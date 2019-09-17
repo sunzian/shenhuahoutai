@@ -1,26 +1,10 @@
-<script>
-    import login from '@/pages/login'
-    export default {
-        name: 'App',
-        components: { login },
-        computed: {
-            // ...mapGetters(['isLogin']),
-        },
-        mounted() {
-        },
-        render(h) {
-            if (true) {
-                return h('router-view')
-            } else {
-                return h(login)
-            }
-        },
-    }
-</script>
-
+<template>
+    <div id="app">
+        <router-view></router-view>
+    </div>
+</template>
 <style>
-  #app {
-    width: 100%;
-    height: 100%;
-  }
+    @import "./assets/css/main.css";
+    @import "./assets/css/color-dark.css";     /*深色主题*/
+    /*@import "./assets/css/theme-green/color-green.css";   浅绿色主题*/
 </style>
