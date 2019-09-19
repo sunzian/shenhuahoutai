@@ -69,8 +69,11 @@
         </div>
     </div>
 </template>
-
 <script>
+    import {Decrypt,Encrypt,preSign,EncryptReplace} from '@/aes/utils';
+    import md5 from 'js-md5';
+    import axios from 'axios';
+    import https from "../../https";
     export default {
         name: 'tabs',
         data() {

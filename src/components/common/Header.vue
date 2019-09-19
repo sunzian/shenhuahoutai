@@ -38,10 +38,7 @@
                         <i class="el-icon-caret-bottom"></i>
                     </span>
                     <el-dropdown-menu slot="dropdown">
-                        <a href="https://github.com/lin-xin/vue-manage-system" target="_blank">
-                            <el-dropdown-item>项目仓库</el-dropdown-item>
-                        </a>
-                        <el-dropdown-item divided command="loginout">退出登录</el-dropdown-item>
+                        <div class="loginOut" @click="loginout">退出登录</div>
                     </el-dropdown-menu>
                 </el-dropdown>
             </div>
@@ -50,6 +47,10 @@
 </template>
 <script>
 import bus from '../common/bus';
+import {Decrypt,Encrypt,preSign,EncryptReplace} from '@/aes/utils';
+import md5 from 'js-md5';
+import axios from 'axios';
+import https from "../../https";
 export default {
     data() {
         return {
@@ -65,7 +66,21 @@ export default {
             return username ? username : this.name;
         }
     },
+    created() {
+
+    },
     methods: {
+        loginout(){
+            https.fetchPost('/admin/logout','').then((data) => {
+                if(data.data.code == 'success'){
+                    this.$router.push('/login');
+                }
+                // console.log(data.data.code)
+            }).catch(err=>{
+                    console.log(err)
+                }
+            )
+        },
         // 用户名下拉菜单选择事件
         handleCommand(command) {
             if (command == 'loginout') {
@@ -185,7 +200,7 @@ export default {
     color: #fff;
     cursor: pointer;
 }
-.el-dropdown-menu__item {
-    text-align: center;
+.loginOut{
+    cursor: pointer;
 }
 </style>
