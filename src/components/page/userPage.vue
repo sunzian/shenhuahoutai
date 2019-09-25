@@ -95,7 +95,7 @@
         </div>
         <!--新增弹出框-->
         <el-dialog title="新增员工" :visible.sync="dialogFormVisible">
-            <el-form :model="oForm">
+            <el-form v-model="oForm">
                 <el-form-item label="用户名" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oForm.userName" autocomplete="off"></el-input>
                 </el-form-item>
@@ -197,10 +197,12 @@
                     </el-checkbox-group>
                 </el-form-item>
                 <el-form-item label="角色">
-                    <el-select v-model="oSelectList.id" >
+                    <el-select v-model="oSelectList[0]" >
                         <el-option
-                                :label="oSelectList.roleName"
-                                :value="oSelectList.id">
+                                v-for="item in oSelectList"
+                                :key="item.id"
+                                :label="item.roleName"
+                                :value="item.id">
                         </el-option>
                     </el-select>
                 </el-form-item>
@@ -458,6 +460,7 @@
                         this.checkedKeys =JSON.parse(Decrypt(data.data.data)).exitPermissionIds
                         this.data=JSON.parse(Decrypt(data.data.data)).permissionList //权限数据
                         this.businessInfoList = JSON.parse(Decrypt(data.data.data)).businessInfoList //定义下拉选的内容
+                        // this.oCheckedCities=JSON.parse(Decrypt(data.data.data)).userInfo.cinemaCodes
                         let _index = 0;  //下拉选显示对应的选项
                         for(let x in this.options){
                             if(this.options[x].value==JSON.parse(Decrypt(data.data.data)).userInfo.status){
@@ -494,7 +497,7 @@
             // 修改操作
             exChanger() {
                 console.log(this.oCheckedCities);
-                console.log(this.$refs.tree.getCheckedKeys());
+                // console.log(this.$refs.tree.getCheckedKeys());
                 var jsonArr = [];
                 jsonArr.push({key:"id",value:this.form.id});
                 jsonArr.push({key:"userName",value:this.userName});
@@ -502,7 +505,7 @@
                 jsonArr.push({key:"userCode",value:this.form.userCode});
                 jsonArr.push({key:"realName",value:this.form.realName});
                 jsonArr.push({key:"callNumber",value:this.form.callNumber});
-                jsonArr.push({key:"roleIds",value:this.oSelectList.id});
+                jsonArr.push({key:"roleIds",value:this.oSelectList[0].id});
                 jsonArr.push({key:"memo",value:this.form.memo});
                 jsonArr.push({key:"cinemaCodes",value:this.oCheckedCities});
                 jsonArr.push({key:"menuIds",value:this.$refs.tree.getCheckedKeys()});
