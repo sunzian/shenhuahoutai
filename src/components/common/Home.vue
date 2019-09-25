@@ -40,7 +40,7 @@ export default {
     },
     mounted() {
         https.fetchPost('/admin/getMenus','').then((data) => {//获取菜单栏
-            console.log(data.data.code)
+            // console.log(data.data.code)
             if(data.data.code=='nologin'){
                 this.$router.push('/login');
             }
@@ -50,7 +50,7 @@ export default {
                 // localStorage.setItem("menu", menusList)//将后端返回的菜单栏存入缓存
                 // this.menuList =JSON.parse(localStorage.getItem('menu'))//将登录页面拿到的菜单栏数据取出来
                 this.menuList =JSON.parse(menus)
-                console.log(this.menuList);
+                // console.log(this.menuList);
             }
         }).catch(err=>{
                 console.log(err)

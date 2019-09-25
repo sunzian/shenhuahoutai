@@ -20,14 +20,24 @@ export default new Router({
                     meta: { title: '系统首页' }
                 },
                 {
-                    path: '/icon',
-                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/Icon.vue'),
-                    meta: { title: '自定义图标' }
+                    path: '/adminUserPage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/adminUserPage.vue'),
+                    meta: { title: '商家账号管理' }
                 },
                 {
-                    path: '/table',
-                    component: () => import(/* webpackChunkName: "table" */ '../components/page/BaseTable.vue'),
-                    meta: { title: '基础表格' }
+                    path: '/rolePermission',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/rolePermission.vue'),
+                    meta: { title: '角色权限管理' }
+                },
+                {
+                    path: '/rolePage',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/rolePage.vue'),
+                    meta: { title: '角色管理' }
+                },
+                {
+                    path: '/userPage',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/userPage.vue'),
+                    meta: { title: '员工管理' }
                 },
                 {
                     path: '/tabs',
@@ -39,12 +49,12 @@ export default new Router({
                     component: () => import(/* webpackChunkName: "form" */ '../components/page/BaseForm.vue'),
                     meta: { title: '基本表单' }
                 },
-                {
-                    // 富文本编辑器组件
-                    path: '/editor',
-                    component: () => import(/* webpackChunkName: "editor" */ '../components/page/VueEditor.vue'),
-                    meta: { title: '富文本编辑器' }
-                },
+                // {
+                //     // 富文本编辑器组件
+                //     path: '/editor',
+                //     component: () => import(/* webpackChunkName: "editor" */ '../components/page/VueEditor.vue'),
+                //     meta: { title: '富文本编辑器' }
+                // },
                 {
                     // markdown组件
                     path: '/markdown',

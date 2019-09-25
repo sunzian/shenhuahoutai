@@ -29,14 +29,13 @@
                 <div class="login-btn">
                     <el-button type="primary" @click="submitForm()">登录</el-button>
                 </div>
-                <p class="login-tips">Tips : 用户名和密码随便填。</p>
             </el-form>
         </div>
     </div>
 </template>
 
 <script>
-    import {Decrypt,Encrypt,preSign,EncryptReplace} from '@/aes/utils';
+    import {Decrypt,Encrypt,preSign,EncryptReplace,ParamsAppend} from '@/aes/utils';
     import md5 from 'js-md5';
     import axios from 'axios';
     import https from "../../https";
@@ -83,9 +82,9 @@ export default {
             jsonArr.push({key:"userName",value:this.param.username});
             jsonArr.push({key:"password",value:this.param.password});
             jsonArr.push({key:"validateCode",value:this.param.code});
-            let sign =EncryptReplace(md5(preSign(jsonArr)));
-            let params ={'userName': EncryptReplace(this.param.username), 'password': EncryptReplace(this.param.password), 'validateCode': EncryptReplace(this.param.code),'sign':sign}
-            console.log(params)
+            let sign =md5(preSign(jsonArr));
+            jsonArr.push({key:"sign",value:sign});
+            let params = ParamsAppend(jsonArr);
             https.fetchPost('/admin/login',params).then((data) => {
                 if(data.data.code== 'success'){
                     localStorage.setItem('ms_username', this.param.username)

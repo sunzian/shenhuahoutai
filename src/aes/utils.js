@@ -8,53 +8,70 @@ const SIGN_KEY="abc";
  * AES加密 ：字符串 key iv  返回base64
  */
 export function Encrypt(word, keyStr, ivStr) {
-    let key = KEY
-    let iv = IV
-    if (keyStr) {
-        key = CryptoJS.enc.Utf8.parse(keyStr);
-        iv = CryptoJS.enc.Utf8.parse(ivStr);
+    if(word){
+        let key = KEY
+        let iv = IV
+        if (keyStr) {
+            key = CryptoJS.enc.Utf8.parse(keyStr);
+            iv = CryptoJS.enc.Utf8.parse(ivStr);
+        }
+
+        let srcs = CryptoJS.enc.Utf8.parse(word);
+        var encrypted = CryptoJS.AES.encrypt(srcs, key, {
+            iv: iv,
+            mode: CryptoJS.mode.CBC,
+            padding: CryptoJS.pad.ZeroPadding
+        });
+        // console.log("-=-=-=-", encrypted.ciphertext)
+        return CryptoJS.enc.Base64.stringify(encrypted.ciphertext);
+    }else{
+        return '';
     }
 
-    let srcs = CryptoJS.enc.Utf8.parse(word);
-    var encrypted = CryptoJS.AES.encrypt(srcs, key, {
-        iv: iv,
-        mode: CryptoJS.mode.CBC,
-        padding: CryptoJS.pad.ZeroPadding
-    });
-    // console.log("-=-=-=-", encrypted.ciphertext)
-    return CryptoJS.enc.Base64.stringify(encrypted.ciphertext);
-
 }
 
-export function EncryptReplace(word, keyStr, ivStr) {
-    return Encrypt(word, keyStr, ivStr).replace(/\+/g,'$input')
-}
 /**
  * AES 解密 ：字符串 key iv  返回base64
  *
  */
 export function Decrypt(word, keyStr, ivStr) {
-    let key  = KEY
-    let iv = IV
+    if(word){
+        let key  = KEY
+        let iv = IV
 
-    if (keyStr) {
-        key = CryptoJS.enc.Utf8.parse(keyStr);
-        iv = CryptoJS.enc.Utf8.parse(ivStr);
+        if (keyStr) {
+            key = CryptoJS.enc.Utf8.parse(keyStr);
+            iv = CryptoJS.enc.Utf8.parse(ivStr);
+        }
+
+        let base64 = CryptoJS.enc.Base64.parse(word);
+        let src = CryptoJS.enc.Base64.stringify(base64);
+
+        var decrypt = CryptoJS.AES.decrypt(src, key, {
+            iv: iv,
+            mode: CryptoJS.mode.CBC,
+            padding: CryptoJS.pad.ZeroPadding
+        });
+
+        var decryptedStr = decrypt.toString(CryptoJS.enc.Utf8);
+        return decryptedStr.toString();
+    }else{
+        return '';
     }
-
-    let base64 = CryptoJS.enc.Base64.parse(word);
-    let src = CryptoJS.enc.Base64.stringify(base64);
-
-    var decrypt = CryptoJS.AES.decrypt(src, key, {
-        iv: iv,
-        mode: CryptoJS.mode.CBC,
-        padding: CryptoJS.pad.ZeroPadding
-    });
-
-    var decryptedStr = decrypt.toString(CryptoJS.enc.Utf8);
-    return decryptedStr.toString();
 }
 export function preSign(jsonArr) {
     let precodeStr = jsonArr.sort((a, b) => a.key < b.key? -1: 1).reduce((all, u) => all + u.value, '') + SIGN_KEY;
     return precodeStr;
+}
+
+export function EncryptReplace(word, keyStr, ivStr) { //加密调用这个
+    return Encrypt(word, keyStr, ivStr).replace(/\+/g,'$input')
+}
+
+export function ParamsAppend(params) { //封装加密参数
+    let result = {};
+    params.map(n=>{
+        result[n.key]=EncryptReplace(n.value);
+    });
+    return JSON.parse(JSON.stringify(result));
 }
