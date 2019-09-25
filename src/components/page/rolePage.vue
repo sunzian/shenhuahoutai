@@ -333,16 +333,18 @@ export default {
         // 编辑操作
         exChanger() {
             console.log(this.form.sort);
+            // console.log(this.from.sort.toString());
             var jsonArr = [];
             jsonArr.push({key:"id",value:this.form.id});
             jsonArr.push({key:"roleName",value:this.oName});
-            jsonArr.push({key:"sort",value:this.form.sort});
+            jsonArr.push({key:"sort",value:''+this.form.sort+''});
             jsonArr.push({key:"memo",value:this.form.memo});
             jsonArr.push({key:"status",value:this.selectValue});
             let sign =md5(preSign(jsonArr));
             jsonArr.push({key:"sign",value:sign});
             console.log(jsonArr);
             let params = ParamsAppend(jsonArr);
+            console.log(params);
             this.editVisible = false;
             https.fetchPost('/role/modifyRole',params).then((data) => {
                 // console.log(data);

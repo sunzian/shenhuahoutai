@@ -307,7 +307,9 @@
                 )
             },
             getCheckedKeys() {//新增数据操作
-                console.log(this.$refs.tree.getCheckedKeys());
+                // console.log(this.$refs.tree.getCheckedKeys());
+                // console.log(this.$refs.tree.getHalfCheckedKeys());
+                // console.log(this.$refs.tree.getCheckedKeys().concat(this.$refs.tree.getHalfCheckedKeys()));
                 var jsonArr = [];
                 jsonArr.push({key:"userName",value:this.oForm.userName});
                 jsonArr.push({key:"userPass",value:this.oForm.userPass});
@@ -317,7 +319,7 @@
                 jsonArr.push({key:"realName",value:this.oForm.realName});
                 jsonArr.push({key:"callNumber",value:this.oForm.callNumber});
                 jsonArr.push({key:"businessCode",value:this.selectList.businessCode});
-                jsonArr.push({key:"menuIds",value:this.$refs.tree.getCheckedKeys()});
+                jsonArr.push({key:"menuIds",value:this.$refs.tree.getCheckedKeys().concat(this.$refs.tree.getHalfCheckedKeys())});
                 let sign =md5(preSign(jsonArr));
                 jsonArr.push({key:"sign",value:sign});
                 let params = ParamsAppend(jsonArr);
@@ -390,8 +392,8 @@
                 jsonArr.push({key:"sign",value:sign});
                 let params = ParamsAppend(jsonArr);
                 https.fetchPost('/user/modifyAdminPage',params).then((data) => {
-                    // console.log(data);
-                    // console.log(JSON.parse(Decrypt(data.data.data)));
+                    console.log(data);
+                    console.log(JSON.parse(Decrypt(data.data.data)));
                     if(data.data.code=='success'){
                         this.editVisible = true;
                         this.form.id=row.id;

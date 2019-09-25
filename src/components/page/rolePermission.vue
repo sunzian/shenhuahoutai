@@ -266,7 +266,7 @@
                 console.log(this.$refs.tree_.getCheckedKeys());
                 var jsonArr = [];
                 jsonArr.push({key:"id",value:this.form.id});
-                jsonArr.push({key:"permissionIds",value:this.$refs.tree_.getCheckedKeys()});
+                jsonArr.push({key:"permissionIds",value:this.$refs.tree_.getCheckedKeys().concat(this.$refs.tree_.getHalfCheckedKeys())});
                 let sign =md5(preSign(jsonArr));
                 jsonArr.push({key:"sign",value:sign});
                 let params = ParamsAppend(jsonArr);

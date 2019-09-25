@@ -373,7 +373,7 @@
                 jsonArr.push({key:"callNumber",value:this.oForm.callNumber});
                 jsonArr.push({key:"roleIds",value:this.selectList.id});
                 jsonArr.push({key:"cinemaCodes",value:this.checkedCities});
-                jsonArr.push({key:"menuIds",value:this.$refs.tree.getCheckedKeys()});
+                jsonArr.push({key:"menuIds",value:this.$refs.tree.getCheckedKeys().concat(this.$refs.tree.getHalfCheckedKeys())});
                 let sign =md5(preSign(jsonArr));
                 jsonArr.push({key:"sign",value:sign});
                 let params = ParamsAppend(jsonArr);
