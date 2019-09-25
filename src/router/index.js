@@ -25,6 +25,11 @@ export default new Router({
                     meta: { title: '商家账号管理' }
                 },
                 {
+                    path: '/businessPage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/businessPage.vue'),
+                    meta: { title: '商家管理' }
+                },
+                {
                     path: '/rolePermission',
                     component: () => import(/* webpackChunkName: "table" */ '../components/page/rolePermission.vue'),
                     meta: { title: '角色权限管理' }

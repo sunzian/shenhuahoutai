@@ -70,8 +70,7 @@ export default {
             }
            else if(data.data.code == 'success'){
                 let menus=Decrypt(data.data.data)//返回的数据进行解密
-                // localStorage.setItem("menu", menusList)//将后端返回的菜单栏存入缓存
-                // this.menuList =JSON.parse(localStorage.getItem('menu'))//将登录页面拿到的菜单栏数据取出来
+                // console.log(menus);
                 this.menuList =JSON.parse(menus)
                 // console.log(this.menuList);
             }
