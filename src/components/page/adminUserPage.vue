@@ -16,7 +16,7 @@
                     <el-option key="4" label="审核失败" value="4"></el-option>
                 </el-select>
                 <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
-                <el-button type="primary"  @click="addPage" icon="el-icon-circle-plus-outline"  style="margin-left: 493px">新增</el-button>
+                <el-button type="primary"  @click="addPage" icon="el-icon-circle-plus-outline"  style="margin-left: 910px">新增</el-button>
             </div>
             <el-table
                     :data="tableData"

@@ -11,7 +11,7 @@
             <div class="handle-box">
                 <el-input v-model="query.name" placeholder="商家名称" class="handle-input mr10"></el-input>
                 <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
-                <el-button type="primary"  @click="addPage" icon="el-icon-circle-plus-outline"  style="margin-left: 493px">新增</el-button>
+                <el-button type="primary"  @click="addPage" icon="el-icon-circle-plus-outline"  style="margin-left: 730px">新增</el-button>
             </div>
             <el-table
                     :data="tableData"
