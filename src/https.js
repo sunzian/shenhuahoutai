@@ -58,7 +58,37 @@ export function fetchGet(url, param) {
             })
     })
 }
+////返回一个Promise(发送Delete请求)
+export function fetchDelete(url, param) {
+    return new Promise((resolve, reject) => {
+        axios.delete(url, {params: param})
+            .then(response => {
+                resolve(response)
+            }, err => {
+                reject(err)
+            })
+            .catch((error) => {
+                reject(error)
+            })
+    })
+}
+////返回一个Promise(发送Put请求)
+export function fetchPut(url, param) {
+    return new Promise((resolve, reject) => {
+        axios.put(url, {params: param})
+            .then(response => {
+                resolve(response)
+            }, err => {
+                reject(err)
+            })
+            .catch((error) => {
+                reject(error)
+            })
+    })
+}
 export default {
     fetchPost,
     fetchGet,
+    fetchDelete,
+    fetchPut,
 }

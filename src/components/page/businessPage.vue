@@ -24,16 +24,16 @@
                 <el-table-column prop="name" label="商家名称">
                     <template slot-scope="scope">{{scope.row.businessName}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="商家描述">
+                <el-table-column prop="memo" label="商家描述">
                     <template slot-scope="scope">{{scope.row.businessMemo}}</template>
                 </el-table-column>
-                <el-table-column label="商家logo">
+                <el-table-column prop="logo" label="商家logo">
                     <template slot-scope="scope">{{scope.row.businessLogo}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="商家电话">
+                <el-table-column prop="phone" label="商家电话">
                     <template slot-scope="scope">{{scope.row.businessMobile}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="金币过期年数">
+                <el-table-column prop="year" label="金币过期年数">
                     <template slot-scope="scope">{{scope.row.goldExpireYears}}</template>
                 </el-table-column>
                 <el-table-column label="操作" width="180" align="center">
@@ -66,27 +66,53 @@
             </div>
         </div>
         <!--新增弹出框-->
-        <el-dialog title="新增角色" :visible.sync="dialogFormVisible">
+        <el-dialog title="新增商家" :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
-                <el-form-item label="角色名" :label-width="formLabelWidth">
+                <el-form-item label="商家名" :label-width="formLabelWidth">
                     <el-input style="width: 250px" maxlength="10" show-word-limit v-model="oForm.name" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="描述" :label-width="formLabelWidth">
+                <el-form-item label="商家描述" :label-width="formLabelWidth">
                     <el-input maxlength="30" type="textarea"
                               :rows="2" show-word-limit v-model="oForm.memo" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="排序" :label-width="formLabelWidth">
-                    <el-input style="width: 150px" maxlength="9" v-model.number="oForm.sort" autocomplete="off"></el-input>
+                <el-form-item label="商家logo" :label-width="formLabelWidth">
+                    <el-input style="width: 150px" maxlength="9" v-model.number="oForm.logo" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="状态" :label-width="formLabelWidth">
-                    <el-select v-model="oForm.value" placeholder="请选择状态">
-                        <el-option
-                                v-for="item in options"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value">
-                        </el-option>
+                <el-form-item label="商家电话" :label-width="formLabelWidth">
+                    <el-input style="width: 150px" maxlength="9" v-model.number="oForm.mobile" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="金币过期年数" :label-width="formLabelWidth">
+                    <el-input style="width: 150px" maxlength="9" v-model.number="oForm.goldExpireYears" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="会员卡积分兑换比例" :label-width="formLabelWidth">
+                    <el-input style="width: 150px" maxlength="9" v-model.number="oForm.percentageOfPointsIntoGold" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="过期优惠券是否发送短信通知会员" :label-width="formLabelWidth">
+                    <el-select v-model="oForm.messageForExpireTickets" placeholder="请选择">
+                        <el-option label="是" value="shanghai"></el-option>
+                        <el-option label="否" value="beijing"></el-option>
                     </el-select>
+                </el-form-item>
+                <el-form-item label="优惠券到期前几天发送短信通知会员" :label-width="formLabelWidth">
+                    <el-input style="width: 150px" maxlength="9" v-model.number="oForm.aheadDaysForMessage" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="售票系统类型" :label-width="formLabelWidth">
+                    <el-input style="width: 150px" maxlength="9" v-model.number="oForm.ticketingSystemType" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="售票系统账号" :label-width="formLabelWidth">
+                    <el-input style="width: 150px" maxlength="9" v-model.number="oForm.ticketingSystemAccount" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="售票系统密码" :label-width="formLabelWidth">
+                    <el-input style="width: 150px" maxlength="9" v-model.number="oForm.ticketingSystemPassword" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="小程序appId" :label-width="formLabelWidth">
+                    <el-input style="width: 150px" maxlength="9" v-model.number="oForm.miniAppId" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="售票系统接口地址" :label-width="formLabelWidth">
+                    <el-input style="width: 150px" maxlength="9" v-model.number="oForm.interfaceAddress" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="售票系统会员接口地址" :label-width="formLabelWidth">
+                    <el-input style="width: 150px" maxlength="9" v-model.number="oForm.memberInterfaceAddress" autocomplete="off"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -96,26 +122,25 @@
         </el-dialog>
         <!-- 编辑弹出框 -->
         <el-dialog title="编辑" :visible.sync="editVisible" width="30%">
-            <el-form ref="form" :model="form" label-width="70px">
-                <el-form-item label="角色名">
+            <el-form ref="form" :model="form" label-width="100px">
+                <el-form-item label="商家名称">
                     <el-input style="width: 250px" maxlength="10" show-word-limit v-model="oName" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="描述" >
+                <el-form-item label="商家编号" >
+                    <el-input style="width: 250px" min="1"  maxlength="7" v-model.number="oCode" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="商家描述" >
                     <el-input maxlength="30" type="textarea"
-                              :rows="2" show-word-limit v-model="form.memo" autocomplete="off"></el-input>
+                              :rows="2" show-word-limit v-model.trim="oMemo" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="排序" >
-                    <el-input style="width: 250px" min="1"  maxlength="7" v-model="form.sort" autocomplete="off"></el-input>
+                <el-form-item label="商家电话" >
+                    <el-input style="width: 250px" min="1"  maxlength="7" v-model.number="oMobile" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="状态">
-                    <el-select v-model="selectValue">
-                        <el-option
-                                v-for="item in options"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value">
-                        </el-option>
-                    </el-select>
+                <el-form-item label="商家logo" >
+                    <el-input style="width: 250px" min="1"  maxlength="7" v-model="oLogo" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="金币过期年数" >
+                    <el-input style="width: 50px" min="1"  maxlength="7" v-model.trim="oGold" autocomplete="off"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -137,50 +162,45 @@
         data() {
             return {
                 oName:'',
+                oId: '',
+                oCode: '',
+                oMemo: '',
+                oLogo: '',
+                oMobile: '',
+                oGold: '',
                 message:'',//弹出框消息
                 query: {
                     pageNo:1,
                     pageSize:10
 
                 },
+                form: [],
                 tableData: [],
                 multipleSelection: [],
                 delList: [],
                 editVisible: false,
                 pageTotal: 0,
-                form: {
-                    memo: '',
-                    sort: '',
-                    id:'',
-                },
                 idx: -1,
                 id: -1,
                 dialogFormVisible: false,
                 oForm: {
                     name: '',
                     memo: '',
-                    sort: '',
-                    delivery: false,
-                    type: [],
-                    resource: '',
-                    desc: '',
-                    value:'1'
+                    logo: '',
+                    mobile: '',
+                    goldExpireYears: '',
+                    percentageOfPointsIntoGold: '',
+                    messageForExpireTickets: '',
+                    aheadDaysForMessage: '',
+                    ticketingSystemType: '',
+                    ticketingSystemAccount: '',
+                    ticketingSystemPassword: '',
+                    miniAppId: '',
+                    interfaceAddress: '',
+                    memberInterfaceAddress: ''
                 },
-                formLabelWidth: '120px',
+                formLabelWidth: '160px',
                 selectValue:{},
-                options: [{
-                    value: '1',
-                    label: '审核中'
-                }, {
-                    value: '2',
-                    label: '未审核'
-                }, {
-                    value: '3',
-                    label: '通过'
-                }, {
-                    value: '4',
-                    label: '审核失败'
-                }],
                 value: ''
             };
         },
@@ -192,7 +212,7 @@
         },
         methods: {
             addPage(){//获取新增按钮权限
-                https.fetchPost('/role/addPage','').then((data) => {
+                https.fetchPost('/businessInfo/addPage','').then((data) => {
                     console.log(data);
                     if(data.data.code == 'success'){
                         this.dialogFormVisible = true
@@ -211,22 +231,43 @@
             },
             addRole(){ //新增按钮操作
                 var jsonArr = [];
-                jsonArr.push({key:"roleName",value:this.oForm.name});
-                jsonArr.push({key:"status",value:this.oForm.value});
-                jsonArr.push({key:"memo",value:this.oForm.memo});
-                jsonArr.push({key:"sort",value:this.oForm.sort});
+                jsonArr.push({key:"businessName",value:this.oForm.name});
+                jsonArr.push({key:"businessMemo",value:this.oForm.memo});
+                jsonArr.push({key:"businessLogo",value:this.oForm.logo});
+                jsonArr.push({key:"businessMobile",value:this.oForm.mobile});
+                jsonArr.push({key:"goldExpireYears",value:this.oForm.goldExpireYears});
+                jsonArr.push({key:"percentageOfPointsIntoGold",value:this.oForm.percentageOfPointsIntoGold});
+                jsonArr.push({key:"messageForExpireTickets",value:this.oForm.messageForExpireTickets});
+                jsonArr.push({key:"aheadDaysForMessage",value:this.oForm.aheadDaysForMessage});
+                jsonArr.push({key:"ticketingSystemType",value:this.oForm.ticketingSystemType});
+                jsonArr.push({key:"ticketingSystemAccount",value:this.oForm.ticketingSystemAccount});
+                jsonArr.push({key:"ticketingSystemPassword",value:this.oForm.ticketingSystemPassword});
+                jsonArr.push({key:"miniAppId",value:this.oForm.miniAppId});
+                jsonArr.push({key:"interfaceAddress",value:this.oForm.interfaceAddress});
+                jsonArr.push({key:"memberInterfaceAddress",value:this.oForm.memberInterfaceAddress});
                 let sign =md5(preSign(jsonArr));
                 jsonArr.push({key:"sign",value:sign});
                 let params = ParamsAppend(jsonArr);
                 if(this.dialogFormVisible == true){
-                    https.fetchPost('/role/addRole',params).then((data) => {//新增
+                    https.fetchPost('/businessInfo',params).then((data) => {//新增
                         // console.log(data);
                         if(data.data.code=='success'){
                             this.dialogFormVisible = false
                             this.$message.success(`新增成功`);
                             this.oForm.name = ''
-                            this.oForm.value = ''
                             this.oForm.memo = ''
+                            this.oForm.logo = ''
+                            this.oForm.mobile = ''
+                            this.oForm.goldExpireYears = ''
+                            this.oForm.percentageOfPointsIntoGold = ''
+                            this.oForm.messageForExpireTickets = ''
+                            this.oForm.aheadDaysForMessage = ''
+                            this.oForm.ticketingSystemType = ''
+                            this.oForm.ticketingSystemAccount = ''
+                            this.oForm.ticketingSystemPassword = ''
+                            this.oForm.miniAppId = ''
+                            this.oForm.interfaceAddress = ''
+                            this.oForm.memberInterfaceAddress = ''
                             this.getMenu()
                         }else if(data.data.code=='nologin'){
                             this.message=data.data.message
@@ -254,15 +295,11 @@
                     status=''
                 }
                 let jsonArr = [];
-                jsonArr.push({key:"roleName",value:name});
-                jsonArr.push({key:"status",value:status});
                 jsonArr.push({key:"id",value:row.id});
                 let sign =md5(preSign(jsonArr));
                 jsonArr.push({key:"sign",value:sign});
                 let params = ParamsAppend(jsonArr);
-                https.fetchPost('/role/deleteRole',params).then((data) => {
-                    // console.log(data);
-                    // console.log(JSON.parse(Decrypt(data.data.data)));
+                https.fetchDelete('/businessInfo/deleteBusinessInfo',params).then((data) => {
                     if(data.data.code=='success'){
                         this.$message.error(`删除了`);
                         this.getMenu()
@@ -279,7 +316,7 @@
                     }
                 )
             },
-            addChange(index, row){//是否修改权限
+            addChange(index, row){//是否拥有修改权限
                 this.idx = index;
                 this.form = row;
                 var jsonArr = [];
@@ -287,25 +324,18 @@
                 let sign =md5(preSign(jsonArr));
                 jsonArr.push({key:"sign",value:sign});
                 let params = ParamsAppend(jsonArr);
-                https.fetchPost('/role/modifyPage',params).then((data) => {
+                https.fetchPost('/businessInfo/modifyPage',params).then((data) => {
                     // console.log(data);
                     console.log(JSON.parse(Decrypt(data.data.data)));
                     if(data.data.code=='success'){
                         this.editVisible = true;
-                        this.oName=JSON.parse(Decrypt(data.data.data)).roleName;
-                        this.form.sort=JSON.parse(Decrypt(data.data.data)).sort;
-                        this.form.memo=JSON.parse(Decrypt(data.data.data)).memo;
-                        this.form.id=row.id;
-                        this.value=JSON.parse(Decrypt(data.data.data)).status;
-                        let _index = 0;
-                        for(let x in this.options){
-                            if(this.options[x].value==JSON.parse(Decrypt(data.data.data)).status){
-                                _index=x;
-                                break;
-                            }
-                        }
-                        this.selectValue = this.options[_index].value;
-
+                        this.oName=JSON.parse(Decrypt(data.data.data)).businessName;
+                        this.oMemo=JSON.parse(Decrypt(data.data.data)).businessMemo;
+                        this.oMobile=JSON.parse(Decrypt(data.data.data)).businessMobile;
+                        this.oLogo=JSON.parse(Decrypt(data.data.data)).businessLogo;
+                        this.oCode=JSON.parse(Decrypt(data.data.data)).businessCode;
+                        this.oGold=JSON.parse(Decrypt(data.data.data)).goldExpireYears;
+                        this.oId=JSON.parse(Decrypt(data.data.data)).id;
                     }else if(data.data.code=='nologin'){
                         this.message=data.data.message
                         this.open()
@@ -321,22 +351,23 @@
             },
             // 编辑操作
             exChanger() {
-                console.log(this.form.sort);
+                // console.log(this.form.id);
                 // console.log(this.from.sort.toString());
                 var jsonArr = [];
-                jsonArr.push({key:"id",value:this.form.id});
-                jsonArr.push({key:"roleName",value:this.oName});
-                jsonArr.push({key:"sort",value:''+this.form.sort+''});
-                jsonArr.push({key:"memo",value:this.form.memo});
-                jsonArr.push({key:"status",value:this.selectValue});
+                jsonArr.push({key:"goldExpireYears",value:this.oGold});
+                jsonArr.push({key:"businessName",value:this.oName});
+                jsonArr.push({key:"businessMobile",value:this.oMobile});
+                jsonArr.push({key:"businessMemo",value:this.oMemo});
+                jsonArr.push({key:"businessLogo",value:this.oLogo});
+                jsonArr.push({key:"id",value:this.oId})
                 let sign =md5(preSign(jsonArr));
                 jsonArr.push({key:"sign",value:sign});
-                console.log(jsonArr);
                 let params = ParamsAppend(jsonArr);
-                console.log(params);
+                console.log(params)
+                console.log(jsonArr)
                 this.editVisible = false;
-                https.fetchPost('/role/modifyRole',params).then((data) => {
-                    // console.log(data);
+                https.fetchPost('/businessInfo/updateById',params).then((data) => {
+                    console.log(data);
                     // console.log(JSON.parse(Decrypt(data.data.data)));
                     if(data.data.code=='success'){
                         this.$message.success(`编辑成功`);
@@ -368,9 +399,10 @@
                     status=''
                 }
                 let jsonArr = [];
+                jsonArr.push({key:"businessName",value:name});
                 jsonArr.push({key:"pageNo",value:this.query.pageNo});
                 jsonArr.push({key:"pageSize",value:this.query.pageSize});
-                let sign =md5(preSign(jsonArr));
+                let sign = md5(preSign(jsonArr));
                 jsonArr.push({key:"sign",value:sign});
                 var params = ParamsAppend(jsonArr);
                 https.fetchPost('/businessInfo/businessInfoPage',params).then((data) => {
