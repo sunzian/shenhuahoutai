@@ -185,156 +185,195 @@
         },
         methods: {
             viewRolePermission(index, row){ //获取查看页面数据
-                this.idx = index;
-                this.form = row;
-                var jsonArr = [];
-                jsonArr.push({key:"id",value:row.id});
-                let sign =md5(preSign(jsonArr));
-                jsonArr.push({key:"sign",value:sign});
-                let params = ParamsAppend(jsonArr);
-                https.fetchPost('/role/viewRolePermission',params).then((data) => {
-                    console.log(data);
-                    if(data.data.data){
-                        console.log(JSON.parse(Decrypt(data.data.data)));
-                    }
+                const loading = this.$loading({
+                    lock: true,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)',
+                    target: document.querySelector('.div1')
+                });
+                setTimeout(() => {
+                    this.idx = index;
+                    this.form = row;
+                    var jsonArr = [];
+                    jsonArr.push({key:"id",value:row.id});
+                    let sign =md5(preSign(jsonArr));
+                    jsonArr.push({key:"sign",value:sign});
+                    let params = ParamsAppend(jsonArr);
+                    https.fetchPost('/role/viewRolePermission',params).then((data) => {
+                        console.log(data);
+                        if(data.data.data){
+                            console.log(JSON.parse(Decrypt(data.data.data)));
+                        }
+                        if(data.data.code=='success'){
+                            this.viewVisible = true
+                            this.expandedKeys = JSON.parse(Decrypt(data.data.data)).openPermissionIds
+                            this.checkedKeys =JSON.parse(Decrypt(data.data.data)).exitPermissionIds
+                            this.data=JSON.parse(Decrypt(data.data.data)).existMenus //权限数据
 
-                    if(data.data.code=='success'){
-                        this.viewVisible = true
-                        this.expandedKeys = JSON.parse(Decrypt(data.data.data)).openPermissionIds
-                        this.checkedKeys =JSON.parse(Decrypt(data.data.data)).exitPermissionIds
-                        this.data=JSON.parse(Decrypt(data.data.data)).existMenus //权限数据
-
-                    }else if(data.data.code=='nologin'){
-                        this.message=data.data.message
-                        this.open()
-                        this.$router.push('/login');
-                    }else{
-                        console.log(1);
-                        this.message=data.data.message
-                        this.open()
-                    }
-                }).catch(err=>{
-                        console.log(err)
-                    }
-                )
+                        }else if(data.data.code=='nologin'){
+                            this.message=data.data.message
+                            this.open()
+                            this.$router.push('/login');
+                        }else{
+                            console.log(1);
+                            this.message=data.data.message
+                            this.open()
+                        }
+                    }).catch(err=>{
+                            console.log(err)
+                        }
+                    )
+                    loading.close();
+                }, 2000);
             },
             addChange(index, row){//是否修改权限
-                this.idx = index;
-                this.form = row;
-                var jsonArr = [];
-                jsonArr.push({key:"id",value:row.id});
-                let sign =md5(preSign(jsonArr));
-                jsonArr.push({key:"sign",value:sign});
-                let params = ParamsAppend(jsonArr);
-                https.fetchPost('/role/permissionForRolePage',params).then((data) => {
-                    console.log(data);
-                    console.log(JSON.parse(Decrypt(data.data.data)));
-                    if(data.data.code=='success'){
-                        this.editVisible = true;
-                        this.expandedKeys = JSON.parse(Decrypt(data.data.data)).openPermissionIds
-                        this.checkedKeys =JSON.parse(Decrypt(data.data.data)).exitPermissionIds
-                        this.data=JSON.parse(Decrypt(data.data.data)).permissionList //权限数据
-                        // this.oName=JSON.parse(Decrypt(data.data.data)).roleName;
-                        // this.form.sort=JSON.parse(Decrypt(data.data.data)).sort;
-                        // this.form.memo=JSON.parse(Decrypt(data.data.data)).memo;
-                        // this.form.id=row.id;
-                        // this.value=JSON.parse(Decrypt(data.data.data)).status;
-                        // let _index = 0;
-                        // for(let x in this.options){
-                        //     if(this.options[x].value==JSON.parse(Decrypt(data.data.data)).status){
-                        //         _index=x;
-                        //         break;
-                        //     }
-                        // }
-                        // this.selectValue = this.options[_index].value;
+                const loading = this.$loading({
+                    lock: true,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)',
+                    target: document.querySelector('.div1')
+                });
+                setTimeout(() => {
+                    this.idx = index;
+                    this.form = row;
+                    var jsonArr = [];
+                    jsonArr.push({key:"id",value:row.id});
+                    let sign =md5(preSign(jsonArr));
+                    jsonArr.push({key:"sign",value:sign});
+                    let params = ParamsAppend(jsonArr);
+                    https.fetchPost('/role/permissionForRolePage',params).then((data) => {
+                        console.log(data);
+                        console.log(JSON.parse(Decrypt(data.data.data)));
+                        if(data.data.code=='success'){
+                            this.editVisible = true;
+                            this.expandedKeys = JSON.parse(Decrypt(data.data.data)).openPermissionIds
+                            this.checkedKeys =JSON.parse(Decrypt(data.data.data)).exitPermissionIds
+                            this.data=JSON.parse(Decrypt(data.data.data)).permissionList //权限数据
+                            // this.oName=JSON.parse(Decrypt(data.data.data)).roleName;
+                            // this.form.sort=JSON.parse(Decrypt(data.data.data)).sort;
+                            // this.form.memo=JSON.parse(Decrypt(data.data.data)).memo;
+                            // this.form.id=row.id;
+                            // this.value=JSON.parse(Decrypt(data.data.data)).status;
+                            // let _index = 0;
+                            // for(let x in this.options){
+                            //     if(this.options[x].value==JSON.parse(Decrypt(data.data.data)).status){
+                            //         _index=x;
+                            //         break;
+                            //     }
+                            // }
+                            // this.selectValue = this.options[_index].value;
 
-                    }else if(data.data.code=='nologin'){
-                        this.message=data.data.message
-                        this.open()
-                        this.$router.push('/login');
-                    }else{
-                        this.message=data.data.message
-                        this.open()
-                    }
-                }).catch(err=>{
-                        console.log(err)
-                    }
-                )
+                        }else if(data.data.code=='nologin'){
+                            this.message=data.data.message
+                            this.open()
+                            this.$router.push('/login');
+                        }else{
+                            this.message=data.data.message
+                            this.open()
+                        }
+                    }).catch(err=>{
+                            console.log(err)
+                        }
+                    )
+                    loading.close();
+                }, 2000);
             },
             // 编辑操作
             exChanger() {
-                console.log(this.$refs.tree_.getCheckedKeys());
-                var jsonArr = [];
-                jsonArr.push({key:"id",value:this.form.id});
-                jsonArr.push({key:"permissionIds",value:this.$refs.tree_.getCheckedKeys().concat(this.$refs.tree_.getHalfCheckedKeys())});
-                let sign =md5(preSign(jsonArr));
-                jsonArr.push({key:"sign",value:sign});
-                let params = ParamsAppend(jsonArr);
-                this.editVisible = false;
-                https.fetchPost('/role/permissionForRole',params).then((data) => {
-                    console.log(data);
-                    // console.log(JSON.parse(Decrypt(data.data.data)));
-                    if(data.data.code=='success'){
-                        this.$message.success(`编辑成功`);
-                        this.getMenu()
-                    }else if(data.data.code=='nologin'){
-                        this.message=data.data.message
-                        this.open()
-                        this.$router.push('/login');
-                    }else{
-                        this.message=data.data.message
-                        this.open()
-                    }
-                }).catch(err=>{
-                        console.log(err)
-                    }
-                )
+                const loading = this.$loading({
+                    lock: true,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)',
+                    target: document.querySelector('.div1')
+                });
+                setTimeout(() => {
+                    console.log(this.$refs.tree_.getCheckedKeys());
+                    var jsonArr = [];
+                    jsonArr.push({key:"id",value:this.form.id});
+                    jsonArr.push({key:"permissionIds",value:this.$refs.tree_.getCheckedKeys().concat(this.$refs.tree_.getHalfCheckedKeys())});
+                    let sign =md5(preSign(jsonArr));
+                    jsonArr.push({key:"sign",value:sign});
+                    let params = ParamsAppend(jsonArr);
+                    this.editVisible = false;
+                    https.fetchPost('/role/permissionForRole',params).then((data) => {
+                        console.log(data);
+                        // console.log(JSON.parse(Decrypt(data.data.data)));
+                        if(data.data.code=='success'){
+                            this.$message.success(`编辑成功`);
+                            this.getMenu()
+                        }else if(data.data.code=='nologin'){
+                            this.message=data.data.message
+                            this.open()
+                            this.$router.push('/login');
+                        }else{
+                            this.message=data.data.message
+                            this.open()
+                        }
+                    }).catch(err=>{
+                            console.log(err)
+                        }
+                    )
+                    loading.close();
+                }, 2000);
             },
             Search(){//搜索操作
                 this.query.pageNo=1
                 this.getMenu()
             },
             getMenu(){//获取菜单栏
-                let name=this.query.name
-                let status=this.query.status
-                if(!name){
-                    name=''
-                }
-                if(!status){
-                    status=''
-                }
-                let jsonArr = [];
-                jsonArr.push({key:"roleName",value:name});
-                jsonArr.push({key:"status",value:status});
-                jsonArr.push({key:"pageNo",value:this.query.pageNo});
-                jsonArr.push({key:"pageSize",value:this.query.pageSize});
-                let sign =md5(preSign(jsonArr));
-                jsonArr.push({key:"sign",value:sign});
-                var params = ParamsAppend(jsonArr);
-                https.fetchPost('/role/rolePermission',params).then((data) => {
-                    // console.log(data);
-                    if(data.data.code=='success') {
-                        var oData = JSON.parse(Decrypt(data.data.data));
-                        console.log(oData);
-                        // console.log(this.query);
-                        this.tableData = oData.pageResult.data;
-                        this.query.pageSize = oData.pageResult.pageSize;
-                        this.query.pageNo = oData.pageResult.pageNo;
-                        this.query.totalCount = oData.pageResult.totalCount;
-                        this.query.totalPage = oData.pageResult.totalPage
-                    }else if(data.data.code=='nologin'){
-                        this.message=data.data.message
-                        this.open()
-                        this.$router.push('/login');
-                    }else{
-                        this.message=data.data.message
-                        this.open()
+                const loading = this.$loading({
+                    lock: true,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)',
+                    target: document.querySelector('.div1')
+                });
+                setTimeout(() => {
+                    let name=this.query.name
+                    let status=this.query.status
+                    if(!name){
+                        name=''
                     }
+                    if(!status){
+                        status=''
+                    }
+                    let jsonArr = [];
+                    jsonArr.push({key:"roleName",value:name});
+                    jsonArr.push({key:"status",value:status});
+                    jsonArr.push({key:"pageNo",value:this.query.pageNo});
+                    jsonArr.push({key:"pageSize",value:this.query.pageSize});
+                    let sign =md5(preSign(jsonArr));
+                    jsonArr.push({key:"sign",value:sign});
+                    var params = ParamsAppend(jsonArr);
+                    https.fetchPost('/role/rolePermission',params).then((data) => {
+                        // console.log(data);
+                        if(data.data.code=='success') {
+                            var oData = JSON.parse(Decrypt(data.data.data));
+                            console.log(oData);
+                            // console.log(this.query);
+                            this.tableData = oData.pageResult.data;
+                            this.query.pageSize = oData.pageResult.pageSize;
+                            this.query.pageNo = oData.pageResult.pageNo;
+                            this.query.totalCount = oData.pageResult.totalCount;
+                            this.query.totalPage = oData.pageResult.totalPage
+                        }else if(data.data.code=='nologin'){
+                            this.message=data.data.message
+                            this.open()
+                            this.$router.push('/login');
+                        }else{
+                            this.message=data.data.message
+                            this.open()
+                        }
 
-                }).catch(err=>{
-                        console.log(err)
-                    }
-                )
+                    }).catch(err=>{
+                            console.log(err)
+                        }
+                    )
+                    loading.close();
+                }, 2000);
             },
             open() {     //错误信息弹出框
                 this.$alert(this.message, '错误信息', {

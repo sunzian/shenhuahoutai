@@ -50,6 +50,11 @@ export default new Router({
                     meta: { title: '员工管理' }
                 },
                 {
+                    path: '/bannerPage',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/bannerPage.vue'),
+                    meta: { title: '轮播图管理' }
+                },
+                {
                     path: '/tabs',
                     component: () => import(/* webpackChunkName: "tabs" */ '../components/page/Tabs.vue'),
                     meta: { title: 'tab选项卡' }
