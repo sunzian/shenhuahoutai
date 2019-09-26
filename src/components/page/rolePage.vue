@@ -106,19 +106,19 @@
             </div>
         </el-dialog>
         <!-- 编辑弹出框 -->
-        <el-dialog title="编辑" :visible.sync="editVisible" width="30%">
-            <el-form ref="form" :model="form" label-width="70px">
-                <el-form-item label="角色名">
+        <el-dialog title="编辑" :visible.sync="editVisible">
+            <el-form ref="form" :model="form">
+                <el-form-item label="角色名" :label-width="formLabelWidth">
                     <el-input style="width: 250px" maxlength="10" show-word-limit v-model="oName" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="描述" >
+                <el-form-item label="描述" :label-width="formLabelWidth">
                     <el-input maxlength="30" type="textarea"
                               :rows="2" show-word-limit v-model="form.memo" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="排序" >
+                <el-form-item label="排序" :label-width="formLabelWidth">
                     <el-input style="width: 250px" min="1"  maxlength="7" v-model="form.sort" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="状态">
+                <el-form-item label="状态" :label-width="formLabelWidth">
                     <el-select v-model="selectValue">
                         <el-option
                                 v-for="item in options"
@@ -203,41 +203,107 @@ export default {
     },
     methods: {
         addPage(){//获取新增按钮权限
-            https.fetchPost('/role/addPage','').then((data) => {
-                console.log(data);
-                if(data.data.code == 'success'){
-                    this.dialogFormVisible = true
-                }else if(data.data.code=='nologin'){
-                    this.message=data.data.message
-                    this.open()
-                    this.$router.push('/login');
-                }else {
-                    this.message=data.data.message
-                    this.open()
-                }
-            }).catch(err=>{
-                    console.log(err)
-                }
-            )
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
+            setTimeout(() => {
+                https.fetchPost('/role/addPage','').then((data) => {
+                    console.log(data);
+                    if(data.data.code == 'success'){
+                        this.dialogFormVisible = true
+                    }else if(data.data.code=='nologin'){
+                        this.message=data.data.message
+                        this.open()
+                        this.$router.push('/login');
+                    }else {
+                        this.message=data.data.message
+                        this.open()
+                    }
+                }).catch(err=>{
+                        console.log(err)
+                    }
+                )
+                loading.close();
+            }, 2000);
         },
         addRole(){ //新增按钮操作
-            var jsonArr = [];
-            jsonArr.push({key:"roleName",value:this.oForm.name});
-            jsonArr.push({key:"status",value:this.oForm.value});
-            jsonArr.push({key:"memo",value:this.oForm.memo});
-            jsonArr.push({key:"sort",value:this.oForm.sort});
-            let sign =md5(preSign(jsonArr));
-            jsonArr.push({key:"sign",value:sign});
-            let params = ParamsAppend(jsonArr);
-            if(this.dialogFormVisible == true){
-                https.fetchPost('/role/addRole',params).then((data) => {//新增
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
+            setTimeout(() => {
+                var jsonArr = [];
+                jsonArr.push({key:"roleName",value:this.oForm.name});
+                jsonArr.push({key:"status",value:this.oForm.value});
+                jsonArr.push({key:"memo",value:this.oForm.memo});
+                jsonArr.push({key:"sort",value:this.oForm.sort});
+                let sign =md5(preSign(jsonArr));
+                jsonArr.push({key:"sign",value:sign});
+                let params = ParamsAppend(jsonArr);
+                if(this.dialogFormVisible == true){
+                    https.fetchPost('/role/addRole',params).then((data) => {//新增
+                        // console.log(data);
+                        if(data.data.code=='success'){
+                            this.dialogFormVisible = false
+                            this.$message.success(`新增成功`);
+                            this.oForm.name = ''
+                            this.oForm.value = ''
+                            this.oForm.memo = ''
+                            this.getMenu()
+                        }else if(data.data.code=='nologin'){
+                            this.message=data.data.message
+                            this.open()
+                            this.$router.push('/login');
+                        }else{
+                            this.message=data.data.message
+                            this.open()
+                        }
+                    }).catch(err=>{
+                            console.log(err)
+                        }
+                    )
+                }
+                loading.close();
+            }, 2000);
+        },
+        delChange(index, row){//删除数据
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
+            setTimeout(() => {
+                this.idx = index;
+                this.form = row;
+                let name=this.query.name
+                let status=this.query.status
+                if(!name){
+                    name=''
+                }
+                if(!status){
+                    status=''
+                }
+                let jsonArr = [];
+                jsonArr.push({key:"roleName",value:name});
+                jsonArr.push({key:"status",value:status});
+                jsonArr.push({key:"id",value:row.id});
+                let sign =md5(preSign(jsonArr));
+                jsonArr.push({key:"sign",value:sign});
+                let params = ParamsAppend(jsonArr);
+                https.fetchPost('/role/deleteRole',params).then((data) => {
                     // console.log(data);
+                    // console.log(JSON.parse(Decrypt(data.data.data)));
                     if(data.data.code=='success'){
-                        this.dialogFormVisible = false
-                        this.$message.success(`新增成功`);
-                        this.oForm.name = ''
-                        this.oForm.value = ''
-                        this.oForm.memo = ''
+                        this.$message.error(`删除了`);
                         this.getMenu()
                     }else if(data.data.code=='nologin'){
                         this.message=data.data.message
@@ -251,164 +317,158 @@ export default {
                         console.log(err)
                     }
                 )
-            }
-        },
-        delChange(index, row){//删除数据
-            this.idx = index;
-            this.form = row;
-            let name=this.query.name
-            let status=this.query.status
-            if(!name){
-                name=''
-            }
-            if(!status){
-                status=''
-            }
-            let jsonArr = [];
-            jsonArr.push({key:"roleName",value:name});
-            jsonArr.push({key:"status",value:status});
-            jsonArr.push({key:"id",value:row.id});
-            let sign =md5(preSign(jsonArr));
-            jsonArr.push({key:"sign",value:sign});
-            let params = ParamsAppend(jsonArr);
-            https.fetchPost('/role/deleteRole',params).then((data) => {
-                // console.log(data);
-                // console.log(JSON.parse(Decrypt(data.data.data)));
-                if(data.data.code=='success'){
-                    this.$message.error(`删除了`);
-                    this.getMenu()
-                }else if(data.data.code=='nologin'){
-                    this.message=data.data.message
-                    this.open()
-                    this.$router.push('/login');
-                }else{
-                    this.message=data.data.message
-                    this.open()
-                }
-            }).catch(err=>{
-                    console.log(err)
-                }
-            )
+                loading.close();
+            }, 2000);
         },
         addChange(index, row){//是否修改权限
-            this.idx = index;
-            this.form = row;
-            var jsonArr = [];
-            jsonArr.push({key:"id",value:row.id});
-            let sign =md5(preSign(jsonArr));
-            jsonArr.push({key:"sign",value:sign});
-            let params = ParamsAppend(jsonArr);
-            https.fetchPost('/role/modifyPage',params).then((data) => {
-                // console.log(data);
-                console.log(JSON.parse(Decrypt(data.data.data)));
-                if(data.data.code=='success'){
-                    this.editVisible = true;
-                    this.oName=JSON.parse(Decrypt(data.data.data)).roleName;
-                    this.form.sort=JSON.parse(Decrypt(data.data.data)).sort;
-                    this.form.memo=JSON.parse(Decrypt(data.data.data)).memo;
-                    this.form.id=row.id;
-                    this.value=JSON.parse(Decrypt(data.data.data)).status;
-                    let _index = 0;
-                    for(let x in this.options){
-                        if(this.options[x].value==JSON.parse(Decrypt(data.data.data)).status){
-                            _index=x;
-                            break;
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
+            setTimeout(() => {
+                this.idx = index;
+                this.form = row;
+                var jsonArr = [];
+                jsonArr.push({key:"id",value:row.id});
+                let sign =md5(preSign(jsonArr));
+                jsonArr.push({key:"sign",value:sign});
+                let params = ParamsAppend(jsonArr);
+                https.fetchPost('/role/modifyPage',params).then((data) => {
+                    // console.log(data);
+                    console.log(JSON.parse(Decrypt(data.data.data)));
+                    if(data.data.code=='success'){
+                        this.editVisible = true;
+                        this.oName=JSON.parse(Decrypt(data.data.data)).roleName;
+                        this.form.sort=JSON.parse(Decrypt(data.data.data)).sort;
+                        this.form.memo=JSON.parse(Decrypt(data.data.data)).memo;
+                        this.form.id=row.id;
+                        this.value=JSON.parse(Decrypt(data.data.data)).status;
+                        let _index = 0;
+                        for(let x in this.options){
+                            if(this.options[x].value==JSON.parse(Decrypt(data.data.data)).status){
+                                _index=x;
+                                break;
+                            }
                         }
-                    }
-                    this.selectValue = this.options[_index].value;
+                        this.selectValue = this.options[_index].value;
 
-                }else if(data.data.code=='nologin'){
-                    this.message=data.data.message
-                    this.open()
-                    this.$router.push('/login');
-                }else{
-                    this.message=data.data.message
-                    this.open()
-                }
-            }).catch(err=>{
-                    console.log(err)
-                }
-            )
+                    }else if(data.data.code=='nologin'){
+                        this.message=data.data.message
+                        this.open()
+                        this.$router.push('/login');
+                    }else{
+                        this.message=data.data.message
+                        this.open()
+                    }
+                }).catch(err=>{
+                        console.log(err)
+                    }
+                )
+                loading.close();
+            }, 2000);
         },
         // 编辑操作
         exChanger() {
-            console.log(this.form.sort);
-            // console.log(this.from.sort.toString());
-            var jsonArr = [];
-            jsonArr.push({key:"id",value:this.form.id});
-            jsonArr.push({key:"roleName",value:this.oName});
-            jsonArr.push({key:"sort",value:''+this.form.sort+''});
-            jsonArr.push({key:"memo",value:this.form.memo});
-            jsonArr.push({key:"status",value:this.selectValue});
-            let sign =md5(preSign(jsonArr));
-            jsonArr.push({key:"sign",value:sign});
-            console.log(jsonArr);
-            let params = ParamsAppend(jsonArr);
-            console.log(params);
-            this.editVisible = false;
-            https.fetchPost('/role/modifyRole',params).then((data) => {
-                // console.log(data);
-                // console.log(JSON.parse(Decrypt(data.data.data)));
-                if(data.data.code=='success'){
-                    this.$message.success(`编辑成功`);
-                    this.getMenu()
-                }else if(data.data.code=='nologin'){
-                    this.message=data.data.message
-                    this.open()
-                    this.$router.push('/login');
-                }else{
-                    this.message=data.data.message
-                    this.open()
-                }
-            }).catch(err=>{
-                    console.log(err)
-                }
-            )
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
+            setTimeout(() => {
+                console.log(this.form.sort);
+                // console.log(this.from.sort.toString());
+                var jsonArr = [];
+                jsonArr.push({key:"id",value:this.form.id});
+                jsonArr.push({key:"roleName",value:this.oName});
+                jsonArr.push({key:"sort",value:''+this.form.sort+''});
+                jsonArr.push({key:"memo",value:this.form.memo});
+                jsonArr.push({key:"status",value:this.selectValue});
+                let sign =md5(preSign(jsonArr));
+                jsonArr.push({key:"sign",value:sign});
+                console.log(jsonArr);
+                let params = ParamsAppend(jsonArr);
+                console.log(params);
+                this.editVisible = false;
+                https.fetchPost('/role/modifyRole',params).then((data) => {
+                    // console.log(data);
+                    // console.log(JSON.parse(Decrypt(data.data.data)));
+                    if(data.data.code=='success'){
+                        this.$message.success(`编辑成功`);
+                        this.getMenu()
+                    }else if(data.data.code=='nologin'){
+                        this.message=data.data.message
+                        this.open()
+                        this.$router.push('/login');
+                    }else{
+                        this.message=data.data.message
+                        this.open()
+                    }
+                }).catch(err=>{
+                        console.log(err)
+                    }
+                )
+                loading.close();
+            }, 2000);
         },
         Search(){
             this.query.pageNo=1
           this.getMenu()
         },
         getMenu(){//获取菜单栏
-            let name=this.query.name
-            let status=this.query.status
-            if(!name){
-                name=''
-            }
-            if(!status){
-                status=''
-            }
-            let jsonArr = [];
-            jsonArr.push({key:"roleName",value:name});
-            jsonArr.push({key:"status",value:status});
-            jsonArr.push({key:"pageNo",value:this.query.pageNo});
-            jsonArr.push({key:"pageSize",value:this.query.pageSize});
-            let sign =md5(preSign(jsonArr));
-            jsonArr.push({key:"sign",value:sign});
-            var params = ParamsAppend(jsonArr);
-            https.fetchPost('/role/rolePage',params).then((data) => {
-                if(data.data.code=='success') {
-                    var oData = JSON.parse(Decrypt(data.data.data));
-                    // console.log(oData);
-                    // console.log(this.query);
-                    this.tableData = oData.data;
-                    this.query.pageSize = oData.pageSize;
-                    this.query.pageNo = oData.pageNo;
-                    this.query.totalCount = oData.totalCount;
-                    this.query.totalPage = oData.totalPage
-                }else if(data.data.code=='nologin'){
-                    this.message=data.data.message
-                    this.open()
-                    this.$router.push('/login');
-                }else{
-                    this.message=data.data.message
-                    this.open()
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
+            setTimeout(() => {
+                let name=this.query.name
+                let status=this.query.status
+                if(!name){
+                    name=''
                 }
+                if(!status){
+                    status=''
+                }
+                let jsonArr = [];
+                jsonArr.push({key:"roleName",value:name});
+                jsonArr.push({key:"status",value:status});
+                jsonArr.push({key:"pageNo",value:this.query.pageNo});
+                jsonArr.push({key:"pageSize",value:this.query.pageSize});
+                let sign =md5(preSign(jsonArr));
+                jsonArr.push({key:"sign",value:sign});
+                var params = ParamsAppend(jsonArr);
+                https.fetchPost('/role/rolePage',params).then((data) => {
+                    if(data.data.code=='success') {
+                        var oData = JSON.parse(Decrypt(data.data.data));
+                        // console.log(oData);
+                        // console.log(this.query);
+                        this.tableData = oData.data;
+                        this.query.pageSize = oData.pageSize;
+                        this.query.pageNo = oData.pageNo;
+                        this.query.totalCount = oData.totalCount;
+                        this.query.totalPage = oData.totalPage
+                    }else if(data.data.code=='nologin'){
+                        this.message=data.data.message
+                        this.open()
+                        this.$router.push('/login');
+                    }else{
+                        this.message=data.data.message
+                        this.open()
+                    }
 
-            }).catch(err=>{
-                    console.log(err)
-                }
-            )
+                }).catch(err=>{
+                        console.log(err)
+                    }
+                )
+                loading.close();
+            }, 2000);
         },
         open() {     //错误信息弹出框
             this.$alert(this.message, '错误信息', {

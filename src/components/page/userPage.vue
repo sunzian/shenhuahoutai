@@ -148,7 +148,7 @@
                 <el-button type="primary" @click="getCheckedKeys">确 定</el-button>
             </div>
         </el-dialog>
-        <!--抽屉弹出框-->
+        <!--新增抽屉弹出框-->
         <el-drawer
                 title="请选择权限"
                 :visible.sync="drawer">
@@ -164,12 +164,12 @@
             <el-button @click="sureNext" type="primary" style="margin-top: 50px;margin-left: 100px">确 定</el-button>
         </el-drawer>
         <!-- 编辑弹出框 -->
-        <el-dialog title="编辑" :visible.sync="editVisible" width="30%">
-            <el-form ref="form" :model="form" label-width="100px">
-                <el-form-item label="用户名">
+        <el-dialog title="编辑" :visible.sync="editVisible" >
+            <el-form ref="form" :model="form">
+                <el-form-item label="用户名" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="userName" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="状态">
+                <el-form-item label="状态" :label-width="formLabelWidth">
                     <el-select v-model="selectValue">
                         <el-option
                                 v-for="item in options"
@@ -179,24 +179,24 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="员工编号" >
+                <el-form-item label="员工编号" :label-width="formLabelWidth">
                     <el-input style="width: 100px"  maxlength="9" v-model="form.userCode" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="真实姓名" >
+                <el-form-item label="真实姓名" :label-width="formLabelWidth">
                     <el-input style="width: 250px"  maxlength="9" v-model="form.realName" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="呼叫号码" >
+                <el-form-item label="呼叫号码" :label-width="formLabelWidth">
                     <el-input style="width: 250px"  maxlength="18" v-model="form.callNumber" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="描述" >
+                <el-form-item label="描述" :label-width="formLabelWidth">
                     <el-input style="width: 250px"  maxlength="9" v-model="form.memo" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="选择影院" >
+                <el-form-item label="选择影院" :label-width="formLabelWidth">
                     <el-checkbox-group v-model="oCheckedCities">
                         <el-checkbox v-for="city in oCities" :label="city.cinemaCode" :key="city.cinemaCode" :value="city.cinemaCode">{{city.cinemaName}}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
-                <el-form-item label="角色">
+                <el-form-item label="角色" :label-width="formLabelWidth">
                     <el-select v-model="oSelectList[0]" >
                         <el-option
                                 v-for="item in oSelectList"
@@ -206,16 +206,8 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="权限" >
-                    <el-tree
-                            ref="tree"
-                            :data="data"
-                            show-checkbox
-                            node-key="id"
-                            :default-expanded-keys="expandedKeys"
-                            :default-checked-keys="checkedKeys"
-                            :props="defaultProps">
-                    </el-tree>
+                <el-form-item label="设置权限" :label-width="formLabelWidth">
+                    <el-button type="primary" @click="changerNext">点击修改</el-button>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -223,6 +215,21 @@
                 <el-button type="primary" @click="exChanger">确 定</el-button>
             </span>
         </el-dialog>
+        <!--编辑抽屉弹出框-->
+        <el-drawer
+                title="请选择权限"
+                :visible.sync="drawered">
+                <el-tree
+                        ref="tree"
+                        :data="data"
+                        show-checkbox
+                        node-key="id"
+                        :default-expanded-keys="expandedKeys"
+                        :default-checked-keys="checkedKeys"
+                        :props="defaultProps">
+                </el-tree>
+            <el-button @click="sureNext" type="primary" style="margin-top: 50px;margin-left: 100px">确 定</el-button>
+        </el-drawer>
     </div>
 </template>
 
@@ -236,7 +243,8 @@
         name: 'basetable',
         data() {
             return {
-                drawer: false,//抽屉弹出框
+                drawered:false,//编辑抽屉弹出框
+                drawer: false,//新增抽屉弹出框
                 checkAll: false,
                 checkedCities: [],
                 oCheckedCities:[],
@@ -307,8 +315,12 @@
             this.getMenu()
         },
         methods: {
+            changerNext(){
+                this.drawered = true
+            },
             sureNext(){
                        this.drawer=false;
+                       this.drawered = false
             },
             openNext(){//获取数级权限列表
                 console.log(this.selectList.id);
@@ -324,6 +336,7 @@
                             this.expandedKeys = JSON.parse(Decrypt(data.data.data)).openPermissionIds
                             this.checkedKeys =JSON.parse(Decrypt(data.data.data)).exitPermissionIds
                             console.log(JSON.parse(Decrypt(data.data.data)));
+                            this.drawer = true
                         }else if(data.data.code=='nologin'){
                             this.message=data.data.message
                             this.open()
@@ -336,7 +349,6 @@
                             console.log(err)
                         }
                     )
-                this.drawer = true
             },
             addPage(){//获取新增按钮权限
                 https.fetchPost('/user/addPage','').then((data) => {

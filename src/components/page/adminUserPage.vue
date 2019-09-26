@@ -152,12 +152,12 @@
             </div>
         </el-dialog>
         <!-- 编辑弹出框 -->
-        <el-dialog title="编辑" :visible.sync="editVisible" width="30%">
-            <el-form ref="form" :model="form" label-width="100px">
-                <el-form-item label="用户名">
+        <el-dialog title="编辑" :visible.sync="editVisible">
+            <el-form ref="form" :model="form">
+                <el-form-item label="用户名" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="userName" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="状态">
+                <el-form-item label="状态" :label-width="formLabelWidth">
                     <el-select v-model="selectValue">
                         <el-option
                                 v-for="item in options"
@@ -167,16 +167,16 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="员工编号" >
+                <el-form-item label="员工编号" :label-width="formLabelWidth">
                     <el-input style="width: 100px"  maxlength="9" v-model="form.userCode" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="真实姓名" >
+                <el-form-item label="真实姓名" :label-width="formLabelWidth">
                     <el-input style="width: 250px"  maxlength="9" v-model="form.realName" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="呼叫号码" >
+                <el-form-item label="呼叫号码" :label-width="formLabelWidth">
                     <el-input style="width: 250px"  maxlength="18" v-model="form.callNumber" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="影院公司名">
+                </el-form-item >
+                <el-form-item label="影院公司名" :label-width="formLabelWidth">
                     <el-select v-model="selectCode">
                         <el-option
                                 v-for="item in businessInfoList"
@@ -186,10 +186,10 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="描述" >
+                <el-form-item label="描述" :label-width="formLabelWidth">
                     <el-input style="width: 250px"  maxlength="9" v-model="form.memo" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="权限" >
+                <el-form-item label="权限" :label-width="formLabelWidth">
                     <el-tree
                             ref="tree"
                             :data="data"
@@ -284,55 +284,300 @@
         },
         methods: {
             addPage(){//获取新增按钮权限
-                https.fetchPost('/user/addAdminPage','').then((data) => {
-                    console.log(data);
-                    if(data.data.code == 'success'){
-                        this.oForm=[]
-                        this.dialogFormVisible = true
-                        // console.log(JSON.parse(JSON.stringify(JSON.parse(Decrypt(data.data.data)).permissionList).replace(/submenuList/g,'children').replace(/menuName/g,'label')));
-                        console.log(JSON.parse(Decrypt(data.data.data)));
-                        this.data=JSON.parse(Decrypt(data.data.data)).permissionList
-                        this.selectList =JSON.parse(Decrypt(data.data.data)).businessInfoList
-                    }else if(data.data.code=='nologin'){
-                        this.message=data.data.message
-                        this.open()
-                        this.$router.push('/login');
-                    }else {
-                        this.message=data.data.message
-                        this.open()
-                    }
-                }).catch(err=>{
-                        console.log(err)
-                    }
-                )
+                const loading = this.$loading({
+                    lock: true,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)',
+                    target: document.querySelector('.div1')
+                });
+                setTimeout(() => {
+                    https.fetchPost('/user/addAdminPage','').then((data) => {
+                        console.log(data);
+                        if(data.data.code == 'success'){
+                            this.oForm=[]
+                            this.dialogFormVisible = true
+                            // console.log(JSON.parse(JSON.stringify(JSON.parse(Decrypt(data.data.data)).permissionList).replace(/submenuList/g,'children').replace(/menuName/g,'label')));
+                            console.log(JSON.parse(Decrypt(data.data.data)));
+                            this.data=JSON.parse(Decrypt(data.data.data)).permissionList
+                            this.selectList =JSON.parse(Decrypt(data.data.data)).businessInfoList
+                        }else if(data.data.code=='nologin'){
+                            this.message=data.data.message
+                            this.open()
+                            this.$router.push('/login');
+                        }else {
+                            this.message=data.data.message
+                            this.open()
+                        }
+                    }).catch(err=>{
+                            console.log(err)
+                        }
+                    )
+                    loading.close();
+                }, 2000);
             },
             getCheckedKeys() {//新增数据操作
                 // console.log(this.$refs.tree.getCheckedKeys());
                 // console.log(this.$refs.tree.getHalfCheckedKeys());
                 // console.log(this.$refs.tree.getCheckedKeys().concat(this.$refs.tree.getHalfCheckedKeys()));
-                var jsonArr = [];
-                jsonArr.push({key:"userName",value:this.oForm.userName});
-                jsonArr.push({key:"userPass",value:this.oForm.userPass});
-                jsonArr.push({key:"status",value:this.oForm.value});
-                jsonArr.push({key:"memo",value:this.oForm.memo});
-                jsonArr.push({key:"userCode",value:this.oForm.userCode});
-                jsonArr.push({key:"realName",value:this.oForm.realName});
-                jsonArr.push({key:"callNumber",value:this.oForm.callNumber});
-                jsonArr.push({key:"businessCode",value:this.selectList.businessCode});
-                jsonArr.push({key:"menuIds",value:this.$refs.tree.getCheckedKeys().concat(this.$refs.tree.getHalfCheckedKeys())});
-                let sign =md5(preSign(jsonArr));
-                jsonArr.push({key:"sign",value:sign});
-                let params = ParamsAppend(jsonArr);
-                if(this.dialogFormVisible == true){
-                    https.fetchPost('/user/addAdminUser',params).then((data) => {//新增
+                const loading = this.$loading({
+                    lock: true,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)',
+                    target: document.querySelector('.div1')
+                });
+                setTimeout(() => {
+                    var jsonArr = [];
+                    jsonArr.push({key:"userName",value:this.oForm.userName});
+                    jsonArr.push({key:"userPass",value:this.oForm.userPass});
+                    jsonArr.push({key:"status",value:this.oForm.value});
+                    jsonArr.push({key:"memo",value:this.oForm.memo});
+                    jsonArr.push({key:"userCode",value:this.oForm.userCode});
+                    jsonArr.push({key:"realName",value:this.oForm.realName});
+                    jsonArr.push({key:"callNumber",value:this.oForm.callNumber});
+                    jsonArr.push({key:"businessCode",value:this.selectList.businessCode});
+                    jsonArr.push({key:"menuIds",value:this.$refs.tree.getCheckedKeys().concat(this.$refs.tree.getHalfCheckedKeys())});
+                    let sign =md5(preSign(jsonArr));
+                    jsonArr.push({key:"sign",value:sign});
+                    let params = ParamsAppend(jsonArr);
+                    if(this.dialogFormVisible == true){
+                        https.fetchPost('/user/addAdminUser',params).then((data) => {//新增
+                            console.log(data);
+                            if(data.data.code=='success'){
+                                this.dialogFormVisible = false
+                                this.$message.success(`新增成功`);
+                                // this.oForm.name = ''
+                                // this.oForm.value = ''
+                                // this.oForm.memo = ''
+                                this.getMenu()
+                            }else if(data.data.code=='nologin'){
+                                this.message=data.data.message
+                                this.open()
+                                this.$router.push('/login');
+                            }else{
+                                this.message=data.data.message
+                                this.open()
+                            }
+                        }).catch(err=>{
+                                console.log(err)
+                            }
+                        )
+                    }
+                    loading.close();
+                }, 2000);
+            },
+            delChange(index, row){//删除数据
+                const loading = this.$loading({
+                    lock: true,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)',
+                    target: document.querySelector('.div1')
+                });
+                setTimeout(() => {
+                    this.idx = index;
+                    this.form = row;
+                    // let name=this.query.name
+                    // let status=this.query.status
+                    // if(!name){
+                    //     name=''
+                    // }
+                    // if(!status){
+                    //     status=''
+                    // }
+                    let jsonArr = [];
+                    jsonArr.push({key:"id",value:row.id});
+                    let sign =md5(preSign(jsonArr));
+                    jsonArr.push({key:"sign",value:sign});
+                    let params = ParamsAppend(jsonArr);
+                    https.fetchPost('/user/deleteAdminUser',params).then((data) => {
                         console.log(data);
+                        // console.log(JSON.parse(Decrypt(data.data.data)));
                         if(data.data.code=='success'){
-                            this.dialogFormVisible = false
-                            this.$message.success(`新增成功`);
-                            // this.oForm.name = ''
-                            // this.oForm.value = ''
-                            // this.oForm.memo = ''
+                            this.$message.error(`删除了`);
                             this.getMenu()
+                        }else if(data.data.code=='nologin'){
+                            this.message=data.data.message
+                            this.open()
+                            this.$router.push('/login');
+                        }
+                        else{
+                            this.message=data.data.message
+                            this.open()
+                        }
+                    }).catch(err=>{
+                            console.log(err)
+                        }
+                    )
+                    loading.close();
+                }, 2000);
+            },
+            addChange(index, row){//是否修改权限
+                const loading = this.$loading({
+                    lock: true,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)',
+                    target: document.querySelector('.div1')
+                });
+                setTimeout(() => {
+                    this.idx = index;
+                    this.form = row;
+                    var jsonArr = [];
+                    jsonArr.push({key:"id",value:row.id});
+                    let sign =md5(preSign(jsonArr));
+                    jsonArr.push({key:"sign",value:sign});
+                    let params = ParamsAppend(jsonArr);
+                    https.fetchPost('/user/modifyAdminPage',params).then((data) => {
+                        console.log(data);
+                        console.log(JSON.parse(Decrypt(data.data.data)));
+                        if(data.data.code=='success'){
+                            this.editVisible = true;
+                            this.form.id=row.id;
+                            this.userName = JSON.parse(Decrypt(data.data.data)).userInfo.userName
+                            this.form.userCode = JSON.parse(Decrypt(data.data.data)).userInfo.userCode
+                            this.form.realName = JSON.parse(Decrypt(data.data.data)).userInfo.realName
+                            this.form.callNumber = JSON.parse(Decrypt(data.data.data)).userInfo.callNumber
+                            this.form.memo = JSON.parse(Decrypt(data.data.data)).userInfo.memo
+                            // this.form.businessCode = JSON.parse(Decrypt(data.data.data)).userInfo.businessCode
+                            this.expandedKeys = JSON.parse(Decrypt(data.data.data)).openPermissionIds
+                            this.checkedKeys =JSON.parse(Decrypt(data.data.data)).exitPermissionIds
+                            this.data=JSON.parse(Decrypt(data.data.data)).permissionList //权限数据
+                            this.businessInfoList = JSON.parse(Decrypt(data.data.data)).businessInfoList //定义下拉选的内容
+                            let _index = 0;  //下拉选显示对应的选项
+                            for(let x in this.options){
+                                if(this.options[x].value==JSON.parse(Decrypt(data.data.data)).userInfo.status){
+                                    _index=x;
+                                    break;
+                                }
+                            }
+                            this.selectValue = this.options[_index].value;
+
+                            let oIndex = 0;  //下拉选显示对应的选项
+                            for(let i in this.businessInfoList){
+                                if(this.businessInfoList[i].businessCode==JSON.parse(Decrypt(data.data.data)).userInfo.businessCode){
+                                    oIndex=i;
+                                    break;
+                                }
+                            }
+                            this.selectCode = this.businessInfoList[oIndex].businessCode;
+
+
+                        }else if(data.data.code=='nologin'){
+                            this.message=data.data.message
+                            this.open()
+                            this.$router.push('/login');
+                        }
+                        else{
+                            this.message=data.data.message
+                            this.open()
+                        }
+                    }).catch(err=>{
+                            console.log(err)
+                        }
+                    )
+                    loading.close();
+                }, 2000);
+
+            },
+            // 修改操作
+            exChanger() {
+                // console.log(this.$refs.tree.getCheckedKeys());
+                const loading = this.$loading({
+                    lock: true,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)',
+                    target: document.querySelector('.div1')
+                });
+                setTimeout(() => {
+                    var jsonArr = [];
+                    jsonArr.push({key:"id",value:this.form.id});
+                    jsonArr.push({key:"userName",value:this.userName});
+                    jsonArr.push({key:"status",value:this.selectValue});
+                    jsonArr.push({key:"userCode",value:this.form.userCode});
+                    jsonArr.push({key:"realName",value:this.form.realName});
+                    jsonArr.push({key:"callNumber",value:this.form.callNumber});
+                    jsonArr.push({key:"memo",value:this.form.memo});
+                    jsonArr.push({key:"businessCode",value:this.selectCode});
+                    jsonArr.push({key:"menuIds",value:this.$refs.tree.getCheckedKeys()});
+                    let sign =md5(preSign(jsonArr));
+                    jsonArr.push({key:"sign",value:sign});
+                    let params = ParamsAppend(jsonArr);
+                    this.editVisible = false;
+                    https.fetchPost('/user/modifyAdminUser',params).then((data) => {
+                        // console.log(data);
+                        // console.log(JSON.parse(Decrypt(data.data.data)));
+                        if(data.data.code=='success'){
+                            this.$message.success(`编辑成功`);
+                            this.getMenu()
+                        }else if(data.data.code=='nologin'){
+                            this.message=data.data.message
+                            this.open()
+                            this.$router.push('/login');
+                        }
+                        else{
+                            this.message=data.data.message
+                            this.open()
+                        }
+                    }).catch(err=>{
+                            console.log(err)
+                        }
+                    )
+                    loading.close();
+                }, 2000);
+            },
+            Search(){
+                this.query.pageNo=1
+                this.getMenu()
+            },
+            getMenu(){//获取菜单栏
+                const loading = this.$loading({
+                    lock: true,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)',
+                    target: document.querySelector('.div1')
+                });
+                setTimeout(() => {
+                    let businessCode=this.query.businessCode
+                    let userName=this.query.userName
+                    let userCode=this.query.userCode
+                    let status=this.query.status
+                    if(!businessCode){
+                        businessCode=''
+                    }
+                    if(!userName){
+                        userName=''
+                    }
+                    if(!userCode){
+                        userCode=''
+                    }
+                    if(!status){
+                        status=''
+                    }
+                    let jsonArr = [];
+                    jsonArr.push({key:"businessCode",value:businessCode});
+                    jsonArr.push({key:"userName",value:userName});
+                    jsonArr.push({key:"userCode",value:userCode});
+                    jsonArr.push({key:"status",value:status});
+                    jsonArr.push({key:"pageNo",value:this.query.pageNo});
+                    jsonArr.push({key:"pageSize",value:this.query.pageSize});
+                    let sign =md5(preSign(jsonArr));
+                    jsonArr.push({key:"sign",value:sign});
+                    var params = ParamsAppend(jsonArr);
+                    https.fetchPost('/user/businessUserPage',params).then((data) => {
+                        // console.log(data);
+                        if(data.data.code=='success') {
+                            var oData = JSON.parse(Decrypt(data.data.data));
+                            // console.log(oData);
+                            // console.log(this.query);
+                            this.tableData = oData.data;
+                            this.query.pageSize = oData.pageSize;
+                            this.query.pageNo = oData.pageNo;
+                            this.query.totalCount = oData.totalCount;
+                            this.query.totalPage = oData.totalPage
                         }else if(data.data.code=='nologin'){
                             this.message=data.data.message
                             this.open()
@@ -341,197 +586,13 @@
                             this.message=data.data.message
                             this.open()
                         }
+
                     }).catch(err=>{
                             console.log(err)
                         }
                     )
-                }
-            },
-            delChange(index, row){//删除数据
-                this.idx = index;
-                this.form = row;
-                // let name=this.query.name
-                // let status=this.query.status
-                // if(!name){
-                //     name=''
-                // }
-                // if(!status){
-                //     status=''
-                // }
-                let jsonArr = [];
-                jsonArr.push({key:"id",value:row.id});
-                let sign =md5(preSign(jsonArr));
-                jsonArr.push({key:"sign",value:sign});
-                let params = ParamsAppend(jsonArr);
-                https.fetchPost('/user/deleteAdminUser',params).then((data) => {
-                    console.log(data);
-                    // console.log(JSON.parse(Decrypt(data.data.data)));
-                    if(data.data.code=='success'){
-                        this.$message.error(`删除了`);
-                        this.getMenu()
-                    }else if(data.data.code=='nologin'){
-                        this.message=data.data.message
-                        this.open()
-                        this.$router.push('/login');
-                    }
-                    else{
-                        this.message=data.data.message
-                        this.open()
-                    }
-                }).catch(err=>{
-                        console.log(err)
-                    }
-                )
-            },
-            addChange(index, row){//是否修改权限
-                this.idx = index;
-                this.form = row;
-                var jsonArr = [];
-                jsonArr.push({key:"id",value:row.id});
-                let sign =md5(preSign(jsonArr));
-                jsonArr.push({key:"sign",value:sign});
-                let params = ParamsAppend(jsonArr);
-                https.fetchPost('/user/modifyAdminPage',params).then((data) => {
-                    console.log(data);
-                    console.log(JSON.parse(Decrypt(data.data.data)));
-                    if(data.data.code=='success'){
-                        this.editVisible = true;
-                        this.form.id=row.id;
-                        this.userName = JSON.parse(Decrypt(data.data.data)).userInfo.userName
-                        this.form.userCode = JSON.parse(Decrypt(data.data.data)).userInfo.userCode
-                        this.form.realName = JSON.parse(Decrypt(data.data.data)).userInfo.realName
-                        this.form.callNumber = JSON.parse(Decrypt(data.data.data)).userInfo.callNumber
-                        this.form.memo = JSON.parse(Decrypt(data.data.data)).userInfo.memo
-                        // this.form.businessCode = JSON.parse(Decrypt(data.data.data)).userInfo.businessCode
-                        this.expandedKeys = JSON.parse(Decrypt(data.data.data)).openPermissionIds
-                        this.checkedKeys =JSON.parse(Decrypt(data.data.data)).exitPermissionIds
-                        this.data=JSON.parse(Decrypt(data.data.data)).permissionList //权限数据
-                        this.businessInfoList = JSON.parse(Decrypt(data.data.data)).businessInfoList //定义下拉选的内容
-                        let _index = 0;  //下拉选显示对应的选项
-                        for(let x in this.options){
-                            if(this.options[x].value==JSON.parse(Decrypt(data.data.data)).userInfo.status){
-                                _index=x;
-                                break;
-                            }
-                        }
-                        this.selectValue = this.options[_index].value;
-
-                        let oIndex = 0;  //下拉选显示对应的选项
-                        for(let i in this.businessInfoList){
-                            if(this.businessInfoList[i].businessCode==JSON.parse(Decrypt(data.data.data)).userInfo.businessCode){
-                                oIndex=i;
-                                break;
-                            }
-                        }
-                        this.selectCode = this.businessInfoList[oIndex].businessCode;
-
-
-                    }else if(data.data.code=='nologin'){
-                        this.message=data.data.message
-                        this.open()
-                        this.$router.push('/login');
-                    }
-                    else{
-                        this.message=data.data.message
-                        this.open()
-                    }
-                }).catch(err=>{
-                        console.log(err)
-                    }
-                )
-            },
-            // 修改操作
-            exChanger() {
-                // console.log(this.$refs.tree.getCheckedKeys());
-                var jsonArr = [];
-                jsonArr.push({key:"id",value:this.form.id});
-                jsonArr.push({key:"userName",value:this.userName});
-                jsonArr.push({key:"status",value:this.selectValue});
-                jsonArr.push({key:"userCode",value:this.form.userCode});
-                jsonArr.push({key:"realName",value:this.form.realName});
-                jsonArr.push({key:"callNumber",value:this.form.callNumber});
-                jsonArr.push({key:"memo",value:this.form.memo});
-                jsonArr.push({key:"businessCode",value:this.selectCode});
-                jsonArr.push({key:"menuIds",value:this.$refs.tree.getCheckedKeys()});
-                let sign =md5(preSign(jsonArr));
-                jsonArr.push({key:"sign",value:sign});
-                let params = ParamsAppend(jsonArr);
-                this.editVisible = false;
-                https.fetchPost('/user/modifyAdminUser',params).then((data) => {
-                    // console.log(data);
-                    // console.log(JSON.parse(Decrypt(data.data.data)));
-                    if(data.data.code=='success'){
-                        this.$message.success(`编辑成功`);
-                        this.getMenu()
-                    }else if(data.data.code=='nologin'){
-                        this.message=data.data.message
-                        this.open()
-                        this.$router.push('/login');
-                    }
-                    else{
-                        this.message=data.data.message
-                        this.open()
-                    }
-                }).catch(err=>{
-                        console.log(err)
-                    }
-                )
-            },
-            Search(){
-                this.query.pageNo=1
-                this.getMenu()
-            },
-            getMenu(){//获取菜单栏
-                let businessCode=this.query.businessCode
-                let userName=this.query.userName
-                let userCode=this.query.userCode
-                let status=this.query.status
-                if(!businessCode){
-                    businessCode=''
-                }
-                if(!userName){
-                    userName=''
-                }
-                if(!userCode){
-                    userCode=''
-                }
-                if(!status){
-                    status=''
-                }
-                let jsonArr = [];
-                jsonArr.push({key:"businessCode",value:businessCode});
-                jsonArr.push({key:"userName",value:userName});
-                jsonArr.push({key:"userCode",value:userCode});
-                jsonArr.push({key:"status",value:status});
-                jsonArr.push({key:"pageNo",value:this.query.pageNo});
-                jsonArr.push({key:"pageSize",value:this.query.pageSize});
-                let sign =md5(preSign(jsonArr));
-                jsonArr.push({key:"sign",value:sign});
-                var params = ParamsAppend(jsonArr);
-                https.fetchPost('/user/businessUserPage',params).then((data) => {
-                    // console.log(data);
-                    if(data.data.code=='success') {
-                        var oData = JSON.parse(Decrypt(data.data.data));
-                        // console.log(oData);
-                        // console.log(this.query);
-                        this.tableData = oData.data;
-                        this.query.pageSize = oData.pageSize;
-                        this.query.pageNo = oData.pageNo;
-                        this.query.totalCount = oData.totalCount;
-                        this.query.totalPage = oData.totalPage
-                    }else if(data.data.code=='nologin'){
-                        this.message=data.data.message
-                        this.open()
-                        this.$router.push('/login');
-                    }else{
-                        this.message=data.data.message
-                        this.open()
-                    }
-
-                }).catch(err=>{
-                        console.log(err)
-                    }
-                )
+                    loading.close();
+                }, 2000);
             },
             open() {     //错误信息弹出框
                 this.$alert(this.message, '错误信息', {
