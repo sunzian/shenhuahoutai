@@ -74,7 +74,7 @@
                     <template slot-scope="scope" v-else>否</template>
                 </el-table-column>
                 <el-table-column prop="time" label="到期时间">
-                    <template slot-scope="scope">{{scope.row. expireDate}}</template>
+                    <template slot-scope="scope">{{scope.row.expireDate}}</template>
                 </el-table-column>
                 <el-table-column prop="string" label="费用支付类型">
                     <template slot-scope="scope" v-if="scope.row.openStatus == 1">包年</template>
@@ -93,10 +93,13 @@
                     <template slot-scope="scope" v-else>否</template>
                 </el-table-column>
                 <el-table-column prop="booleans" label="会员卡支付是否可用优惠券">
-                    <template slot-scope="scope" v-if="scope.row.ticketsForMemberCardPayStatus == 1">是</template>
+                    <template
+                        slot-scope="scope"
+                        v-if="scope.row.ticketsForMemberCardPayStatus == 1"
+                    >是</template>
                     <template slot-scope="scope" v-else>否</template>
                 </el-table-column>
-                <el-table-column label="操作" width="100" align="center" fixed='right'>
+                <el-table-column label="操作" width="100" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-button
                             type="text"
@@ -120,136 +123,14 @@
             </div>
         </div>
         <!--新增弹出框-->
-        <el-dialog title="新增影院" :visible.sync="dialogFormVisible">
+        <el-dialog title="新增" :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
-                <el-form-item label="影院名" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 250px"
-                        maxlength="10"
-                        show-word-limit
-                        v-model="oForm.name"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="影院描述" :label-width="formLabelWidth">
-                    <el-input
-                        maxlength="30"
-                        type="textarea"
-                        :rows="2"
-                        show-word-limit
-                        v-model="oForm.memo"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="影院logo" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 150px"
-                        maxlength="9"
-                        v-model.number="oForm.logo"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="影院电话" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 150px"
-                        maxlength="9"
-                        v-model.number="oForm.mobile"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="金币过期年数" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 150px"
-                        maxlength="9"
-                        v-model.number="oForm.goldExpireYears"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="会员卡积分兑换比例" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 150px"
-                        maxlength="9"
-                        v-model.number="oForm.percentageOfPointsIntoGold"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="过期优惠券是否发送短信通知会员" :label-width="formLabelWidth">
-                    <el-select v-model="oForm.messageForExpireTickets" placeholder="请选择">
-                        <el-option label="是" value="shanghai"></el-option>
-                        <el-option label="否" value="beijing"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="优惠券到期前几天发送短信通知会员" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 150px"
-                        maxlength="9"
-                        v-model.number="oForm.aheadDaysForMessage"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="售票系统类型" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 150px"
-                        maxlength="9"
-                        v-model.number="oForm.ticketingSystemType"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="售票系统账号" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 150px"
-                        maxlength="9"
-                        v-model.number="oForm.ticketingSystemAccount"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="售票系统密码" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 150px"
-                        maxlength="9"
-                        v-model.number="oForm.ticketingSystemPassword"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="小程序appId" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 150px"
-                        maxlength="9"
-                        v-model.number="oForm.miniAppId"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="售票系统接口地址" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 150px"
-                        maxlength="9"
-                        v-model.number="oForm.interfaceAddress"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="售票系统会员接口地址" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 150px"
-                        maxlength="9"
-                        v-model.number="oForm.memberInterfaceAddress"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogFormVisible = false">取 消</el-button>
-                <el-button type="primary" @click="addRole">确 定</el-button>
-            </div>
-        </el-dialog>
-        <!-- 编辑弹出框 -->
-        <el-dialog title="编辑" :visible.sync="editVisible" width="30%">
-            <el-form ref="form" :model="form" label-width="100px">
                 <el-form-item label="影院编码">
                     <el-input
                         style="width: 250px"
                         maxlength="10"
                         show-word-limit
-                        v-model="oName"
+                        v-model="oForm.cinemaCode"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
@@ -257,8 +138,7 @@
                     <el-input
                         style="width: 250px"
                         min="1"
-                        maxlength="7"
-                        v-model.number="oCode"
+                        v-model.number="oForm.cinemaName"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
@@ -266,8 +146,7 @@
                     <el-input
                         style="width: 250px"
                         min="1"
-                        maxlength="7"
-                        v-model.number="oCode"
+                        v-model.number="oForm.province"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
@@ -275,8 +154,7 @@
                     <el-input
                         style="width: 250px"
                         min="1"
-                        maxlength="7"
-                        v-model.number="oCode"
+                        v-model.number="oForm.city"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
@@ -284,8 +162,7 @@
                     <el-input
                         style="width: 250px"
                         min="1"
-                        maxlength="7"
-                        v-model.number="oCode"
+                        v-model.number="oForm.address"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
@@ -293,8 +170,7 @@
                     <el-input
                         style="width: 250px"
                         min="1"
-                        maxlength="7"
-                        v-model.number="oCode"
+                        v-model.number="oForm.longitude"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
@@ -302,8 +178,7 @@
                     <el-input
                         style="width: 250px"
                         min="1"
-                        maxlength="7"
-                        v-model.number="oCode"
+                        v-model.number="oForm.latitude"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
@@ -311,8 +186,7 @@
                     <el-input
                         style="width: 250px"
                         min="1"
-                        maxlength="7"
-                        v-model.number="oCode"
+                        v-model.number="oForm.belongBusinessCode"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
@@ -320,8 +194,7 @@
                     <el-input
                         style="width: 250px"
                         min="1"
-                        maxlength="7"
-                        v-model.number="oCode"
+                        v-model.number="oForm.concatName"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
@@ -329,8 +202,7 @@
                     <el-input
                         style="width: 250px"
                         min="1"
-                        maxlength="7"
-                        v-model.number="oCode"
+                        v-model.number="oForm.concatMobile"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
@@ -338,17 +210,23 @@
                     <el-input
                         style="width: 250px"
                         min="1"
-                        maxlength="7"
-                        v-model.number="oCode"
+                        v-model.number="oForm.serviceMobile"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
+                <!-- <el-form-item label="影院标签">
+                    <el-input
+                        style="width: 250px"
+                        min="1"
+                        v-model.number="oCinemaLabel"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>-->
                 <el-form-item label="影厅数量">
                     <el-input
                         style="width: 250px"
                         min="1"
-                        maxlength="7"
-                        v-model.number="oCode"
+                        v-model.number="oForm.screenCount"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
@@ -356,18 +234,17 @@
                     <el-input
                         style="width: 250px"
                         min="1"
-                        maxlength="7"
-                        v-model.number="oCode"
+                        v-model.number="oForm.ticketSystemCode"
                         autocomplete="off"
-                        disabled='true'
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="第三方比价影院编码">
                     <el-input
-                        style="width: 250px"
-                        min="1"
-                        maxlength="7"
-                        v-model.number="oCode"
+                        maxlength="30"
+                        type="textarea"
+                        :rows="2"
+                        show-word-limit
+                        v-model.trim="oForm.comparePriceCode"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
@@ -375,8 +252,7 @@
                     <el-input
                         style="width: 250px"
                         min="1"
-                        maxlength="7"
-                        v-model.number="oCode"
+                        v-model.number="oForm.buyMinutesLimit"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
@@ -384,18 +260,15 @@
                     <el-input
                         style="width: 250px"
                         min="1"
-                        maxlength="7"
-                        v-model.number="oCode"
+                        v-model="oForm.refundMinutesLimit"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="退票手续费">
                     <el-input
-                        maxlength="30"
-                        type="textarea"
-                        :rows="2"
-                        show-word-limit
-                        v-model.trim="oMemo"
+                        style="width: 250px"
+                        min="1"
+                        v-model.trim="oForm.refundFee"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
@@ -403,8 +276,7 @@
                     <el-input
                         style="width: 250px"
                         min="1"
-                        maxlength="7"
-                        v-model.number="oMobile"
+                        v-model.trim="oForm.thirdPartyPayCommissionFee"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
@@ -412,215 +284,525 @@
                     <el-input
                         style="width: 250px"
                         min="1"
-                        maxlength="7"
-                        v-model="oLogo"
+                        v-model.trim="oForm.memberCardPayCommissionFee"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="影院会员服务协议">
                     <el-input
-                        style="width: 50px"
+                        style="width: 250px"
                         min="1"
-                        maxlength="7"
-                        v-model.trim="oGold"
+                        v-model.trim="oForm.membershipServiceAgreement"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="购票提示">
                     <el-input
-                        style="width: 50px"
+                        style="width: 250px"
                         min="1"
-                        maxlength="7"
-                        v-model.trim="oGold"
+                        v-model.trim="oForm.buyTicketHint"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="是否开通套餐">
                     <el-input
-                        style="width: 50px"
+                        style="width: 250px"
                         min="1"
-                        maxlength="7"
-                        v-model.trim="oGold"
+                        v-model.trim="oForm.openSnackStatus"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="是否小卖配送">
                     <el-input
-                        style="width: 50px"
+                        style="width: 250px"
                         min="1"
-                        maxlength="7"
-                        v-model.trim="oGold"
+                        v-model.trim="oForm.snackDispatcherStatus"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="是否可退票">
                     <el-input
-                        style="width: 50px"
+                        style="width: 250px"
                         min="1"
-                        maxlength="7"
-                        v-model.trim="oGold"
+                        v-model.trim="oForm.refundable"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="剩余票数">
                     <el-input
-                        style="width: 50px"
+                        style="width: 250px"
                         min="1"
-                        maxlength="7"
-                        v-model.trim="oGold"
+                        v-model.trim="oForm.remainTicketsNumber"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="卖品显示开始时间">
-                    <el-input
-                        style="width: 50px"
-                        min="1"
-                        maxlength="7"
-                        v-model.trim="oGold"
-                        autocomplete="off"
-                    ></el-input>
+                    <el-time-picker v-model="oForm.snackBeginTime" :picker-options="{
+    }"></el-time-picker>
                 </el-form-item>
                 <el-form-item label="卖品显示结束时间">
-                    <el-input
-                        style="width: 50px"
-                        min="1"
-                        maxlength="7"
-                        v-model.trim="oGold"
-                        autocomplete="off"
-                    ></el-input>
+                    <el-time-picker v-model="oForm.snackEndTime" :picker-options="{
+    }"></el-time-picker>
                 </el-form-item>
                 <el-form-item label="短信平台类型">
                     <el-input
-                        style="width: 50px"
+                        style="width: 250px"
                         min="1"
-                        maxlength="7"
-                        v-model.trim="oGold"
+                        v-model.trim="oForm.messagePlatformType"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="短信平台账号">
                     <el-input
-                        style="width: 50px"
+                        style="width: 250px"
                         min="1"
-                        maxlength="7"
-                        v-model.trim="oGold"
+                        v-model="oForm.messagePlatformAccount"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="短信平台密码">
                     <el-input
-                        style="width: 50px"
+                        style="width: 250px"
                         min="1"
-                        maxlength="7"
-                        v-model.trim="oGold"
+                        v-model="oForm.messagePlatformPassword"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="短信平台签名id">
                     <el-input
-                        style="width: 50px"
+                        style="width: 250px"
                         min="1"
-                        maxlength="7"
-                        v-model.trim="oGold"
+                        v-model="oForm.messagePlatformSignId"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="是否开通服务">
                     <el-input
-                        style="width: 50px"
+                        style="width: 250px"
                         min="1"
-                        maxlength="7"
-                        v-model.trim="oGold"
+                        v-model.trim="oForm.openStatus"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="到期时间">
-                    <el-input
-                        style="width: 50px"
+                    <el-date-picker v-model="oExpireDate" type="datetime" placeholder="选择日期时间"></el-date-picker>
+                    <!-- <el-input
+                        style="width: 250px"
                         min="1"
-                        maxlength="7"
-                        v-model.trim="oGold"
+                        v-model.trim="oForm.expireDate"
                         autocomplete="off"
-                    ></el-input>
+                    ></el-input>-->
                 </el-form-item>
                 <el-form-item label="费用支付类型">
                     <el-input
-                        style="width: 50px"
+                        style="width: 250px"
                         min="1"
-                        maxlength="7"
-                        v-model.trim="oGold"
+                        v-model.trim="oForm.paymentType"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="票价上报方式">
                     <el-input
-                        style="width: 50px"
+                        style="width: 250px"
                         min="1"
-                        maxlength="7"
-                        v-model.trim="oGold"
+                        v-model.trim="oForm.reportedType"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="是否开通会员卡功能">
                     <el-input
-                        style="width: 50px"
+                        style="width: 250px"
                         min="1"
-                        maxlength="7"
-                        v-model.trim="oGold"
+                        v-model.trim="oForm.openMemberCardStatus"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="会员卡是否门店通用">
                     <el-input
-                        style="width: 50px"
+                        style="width: 250px"
                         min="1"
-                        maxlength="7"
-                        v-model.trim="oGold"
+                        v-model.trim="oForm.memberCardCommonUseStatus"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="会员卡支付是否可用优惠券">
                     <el-input
-                        style="width: 50px"
+                        style="width: 250px"
                         min="1"
-                        maxlength="7"
-                        v-model.trim="oGold"
+                        v-model.trim="oForm.ticketsForMemberCardPayStatus"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="小程序appSecret">
                     <el-input
-                        style="width: 50px"
+                        style="width: 250px"
                         min="1"
-                        maxlength="7"
-                        v-model.trim="oGold"
+                        v-model.trim="oForm.miniAppSecret"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="小程序支付商户号">
                     <el-input
-                        style="width: 50px"
+                        style="width: 250px"
                         min="1"
-                        maxlength="7"
-                        v-model.trim="oGold"
+                        v-model.trim="oForm.miniMerchantNo"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="小程序支付密钥">
                     <el-input
-                        style="width: 50px"
+                        style="width: 250px"
                         min="1"
-                        maxlength="7"
-                        v-model.trim="oGold"
+                        v-model.trim="oForm.miniMerchantSecret"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="小程序退款证书阿里云路径">
                     <el-input
-                        style="width: 50px"
+                        style="width: 250px"
                         min="1"
-                        maxlength="7"
-                        v-model.trim="oGold"
+                        v-model.trim="oForm.miniRefundCertificateUrl"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogFormVisible = false">取 消</el-button>
+                <el-button type="primary" @click="addRole">确 定</el-button>
+            </span>
+        </el-dialog>
+        <!-- 编辑弹出框 -->
+        <el-dialog title="编辑" :visible.sync="editVisible">
+            <el-form ref="form" :model="form">
+                <el-form-item label="影院编码">
+                    <el-input style="width: 250px" min="1" v-model="oCinemaCode" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="影院名称">
+                    <el-input
+                        style="width: 250px"
+                        min="1"
+                        v-model.number="oCinemaName"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="所在省份">
+                    <el-input
+                        style="width: 250px"
+                        min="1"
+                        v-model.number="oProvince"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="所在城市">
+                    <el-input
+                        style="width: 250px"
+                        min="1"
+                        v-model.number="oCity"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="详细地址">
+                    <el-input
+                        style="width: 250px"
+                        min="1"
+                        v-model.number="oAddress"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="经度">
+                    <el-input
+                        style="width: 250px"
+                        min="1"
+                        v-model.number="oLongitude"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="纬度">
+                    <el-input
+                        style="width: 250px"
+                        min="1"
+                        v-model.number="oLatitude"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="关联商家编码">
+                    <el-input
+                        style="width: 250px"
+                        min="1"
+                        v-model.number="oBelongBusinessCode"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="影院联系人姓名">
+                    <el-input
+                        style="width: 250px"
+                        min="1"
+                        v-model.number="oConcatName"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="影院联系人电话">
+                    <el-input
+                        style="width: 250px"
+                        min="1"
+                        v-model.number="oConcatMobile"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="客服电话">
+                    <el-input
+                        style="width: 250px"
+                        min="1"
+                        v-model.number="oServiceMobile"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <!-- <el-form-item label="影院标签">
+                    <el-input
+                        style="width: 250px"
+                        min="1"
+                        v-model.number="oCinemaLabel"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>-->
+                <el-form-item label="影厅数量">
+                    <el-input
+                        style="width: 250px"
+                        min="1"
+                        v-model.number="oScreenCount"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="售票系统影院内码">
+                    <el-input
+                        style="width: 250px"
+                        min="1"
+                        v-model.number="oTicketSystemCode"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="第三方比价影院编码">
+                    <el-input
+                        maxlength="30"
+                        type="textarea"
+                        :rows="2"
+                        show-word-limit
+                        v-model.trim="oComparePriceCode"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="开场前的购票时间限制">
+                    <el-input
+                        style="width: 250px"
+                        min="1"
+                        v-model.number="oBuyMinutesLimit"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="开场前的退票时间限制">
+                    <el-input
+                        style="width: 250px"
+                        min="1"
+                        v-model="oRefundMinutesLimit"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="退票手续费">
+                    <el-input
+                        style="width: 250px"
+                        min="1"
+                        v-model.trim="oRefundFee"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="第三方支付代售费（微信支付）">
+                    <el-input
+                        style="width: 250px"
+                        min="1"
+                        v-model.trim="oThirdPartyPayCommissionFee"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="会员卡支付代售费">
+                    <el-input
+                        style="width: 250px"
+                        min="1"
+                        v-model.trim="oMemberCardPayCommissionFee"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="影院会员服务协议">
+                    <el-input
+                        style="width: 250px"
+                        min="1"
+                        v-model.trim="oMembershipServiceAgreement"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="购票提示">
+                    <el-input
+                        style="width: 250px"
+                        min="1"
+                        v-model.trim="oBuyTicketHint"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="是否开通套餐">
+                    <el-input
+                        style="width: 250px"
+                        min="1"
+                        v-model.trim="oOpenSnackStatus"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="是否小卖配送">
+                    <el-input
+                        style="width: 250px"
+                        min="1"
+                        v-model.trim="oSnackDispatcherStatus"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="是否可退票">
+                    <el-input
+                        style="width: 250px"
+                        min="1"
+                        v-model.trim="oRefundable"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="剩余票数">
+                    <el-input
+                        style="width: 250px"
+                        min="1"
+                        v-model.trim="oRemainTicketsNumber"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="卖品显示开始时间">
+                    <el-time-picker
+                        v-model="oSnackBeginTime"
+                        placeholder="任意时间点"
+                    ></el-time-picker>
+                </el-form-item>
+                <el-form-item label="卖品显示结束时间">
+                    <el-time-picker
+                        v-model="oSnackEndTime"
+                        placeholder="任意时间点"
+                    ></el-time-picker>
+                </el-form-item>
+                <el-form-item label="短信平台类型">
+                    <el-input
+                        style="width: 250px"
+                        min="1"
+                        v-model.trim="oMessagePlatformType"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="短信平台账号">
+                    <el-input
+                        style="width: 250px"
+                        min="1"
+                        v-model.trim="oMessagePlatformAccount"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="短信平台密码">
+                    <el-input
+                        style="width: 250px"
+                        min="1"
+                        v-model.trim="oMessagePlatformPassword"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="短信平台签名id">
+                    <el-input
+                        style="width: 250px"
+                        min="1"
+                        v-model.trim="oMessagePlatformSignId"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="是否开通服务">
+                    <el-input
+                        style="width: 250px"
+                        min="1"
+                        v-model.trim="oOpenStatus"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="到期时间">
+                    <el-date-picker v-model="oExpireDate" type="datetime" placeholder="选择日期时间"></el-date-picker>
+                </el-form-item>
+                <el-form-item label="费用支付类型">
+                    <el-input
+                        style="width: 250px"
+                        min="1"
+                        v-model.trim="oPaymentType"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="票价上报方式">
+                    <el-input
+                        style="width: 250px"
+                        min="1"
+                        v-model.trim="oReportedType"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="是否开通会员卡功能">
+                    <el-input
+                        style="width: 250px"
+                        min="1"
+                        v-model.trim="oOpenMemberCardStatus"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="会员卡是否门店通用">
+                    <el-input
+                        style="width: 250px"
+                        min="1"
+                        v-model.trim="oMemberCardCommonUseStatus"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="会员卡支付是否可用优惠券">
+                    <el-input
+                        style="width: 250px"
+                        min="1"
+                        v-model.trim="oTicketsForMemberCardPayStatus"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="小程序appSecret">
+                    <el-input
+                        style="width: 250px"
+                        min="1"
+                        v-model.trim="oMiniAppSecret"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="小程序支付商户号">
+                    <el-input
+                        style="width: 250px"
+                        min="1"
+                        v-model.trim="oMiniMerchantNo"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="小程序支付密钥">
+                    <el-input
+                        style="width: 250px"
+                        min="1"
+                        v-model.trim="oMiniMerchantSecret"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="小程序退款证书阿里云路径">
+                    <el-input
+                        style="width: 250px"
+                        min="1"
+                        v-model.trim="oMiniRefundCertificateUrl"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
@@ -643,13 +825,50 @@ export default {
     name: 'basetable',
     data() {
         return {
-            oName: '',
+            oCinemaName: '',
+            oCinemaCode: '',
+            oProvince: '',
+            oCity: '',
+            oAddress: '',
+            oLongitude: '',
+            oLatitude: '',
+            oBelongBusinessCode: '',
+            oConcatName: '',
+            oConcatMobile: '',
+            oServiceMobile: '',
+            // oCinemaLabel: '',
+            oScreenCount: '',
+            oTicketSystemCode: '',
+            oComparePriceCode: '',
+            oBuyMinutesLimit: '',
+            oRefundMinutesLimit: '',
+            oRefundFee: '',
+            oThirdPartyPayCommissionFee: '',
+            oMemberCardPayCommissionFee: '',
+            oMembershipServiceAgreement: '',
+            oBuyTicketHint: '',
+            oOpenSnackStatus: '',
+            oSnackDispatcherStatus: '',
+            oRefundable: '',
+            oRemainTicketsNumber: '',
+            oSnackBeginTime: '',
+            oSnackEndTime: '',
+            oMessagePlatformType: '',
+            oMessagePlatformAccount: '',
+            oMessagePlatformPassword: '',
+            oMessagePlatformSignId: '',
+            oOpenStatus: '',
+            oExpireDate: '',
+            oPaymentType: '',
+            oReportedType: '',
+            oOpenMemberCardStatus: '',
+            oMemberCardCommonUseStatus: '',
+            oTicketsForMemberCardPayStatus: '',
+            oMiniAppSecret: '',
+            oMiniMerchantNo: '',
+            oMiniMerchantSecret: '',
+            oMiniRefundCertificateUrl: '',
             oId: '',
-            oCode: '',
-            oMemo: '',
-            oLogo: '',
-            oMobile: '',
-            oGold: '',
             message: '', //弹出框消息
             query: {
                 pageNo: 1,
@@ -665,20 +884,49 @@ export default {
             id: -1,
             dialogFormVisible: false,
             oForm: {
-                name: '',
-                memo: '',
-                logo: '',
-                mobile: '',
-                goldExpireYears: '',
-                percentageOfPointsIntoGold: '',
-                messageForExpireTickets: '',
-                aheadDaysForMessage: '',
-                ticketingSystemType: '',
-                ticketingSystemAccount: '',
-                ticketingSystemPassword: '',
-                miniAppId: '',
-                interfaceAddress: '',
-                memberInterfaceAddress: ''
+                cinemaName: '',
+                cinemaCode: '',
+                province: '',
+                city: '',
+                address: '',
+                longitude: '',
+                latitude: '',
+                belongBusinessCode: '',
+                concatName: '',
+                concatMobile: '',
+                serviceMobile: '',
+                // oCinemaLabel: '',
+                screenCount: '',
+                ticketSystemCode: '',
+                comparePriceCode: '',
+                buyMinutesLimit: '',
+                refundMinutesLimit: '',
+                refundFee: '',
+                thirdPartyPayCommissionFee: '',
+                memberCardPayCommissionFee: '',
+                membershipServiceAgreement: '',
+                buyTicketHint: '',
+                openSnackStatus: '',
+                snackDispatcherStatus: '',
+                refundable: '',
+                remainTicketsNumber: '',
+                snackBeginTime: 'new Date(00, 00)',
+                snackEndTime: 'new Date(00, 00)',
+                messagePlatformType: '',
+                messagePlatformAccount: '',
+                messagePlatformPassword: '',
+                messagePlatformSignId: '',
+                openStatus: '',
+                expireDate: '',
+                paymentType: '',
+                reportedType: '',
+                openMemberCardStatus: '',
+                memberCardCommonUseStatus: '',
+                ticketsForMemberCardPayStatus: '',
+                miniAppSecret: '',
+                miniMerchantNo: '',
+                miniMerchantSecret: '',
+                miniRefundCertificateUrl: ''
             },
             formLabelWidth: '160px',
             selectValue: {},
@@ -700,7 +948,7 @@ export default {
                 target: document.querySelector('.div1')
             });
             https
-                .fetchPost('/businessInfo/addPage', '')
+                .fetchPost('/cinema/addPage', '')
                 .then(data => {
                     console.log(data);
                     if (data.data.code == 'success') {
@@ -728,47 +976,108 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
+            let bSnackBeginTime = this.oForm.snackBeginTime.getHours() + ':' + this.oForm.snackBeginTime.getMinutes();
+            let sSnackEndTime = this.oForm.snackEndTime.getHours() + ':' + this.oForm.snackEndTime.getMinutes();
             var jsonArr = [];
-            jsonArr.push({ key: 'businessName', value: this.oForm.name });
-            jsonArr.push({ key: 'businessMemo', value: this.oForm.memo });
-            jsonArr.push({ key: 'businessLogo', value: this.oForm.logo });
-            jsonArr.push({ key: 'businessMobile', value: this.oForm.mobile });
-            jsonArr.push({ key: 'goldExpireYears', value: this.oForm.goldExpireYears });
-            jsonArr.push({ key: 'percentageOfPointsIntoGold', value: this.oForm.percentageOfPointsIntoGold });
-            jsonArr.push({ key: 'messageForExpireTickets', value: this.oForm.messageForExpireTickets });
-            jsonArr.push({ key: 'aheadDaysForMessage', value: this.oForm.aheadDaysForMessage });
-            jsonArr.push({ key: 'ticketingSystemType', value: this.oForm.ticketingSystemType });
-            jsonArr.push({ key: 'ticketingSystemAccount', value: this.oForm.ticketingSystemAccount });
-            jsonArr.push({ key: 'ticketingSystemPassword', value: this.oForm.ticketingSystemPassword });
-            jsonArr.push({ key: 'miniAppId', value: this.oForm.miniAppId });
-            jsonArr.push({ key: 'interfaceAddress', value: this.oForm.interfaceAddress });
-            jsonArr.push({ key: 'memberInterfaceAddress', value: this.oForm.memberInterfaceAddress });
+            jsonArr.push({ key: 'cinemaName', value: this.oForm.cinemaName });
+            jsonArr.push({ key: 'cinemaCode', value: this.oForm.cinemaCode });
+            jsonArr.push({ key: 'province', value: this.oForm.province });
+            jsonArr.push({ key: 'city', value: this.oForm.city });
+            jsonArr.push({ key: 'address', value: this.oForm.address });
+            jsonArr.push({ key: 'longitude', value: this.oForm.longitude });
+            jsonArr.push({ key: 'latitude', value: this.oForm.latitude });
+            jsonArr.push({ key: 'belongBusinessCode', value: this.oForm.belongBusinessCode });
+            jsonArr.push({ key: 'concatName', value: this.oForm.concatName });
+            jsonArr.push({ key: 'concatMobile', value: this.oForm.concatMobile });
+            jsonArr.push({ key: 'serviceMobile', value: this.oForm.serviceMobile });
+            // jsonArr.push({ key: 'cinemaLabel', value: this.oCinemaLabel });
+            jsonArr.push({ key: 'screenCount', value: this.oForm.screenCount });
+            jsonArr.push({ key: 'ticketSystemCode', value: this.oForm.ticketSystemCode });
+            jsonArr.push({ key: 'comparePriceCode', value: this.oForm.comparePriceCode });
+            jsonArr.push({ key: 'buyMinutesLimit', value: this.oForm.buyMinutesLimit });
+            jsonArr.push({ key: 'refundMinutesLimit', value: this.oForm.refundMinutesLimit });
+            jsonArr.push({ key: 'refundFee', value: this.oForm.refundFee });
+            jsonArr.push({ key: 'thirdPartyPayCommissionFee', value: this.oForm.thirdPartyPayCommissionFee });
+            jsonArr.push({ key: 'memberCardPayCommissionFee', value: this.oForm.memberCardPayCommissionFee });
+            jsonArr.push({ key: 'membershipServiceAgreement', value: this.oForm.membershipServiceAgreement });
+            jsonArr.push({ key: 'buyTicketHint', value: this.oForm.buyTicketHint });
+            jsonArr.push({ key: 'openSnackStatus', value: this.oForm.openSnackStatus });
+            jsonArr.push({ key: 'snackDispatcherStatus', value: this.oForm.snackDispatcherStatus });
+            jsonArr.push({ key: 'refundable', value: this.oForm.refundable });
+            jsonArr.push({ key: 'remainTicketsNumber', value: this.oForm.remainTicketsNumber });
+            jsonArr.push({ key: 'snackBeginTime', value: bSnackBeginTime });
+            jsonArr.push({ key: 'snackEndTime', value: sSnackEndTime });
+            jsonArr.push({ key: 'messagePlatformType', value: this.oForm.messagePlatformType });
+            jsonArr.push({ key: 'messagePlatformAccount', value: this.oForm.messagePlatformAccount });
+            jsonArr.push({ key: 'messagePlatformPassword', value: this.oForm.messagePlatformPassword });
+            jsonArr.push({ key: 'messagePlatformSignId', value: this.oForm.messagePlatformSignId });
+            jsonArr.push({ key: 'openStatus', value: this.oForm.openStatus });
+            jsonArr.push({ key: 'expireDate', value: this.oForm.expireDate });
+            jsonArr.push({ key: 'paymentType', value: this.oForm.paymentType });
+            jsonArr.push({ key: 'reportedType', value: this.oForm.reportedType });
+            jsonArr.push({ key: 'openMemberCardStatus', value: this.oForm.openMemberCardStatus });
+            jsonArr.push({ key: 'memberCardCommonUseStatus', value: this.oForm.memberCardCommonUseStatus });
+            jsonArr.push({ key: 'ticketsForMemberCardPayStatus', value: this.oForm.ticketsForMemberCardPayStatus });
+            jsonArr.push({ key: 'miniAppSecret', value: this.oForm.miniAppSecret });
+            jsonArr.push({ key: 'miniMerchantNo', value: this.oForm.miniMerchantNo });
+            jsonArr.push({ key: 'miniMerchantSecret', value: this.oForm.miniMerchantSecret });
+            jsonArr.push({ key: 'miniRefundCertificateUrl', value: this.oForm.miniRefundCertificateUrl });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
+            console.log(jsonArr);
             let params = ParamsAppend(jsonArr);
+            console.log(params);
             if (this.dialogFormVisible == true) {
                 https
-                    .fetchPost('/businessInfo', params)
+                    .fetchPost('/cinema/addCinema', params)
                     .then(data => {
                         //新增
-                        // console.log(data);
+                        console.log(data);
                         if (data.data.code == 'success') {
                             this.dialogFormVisible = false;
                             this.$message.success(`新增成功`);
-                            this.oForm.name = '';
-                            this.oForm.memo = '';
-                            this.oForm.logo = '';
-                            this.oForm.mobile = '';
-                            this.oForm.goldExpireYears = '';
-                            this.oForm.percentageOfPointsIntoGold = '';
-                            this.oForm.messageForExpireTickets = '';
-                            this.oForm.aheadDaysForMessage = '';
-                            this.oForm.ticketingSystemType = '';
-                            this.oForm.ticketingSystemAccount = '';
-                            this.oForm.ticketingSystemPassword = '';
-                            this.oForm.miniAppId = '';
-                            this.oForm.interfaceAddress = '';
-                            this.oForm.memberInterfaceAddress = '';
+                            this.oForm.cinemaName = '';
+                            this.oForm.cinemaCode = '';
+                            this.oForm.province = '';
+                            this.oForm.city = '';
+                            this.oForm.address = '';
+                            this.oForm.longitude = '';
+                            this.oForm.latitude = '';
+                            this.oForm.belongBusinessCode = '';
+                            this.oForm.concatName = '';
+                            this.oForm.concatMobile = '';
+                            this.oForm.serviceMobile = '';
+                            this.oForm.screenCount = '';
+                            this.oForm.ticketSystemCode = '';
+                            this.oForm.comparePriceCode = '';
+                            this.oForm.buyMinutesLimit = '';
+                            this.oForm.refundMinutesLimit = '';
+                            this.oForm.refundFee = '';
+                            this.oForm.thirdPartyPayCommissionFee = '';
+                            this.oForm.memberCardPayCommissionFee = '';
+                            this.oForm.membershipServiceAgreement = '';
+                            this.oForm.buyTicketHint = '';
+                            this.oForm.openSnackStatus = '';
+                            this.oForm.snackDispatcherStatus = '';
+                            this.oForm.refundable = '';
+                            this.oForm.remainTicketsNumber = '';
+                            this.oForm.snackBeginTime = '';
+                            this.oForm.snackEndTime = '';
+                            this.oForm.messagePlatformType = '';
+                            this.oForm.messagePlatformAccount = '';
+                            this.oForm.messagePlatformPassword = '';
+                            this.oForm.messagePlatformSignId = '';
+                            this.oForm.openStatus = '';
+                            this.oForm.expireDate = '';
+                            this.oForm.paymentType = '';
+                            this.oForm.reportedType = '';
+                            this.oForm.openMemberCardStatus = '';
+                            this.oForm.memberCardCommonUseStatus = '';
+                            this.oForm.ticketsForMemberCardPayStatus = '';
+                            this.oForm.miniAppSecret = '';
+                            this.oForm.miniMerchantNo = '';
+                            this.oForm.miniMerchantSecret = '';
+                            this.oForm.miniRefundCertificateUrl = '';
                             this.getMenu();
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
@@ -852,12 +1161,49 @@ export default {
                     console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.editVisible = true;
-                        this.oName = JSON.parse(Decrypt(data.data.data)).businessName;
-                        this.oMemo = JSON.parse(Decrypt(data.data.data)).businessMemo;
-                        this.oMobile = JSON.parse(Decrypt(data.data.data)).businessMobile;
-                        this.oLogo = JSON.parse(Decrypt(data.data.data)).businessLogo;
-                        this.oCode = JSON.parse(Decrypt(data.data.data)).businessCode;
-                        this.oGold = JSON.parse(Decrypt(data.data.data)).goldExpireYears;
+                        this.oCinemaName = JSON.parse(Decrypt(data.data.data)).cinemaName;
+                        this.oCinemaCode = JSON.parse(Decrypt(data.data.data)).cinemaCode;
+                        this.oProvince = JSON.parse(Decrypt(data.data.data)).province;
+                        this.oCity = JSON.parse(Decrypt(data.data.data)).city;
+                        this.oAddress = JSON.parse(Decrypt(data.data.data)).address;
+                        this.oLongitude = JSON.parse(Decrypt(data.data.data)).longitude;
+                        this.oLatitude = JSON.parse(Decrypt(data.data.data)).latitude;
+                        this.oBelongBusinessCode = JSON.parse(Decrypt(data.data.data)).belongBusinessCode;
+                        this.oConcatName = JSON.parse(Decrypt(data.data.data)).concatName;
+                        this.oConcatMobile = JSON.parse(Decrypt(data.data.data)).concatMobile;
+                        this.oServiceMobile = JSON.parse(Decrypt(data.data.data)).serviceMobile;
+                        // this.oCinemaLabel = JSON.parse(Decrypt(data.data.data)).cinemaLabel;
+                        this.oScreenCount = JSON.parse(Decrypt(data.data.data)).screenCount;
+                        this.oTicketSystemCode = JSON.parse(Decrypt(data.data.data)).ticketSystemCode;
+                        this.oComparePriceCode = JSON.parse(Decrypt(data.data.data)).comparePriceCode;
+                        this.oBuyMinutesLimit = JSON.parse(Decrypt(data.data.data)).buyMinutesLimit;
+                        this.oRefundMinutesLimit = JSON.parse(Decrypt(data.data.data)).refundMinutesLimit;
+                        this.oRefundFee = JSON.parse(Decrypt(data.data.data)).refundFee;
+                        this.oThirdPartyPayCommissionFee = JSON.parse(Decrypt(data.data.data)).thirdPartyPayCommissionFee;
+                        this.oMemberCardPayCommissionFee = JSON.parse(Decrypt(data.data.data)).memberCardPayCommissionFee;
+                        this.oMembershipServiceAgreement = JSON.parse(Decrypt(data.data.data)).membershipServiceAgreement;
+                        this.oBuyTicketHint = JSON.parse(Decrypt(data.data.data)).buyTicketHint;
+                        this.oOpenSnackStatus = JSON.parse(Decrypt(data.data.data)).openSnackStatus;
+                        this.oSnackDispatcherStatus = JSON.parse(Decrypt(data.data.data)).snackDispatcherStatus;
+                        this.oRefundable = JSON.parse(Decrypt(data.data.data)).refundable;
+                        this.oRemainTicketsNumber = JSON.parse(Decrypt(data.data.data)).remainTicketsNumber;
+                        this.oSnackBeginTime = JSON.parse(Decrypt(data.data.data)).snackBeginTime;
+                        this.oSnackEndTime = JSON.parse(Decrypt(data.data.data)).snackEndTime;
+                        this.oMessagePlatformType = JSON.parse(Decrypt(data.data.data)).messagePlatformType;
+                        this.oMessagePlatformAccount = JSON.parse(Decrypt(data.data.data)).messagePlatformAccount;
+                        this.oMessagePlatformPassword = JSON.parse(Decrypt(data.data.data)).messagePlatformPassword;
+                        this.oMessagePlatformSignId = JSON.parse(Decrypt(data.data.data)).messagePlatformSignId;
+                        this.oOpenStatus = JSON.parse(Decrypt(data.data.data)).openStatus;
+                        this.oExpireDate = JSON.parse(Decrypt(data.data.data)).expireDate;
+                        this.oPaymentType = JSON.parse(Decrypt(data.data.data)).paymentType;
+                        this.oReportedType = JSON.parse(Decrypt(data.data.data)).reportedType;
+                        this.oOpenMemberCardStatus = JSON.parse(Decrypt(data.data.data)).openMemberCardStatus;
+                        this.oMemberCardCommonUseStatus = JSON.parse(Decrypt(data.data.data)).memberCardCommonUseStatus;
+                        this.oTicketsForMemberCardPayStatus = JSON.parse(Decrypt(data.data.data)).ticketsForMemberCardPayStatus;
+                        this.oMiniAppSecret = JSON.parse(Decrypt(data.data.data)).miniAppSecret;
+                        this.oMiniMerchantNo = JSON.parse(Decrypt(data.data.data)).miniMerchantNo;
+                        this.oMiniMerchantSecret = JSON.parse(Decrypt(data.data.data)).miniMerchantSecret;
+                        this.oMiniRefundCertificateUrl = JSON.parse(Decrypt(data.data.data)).miniRefundCertificateUrl;
                         this.oId = JSON.parse(Decrypt(data.data.data)).id;
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
@@ -882,21 +1228,60 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
+            let dSnackBeginTime = this.oSnackBeginTime.getHours() + ':' + this.oSnackBeginTime.getMinutes();
+            let dSnackEndTime = this.oSnackEndTime.getHours() + ':' + this.oSnackEndTime.getMinutes();
             var jsonArr = [];
-            jsonArr.push({ key: 'goldExpireYears', value: this.oGold });
-            jsonArr.push({ key: 'businessName', value: this.oName });
-            jsonArr.push({ key: 'businessMobile', value: this.oMobile });
-            jsonArr.push({ key: 'businessMemo', value: this.oMemo });
-            jsonArr.push({ key: 'businessLogo', value: this.oLogo });
+            jsonArr.push({ key: 'cinemaName', value: this.oCinemaName });
+            jsonArr.push({ key: 'cinemaCode', value: this.oCinemaCode });
+            jsonArr.push({ key: 'province', value: this.oProvince });
+            jsonArr.push({ key: 'city', value: this.oCity });
+            jsonArr.push({ key: 'address', value: this.oAddress });
+            jsonArr.push({ key: 'longitude', value: this.oLongitude });
+            jsonArr.push({ key: 'latitude', value: this.oLatitude });
+            jsonArr.push({ key: 'belongBusinessCode', value: this.oBelongBusinessCode });
+            jsonArr.push({ key: 'concatName', value: this.oConcatName });
+            jsonArr.push({ key: 'concatMobile', value: this.oConcatMobile });
+            jsonArr.push({ key: 'serviceMobile', value: this.oServiceMobile });
+            // jsonArr.push({ key: 'cinemaLabel', value: this.oCinemaLabel });
+            jsonArr.push({ key: 'screenCount', value: this.oScreenCount });
+            jsonArr.push({ key: 'ticketSystemCode', value: this.oTicketSystemCode });
+            jsonArr.push({ key: 'comparePriceCode', value: this.oComparePriceCode });
+            jsonArr.push({ key: 'buyMinutesLimit', value: this.oBuyMinutesLimit });
+            jsonArr.push({ key: 'refundMinutesLimit', value: this.oRefundMinutesLimit });
+            jsonArr.push({ key: 'refundFee', value: this.oRefundFee });
+            jsonArr.push({ key: 'thirdPartyPayCommissionFee', value: this.oThirdPartyPayCommissionFee });
+            jsonArr.push({ key: 'memberCardPayCommissionFee', value: this.oMemberCardPayCommissionFee });
+            jsonArr.push({ key: 'membershipServiceAgreement', value: this.oMembershipServiceAgreement });
+            jsonArr.push({ key: 'buyTicketHint', value: this.oBuyTicketHint });
+            jsonArr.push({ key: 'openSnackStatus', value: this.oOpenSnackStatus });
+            jsonArr.push({ key: 'snackDispatcherStatus', value: this.oSnackDispatcherStatus });
+            jsonArr.push({ key: 'refundable', value: this.oRefundable });
+            jsonArr.push({ key: 'remainTicketsNumber', value: this.oRemainTicketsNumber });
+            jsonArr.push({ key: 'snackBeginTime', value: dSnackBeginTime });
+            jsonArr.push({ key: 'snackEndTime', value: dSnackEndTime });
+            jsonArr.push({ key: 'messagePlatformType', value: this.oMessagePlatformType });
+            jsonArr.push({ key: 'messagePlatformAccount', value: this.oMessagePlatformAccount });
+            jsonArr.push({ key: 'messagePlatformPassword', value: this.oMessagePlatformPassword });
+            jsonArr.push({ key: 'messagePlatformSignId', value: this.oMessagePlatformSignId });
+            jsonArr.push({ key: 'openStatus', value: this.oOpenStatus });
+            jsonArr.push({ key: 'expireDate', value: this.oExpireDate });
+            jsonArr.push({ key: 'paymentType', value: this.oPaymentType });
+            jsonArr.push({ key: 'reportedType', value: this.oReportedType });
+            jsonArr.push({ key: 'openMemberCardStatus', value: this.oOpenMemberCardStatus });
+            jsonArr.push({ key: 'memberCardCommonUseStatus', value: this.oMemberCardCommonUseStatus });
+            jsonArr.push({ key: 'ticketsForMemberCardPayStatus', value: this.oTicketsForMemberCardPayStatus });
+            jsonArr.push({ key: 'miniAppSecret', value: this.oMiniAppSecret });
+            jsonArr.push({ key: 'miniMerchantNo', value: this.oMiniMerchantNo });
+            jsonArr.push({ key: 'miniMerchantSecret', value: this.oMiniMerchantSecret });
+            jsonArr.push({ key: 'miniRefundCertificateUrl', value: this.oMiniRefundCertificateUrl });
             jsonArr.push({ key: 'id', value: this.oId });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             let params = ParamsAppend(jsonArr);
-            console.log(params);
             console.log(jsonArr);
             this.editVisible = false;
             https
-                .fetchPost('/businessInfo/updateById', params)
+                .fetchPost('/cinema/updateCinema', params)
                 .then(data => {
                     console.log(data);
                     // console.log(JSON.parse(Decrypt(data.data.data)));

@@ -71,7 +71,7 @@ export function EncryptReplace(word, keyStr, ivStr) { //加密调用这个
 export function ParamsAppend(params) { //封装加密参数
     let result = {};
     params.map(n=>{
-        result[n.key]=EncryptReplace(n.value);
+        result[n.key]=EncryptReplace(n.value.toString());
     });
     return JSON.parse(JSON.stringify(result));
 }
