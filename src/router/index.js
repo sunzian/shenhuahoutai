@@ -30,6 +30,11 @@ export default new Router({
                     meta: { title: '商家管理' }
                 },
                 {
+                    path: '/cinemaPage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/cinemaPage.vue'),
+                    meta: { title: '影院管理' }
+                },
+                {
                     path: '/rolePermission',
                     component: () => import(/* webpackChunkName: "table" */ '../components/page/rolePermission.vue'),
                     meta: { title: '角色权限管理' }

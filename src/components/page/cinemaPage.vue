@@ -3,13 +3,13 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
-                    <i class="el-icon-lx-cascades"></i> 商家管理
+                    <i class="el-icon-lx-cascades"></i> 影院管理
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-input v-model="query.name" placeholder="商家名称" class="handle-input mr10"></el-input>
+                <el-input v-model="query.name" placeholder="影院名称" class="handle-input mr10"></el-input>
                 <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
                 <el-button
                     type="primary"
@@ -20,40 +20,89 @@
             </div>
             <el-table
                 :data="tableData"
+                height="500"
                 border
                 class="table"
                 ref="multipleTable"
                 header-cell-class-name="table-header"
                 @selection-change="handleSelectionChange"
             >
-                <el-table-column prop="name" label="商家名称">
-                    <template slot-scope="scope">{{scope.row.businessName}}</template>
+                <el-table-column prop="code" label="影院编码" fixed>
+                    <template slot-scope="scope">{{scope.row.cinemaCode}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="商家描述">
-                    <template slot-scope="scope">{{scope.row.businessMemo}}</template>
+                <el-table-column prop="name" label="影院名称" fixed>
+                    <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
-                <el-table-column prop="logo" label="商家logo">
-                    <template slot-scope="scope">{{scope.row.businessLogo}}</template>
+                <el-table-column prop="time" label="开场前的购票时间限制">
+                    <template slot-scope="scope">{{scope.row.buyMinutesLimit}}</template>
                 </el-table-column>
-                <el-table-column prop="phone" label="商家电话">
-                    <template slot-scope="scope">{{scope.row.businessMobile}}</template>
+                <el-table-column prop="time" label="开场前的退票时间限制">
+                    <template slot-scope="scope">{{scope.row.refundMinutesLimit}}</template>
                 </el-table-column>
-                <el-table-column prop="year" label="金币过期年数">
-                    <template slot-scope="scope">{{scope.row.goldExpireYears}}</template>
+                <el-table-column prop="number" label="退票手续费">
+                    <template slot-scope="scope">{{scope.row.refundFee}}</template>
                 </el-table-column>
-                <el-table-column label="操作" width="180" align="center">
+                <el-table-column prop="number" label="第三方支付代售费（微信支付）">
+                    <template slot-scope="scope">{{scope.row.thirdPartyPayCommissionFee}}</template>
+                </el-table-column>
+                <el-table-column prop="number" label="会员卡支付代售费">
+                    <template slot-scope="scope">{{scope.row.memberCardPayCommissionFee}}</template>
+                </el-table-column>
+                <el-table-column prop="booleans" label="是否开通套餐">
+                    <template slot-scope="scope" v-if="scope.row.openSnackStatus == 1">已开通</template>
+                    <template slot-scope="scope" v-else>未开通</template>
+                </el-table-column>
+                <el-table-column prop="booleans" label="是否小卖配送">
+                    <template slot-scope="scope" v-if="scope.row.snackDispatcherStatus == 1">是</template>
+                    <template slot-scope="scope" v-else>否</template>
+                </el-table-column>
+                <el-table-column prop="booleans" label="是否可退票">
+                    <template slot-scope="scope" v-if="scope.row.refundable == 1">是</template>
+                    <template slot-scope="scope" v-else>否</template>
+                </el-table-column>
+                <el-table-column prop="booleans" label="是否可退票">
+                    <template slot-scope="scope">{{scope.row.refundable}}</template>
+                </el-table-column>
+                <el-table-column prop="number" label="剩余票数">
+                    <template slot-scope="scope">{{scope.row.remainTicketsNumber}}</template>
+                </el-table-column>
+                <el-table-column prop="string" label="短信平台类型">
+                    <template slot-scope="scope">{{scope.row.messagePlatformType}}</template>
+                </el-table-column>
+                <el-table-column prop="booleans" label="是否开通服务">
+                    <template slot-scope="scope" v-if="scope.row.openStatus == 1">是</template>
+                    <template slot-scope="scope" v-else>否</template>
+                </el-table-column>
+                <el-table-column prop="time" label="到期时间">
+                    <template slot-scope="scope">{{scope.row. expireDate}}</template>
+                </el-table-column>
+                <el-table-column prop="string" label="费用支付类型">
+                    <template slot-scope="scope" v-if="scope.row.openStatus == 1">包年</template>
+                    <template slot-scope="scope" v-else>按票收费</template>
+                </el-table-column>
+                <el-table-column prop="string" label="票价上报方式">
+                    <template slot-scope="scope" v-if="scope.row.paymentType == 1">标准价格上报</template>
+                    <template slot-scope="scope" v-else>优惠后价格上报</template>
+                </el-table-column>
+                <el-table-column prop="booleans" label="是否开通会员卡功能">
+                    <template slot-scope="scope" v-if="scope.row.reportedType == 1">开通</template>
+                    <template slot-scope="scope" v-else>未开通</template>
+                </el-table-column>
+                <el-table-column prop="booleans" label="会员卡是否门店通用">
+                    <template slot-scope="scope" v-if="scope.row.memberCardCommonUseStatus == 1">是</template>
+                    <template slot-scope="scope" v-else>否</template>
+                </el-table-column>
+                <el-table-column prop="booleans" label="会员卡支付是否可用优惠券">
+                    <template slot-scope="scope" v-if="scope.row.ticketsForMemberCardPayStatus == 1">是</template>
+                    <template slot-scope="scope" v-else>否</template>
+                </el-table-column>
+                <el-table-column label="操作" width="100" align="center" fixed='right'>
                     <template slot-scope="scope">
                         <el-button
                             type="text"
                             icon="el-icon-edit"
                             @click="addChange(scope.$index, scope.row)"
                         >编辑</el-button>
-                        <el-button
-                            type="text"
-                            icon="el-icon-delete"
-                            class="red"
-                            @click="delChange(scope.$index, scope.row)"
-                        >删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -71,9 +120,9 @@
             </div>
         </div>
         <!--新增弹出框-->
-        <el-dialog title="新增商家" :visible.sync="dialogFormVisible">
+        <el-dialog title="新增影院" :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
-                <el-form-item label="商家名" :label-width="formLabelWidth">
+                <el-form-item label="影院名" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         maxlength="10"
@@ -82,7 +131,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="商家描述" :label-width="formLabelWidth">
+                <el-form-item label="影院描述" :label-width="formLabelWidth">
                     <el-input
                         maxlength="30"
                         type="textarea"
@@ -92,7 +141,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="商家logo" :label-width="formLabelWidth">
+                <el-form-item label="影院logo" :label-width="formLabelWidth">
                     <el-input
                         style="width: 150px"
                         maxlength="9"
@@ -100,7 +149,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="商家电话" :label-width="formLabelWidth">
+                <el-form-item label="影院电话" :label-width="formLabelWidth">
                     <el-input
                         style="width: 150px"
                         maxlength="9"
@@ -195,7 +244,7 @@
         <!-- 编辑弹出框 -->
         <el-dialog title="编辑" :visible.sync="editVisible" width="30%">
             <el-form ref="form" :model="form" label-width="100px">
-                <el-form-item label="商家名称">
+                <el-form-item label="影院编码">
                     <el-input
                         style="width: 250px"
                         maxlength="10"
@@ -204,7 +253,106 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="商家编号">
+                <el-form-item label="影院名称">
+                    <el-input
+                        style="width: 250px"
+                        min="1"
+                        maxlength="7"
+                        v-model.number="oCode"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="所在省份">
+                    <el-input
+                        style="width: 250px"
+                        min="1"
+                        maxlength="7"
+                        v-model.number="oCode"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="所在城市">
+                    <el-input
+                        style="width: 250px"
+                        min="1"
+                        maxlength="7"
+                        v-model.number="oCode"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="详细地址">
+                    <el-input
+                        style="width: 250px"
+                        min="1"
+                        maxlength="7"
+                        v-model.number="oCode"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="经度">
+                    <el-input
+                        style="width: 250px"
+                        min="1"
+                        maxlength="7"
+                        v-model.number="oCode"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="纬度">
+                    <el-input
+                        style="width: 250px"
+                        min="1"
+                        maxlength="7"
+                        v-model.number="oCode"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="关联商家编码">
+                    <el-input
+                        style="width: 250px"
+                        min="1"
+                        maxlength="7"
+                        v-model.number="oCode"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="影院联系人姓名">
+                    <el-input
+                        style="width: 250px"
+                        min="1"
+                        maxlength="7"
+                        v-model.number="oCode"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="影院联系人电话">
+                    <el-input
+                        style="width: 250px"
+                        min="1"
+                        maxlength="7"
+                        v-model.number="oCode"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="客服电话">
+                    <el-input
+                        style="width: 250px"
+                        min="1"
+                        maxlength="7"
+                        v-model.number="oCode"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="影厅数量">
+                    <el-input
+                        style="width: 250px"
+                        min="1"
+                        maxlength="7"
+                        v-model.number="oCode"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="售票系统影院内码">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -214,7 +362,34 @@
                         disabled='true'
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="商家描述">
+                <el-form-item label="第三方比价影院编码">
+                    <el-input
+                        style="width: 250px"
+                        min="1"
+                        maxlength="7"
+                        v-model.number="oCode"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="开场前的购票时间限制">
+                    <el-input
+                        style="width: 250px"
+                        min="1"
+                        maxlength="7"
+                        v-model.number="oCode"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="开场前的退票时间限制">
+                    <el-input
+                        style="width: 250px"
+                        min="1"
+                        maxlength="7"
+                        v-model.number="oCode"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="退票手续费">
                     <el-input
                         maxlength="30"
                         type="textarea"
@@ -224,7 +399,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="商家电话">
+                <el-form-item label="第三方支付代售费（微信支付）">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -233,7 +408,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="商家logo">
+                <el-form-item label="会员卡支付代售费">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -242,7 +417,205 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="金币过期年数">
+                <el-form-item label="影院会员服务协议">
+                    <el-input
+                        style="width: 50px"
+                        min="1"
+                        maxlength="7"
+                        v-model.trim="oGold"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="购票提示">
+                    <el-input
+                        style="width: 50px"
+                        min="1"
+                        maxlength="7"
+                        v-model.trim="oGold"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="是否开通套餐">
+                    <el-input
+                        style="width: 50px"
+                        min="1"
+                        maxlength="7"
+                        v-model.trim="oGold"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="是否小卖配送">
+                    <el-input
+                        style="width: 50px"
+                        min="1"
+                        maxlength="7"
+                        v-model.trim="oGold"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="是否可退票">
+                    <el-input
+                        style="width: 50px"
+                        min="1"
+                        maxlength="7"
+                        v-model.trim="oGold"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="剩余票数">
+                    <el-input
+                        style="width: 50px"
+                        min="1"
+                        maxlength="7"
+                        v-model.trim="oGold"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="卖品显示开始时间">
+                    <el-input
+                        style="width: 50px"
+                        min="1"
+                        maxlength="7"
+                        v-model.trim="oGold"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="卖品显示结束时间">
+                    <el-input
+                        style="width: 50px"
+                        min="1"
+                        maxlength="7"
+                        v-model.trim="oGold"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="短信平台类型">
+                    <el-input
+                        style="width: 50px"
+                        min="1"
+                        maxlength="7"
+                        v-model.trim="oGold"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="短信平台账号">
+                    <el-input
+                        style="width: 50px"
+                        min="1"
+                        maxlength="7"
+                        v-model.trim="oGold"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="短信平台密码">
+                    <el-input
+                        style="width: 50px"
+                        min="1"
+                        maxlength="7"
+                        v-model.trim="oGold"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="短信平台签名id">
+                    <el-input
+                        style="width: 50px"
+                        min="1"
+                        maxlength="7"
+                        v-model.trim="oGold"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="是否开通服务">
+                    <el-input
+                        style="width: 50px"
+                        min="1"
+                        maxlength="7"
+                        v-model.trim="oGold"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="到期时间">
+                    <el-input
+                        style="width: 50px"
+                        min="1"
+                        maxlength="7"
+                        v-model.trim="oGold"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="费用支付类型">
+                    <el-input
+                        style="width: 50px"
+                        min="1"
+                        maxlength="7"
+                        v-model.trim="oGold"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="票价上报方式">
+                    <el-input
+                        style="width: 50px"
+                        min="1"
+                        maxlength="7"
+                        v-model.trim="oGold"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="是否开通会员卡功能">
+                    <el-input
+                        style="width: 50px"
+                        min="1"
+                        maxlength="7"
+                        v-model.trim="oGold"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="会员卡是否门店通用">
+                    <el-input
+                        style="width: 50px"
+                        min="1"
+                        maxlength="7"
+                        v-model.trim="oGold"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="会员卡支付是否可用优惠券">
+                    <el-input
+                        style="width: 50px"
+                        min="1"
+                        maxlength="7"
+                        v-model.trim="oGold"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="小程序appSecret">
+                    <el-input
+                        style="width: 50px"
+                        min="1"
+                        maxlength="7"
+                        v-model.trim="oGold"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="小程序支付商户号">
+                    <el-input
+                        style="width: 50px"
+                        min="1"
+                        maxlength="7"
+                        v-model.trim="oGold"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="小程序支付密钥">
+                    <el-input
+                        style="width: 50px"
+                        min="1"
+                        maxlength="7"
+                        v-model.trim="oGold"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="小程序退款证书阿里云路径">
                     <el-input
                         style="width: 50px"
                         min="1"
@@ -473,7 +846,7 @@ export default {
             jsonArr.push({ key: 'sign', value: sign });
             let params = ParamsAppend(jsonArr);
             https
-                .fetchPost('/businessInfo/modifyPage', params)
+                .fetchPost('/cinema/getCinemaById', params)
                 .then(data => {
                     // console.log(data);
                     console.log(JSON.parse(Decrypt(data.data.data)));
@@ -566,19 +939,18 @@ export default {
                 status = '';
             }
             let jsonArr = [];
-            jsonArr.push({ key: 'businessName', value: name });
+            jsonArr.push({ key: 'cinemaName', value: name });
             jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
             jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             var params = ParamsAppend(jsonArr);
             https
-                .fetchPost('/businessInfo/businessInfoPage', params)
+                .fetchPost('/cinema/cinemaPage', params)
                 .then(data => {
                     if (data.data.code == 'success') {
                         var oData = JSON.parse(Decrypt(data.data.data));
                         console.log(oData);
-                        // console.log(this.query);
                         this.tableData = oData.data;
                         this.query.pageSize = oData.pageSize;
                         this.query.pageNo = oData.pageNo;
