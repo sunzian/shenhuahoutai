@@ -49,55 +49,70 @@
                     <template slot-scope="scope">{{scope.row.memberCardPayCommissionFee}}</template>
                 </el-table-column>
                 <el-table-column prop="booleans" label="是否开通套餐">
-                    <template slot-scope="scope" v-if="scope.row.openSnackStatus == 1">已开通</template>
-                    <template slot-scope="scope" v-else>未开通</template>
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row.openSnackStatus == 1" type="success">已开通</el-tag>
+                        <el-tag v-else type="danger">未开通</el-tag>
+                    </template>
                 </el-table-column>
                 <el-table-column prop="booleans" label="是否小卖配送">
-                    <template slot-scope="scope" v-if="scope.row.snackDispatcherStatus == 1">是</template>
-                    <template slot-scope="scope" v-else>否</template>
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row.snackDispatcherStatus == 1" type="success">是</el-tag>
+                        <el-tag v-else type="danger">否</el-tag>
+                    </template>
                 </el-table-column>
                 <el-table-column prop="booleans" label="是否可退票">
-                    <template slot-scope="scope" v-if="scope.row.refundable == 1">是</template>
-                    <template slot-scope="scope" v-else>否</template>
-                </el-table-column>
-                <el-table-column prop="booleans" label="是否可退票">
-                    <template slot-scope="scope">{{scope.row.refundable}}</template>
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row.refundable == 1" type="success">是</el-tag>
+                        <el-tag v-else type="danger">否</el-tag>
+                    </template>
                 </el-table-column>
                 <el-table-column prop="number" label="剩余票数">
                     <template slot-scope="scope">{{scope.row.remainTicketsNumber}}</template>
                 </el-table-column>
                 <el-table-column prop="string" label="短信平台类型">
-                    <template slot-scope="scope">{{scope.row.messagePlatformType}}</template>
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row.messagePlatformType == 1" type="info">专信云</el-tag>
+                        <el-tag v-else type="info">三体</el-tag>
+                    </template>
                 </el-table-column>
                 <el-table-column prop="booleans" label="是否开通服务">
-                    <template slot-scope="scope" v-if="scope.row.openStatus == 1">是</template>
-                    <template slot-scope="scope" v-else>否</template>
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row.openStatus == 1" type="success">是</el-tag>
+                        <el-tag v-else type="danger">否</el-tag>
+                    </template>
                 </el-table-column>
                 <el-table-column prop="time" label="到期时间">
                     <template slot-scope="scope">{{scope.row.expireDate}}</template>
                 </el-table-column>
                 <el-table-column prop="string" label="费用支付类型">
-                    <template slot-scope="scope" v-if="scope.row.openStatus == 1">包年</template>
-                    <template slot-scope="scope" v-else>按票收费</template>
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row.paymentType == 1" type="info">包年</el-tag>
+                        <el-tag v-else type="info">按票收费</el-tag>
+                    </template>
                 </el-table-column>
                 <el-table-column prop="string" label="票价上报方式">
-                    <template slot-scope="scope" v-if="scope.row.paymentType == 1">标准价格上报</template>
-                    <template slot-scope="scope" v-else>优惠后价格上报</template>
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row.reportedType == 1" type="info">标准价格上报</el-tag>
+                        <el-tag v-else type="info">优惠后价格上报</el-tag>
+                    </template>
                 </el-table-column>
                 <el-table-column prop="booleans" label="是否开通会员卡功能">
-                    <template slot-scope="scope" v-if="scope.row.reportedType == 1">开通</template>
-                    <template slot-scope="scope" v-else>未开通</template>
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row.openMemberCardStatus == 1" type="success">开通</el-tag>
+                        <el-tag v-else type="danger">未开通</el-tag>
+                    </template>
                 </el-table-column>
                 <el-table-column prop="booleans" label="会员卡是否门店通用">
-                    <template slot-scope="scope" v-if="scope.row.memberCardCommonUseStatus == 1">是</template>
-                    <template slot-scope="scope" v-else>否</template>
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row.memberCardCommonUseStatus == 1" type="success">是</el-tag>
+                        <el-tag v-else type="danger">否</el-tag>
+                    </template>
                 </el-table-column>
                 <el-table-column prop="booleans" label="会员卡支付是否可用优惠券">
-                    <template
-                        slot-scope="scope"
-                        v-if="scope.row.ticketsForMemberCardPayStatus == 1"
-                    >是</template>
-                    <template slot-scope="scope" v-else>否</template>
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row.ticketsForMemberCardPayStatus == 1" type="success">是</el-tag>
+                        <el-tag v-else type="danger">否</el-tag>
+                    </template>
                 </el-table-column>
                 <el-table-column label="操作" width="100" align="center" fixed="right">
                     <template slot-scope="scope">
@@ -106,6 +121,12 @@
                             icon="el-icon-edit"
                             @click="addChange(scope.$index, scope.row)"
                         >编辑</el-button>
+                        <el-button
+                            type="text"
+                            icon="el-icon-delete"
+                            class="red"
+                            @click="delChange(scope.$index, scope.row)"
+                        >删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -183,12 +204,14 @@
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="关联商家编码">
-                    <el-input
-                        style="width: 250px"
-                        min="1"
-                        v-model.number="oForm.belongBusinessCode"
-                        autocomplete="off"
-                    ></el-input>
+                    <el-select v-model="oForm.belongBusinessCode" placeholder="请选择">
+                        <el-option
+                            v-for="info in businessInfo"
+                            :key="info.businessCode"
+                            :value="info.businessName"
+                            :label="info.businessName"
+                        ></el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item label="影院联系人姓名">
                     <el-input
@@ -214,14 +237,6 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <!-- <el-form-item label="影院标签">
-                    <el-input
-                        style="width: 250px"
-                        min="1"
-                        v-model.number="oCinemaLabel"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>-->
                 <el-form-item label="影厅数量">
                     <el-input
                         style="width: 250px"
@@ -385,13 +400,7 @@
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="到期时间">
-                    <el-date-picker v-model="oExpireDate" type="datetime" placeholder="选择日期时间"></el-date-picker>
-                    <!-- <el-input
-                        style="width: 250px"
-                        min="1"
-                        v-model.trim="oForm.expireDate"
-                        autocomplete="off"
-                    ></el-input>-->
+                    <el-date-picker v-model="oExpireDate" placeholder="选择日期时间"></el-date-picker>
                 </el-form-item>
                 <el-form-item label="费用支付类型">
                     <el-input
@@ -526,12 +535,14 @@
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="关联商家编码">
-                    <el-input
-                        style="width: 250px"
-                        min="1"
-                        v-model.number="oBelongBusinessCode"
-                        autocomplete="off"
-                    ></el-input>
+                    <el-select v-model="selectCode" @change="changeBusinessCode">
+                        <el-option
+                            v-for="info in businessInfo"
+                            :key="info.businessCode"
+                            :label="info.businessName"
+                            :value="info.businessName"
+                        ></el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item label="影院联系人姓名">
                     <el-input
@@ -557,14 +568,6 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <!-- <el-form-item label="影院标签">
-                    <el-input
-                        style="width: 250px"
-                        min="1"
-                        v-model.number="oCinemaLabel"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>-->
                 <el-form-item label="影厅数量">
                     <el-input
                         style="width: 250px"
@@ -583,10 +586,7 @@
                 </el-form-item>
                 <el-form-item label="第三方比价影院编码">
                     <el-input
-                        maxlength="30"
-                        type="textarea"
-                        :rows="2"
-                        show-word-limit
+                        style="width: 250px"
                         v-model.trim="oComparePriceCode"
                         autocomplete="off"
                     ></el-input>
@@ -648,12 +648,23 @@
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="是否开通套餐">
-                    <el-input
+                    <el-select
+                    v-model="oOpenSnackStatus" 
+                    @change="openServe"
+                    >
+                        <el-option
+                            v-for="info in boolean"
+                            :key="info.id"
+                            :label="info.value"
+                            :value="info.value"
+                        ></el-option>
+                    </el-select>
+                    <!-- <el-input
                         style="width: 250px"
                         min="1"
                         v-model.trim="oOpenSnackStatus"
                         autocomplete="off"
-                    ></el-input>
+                    ></el-input> -->
                 </el-form-item>
                 <el-form-item label="是否小卖配送">
                     <el-input
@@ -680,16 +691,10 @@
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="卖品显示开始时间">
-                    <el-time-picker
-                        v-model="oSnackBeginTime"
-                        placeholder="任意时间点"
-                    ></el-time-picker>
+                    <el-time-picker v-model="oSnackBeginTime" placeholder="选择日期时间"></el-time-picker>
                 </el-form-item>
                 <el-form-item label="卖品显示结束时间">
-                    <el-time-picker
-                        v-model="oSnackEndTime"
-                        placeholder="任意时间点"
-                    ></el-time-picker>
+                    <el-time-picker v-model="oSnackEndTime" placeholder="选择日期时间"></el-time-picker>
                 </el-form-item>
                 <el-form-item label="短信平台类型">
                     <el-input
@@ -732,7 +737,7 @@
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="到期时间">
-                    <el-date-picker v-model="oExpireDate" type="datetime" placeholder="选择日期时间"></el-date-picker>
+                    <el-date-picker v-model="oExpireDate" placeholder="选择日期时间"></el-date-picker>
                 </el-form-item>
                 <el-form-item label="费用支付类型">
                     <el-input
@@ -832,11 +837,11 @@ export default {
             oAddress: '',
             oLongitude: '',
             oLatitude: '',
-            oBelongBusinessCode: '',
+            oBelongBusinessCode: '', // 商家编码
+            oBusinessName: '', //商家名称
             oConcatName: '',
             oConcatMobile: '',
             oServiceMobile: '',
-            // oCinemaLabel: '',
             oScreenCount: '',
             oTicketSystemCode: '',
             oComparePriceCode: '',
@@ -874,6 +879,17 @@ export default {
                 pageNo: 1,
                 pageSize: 10
             },
+            boolean: [
+                {
+                    value: '是',
+                    id: '1'
+                },
+                {
+                    value: '否',
+                    id: '2'
+                }
+            ],
+            businessInfo: [], //关联商家信息
             form: [],
             tableData: [],
             multipleSelection: [],
@@ -891,11 +907,11 @@ export default {
                 address: '',
                 longitude: '',
                 latitude: '',
-                belongBusinessCode: '',
+                belongBusinessCode: '', // 商家编码
+                businessName: '', // 商家名称
                 concatName: '',
                 concatMobile: '',
                 serviceMobile: '',
-                // oCinemaLabel: '',
                 screenCount: '',
                 ticketSystemCode: '',
                 comparePriceCode: '',
@@ -930,6 +946,7 @@ export default {
             },
             formLabelWidth: '160px',
             selectValue: {},
+            selectCode: {},
             value: ''
         };
     },
@@ -950,9 +967,10 @@ export default {
             https
                 .fetchPost('/cinema/addPage', '')
                 .then(data => {
-                    console.log(data);
+                    // console.log(data);
                     if (data.data.code == 'success') {
                         this.dialogFormVisible = true;
+                        this.getBusinessInfo();
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
@@ -976,6 +994,13 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
+            // 获取所选影院编码
+            for (let i = 0; i < this.businessInfo.length; i++) {
+                if (this.businessInfo[i].businessName == this.oForm.belongBusinessCode) {
+                    this.oForm.businessCode = this.businessInfo[i].businessCode;
+                }
+            }
+            console.log(this.oForm.businessCode);
             let bSnackBeginTime = this.oForm.snackBeginTime.getHours() + ':' + this.oForm.snackBeginTime.getMinutes();
             let sSnackEndTime = this.oForm.snackEndTime.getHours() + ':' + this.oForm.snackEndTime.getMinutes();
             var jsonArr = [];
@@ -986,11 +1011,10 @@ export default {
             jsonArr.push({ key: 'address', value: this.oForm.address });
             jsonArr.push({ key: 'longitude', value: this.oForm.longitude });
             jsonArr.push({ key: 'latitude', value: this.oForm.latitude });
-            jsonArr.push({ key: 'belongBusinessCode', value: this.oForm.belongBusinessCode });
+            jsonArr.push({ key: 'belongBusinessCode', value: this.oForm.businessCode });
             jsonArr.push({ key: 'concatName', value: this.oForm.concatName });
             jsonArr.push({ key: 'concatMobile', value: this.oForm.concatMobile });
             jsonArr.push({ key: 'serviceMobile', value: this.oForm.serviceMobile });
-            // jsonArr.push({ key: 'cinemaLabel', value: this.oCinemaLabel });
             jsonArr.push({ key: 'screenCount', value: this.oForm.screenCount });
             jsonArr.push({ key: 'ticketSystemCode', value: this.oForm.ticketSystemCode });
             jsonArr.push({ key: 'comparePriceCode', value: this.oForm.comparePriceCode });
@@ -1026,7 +1050,7 @@ export default {
             jsonArr.push({ key: 'sign', value: sign });
             console.log(jsonArr);
             let params = ParamsAppend(jsonArr);
-            console.log(params);
+            // console.log(params);
             if (this.dialogFormVisible == true) {
                 https
                     .fetchPost('/cinema/addCinema', params)
@@ -1044,6 +1068,7 @@ export default {
                             this.oForm.longitude = '';
                             this.oForm.latitude = '';
                             this.oForm.belongBusinessCode = '';
+                            this.oForm.businessCode = '';
                             this.oForm.concatName = '';
                             this.oForm.concatMobile = '';
                             this.oForm.serviceMobile = '';
@@ -1119,7 +1144,7 @@ export default {
             jsonArr.push({ key: 'sign', value: sign });
             let params = ParamsAppend(jsonArr);
             https
-                .fetchDelete('/businessInfo/deleteBusinessInfo', params)
+                .fetchDelete('/cinema/deleteCinema', params)
                 .then(data => {
                     if (data.data.code == 'success') {
                         this.$message.error(`删除了`);
@@ -1147,6 +1172,8 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
+            this.getBusinessInfo();
+            this.openServe();
             this.idx = index;
             this.form = row;
             var jsonArr = [];
@@ -1157,7 +1184,6 @@ export default {
             https
                 .fetchPost('/cinema/getCinemaById', params)
                 .then(data => {
-                    // console.log(data);
                     console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.editVisible = true;
@@ -1165,14 +1191,13 @@ export default {
                         this.oCinemaCode = JSON.parse(Decrypt(data.data.data)).cinemaCode;
                         this.oProvince = JSON.parse(Decrypt(data.data.data)).province;
                         this.oCity = JSON.parse(Decrypt(data.data.data)).city;
+                        this.oBelongBusinessCode = JSON.parse(Decrypt(data.data.data)).belongBusinessCode;
                         this.oAddress = JSON.parse(Decrypt(data.data.data)).address;
                         this.oLongitude = JSON.parse(Decrypt(data.data.data)).longitude;
                         this.oLatitude = JSON.parse(Decrypt(data.data.data)).latitude;
-                        this.oBelongBusinessCode = JSON.parse(Decrypt(data.data.data)).belongBusinessCode;
                         this.oConcatName = JSON.parse(Decrypt(data.data.data)).concatName;
                         this.oConcatMobile = JSON.parse(Decrypt(data.data.data)).concatMobile;
                         this.oServiceMobile = JSON.parse(Decrypt(data.data.data)).serviceMobile;
-                        // this.oCinemaLabel = JSON.parse(Decrypt(data.data.data)).cinemaLabel;
                         this.oScreenCount = JSON.parse(Decrypt(data.data.data)).screenCount;
                         this.oTicketSystemCode = JSON.parse(Decrypt(data.data.data)).ticketSystemCode;
                         this.oComparePriceCode = JSON.parse(Decrypt(data.data.data)).comparePriceCode;
@@ -1205,6 +1230,12 @@ export default {
                         this.oMiniMerchantSecret = JSON.parse(Decrypt(data.data.data)).miniMerchantSecret;
                         this.oMiniRefundCertificateUrl = JSON.parse(Decrypt(data.data.data)).miniRefundCertificateUrl;
                         this.oId = JSON.parse(Decrypt(data.data.data)).id;
+                        // 获取所选影院名称
+                        for (let i = 0; i < this.businessInfo.length; i++) {
+                            if (this.businessInfo[i].businessCode == this.oBelongBusinessCode) {
+                                this.oBusinessName = this.businessInfo[i].businessName;
+                            }
+                        }
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
@@ -1242,7 +1273,6 @@ export default {
             jsonArr.push({ key: 'concatName', value: this.oConcatName });
             jsonArr.push({ key: 'concatMobile', value: this.oConcatMobile });
             jsonArr.push({ key: 'serviceMobile', value: this.oServiceMobile });
-            // jsonArr.push({ key: 'cinemaLabel', value: this.oCinemaLabel });
             jsonArr.push({ key: 'screenCount', value: this.oScreenCount });
             jsonArr.push({ key: 'ticketSystemCode', value: this.oTicketSystemCode });
             jsonArr.push({ key: 'comparePriceCode', value: this.oComparePriceCode });
@@ -1305,6 +1335,28 @@ export default {
         Search() {
             this.query.pageNo = 1;
             this.getMenu();
+        },
+        getBusinessInfo() {
+            // 获取所有关联商家编码
+            https
+                .fetchPost('/businessInfo/getAllBusinessInfo')
+                .then(data => {
+                    if (data.data.code == 'success') {
+                        var res = JSON.parse(Decrypt(data.data.data));
+                        console.log(res);
+                        this.businessInfo = res;
+                    } else if (data.data.code == 'nologin') {
+                        this.message = data.data.message;
+                        this.open();
+                        this.$router.push('/login');
+                    } else {
+                        this.message = data.data.message;
+                        this.open();
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                });
         },
         getMenu() {
             //获取菜单栏
@@ -1379,6 +1431,18 @@ export default {
             //分页按钮下一页
             this.query.pageNo++;
             this.getMenu();
+        },
+        changeBusinessCode() {
+            // 获取商家编码
+            for (let i = 0; i < this.businessInfo.length; i++) {
+                if (this.businessInfo[i].businessName == this.selectCode) {
+                    this.oBelongBusinessCode = this.businessInfo[i].businessCode;
+                }
+            }
+        },
+        openServe() {
+            // 开通各种服务状态
+            console.log(this.oOpenSnackStatus)
         }
     }
 };
