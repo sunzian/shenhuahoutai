@@ -124,18 +124,8 @@
         <!--新增弹出框-->
         <el-dialog title="新增轮播图" :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
-                <el-form-item label="角色名" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" maxlength="10" show-word-limit v-model="oForm.name" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="描述" :label-width="formLabelWidth">
-                    <el-input maxlength="30" type="textarea"
-                              :rows="2" show-word-limit v-model="oForm.memo" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="排序" :label-width="formLabelWidth">
-                    <el-input style="width: 150px" maxlength="9" v-model.number="oForm.sort" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="状态" :label-width="formLabelWidth">
-                    <el-select v-model="oForm.value" placeholder="请选择状态">
+                <el-form-item label="轮播图级别" :label-width="formLabelWidth">
+                    <el-select v-model="oForm.value" placeholder="请选择级别">
                         <el-option
                                 v-for="item in options"
                                 :key="item.value"
@@ -143,6 +133,83 @@
                                 :value="item.value">
                         </el-option>
                     </el-select>
+                </el-form-item>
+                <el-form-item label="所属商家编码" :label-width="formLabelWidth">
+                    <el-select v-model="oForm.businessCode" placeholder="请选择商家">
+                        <el-option
+                                v-for="item in businessOptiones"
+                                :key="item.business_code"
+                                :label="item.business_name"
+                                :value="item.business_code">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="适用影院编码" :label-width="formLabelWidth">
+                    <el-input style="width: 150px" maxlength="9" v-model.number="oForm.cinemaCode" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="是否显示" :label-width="formLabelWidth">
+                    <el-select v-model="oForm.statusValue" placeholder="选择是否显示">
+                        <el-option
+                                v-for="item in showStatus"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="开始时间" :label-width="formLabelWidth">
+                    <el-date-picker
+                            style="width: 150px"
+                            v-model="startTime"
+                            type="datetime"
+                            placeholder="选择日期时间">
+                    </el-date-picker>
+                </el-form-item>
+                <el-form-item label="结束时间" :label-width="formLabelWidth">
+                    <el-date-picker
+                            style="width: 150px"
+                            v-model="endTime"
+                            type="datetime"
+                            placeholder="选择日期时间">
+                    </el-date-picker>
+                </el-form-item>
+                <el-form-item label="备注" :label-width="formLabelWidth">
+                    <el-input style="width: 150px" maxlength="9" v-model.number="oForm.memo" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="轮播图类别" :label-width="formLabelWidth">
+                    <el-select v-model="oForm.bannerType" placeholder="请选择商家">
+                        <el-option
+                                v-for="item in bannerType"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="图片地址" :label-width="formLabelWidth">
+                    <el-upload
+                            class="upload-demo"
+                            drag
+                            action="/api/upload/uploadImage"
+                            :on-success="onSuccess"
+                            multiple>
+                        <i class="el-icon-upload"></i>
+                        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
+                    </el-upload>
+                </el-form-item>
+                <el-form-item label="跳转类型" :label-width="formLabelWidth">
+                    <el-select v-model="oForm.tabType" placeholder="请选择跳转类型">
+                        <el-option
+                                v-for="item in tabType"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="跳转的具体类型" :label-width="formLabelWidth">
+                    <el-input style="width: 150px" maxlength="9" v-model.number="oForm.goType" autocomplete="off"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -192,6 +259,8 @@
         name: 'basetable',
         data() {
             return {
+                startTime:'',
+                endTime:'',
                 oName:'',
                 message:'',//弹出框消息
                 query: {
@@ -220,23 +289,39 @@
                     type: [],
                     resource: '',
                     desc: '',
-                    value:'1'
+                    value:'',
+                    statusValue:'',
+                    businessCode:'',
                 },
                 formLabelWidth: '120px',
                 selectValue:{},
                 options: [{
                     value: '1',
-                    label: '审核中'
+                    label: '商家'
                 }, {
                     value: '2',
-                    label: '未审核'
-                }, {
-                    value: '3',
-                    label: '通过'
-                }, {
-                    value: '4',
-                    label: '审核失败'
+                    label: '门店'
                 }],
+                showStatus: [{
+                    value: '1',
+                    label: '显示'
+                }, {
+                    value: '2',
+                    label: '不显示'
+                }],
+                businessOptiones:[],
+                bannerType:[
+                    {
+                        value: '1',
+                        label: '电影首页轮播图'
+                    }
+                ],
+                tabType:[
+                    {
+                        value: '1',
+                        label: '跳转到文章'
+                    }
+                ],
                 value: ''
             };
         },
@@ -258,6 +343,8 @@
                 setTimeout(() => {
                     https.fetchPost('/banner/addPage','').then((data) => {
                         console.log(data);
+                        console.log(JSON.parse(Decrypt(data.data.data)));
+                        this.businessOptiones = JSON.parse(Decrypt(data.data.data))
                         if(data.data.code == 'success'){
                             this.dialogFormVisible = true
                         }else if(data.data.code=='nologin'){
@@ -275,7 +362,26 @@
                     loading.close();
                 }, 2000);
             },
+            onSuccess(data){//上传文件 登录超时
+                // console.log(data);
+                this.oForm.imageUrl=data.data
+                if(data.code=='nologin'){
+                    this.message=data.message
+                    this.open()
+                    this.$router.push('/login');
+                }
+            },
             addRole(){ //新增按钮操作
+                // console.log(this.startTime);//开始时间
+                // console.log(this.endTime);//结束时间
+                // console.log(this.oForm.value);
+                // console.log(this.oForm.statusValue);
+                // console.log(this.oForm.memo);
+                // console.log(this.oForm.businessCode);
+                // console.log(this.oForm.bannerType);
+                // console.log(this.oForm.tabType);
+                // console.log(this.oForm.goType);
+                // console.log(this.oForm.cinemaCode);
                 const loading = this.$loading({
                     lock: true,
                     text: 'Loading',
@@ -285,16 +391,23 @@
                 });
                 setTimeout(() => {
                     var jsonArr = [];
-                    jsonArr.push({key:"roleName",value:this.oForm.name});
-                    jsonArr.push({key:"status",value:this.oForm.value});
+                    jsonArr.push({key:"bannerLevel",value:this.oForm.value});
+                    jsonArr.push({key:"businessCode",value:this.oForm.businessCode});
+                    jsonArr.push({key:"cinemaCodes",value:this.oForm.cinemaCode});
+                    jsonArr.push({key:"status",value:this.oForm.statusValue});
+                    jsonArr.push({key:"startDate",value:this.startTime});
+                    jsonArr.push({key:"endDate",value:this.endTime});
                     jsonArr.push({key:"memo",value:this.oForm.memo});
-                    jsonArr.push({key:"sort",value:this.oForm.sort});
+                    jsonArr.push({key:"category",value:this.oForm.bannerType});
+                    jsonArr.push({key:"imageUrl",value:this.oForm.imageUrl});
+                    jsonArr.push({key:"redirectType",value:this.oForm.tabType});
+                    jsonArr.push({key:"redirectGoal",value:this.oForm.goType});
                     let sign =md5(preSign(jsonArr));
                     jsonArr.push({key:"sign",value:sign});
                     let params = ParamsAppend(jsonArr);
                     if(this.dialogFormVisible == true){
-                        https.fetchPost('/role/addRole',params).then((data) => {//新增
-                            // console.log(data);
+                        https.fetchPost('/banner/addBanner',params).then((data) => {//新增
+                            console.log(data);
                             if(data.data.code=='success'){
                                 this.dialogFormVisible = false
                                 this.$message.success(`新增成功`);
@@ -338,15 +451,15 @@
                         status=''
                     }
                     let jsonArr = [];
-                    jsonArr.push({key:"roleName",value:name});
-                    jsonArr.push({key:"status",value:status});
+                    // jsonArr.push({key:"roleName",value:name});
+                    // jsonArr.push({key:"status",value:status});
                     jsonArr.push({key:"id",value:row.id});
                     let sign =md5(preSign(jsonArr));
                     jsonArr.push({key:"sign",value:sign});
                     let params = ParamsAppend(jsonArr);
-                    https.fetchPost('/role/deleteRole',params).then((data) => {
-                        // console.log(data);
-                        // console.log(JSON.parse(Decrypt(data.data.data)));
+                    https.fetchPost('/banner/deleteBanner').then((data) => {
+                        console.log(data);
+                        console.log(JSON.parse(Decrypt(data.data.data)));
                         if(data.data.code=='success'){
                             this.$message.error(`删除了`);
                             this.getMenu()
