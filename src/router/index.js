@@ -55,6 +55,11 @@ export default new Router({
                     meta: { title: '轮播图管理' }
                 },
                 {
+                    path: '/cardOpenRulesPage',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/cardOpenRulesPage.vue'),
+                    meta: { title: '开卡规则管理' }
+                },
+                {
                     path: '/tabs',
                     component: () => import(/* webpackChunkName: "tabs" */ '../components/page/Tabs.vue'),
                     meta: { title: 'tab选项卡' }

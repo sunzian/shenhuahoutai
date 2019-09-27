@@ -26,69 +26,63 @@
                     header-cell-class-name="table-header"
                     @selection-change="handleSelectionChange"
             >
-                <el-table-column prop="name" label="轮播图级别">
-                    <template slot-scope="scope">
-                        <el-tag v-if="scope.row.bannerLevel=='1'"
-                        >商家</el-tag>
-                        <el-tag v-else-if="scope.row.bannerLevel=='2'"
-                        >门店</el-tag>
-                    </template>
-                </el-table-column>
-                <el-table-column label="所属商家编码">
+                <el-table-column prop="name" label="商家编码">
                     <template slot-scope="scope">{{scope.row.businessCode}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="适用影院编码" width="100px">
-                    <template slot-scope="scope">{{scope.row.cinemaCodes}}</template>
+                <el-table-column label="影院编码">
+                    <template slot-scope="scope">{{scope.row.cinemaCode}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="是否显示">
+                <el-table-column prop="memo" label="开卡规则编码" width="100px">
+                    <template slot-scope="scope">{{scope.row.ruleCode}}</template>
+                </el-table-column>
+                <el-table-column prop="sort" label="开卡规则名称">
+                    <template slot-scope="scope">{{scope.row. ruleName}}</template>
+                </el-table-column>
+                <el-table-column prop="sort" label="活动描述">
+                    <template slot-scope="scope">{{scope.row. ruleMemo}}</template>
+                </el-table-column>
+                <el-table-column prop="sort" label="会员卡类型" width="160px">
+                    <template slot-scope="scope">{{scope.row.memberCardType}}</template>
+                </el-table-column>
+                <el-table-column prop="sort" label="会员卡类别编码" width="160px">
+                    <template slot-scope="scope">{{scope.row.cardLevelCode}}</template>
+                </el-table-column>
+                <el-table-column prop="sort" label="会员卡类别名称">
+                    <template slot-scope="scope">{{scope.row.cardLevelName}}</template>
+                </el-table-column>
+                <el-table-column prop="sort" label="充值金额" width="120px">
+                    <template slot-scope="scope">{{scope.row.rechargeAmount}}</template>
+                </el-table-column>
+                <el-table-column prop="sort" label="赠送类型" width="200px">
                     <template slot-scope="scope">
-                        <el-tag v-if="scope.row.status=='1'"
-                        >显示</el-tag>
-                        <el-tag v-else-if="scope.row.status=='2'"
-                        >不显示</el-tag>
+                        <el-tag v-if="scope.row.givenType=='1'"
+                        >不赠送</el-tag>
+                        <el-tag v-else-if="scope.row.givenType=='2'"
+                        >赠送RMB</el-tag>
+                        <el-tag v-else-if="scope.row.givenType=='3'"
+                        >赠送券包</el-tag>
+                        <el-tag v-else-if="scope.row.givenType=='4'"
+                        >两者都送</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="sort" label="开始时间" width="160px">
+                <el-table-column prop="sort" label="赠送金额" width="120px">
+                    <template slot-scope="scope">{{scope.row.givenMoney}}</template>
+                </el-table-column>
+                <el-table-column prop="sort" label="赠送的券id和张数">
+                    <template slot-scope="scope">{{scope.row.givenTicketsParams}}</template>
+                </el-table-column>
+                <el-table-column label="开始时间" align="center">
                     <template slot-scope="scope">{{scope.row.startDate}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="结束时间" width="160px">
+                <el-table-column label="结束时间" align="center">
                     <template slot-scope="scope">{{scope.row.endDate}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="备注">
-                    <template slot-scope="scope">{{scope.row.memo}}</template>
-                </el-table-column>
-                <el-table-column prop="sort" label="轮播图类别" width="120px">
-                    <template slot-scope="scope">
-                        <el-tag v-if="scope.row.category=='1'"
-                        >电影首页轮播图</el-tag>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="sort" label="图片地址" width="200px">
-                    <template slot-scope="scope">
-                        <el-popover
-                                placement="right"
-                                title=""
-                                trigger="hover">
-                            <img :src="scope.row.imageUrl"/>
-                            <img slot="reference" :src="scope.row.imageUrl" :alt="scope.row.imageUrl" style="max-height: 50px;max-width: 130px">
-                        </el-popover>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="sort" label="跳转类型" width="120px">
-                    <template slot-scope="scope">
-                        <el-tag v-if="scope.row.redirectType=='1'"
-                        >跳转到文章</el-tag>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="sort" label="跳转的具体信息">
-                    <template slot-scope="scope">{{scope.row.redirectGoal}}</template>
-                </el-table-column>
-                <el-table-column label="状态" align="center">
+                <el-table-column label="启用状态" align="center">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status=='1'" type='success'
-                        >成功</el-tag>
+                        >启用</el-tag>
                         <el-tag v-else type='danger'
-                        >未通过</el-tag>
+                        >未启用</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column label="操作" width="180" align="center">
@@ -424,10 +418,9 @@
                     target: document.querySelector('.div1')
                 });
                 setTimeout(() => {
-                    https.fetchPost('/banner/addPage','').then((data) => {
+                    https.fetchPost('/openCardRule/addPage','').then((data) => {
                         console.log(data);
-                        console.log(JSON.parse(Decrypt(data.data.data)));
-                        this.businessOptiones = JSON.parse(Decrypt(data.data.data))
+                        // console.log(JSON.parse(Decrypt(data.data.data)));
                         if(data.data.code == 'success'){
                             this.dialogFormVisible = true
                         }else if(data.data.code=='nologin'){
@@ -732,7 +725,7 @@
                     let sign =md5(preSign(jsonArr));
                     jsonArr.push({key:"sign",value:sign});
                     var params = ParamsAppend(jsonArr);
-                    https.fetchPost('/banner/bannerPage',params).then((data) => {
+                    https.fetchPost('/openCardRule/openPage',params).then((data) => {
                         if(data.data.code=='success') {
                             var oData = JSON.parse(Decrypt(data.data.data));
                             console.log(oData);
@@ -806,4 +799,5 @@
         margin-right: 10px;
     }
 </style>
+
 
