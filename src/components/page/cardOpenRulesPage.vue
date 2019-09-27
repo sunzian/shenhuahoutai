@@ -115,95 +115,56 @@
             </div>
         </div>
         <!--新增弹出框-->
-        <el-dialog title="新增轮播图" :visible.sync="dialogFormVisible">
+        <el-dialog title="新增规则" :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
-                <el-form-item label="轮播图级别" :label-width="formLabelWidth">
-                    <el-select v-model="oForm.value" placeholder="请选择级别">
+                <el-form-item label="影院编码" :label-width="formLabelWidth">
+                    <el-select v-model="oForm.cinemaCode" placeholder="请选择影院">
                         <el-option
-                                v-for="item in options"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value">
+                                v-for="item in selectValue"
+                                :key="item.cinemaCode"
+                                :label="item.cinemaName"
+                                :value="item.cinemaCode">
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="所属商家编码" :label-width="formLabelWidth">
-                    <el-select v-model="oForm.businessCode" placeholder="请选择商家">
-                        <el-option
-                                v-for="item in businessOptiones"
-                                :key="item.business_code"
-                                :label="item.business_name"
-                                :value="item.business_code">
-                        </el-option>
-                    </el-select>
+                <el-form-item label="开卡规则编码" :label-width="formLabelWidth">
+                    <el-input style="width: 150px" maxlength="9" v-model.number="oForm.ruleCode" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="适用影院编码" :label-width="formLabelWidth">
-                    <el-input style="width: 150px" maxlength="9" v-model.number="oForm.cinemaCode" autocomplete="off"></el-input>
+                <el-form-item label="开卡规则名称" :label-width="formLabelWidth">
+                    <el-input style="width: 150px" maxlength="9" v-model.number="oForm.ruleName" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="是否显示" :label-width="formLabelWidth">
-                    <el-select v-model="oForm.statusValue" placeholder="选择是否显示">
-                        <el-option
-                                v-for="item in showStatus"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value">
-                        </el-option>
-                    </el-select>
+                <el-form-item label="活动描述" :label-width="formLabelWidth">
+                    <el-input style="width: 150px" maxlength="9" v-model.number="oForm.ruleMemo" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="会员卡类型" :label-width="formLabelWidth">
+                    <el-input style="width: 150px" maxlength="9" v-model.number="oForm.memberCardType" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="会员卡类别编码" :label-width="formLabelWidth">
+                    <el-input style="width: 150px" maxlength="9" v-model.number="oForm.cardLevelCode" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="会员卡类别名称" :label-width="formLabelWidth">
+                    <el-input style="width: 150px" maxlength="9" v-model.number="oForm.cardLevelName" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="充值金额" :label-width="formLabelWidth">
+                    <el-input style="width: 150px" maxlength="9" v-model.number="oForm.rechargeAmount" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="赠送类型" :label-width="formLabelWidth">
+                    <el-input style="width: 150px" maxlength="9" v-model.number="oForm.givenType" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="赠送金额" :label-width="formLabelWidth">
+                    <el-input style="width: 150px" maxlength="9" v-model.number="oForm.givenMoney" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="赠送的券id和张数" :label-width="formLabelWidth">
+                    <el-input style="width: 150px" maxlength="9" v-model.number="oForm.givenTicketsParams" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="开始时间" :label-width="formLabelWidth">
-                    <el-date-picker
-                            style="width: 150px"
-                            v-model="startTime"
-                            type="datetime"
-                            placeholder="选择日期时间">
-                    </el-date-picker>
+                    <el-input style="width: 150px" maxlength="9" v-model.number="oForm.startDate" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="结束时间" :label-width="formLabelWidth">
-                    <el-date-picker
-                            style="width: 150px"
-                            v-model="endTime"
-                            type="datetime"
-                            placeholder="选择日期时间">
-                    </el-date-picker>
+                    <el-input style="width: 150px" maxlength="9" v-model.number="oForm.endDate" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="备注" :label-width="formLabelWidth">
-                    <el-input style="width: 150px" maxlength="9" v-model.number="oForm.memo" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="轮播图类别" :label-width="formLabelWidth">
-                    <el-select v-model="oForm.bannerType" placeholder="请选择商家">
-                        <el-option
-                                v-for="item in bannerType"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="图片地址" :label-width="formLabelWidth">
-                    <el-upload
-                            :data="type"
-                            class="upload-demo"
-                            drag
-                            action="/api/upload/uploadImage"
-                            :on-success="onSuccess"
-                            multiple>
-                        <i class="el-icon-upload"></i>
-                        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
-                    </el-upload>
-                </el-form-item>
-                <el-form-item label="跳转类型" :label-width="formLabelWidth">
-                    <el-select v-model="oForm.tabType" placeholder="请选择跳转类型">
-                        <el-option
-                                v-for="item in tabType"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="跳转的具体类型" :label-width="formLabelWidth">
-                    <el-input style="width: 150px" maxlength="9" v-model.number="oForm.goType" autocomplete="off"></el-input>
+                <el-form-item label="启用状态" :label-width="formLabelWidth">
+                    <el-input style="width: 150px" maxlength="9" v-model.number="oForm.status" autocomplete="off"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -368,6 +329,7 @@
                     value:'',
                     statusValue:'',
                     businessCode:'',
+                    cinemaCode:'',
                 },
                 formLabelWidth: '120px',
                 selectValue:{},
@@ -420,9 +382,10 @@
                 setTimeout(() => {
                     https.fetchPost('/openCardRule/addPage','').then((data) => {
                         console.log(data);
-                        // console.log(JSON.parse(Decrypt(data.data.data)));
+                        console.log(JSON.parse(Decrypt(data.data.data)));
                         if(data.data.code == 'success'){
                             this.dialogFormVisible = true
+                            this.selectValue = JSON.parse(Decrypt(data.data.data))
                         }else if(data.data.code=='nologin'){
                             this.message=data.data.message
                             this.open()
@@ -448,6 +411,10 @@
                 }
             },
             addRole(){ //新增按钮操作
+                console.log(this.oForm.cinemaCode);
+                console.log(oForm.ruleCode);
+                console.log(oForm.ruleName);
+                console.log(oForm.ruleMemo);
                 // console.log(this.startTime);//开始时间
                 // console.log(this.endTime);//结束时间
                 // console.log(this.oForm.value);
@@ -458,54 +425,54 @@
                 // console.log(this.oForm.tabType);
                 // console.log(this.oForm.goType);
                 // console.log(this.oForm.cinemaCode);
-                const loading = this.$loading({
-                    lock: true,
-                    text: 'Loading',
-                    spinner: 'el-icon-loading',
-                    background: 'rgba(0, 0, 0, 0.7)',
-                    target: document.querySelector('.div1')
-                });
-                setTimeout(() => {
-                    var jsonArr = [];
-                    jsonArr.push({key:"bannerLevel",value:this.oForm.value});
-                    jsonArr.push({key:"businessCode",value:this.oForm.businessCode});
-                    jsonArr.push({key:"cinemaCodes",value:this.oForm.cinemaCode});
-                    jsonArr.push({key:"status",value:this.oForm.statusValue});
-                    jsonArr.push({key:"startDate",value:this.startTime});
-                    jsonArr.push({key:"endDate",value:this.endTime});
-                    jsonArr.push({key:"memo",value:this.oForm.memo});
-                    jsonArr.push({key:"category",value:this.oForm.bannerType});
-                    jsonArr.push({key:"imageUrl",value:this.oForm.imageUrl});
-                    jsonArr.push({key:"redirectType",value:this.oForm.tabType});
-                    jsonArr.push({key:"redirectGoal",value:this.oForm.goType});
-                    let sign =md5(preSign(jsonArr));
-                    jsonArr.push({key:"sign",value:sign});
-                    let params = ParamsAppend(jsonArr);
-                    if(this.dialogFormVisible == true){
-                        https.fetchPost('/banner/addBanner',params).then((data) => {//新增
-                            console.log(data);
-                            if(data.data.code=='success'){
-                                this.dialogFormVisible = false
-                                this.$message.success(`新增成功`);
-                                this.oForm.name = ''
-                                this.oForm.value = ''
-                                this.oForm.memo = ''
-                                this.getMenu()
-                            }else if(data.data.code=='nologin'){
-                                this.message=data.data.message
-                                this.open()
-                                this.$router.push('/login');
-                            }else{
-                                this.message=data.data.message
-                                this.open()
-                            }
-                        }).catch(err=>{
-                                console.log(err)
-                            }
-                        )
-                    }
-                    loading.close();
-                }, 2000);
+                // const loading = this.$loading({
+                //     lock: true,
+                //     text: 'Loading',
+                //     spinner: 'el-icon-loading',
+                //     background: 'rgba(0, 0, 0, 0.7)',
+                //     target: document.querySelector('.div1')
+                // });
+                // setTimeout(() => {
+                //     var jsonArr = [];
+                //     jsonArr.push({key:"bannerLevel",value:this.oForm.value});
+                //     jsonArr.push({key:"businessCode",value:this.oForm.businessCode});
+                //     jsonArr.push({key:"cinemaCodes",value:this.oForm.cinemaCode});
+                //     jsonArr.push({key:"status",value:this.oForm.statusValue});
+                //     jsonArr.push({key:"startDate",value:this.startTime});
+                //     jsonArr.push({key:"endDate",value:this.endTime});
+                //     jsonArr.push({key:"memo",value:this.oForm.memo});
+                //     jsonArr.push({key:"category",value:this.oForm.bannerType});
+                //     jsonArr.push({key:"imageUrl",value:this.oForm.imageUrl});
+                //     jsonArr.push({key:"redirectType",value:this.oForm.tabType});
+                //     jsonArr.push({key:"redirectGoal",value:this.oForm.goType});
+                //     let sign =md5(preSign(jsonArr));
+                //     jsonArr.push({key:"sign",value:sign});
+                //     let params = ParamsAppend(jsonArr);
+                //     if(this.dialogFormVisible == true){
+                //         https.fetchPost('/banner/addBanner',params).then((data) => {//新增
+                //             console.log(data);
+                //             if(data.data.code=='success'){
+                //                 this.dialogFormVisible = false
+                //                 this.$message.success(`新增成功`);
+                //                 this.oForm.name = ''
+                //                 this.oForm.value = ''
+                //                 this.oForm.memo = ''
+                //                 this.getMenu()
+                //             }else if(data.data.code=='nologin'){
+                //                 this.message=data.data.message
+                //                 this.open()
+                //                 this.$router.push('/login');
+                //             }else{
+                //                 this.message=data.data.message
+                //                 this.open()
+                //             }
+                //         }).catch(err=>{
+                //                 console.log(err)
+                //             }
+                //         )
+                //     }
+                //     loading.close();
+                // }, 2000);
             },
             delChange(index, row){//删除数据
                 const loading = this.$loading({
