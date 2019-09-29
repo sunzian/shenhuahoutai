@@ -656,23 +656,22 @@
                             v-for="info in boolean"
                             :key="info.id"
                             :label="info.value"
-                            :value="info.value"
+                            :value="info.id"
                         ></el-option>
                     </el-select>
-                    <!-- <el-input
-                        style="width: 250px"
-                        min="1"
-                        v-model.trim="oOpenSnackStatus"
-                        autocomplete="off"
-                    ></el-input> -->
                 </el-form-item>
                 <el-form-item label="是否小卖配送">
-                    <el-input
-                        style="width: 250px"
-                        min="1"
-                        v-model.trim="oSnackDispatcherStatus"
-                        autocomplete="off"
-                    ></el-input>
+                    <el-select
+                    v-model="oSnackDispatcherStatus" 
+                    @change="openServe"
+                    >
+                        <el-option
+                            v-for="info in boolean"
+                            :key="info.id"
+                            :label="info.value"
+                            :value="info.id"
+                        ></el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item label="是否可退票">
                     <el-input
@@ -1173,7 +1172,6 @@ export default {
                 target: document.querySelector('.div1')
             });
             this.getBusinessInfo();
-            this.openServe();
             this.idx = index;
             this.form = row;
             var jsonArr = [];
@@ -1208,7 +1206,7 @@ export default {
                         this.oMemberCardPayCommissionFee = JSON.parse(Decrypt(data.data.data)).memberCardPayCommissionFee;
                         this.oMembershipServiceAgreement = JSON.parse(Decrypt(data.data.data)).membershipServiceAgreement;
                         this.oBuyTicketHint = JSON.parse(Decrypt(data.data.data)).buyTicketHint;
-                        this.oOpenSnackStatus = JSON.parse(Decrypt(data.data.data)).openSnackStatus;
+                        this.oOpenSnackStatus = this.changeGetStatus(JSON.parse(Decrypt(data.data.data)).openSnackStatus);
                         this.oSnackDispatcherStatus = JSON.parse(Decrypt(data.data.data)).snackDispatcherStatus;
                         this.oRefundable = JSON.parse(Decrypt(data.data.data)).refundable;
                         this.oRemainTicketsNumber = JSON.parse(Decrypt(data.data.data)).remainTicketsNumber;
@@ -1230,6 +1228,7 @@ export default {
                         this.oMiniMerchantSecret = JSON.parse(Decrypt(data.data.data)).miniMerchantSecret;
                         this.oMiniRefundCertificateUrl = JSON.parse(Decrypt(data.data.data)).miniRefundCertificateUrl;
                         this.oId = JSON.parse(Decrypt(data.data.data)).id;
+                        this.openServe();
                         // 获取所选影院名称
                         for (let i = 0; i < this.businessInfo.length; i++) {
                             if (this.businessInfo[i].businessCode == this.oBelongBusinessCode) {
@@ -1440,9 +1439,30 @@ export default {
                 }
             }
         },
-        openServe() {
+        openServe(e) {
             // 开通各种服务状态
             console.log(this.oOpenSnackStatus)
+            console.log(this.oSnackDispatcherStatus)
+        },
+        changeGetStatus(item) {
+            if (item == 1) {
+                item = '是'
+                return item
+            }
+            if (item == 2) {
+                item = '否'
+                return item
+            }
+        },
+        changeSetStatus(item) {
+            if (item == '是') {
+                item = 1
+                return item
+            }
+            if (item == '否') {
+                item = 2
+                return item
+            }
         }
     }
 };

@@ -35,6 +35,26 @@ export default new Router({
                     meta: { title: '影院管理' }
                 },
                 {
+                    path: '/screenInfoPage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/screenInfoPage.vue'),
+                    meta: { title: '影厅管理' }
+                },
+                {
+                    path: '/filmPage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/filmPage.vue'),
+                    meta: { title: '影片信息维护' }
+                },
+                {
+                    path: '/directorPage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/directorPage.vue'),
+                    meta: { title: '导演管理' }
+                },
+                {
+                    path: '/actorPage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/actorPage.vue'),
+                    meta: { title: '演员管理' }
+                },
+                {
                     path: '/rolePermission',
                     component: () => import(/* webpackChunkName: "table" */ '../components/page/rolePermission.vue'),
                     meta: { title: '角色权限管理' }
