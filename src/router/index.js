@@ -50,6 +50,21 @@ export default new Router({
                     meta: { title: '导演管理' }
                 },
                 {
+                    path: '/sessionInfoPage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/sessionInfoPage.vue'),
+                    meta: { title: '排期管理' }
+                },
+                {
+                    path: '/thirdPricePage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/thirdPricePage.vue'),
+                    meta: { title: '三方比价' }
+                },
+                {
+                    path: '/rechargeCardRulePage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/rechargeCardRulePage.vue'),
+                    meta: { title: '充值规则管理' }
+                },
+                {
                     path: '/actorPage',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/actorPage.vue'),
                     meta: { title: '演员管理' }
