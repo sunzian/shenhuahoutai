@@ -3,7 +3,7 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
-                    <i class="el-icon-lx-cascades"></i> 轮播图管理
+                    <i class="el-icon-lx-cascades"></i> 开卡规则管理
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
@@ -116,7 +116,7 @@
         </div>
         <!--新增弹出框-->
         <el-dialog title="新增规则" :visible.sync="dialogFormVisible">
-            <el-form :model="oForm">
+            <el-form v-model="oForm">
                 <el-form-item label="影院编码" :label-width="formLabelWidth">
                     <el-select v-model="oForm.cinemaCode" placeholder="请选择影院">
                         <el-option
@@ -128,43 +128,78 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="开卡规则编码" :label-width="formLabelWidth">
-                    <el-input style="width: 150px" maxlength="9" v-model.number="oForm.ruleCode" autocomplete="off"></el-input>
+                    <el-input style="width: 150px" maxlength="9" v-model="oForm.ruleCode" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="开卡规则名称" :label-width="formLabelWidth">
-                    <el-input style="width: 150px" maxlength="9" v-model.number="oForm.ruleName" autocomplete="off"></el-input>
+                    <el-input style="width: 150px" maxlength="9" v-model="oForm.ruleName" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="活动描述" :label-width="formLabelWidth">
-                    <el-input style="width: 150px" maxlength="9" v-model.number="oForm.ruleMemo" autocomplete="off"></el-input>
+                    <el-input style="width: 150px" maxlength="9" v-model="oForm.ruleMemo" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="会员卡类型" :label-width="formLabelWidth">
-                    <el-input style="width: 150px" maxlength="9" v-model.number="oForm.memberCardType" autocomplete="off"></el-input>
+                    <el-select v-model="oForm.memberCardType" placeholder="请选择会员卡类型">
+                        <el-option
+                                v-for="item in memberCardTypeList"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                        </el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item label="会员卡类别编码" :label-width="formLabelWidth">
-                    <el-input style="width: 150px" maxlength="9" v-model.number="oForm.cardLevelCode" autocomplete="off"></el-input>
+                    <el-input style="width: 150px" maxlength="9" v-model="oForm.cardLevelCode" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="会员卡类别名称" :label-width="formLabelWidth">
-                    <el-input style="width: 150px" maxlength="9" v-model.number="oForm.cardLevelName" autocomplete="off"></el-input>
+                    <el-input style="width: 150px" maxlength="9" v-model="oForm.cardLevelName" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="充值金额" :label-width="formLabelWidth">
-                    <el-input style="width: 150px" maxlength="9" v-model.number="oForm.rechargeAmount" autocomplete="off"></el-input>
+                    <el-input style="width: 150px" maxlength="9" v-model="oForm.rechargeAmount" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="赠送类型" :label-width="formLabelWidth">
-                    <el-input style="width: 150px" maxlength="9" v-model.number="oForm.givenType" autocomplete="off"></el-input>
+                    <el-select v-model="oForm.givenType" placeholder="请选择赠送类型">
+                        <el-option
+                                v-for="item in options"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                        </el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item label="赠送金额" :label-width="formLabelWidth">
-                    <el-input style="width: 150px" maxlength="9" v-model.number="oForm.givenMoney" autocomplete="off"></el-input>
+                    <el-input style="width: 150px" maxlength="9" v-model="oForm.givenMoney" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="赠送的券id和张数" :label-width="formLabelWidth">
-                    <el-input style="width: 150px" maxlength="9" v-model.number="oForm.givenTicketsParams" autocomplete="off"></el-input>
+                    <el-input style="width: 150px" maxlength="9" v-model="oForm.givenTicketsParams" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="开始时间" :label-width="formLabelWidth">
-                    <el-input style="width: 150px" maxlength="9" v-model.number="oForm.startDate" autocomplete="off"></el-input>
+                    <el-date-picker
+                            style="width: 190px"
+                            v-model="startTime"
+                            type="datetime"
+                            format="yyyy-MM-dd HH:mm:ss"
+                            value-format="yyyy-MM-dd HH:mm:ss"
+                            placeholder="选择日期时间">
+                    </el-date-picker>
                 </el-form-item>
                 <el-form-item label="结束时间" :label-width="formLabelWidth">
-                    <el-input style="width: 150px" maxlength="9" v-model.number="oForm.endDate" autocomplete="off"></el-input>
+                    <el-date-picker
+                            style="width: 190px"
+                            v-model="endTime"
+                            type="datetime"
+                            format="yyyy-MM-dd HH:mm:ss"
+                            value-format="yyyy-MM-dd HH:mm:ss"
+                            placeholder="选择日期时间">
+                    </el-date-picker>
                 </el-form-item>
                 <el-form-item label="启用状态" :label-width="formLabelWidth">
-                    <el-input style="width: 150px" maxlength="9" v-model.number="oForm.status" autocomplete="off"></el-input>
+                    <el-select v-model="oForm.statusValue" placeholder="选择是否启用">
+                        <el-option
+                                v-for="item in showStatus"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                        </el-option>
+                    </el-select>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -175,8 +210,46 @@
         <!-- 编辑弹出框 -->
         <el-dialog title="编辑" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
-                <el-form-item label="轮播图级别" :label-width="formLabelWidth">
-                    <el-select v-model="form.bannerLevel" placeholder="请选择级别">
+                <el-form-item label="影院编码" :label-width="formLabelWidth">
+                    <el-select v-model="form.cinemaCode" placeholder="请选择影院">
+                        <el-option
+                                v-for="item in cinemaList"
+                                :key="item.cinemaCode"
+                                :label="item.cinemaName"
+                                :value="item.cinemaCode">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="开卡规则编码" :label-width="formLabelWidth">
+                    <el-input style="width: 150px" maxlength="9" v-model="form.ruleCode" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="开卡规则名称" :label-width="formLabelWidth">
+                    <el-input style="width: 150px" maxlength="9" v-model="form.ruleName" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="活动描述" :label-width="formLabelWidth">
+                    <el-input style="width: 150px" maxlength="9" v-model="form.ruleMemo" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="会员卡类型" :label-width="formLabelWidth">
+                    <el-select v-model="form.memberCardType" placeholder="请选择会员卡类型">
+                        <el-option
+                                v-for="item in memberCardTypeList"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="会员卡类别编码" :label-width="formLabelWidth">
+                    <el-input style="width: 150px" maxlength="9" v-model="form.cardLevelCode" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="会员卡类别名称" :label-width="formLabelWidth">
+                    <el-input style="width: 150px" maxlength="9" v-model="form.cardLevelName" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="充值金额" :label-width="formLabelWidth">
+                    <el-input style="width: 150px" maxlength="9" v-model="form.rechargeAmount" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="赠送类型" :label-width="formLabelWidth">
+                    <el-select v-model="form.givenType" placeholder="请选择赠送类型">
                         <el-option
                                 v-for="item in options"
                                 :key="item.value"
@@ -185,34 +258,19 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="所属商家编码" :label-width="formLabelWidth">
-                    <el-select v-model="form.businessCode" placeholder="请选择商家">
-                        <el-option
-                                v-for="item in businessOptiones"
-                                :key="item.business_code"
-                                :label="item.business_name"
-                                :value="item.business_code">
-                        </el-option>
-                    </el-select>
+                <el-form-item label="赠送金额" :label-width="formLabelWidth">
+                    <el-input style="width: 150px" maxlength="9" v-model="form.givenMoney" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="适用影院编码" :label-width="formLabelWidth">
-                    <el-input style="width: 150px" maxlength="9" v-model.number="form.cinemaCodes" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="是否显示" :label-width="formLabelWidth">
-                    <el-select v-model="form.status" placeholder="选择是否显示">
-                        <el-option
-                                v-for="item in showStatus"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value">
-                        </el-option>
-                    </el-select>
+                <el-form-item label="赠送的券id和张数" :label-width="formLabelWidth">
+                    <el-input style="width: 150px" maxlength="9" v-model="form.givenTicketsParams" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="开始时间" :label-width="formLabelWidth">
                     <el-date-picker
                             style="width: 190px"
                             v-model="changeStartTime"
                             type="datetime"
+                            format="yyyy-MM-dd HH:mm:ss"
+                            value-format="yyyy-MM-dd HH:mm:ss"
                             placeholder="选择日期时间">
                     </el-date-picker>
                 </el-form-item>
@@ -221,54 +279,20 @@
                             style="width: 190px"
                             v-model="changeEndTime"
                             type="datetime"
+                            format="yyyy-MM-dd HH:mm:ss"
+                            value-format="yyyy-MM-dd HH:mm:ss"
                             placeholder="选择日期时间">
                     </el-date-picker>
                 </el-form-item>
-                <el-form-item label="备注" :label-width="formLabelWidth">
-                    <el-input style="width: 150px" maxlength="9" v-model.number="form.memo" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="轮播图类别" :label-width="formLabelWidth">
-                    <el-select v-model="form.bannerType" placeholder="请选择商家">
+                <el-form-item label="启用状态" :label-width="formLabelWidth">
+                    <el-select v-model="form.statusValue" placeholder="选择是否启用">
                         <el-option
-                                v-for="item in bannerType"
+                                v-for="item in showStatus"
                                 :key="item.value"
                                 :label="item.label"
                                 :value="item.value">
                         </el-option>
                     </el-select>
-                </el-form-item>
-                <el-form-item label="图片地址" :label-width="formLabelWidth">
-                    <el-popover
-                            placement="right"
-                            title=""
-                            trigger="hover">
-                        <img :src="imageUrl"/>
-                        <img slot="reference" :src="imageUrl" :alt="imageUrl" style="max-height: 50px;max-width: 130px">
-                    </el-popover>
-                    <el-upload
-                            :data="type"
-                            class="upload-demo"
-                            drag
-                            action="/api/upload/uploadImage"
-                            :on-success="onSuccess"
-                            multiple>
-                        <i class="el-icon-upload"></i>
-                        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
-                    </el-upload>
-                </el-form-item>
-                <el-form-item label="跳转类型" :label-width="formLabelWidth">
-                    <el-select v-model="form.tabType" placeholder="请选择跳转类型">
-                        <el-option
-                                v-for="item in tabType"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="跳转的具体类型" :label-width="formLabelWidth">
-                    <el-input style="width: 150px" maxlength="9" v-model="goType" autocomplete="off"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -289,10 +313,15 @@
         name: 'basetable',
         data() {
             return {
-                type:{
-                    // sign: "ed8u$input7$input7jpYsRe8t2aKSKBF/cJ21S1z/10SqwBE2XAQ=",
-                    type: "HaqvR9QhxCCGBAiSE6veKw=="
-                },
+                memberCardTypeList:[
+                    {
+                        value: '1',
+                        label: '权益卡'
+                    }, {
+                        value: '2',
+                        label: '普通卡'
+                    }
+                ],
                 imageUrl:'',
                 changeStartTime:'',
                 changeEndTime:'',
@@ -335,33 +364,28 @@
                 selectValue:{},
                 options: [{
                     value: '1',
-                    label: '商家'
+                    label: '不赠送'
                 }, {
                     value: '2',
-                    label: '门店'
+                    label: '赠送RMB'
+                }, {
+                    value: '3',
+                    label: '赠送券包'
+                }, {
+                    value: '4',
+                    label: '两者都送'
                 }],
                 showStatus: [{
                     value: '1',
-                    label: '显示'
+                    label: '启用'
                 }, {
                     value: '2',
-                    label: '不显示'
+                    label: '不启用'
                 }],
                 businessOptiones:[],
-                bannerType:[
-                    {
-                        value: '1',
-                        label: '电影首页轮播图'
-                    }
-                ],
-                tabType:[
-                    {
-                        value: '1',
-                        label: '跳转到文章'
-                    }
-                ],
                 value: '',
                 goType:'',
+                cinemaList:[],
             };
         },
         created() {
@@ -381,9 +405,10 @@
                 });
                 setTimeout(() => {
                     https.fetchPost('/openCardRule/addPage','').then((data) => {
-                        console.log(data);
-                        console.log(JSON.parse(Decrypt(data.data.data)));
+                        // console.log(data);
+                        // console.log(JSON.parse(Decrypt(data.data.data)));
                         if(data.data.code == 'success'){
+                            this.oForm=[]
                             this.dialogFormVisible = true
                             this.selectValue = JSON.parse(Decrypt(data.data.data))
                         }else if(data.data.code=='nologin'){
@@ -401,78 +426,72 @@
                     loading.close();
                 }, 2000);
             },
-            onSuccess(data){//上传文件 登录超时
-                // console.log(data);
-                this.oForm.imageUrl=data.data
-                if(data.code=='nologin'){
-                    this.message=data.message
-                    this.open()
-                    this.$router.push('/login');
-                }
-            },
             addRole(){ //新增按钮操作
-                console.log(this.oForm.cinemaCode);
-                console.log(oForm.ruleCode);
-                console.log(oForm.ruleName);
-                console.log(oForm.ruleMemo);
+                // console.log(this.oForm.cinemaCode);
+                // console.log(this.oForm.ruleCode);
+                // console.log(this.oForm.ruleName);
+                // console.log(this.oForm.ruleMemo);
                 // console.log(this.startTime);//开始时间
                 // console.log(this.endTime);//结束时间
-                // console.log(this.oForm.value);
+                // console.log(this.oForm.memberCardType);
+                // console.log(this.oForm.cardLevelCode);
+                // console.log(this.oForm.cardLevelName);
+                // console.log(parseInt(this.oForm.rechargeAmount).toFixed(2));
+                // console.log(this.oForm.givenType);
+                // console.log(parseInt(this.oForm.givenMoney).toFixed(2));
+                // console.log(this.oForm.givenTicketsParams);
                 // console.log(this.oForm.statusValue);
-                // console.log(this.oForm.memo);
-                // console.log(this.oForm.businessCode);
-                // console.log(this.oForm.bannerType);
-                // console.log(this.oForm.tabType);
-                // console.log(this.oForm.goType);
-                // console.log(this.oForm.cinemaCode);
-                // const loading = this.$loading({
-                //     lock: true,
-                //     text: 'Loading',
-                //     spinner: 'el-icon-loading',
-                //     background: 'rgba(0, 0, 0, 0.7)',
-                //     target: document.querySelector('.div1')
-                // });
-                // setTimeout(() => {
-                //     var jsonArr = [];
-                //     jsonArr.push({key:"bannerLevel",value:this.oForm.value});
-                //     jsonArr.push({key:"businessCode",value:this.oForm.businessCode});
-                //     jsonArr.push({key:"cinemaCodes",value:this.oForm.cinemaCode});
-                //     jsonArr.push({key:"status",value:this.oForm.statusValue});
-                //     jsonArr.push({key:"startDate",value:this.startTime});
-                //     jsonArr.push({key:"endDate",value:this.endTime});
-                //     jsonArr.push({key:"memo",value:this.oForm.memo});
-                //     jsonArr.push({key:"category",value:this.oForm.bannerType});
-                //     jsonArr.push({key:"imageUrl",value:this.oForm.imageUrl});
-                //     jsonArr.push({key:"redirectType",value:this.oForm.tabType});
-                //     jsonArr.push({key:"redirectGoal",value:this.oForm.goType});
-                //     let sign =md5(preSign(jsonArr));
-                //     jsonArr.push({key:"sign",value:sign});
-                //     let params = ParamsAppend(jsonArr);
-                //     if(this.dialogFormVisible == true){
-                //         https.fetchPost('/banner/addBanner',params).then((data) => {//新增
-                //             console.log(data);
-                //             if(data.data.code=='success'){
-                //                 this.dialogFormVisible = false
-                //                 this.$message.success(`新增成功`);
-                //                 this.oForm.name = ''
-                //                 this.oForm.value = ''
-                //                 this.oForm.memo = ''
-                //                 this.getMenu()
-                //             }else if(data.data.code=='nologin'){
-                //                 this.message=data.data.message
-                //                 this.open()
-                //                 this.$router.push('/login');
-                //             }else{
-                //                 this.message=data.data.message
-                //                 this.open()
-                //             }
-                //         }).catch(err=>{
-                //                 console.log(err)
-                //             }
-                //         )
-                //     }
-                //     loading.close();
-                // }, 2000);
+                const loading = this.$loading({
+                    lock: true,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)',
+                    target: document.querySelector('.div1')
+                });
+                setTimeout(() => {
+                    var jsonArr = [];
+                    jsonArr.push({key:"cinemaCode",value:this.oForm.cinemaCode});
+                    jsonArr.push({key:"ruleCode",value:this.oForm.ruleCode});
+                    jsonArr.push({key:"ruleName",value:this.oForm. ruleName});
+                    jsonArr.push({key:"ruleMemo",value:this.oForm. ruleMemo});
+                    jsonArr.push({key:"memberCardType",value:this.oForm.memberCardType});
+                    jsonArr.push({key:"cardLevelCode",value:this.oForm.cardLevelCode});
+                    jsonArr.push({key:"cardLevelName",value:this.oForm.cardLevelName});
+                    jsonArr.push({key:"rechargeAmount",value:parseInt(this.oForm.rechargeAmount).toFixed(2)});
+                    jsonArr.push({key:"givenType",value:this.oForm.givenType});
+                    jsonArr.push({key:"givenMoney",value:parseInt(this.oForm.givenMoney).toFixed(2)});
+                    jsonArr.push({key:"givenTicketsParams",value:this.oForm.givenTicketsParams});
+                    jsonArr.push({key:"startDate",value:this.startTime});
+                    jsonArr.push({key:"endDate",value:this.endTime});
+                    jsonArr.push({key:"status",value:this.oForm.statusValue});
+                    let sign =md5(preSign(jsonArr));
+                    jsonArr.push({key:"sign",value:sign});
+                    let params = ParamsAppend(jsonArr);
+                    if(this.dialogFormVisible == true){
+                        https.fetchPost('/openCardRule/addOpenCardRule',params).then((data) => {//新增
+                            console.log(data);
+                            if(data.data.code=='success'){
+                                this.dialogFormVisible = false
+                                this.$message.success(`新增成功`);
+                                this.oForm.name = ''
+                                this.oForm.value = ''
+                                this.oForm.memo = ''
+                                this.getMenu()
+                            }else if(data.data.code=='nologin'){
+                                this.message=data.data.message
+                                this.open()
+                                this.$router.push('/login');
+                            }else{
+                                this.message=data.data.message
+                                this.open()
+                            }
+                        }).catch(err=>{
+                                console.log(err)
+                            }
+                        )
+                    }
+                    loading.close();
+                }, 2000);
             },
             delChange(index, row){//删除数据
                 const loading = this.$loading({
@@ -500,7 +519,7 @@
                     let sign =md5(preSign(jsonArr));
                     jsonArr.push({key:"sign",value:sign});
                     let params = ParamsAppend(jsonArr);
-                    https.fetchPost('/banner/deleteBanner',params).then((data) => {
+                    https.fetchPost('/openCardRule/deleteOpenCardRule',params).then((data) => {
                         console.log(data);
                         // console.log(JSON.parse(Decrypt(data.data.data)));
                         if(data.data.code=='success'){
@@ -537,58 +556,50 @@
                     let sign =md5(preSign(jsonArr));
                     jsonArr.push({key:"sign",value:sign});
                     let params = ParamsAppend(jsonArr);
-                    https.fetchPost('/banner/modifyPage',params).then((data) => {
+                    https.fetchPost('/openCardRule/modifyPage',params).then((data) => {
                         console.log(data);
                         console.log(JSON.parse(Decrypt(data.data.data)));
                         if(data.data.code=='success'){
                             this.editVisible = true;
-                            let oIndex = 0;  //轮播图级别下拉选显示对应的选项
-                            for(let i in this.options){
-                                if(this.options[i].value==JSON.parse(Decrypt(data.data.data)).banner.bannerLevel){
+                            this.cinemaList = JSON.parse(Decrypt(data.data.data)).cinemaList  //影院编码下拉选显示对应的选项
+                            let oIndex = 0;
+                            for(let i in this.cinemaList){
+                                if(this.cinemaList[i].cinemaCode==JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.cinemaCode){
                                     oIndex=i;
                                     break;
                                 }
                             }
-                            this.form.bannerLevel = this.options[oIndex].value;
-                            this.businessOptiones = JSON.parse(Decrypt(data.data.data)).businessInfos
-                            let businessIndex = 0;  //所属商家编码下拉选显示对应的选项
-                            for(let i in this.businessOptiones){
-                                if(this.businessOptiones[i].business_code==JSON.parse(Decrypt(data.data.data)).banner.businessCode){
+                            this.form.cinemaCode = this.cinemaList[oIndex].cinemaCode; //影院编码下拉选显示对应的选项
+                            let businessIndex = 0;  //会员卡类型下拉选显示对应的选项
+                            for(let i in this.memberCardTypeList){
+                                if(this.memberCardTypeList[i].value==JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.memberCardType){
                                     businessIndex=i;
                                     break;
                                 }
                             }
-                            this.form.businessCode = this.businessOptiones[businessIndex].business_code;
-                            this.form.cinemaCodes=JSON.parse(Decrypt(data.data.data)).banner.cinemaCodes //适用影院编码
-                            let index = 0;  //是否显示下拉选显示对应的选项
-                            for(let i in this.showStatus){
-                                if(this.options[i].value==JSON.parse(Decrypt(data.data.data)).banner.status){
+                            this.form.memberCardType = this.memberCardTypeList[businessIndex].value; //会员卡类型下拉选显示对应的选项
+
+                            let index = 0;//赠送类型下拉选显示对应的选项
+                            for(let i in this.options){
+                                if(this.options[i].value ==JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.givenType){
                                     index=i;
-                                    break;
+                                    break
                                 }
                             }
-                            this.form.status = this.showStatus[index].value;
-                            this.changeStartTime = JSON.parse(Decrypt(data.data.data)).banner.createDate//创建时间
-                            this.changeEndTime = JSON.parse(Decrypt(data.data.data)).banner.endDate//结束时间
-                            this.form.memo= JSON.parse(Decrypt(data.data.data)).banner.memo//备注
-                            let typeIndex = 0;  //轮播图级别下拉选显示对应的选项
-                            for(let i in this.bannerType){//轮播图类型下拉框显示对应的选项
-                                if(this.bannerType[i].value==JSON.parse(Decrypt(data.data.data)).banner.category){
-                                    typeIndex=i;
-                                    break;
+                            this.form.givenType = this.options[index].value//赠送类型下拉选显示对应的选项
+
+
+                            let statusIndex = 0;//是否启用下拉选显示对应的选项
+                            for(let i in this.showStatus){
+                                if(this.showStatus[i].value ==JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.statusValue){
+                                    statusIndex=i;
+                                    break
                                 }
                             }
-                            this.form.bannerType = this.bannerType[typeIndex].value;
-                            this.imageUrl = JSON.parse(Decrypt(data.data.data)).banner.imageUrl
-                            let tabIndex = 0;  //跳转类型下拉选显示对应的选项
-                            for(let i in this.tabType){//轮播图类型下拉框显示对应的选项
-                                if(this.tabType[i].value==JSON.parse(Decrypt(data.data.data)).banner.redirectType){
-                                    tabIndex=i;
-                                    break;
-                                }
-                            }
-                            this.form.tabType = this.bannerType[tabIndex].value;
-                            this.goType = JSON.parse(Decrypt(data.data.data)).banner.redirectGoal
+                            this.form.statusValue = this.showStatus[statusIndex].value//是否启用下拉选显示对应的选项
+
+                            this.changeStartTime = JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.createDate//创建时间
+                            this.changeEndTime = JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.endDate//endDate
                         }else if(data.data.code=='nologin'){
                             this.message=data.data.message
                             this.open()
@@ -606,16 +617,20 @@
             },
             // 编辑操作
             exChanger() {
-                console.log(this.form.bannerLevel);
-                console.log(this.form.businessCode);
-                console.log(this.form.cinemaCodes);
-                console.log(this.form.status);
+                console.log(this.form.cinemaCode);
+                console.log(this.form.ruleCode);
+                console.log(this.form.ruleName);
+                console.log(this.form.ruleMemo);
+                console.log(this.form.memberCardType);
+                console.log(this.form.cardLevelCode);
+                console.log(this.form.cardLevelName);
+                console.log(this.form.rechargeAmount);
+                console.log(this.form.givenType);
+                console.log(this.form.givenMoney);
+                console.log(this.form.givenTicketsParams);
                 console.log(this.changeStartTime);
                 console.log(this.changeEndTime);
-                console.log(this.form.memo);
-                console.log(this.form.bannerType);
-                console.log(this.form.tabType);
-                console.log(this.goType);
+                console.log(this.form.statusValue);
                 const loading = this.$loading({
                     lock: true,
                     text: 'Loading',
@@ -624,27 +639,29 @@
                     target: document.querySelector('.div1')
                 });
                 setTimeout(() => {
-                    // console.log(this.form.sort);
-                    // console.log(this.from.sort.toString());
                     var jsonArr = [];
                     jsonArr.push({key:"id",value:this.form.id});
-                    jsonArr.push({key:"bannerLevel",value:this.form.bannerLevel});
-                    jsonArr.push({key:"businessCode",value:this.form.businessCode});
-                    jsonArr.push({key:"cinemaCodes",value:this.form.cinemaCodes});
-                    jsonArr.push({key:"status",value:this.form.status});
+                    jsonArr.push({key:"cinemaCode",value:this.form.cinemaCode});
+                    jsonArr.push({key:"ruleCode",value:this.form.ruleCode});
+                    jsonArr.push({key:"ruleName",value:this.form.ruleName});
+                    jsonArr.push({key:"ruleMemo",value:this.form.ruleMemo});
+                    jsonArr.push({key:"memberCardType",value:this.form.memberCardType});
+                    jsonArr.push({key:"cardLevelCode",value:this.form.cardLevelCode});
+                    jsonArr.push({key:"cardLevelName",value:this.form.cardLevelName});
+                    jsonArr.push({key:"rechargeAmount",value:parseInt(this.form.rechargeAmount).toFixed(2)});
+                    jsonArr.push({key:"givenType",value:this.form.givenType});
+                    jsonArr.push({key:"givenMoney",value:parseInt(this.form.rechargeAmount).toFixed(2)});
+                    jsonArr.push({key:"givenTicketsParams",value:this.form.givenTicketsParams});
                     jsonArr.push({key:"startDate",value:this.changeStartTime});
                     jsonArr.push({key:"endDate",value:this.changeEndTime});
-                    jsonArr.push({key:"memo",value:this.form.memo});
-                    jsonArr.push({key:"category",value:this.form.bannerType});
-                    jsonArr.push({key:"redirectType",value:this.form.tabType});
-                    jsonArr.push({key:"redirectGoal",value:this.goType});
+                    jsonArr.push({key:"status",value:this.form.statusValue});
                     let sign =md5(preSign(jsonArr));
                     jsonArr.push({key:"sign",value:sign});
                     console.log(jsonArr);
                     let params = ParamsAppend(jsonArr);
                     console.log(params);
                     this.editVisible = false;
-                    https.fetchPost('/banner/updateById',params).then((data) => {
+                    https.fetchPost('/openCardRule/modifyOpenCardRule',params).then((data) => {
                         console.log(data);
                         // console.log(JSON.parse(Decrypt(data.data.data)));
                         if(data.data.code=='success'){

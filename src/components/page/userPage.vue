@@ -70,18 +70,18 @@
                                    type="text"
                                    icon="el-icon-setting"
                                    @click="UserPassword(scope.$index, scope.row)"
-                        ></el-button>
+                        >密码设置</el-button>
                         <el-button v-if="scope.row.adminFlag !='1'"
                                 type="text"
                                 icon="el-icon-edit"
                                 @click="addChange(scope.$index, scope.row)"
-                        ></el-button>
+                        >修改</el-button>
                         <el-button v-if="scope.row.adminFlag !='1'"
                                 type="text"
                                 icon="el-icon-delete"
                                 class="red"
                                 @click="delChange(scope.$index, scope.row)"
-                        ></el-button>
+                        >删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -430,42 +430,48 @@
                        this.drawered = false
             },
             openNext(){//获取数级权限列表
-                const loading = this.$loading({
-                    lock: true,
-                    text: 'Loading',
-                    spinner: 'el-icon-loading',
-                    background: 'rgba(0, 0, 0, 0.7)',
-                    target: document.querySelector('.div1')
-                });
-                setTimeout(() => {
-                    console.log(this.selectList.id);
-                    var jsonArr = [];
-                    jsonArr.push({key:"id",value:this.selectList.id});
-                    let sign =md5(preSign(jsonArr));
-                    jsonArr.push({key:"sign",value:sign});
-                    let params = ParamsAppend(jsonArr);
-                    https.fetchPost('/user/getMenusByRole',params).then((data) => {
-                        console.log(data);
-                        if(data.data.code == 'success'){
-                            this.data = JSON.parse(Decrypt(data.data.data)).permissionList
-                            this.expandedKeys = JSON.parse(Decrypt(data.data.data)).openPermissionIds
-                            this.checkedKeys =JSON.parse(Decrypt(data.data.data)).exitPermissionIds
-                            console.log(JSON.parse(Decrypt(data.data.data)));
-                            this.drawer = true
-                        }else if(data.data.code=='nologin'){
-                            this.message=data.data.message
-                            this.open()
-                            this.$router.push('/login');
-                        }else {
-                            this.message=data.data.message
-                            this.open()
-                        }
-                    }).catch(err=>{
-                            console.log(err)
-                        }
-                    )
-                    loading.close();
-                }, 2000);
+                if(this.selectList.id){
+                    const loading = this.$loading({
+                        lock: true,
+                        text: 'Loading',
+                        spinner: 'el-icon-loading',
+                        background: 'rgba(0, 0, 0, 0.7)',
+                        target: document.querySelector('.div1')
+                    });
+                    setTimeout(() => {
+                        console.log(this.selectList.id);
+                        var jsonArr = [];
+                        jsonArr.push({key:"id",value:this.selectList.id});
+                        let sign =md5(preSign(jsonArr));
+                        jsonArr.push({key:"sign",value:sign});
+                        let params = ParamsAppend(jsonArr);
+                        https.fetchPost('/user/getMenusByRole',params).then((data) => {
+                            console.log(data);
+                            if(data.data.code == 'success'){
+                                this.data = JSON.parse(Decrypt(data.data.data)).permissionList
+                                this.expandedKeys = JSON.parse(Decrypt(data.data.data)).openPermissionIds
+                                this.checkedKeys =JSON.parse(Decrypt(data.data.data)).exitPermissionIds
+                                console.log(JSON.parse(Decrypt(data.data.data)));
+                                this.drawer = true
+                            }else if(data.data.code=='nologin'){
+                                this.message=data.data.message
+                                this.open()
+                                this.$router.push('/login');
+                            }else {
+                                this.message=data.data.message
+                                this.open()
+                            }
+                        }).catch(err=>{
+                                console.log(err)
+                            }
+                        )
+                        loading.close();
+                    }, 2000);
+                }else{
+                    this.message='请先选择角色'
+                    this.open()
+                }
+
             },
             addPage(){//获取新增按钮权限
                 const loading = this.$loading({
@@ -685,7 +691,7 @@
                     jsonArr.push({key:"roleIds",value:this.oSelectList[0].id});
                     jsonArr.push({key:"memo",value:this.form.memo});
                     jsonArr.push({key:"cinemaCodes",value:this.oCheckedCities});
-                    jsonArr.push({key:"menuIds",value:this.$refs.tree.getCheckedKeys()});
+                    jsonArr.push({key:"menuIds",value:this.$refs.tree_.getCheckedKeys().concat(this.$refs.tree_.getHalfCheckedKeys())});
                     let sign =md5(preSign(jsonArr));
                     jsonArr.push({key:"sign",value:sign});
                     let params = ParamsAppend(jsonArr);

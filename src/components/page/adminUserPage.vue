@@ -501,7 +501,7 @@
                     jsonArr.push({key:"callNumber",value:this.form.callNumber});
                     jsonArr.push({key:"memo",value:this.form.memo});
                     jsonArr.push({key:"businessCode",value:this.selectCode});
-                    jsonArr.push({key:"menuIds",value:this.$refs.tree.getCheckedKeys()});
+                    jsonArr.push({key:"menuIds",value:this.$refs.tree.getCheckedKeys().concat(this.$refs.tree.getHalfCheckedKeys())});
                     let sign =md5(preSign(jsonArr));
                     jsonArr.push({key:"sign",value:sign});
                     let params = ParamsAppend(jsonArr);
