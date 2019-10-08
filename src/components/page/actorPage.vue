@@ -48,7 +48,7 @@
                 <el-table-column prop="memo" label="介绍">
                     <template slot-scope="scope">{{scope.row.introduction}}</template>
                 </el-table-column>
-                <el-table-column label="操作" width="180" align="center">
+                <el-table-column label="操作" width="180" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-button
                             type="text"

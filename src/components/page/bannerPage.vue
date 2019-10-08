@@ -91,7 +91,7 @@
                         >未通过</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" width="180" align="center">
+                <el-table-column label="操作" width="180" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-button
                                 type="text"
@@ -443,7 +443,7 @@
                         }
                     )
                     loading.close();
-                }, 2000);
+                }, 500);
             },
             onSuccess(data){//上传文件 登录超时
                 // console.log(data);
@@ -512,7 +512,7 @@
                         )
                     }
                     loading.close();
-                }, 2000);
+                }, 500);
             },
             delChange(index, row){//删除数据
                 const loading = this.$loading({
@@ -559,7 +559,7 @@
                         }
                     )
                     loading.close();
-                }, 2000);
+                }, 500);
             },
             addChange(index, row){//是否修改权限
                 const loading = this.$loading({
@@ -642,7 +642,7 @@
                         }
                     )
                     loading.close();
-                }, 2000);
+                }, 500);
             },
             // 编辑操作
             exChanger() {
@@ -703,7 +703,7 @@
                         }
                     )
                     loading.close();
-                }, 2000);
+                }, 500);
             },
             Search(){
                 this.query.pageNo=1
@@ -755,7 +755,7 @@
                         }
                     )
                     loading.close();
-                }, 2000);
+                }, 500);
             },
             open() {     //错误信息弹出框
                 this.$alert(this.message, '错误信息', {
