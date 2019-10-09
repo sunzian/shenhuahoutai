@@ -64,7 +64,7 @@
                         >未通过</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" width="140" align="center">
+                <el-table-column label="操作" width="140" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-button
                                 type="text"
@@ -314,7 +314,7 @@
                         }
                     )
                     loading.close();
-                }, 2000);
+                }, 500);
             },
             getCheckedKeys() {//新增数据操作
                 // console.log(this.$refs.tree.getCheckedKeys());
@@ -365,7 +365,7 @@
                         )
                     }
                     loading.close();
-                }, 2000);
+                }, 500);
             },
             delChange(index, row){//删除数据
                 const loading = this.$loading({
@@ -411,7 +411,7 @@
                         }
                     )
                     loading.close();
-                }, 2000);
+                }, 500);
             },
             addChange(index, row){//是否修改权限
                 const loading = this.$loading({
@@ -478,7 +478,7 @@
                         }
                     )
                     loading.close();
-                }, 2000);
+                }, 500);
 
             },
             // 修改操作
@@ -526,7 +526,7 @@
                         }
                     )
                     loading.close();
-                }, 2000);
+                }, 500);
             },
             Search(){
                 this.query.pageNo=1
@@ -592,7 +592,7 @@
                         }
                     )
                     loading.close();
-                }, 2000);
+                }, 500);
             },
             open() {     //错误信息弹出框
                 this.$alert(this.message, '错误信息', {
