@@ -344,16 +344,21 @@ export default {
                 target: document.querySelector('.div1')
             });
             //获取所选影院编码
-            for (let i = 0; i < this.cinemaInfo.length; i++) {
-                if (this.cinemaInfo[i].cinemaName == this.oForm.cinemaName) {
-                    this.oForm.cinemaCode = this.cinemaInfo[i].cinemaCode;
-                }
-            }
+            // for (let i = 0; i < this.cinemaInfo.length; i++) {
+            //     if (this.cinemaInfo[i].cinemaName == this.oForm.cinemaName) {
+            //         this.oForm.cinemaCode = this.cinemaInfo[i].cinemaCode;
+            //     }
+            // }
+            console.log(this.cardList)
+            // return
             var jsonArr = [];
             jsonArr.push({ key: 'cinemaCode', value: this.oForm.cinemaCode });
+            jsonArr.push({ key: 'cinemaName', value: this.oForm.cinemaName });
             jsonArr.push({ key: 'ruleName', value: this.oForm.ruleName });
             jsonArr.push({ key: 'rechargeAmount', value: this.oForm.rechargeAmount });
             jsonArr.push({ key: 'givenType', value: 1 }); // 赠送类型
+            jsonArr.push({ key: 'cardLevelCode', value: 8888 });
+            jsonArr.push({ key: 'cardLevelName', value: "普通类型" });
             // jsonArr.push({ key: 'givenType', value: this.oForm.givenType }); // 赠送类型
             // jsonArr.push({ key: 'givenMoney', value: this.oForm.givenMoney });
             jsonArr.push({ key: 'ruleMemo', value: this.oForm.ruleMemo });
@@ -453,17 +458,18 @@ export default {
             https
                 .fetchPost('/rechargeCardRule/modifyPage', params)
                 .then(data => {
-                    console.log(JSON.parse(Decrypt(data.data.data)));
+                    console.log(data)
                     if (data.data.code == 'success') {
+                        console.log(JSON.parse(Decrypt(data.data.data)));
                         this.editVisible = true;
-                        this.oCinemaName = JSON.parse(Decrypt(data.data.data)).cinemaName;
-                        this.oFilmName = JSON.parse(Decrypt(data.data.data)).filmName;
-                        this.oSessionTime = JSON.parse(Decrypt(data.data.data)).sessionTime;
-                        this.oStandardPrice = JSON.parse(Decrypt(data.data.data)).standardPrice;
-                        this.oTicketFee = JSON.parse(Decrypt(data.data.data)).ticketFee;
-                        this.oThirdPartyPayCommissionFee = JSON.parse(Decrypt(data.data.data)).thirdPartyPayCommissionFee;
-                        this.oMemberCardPayCommissionFee = JSON.parse(Decrypt(data.data.data)).memberCardPayCommissionFee;
-                        this.oId = JSON.parse(Decrypt(data.data.data)).id;
+                        this.oCinemaName = JSON.parse(Decrypt(data.data.data)).rechargeCardRules.cinemaName;
+                        this.oCinemaCode = JSON.parse(Decrypt(data.data.data)).rechargeCardRules.cinemaCode;
+                        this.oRuleName = JSON.parse(Decrypt(data.data.data)).rechargeCardRules.ruleName;
+                        this.oRechargeAmount = JSON.parse(Decrypt(data.data.data)).rechargeCardRules.rechargeAmount;
+                        this.oGivenMoney = JSON.parse(Decrypt(data.data.data)).rechargeCardRules.givenMoney;
+                        this.oRuleMemo = JSON.parse(Decrypt(data.data.data)).rechargeCardRules.ruleMemo;
+                        this.oStatus = JSON.parse(Decrypt(data.data.data)).rechargeCardRules.Status;
+                        this.oId = JSON.parse(Decrypt(data.data.data)).rechargeCardRules.id;
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
@@ -488,16 +494,26 @@ export default {
                 target: document.querySelector('.div1')
             });
             var jsonArr = [];
-            jsonArr.push({ key: 'thirdPartyPayCommissionFee', value: this.oThirdPartyPayCommissionFee });
-            jsonArr.push({ key: 'memberCardPayCommissionFee', value: this.oMemberCardPayCommissionFee });
+            jsonArr.push({ key: 'cinemaCode', value: this.oCinemaCode });
+            jsonArr.push({ key: 'ruleName', value: this.oRuleName });
+            jsonArr.push({ key: 'rechargeAmount', value: this.oRechargeAmount });
+            jsonArr.push({ key: 'ruleMemo', value: this.oRuleMemo });
+            // jsonArr.push({ key: 'cinemaName', value: this.oForm.cinemaName });
+            jsonArr.push({ key: 'givenType', value: 1 }); // 赠送类型
+            jsonArr.push({ key: 'cardLevelCode', value: 8888 });
+            jsonArr.push({ key: 'cardLevelName', value: "普通类型" });
+            // jsonArr.push({ key: 'givenType', value: this.oGivenType }); // 赠送类型
+            // jsonArr.push({ key: 'givenMoney', value: this.oGivenMoney });
+            jsonArr.push({ key: 'status', value: 1 });
+            // jsonArr.push({ key: 'status', value: this.oStatus });
             jsonArr.push({ key: 'id', value: this.oId });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
+                        console.log(jsonArr);
             let params = ParamsAppend(jsonArr);
-            console.log(jsonArr);
             this.editVisible = false;
             https
-                .fetchPost('/sessionInfo/updatePartyPayCommissionFee', params)
+                .fetchPost('/rechargeCardRule/modifyRechargeCardRule', params)
                 .then(data => {
                     console.log(data);
                     // console.log(JSON.parse(Decrypt(data.data.data)));
@@ -640,7 +656,7 @@ export default {
                     if (data.data.code == 'success') {
                         var res = JSON.parse(Decrypt(data.data.data));
                         console.log(res);
-                        // this.cinemaInfo = res;
+                        this.cardList = res;
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
