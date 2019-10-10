@@ -12,7 +12,7 @@
         >
             <template v-for="item in menuList">
                 <template v-if="item.submenuList" >
-                    <el-submenu :index="item.menuPath" :key="item.menuPath">
+                    <el-submenu :index="item.id+''" :key="item.id">
                         <template slot="title">
                             <!--<i :class="item.icon"></i>-->
                             <span slot="title">{{ item.menuName }}</span>
@@ -72,7 +72,7 @@ export default {
                 let menus=Decrypt(data.data.data)//返回的数据进行解密
                 // console.log(menus);
                 this.menuList =JSON.parse(menus)
-                // console.log(this.menuList);
+                console.log(this.menuList);
             }
         }).catch(err=>{
                 console.log(err)

@@ -15,15 +15,15 @@
                 </el-card>
                 <el-card shadow="hover" style="height:252px;">
                     <div slot="header" class="clearfix">
-                        <span>语言详情</span>
+                        <span>客户购票时间段</span>
                     </div>
-                    Vue
+                    18:00-20:00
                     <el-progress :percentage="71.3" color="#42b983"></el-progress>
-                    JavaScript
+                    20:00-22:00
                     <el-progress :percentage="24.1" color="#f1e05a"></el-progress>
-                    CSS
+                    22:00-24:00
                     <el-progress :percentage="3.7"></el-progress>
-                    HTML
+                    12:00-14:00
                     <el-progress :percentage="0.9" color="#f56c6c"></el-progress>
                 </el-card>
             </el-col>
