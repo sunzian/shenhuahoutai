@@ -68,6 +68,14 @@
                 <el-table-column label="操作" width="180" align="center">
                     <template slot-scope="scope">
                         <el-button
+                            type="success"
+                            @click="changeStatus(scope.$index, scope.row)"
+                            >启用</el-button>
+                            <el-button
+                            type="success"
+                            @click="changeStatus(scope.$index, scope.row)"
+                            >停用</el-button>
+                        <el-button
                             type="text"
                             icon="el-icon-circle-plus-outline"
                             @click="addChange(scope.$index, scope.row)"
@@ -158,7 +166,7 @@
             </div>
         </el-dialog>
         <!-- 编辑弹出框 -->
-        <el-dialog title="编辑" :visible.sync="editVisible">
+        <el-dialog title="详情" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
                 <el-form-item label="影片编码" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oFilmCode" autocomplete="off" disabled></el-input>
@@ -462,9 +470,9 @@ export default {
             jsonArr.push({ key: 'sign', value: sign });
             let params = ParamsAppend(jsonArr);
             https
-                .fetchPost('/film/getFilmById', params)
+                .fetchPost('merchandiseCoupon/getMerchandiseCouponById', params)
                 .then(data => {
-                    // console.log(data);
+                    console.log(data);
                     console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.editVisible = true;
@@ -554,6 +562,22 @@ export default {
                     console.log(err);
                 });
             loading.close();
+        },
+        // 修改状态
+        changeStatus() {
+            // const loading = this.$loading({
+            //     lock: true,
+            //     text: 'Loading',
+            //     spinner: 'el-icon-loading',
+            //     background: 'rgba(0, 0, 0, 0.7)',
+            //     target: document.querySelector('.div1')
+            // });
+            var jsonArr = [];
+            jsonArr.push({ key: 'status', value: this.oStatus });
+            jsonArr.push({ key: 'id', value: this.oId });
+            let sign = md5(preSign(jsonArr));
+            jsonArr.push({ key: 'sign', value: sign });
+            let params = ParamsAppend(jsonArr);
         },
         Search() {
             this.query.pageNo = 1;
