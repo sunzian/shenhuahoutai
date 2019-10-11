@@ -62,9 +62,6 @@
                 <el-table-column prop="sort" label="排序">
                     <template slot-scope="scope">{{scope.row.sort}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="关联商家编码">
-                    <template slot-scope="scope">{{scope.row.business_code}}</template>
-                </el-table-column>
                 <el-table-column prop="sort" label="商品类型">
                     <template slot-scope="scope">{{scope.row.commodity_type}}</template>
                 </el-table-column>
@@ -83,7 +80,7 @@
                 <el-table-column prop="sort" label="对应上方的限制兑换数量">
                     <template slot-scope="scope">{{scope.row.limit_number}}</template>
                 </el-table-column>
-                <el-table-column label="操作" width="180" align="center" fixed="right">
+                <el-table-column label="操作" width="100" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-button
                                 type="text"
@@ -115,11 +112,32 @@
         <!--新增弹出框-->
         <el-dialog title="新增商品" :visible.sync="dialogFormVisible">
             <el-form v-model="oForm">
+                <el-form-item label="商品类型" :label-width="formLabelWidth">
+                    <el-select v-model="oForm.commodity_type" placeholder="请选择兑换方式">
+                        <el-option
+                                v-for="item in commodityType"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
                 <el-form-item label="商品名称" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oForm.name" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="商品图片" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="oForm.image_url" autocomplete="off"></el-input>
+                    <el-upload
+                            :before-upload="beforeUpload"
+                            :data="type"
+                            class="upload-demo"
+                            drag
+                            action="/api/upload/uploadImage"
+                            :on-success="onSuccess"
+                            multiple>
+                        <i class="el-icon-upload"></i>
+                        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
+                    </el-upload>
                 </el-form-item>
                 <el-form-item label="商品描述" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oForm.memo" autocomplete="off"></el-input>
@@ -127,11 +145,15 @@
                 <el-form-item label="库存" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oForm.store" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="已兑换数量" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="oForm.alredy_changed_number" autocomplete="off"></el-input>
-                </el-form-item>
                 <el-form-item label="兑换方式" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="oForm.change_type" autocomplete="off"></el-input>
+                    <el-select v-model="oForm.change_type" placeholder="请选择兑换方式">
+                        <el-option
+                                v-for="item in showType"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                        </el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item label="所需金币数量" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oForm.gold" autocomplete="off"></el-input>
@@ -143,25 +165,45 @@
                     <el-input style="width: 250px" v-model="oForm.cinema_codes" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="上架状态" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="oForm.status" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="关联商家编码" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="oForm.business_code" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="商品类型" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="oForm.commodity_type" autocomplete="off"></el-input>
+                    <el-select v-model="oForm.status" placeholder="请选择兑换方式">
+                        <el-option
+                                v-for="item in showStatus"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                        </el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item label="优惠券id" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oForm.ticket_ids" autocomplete="off"></el-input>
+                    <el-autocomplete
+                            v-model="state"
+                            :fetch-suggestions="querySearchAsync"
+                            placeholder="请输入内容"
+                    ></el-autocomplete>
                 </el-form-item>
                 <el-form-item label="是否指定日期可以兑换" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="oForm.assign_type" autocomplete="off"></el-input>
+                    <el-select v-model="oForm.assign_type" placeholder="请选择兑换方式">
+                        <el-option
+                                v-for="item in assignType"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                        </el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item label="对应上方参数的具体日期信息" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oForm.assign_info" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="是否限制一段时间内可兑换数量" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="oForm.limit_type" autocomplete="off"></el-input>
+                    <el-select v-model="oForm.limit_type" placeholder="请选择兑换方式">
+                        <el-option
+                                v-for="item in limitType"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                        </el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item label="对应上方的限制兑换数量" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oForm.limit_number" autocomplete="off"></el-input>
@@ -245,6 +287,10 @@
         name: 'basetable',
         data() {
             return {
+                type:{
+                    // sign: "ed8u$input7$input7jpYsRe8t2aKSKBF/cJ21S1z/10SqwBE2XAQ=",
+                    type: ""
+                },
                 oName:'',
                 message:'',//弹出框消息
                 query: {
@@ -290,7 +336,63 @@
                     value: '4',
                     label: '审核失败'
                 }],
-                value: ''
+                showType: [{
+                    value: '1',
+                    label: '纯金币兑换'
+                }, {
+                    value: '2',
+                    label: '纯RMB兑换'
+                }, {
+                    value: '3',
+                    label: '金币 + RMB 兑换'
+                }],
+                showStatus: [{
+                    value: '1',
+                    label: '上架'
+                }, {
+                    value: '2',
+                    label: '未上架'
+                }],
+                commodityType: [{
+                    value: '1',
+                    label: '实物'
+                }, {
+                    value: '2',
+                    label: '优惠券'
+                }],
+                assignType: [{
+                    value: '0',
+                    label: '不允许指定日期'
+                }, {
+                    value: '1',
+                    label: '指定日期'
+                }, {
+                    value: '2',
+                    label: '指定每月几号'
+                }, {
+                    value: '3',
+                    label: '指定每月第几周'
+                }, {
+                    value: '4',
+                    label: '指定每周几'
+                }],
+                limitType: [{
+                    value: '0',
+                    label: '不限制'
+                }, {
+                    value: '1',
+                    label: '限制每年可兑换数量'
+                }, {
+                    value: '2',
+                    label: '每月'
+                }, {
+                    value: '3',
+                    label: '每周'
+                }],
+                value: '',
+                restaurants: [],
+                state: '',
+                timeout:  null
             };
         },
         created() {
@@ -300,6 +402,39 @@
             this.getMenu()
         },
         methods: {
+            querySearchAsync(queryString, cb) {
+                console.log(queryString);
+                var jsonArr=[];
+                jsonArr.push({key:"couponName",value:queryString});
+                let sign =md5(preSign(jsonArr));
+                jsonArr.push({key:"sign",value:sign});
+                let params = ParamsAppend(jsonArr);
+                https.fetchPost('/merchandiseCoupon/getCouponByName',params).then((data) => {
+                    console.log(data);
+                    if(data.data.code == 'success'){
+                        console.log(JSON.parse(Decrypt(data.data.data)));
+                        var results =JSON.parse(Decrypt(data.data.data))
+
+
+                            cb(results);
+                    }else if(data.data.code=='nologin'){
+                        this.message=data.data.message
+                        this.open()
+                        this.$router.push('/login');
+                    }else {
+                        this.message=data.data.message
+                        this.open()
+                    }
+                }).catch(err=>{
+                        console.log(err)
+                    }
+                )
+            },
+            createStateFilter(queryString) {
+                return (state) => {
+                    return (state.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+                };
+            },
             addPage(){//获取新增按钮权限
                 const loading = this.$loading({
                     lock: true,
@@ -343,13 +478,11 @@
                     jsonArr.push({key:"imageUrl",value:this.oForm.image_url});
                     jsonArr.push({key:"memo",value:this.oForm.memo});
                     jsonArr.push({key:"store",value:this.oForm.store});
-                    jsonArr.push({key:"alredyChangedNumber",value:this.oForm.alredy_changed_number});
                     jsonArr.push({key:"changeType",value:this.oForm.change_type});
                     jsonArr.push({key:"gold",value:this.oForm.gold});
                     jsonArr.push({key:"money",value:this.oForm.money});
                     jsonArr.push({key:"cinemaCodes",value:this.oForm.cinema_codes});
                     jsonArr.push({key:"status",value:this.oForm.status});
-                    jsonArr.push({key:"businessCode",value:this.oForm.business_code});
                     jsonArr.push({key:"commodityType",value:this.oForm.commodity_type});
                     jsonArr.push({key:"ticketIds",value:this.oForm.ticket_ids});
                     jsonArr.push({key:"assignType",value:this.oForm.assign_type});
@@ -359,6 +492,7 @@
                     let sign =md5(preSign(jsonArr));
                     jsonArr.push({key:"sign",value:sign});
                     let params = ParamsAppend(jsonArr);
+                    console.log(params);
                     if(this.dialogFormVisible == true){
                         https.fetchPost('/goldCommodity/addGoldCommodity',params).then((data) => {//新增
                             console.log(data);
@@ -598,6 +732,18 @@
                     )
                     loading.close();
                 }, 500);
+            },
+            beforeUpload(){//上传之前
+                this.type.type=EncryptReplace('business')
+            },
+            onSuccess(data){//上传文件 登录超时
+                // console.log(data);
+                this.oForm.image_url=data.data
+                if(data.code=='nologin'){
+                    this.message=data.message
+                    this.open()
+                    this.$router.push('/login');
+                }
             },
             open() {     //错误信息弹出框
                 this.$alert(this.message, '错误信息', {

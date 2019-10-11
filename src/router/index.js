@@ -82,7 +82,7 @@ export default new Router({
                 {
                     path: '/userPage',
                     component: () => import(/* webpackChunkName: "table" */ '../components/page/userPage.vue'),
-                    meta: { title: '员工管理' }
+                    meta: { title: '用户管理' }
                 },
                 {
                     path: '/bannerPage',

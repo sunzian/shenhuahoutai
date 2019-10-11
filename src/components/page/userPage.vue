@@ -3,12 +3,14 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
-                    <i class="el-icon-lx-cascades"></i> 员工管理
+                    <i class="el-icon-lx-cascades"></i> 用户管理
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="container">
             <div class="handle-box">
+                <el-input placeholder="用户名" style="width: 150px" v-model="query.name" autocomplete="off"></el-input>
+                <el-input placeholder="真实姓名" style="width: 150px" v-model="query.realName" autocomplete="off"></el-input>
                 <el-select clearable v-model="query.status" placeholder="状态" class="handle-select mr10">
                     <el-option key="1" label="审核中" value="1"></el-option>
                     <el-option key="2" label="未审核" value="2"></el-option>
@@ -53,9 +55,6 @@
                 <el-table-column prop="memo" label="登录IP">
                     <template slot-scope="scope">{{scope.row.loginIp}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="员工编号">
-                    <template slot-scope="scope">{{scope.row.userCode}}</template>
-                </el-table-column>
                 <el-table-column label="状态" align="center">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status=='1'" type='success'
@@ -64,7 +63,7 @@
                         >未通过</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" width="140" align="center"  fixed="right">
+                <el-table-column label="操作"  align="center"  fixed="right">
                     <template slot-scope="scope">
                         <el-button
                                    type="text"
@@ -116,9 +115,6 @@
                                 :value="item.value">
                         </el-option>
                     </el-select>
-                </el-form-item>
-                <el-form-item label="员工编号" :label-width="formLabelWidth">
-                    <el-input style="width: 100px" maxlength="9" v-model.number="oForm.userCode" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="真实姓名" :label-width="formLabelWidth">
                     <el-input style="width: 250px" maxlength="9" v-model.number="oForm.realName" autocomplete="off"></el-input>
@@ -183,9 +179,6 @@
                                 :value="item.value">
                         </el-option>
                     </el-select>
-                </el-form-item>
-                <el-form-item label="员工编号" :label-width="formLabelWidth">
-                    <el-input style="width: 100px"  maxlength="9" v-model="form.userCode" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="真实姓名" :label-width="formLabelWidth">
                     <el-input style="width: 250px"  maxlength="9" v-model="form.realName" autocomplete="off"></el-input>
@@ -308,7 +301,6 @@
                     userName: '',
                     userPass: '',
                     value: '',
-                    userCode: '',
                     realName: '',
                     callNumber: '',
                     memo: '',
@@ -523,7 +515,6 @@
                     jsonArr.push({key:"userPass",value:this.oForm.userPass});
                     jsonArr.push({key:"status",value:this.oForm.value});
                     jsonArr.push({key:"memo",value:this.oForm.memo});
-                    jsonArr.push({key:"userCode",value:this.oForm.userCode});
                     jsonArr.push({key:"realName",value:this.oForm.realName});
                     jsonArr.push({key:"callNumber",value:this.oForm.callNumber});
                     jsonArr.push({key:"roleIds",value:this.selectList.id});
@@ -565,14 +556,6 @@
                 setTimeout(() => {
                     this.idx = index;
                     this.form = row;
-                    // let name=this.query.name
-                    // let status=this.query.status
-                    // if(!name){
-                    //     name=''
-                    // }
-                    // if(!status){
-                    //     status=''
-                    // }
                     let jsonArr = [];
                     jsonArr.push({key:"id",value:row.id});
                     let sign =md5(preSign(jsonArr));
@@ -623,7 +606,6 @@
                             this.editVisible = true;
                             this.form.id=row.id;
                             this.userName = JSON.parse(Decrypt(data.data.data)).userInfo.userName
-                            this.form.userCode = JSON.parse(Decrypt(data.data.data)).userInfo.userCode
                             this.form.realName = JSON.parse(Decrypt(data.data.data)).userInfo.realName
                             this.form.callNumber = JSON.parse(Decrypt(data.data.data)).userInfo.callNumber
                             this.form.memo = JSON.parse(Decrypt(data.data.data)).userInfo.memo
@@ -685,7 +667,6 @@
                     jsonArr.push({key:"id",value:this.form.id});
                     jsonArr.push({key:"userName",value:this.userName});
                     jsonArr.push({key:"status",value:this.selectValue});
-                    jsonArr.push({key:"userCode",value:this.form.userCode});
                     jsonArr.push({key:"realName",value:this.form.realName});
                     jsonArr.push({key:"callNumber",value:this.form.callNumber});
                     jsonArr.push({key:"roleIds",value:this.oSelectList[0].id});
@@ -733,7 +714,6 @@
                 setTimeout(() => {
                     let businessCode=this.query.businessCode
                     let userName=this.query.userName
-                    let userCode=this.query.userCode
                     let status=this.query.status
                     if(!businessCode){
                         businessCode=''
@@ -741,16 +721,12 @@
                     if(!userName){
                         userName=''
                     }
-                    if(!userCode){
-                        userCode=''
-                    }
                     if(!status){
                         status=''
                     }
                     let jsonArr = [];
-                    // jsonArr.push({key:"businessCode",value:businessCode});
+                    jsonArr.push({key:"businessCode",value:businessCode});
                     jsonArr.push({key:"userName",value:userName});
-                    jsonArr.push({key:"userCode",value:userCode});
                     jsonArr.push({key:"status",value:status});
                     jsonArr.push({key:"pageNo",value:this.query.pageNo});
                     jsonArr.push({key:"pageSize",value:this.query.pageSize});

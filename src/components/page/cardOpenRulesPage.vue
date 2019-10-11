@@ -32,7 +32,7 @@
                 <el-table-column label="影院编码">
                     <template slot-scope="scope">{{scope.row.cinemaCode}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="开卡规则编码" width="100px">
+                <el-table-column prop="memo" label="开卡规则编码">
                     <template slot-scope="scope">{{scope.row.ruleCode}}</template>
                 </el-table-column>
                 <el-table-column prop="sort" label="开卡规则名称">
@@ -41,19 +41,19 @@
                 <el-table-column prop="sort" label="活动描述">
                     <template slot-scope="scope">{{scope.row. ruleMemo}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="会员卡类型" width="160px">
+                <el-table-column prop="sort" label="会员卡类型">
                     <template slot-scope="scope">{{scope.row.memberCardType}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="会员卡类别编码" width="160px">
+                <el-table-column prop="sort" label="会员卡类别编码">
                     <template slot-scope="scope">{{scope.row.cardLevelCode}}</template>
                 </el-table-column>
                 <el-table-column prop="sort" label="会员卡类别名称">
                     <template slot-scope="scope">{{scope.row.cardLevelName}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="充值金额" width="120px">
+                <el-table-column prop="sort" label="充值金额" >
                     <template slot-scope="scope">{{scope.row.rechargeAmount}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="赠送类型" width="200px">
+                <el-table-column prop="sort" label="赠送类型" >
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.givenType=='1'"
                         >不赠送</el-tag>
@@ -65,7 +65,7 @@
                         >两者都送</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="sort" label="赠送金额" width="120px">
+                <el-table-column prop="sort" label="赠送金额" >
                     <template slot-scope="scope">{{scope.row.givenMoney}}</template>
                 </el-table-column>
                 <el-table-column prop="sort" label="赠送的券id和张数">
@@ -85,7 +85,7 @@
                         >未启用</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" width="180" align="center" fixed="right">
+                <el-table-column label="操作" width="100" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-button
                                 type="text"

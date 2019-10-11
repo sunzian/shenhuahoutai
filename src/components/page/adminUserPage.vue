@@ -53,9 +53,6 @@
                 <el-table-column prop="memo" label="登录IP">
                 <template slot-scope="scope">{{scope.row.loginIp}}</template>
             </el-table-column>
-                <el-table-column prop="sort" label="员工编号">
-                    <template slot-scope="scope">{{scope.row.userCode}}</template>
-                </el-table-column>
                 <el-table-column label="状态" align="center">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status=='1'" type='success'
@@ -95,7 +92,7 @@
         </div>
         <!--新增弹出框-->
         <el-dialog title="新增角色" :visible.sync="dialogFormVisible">
-            <el-form :model="oForm">
+            <el-form v-model="oForm">
                 <el-form-item label="用户名" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oForm.userName" autocomplete="off"></el-input>
                 </el-form-item>
@@ -111,9 +108,6 @@
                                 :value="item.value">
                         </el-option>
                     </el-select>
-                </el-form-item>
-                <el-form-item label="员工编号" :label-width="formLabelWidth">
-                    <el-input style="width: 100px" maxlength="9" v-model.number="oForm.userCode" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="真实姓名" :label-width="formLabelWidth">
                     <el-input style="width: 250px" maxlength="9" v-model.number="oForm.realName" autocomplete="off"></el-input>
@@ -166,9 +160,6 @@
                                 :value="item.value">
                         </el-option>
                     </el-select>
-                </el-form-item>
-                <el-form-item label="员工编号" :label-width="formLabelWidth">
-                    <el-input style="width: 100px"  maxlength="9" v-model="form.userCode" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="真实姓名" :label-width="formLabelWidth">
                     <el-input style="width: 250px"  maxlength="9" v-model="form.realName" autocomplete="off"></el-input>
@@ -249,7 +240,6 @@
                     userName: '',
                     userPass: '',
                     value: '',
-                    userCode: '',
                     realName: '',
                     callNumber: '',
                     businessCode: '',
@@ -333,7 +323,6 @@
                     jsonArr.push({key:"userPass",value:this.oForm.userPass});
                     jsonArr.push({key:"status",value:this.oForm.value});
                     jsonArr.push({key:"memo",value:this.oForm.memo});
-                    jsonArr.push({key:"userCode",value:this.oForm.userCode});
                     jsonArr.push({key:"realName",value:this.oForm.realName});
                     jsonArr.push({key:"callNumber",value:this.oForm.callNumber});
                     jsonArr.push({key:"businessCode",value:this.selectList.businessCode});
@@ -436,7 +425,6 @@
                             this.editVisible = true;
                             this.form.id=row.id;
                             this.userName = JSON.parse(Decrypt(data.data.data)).userInfo.userName
-                            this.form.userCode = JSON.parse(Decrypt(data.data.data)).userInfo.userCode
                             this.form.realName = JSON.parse(Decrypt(data.data.data)).userInfo.realName
                             this.form.callNumber = JSON.parse(Decrypt(data.data.data)).userInfo.callNumber
                             this.form.memo = JSON.parse(Decrypt(data.data.data)).userInfo.memo
@@ -496,7 +484,6 @@
                     jsonArr.push({key:"id",value:this.form.id});
                     jsonArr.push({key:"userName",value:this.userName});
                     jsonArr.push({key:"status",value:this.selectValue});
-                    jsonArr.push({key:"userCode",value:this.form.userCode});
                     jsonArr.push({key:"realName",value:this.form.realName});
                     jsonArr.push({key:"callNumber",value:this.form.callNumber});
                     jsonArr.push({key:"memo",value:this.form.memo});
@@ -507,7 +494,7 @@
                     let params = ParamsAppend(jsonArr);
                     this.editVisible = false;
                     https.fetchPost('/user/modifyAdminUser',params).then((data) => {
-                        // console.log(data);
+                        console.log(data);
                         // console.log(JSON.parse(Decrypt(data.data.data)));
                         if(data.data.code=='success'){
                             this.$message.success(`编辑成功`);
@@ -543,7 +530,6 @@
                 setTimeout(() => {
                     let businessCode=this.query.businessCode
                     let userName=this.query.userName
-                    let userCode=this.query.userCode
                     let status=this.query.status
                     if(!businessCode){
                         businessCode=''
@@ -551,16 +537,12 @@
                     if(!userName){
                         userName=''
                     }
-                    if(!userCode){
-                        userCode=''
-                    }
                     if(!status){
                         status=''
                     }
                     let jsonArr = [];
                     jsonArr.push({key:"businessCode",value:businessCode});
                     jsonArr.push({key:"userName",value:userName});
-                    jsonArr.push({key:"userCode",value:userCode});
                     jsonArr.push({key:"status",value:status});
                     jsonArr.push({key:"pageNo",value:this.query.pageNo});
                     jsonArr.push({key:"pageSize",value:this.query.pageSize});

@@ -9,6 +9,7 @@
         </div>
         <div class="container">
             <div class="handle-box">
+                <el-input placeholder="名称" style="width: 150px" v-model="query.name" autocomplete="off"></el-input>
                 <el-select clearable v-model="query.status" placeholder="状态" class="handle-select mr10">
                     <el-option key="1" label="审核中" value="1"></el-option>
                     <el-option key="2" label="未审核" value="2"></el-option>
