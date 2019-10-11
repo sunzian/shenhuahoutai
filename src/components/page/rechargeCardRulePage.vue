@@ -91,7 +91,7 @@
         <!--新增弹出框-->
         <el-dialog title="获取排期" :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
-                <el-form-item label="影院名称">
+                <el-form-item label="影院名称"  :label-width="formLabelWidth">
                     <el-select v-model="oForm.cinemaName" placeholder="请选择" @change="getCinemaCode">
                         <el-option
                             v-for="info in cinemaInfo"
@@ -101,7 +101,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="充值规则名称">
+                <el-form-item label="充值规则名称"  :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -135,10 +135,10 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item> -->
-                <el-form-item label="充值金额(起充金额)">
+                <el-form-item label="充值金额(起充金额)" :label-width="formLabelWidth">
                     <el-input style="width: 250px" min="1" v-model="oForm.rechargeAmount" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="赠送金额">
+                <el-form-item label="赠送金额" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -146,7 +146,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="设置优惠券">
+                <el-form-item label="设置优惠券" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -154,10 +154,10 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="优惠描述">
+                <el-form-item label="优惠描述" :label-width="formLabelWidth">
                     <el-input style="width: 250px" min="1" v-model="oForm.ruleMemo" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="状态">
+                <el-form-item label="状态" :label-width="formLabelWidth">
                     <el-input style="width: 250px" min="1" v-model="oForm.status" autocomplete="off"></el-input>
                 </el-form-item>
                 </el-form-item>
@@ -170,7 +170,7 @@
         <!-- 编辑弹出框 -->
         <el-dialog title="价格设置" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
-                <el-form-item label="影院名称">
+                <el-form-item label="影院名称" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -179,7 +179,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="充值规则名称">
+                <el-form-item label="充值规则名称" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -203,10 +203,10 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item> -->
-                <el-form-item label="充值金额(起充金额)">
+                <el-form-item label="充值金额(起充金额)" :label-width="formLabelWidth">
                     <el-input style="width: 250px" min="1" v-model="oRechargeAmount" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="赠送金额">
+                <el-form-item label="赠送金额" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -214,7 +214,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="设置优惠券">
+                <el-form-item label="设置优惠券" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -222,10 +222,10 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="优惠描述">
+                <el-form-item label="优惠描述" :label-width="formLabelWidth">
                     <el-input style="width: 250px" min="1" v-model="oRuleMemo" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="状态">
+                <el-form-item label="状态" :label-width="formLabelWidth">
                     <el-input style="width: 250px" min="1" v-model="oStatus" autocomplete="off"></el-input>
                 </el-form-item>
             </el-form>
