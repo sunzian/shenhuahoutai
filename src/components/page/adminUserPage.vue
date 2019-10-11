@@ -484,10 +484,7 @@
                     jsonArr.push({key:"id",value:this.form.id});
                     jsonArr.push({key:"userName",value:this.userName});
                     jsonArr.push({key:"status",value:this.selectValue});
-<<<<<<< HEAD
                     // jsonArr.push({key:"userCode",value:this.form.userCode});
-=======
->>>>>>> cbe69c8b143e8b90c8a2d8f02e62843d59fec306
                     jsonArr.push({key:"realName",value:this.form.realName});
                     jsonArr.push({key:"callNumber",value:this.form.callNumber});
                     jsonArr.push({key:"memo",value:this.form.memo});
