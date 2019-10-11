@@ -60,7 +60,7 @@ export function Decrypt(word, keyStr, ivStr) {
     }
 }
 export function preSign(jsonArr) {
-    let precodeStr = jsonArr.sort((a, b) => a.key < b.key? -1: 1).reduce((all, u) => all + u.value, '') + SIGN_KEY;
+    let precodeStr = jsonArr.sort((a, b) => a.key < b.key? -1: 1).reduce((all, u) => all + (u.value==undefined?"":u.value), '') + SIGN_KEY;
     return precodeStr;
 }
 
@@ -71,7 +71,7 @@ export function EncryptReplace(word, keyStr, ivStr) { //加密调用这个
 export function ParamsAppend(params) { //封装加密参数
     let result = {};
     params.map(n=>{
-        result[n.key]=EncryptReplace(n.value.toString());
+        result[n.key]=EncryptReplace(n.value==undefined?"":n.value.toString());
     });
     return JSON.parse(JSON.stringify(result));
 }

@@ -121,8 +121,6 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-<<<<<<< HEAD
-=======
                 <el-form-item label="员工编号" :label-width="formLabelWidth">
                     <el-input
                         style="width: 100px"
@@ -131,7 +129,6 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
->>>>>>> 5f9da13e5c185b8e726e2fc24dc85c52d8e74de9
                 <el-form-item label="真实姓名" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
@@ -218,8 +215,6 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-<<<<<<< HEAD
-=======
                 <el-form-item label="员工编号" :label-width="formLabelWidth">
                     <el-input
                         style="width: 100px"
@@ -228,7 +223,6 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
->>>>>>> 5f9da13e5c185b8e726e2fc24dc85c52d8e74de9
                 <el-form-item label="真实姓名" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
