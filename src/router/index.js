@@ -45,6 +45,11 @@ export default new Router({
                     meta: { title: '影片信息维护' }
                 },
                 {
+                    path: '/merchandiseCoupon',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/merchandiseCoupon.vue'),
+                    meta: { title: '卖品优惠券管理' }
+                },
+                {
                     path: '/directorPage',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/directorPage.vue'),
                     meta: { title: '导演管理' }

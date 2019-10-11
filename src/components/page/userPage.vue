@@ -18,15 +18,20 @@
                     <el-option key="4" label="审核失败" value="4"></el-option>
                 </el-select>
                 <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
-                <el-button type="primary"  @click="addPage" icon="el-icon-circle-plus-outline"  style="margin-left: 910px">新增</el-button>
+                <el-button
+                    type="primary"
+                    @click="addPage"
+                    icon="el-icon-circle-plus-outline"
+                    style="margin-left: 910px"
+                >新增</el-button>
             </div>
             <el-table
-                    :data="tableData"
-                    border
-                    class="table"
-                    ref="multipleTable"
-                    header-cell-class-name="table-header"
-                    @selection-change="handleSelectionChange"
+                :data="tableData"
+                border
+                class="table"
+                ref="multipleTable"
+                header-cell-class-name="table-header"
+                @selection-change="handleSelectionChange"
             >
                 <el-table-column prop="name" label="用户名">
                     <template slot-scope="scope">{{scope.row.userName}}</template>
@@ -57,43 +62,43 @@
                 </el-table-column>
                 <el-table-column label="状态" align="center">
                     <template slot-scope="scope">
-                        <el-tag v-if="scope.row.status=='1'" type='success'
-                        >成功</el-tag>
-                        <el-tag v-else type='danger'
-                        >未通过</el-tag>
+                        <el-tag v-if="scope.row.status=='1'" type="success">成功</el-tag>
+                        <el-tag v-else type="danger">未通过</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column label="操作"  align="center"  fixed="right">
                     <template slot-scope="scope">
                         <el-button
-                                   type="text"
-                                   icon="el-icon-setting"
-                                   @click="UserPassword(scope.$index, scope.row)"
+                            type="text"
+                            icon="el-icon-setting"
+                            @click="UserPassword(scope.$index, scope.row)"
                         >密码设置</el-button>
-                        <el-button v-if="scope.row.adminFlag !='1'"
-                                type="text"
-                                icon="el-icon-edit"
-                                @click="addChange(scope.$index, scope.row)"
+                        <el-button
+                            v-if="scope.row.adminFlag !='1'"
+                            type="text"
+                            icon="el-icon-edit"
+                            @click="addChange(scope.$index, scope.row)"
                         >修改</el-button>
-                        <el-button v-if="scope.row.adminFlag !='1'"
-                                type="text"
-                                icon="el-icon-delete"
-                                class="red"
-                                @click="delChange(scope.$index, scope.row)"
+                        <el-button
+                            v-if="scope.row.adminFlag !='1'"
+                            type="text"
+                            icon="el-icon-delete"
+                            class="red"
+                            @click="delChange(scope.$index, scope.row)"
                         >删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
             <div class="pagination">
                 <el-pagination
-                        background
-                        layout="total, prev, pager, next"
-                        :current-page="query.pageNo"
-                        :page-size="query.pageSize"
-                        :total="query.totalCount"
-                        @current-change="currentChange"
-                        @prev-click='prev'
-                        @next-click="next"
+                    background
+                    layout="total, prev, pager, next"
+                    :current-page="query.pageNo"
+                    :page-size="query.pageSize"
+                    :total="query.totalCount"
+                    @current-change="currentChange"
+                    @prev-click="prev"
+                    @next-click="next"
                 ></el-pagination>
             </div>
         </div>
@@ -109,35 +114,66 @@
                 <el-form-item label="状态" :label-width="formLabelWidth">
                     <el-select v-model="oForm.value" placeholder="请选择状态">
                         <el-option
-                                v-for="item in options"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value">
-                        </el-option>
+                            v-for="item in options"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value"
+                        ></el-option>
                     </el-select>
                 </el-form-item>
+<<<<<<< HEAD
+=======
+                <el-form-item label="员工编号" :label-width="formLabelWidth">
+                    <el-input
+                        style="width: 100px"
+                        maxlength="9"
+                        v-model.number="oForm.userCode"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+>>>>>>> 5f9da13e5c185b8e726e2fc24dc85c52d8e74de9
                 <el-form-item label="真实姓名" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" maxlength="9" v-model.number="oForm.realName" autocomplete="off"></el-input>
+                    <el-input
+                        style="width: 250px"
+                        maxlength="9"
+                        v-model.number="oForm.realName"
+                        autocomplete="off"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item label="呼叫号码" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" maxlength="18" v-model.number="oForm.callNumber" autocomplete="off"></el-input>
+                    <el-input
+                        style="width: 250px"
+                        maxlength="18"
+                        v-model.number="oForm.callNumber"
+                        autocomplete="off"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item label="描述" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" maxlength="9" v-model.number="oForm.memo" autocomplete="off"></el-input>
+                    <el-input
+                        style="width: 250px"
+                        maxlength="9"
+                        v-model.number="oForm.memo"
+                        autocomplete="off"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item label="选择影院" :label-width="formLabelWidth">
                     <el-checkbox-group v-model="checkedCities">
-                        <el-checkbox v-for="city in cities" :label="city.cinemaCode" :key="city.cinemaCode" :value="city.cinemaCode">{{city.cinemaName}}</el-checkbox>
+                        <el-checkbox
+                            v-for="city in cities"
+                            :label="city.cinemaCode"
+                            :key="city.cinemaCode"
+                            :value="city.cinemaCode"
+                        >{{city.cinemaName}}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
                 <el-form-item label="角色" :label-width="formLabelWidth">
-                    <el-select v-model="selectList.id" >
+                    <el-select v-model="selectList.id">
                         <el-option
-                                v-for="item in selectList"
-                                :key="item.id"
-                                :label="item.roleName"
-                                :value="item.id">
-                        </el-option>
+                            v-for="item in selectList"
+                            :key="item.id"
+                            :label="item.roleName"
+                            :value="item.id"
+                        ></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="设置权限" :label-width="formLabelWidth">
@@ -150,9 +186,7 @@
             </div>
         </el-dialog>
         <!--新增抽屉弹出框-->
-        <el-drawer
-                title="请选择权限"
-                :visible.sync="drawer">
+        <el-drawer title="请选择权限" :visible.sync="drawer">
             <el-tree
                 ref="tree"
                 :data="data"
@@ -160,12 +194,16 @@
                 node-key="id"
                 :default-expanded-keys="expandedKeys"
                 :default-checked-keys="checkedKeys"
-                :props="defaultProps">
-            </el-tree>
-            <el-button @click="sureNext" type="primary" style="margin-top: 50px;margin-left: 100px">确 定</el-button>
+                :props="defaultProps"
+            ></el-tree>
+            <el-button
+                @click="sureNext"
+                type="primary"
+                style="margin-top: 50px;margin-left: 100px"
+            >确 定</el-button>
         </el-drawer>
         <!-- 编辑弹出框 -->
-        <el-dialog title="编辑" :visible.sync="editVisible" >
+        <el-dialog title="编辑" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
                 <el-form-item label="用户名" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="userName" autocomplete="off"></el-input>
@@ -173,35 +211,66 @@
                 <el-form-item label="状态" :label-width="formLabelWidth">
                     <el-select v-model="selectValue">
                         <el-option
-                                v-for="item in options"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value">
-                        </el-option>
+                            v-for="item in options"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value"
+                        ></el-option>
                     </el-select>
                 </el-form-item>
+<<<<<<< HEAD
+=======
+                <el-form-item label="员工编号" :label-width="formLabelWidth">
+                    <el-input
+                        style="width: 100px"
+                        maxlength="9"
+                        v-model="form.userCode"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+>>>>>>> 5f9da13e5c185b8e726e2fc24dc85c52d8e74de9
                 <el-form-item label="真实姓名" :label-width="formLabelWidth">
-                    <el-input style="width: 250px"  maxlength="9" v-model="form.realName" autocomplete="off"></el-input>
+                    <el-input
+                        style="width: 250px"
+                        maxlength="9"
+                        v-model="form.realName"
+                        autocomplete="off"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item label="呼叫号码" :label-width="formLabelWidth">
-                    <el-input style="width: 250px"  maxlength="18" v-model="form.callNumber" autocomplete="off"></el-input>
+                    <el-input
+                        style="width: 250px"
+                        maxlength="18"
+                        v-model="form.callNumber"
+                        autocomplete="off"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item label="描述" :label-width="formLabelWidth">
-                    <el-input style="width: 250px"  maxlength="9" v-model="form.memo" autocomplete="off"></el-input>
+                    <el-input
+                        style="width: 250px"
+                        maxlength="9"
+                        v-model="form.memo"
+                        autocomplete="off"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item label="选择影院" :label-width="formLabelWidth">
                     <el-checkbox-group v-model="oCheckedCities">
-                        <el-checkbox v-for="city in oCities" :label="city.cinemaCode" :key="city.cinemaCode" :value="city.cinemaCode">{{city.cinemaName}}</el-checkbox>
+                        <el-checkbox
+                            v-for="city in oCities"
+                            :label="city.cinemaCode"
+                            :key="city.cinemaCode"
+                            :value="city.cinemaCode"
+                        >{{city.cinemaName}}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
                 <el-form-item label="角色" :label-width="formLabelWidth">
-                    <el-select v-model="oSelectList[0]" >
+                    <el-select v-model="oSelectList[0]">
                         <el-option
-                                v-for="item in oSelectList"
-                                :key="item.id"
-                                :label="item.roleName"
-                                :value="item.id">
-                        </el-option>
+                            v-for="item in oSelectList"
+                            :key="item.id"
+                            :label="item.roleName"
+                            :value="item.id"
+                        ></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="设置权限" :label-width="formLabelWidth">
@@ -214,31 +283,50 @@
             </span>
         </el-dialog>
         <!--编辑抽屉弹出框-->
-        <el-drawer
-                title="请选择权限"
-                :visible.sync="drawered">
-                <el-tree
-                        ref="tree"
-                        :data="data"
-                        show-checkbox
-                        node-key="id"
-                        :default-expanded-keys="expandedKeys"
-                        :default-checked-keys="checkedKeys"
-                        :props="defaultProps">
-                </el-tree>
-            <el-button @click="sureNext" type="primary" style="margin-top: 50px;margin-left: 100px">确 定</el-button>
+        <el-drawer title="请选择权限" :visible.sync="drawered">
+            <el-tree
+                ref="tree"
+                :data="data"
+                show-checkbox
+                node-key="id"
+                :default-expanded-keys="expandedKeys"
+                :default-checked-keys="checkedKeys"
+                :props="defaultProps"
+            ></el-tree>
+            <el-button
+                @click="sureNext"
+                type="primary"
+                style="margin-top: 50px;margin-left: 100px"
+            >确 定</el-button>
         </el-drawer>
         <!-- 修改密码弹出框 -->
-        <el-dialog title="修改密码" :visible.sync="passShow" >
+        <el-dialog title="修改密码" :visible.sync="passShow">
             <el-form ref="form" :model="form">
                 <el-form-item label="旧密码" :label-width="formLabelWidth">
-                    <el-input type="password" style="width: 250px" v-model="oldPass" autocomplete="off"></el-input>
+                    <el-input
+                        type="password"
+                        style="width: 250px"
+                        v-model="oldPass"
+                        autocomplete="off"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item label="新密码" :label-width="formLabelWidth">
-                    <el-input type="password" style="width: 250px"  maxlength="9" v-model="newPass" autocomplete="off"></el-input>
+                    <el-input
+                        type="password"
+                        style="width: 250px"
+                        maxlength="9"
+                        v-model="newPass"
+                        autocomplete="off"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item label="确认密码" :label-width="formLabelWidth">
-                    <el-input type="password" style="width: 250px"  maxlength="9" v-model="surePass" autocomplete="off"></el-input>
+                    <el-input
+                        type="password"
+                        style="width: 250px"
+                        maxlength="9"
+                        v-model="surePass"
+                        autocomplete="off"
+                    ></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -313,159 +401,123 @@
                 options: [{
                     value: '1',
                     label: '审核中'
-                }, {
+                },
+                {
                     value: '2',
                     label: '未审核'
-                }, {
+                },
+                {
                     value: '3',
                     label: '通过'
-                }, {
+                },
+                {
                     value: '4',
                     label: '审核失败'
-                }],
-                businessInfoList:[],
-                value: ''
-            };
-        },
-        created() {
-
-        },
-        mounted(){
-            this.getMenu()
-        },
-        methods: {
-            UserPassword(index, row){//校验修改密码权限
-                const loading = this.$loading({
-                    lock: true,
-                    text: 'Loading',
-                    spinner: 'el-icon-loading',
-                    background: 'rgba(0, 0, 0, 0.7)',
-                    target: document.querySelector('.div1')
-                });
-                setTimeout(() => {
-                    this.idx = index;
-                    this.form = row;
-                    https.fetchPost('/user/updateUserPasswordPage','').then((data) => {
+                }
+            ],
+            businessInfoList: [],
+            value: ''
+        };
+    },
+    created() {},
+    mounted() {
+        this.getMenu();
+    },
+    methods: {
+        UserPassword(index, row) {
+            //校验修改密码权限
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
+            setTimeout(() => {
+                this.idx = index;
+                this.form = row;
+                https
+                    .fetchPost('/user/updateUserPasswordPage', '')
+                    .then(data => {
                         console.log(data);
-                        if(data.data.code == 'success'){
-                            this.oldPass='';
-                            this.newPass='';
-                            this.surePass='';
-                            this.form.id=row.id;
-                            this.passShow=true
-                        }else if(data.data.code=='nologin'){
-                            this.message=data.data.message
-                            this.open()
+                        if (data.data.code == 'success') {
+                            this.oldPass = '';
+                            this.newPass = '';
+                            this.surePass = '';
+                            this.form.id = row.id;
+                            this.passShow = true;
+                        } else if (data.data.code == 'nologin') {
+                            this.message = data.data.message;
+                            this.open();
                             this.$router.push('/login');
-                        }else {
-                            this.message=data.data.message
-                            this.open()
+                        } else {
+                            this.message = data.data.message;
+                            this.open();
                         }
-                    }).catch(err=>{
-                            console.log(err)
-                        }
-                    )
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
+                loading.close();
+            }, 500);
+        },
+        surePassword() {
+            //确认修改密码
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
+            setTimeout(() => {
+                if (this.newPass != this.surePass) {
+                    this.message = '两次密码输入不一致';
+                    this.open();
                     loading.close();
-                }, 500);
-            },
-            surePassword(){//确认修改密码
-                const loading = this.$loading({
-                    lock: true,
-                    text: 'Loading',
-                    spinner: 'el-icon-loading',
-                    background: 'rgba(0, 0, 0, 0.7)',
-                    target: document.querySelector('.div1')
-                });
-                setTimeout(() => {
-                    if(this.newPass!=this.surePass){
-                        this.message='两次密码输入不一致'
-                        this.open()
-                        loading.close();
-                    }
-                    else{
-                        var jsonArr = [];
-                        jsonArr.push({key:"id",value:this.form.id});
-                        jsonArr.push({key:"oldPassword",value:this.oldPass});
-                        jsonArr.push({key:"newPassword",value:this.newPass});
-                        let sign =md5(preSign(jsonArr));
-                        jsonArr.push({key:"sign",value:sign});
-                        let params = ParamsAppend(jsonArr);
-                        this.passShow = false;
-                        https.fetchPost('/user/updateUserPassword',params).then((data) => {
+                } else {
+                    var jsonArr = [];
+                    jsonArr.push({ key: 'id', value: this.form.id });
+                    jsonArr.push({ key: 'oldPassword', value: this.oldPass });
+                    jsonArr.push({ key: 'newPassword', value: this.newPass });
+                    let sign = md5(preSign(jsonArr));
+                    jsonArr.push({ key: 'sign', value: sign });
+                    let params = ParamsAppend(jsonArr);
+                    this.passShow = false;
+                    https
+                        .fetchPost('/user/updateUserPassword', params)
+                        .then(data => {
                             console.log(data);
                             // console.log(JSON.parse(Decrypt(data.data.data)));
-                            if(data.data.code=='success'){
+                            if (data.data.code == 'success') {
                                 this.$message.success(`密码修改成功`);
-                                this.getMenu()
-                            }else if(data.data.code=='nologin'){
-                                this.message=data.data.message
-                                this.open()
+                                this.getMenu();
+                            } else if (data.data.code == 'nologin') {
+                                this.message = data.data.message;
+                                this.open();
                                 this.$router.push('/login');
+                            } else {
+                                this.message = data.data.message;
+                                this.open();
                             }
-                            else{
-                                this.message=data.data.message
-                                this.open()
-                            }
-                        }).catch(err=>{
-                                console.log(err)
-                            }
-                        )
-                        loading.close();
-                    }
-                }, 500);
-            },
-            changerNext(){
-                this.drawered = true
-            },
-            sureNext(){
-                       this.drawer=false;
-                       this.drawered = false
-            },
-            openNext(){//获取数级权限列表
-                if(this.selectList.id){
-                    const loading = this.$loading({
-                        lock: true,
-                        text: 'Loading',
-                        spinner: 'el-icon-loading',
-                        background: 'rgba(0, 0, 0, 0.7)',
-                        target: document.querySelector('.div1')
-                    });
-                    setTimeout(() => {
-                        console.log(this.selectList.id);
-                        var jsonArr = [];
-                        jsonArr.push({key:"id",value:this.selectList.id});
-                        let sign =md5(preSign(jsonArr));
-                        jsonArr.push({key:"sign",value:sign});
-                        let params = ParamsAppend(jsonArr);
-                        https.fetchPost('/user/getMenusByRole',params).then((data) => {
-                            console.log(data);
-                            if(data.data.code == 'success'){
-                                this.data = JSON.parse(Decrypt(data.data.data)).permissionList
-                                this.expandedKeys = JSON.parse(Decrypt(data.data.data)).openPermissionIds
-                                this.checkedKeys =JSON.parse(Decrypt(data.data.data)).exitPermissionIds
-                                console.log(JSON.parse(Decrypt(data.data.data)));
-                                this.drawer = true
-                            }else if(data.data.code=='nologin'){
-                                this.message=data.data.message
-                                this.open()
-                                this.$router.push('/login');
-                            }else {
-                                this.message=data.data.message
-                                this.open()
-                            }
-                        }).catch(err=>{
-                                console.log(err)
-                            }
-                        )
-                        loading.close();
-                    }, 500);
-                }else{
-                    this.message='请先选择角色'
-                    this.open()
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        });
+                    loading.close();
                 }
-
-            },
-            addPage(){//获取新增按钮权限
+            }, 500);
+        },
+        changerNext() {
+            this.drawered = true;
+        },
+        sureNext() {
+            this.drawer = false;
+            this.drawered = false;
+        },
+        openNext() {
+            //获取数级权限列表
+            if (this.selectList.id) {
                 const loading = this.$loading({
                     lock: true,
                     text: 'Loading',
@@ -474,26 +526,71 @@
                     target: document.querySelector('.div1')
                 });
                 setTimeout(() => {
-                    https.fetchPost('/user/addPage','').then((data) => {
+                    console.log(this.selectList.id);
+                    var jsonArr = [];
+                    jsonArr.push({ key: 'id', value: this.selectList.id });
+                    let sign = md5(preSign(jsonArr));
+                    jsonArr.push({ key: 'sign', value: sign });
+                    let params = ParamsAppend(jsonArr);
+                    https
+                        .fetchPost('/user/getMenusByRole', params)
+                        .then(data => {
+                            console.log(data);
+                            if (data.data.code == 'success') {
+                                this.data = JSON.parse(Decrypt(data.data.data)).permissionList;
+                                this.expandedKeys = JSON.parse(Decrypt(data.data.data)).openPermissionIds;
+                                this.checkedKeys = JSON.parse(Decrypt(data.data.data)).exitPermissionIds;
+                                console.log(JSON.parse(Decrypt(data.data.data)));
+                                this.drawer = true;
+                            } else if (data.data.code == 'nologin') {
+                                this.message = data.data.message;
+                                this.open();
+                                this.$router.push('/login');
+                            } else {
+                                this.message = data.data.message;
+                                this.open();
+                            }
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        });
+                    loading.close();
+                }, 500);
+            } else {
+                this.message = '请先选择角色';
+                this.open();
+            }
+        },
+        addPage() {
+            //获取新增按钮权限
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
+            setTimeout(() => {
+                https
+                    .fetchPost('/user/addPage', '')
+                    .then(data => {
                         // console.log(data);
-                        if(data.data.code == 'success'){
-                            this.oForm=[]
-                            this.dialogFormVisible = true
+                        if (data.data.code == 'success') {
+                            this.oForm = [];
+                            this.dialogFormVisible = true;
                             // console.log(JSON.parse(JSON.stringify(JSON.parse(Decrypt(data.data.data)).permissionList).replace(/submenuList/g,'children').replace(/menuName/g,'label')));
                             console.log(JSON.parse(Decrypt(data.data.data)));
-                            this.cities=JSON.parse(Decrypt(data.data.data)).selectCinemaList
+                            this.cities = JSON.parse(Decrypt(data.data.data)).selectCinemaList;
                             // this.data=JSON.parse(Decrypt(data.data.data)).permissionList
-                            this.selectList =JSON.parse(Decrypt(data.data.data)).selectRole
-                        }else if(data.data.code=='nologin'){
-                            this.message=data.data.message
-                            this.open()
+                            this.selectList = JSON.parse(Decrypt(data.data.data)).selectRole;
+                        } else if (data.data.code == 'nologin') {
+                            this.message = data.data.message;
+                            this.open();
                             this.$router.push('/login');
-                        }else {
-                            this.message=data.data.message
-                            this.open()
+                        } else {
+                            this.message = data.data.message;
+                            this.open();
                         }
-                    }).catch(err=>{
-                            console.log(err)
                         }
                     )
                     loading.close();
@@ -526,20 +623,18 @@
                     if(this.dialogFormVisible == true){
                         https.fetchPost('/user/addUser',params).then((data) => {//新增
                             console.log(data);
-                            if(data.data.code=='success'){
-                                this.dialogFormVisible=false
-                                this.getMenu()
-                            }else if(data.data.code=='nologin'){
-                                this.message=data.data.message
-                                this.open()
+                            if (data.data.code == 'success') {
+                                this.dialogFormVisible = false;
+                                this.getMenu();
+                            } else if (data.data.code == 'nologin') {
+                                this.message = data.data.message;
+                                this.open();
                                 this.$router.push('/login');
-                            }else{
-                                this.message=data.data.message
-                                this.open()
+                            } else {
+                                this.message = data.data.message;
+                                this.open();
                             }
-                        }).catch(err=>{
-                                console.log(err)
-                            }
+                        }
                         )
                     }
                     loading.close();
@@ -564,62 +659,64 @@
                     https.fetchPost('/user/deleteUser',params).then((data) => {
                         console.log(data);
                         // console.log(JSON.parse(Decrypt(data.data.data)));
-                        if(data.data.code=='success'){
+                        if (data.data.code == 'success') {
                             this.$message.error(`删除了`);
-                            this.getMenu()
-                        }else if(data.data.code=='nologin'){
-                            this.message=data.data.message
-                            this.open()
+                            this.getMenu();
+                        } else if (data.data.code == 'nologin') {
+                            this.message = data.data.message;
+                            this.open();
                             this.$router.push('/login');
+                        } else {
+                            this.message = data.data.message;
+                            this.open();
                         }
-                        else{
-                            this.message=data.data.message
-                            this.open()
-                        }
-                    }).catch(err=>{
-                            console.log(err)
-                        }
-                    )
-                    loading.close();
-                }, 500);
-            },
-            addChange(index, row){//是否修改权限
-                const loading = this.$loading({
-                    lock: true,
-                    text: 'Loading',
-                    spinner: 'el-icon-loading',
-                    background: 'rgba(0, 0, 0, 0.7)',
-                    target: document.querySelector('.div1')
-                });
-                setTimeout(() => {
-                    this.idx = index;
-                    this.form = row;
-                    var jsonArr = [];
-                    jsonArr.push({key:"id",value:row.id});
-                    let sign =md5(preSign(jsonArr));
-                    jsonArr.push({key:"sign",value:sign});
-                    let params = ParamsAppend(jsonArr);
-                    https.fetchPost('/user/modifyPage',params).then((data) => {
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
+                loading.close();
+            }, 500);
+        },
+        addChange(index, row) {
+            //是否修改权限
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
+            setTimeout(() => {
+                this.idx = index;
+                this.form = row;
+                var jsonArr = [];
+                jsonArr.push({ key: 'id', value: row.id });
+                let sign = md5(preSign(jsonArr));
+                jsonArr.push({ key: 'sign', value: sign });
+                let params = ParamsAppend(jsonArr);
+                https
+                    .fetchPost('/user/modifyPage', params)
+                    .then(data => {
                         console.log(data);
                         console.log(JSON.parse(Decrypt(data.data.data)));
-                        if(data.data.code=='success'){
+                        if (data.data.code == 'success') {
                             this.editVisible = true;
-                            this.form.id=row.id;
+                            this.form.id = row.id;
                             this.userName = JSON.parse(Decrypt(data.data.data)).userInfo.userName
                             this.form.realName = JSON.parse(Decrypt(data.data.data)).userInfo.realName
                             this.form.callNumber = JSON.parse(Decrypt(data.data.data)).userInfo.callNumber
                             this.form.memo = JSON.parse(Decrypt(data.data.data)).userInfo.memo
-                            this.oCities=JSON.parse(Decrypt(data.data.data)).selectCinemaList//影院列表
-                            this.oSelectList =JSON.parse(Decrypt(data.data.data)).existRoll
+                            this.oCities = JSON.parse(Decrypt(data.data.data)).selectCinemaList//影院列表
+                            this.oSelectList = JSON.parse(Decrypt(data.data.data)).existRoll
                             this.expandedKeys = JSON.parse(Decrypt(data.data.data)).openPermissionIds
-                            this.checkedKeys =JSON.parse(Decrypt(data.data.data)).exitPermissionIds
-                            this.data=JSON.parse(Decrypt(data.data.data)).permissionList //权限数据
+                            this.checkedKeys = JSON.parse(Decrypt(data.data.data)).exitPermissionIds
+                            this.data = JSON.parse(Decrypt(data.data.data)).permissionList //权限数据
                             this.businessInfoList = JSON.parse(Decrypt(data.data.data)).businessInfoList //定义下拉选的内容
                             // this.oCheckedCities=JSON.parse(Decrypt(data.data.data)).userInfo.cinemaCodes
-                            let _index = 0;  //下拉选显示对应的选项
-                            for(let x in this.options){
-                                if(this.options[x].value==JSON.parse(Decrypt(data.data.data)).userInfo.status){
-                                    _index=x;
+                            let _index = 0; //下拉选显示对应的选项
+                            for (let x in this.options) {
+                                if (this.options[x].value == JSON.parse(Decrypt(data.data.data)).userInfo.status) {
+                                    _index = x;
                                     break;
                                 }
                             }
@@ -633,16 +730,13 @@
                             //     }
                             // }
                             // this.selectCode = this.businessInfoList[oIndex].businessCode;
-
-
-                        }else if(data.data.code=='nologin'){
-                            this.message=data.data.message
-                            this.open()
+                        } else if (data.data.code == 'nologin') {
+                            this.message = data.data.message;
+                            this.open();
                             this.$router.push('/login');
-                        }
-                        else{
-                            this.message=data.data.message
-                            this.open()
+                        } else {
+                            this.message = data.data.message;
+                            this.open();
                         }
                     }).catch(err=>{
                             console.log(err)
@@ -680,15 +774,14 @@
                     https.fetchPost('/user/modifyUser',params).then((data) => {
                         console.log(data);
                         // console.log(JSON.parse(Decrypt(data.data.data)));
-                        if(data.data.code=='success'){
+                        if (data.data.code == 'success') {
                             this.$message.success(`编辑成功`);
-                            this.getMenu()
-                        }else if(data.data.code=='nologin'){
-                            this.message=data.data.message
-                            this.open()
+                            this.getMenu();
+                        } else if (data.data.code == 'nologin') {
+                            this.message = data.data.message;
+                            this.open();
                             this.$router.push('/login');
-                        }
-                        else{
+                        } else{
                             this.message=data.data.message
                             this.open()
                         }
@@ -735,7 +828,7 @@
                     var params = ParamsAppend(jsonArr);
                     https.fetchPost('/user/userPage',params).then((data) => {
                         console.log(data);
-                        if(data.data.code=='success') {
+                        if (data.data.code == 'success') {
                             var oData = JSON.parse(Decrypt(data.data.data));
                             console.log(oData);
                             // console.log(this.query);
@@ -743,69 +836,72 @@
                             this.query.pageSize = oData.pageResult.pageSize;
                             this.query.pageNo = oData.pageResult.pageNo;
                             this.query.totalCount = oData.pageResult.totalCount;
-                            this.query.totalPage = oData.pageResult.totalPage
-                        }else if(data.data.code=='nologin'){
-                            this.message=data.data.message
-                            this.open()
+                            this.query.totalPage = oData.pageResult.totalPage;
+                        } else if (data.data.code == 'nologin') {
+                            this.message = data.data.message;
+                            this.open();
                             this.$router.push('/login');
-                        }else{
-                            this.message=data.data.message
-                            this.open()
+                        } else {
+                            this.message = data.data.message;
+                            this.open();
                         }
-
-                    }).catch(err=>{
-                            console.log(err)
-                        }
-                    )
-                    loading.close();
-                }, 500);
-            },
-            open() {     //错误信息弹出框
-                this.$alert(this.message, '错误信息', {
-                    dangerouslyUseHTMLString: true
-                });
-            },
-            // 多选操作
-            handleSelectionChange(val) {
-                this.multipleSelection = val;
-            },
-            currentChange(val){//点击选择具体页数
-                this.query.pageNo = val
-                this.getMenu()
-            },
-            prev(){//分页按钮上一页
-                this.query.pageNo--
-                this.getMenu()
-            },
-            next(){//分页按钮下一页
-                this.query.pageNo++
-                this.getMenu()
-            },
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
+                loading.close();
+            }, 500);
+        },
+        open() {
+            //错误信息弹出框
+            this.$alert(this.message, '错误信息', {
+                dangerouslyUseHTMLString: true
+            });
+        },
+        // 多选操作
+        handleSelectionChange(val) {
+            this.multipleSelection = val;
+        },
+        currentChange(val) {
+            //点击选择具体页数
+            this.query.pageNo = val;
+            this.getMenu();
+        },
+        prev() {
+            //分页按钮上一页
+            this.query.pageNo--;
+            this.getMenu();
+        },
+        next() {
+            //分页按钮下一页
+            this.query.pageNo++;
+            this.getMenu();
         }
-    };
+    }
+};
 </script>
 
 <style scoped>
-    .handle-box {
-        margin-bottom: 20px;
-    }
+.handle-box {
+    margin-bottom: 20px;
+}
 
-    .handle-select {
-        width: 120px;
-    }
+.handle-select {
+    width: 120px;
+}
 
-    .handle-input {
-        width: 300px;
-        display: inline-block;
-    }
-    .table {
-        width: 100%;
-        font-size: 14px;
-    }
-    .red {
-        color: #ff0000;
-    }
-    .mr10 {
-        margin-right: 10px;
-    }
+.handle-input {
+    width: 300px;
+    display: inline-block;
+}
+.table {
+    width: 100%;
+    font-size: 14px;
+}
+.red {
+    color: #ff0000;
+}
+.mr10 {
+    margin-right: 10px;
+}
 </style>
