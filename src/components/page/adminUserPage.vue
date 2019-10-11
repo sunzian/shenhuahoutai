@@ -496,7 +496,7 @@
                     jsonArr.push({key:"id",value:this.form.id});
                     jsonArr.push({key:"userName",value:this.userName});
                     jsonArr.push({key:"status",value:this.selectValue});
-                    jsonArr.push({key:"userCode",value:this.form.userCode});
+                    // jsonArr.push({key:"userCode",value:this.form.userCode});
                     jsonArr.push({key:"realName",value:this.form.realName});
                     jsonArr.push({key:"callNumber",value:this.form.callNumber});
                     jsonArr.push({key:"memo",value:this.form.memo});
@@ -504,10 +504,11 @@
                     jsonArr.push({key:"menuIds",value:this.$refs.tree.getCheckedKeys().concat(this.$refs.tree.getHalfCheckedKeys())});
                     let sign =md5(preSign(jsonArr));
                     jsonArr.push({key:"sign",value:sign});
+                    console.log(jsonArr)
                     let params = ParamsAppend(jsonArr);
                     this.editVisible = false;
                     https.fetchPost('/user/modifyAdminUser',params).then((data) => {
-                        // console.log(data);
+                        console.log(data);
                         // console.log(JSON.parse(Decrypt(data.data.data)));
                         if(data.data.code=='success'){
                             this.$message.success(`编辑成功`);

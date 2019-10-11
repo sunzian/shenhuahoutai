@@ -3,7 +3,7 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
-                    <i class="el-icon-lx-cascades"></i> 卖品优惠券
+                    <i class="el-icon-lx-cascades"></i> 影票优惠券
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
@@ -26,8 +26,8 @@
                 ref="multipleTable"
                 header-cell-class-name="table-header"
             >
-                <el-table-column prop="name" label="适用卖品">
-                    <template slot-scope="scope">{{scope.row.merchandiseNames}}</template>
+                <el-table-column prop="name" label="适用影院">
+                    <template slot-scope="scope">{{scope.row.cinemaNames}}</template>
                 </el-table-column>
                 <el-table-column prop="name" label="卡券类型">
                     <template slot-scope="scope">
@@ -120,15 +120,44 @@
                         >{{item.cinemaName}}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
-                <el-form-item label="适用卖品：" :label-width="formLabelWidth">
-                    <el-checkbox-group v-model="oForm.merchandiseCode" @change="selectGoods">
+                <el-form-item label="选择影厅：" :label-width="formLabelWidth">
+                    <el-checkbox-group v-model="oForm.screenCode" @change="selectScreens">
                         <el-checkbox
-                            v-for="item in goodsInfo"
-                            :label="item.merchandiseCode"
-                            :key="item.merchandiseCode"
-                            :value="item.merchandiseName"
-                        >{{item.merchandiseName}}</el-checkbox>
+                            v-for="item in screenInfo"
+                            :label="item.screenCode"
+                            :key="item.screenCode"
+                            :value="item.screenName"
+                        >{{item.screenName}}</el-checkbox>
                     </el-checkbox-group>
+                </el-form-item>
+                <el-form-item label="选择影片：" :label-width="formLabelWidth">
+                    <el-radio-group v-model="oForm.selectFilmType">
+                        <el-radio label="0">全部影片</el-radio>
+                        <el-radio label="1">部分影片</el-radio>
+                        <el-radio label="2">排除影片</el-radio>
+                    </el-radio-group>
+                    <el-col :span="12" v-if="oForm.selectFilmType != 0">
+                        搜索影片：
+                        <el-autocomplete
+                            class="inline-input"
+                            v-model="oForm.filmName"
+                            :fetch-suggestions="querySearch"
+                            placeholder="请输入内容"
+                            :trigger-on-focus="false"
+                            @select="handleSelect"
+                        ></el-autocomplete>
+                        <span style="color:blue;cursor: pointer;" @click="addFilm">添加</span>
+                    </el-col>
+                </el-form-item>
+                <el-form-item
+                    label="所选影片："
+                    :label-width="formLabelWidth"
+                    v-if="filmInfo.length>0 && oForm.selectFilmType != 0"
+                >
+                    <div v-for="(item, index) in filmInfo">
+                        {{item.value}}
+                        <span style="color:red;cursor: pointer;" @click="deletFilm(index)">删除</span>
+                    </div>
                 </el-form-item>
                 <el-form-item label="有效期：" :label-width="formLabelWidth">
                     <el-date-picker
@@ -223,8 +252,14 @@
         <!-- 编辑弹出框 -->
         <el-dialog title="详情" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
-                <el-form-item label="适用卖品名称：" :label-width="formLabelWidth">
-                    <span>{{oMerchandiseName}}</span>
+                <el-form-item label="适用影片名称：" :label-width="formLabelWidth">
+                    <span>{{oCinemaName}}</span>
+                </el-form-item>
+                <el-form-item label="适用影厅名称：" :label-width="formLabelWidth">
+                    <span>{{oScreenName}}</span>
+                </el-form-item>
+                <el-form-item label="适用影片名称：" :label-width="formLabelWidth">
+                    <span>{{oFilmName}}</span>
                 </el-form-item>
                 <el-form-item label="优惠券名称：" :label-width="formLabelWidth">
                     <span>{{oName}}</span>
@@ -265,7 +300,9 @@ export default {
     name: 'basetable',
     data() {
         return {
-            oMerchandiseName: '',
+            oCinemaName: '',
+            oScreenName: '',
+            oFilmName: '',
             oName: '',
             oCreateDate: '',
             oEndDate: '',
@@ -281,6 +318,7 @@ export default {
                 pageNo: 1,
                 pageSize: 10
             },
+            restaurants: [],
             tableData: [],
             multipleSelection: [],
             delList: [],
@@ -315,8 +353,11 @@ export default {
                 name: '',
                 cinemaName: '',
                 cinemaCode: [],
-                merchandiseName: '',
-                merchandiseCode: [],
+                screenName: '',
+                screenCode: [],
+                selectFilmType: '',
+                filmCode: '',
+                filmName: '',
                 checkedDays: [],
                 exceptWeekDay: [1, 2, 3, 4, 5, 6, 7],
                 startDate: '',
@@ -331,9 +372,11 @@ export default {
             },
             formLabelWidth: '120px',
             selectValue: {},
-            selectGoodsCode: {},
+            selectScreenCode: {},
+            selectFilm: {},
             cinemaInfo: [],
-            goodsInfo: [],
+            screenInfo: [],
+            filmInfo: [],
             value: ''
         };
     },
@@ -352,13 +395,11 @@ export default {
                 target: document.querySelector('.div1')
             });
             https
-                .fetchPost('merchandiseCoupon/merchandiseCouponAddPage', '')
+                .fetchPost('/filmCoupon/filmCouponAddPage', '')
                 .then(data => {
                     console.log(data);
                     if (data.data.code == 'success') {
                         this.dialogFormVisible = true;
-                        // console.log(this.oForm.checkedDays)
-                        // let checkedDays = this.oForm.checkedDays.join(',');
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
@@ -375,20 +416,24 @@ export default {
         },
         addRole() {
             //新增按钮操作
-            const loading = this.$loading({
-                lock: true,
-                text: 'Loading',
-                spinner: 'el-icon-loading',
-                background: 'rgba(0, 0, 0, 0.7)',
-                target: document.querySelector('.div1')
-            });
+            // const loading = this.$loading({
+            //     lock: true,
+            //     text: 'Loading',
+            //     spinner: 'el-icon-loading',
+            //     background: 'rgba(0, 0, 0, 0.7)',
+            //     target: document.querySelector('.div1')
+            // });
             if (this.oForm.cinemaCode == true) {
-                this.selectGoodsCode = this.cinemaInfo[0].cinemaCode;
+                this.oForm.cinemaCode = this.cinemaInfo[0].cinemaCode;
             }
+            console.log(this.oForm.selectFilmType);
+            return;
             var jsonArr = [];
             jsonArr.push({ key: 'name', value: this.oForm.name });
             jsonArr.push({ key: 'cinemaCodes', value: this.selectValue });
-            jsonArr.push({ key: 'merchandiseCode', value: this.selectGoodsCode });
+            jsonArr.push({ key: 'screenCode', value: this.selectScreenCode });
+            jsonArr.push({ key: 'selectFilmType', value: this.oForm.selectFilmType });
+            jsonArr.push({ key: 'filmCode', value: this.oForm.filmCode });
             jsonArr.push({ key: 'startDate', value: this.oForm.startDate });
             jsonArr.push({ key: 'endDate', value: this.oForm.endDate });
             jsonArr.push({ key: 'reduceType', value: this.oForm.reduceType });
@@ -471,7 +516,7 @@ export default {
                     jsonArr.push({ key: 'sign', value: sign });
                     let params = ParamsAppend(jsonArr);
                     https
-                        .fetchPost('merchandiseCoupon/deleteById', params)
+                        .fetchPost('/filmCoupon/deleteById', params)
                         .then(data => {
                             if (data.data.code == 'success') {
                                 this.$message.error(`删除了`);
@@ -513,13 +558,15 @@ export default {
             jsonArr.push({ key: 'sign', value: sign });
             let params = ParamsAppend(jsonArr);
             https
-                .fetchPost('merchandiseCoupon/getMerchandiseCouponById', params)
+                .fetchPost('/filmCoupon/getFilmCouponById', params)
                 .then(data => {
                     console.log(data);
                     console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.editVisible = true;
-                        this.oMerchandiseName = JSON.parse(Decrypt(data.data.data)).merchandiseNames;
+                        this.oCinemaName = JSON.parse(Decrypt(data.data.data)).cinemaNames;
+                        this.oScreenName = JSON.parse(Decrypt(data.data.data)).screenNames;
+                        this.oFilmName = JSON.parse(Decrypt(data.data.data)).filmNames;
                         this.oName = JSON.parse(Decrypt(data.data.data)).name;
                         this.oCreateDate = JSON.parse(Decrypt(data.data.data)).createDate;
                         this.oEndDate = JSON.parse(Decrypt(data.data.data)).endDate;
@@ -622,7 +669,7 @@ export default {
             console.log(jsonArr);
             let params = ParamsAppend(jsonArr);
             https
-                .fetchPost('merchandiseCoupon/updateCouponStatusById', params)
+                .fetchPost('/filmCoupon/updateCouponStatusById', params)
                 .then(data => {
                     // console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
@@ -671,7 +718,7 @@ export default {
             jsonArr.push({ key: 'sign', value: sign });
             var params = ParamsAppend(jsonArr);
             https
-                .fetchPost('merchandiseCoupon/merchandiseCouponPage', params)
+                .fetchPost('/filmCoupon/filmCouponPage', params)
                 .then(data => {
                     if (data.data.code == 'success') {
                         var oData = JSON.parse(Decrypt(data.data.data));
@@ -713,37 +760,37 @@ export default {
             // console.log(val)
             let selectValue = val.join(',');
             this.selectValue = selectValue;
-            this.getAllGoods(selectValue);
-            // console.log(this.goodsInfo)
+            this.getAllScreen(selectValue);
         },
-        selectGoods(val) {
+        selectScreens(val) {
             // console.log(val)
             let selectValue = val.join(',');
-            this.selectGoodsCode = selectValue;
+            this.selectScreenCode = selectValue;
+            console.log(selectValue);
         },
         selectDay(val) {
             // console.log(val)
             this.checkedDays = val.join(',');
         },
-        // 获取所选影院卖品
-        getAllGoods(value) {
+        // 获取所选影院影厅
+        getAllScreen(value) {
             let jsonArr = [];
             jsonArr.push({ key: 'cinemaCode', value: value });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             var params = ParamsAppend(jsonArr);
             https
-                .fetchPost('merchandiseCoupon/getMerchandiseByCinemaCode', params)
+                .fetchPost('filmCoupon/getScreenInfoByCinemaCode', params)
                 .then(data => {
                     if (data.data.code == 'success') {
-                        // console.log(JSON.parse(Decrypt(data.data.data)));
-                        let goods = JSON.parse(Decrypt(data.data.data));
-                        this.goodsInfo = [];
-                        for (let i = 0; i < goods.length; i++) {
-                            let goodsList = {};
-                            goodsList.merchandiseCode = goods[i].merchandiseCode;
-                            goodsList.merchandiseName = goods[i].merchandiseName;
-                            this.goodsInfo.push(goodsList);
+                        console.log(JSON.parse(Decrypt(data.data.data)));
+                        let screens = JSON.parse(Decrypt(data.data.data));
+                        this.screenInfo = [];
+                        for (let i = 0; i < screens.length; i++) {
+                            let screenList = {};
+                            screenList.screenCode = screens[i].screenCode;
+                            screenList.screenName = screens[i].screenName;
+                            this.screenInfo.push(screenList);
                         }
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
@@ -757,6 +804,54 @@ export default {
                 .catch(err => {
                     console.log(err);
                 });
+        },
+        // 获取影片
+        querySearch(queryString, cb) {
+            let jsonArr = [];
+            jsonArr.push({ key: 'filmName', value: queryString });
+            let sign = md5(preSign(jsonArr));
+            jsonArr.push({ key: 'sign', value: sign });
+            var params = ParamsAppend(jsonArr);
+            https
+                .fetchPost('filmCoupon/getFilmByFilmName', params)
+                .then(data => {
+                    if (data.data.code == 'success') {
+                        let films = JSON.parse(Decrypt(data.data.data));
+                        this.restaurants = films;
+                        var restaurants = this.restaurants;
+                        var results = restaurants;
+                        // 调用 callback 返回建议列表的数据
+                        cb(results);
+                    } else if (data.data.code == 'nologin') {
+                        this.message = data.data.message;
+                        this.open();
+                        this.$router.push('/login');
+                    } else {
+                        this.message = data.data.message;
+                        this.open();
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        },
+        handleSelect(item) {
+            this.selectFilm = {};
+            this.selectFilm = item;
+        },
+        addFilm() {
+            var result = this.filmInfo.some(item => {
+                if (item.value == this.selectFilm.value) {
+                    return true;
+                }
+            });
+            if (result) {
+                return;
+            }
+            this.filmInfo.push(this.selectFilm);
+        },
+        deletFilm(index) {
+            this.filmInfo.splice(index,1)
         },
         // 多选操作
         handleSelectionChange(val) {
