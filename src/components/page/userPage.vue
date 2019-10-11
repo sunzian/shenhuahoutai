@@ -3,18 +3,15 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
-                    <i class="el-icon-lx-cascades"></i> 员工管理
+                    <i class="el-icon-lx-cascades"></i> 用户管理
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-select
-                    clearable
-                    v-model="query.status"
-                    placeholder="状态"
-                    class="handle-select mr10"
-                >
+                <el-input placeholder="用户名" style="width: 150px" v-model="query.name" autocomplete="off"></el-input>
+                <el-input placeholder="真实姓名" style="width: 150px" v-model="query.realName" autocomplete="off"></el-input>
+                <el-select clearable v-model="query.status" placeholder="状态" class="handle-select mr10">
                     <el-option key="1" label="审核中" value="1"></el-option>
                     <el-option key="2" label="未审核" value="2"></el-option>
                     <el-option key="3" label="通过" value="3"></el-option>
@@ -63,16 +60,13 @@
                 <el-table-column prop="memo" label="登录IP">
                     <template slot-scope="scope">{{scope.row.loginIp}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="员工编号">
-                    <template slot-scope="scope">{{scope.row.userCode}}</template>
-                </el-table-column>
                 <el-table-column label="状态" align="center">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status=='1'" type="success">成功</el-tag>
                         <el-tag v-else type="danger">未通过</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" width="140" align="center" fixed="right">
+                <el-table-column label="操作"  align="center"  fixed="right">
                     <template slot-scope="scope">
                         <el-button
                             type="text"
@@ -338,70 +332,67 @@
 </template>
 
 <script>
-import { fetchData } from '../../api/index';
-import { Decrypt, Encrypt, preSign, EncryptReplace, ParamsAppend } from '@/aes/utils';
-import md5 from 'js-md5';
-import axios from 'axios';
-import https from '../../https';
-export default {
-    name: 'basetable',
-    data() {
-        return {
-            oldPass: '', //旧密码
-            newPass: '', //新密码
-            surePass: '', //确认密码
-            passShow: false, //修改密码页面
-            drawered: false, //编辑抽屉弹出框
-            drawer: false, //新增抽屉弹出框
-            checkAll: false,
-            checkedCities: [],
-            oCheckedCities: [],
-            cities: [], //增加页面影院
-            oCities: [], //修改页面影院
-            isIndeterminate: true,
-            checkedKeys: [], //自动勾选的树级菜单栏目
-            expandedKeys: [], //自动展开的树级菜单栏目
-            data: [], //树级菜单
-            defaultProps: {
-                //数级菜单配置
-                children: 'submenuList',
-                label: 'menuName'
-            },
-            userName: '',
-            message: '', //弹出框消息
-            query: {
-                pageNo: 1,
-                pageSize: 10
-            },
-            tableData: [],
-            multipleSelection: [],
-            delList: [],
-            editVisible: false,
-            pageTotal: 0,
-            form: {
-                memo: '',
-                sort: '',
-                id: ''
-            },
-            idx: -1,
-            id: -1,
-            dialogFormVisible: false,
-            oForm: {
-                userName: '',
-                userPass: '',
-                value: '',
-                userCode: '',
-                realName: '',
-                callNumber: '',
-                memo: ''
-            },
-            selectList: [], //新增角色
-            oSelectList: [], //修改角色
-            formLabelWidth: '120px',
-            selectValue: {},
-            selectCode: {},
-            options: [
-                {
+    import { fetchData } from '../../api/index';
+    import {Decrypt,Encrypt,preSign,EncryptReplace,ParamsAppend} from '@/aes/utils';
+    import md5 from 'js-md5';
+    import axios from 'axios';
+    import https from "../../https";
+    export default {
+        name: 'basetable',
+        data() {
+            return {
+                oldPass:'',//旧密码
+                newPass:'',//新密码
+                surePass:'',//确认密码
+                passShow:false,//修改密码页面
+                drawered:false,//编辑抽屉弹出框
+                drawer: false,//新增抽屉弹出框
+                checkAll: false,
+                checkedCities: [],
+                oCheckedCities:[],
+                cities: [],//增加页面影院
+                oCities: [],//修改页面影院
+                isIndeterminate: true,
+                checkedKeys:[],//自动勾选的树级菜单栏目
+                expandedKeys:[],//自动展开的树级菜单栏目
+                data: [],//树级菜单
+                defaultProps: {//数级菜单配置
+                    children: 'submenuList',
+                    label: 'menuName'
+                },
+                userName:'',
+                message:'',//弹出框消息
+                query: {
+                    pageNo:1,
+                    pageSize:10
+                },
+                tableData: [],
+                multipleSelection: [],
+                delList: [],
+                editVisible: false,
+                pageTotal: 0,
+                form: {
+                    memo: '',
+                    sort: '',
+                    id:'',
+                },
+                idx: -1,
+                id: -1,
+                dialogFormVisible: false,
+                oForm: {
+                    userName: '',
+                    userPass: '',
+                    value: '',
+                    realName: '',
+                    callNumber: '',
+                    memo: '',
+                },
+                selectList:[],//新增角色
+                oSelectList:[],//修改角色
+                formLabelWidth: '120px',
+                selectValue:{},
+                selectCode:{},
+                options: [{
                     value: '1',
                     label: '审核中'
                 },
@@ -594,44 +585,37 @@ export default {
                             this.message = data.data.message;
                             this.open();
                         }
-                    })
-                    .catch(err => {
-                        console.log(err);
-                    });
-                loading.close();
-            }, 500);
-        },
-        getCheckedKeys() {
-            //新增数据操作
-            const loading = this.$loading({
-                lock: true,
-                text: 'Loading',
-                spinner: 'el-icon-loading',
-                background: 'rgba(0, 0, 0, 0.7)',
-                target: document.querySelector('.div1')
-            });
-            setTimeout(() => {
-                console.log(this.$refs.tree.getCheckedKeys());
-                console.log(this.checkedCities);
-                var jsonArr = [];
-                jsonArr.push({ key: 'userName', value: this.oForm.userName });
-                jsonArr.push({ key: 'userPass', value: this.oForm.userPass });
-                jsonArr.push({ key: 'status', value: this.oForm.value });
-                jsonArr.push({ key: 'memo', value: this.oForm.memo });
-                jsonArr.push({ key: 'userCode', value: this.oForm.userCode });
-                jsonArr.push({ key: 'realName', value: this.oForm.realName });
-                jsonArr.push({ key: 'callNumber', value: this.oForm.callNumber });
-                jsonArr.push({ key: 'roleIds', value: this.selectList.id });
-                jsonArr.push({ key: 'cinemaCodes', value: this.checkedCities });
-                jsonArr.push({ key: 'menuIds', value: this.$refs.tree.getCheckedKeys().concat(this.$refs.tree.getHalfCheckedKeys()) });
-                let sign = md5(preSign(jsonArr));
-                jsonArr.push({ key: 'sign', value: sign });
-                let params = ParamsAppend(jsonArr);
-                if (this.dialogFormVisible == true) {
-                    https
-                        .fetchPost('/user/addUser', params)
-                        .then(data => {
-                            //新增
+                        }
+                    )
+                    loading.close();
+                }, 500);
+            },
+            getCheckedKeys() {//新增数据操作
+                const loading = this.$loading({
+                    lock: true,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)',
+                    target: document.querySelector('.div1')
+                });
+                setTimeout(() => {
+                    console.log(this.$refs.tree.getCheckedKeys());
+                    console.log(this.checkedCities);
+                    var jsonArr = [];
+                    jsonArr.push({key:"userName",value:this.oForm.userName});
+                    jsonArr.push({key:"userPass",value:this.oForm.userPass});
+                    jsonArr.push({key:"status",value:this.oForm.value});
+                    jsonArr.push({key:"memo",value:this.oForm.memo});
+                    jsonArr.push({key:"realName",value:this.oForm.realName});
+                    jsonArr.push({key:"callNumber",value:this.oForm.callNumber});
+                    jsonArr.push({key:"roleIds",value:this.selectList.id});
+                    jsonArr.push({key:"cinemaCodes",value:this.checkedCities});
+                    jsonArr.push({key:"menuIds",value:this.$refs.tree.getCheckedKeys().concat(this.$refs.tree.getHalfCheckedKeys())});
+                    let sign =md5(preSign(jsonArr));
+                    jsonArr.push({key:"sign",value:sign});
+                    let params = ParamsAppend(jsonArr);
+                    if(this.dialogFormVisible == true){
+                        https.fetchPost('/user/addUser',params).then((data) => {//新增
                             console.log(data);
                             if (data.data.code == 'success') {
                                 this.dialogFormVisible = false;
@@ -644,42 +628,29 @@ export default {
                                 this.message = data.data.message;
                                 this.open();
                             }
-                        })
-                        .catch(err => {
-                            console.log(err);
-                        });
-                }
-                loading.close();
-            }, 500);
-        },
-        delChange(index, row) {
-            //删除数据
-            const loading = this.$loading({
-                lock: true,
-                text: 'Loading',
-                spinner: 'el-icon-loading',
-                background: 'rgba(0, 0, 0, 0.7)',
-                target: document.querySelector('.div1')
-            });
-            setTimeout(() => {
-                this.idx = index;
-                this.form = row;
-                // let name=this.query.name
-                // let status=this.query.status
-                // if(!name){
-                //     name=''
-                // }
-                // if(!status){
-                //     status=''
-                // }
-                let jsonArr = [];
-                jsonArr.push({ key: 'id', value: row.id });
-                let sign = md5(preSign(jsonArr));
-                jsonArr.push({ key: 'sign', value: sign });
-                let params = ParamsAppend(jsonArr);
-                https
-                    .fetchPost('/user/deleteUser', params)
-                    .then(data => {
+                        }
+                        )
+                    }
+                    loading.close();
+                }, 500);
+            },
+            delChange(index, row){//删除数据
+                const loading = this.$loading({
+                    lock: true,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)',
+                    target: document.querySelector('.div1')
+                });
+                setTimeout(() => {
+                    this.idx = index;
+                    this.form = row;
+                    let jsonArr = [];
+                    jsonArr.push({key:"id",value:row.id});
+                    let sign =md5(preSign(jsonArr));
+                    jsonArr.push({key:"sign",value:sign});
+                    let params = ParamsAppend(jsonArr);
+                    https.fetchPost('/user/deleteUser',params).then((data) => {
                         console.log(data);
                         // console.log(JSON.parse(Decrypt(data.data.data)));
                         if (data.data.code == 'success') {
@@ -725,17 +696,16 @@ export default {
                         if (data.data.code == 'success') {
                             this.editVisible = true;
                             this.form.id = row.id;
-                            this.userName = JSON.parse(Decrypt(data.data.data)).userInfo.userName;
-                            this.form.userCode = JSON.parse(Decrypt(data.data.data)).userInfo.userCode;
-                            this.form.realName = JSON.parse(Decrypt(data.data.data)).userInfo.realName;
-                            this.form.callNumber = JSON.parse(Decrypt(data.data.data)).userInfo.callNumber;
-                            this.form.memo = JSON.parse(Decrypt(data.data.data)).userInfo.memo;
-                            this.oCities = JSON.parse(Decrypt(data.data.data)).selectCinemaList; //影院列表
-                            this.oSelectList = JSON.parse(Decrypt(data.data.data)).existRoll;
-                            this.expandedKeys = JSON.parse(Decrypt(data.data.data)).openPermissionIds;
-                            this.checkedKeys = JSON.parse(Decrypt(data.data.data)).exitPermissionIds;
-                            this.data = JSON.parse(Decrypt(data.data.data)).permissionList; //权限数据
-                            this.businessInfoList = JSON.parse(Decrypt(data.data.data)).businessInfoList; //定义下拉选的内容
+                            this.userName = JSON.parse(Decrypt(data.data.data)).userInfo.userName
+                            this.form.realName = JSON.parse(Decrypt(data.data.data)).userInfo.realName
+                            this.form.callNumber = JSON.parse(Decrypt(data.data.data)).userInfo.callNumber
+                            this.form.memo = JSON.parse(Decrypt(data.data.data)).userInfo.memo
+                            this.oCities = JSON.parse(Decrypt(data.data.data)).selectCinemaList//影院列表
+                            this.oSelectList = JSON.parse(Decrypt(data.data.data)).existRoll
+                            this.expandedKeys = JSON.parse(Decrypt(data.data.data)).openPermissionIds
+                            this.checkedKeys = JSON.parse(Decrypt(data.data.data)).exitPermissionIds
+                            this.data = JSON.parse(Decrypt(data.data.data)).permissionList //权限数据
+                            this.businessInfoList = JSON.parse(Decrypt(data.data.data)).businessInfoList //定义下拉选的内容
                             // this.oCheckedCities=JSON.parse(Decrypt(data.data.data)).userInfo.cinemaCodes
                             let _index = 0; //下拉选显示对应的选项
                             for (let x in this.options) {
@@ -762,43 +732,40 @@ export default {
                             this.message = data.data.message;
                             this.open();
                         }
-                    })
-                    .catch(err => {
-                        console.log(err);
-                    });
-                loading.close();
-            }, 500);
-        },
-        // 修改操作
-        exChanger() {
-            const loading = this.$loading({
-                lock: true,
-                text: 'Loading',
-                spinner: 'el-icon-loading',
-                background: 'rgba(0, 0, 0, 0.7)',
-                target: document.querySelector('.div1')
-            });
-            setTimeout(() => {
-                console.log(this.oCheckedCities);
-                // console.log(this.$refs.tree.getCheckedKeys());
-                var jsonArr = [];
-                jsonArr.push({ key: 'id', value: this.form.id });
-                jsonArr.push({ key: 'userName', value: this.userName });
-                jsonArr.push({ key: 'status', value: this.selectValue });
-                jsonArr.push({ key: 'userCode', value: this.form.userCode });
-                jsonArr.push({ key: 'realName', value: this.form.realName });
-                jsonArr.push({ key: 'callNumber', value: this.form.callNumber });
-                jsonArr.push({ key: 'roleIds', value: this.oSelectList[0].id });
-                jsonArr.push({ key: 'memo', value: this.form.memo });
-                jsonArr.push({ key: 'cinemaCodes', value: this.oCheckedCities });
-                jsonArr.push({ key: 'menuIds', value: this.$refs.tree_.getCheckedKeys().concat(this.$refs.tree_.getHalfCheckedKeys()) });
-                let sign = md5(preSign(jsonArr));
-                jsonArr.push({ key: 'sign', value: sign });
-                let params = ParamsAppend(jsonArr);
-                this.editVisible = false;
-                https
-                    .fetchPost('/user/modifyUser', params)
-                    .then(data => {
+                    }).catch(err=>{
+                            console.log(err)
+                        }
+                    )
+                    loading.close();
+                }, 500);
+            },
+            // 修改操作
+            exChanger() {
+                const loading = this.$loading({
+                    lock: true,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)',
+                    target: document.querySelector('.div1')
+                });
+                setTimeout(() => {
+                    console.log(this.oCheckedCities);
+                    // console.log(this.$refs.tree.getCheckedKeys());
+                    var jsonArr = [];
+                    jsonArr.push({key:"id",value:this.form.id});
+                    jsonArr.push({key:"userName",value:this.userName});
+                    jsonArr.push({key:"status",value:this.selectValue});
+                    jsonArr.push({key:"realName",value:this.form.realName});
+                    jsonArr.push({key:"callNumber",value:this.form.callNumber});
+                    jsonArr.push({key:"roleIds",value:this.oSelectList[0].id});
+                    jsonArr.push({key:"memo",value:this.form.memo});
+                    jsonArr.push({key:"cinemaCodes",value:this.oCheckedCities});
+                    jsonArr.push({key:"menuIds",value:this.$refs.tree_.getCheckedKeys().concat(this.$refs.tree_.getHalfCheckedKeys())});
+                    let sign =md5(preSign(jsonArr));
+                    jsonArr.push({key:"sign",value:sign});
+                    let params = ParamsAppend(jsonArr);
+                    this.editVisible = false;
+                    https.fetchPost('/user/modifyUser',params).then((data) => {
                         console.log(data);
                         // console.log(JSON.parse(Decrypt(data.data.data)));
                         if (data.data.code == 'success') {
@@ -808,60 +775,52 @@ export default {
                             this.message = data.data.message;
                             this.open();
                             this.$router.push('/login');
-                        } else {
-                            this.message = data.data.message;
-                            this.open();
+                        } else{
+                            this.message=data.data.message
+                            this.open()
                         }
-                    })
-                    .catch(err => {
-                        console.log(err);
-                    });
-                loading.close();
-            }, 500);
-        },
-        Search() {
-            this.query.pageNo = 1;
-            this.getMenu();
-        },
-        getMenu() {
-            //获取菜单栏
-            const loading = this.$loading({
-                lock: true,
-                text: 'Loading',
-                spinner: 'el-icon-loading',
-                background: 'rgba(0, 0, 0, 0.7)',
-                target: document.querySelector('.div1')
-            });
-            setTimeout(() => {
-                let businessCode = this.query.businessCode;
-                let userName = this.query.userName;
-                let userCode = this.query.userCode;
-                let status = this.query.status;
-                if (!businessCode) {
-                    businessCode = '';
-                }
-                if (!userName) {
-                    userName = '';
-                }
-                if (!userCode) {
-                    userCode = '';
-                }
-                if (!status) {
-                    status = '';
-                }
-                let jsonArr = [];
-                // jsonArr.push({key:"businessCode",value:businessCode});
-                jsonArr.push({ key: 'userName', value: userName });
-                jsonArr.push({ key: 'userCode', value: userCode });
-                jsonArr.push({ key: 'status', value: status });
-                jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
-                jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
-                let sign = md5(preSign(jsonArr));
-                jsonArr.push({ key: 'sign', value: sign });
-                var params = ParamsAppend(jsonArr);
-                https
-                    .fetchPost('/user/userPage', params)
-                    .then(data => {
+                    }).catch(err=>{
+                            console.log(err)
+                        }
+                    )
+                    loading.close();
+                }, 500);
+            },
+            Search(){
+                this.query.pageNo=1
+                this.getMenu()
+            },
+            getMenu(){//获取菜单栏
+                const loading = this.$loading({
+                    lock: true,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)',
+                    target: document.querySelector('.div1')
+                });
+                setTimeout(() => {
+                    let businessCode=this.query.businessCode
+                    let userName=this.query.userName
+                    let status=this.query.status
+                    if(!businessCode){
+                        businessCode=''
+                    }
+                    if(!userName){
+                        userName=''
+                    }
+                    if(!status){
+                        status=''
+                    }
+                    let jsonArr = [];
+                    jsonArr.push({key:"businessCode",value:businessCode});
+                    jsonArr.push({key:"userName",value:userName});
+                    jsonArr.push({key:"status",value:status});
+                    jsonArr.push({key:"pageNo",value:this.query.pageNo});
+                    jsonArr.push({key:"pageSize",value:this.query.pageSize});
+                    let sign =md5(preSign(jsonArr));
+                    jsonArr.push({key:"sign",value:sign});
+                    var params = ParamsAppend(jsonArr);
+                    https.fetchPost('/user/userPage',params).then((data) => {
                         console.log(data);
                         if (data.data.code == 'success') {
                             var oData = JSON.parse(Decrypt(data.data.data));

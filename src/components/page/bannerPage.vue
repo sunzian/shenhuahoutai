@@ -91,7 +91,7 @@
                         >未通过</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" width="180" align="center" fixed="right">
+                <el-table-column label="操作" width="100" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-button
                                 type="text"
@@ -187,6 +187,7 @@
                 </el-form-item>
                 <el-form-item label="图片地址" :label-width="formLabelWidth">
                     <el-upload
+                            :before-upload="beforeUpload"
                             :data="type"
                             class="upload-demo"
                             drag
@@ -291,6 +292,7 @@
                         <img slot="reference" :src="imageUrl" :alt="imageUrl" style="max-height: 50px;max-width: 130px">
                     </el-popover>
                     <el-upload
+                            :before-upload="beforeUpload"
                             :data="type"
                             class="upload-demo"
                             drag
@@ -336,7 +338,7 @@
             return {
                 type:{
                     // sign: "ed8u$input7$input7jpYsRe8t2aKSKBF/cJ21S1z/10SqwBE2XAQ=",
-                    type: "HaqvR9QhxCCGBAiSE6veKw=="
+                    type: ""
                 },
                 imageUrl:'',
                 changeStartTime:'',
@@ -444,6 +446,9 @@
                     )
                     loading.close();
                 }, 500);
+            },
+            beforeUpload(){//上传之前
+                this.type.type=EncryptReplace('activity')
             },
             onSuccess(data){//上传文件 登录超时
                 // console.log(data);
