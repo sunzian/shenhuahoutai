@@ -160,7 +160,6 @@
                 <el-form-item label="状态" :label-width="formLabelWidth">
                     <el-input style="width: 250px" min="1" v-model="oForm.status" autocomplete="off"></el-input>
                 </el-form-item>
-                </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取 消</el-button>
