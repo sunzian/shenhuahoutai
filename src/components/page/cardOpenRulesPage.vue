@@ -427,20 +427,6 @@
                 }, 500);
             },
             addRole(){ //新增按钮操作
-                // console.log(this.oForm.cinemaCode);
-                // console.log(this.oForm.ruleCode);
-                // console.log(this.oForm.ruleName);
-                // console.log(this.oForm.ruleMemo);
-                // console.log(this.startTime);//开始时间
-                // console.log(this.endTime);//结束时间
-                // console.log(this.oForm.memberCardType);
-                // console.log(this.oForm.cardLevelCode);
-                // console.log(this.oForm.cardLevelName);
-                // console.log(parseInt(this.oForm.rechargeAmount).toFixed(2));
-                // console.log(this.oForm.givenType);
-                // console.log(parseInt(this.oForm.givenMoney).toFixed(2));
-                // console.log(this.oForm.givenTicketsParams);
-                // console.log(this.oForm.statusValue);
                 const loading = this.$loading({
                     lock: true,
                     text: 'Loading',
