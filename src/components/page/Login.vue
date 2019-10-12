@@ -5,7 +5,7 @@
             <el-form :model="param" :rules="rules" ref="login" label-width="0px" class="ms-content">
                 <el-form-item prop="username">
                     <el-input v-model="param.username" placeholder="账号">
-                        <el-button slot="prepend" icon="el-icon-lx-people"></el-button>
+                        <span slot="prepend" class="el-icon-lx-people"></span>
                     </el-input>
                 </el-form-item>
                 <el-form-item prop="password">
@@ -15,12 +15,12 @@
                         v-model="param.password"
                         @keyup.enter.native="submitForm()"
                     >
-                        <el-button slot="prepend" icon="el-icon-lx-lock"></el-button>
+                        <span slot="prepend" class="el-icon-lx-lock"></span>
                     </el-input>
                 </el-form-item>
                 <el-form-item prop="code">
                     <el-input v-model="param.code" placeholder="验证码" @keyup.enter.native="submitForm()">
-                        <el-button slot="prepend" icon="el-icon-picture-outline"></el-button>
+                        <span slot="prepend" class="el-icon-picture-outline"></span>
                     </el-input>
                 </el-form-item>
                 <div class="code-img" @click="fresh">
