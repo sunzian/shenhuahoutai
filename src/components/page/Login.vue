@@ -19,7 +19,7 @@
                     </el-input>
                 </el-form-item>
                 <el-form-item prop="code">
-                    <el-input v-model="param.code" placeholder="验证码">
+                    <el-input v-model="param.code" placeholder="验证码" @keyup.enter.native="submitForm()">
                         <el-button slot="prepend" icon="el-icon-picture-outline"></el-button>
                     </el-input>
                 </el-form-item>
