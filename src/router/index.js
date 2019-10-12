@@ -55,6 +55,11 @@ export default new Router({
                     meta: { title: '影票优惠券管理' }
                 },
                 {
+                    path: '/couponGroup',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/couponGroup.vue'),
+                    meta: { title: '券包管理' }
+                },
+                {
                     path: '/directorPage',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/directorPage.vue'),
                     meta: { title: '导演管理' }

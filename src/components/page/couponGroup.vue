@@ -3,7 +3,7 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
-                    <i class="el-icon-lx-cascades"></i> 影票优惠券
+                    <i class="el-icon-lx-cascades"></i> 券包管理
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
@@ -16,7 +16,7 @@
                     @click="addPage"
                     icon="el-icon-circle-plus-outline"
                     style="margin-left: 690px"
-                >生成优惠券</el-button>
+                >生成券包</el-button>
             </div>
             <el-table
                 :data="tableData"
@@ -27,37 +27,16 @@
                 header-cell-class-name="table-header"
             >
                 <el-table-column prop="name" label="适用影院">
-                    <template slot-scope="scope">{{scope.row.cinemaNames}}</template>
+                    <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="卡券类型">
-                    <template slot-scope="scope">
-                        <el-tag v-if="scope.row.reduceType == 1" type="success">兑换券</el-tag>
-                        <el-tag v-else type="danger">代金券</el-tag>
-                    </template>
+                <el-table-column label="券包名称">
+                    <template slot-scope="scope">{{scope.row.groupName}}</template>
                 </el-table-column>
-                <el-table-column label="卡券名称">
-                    <template slot-scope="scope">{{scope.row.name}}</template>
+                <el-table-column prop="memo" label="有效期（天）">
+                    <template slot-scope="scope">{{scope.row.overDays}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="有效期">
-                    <template slot-scope="scope">{{scope.row.startDate}}至{{scope.row.endDate}}</template>
-                </el-table-column>
-                <!-- <el-table-column prop="sort" label="有效天数">
-                    <template slot-scope="scope">{{scope.row.publishDate}}</template>
-                </el-table-column>-->
-                <el-table-column prop="sort" label="满多少可用">
-                    <template slot-scope="scope">{{scope.row.achieveMoney}}</template>
-                </el-table-column>
-                <el-table-column prop="sort" label="优惠金额">
-                    <template slot-scope="scope">{{scope.row.discountMoney}}</template>
-                </el-table-column>
-                <el-table-column prop="sort" label="已发放">
-                    <template slot-scope="scope">{{scope.row.sendNumber}}</template>
-                </el-table-column>
-                <el-table-column prop="sort" label="已领取">
-                    <template slot-scope="scope">{{scope.row.acquireNumber}}</template>
-                </el-table-column>
-                <el-table-column prop="sort" label="已使用">
-                    <template slot-scope="scope">{{scope.row.usedNumber}}</template>
+                <el-table-column prop="sort" label="券包说明">
+                    <template slot-scope="scope">{{scope.row.memo}}</template>
                 </el-table-column>
                 <el-table-column prop="sort" label="状态">
                     <template slot-scope="scope">
@@ -107,7 +86,7 @@
         <!--新增弹出框-->
         <el-dialog :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
-                <el-form-item label="优惠券名称：" :label-width="formLabelWidth" prop="name">
+                <el-form-item label="券包名称：" :label-width="formLabelWidth" prop="name">
                     <el-input style="width: 150px" v-model="oForm.name" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="选择影院：" :label-width="formLabelWidth" prop="cinemaName">
@@ -120,89 +99,37 @@
                         >{{item.cinemaName}}</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item label="选择影厅：" :label-width="formLabelWidth" prop="screenName">
-                    <el-radio-group v-model="oForm.selectHallType">
-                        <el-radio label="0">全部影厅</el-radio>
-                        <el-radio label="1">指定影厅参加</el-radio>
-                        <el-radio label="2">指定影厅不参加</el-radio>
-                    </el-radio-group>
-                    <el-checkbox-group v-model="oForm.screenCode" @change="selectScreens" v-if="oForm.selectHallType != 0">
-                        <el-checkbox
-                            v-for="item in screenInfo"
-                            :label="item.screenCode"
-                            :key="item.screenCode"
-                            :value="item.screenName"
-                        >{{item.screenName}}</el-checkbox>
-                    </el-checkbox-group>
-                </el-form-item>
-                <el-form-item label="选择影片：" :label-width="formLabelWidth" prop="filmName">
-                    <el-radio-group v-model="oForm.selectFilmType">
-                        <el-radio label="0">全部影片</el-radio>
-                        <el-radio label="1">部分影片</el-radio>
-                        <el-radio label="2">排除影片</el-radio>
-                    </el-radio-group>
-                    <el-col :span="12" v-if="oForm.selectFilmType != 0">
-                        搜索影片：
+                <el-form-item label="搜索优惠券：" :label-width="formLabelWidth" prop="couponName">
+                    <el-col>
                         <el-autocomplete
                             class="inline-input"
-                            v-model="oForm.filmName"
+                            v-model="oForm.couponName"
                             :fetch-suggestions="querySearch"
                             placeholder="请输入内容"
                             :trigger-on-focus="false"
                             @select="handleSelect"
-                        ></el-autocomplete>
-                        <span style="color:blue;cursor: pointer;" @click="addFilm">添加</span>
+                        ></el-autocomplete>优惠券数量：
+                        <el-input style="width: 50px" v-model="oForm.number" autocomplete="off"></el-input>
+                        <span style="color:blue;cursor: pointer;" @click="addCoupon">添加</span>
                     </el-col>
                 </el-form-item>
                 <el-form-item
-                    label="所选影片："
+                    label="所选优惠券："
                     :label-width="formLabelWidth"
-                    v-if="filmInfo.length>0 && oForm.selectFilmType != 0"
+                    v-if="couponInfo.length>0"
                 >
-                    <div v-for="(item, index) in filmInfo">
+                    <div v-for="(item, index) in couponInfo">
                         {{item.value}}
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        数量：{{item.number}}
                         <span
                             style="color:red;cursor: pointer;"
-                            @click="deletFilm(index)"
+                            @click="deletCoupon(index)"
                         >删除</span>
                     </div>
                 </el-form-item>
                 <el-form-item label="有效期：" :label-width="formLabelWidth" prop="date1">
-                    <el-date-picker
-                        v-model="oForm.startDate"
-                        type="datetime"
-                        placeholder="开始时间"
-                        value-format="yyyy-MM-dd hh:mm:ss"
-                        format="yyyy-MM-dd hh:mm:ss"
-                    ></el-date-picker>至
-                    <el-date-picker
-                        v-model="oForm.endDate"
-                        type="datetime"
-                        placeholder="结束时间"
-                        value-format="yyyy-MM-dd hh:mm:ss"
-                        format="yyyy-MM-dd hh:mm:ss"
-                    ></el-date-picker>
-                </el-form-item>
-                <el-form-item label="支付类型：" :label-width="formLabelWidth" prop="date2">
-                    <el-radio-group v-model="oForm.validPayType">
-                        <el-radio label="0">全部</el-radio>
-                        <el-radio label="1">仅非会员卡支付</el-radio>
-                        <el-radio label="2">仅会员卡支付</el-radio>
-                    </el-radio-group>
-                </el-form-item>
-                <el-form-item label="优惠方式：" :label-width="formLabelWidth" prop="reduceType">
-                    <el-radio-group v-model="oForm.reduceType">
-                        <el-radio label="1">固定价格</el-radio>
-                        <el-radio label="2">满减</el-radio>
-                    </el-radio-group>
-                </el-form-item>
-                <el-form-item label="固定金额：" :label-width="formLabelWidth" v-if="oForm.reduceType == 1">
-                    <el-input style="width: 150px" v-model="oForm.discountMoney" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="减免金额：" :label-width="formLabelWidth" v-if="oForm.reduceType == 2">
-                    满
-                    <el-input style="width: 150px" v-model="oForm.achieveMoney" autocomplete="off"></el-input>减
-                    <el-input style="width: 150px" v-model="oForm.discountMoney" autocomplete="off"></el-input>
+                    <el-input style="width: 150px" v-model="oForm.overDays" autocomplete="off"></el-input>（天）
                 </el-form-item>
                 <el-form-item label="开启状态：" :label-width="formLabelWidth">
                     <el-select v-model="oForm.status" placeholder="请选择">
@@ -214,45 +141,8 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="节假日是否可用：" :label-width="formLabelWidth">
-                    <el-select v-model="oForm.holidayValid" placeholder="请选择">
-                        <el-option
-                            v-for="item in canUse"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value"
-                        ></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="星期几不可用：" :label-width="formLabelWidth">
-                    <el-checkbox-group v-model="oForm.checkedDays" @change="selectDay">
-                        <el-checkbox
-                            v-for="(day, index) in oForm.exceptWeekDay"
-                            :label="index+1"
-                            :key="day"
-                        >{{day}}</el-checkbox>
-                    </el-checkbox-group>
-                </el-form-item>
-                <el-form-item label="是否和活动共用" :label-width="formLabelWidth">
-                    <el-select v-model="oForm.activityTogether" placeholder="请选择">
-                        <el-option
-                            v-for="item in canUse"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value"
-                        ></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="优惠券数量：" :label-width="formLabelWidth">
-                    <el-input style="width: 50px" v-model="oForm.sendNumber" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="使用须知：" :label-width="formLabelWidth">
-                    <el-input
-                        type="textarea"
-                        :rows="2"
-                        placeholder="请输入内容"
-                        v-model="oForm.couponDesc"
-                    ></el-input>
+                <el-form-item label="券包说明：" :label-width="formLabelWidth">
+                    <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="oForm.memo"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -263,38 +153,36 @@
         <!-- 编辑弹出框 -->
         <el-dialog title="详情" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
-                <el-form-item label="适用影片名称：" :label-width="formLabelWidth">
+                <el-form-item label="适用影院名称：" :label-width="formLabelWidth">
                     <span>{{oCinemaName}}</span>
                 </el-form-item>
-                <el-form-item label="适用影厅名称：" :label-width="formLabelWidth">
-                    <span>{{oScreenName}}</span>
+                <el-form-item label="券包名称：" :label-width="formLabelWidth">
+                    <el-input style="width: 75px" v-model="oGroupName" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="适用影片名称：" :label-width="formLabelWidth">
-                    <span>{{oFilmName}}</span>
-                </el-form-item>
-                <el-form-item label="优惠券名称：" :label-width="formLabelWidth">
-                    <span>{{oName}}</span>
+                <el-form-item label="券包优惠券：" :label-width="formLabelWidth">
+                    <div v-for="(item, index) in couponList">
+                        <div v-if="item.number > 0">
+                            优惠券名称：&nbsp;&nbsp;
+                            <span>{{item.couponName}}</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                            优惠券数量：&nbsp;&nbsp;
+                            <el-input style="width: 75px" v-model="item.number" autocomplete="off"></el-input>
+                            <span
+                                style="color:red;cursor: pointer;"
+                                @click="changeCoupon(index,item.id)"
+                            >删除</span>
+                        </div>
+                    </div>
                 </el-form-item>
                 <el-form-item label="有效期：" :label-width="formLabelWidth">
-                    <span>{{oCreateDate}}</span>
-                    至
-                    <span>{{oEndDate}}</span>
-                </el-form-item>
-                <el-form-item label="支付类型：" :label-width="formLabelWidth">
-                    <span>{{oValidPayType}}</span>
-                </el-form-item>
-                <el-form-item label="减免金额：" :label-width="formLabelWidth">
-                    满
-                    <span>{{oAchieveMoney}}</span>
-                    减
-                    <span>{{oDiscountMoney}}</span>
+                    <el-input style="width: 75px" v-model="oOverDays" autocomplete="off"></el-input>（天）
                 </el-form-item>
                 <el-form-item label="使用须知：" :label-width="formLabelWidth">
-                    <span>{{oCouponDesc}}</span>
+                    <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="oMemo"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="editVisible = false">确 定</el-button>
+                <el-button @click="editVisible = false">取 消</el-button>
+                <el-button type="primary" @click="exChanger">确 定</el-button>
             </span>
         </el-dialog>
     </div>
@@ -311,16 +199,9 @@ export default {
     data() {
         return {
             oCinemaName: '',
-            oScreenName: '',
-            oFilmName: '',
-            oName: '',
-            oCreateDate: '',
-            oEndDate: '',
-            oValidPayType: '',
-            oReduceType: '',
-            oDiscountMoney: '',
-            oAchieveMoney: '',
-            oCouponDesc: '',
+            oGroupName: '',
+            oOverDays: '',
+            oMemo: '',
             oId: '',
             oStatus: '',
             message: '', //弹出框消息
@@ -360,48 +241,27 @@ export default {
                 }
             ],
             oForm: {
-                name: '',
+                groupName: '',
                 cinemaName: '',
                 cinemaCode: [],
-                screenName: '',
-                screenCode: [],
-                selectFilmType: '0',
-                selectHallType: '0',
-                filmCode: '',
-                filmName: '',
-                checkedDays: [],
-                exceptWeekDay: ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日'],
-                startDate: '',
-                endDate: '',
-                validPayType: '0',
-                achieveMoney: '',
-                discountMoney: '',
                 reduceType: '1',
-                couponDesc: '',
+                couponName: '',
+                groupId: '',
+                memo: '',
+                number: '',
+                overDays: '',
                 id: '',
                 status: ''
             },
             formLabelWidth: '120px',
             selectValue: {},
             selectScreenCode: {},
-            selectFilm: {},
+            selectGroup: {},
             cinemaInfo: [],
             screenInfo: [],
-            filmInfo: [],
-            value: '',
-            // rules: {
-            //     name: [
-            //         { required: true, message: '请输入优惠券名称', trigger: 'blur' },
-            //     ],
-            //     cinemaName: [{ type: 'array', required: true, message: '请选择影院', trigger: 'change' }],
-            //     screenName: [{ type: 'array', required: true, message: '请选择影厅', trigger: 'change' }],
-            //     filmName: [{ type: 'array', required: true, message: '请选择影片', trigger: 'change' }],
-            //     date1: [{ type: 'date', required: true, message: '请选择日期', trigger: 'change' }],
-            //     date2: [{ type: 'date', required: true, message: '请选择时间', trigger: 'change' }],
-            //     type: [{ type: 'array', required: true, message: '请至少选择一个活动性质', trigger: 'change' }],
-            //     resource: [{ required: true, message: '请选择活动资源', trigger: 'change' }],
-            //     desc: [{ required: true, message: '请填写活动形式', trigger: 'blur' }]
-            // }
+            couponInfo: [],
+            couponList: [],
+            value: ''
         };
     },
     created() {},
@@ -419,10 +279,20 @@ export default {
                 target: document.querySelector('.div1')
             });
             https
-                .fetchPost('/filmCoupon/filmCouponAddPage', '')
+                .fetchPost('couponGroup/addCouponGroupPage', '')
                 .then(data => {
                     console.log(data);
                     if (data.data.code == 'success') {
+                        var oData = JSON.parse(Decrypt(data.data.data));
+                        for (let i = 0; i < oData.length; i++) {
+                            let cinemaInfo = {};
+                            cinemaInfo.cinemaCode = oData[i].cinemaCode;
+                            cinemaInfo.cinemaName = oData[i].cinemaName;
+                            this.cinemaInfo.push(cinemaInfo);
+                        }
+                        // console.log(this.cinemaInfo)
+                        this.oForm.cinemaCode = this.cinemaInfo[0].cinemaCode;
+                        this.selectValue = this.cinemaInfo[0].cinemaCode;
                         this.dialogFormVisible = true;
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
@@ -439,57 +309,33 @@ export default {
             loading.close();
         },
         addRole() {
-            新增按钮操作
-            const loading = this.$loading({
-                lock: true,
-                text: 'Loading',
-                spinner: 'el-icon-loading',
-                background: 'rgba(0, 0, 0, 0.7)',
-                target: document.querySelector('.div1')
-            });
-            if (this.oForm.cinemaCode == true) {
-                this.oForm.cinemaCode = this.cinemaInfo[0].cinemaCode;
-            }
-            let filmeCodes = [];
-            for (let i = 0; i < this.filmInfo.length; i++) {
-                filmeCodes.push(this.filmInfo[i].filmCode);
-            }
-            this.oForm.filmCode = filmeCodes.join(',');
-            if (this.oForm.selectFilmType == 0) {
-                this.oForm.filmCode = '';
-            }
-            if (this.oForm.selectHallType == 0) {
-                this.selectScreenCode = '';
-            }
-            if (this.oForm.reduceType == 1) {
-                this.oForm.achieveMoney = '';
-            }
+            //新增按钮操作
+            // const loading = this.$loading({
+            //     lock: true,
+            //     text: 'Loading',
+            //     spinner: 'el-icon-loading',
+            //     background: 'rgba(0, 0, 0, 0.7)',
+            //     target: document.querySelector('.div1')
+            // });
             var jsonArr = [];
-            jsonArr.push({ key: 'name', value: this.oForm.name });
+            let coupon = [];
+            for (let i = 0; i < this.couponInfo.length; i++) {
+                coupon.push(this.couponInfo[i].address + '=' + this.couponInfo[i].number);
+            }
+            let newCoupon = coupon.join(',');
+            jsonArr.push({ key: 'groupName', value: this.oForm.name });
+            jsonArr.push({ key: 'couponNumbers', value: newCoupon });
             jsonArr.push({ key: 'cinemaCodes', value: this.selectValue });
-            jsonArr.push({ key: 'selectHallType', value: this.oForm.selectHallType });
-            jsonArr.push({ key: 'screenCode', value: this.selectScreenCode });
-            jsonArr.push({ key: 'selectFilmType', value: this.oForm.selectFilmType });
-            jsonArr.push({ key: 'filmCode', value: this.oForm.filmCode });
-            jsonArr.push({ key: 'startDate', value: this.oForm.startDate });
-            jsonArr.push({ key: 'endDate', value: this.oForm.endDate });
-            jsonArr.push({ key: 'reduceType', value: this.oForm.reduceType });
-            jsonArr.push({ key: 'validPayType', value: this.oForm.validPayType });
-            jsonArr.push({ key: 'achieveMoney', value: this.oForm.achieveMoney });
-            jsonArr.push({ key: 'discountMoney', value: this.oForm.discountMoney });
+            jsonArr.push({ key: 'overDays', value: this.oForm.overDays });
             jsonArr.push({ key: 'status', value: this.oForm.status });
-            jsonArr.push({ key: 'holidayValid', value: this.oForm.holidayValid });
-            jsonArr.push({ key: 'exceptWeekDay', value: this.checkedDays });
-            jsonArr.push({ key: 'activityTogether', value: this.oForm.activityTogether });
-            jsonArr.push({ key: 'sendNumber', value: this.oForm.sendNumber });
-            jsonArr.push({ key: 'couponDesc', value: this.oForm.couponDesc });
+            jsonArr.push({ key: 'memo', value: this.oForm.memo });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             console.log(jsonArr);
             let params = ParamsAppend(jsonArr);
             if (this.dialogFormVisible == true) {
                 https
-                    .fetchPost('/filmCoupon/addFilmCoupon', params)
+                    .fetchPost('couponGroup/addCouponGroup', params)
                     .then(data => {
                         //新增
                         console.log(data);
@@ -498,22 +344,14 @@ export default {
                             this.$message.success(`新增成功`);
                             this.oForm.name = '';
                             this.oForm.cinemaCode = [];
+                            this.selectValue = '';
+                            this.selectGroup = {};
+                            this.oForm.overDays = '';
                             this.cinemaInfo = [];
                             this.oForm.cinemaName = '';
-                            this.oForm.merchandiseCode = [];
-                            this.oForm.merchandiseName = '';
-                            this.oForm.startDate = '';
-                            this.oForm.endDate = '';
-                            this.oForm.validPayType = '';
-                            this.oForm.reduceType = '';
-                            this.oForm.achieveMoney = '';
-                            this.oForm.discountMoney = '';
-                            this.oForm.holidayValid = '';
-                            this.oForm.checkedDays = [];
                             this.oForm.status = '';
-                            this.oForm.activityTogether = '';
-                            this.oForm.sendNumber = '';
-                            this.oForm.couponDesc = '';
+                            this.oForm.number = '';
+                            this.oForm.memo = '';
                             this.getMenu();
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
@@ -528,7 +366,7 @@ export default {
                         console.log(err);
                     });
             }
-            loading.close();
+            // loading.close();
         },
         delChange(index, row) {
             //删除数据
@@ -554,7 +392,7 @@ export default {
                     jsonArr.push({ key: 'sign', value: sign });
                     let params = ParamsAppend(jsonArr);
                     https
-                        .fetchPost('/filmCoupon/deleteById', params)
+                        .fetchPost('couponGroup/deleteById', params)
                         .then(data => {
                             if (data.data.code == 'success') {
                                 this.$message.error(`删除了`);
@@ -596,25 +434,19 @@ export default {
             jsonArr.push({ key: 'sign', value: sign });
             let params = ParamsAppend(jsonArr);
             https
-                .fetchPost('/filmCoupon/getFilmCouponById', params)
+                .fetchPost('couponGroup/updateCouponGroupPage', params)
                 .then(data => {
                     console.log(data);
                     console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.editVisible = true;
-                        this.oCinemaName = JSON.parse(Decrypt(data.data.data)).cinemaNames;
-                        this.oScreenName = JSON.parse(Decrypt(data.data.data)).screenNames;
-                        this.oFilmName = JSON.parse(Decrypt(data.data.data)).filmNames;
-                        this.oName = JSON.parse(Decrypt(data.data.data)).name;
-                        this.oCreateDate = JSON.parse(Decrypt(data.data.data)).createDate;
-                        this.oEndDate = JSON.parse(Decrypt(data.data.data)).endDate;
-                        this.oValidPayType = JSON.parse(Decrypt(data.data.data)).validPayType;
-                        this.oAchieveMoney = JSON.parse(Decrypt(data.data.data)).achieveMoney;
-                        this.oReduceType = JSON.parse(Decrypt(data.data.data)).reduceType;
-                        this.oDiscountMoney = JSON.parse(Decrypt(data.data.data)).discountMoney;
-                        this.oCouponDesc = JSON.parse(Decrypt(data.data.data)).couponDesc;
-                        this.oId = JSON.parse(Decrypt(data.data.data)).id;
-                        this.oStatus = JSON.parse(Decrypt(data.data.data)).status;
+                        this.couponList = JSON.parse(Decrypt(data.data.data)).couponGroup.couponList;
+                        this.oCinemaName = JSON.parse(Decrypt(data.data.data)).couponGroup.cinemaName;
+                        this.oGroupName = JSON.parse(Decrypt(data.data.data)).couponGroup.groupName;
+                        this.oOverDays = JSON.parse(Decrypt(data.data.data)).couponGroup.overDays;
+                        this.oMemo = JSON.parse(Decrypt(data.data.data)).couponGroup.memo;
+                        this.oId = JSON.parse(Decrypt(data.data.data)).couponGroup.id;
+                        this.oStatus = JSON.parse(Decrypt(data.data.data)).couponGroup.status;
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
@@ -639,22 +471,15 @@ export default {
                 target: document.querySelector('.div1')
             });
             var jsonArr = [];
-            jsonArr.push({ key: 'filmCode', value: this.oFilmCode });
-            jsonArr.push({ key: 'filmName', value: this.oFilmName });
-            jsonArr.push({ key: 'version', value: this.oVersion });
-            jsonArr.push({ key: 'duration', value: this.oDuration });
-            jsonArr.push({ key: 'publishDate', value: this.oPublishDate });
-            jsonArr.push({ key: 'directorId', value: this.oDirectorId });
-            jsonArr.push({ key: 'castId', value: this.oCastId });
-            jsonArr.push({ key: 'introduction', value: this.oIntroduction });
-            jsonArr.push({ key: 'score', value: this.oScore });
-            jsonArr.push({ key: 'area', value: this.oArea });
-            jsonArr.push({ key: 'type', value: this.oType });
-            jsonArr.push({ key: 'language', value: this.oLanguage });
-            jsonArr.push({ key: 'status', value: this.oStatus });
-            jsonArr.push({ key: 'image', value: this.oImage });
-            jsonArr.push({ key: 'trailer', value: this.oTrailer });
-            jsonArr.push({ key: 'stagePhoto', value: this.oStagePhoto });
+            let coupon = [];
+            for (let i = 0; i < this.couponList.length; i++) {
+                coupon.push(this.couponList[i].id + '=' + this.couponList[i].number);
+            }
+            let newCoupon = coupon.join(',');
+            jsonArr.push({ key: 'groupName', value: this.oGroupName });
+            jsonArr.push({ key: 'overDays', value: this.oOverDays });
+            jsonArr.push({ key: 'memo', value: this.oMemo });
+            jsonArr.push({ key: 'couponNumbers', value: newCoupon });
             jsonArr.push({ key: 'id', value: this.oId });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
@@ -662,7 +487,7 @@ export default {
             let params = ParamsAppend(jsonArr);
             this.editVisible = false;
             https
-                .fetchPost('/film/updateFilm', params)
+                .fetchPost('couponGroup/updateCouponGroup', params)
                 .then(data => {
                     // console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
@@ -756,27 +581,16 @@ export default {
             jsonArr.push({ key: 'sign', value: sign });
             var params = ParamsAppend(jsonArr);
             https
-                .fetchPost('/filmCoupon/filmCouponPage', params)
+                .fetchPost('couponGroup/couponGroupPage', params)
                 .then(data => {
                     if (data.data.code == 'success') {
                         var oData = JSON.parse(Decrypt(data.data.data));
                         console.log(oData);
-                        // console.log(oData.pageResult);
-                        this.cinemaInfo = [];
-                        for (let i = 0; i < oData.cinemaList.length; i++) {
-                            let cinemaList = {};
-                            cinemaList.cinemaCode = oData.cinemaList[i].cinemaCode;
-                            cinemaList.cinemaName = oData.cinemaList[i].cinemaName;
-                            this.cinemaInfo.push(cinemaList);
-                        }
-                        console.log(this.cinemaInfo)
-                        this.oForm.cinemaCode = this.cinemaInfo[0].cinemaCode;
-                        this.selectValue = this.cinemaInfo[0].cinemaCode;
-                        this.tableData = oData.pageResult.data;
-                        this.query.pageSize = oData.pageResult.pageSize;
-                        this.query.pageNo = oData.pageResult.pageNo;
-                        this.query.totalCount = oData.pageResult.totalCount;
-                        this.query.totalPage = oData.pageResult.totalPage;
+                        this.tableData = oData.data;
+                        this.query.pageSize = oData.pageSize;
+                        this.query.pageNo = oData.pageNo;
+                        this.query.totalCount = oData.totalCount;
+                        this.query.totalPage = oData.totalPage;
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
@@ -798,16 +612,8 @@ export default {
             });
         },
         selectCinema(val) {
-            console.log(val)
-            // let selectValue = val.join(',');
+            console.log(val);
             this.selectValue = val;
-            this.getAllScreen(val);
-        },
-        selectScreens(val) {
-            // console.log(val)
-            let selectValue = val.join(',');
-            this.selectScreenCode = selectValue;
-            console.log(selectValue);
         },
         selectDay(val) {
             // console.log(val)
@@ -850,19 +656,20 @@ export default {
                     console.log(err);
                 });
         },
-        // 获取影片
+        // 获取优惠券
         querySearch(queryString, cb) {
             let jsonArr = [];
-            jsonArr.push({ key: 'filmName', value: queryString });
+            jsonArr.push({ key: 'couponName', value: queryString });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             var params = ParamsAppend(jsonArr);
             https
-                .fetchPost('filmCoupon/getFilmByFilmName', params)
+                .fetchPost('merchandiseCoupon/getCouponByName', params)
                 .then(data => {
                     if (data.data.code == 'success') {
-                        let films = JSON.parse(Decrypt(data.data.data));
-                        this.restaurants = films;
+                        let couponName = JSON.parse(Decrypt(data.data.data));
+                        console.log(couponName);
+                        this.restaurants = couponName;
                         var restaurants = this.restaurants;
                         var results = restaurants;
                         // 调用 callback 返回建议列表的数据
@@ -880,24 +687,31 @@ export default {
                     console.log(err);
                 });
         },
-        handleSelect(item) {
-            this.selectFilm = {};
-            this.selectFilm = item;
+        addCoupon() {
+            // 筛选重复优惠券
+            this.selectGroup.number = this.oForm.number;
+            this.couponInfo.push(this.selectGroup);
+            this.couponInfo = [...new Set(this.couponInfo)];
         },
-        addFilm() {
-            // 筛选重复影片
-            var result = this.filmInfo.some(item => {
-                if (item.value == this.selectFilm.value) {
-                    return true;
+        deletCoupon(index) {
+            this.couponInfo.splice(index, 1);
+        },
+        // 改变优惠券数量
+        changeCoupon(index, couponId) {
+            let number = [];
+            for (let i = 0; i < this.couponList.length; i++) {
+                if (this.couponList[i].number == 0) {
+                    number.push(this.couponList[i]);
                 }
-            });
-            if (result) {
+            }
+            if (number.length - this.couponList.length > -2) {
                 return;
             }
-            this.filmInfo.push(this.selectFilm);
+            this.couponList[index].number = 0;
         },
-        deletFilm(index) {
-            this.filmInfo.splice(index, 1);
+        handleSelect(item) {
+            this.selectGroup = {};
+            this.selectGroup = item;
         },
         // 多选操作
         handleSelectionChange(val) {
