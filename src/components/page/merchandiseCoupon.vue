@@ -383,7 +383,7 @@ export default {
                 target: document.querySelector('.div1')
             });
             if (this.oForm.cinemaCode == true) {
-                this.selectGoodsCode = this.cinemaInfo[0].cinemaCode;
+                this.oForm.cinemaCode = this.cinemaInfo[0].cinemaCode;
             }
             var jsonArr = [];
             jsonArr.push({ key: 'name', value: this.oForm.name });

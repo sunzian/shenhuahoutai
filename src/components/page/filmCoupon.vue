@@ -107,21 +107,26 @@
         <!--新增弹出框-->
         <el-dialog :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
-                <el-form-item label="优惠券名称：" :label-width="formLabelWidth">
+                <el-form-item label="优惠券名称：" :label-width="formLabelWidth" prop="name">
                     <el-input style="width: 150px" v-model="oForm.name" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="选择影院：" :label-width="formLabelWidth">
-                    <el-checkbox-group v-model="oForm.cinemaCode" @change="selectCinema">
-                        <el-checkbox
+                <el-form-item label="选择影院：" :label-width="formLabelWidth" prop="cinemaName">
+                    <el-radio-group v-model="oForm.cinemaCode" @change="selectCinema">
+                        <el-radio
                             v-for="item in cinemaInfo"
                             :label="item.cinemaCode"
                             :key="item.cinemaCode"
                             :value="item.cinemaName"
-                        >{{item.cinemaName}}</el-checkbox>
-                    </el-checkbox-group>
+                        >{{item.cinemaName}}</el-radio>
+                    </el-radio-group>
                 </el-form-item>
-                <el-form-item label="选择影厅：" :label-width="formLabelWidth">
-                    <el-checkbox-group v-model="oForm.screenCode" @change="selectScreens">
+                <el-form-item label="选择影厅：" :label-width="formLabelWidth" prop="screenName">
+                    <el-radio-group v-model="oForm.selectHallType">
+                        <el-radio label="0">全部影厅</el-radio>
+                        <el-radio label="1">指定影厅参加</el-radio>
+                        <el-radio label="2">指定影厅不参加</el-radio>
+                    </el-radio-group>
+                    <el-checkbox-group v-model="oForm.screenCode" @change="selectScreens" v-if="oForm.selectHallType != 0">
                         <el-checkbox
                             v-for="item in screenInfo"
                             :label="item.screenCode"
@@ -130,7 +135,7 @@
                         >{{item.screenName}}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
-                <el-form-item label="选择影片：" :label-width="formLabelWidth">
+                <el-form-item label="选择影片：" :label-width="formLabelWidth" prop="filmName">
                     <el-radio-group v-model="oForm.selectFilmType">
                         <el-radio label="0">全部影片</el-radio>
                         <el-radio label="1">部分影片</el-radio>
@@ -156,10 +161,13 @@
                 >
                     <div v-for="(item, index) in filmInfo">
                         {{item.value}}
-                        <span style="color:red;cursor: pointer;" @click="deletFilm(index)">删除</span>
+                        <span
+                            style="color:red;cursor: pointer;"
+                            @click="deletFilm(index)"
+                        >删除</span>
                     </div>
                 </el-form-item>
-                <el-form-item label="有效期：" :label-width="formLabelWidth">
+                <el-form-item label="有效期：" :label-width="formLabelWidth" prop="date1">
                     <el-date-picker
                         v-model="oForm.startDate"
                         type="datetime"
@@ -175,20 +183,23 @@
                         format="yyyy-MM-dd hh:mm:ss"
                     ></el-date-picker>
                 </el-form-item>
-                <el-form-item label="支付类型：" :label-width="formLabelWidth">
+                <el-form-item label="支付类型：" :label-width="formLabelWidth" prop="date2">
                     <el-radio-group v-model="oForm.validPayType">
                         <el-radio label="0">全部</el-radio>
                         <el-radio label="1">仅非会员卡支付</el-radio>
                         <el-radio label="2">仅会员卡支付</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item label="优惠方式：" :label-width="formLabelWidth">
+                <el-form-item label="优惠方式：" :label-width="formLabelWidth" prop="reduceType">
                     <el-radio-group v-model="oForm.reduceType">
                         <el-radio label="1">固定价格</el-radio>
                         <el-radio label="2">满减</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item label="减免金额：" :label-width="formLabelWidth">
+                <el-form-item label="固定金额：" :label-width="formLabelWidth" v-if="oForm.reduceType == 1">
+                    <el-input style="width: 150px" v-model="oForm.discountMoney" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="减免金额：" :label-width="formLabelWidth" v-if="oForm.reduceType == 2">
                     满
                     <el-input style="width: 150px" v-model="oForm.achieveMoney" autocomplete="off"></el-input>减
                     <el-input style="width: 150px" v-model="oForm.discountMoney" autocomplete="off"></el-input>
@@ -216,8 +227,8 @@
                 <el-form-item label="星期几不可用：" :label-width="formLabelWidth">
                     <el-checkbox-group v-model="oForm.checkedDays" @change="selectDay">
                         <el-checkbox
-                            v-for="day in oForm.exceptWeekDay"
-                            :label="day"
+                            v-for="(day, index) in oForm.exceptWeekDay"
+                            :label="index+1"
                             :key="day"
                         >{{day}}</el-checkbox>
                     </el-checkbox-group>
@@ -232,7 +243,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="发放数量：" :label-width="formLabelWidth">
+                <el-form-item label="优惠券数量：" :label-width="formLabelWidth">
                     <el-input style="width: 50px" v-model="oForm.sendNumber" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="使用须知：" :label-width="formLabelWidth">
@@ -354,17 +365,18 @@ export default {
                 cinemaCode: [],
                 screenName: '',
                 screenCode: [],
-                selectFilmType: '',
+                selectFilmType: '0',
+                selectHallType: '0',
                 filmCode: '',
                 filmName: '',
                 checkedDays: [],
-                exceptWeekDay: [1, 2, 3, 4, 5, 6, 7],
+                exceptWeekDay: ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日'],
                 startDate: '',
                 endDate: '',
-                validPayType: '',
+                validPayType: '0',
                 achieveMoney: '',
                 discountMoney: '',
-                reduceType: '',
+                reduceType: '1',
                 couponDesc: '',
                 id: '',
                 status: ''
@@ -376,7 +388,20 @@ export default {
             cinemaInfo: [],
             screenInfo: [],
             filmInfo: [],
-            value: ''
+            value: '',
+            // rules: {
+            //     name: [
+            //         { required: true, message: '请输入优惠券名称', trigger: 'blur' },
+            //     ],
+            //     cinemaName: [{ type: 'array', required: true, message: '请选择影院', trigger: 'change' }],
+            //     screenName: [{ type: 'array', required: true, message: '请选择影厅', trigger: 'change' }],
+            //     filmName: [{ type: 'array', required: true, message: '请选择影片', trigger: 'change' }],
+            //     date1: [{ type: 'date', required: true, message: '请选择日期', trigger: 'change' }],
+            //     date2: [{ type: 'date', required: true, message: '请选择时间', trigger: 'change' }],
+            //     type: [{ type: 'array', required: true, message: '请至少选择一个活动性质', trigger: 'change' }],
+            //     resource: [{ required: true, message: '请选择活动资源', trigger: 'change' }],
+            //     desc: [{ required: true, message: '请填写活动形式', trigger: 'blur' }]
+            // }
         };
     },
     created() {},
@@ -425,11 +450,24 @@ export default {
             if (this.oForm.cinemaCode == true) {
                 this.oForm.cinemaCode = this.cinemaInfo[0].cinemaCode;
             }
-            console.log(this.oForm.selectFilmType);
-            return;
+            let filmeCodes = [];
+            for (let i = 0; i < this.filmInfo.length; i++) {
+                filmeCodes.push(this.filmInfo[i].filmCode);
+            }
+            this.oForm.filmCode = filmeCodes.join(',');
+            if (this.oForm.selectFilmType == 0) {
+                this.oForm.filmCode = '';
+            }
+            if (this.oForm.selectHallType == 0) {
+                this.selectScreenCode = '';
+            }
+            if (this.oForm.reduceType == 1) {
+                this.oForm.achieveMoney = '';
+            }
             var jsonArr = [];
             jsonArr.push({ key: 'name', value: this.oForm.name });
             jsonArr.push({ key: 'cinemaCodes', value: this.selectValue });
+            jsonArr.push({ key: 'selectHallType', value: this.oForm.selectHallType });
             jsonArr.push({ key: 'screenCode', value: this.selectScreenCode });
             jsonArr.push({ key: 'selectFilmType', value: this.oForm.selectFilmType });
             jsonArr.push({ key: 'filmCode', value: this.oForm.filmCode });
@@ -447,10 +485,11 @@ export default {
             jsonArr.push({ key: 'couponDesc', value: this.oForm.couponDesc });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
+            console.log(jsonArr);
             let params = ParamsAppend(jsonArr);
             if (this.dialogFormVisible == true) {
                 https
-                    .fetchPost('merchandiseCoupon/addMerchandiseCoupon', params)
+                    .fetchPost('/filmCoupon/addFilmCoupon', params)
                     .then(data => {
                         //新增
                         console.log(data);
@@ -489,7 +528,7 @@ export default {
                         console.log(err);
                     });
             }
-            loading.close();
+            // loading.close();
         },
         delChange(index, row) {
             //删除数据
@@ -730,6 +769,9 @@ export default {
                             cinemaList.cinemaName = oData.cinemaList[i].cinemaName;
                             this.cinemaInfo.push(cinemaList);
                         }
+                        console.log(this.cinemaInfo)
+                        this.oForm.cinemaCode = this.cinemaInfo[0].cinemaCode;
+                        this.selectValue = this.cinemaInfo[0].cinemaCode;
                         this.tableData = oData.pageResult.data;
                         this.query.pageSize = oData.pageResult.pageSize;
                         this.query.pageNo = oData.pageResult.pageNo;
@@ -756,10 +798,10 @@ export default {
             });
         },
         selectCinema(val) {
-            // console.log(val)
-            let selectValue = val.join(',');
-            this.selectValue = selectValue;
-            this.getAllScreen(selectValue);
+            console.log(val)
+            // let selectValue = val.join(',');
+            this.selectValue = val;
+            this.getAllScreen(val);
         },
         selectScreens(val) {
             // console.log(val)
@@ -773,6 +815,10 @@ export default {
         },
         // 获取所选影院影厅
         getAllScreen(value) {
+            if (!value) {
+                this.screenInfo = [];
+                return;
+            }
             let jsonArr = [];
             jsonArr.push({ key: 'cinemaCode', value: value });
             let sign = md5(preSign(jsonArr));
@@ -839,6 +885,7 @@ export default {
             this.selectFilm = item;
         },
         addFilm() {
+            // 筛选重复影片
             var result = this.filmInfo.some(item => {
                 if (item.value == this.selectFilm.value) {
                     return true;
@@ -850,7 +897,7 @@ export default {
             this.filmInfo.push(this.selectFilm);
         },
         deletFilm(index) {
-            this.filmInfo.splice(index,1)
+            this.filmInfo.splice(index, 1);
         },
         // 多选操作
         handleSelectionChange(val) {
