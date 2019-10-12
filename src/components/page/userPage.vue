@@ -22,7 +22,7 @@
                     type="primary"
                     @click="addPage"
                     icon="el-icon-circle-plus-outline"
-                    style="margin-left: 910px"
+                    style="margin-left: 610px"
                 >新增</el-button>
             </div>
             <el-table
@@ -121,14 +121,6 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="员工编号" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 100px"
-                        maxlength="9"
-                        v-model.number="oForm.userCode"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
                 <el-form-item label="真实姓名" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
@@ -214,14 +206,6 @@
                             :value="item.value"
                         ></el-option>
                     </el-select>
-                </el-form-item>
-                <el-form-item label="员工编号" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 100px"
-                        maxlength="9"
-                        v-model="form.userCode"
-                        autocomplete="off"
-                    ></el-input>
                 </el-form-item>
                 <el-form-item label="真实姓名" :label-width="formLabelWidth">
                     <el-input

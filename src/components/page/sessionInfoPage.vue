@@ -39,7 +39,7 @@
                 <el-table-column prop="time" label="放映时间">
                     <template slot-scope="scope">{{scope.row.sessionTime}}</template>
                 </el-table-column>
-                <el-table-column prop="number" label="时长（分钟）">
+                <el-table-column prop="number" label="时长（分钟）" width="130">
                     <template slot-scope="scope">{{scope.row.duration}}</template>
                 </el-table-column>
                 <el-table-column prop="number" label="语言">
@@ -57,16 +57,16 @@
                 <el-table-column prop="number" label="会员价">
                     <template slot-scope="scope">{{scope.row.memberPrice}}</template>
                 </el-table-column>
-                <el-table-column prop="time" label="增值服务费">
+                <el-table-column prop="time" label="增值服务费" width="130">
                     <template slot-scope="scope">{{scope.row.ticketFee}}</template>
                 </el-table-column>
                 <el-table-column prop="time" label="影院补贴">
                     <template slot-scope="scope">{{scope.row.cinemaAllowance}}</template>
                 </el-table-column>
-                <el-table-column prop="time" label="第三方支付代售费">
+                <el-table-column prop="time" label="第三方支付代售费" width="150">
                     <template slot-scope="scope">{{scope.row.thirdPartyPayCommissionFee}}</template>
                 </el-table-column>
-                <el-table-column prop="time" label="会员卡支付代售费">
+                <el-table-column prop="time" label="会员卡支付代售费" width="150">
                     <template slot-scope="scope">{{scope.row.memberCardPayCommissionFee}}</template>
                 </el-table-column>
                 <el-table-column label="操作" width="100" align="center" fixed="right">

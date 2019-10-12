@@ -36,7 +36,7 @@
                                 placement="right"
                                 title=""
                                 trigger="hover">
-                            <img :src="scope.row.imageUrl"/>
+                            <img style="width:400px" :src="scope.row.imageUrl"/>
                             <img slot="reference" :src="scope.row.imageUrl" :alt="scope.row.imageUrl" style="max-height: 50px;max-width: 130px">
                         </el-popover>
                     </template>
@@ -60,10 +60,10 @@
                 <el-table-column prop="sort" label="所需金币数量">
                     <template slot-scope="scope">{{scope.row.gold}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="所需RMB">
+                <el-table-column prop="sort" label="所需RMB" width="110">
                     <template slot-scope="scope">{{scope.row.money}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="允许兑换的门店">
+                <el-table-column prop="sort" label="允许兑换的门店" width="150">
                     <template slot-scope="scope">{{scope.row.cinemaNames}}</template>
                 </el-table-column>
                 <el-table-column label="上架状态" align="center">
@@ -85,10 +85,10 @@
                         >优惠券</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="sort" label="优惠券名称">
+                <el-table-column prop="sort" label="优惠券名称" width="130">
                     <template slot-scope="scope">{{scope.row.ticketNames}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="是否指定日期可以兑换">
+                <el-table-column prop="sort" label="是否指定日期可以兑换" width="160">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.assignType=='0'"
                         >不允许指定日期</el-tag>
@@ -102,10 +102,10 @@
                         >指定每周几</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="sort" label="对应上方参数的具体日期信息">
+                <el-table-column prop="sort" label="对应上方参数的具体日期信息" width="160">
                     <template slot-scope="scope">{{scope.row.assignInfo}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="是否限制一段时间内可兑换数量">
+                <el-table-column prop="sort" label="是否限制一段时间内可兑换数量" width="160">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.limitType=='0'"
                         >不限制</el-tag>
@@ -117,7 +117,7 @@
                         >限制每周可兑换数量</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="sort" label="对应上方的限制兑换数量">
+                <el-table-column prop="sort" label="对应上方的限制兑换数量" width="160">
                     <template slot-scope="scope">{{scope.row.limitNumber}}</template>
                 </el-table-column>
                 <el-table-column label="操作" width="100" align="center" fixed="right">
@@ -291,7 +291,7 @@
         <el-dialog title="编辑" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
                 <el-form-item label="商品类型" :label-width="formLabelWidth">
-                    <el-select v-model="form.commodity_type" placeholder="商品类型" :disabled="true">
+                    <el-select v-model="form.commodityType" placeholder="商品类型" :disabled="true">
                         <el-option
                                 v-for="item in commodityType"
                                 :key="item.value"
@@ -300,10 +300,10 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item v-if="form.commodity_type==1"  label="商品名称" :label-width="formLabelWidth">
+                <el-form-item v-if="form.commodityType==1"  label="商品名称" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="form.name" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item v-if="form.commodity_type==1"  label="商品图片" :label-width="formLabelWidth">
+                <el-form-item v-if="form.commodityType==1"  label="商品图片" :label-width="formLabelWidth">
                     <el-upload
                             :before-upload="beforeUpload"
                             :data="type"
@@ -324,19 +324,19 @@
                     <el-input style="width: 250px" v-model="form.store" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="兑换方式" :label-width="formLabelWidth">
-                    <el-select v-model="form.change_type" placeholder="请选择兑换方式">
+                    <el-select v-model="form.changeType" placeholder="请选择兑换方式" @change="change">
                         <el-option
-                                v-for="(item, index) in showType"
-                                :key="index"
+                                v-for="item in showType"
+                                :key="item.value"
                                 :label="item.label"
                                 :value="item.value">
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item v-if="form.change_type==1||form.change_type==3"  label="所需金币数量" :label-width="formLabelWidth">
+                <el-form-item v-if="form.changeType==1||form.changeType==3"  label="所需金币数量" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="form.gold" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item v-if="form.change_type==2||form.change_type==3"  label="所需RMB" :label-width="formLabelWidth">
+                <el-form-item v-if="form.changeType==2||form.changeType==3"  label="所需RMB" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="form.money" autocomplete="off"></el-input>
                 </el-form-item>
                 <!--<el-form-item label="允许兑换的门店" :label-width="formLabelWidth">-->
@@ -359,7 +359,7 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item v-if="form.commodity_type==2" label="选择优惠券" :label-width="formLabelWidth">
+                <el-form-item v-if="form.commodityType==2" label="选择优惠券" :label-width="formLabelWidth">
                        <el-autocomplete class="inline-input"
                                         v-model="form.filmName"
                                         :fetch-suggestions="querySearch"
@@ -379,7 +379,7 @@
                     </div>
                 </el-form-item>
                 <el-form-item label="是否指定日期可以兑换" :label-width="formLabelWidth">
-                    <el-select v-model="form.assign_type" placeholder="请选择指定日期">
+                    <el-select v-model="form.assignType" placeholder="请选择指定日期">
                         <el-option
                                 v-for="item in assignType"
                                 :key="item.value"
@@ -388,26 +388,26 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item v-if="form.assign_type==1" label="选择指定日期" :label-width="formLabelWidth">
+                <el-form-item v-if="form.assignType==1" label="选择指定日期" :label-width="formLabelWidth">
                     <el-date-picker
-                            v-model="form.assign_info"
+                            v-model="form.assignInfo"
                             type="date"
                             format="yyyy-MM-dd"
                             value-format="yyyy-MM-dd"
                             placeholder="选择日期">
                     </el-date-picker>
                 </el-form-item>
-                <el-form-item v-if="form.assign_type==2" label="输入每月几号" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="form.assign_info" autocomplete="off"></el-input>
+                <el-form-item v-if="form.assignType==2" label="输入每月几号" :label-width="formLabelWidth">
+                    <el-input style="width: 250px" v-model="form.assignInfo" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item v-if="form.assign_type==3" label="输入每月第几周" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="form.assign_info" autocomplete="off"></el-input>
+                <el-form-item v-if="form.assignType==3" label="输入每月第几周" :label-width="formLabelWidth">
+                    <el-input style="width: 250px" v-model="form.assignInfo" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item v-if="form.assign_type==4" label="输入每周几" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="form.assign_info" autocomplete="off"></el-input>
+                <el-form-item v-if="form.assignType==4" label="输入每周几" :label-width="formLabelWidth">
+                    <el-input style="width: 250px" v-model="form.assignInfo" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="是否限制一段时间内可兑换数量" :label-width="formLabelWidth">
-                    <el-select v-model="form.limit_type" placeholder="请选择限制时间">
+                    <el-select v-model="form.limitType" placeholder="请选择限制时间">
                         <el-option
                                 v-for="item in limitType"
                                 :key="item.value"
@@ -416,8 +416,8 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item v-if="form.limit_type==1||form.limit_type==2||form.limit_type==3" label="对应上方的限制兑换数量" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="form.limit_number" autocomplete="off"></el-input>
+                <el-form-item v-if="form.limitType==1||form.limitType==2||form.limitType==3" label="对应上方的限制兑换数量" :label-width="formLabelWidth">
+                    <el-input style="width: 250px" v-model="form.limitNumber" autocomplete="off"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -439,7 +439,6 @@
         data() {
             return {
                 type:{
-                    // sign: "ed8u$input7$input7jpYsRe8t2aKSKBF/cJ21S1z/10SqwBE2XAQ=",
                     type: ""
                 },
                 oName:'',
@@ -553,12 +552,14 @@
             };
         },
         created() {
-
         },
         mounted(){
             this.getMenu()
         },
         methods: {
+            change(){
+                console.log(this.form.changeType);
+            },
             querySearch(queryString, cb) {
                 let jsonArr = [];
                 jsonArr.push({ key: 'couponName', value: queryString });
@@ -747,6 +748,7 @@
                 }, 500);
             },
             addChange(index, row){//是否修改权限
+                let that=this
                 const loading = this.$loading({
                     lock: true,
                     text: 'Loading',
@@ -772,7 +774,6 @@
                             this.form.memo=JSON.parse(Decrypt(data.data.data)).goldCommodity.memo;
                             this.form.store=JSON.parse(Decrypt(data.data.data)).goldCommodity.store;
                             this.form.alredyChangedNumber=JSON.parse(Decrypt(data.data.data)).goldCommodity.alredyChangedNumber;
-                            this.form.changeType=JSON.parse(Decrypt(data.data.data)).goldCommodity.changeType;
                             this.form.gold=JSON.parse(Decrypt(data.data.data)).goldCommodity.gold;
                             this.form.money=JSON.parse(Decrypt(data.data.data)).goldCommodity.money;
                             this.form.cinemaCodes=JSON.parse(Decrypt(data.data.data)).goldCommodity.cinemaCodes;
@@ -784,50 +785,50 @@
                             this.form.limitType=JSON.parse(Decrypt(data.data.data)).goldCommodity.limitType;
                             this.form.limitNumber=JSON.parse(Decrypt(data.data.data)).goldCommodity.limitNumber;
 
-                            let _index = 0;  //商品类型下拉选显示对应的选项
+                           //商品类型下拉选显示对应的选项
                             for(let x in this.commodityType){
                                 if(this.commodityType[x].value==JSON.parse(Decrypt(data.data.data)).goldCommodity.commodityType){
-                                    _index=x;
+                                    this.form.commodityType = this.commodityType[x].value;
                                     break;
                                 }
                             }
-                            this.form.commodity_type = this.commodityType[_index].value;
-
-                            let index = 0;  //兑换方式下拉选显示对应的选项
+                          //兑换方式下拉选显示对应的选项
+                          //   console.log(typeof JSON.parse(Decrypt(data.data.data)).goldCommodity.changeType);
                             for(let x in this.showType){
                                 if(this.showType[x].value==JSON.parse(Decrypt(data.data.data)).goldCommodity.changeType){
-                                    index=x;
+                                    this.form.changeType = this.showType[x].value;
+
                                     break;
                                 }
                             }
-                            this.form.change_type = this.showType[index].value;
 
-                            let oIndex = 0;  //上架状态下拉选显示对应的选项
+
+                          //上架状态下拉选显示对应的选项
                             for(let x in this.showStatus){
                                 if(this.showStatus[x].value==JSON.parse(Decrypt(data.data.data)).goldCommodity.status){
-                                    oIndex=x;
+                                    this.form.status = this.showStatus[x].value;
                                     break;
                                 }
                             }
-                            this.form.status = this.showStatus[oIndex].value;
 
-                            let aIndex = 0;  //是否指定日期可以兑换下拉选显示对应的选项
+
+                            //是否指定日期可以兑换下拉选显示对应的选项
                             for(let x in this.assignType){
                                 if(this.assignType[x].value==JSON.parse(Decrypt(data.data.data)).goldCommodity.assignType){
-                                    aIndex=x;
-                                    break;a
+                                    this.form.assignType = this.assignType[x].value;
+                                    break;
                                 }
                             }
-                            this.form.assign_type = this.assignType[aIndex].value;
 
-                            let bIndex = 0;  //是否限制一段时间内可兑换数量下拉选显示对应的选项
+
+                            //是否限制一段时间内可兑换数量下拉选显示对应的选项
                             for(let x in this.limitType){
                                 if(this.limitType[x].value==JSON.parse(Decrypt(data.data.data)).goldCommodity.limitType){
-                                    bIndex=x;
-                                    break;a
+                                    this.form.limitType = this.limitType[x].value;
+                                    break;
                                 }
                             }
-                            this.form.limit_type = this.limitType[bIndex].value;
+
                         }else if(data.data.code=='nologin'){
                             this.message=data.data.message
                             this.open()

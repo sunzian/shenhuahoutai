@@ -32,22 +32,22 @@
                 <el-table-column label="影院编码">
                     <template slot-scope="scope">{{scope.row.cinemaCode}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="开卡规则编码">
+                <el-table-column prop="memo" label="开卡规则编码" width="130">
                     <template slot-scope="scope">{{scope.row.ruleCode}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="开卡规则名称">
+                <el-table-column prop="sort" label="开卡规则名称" width="130">
                     <template slot-scope="scope">{{scope.row. ruleName}}</template>
                 </el-table-column>
                 <el-table-column prop="sort" label="活动描述">
                     <template slot-scope="scope">{{scope.row. ruleMemo}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="会员卡类型">
+                <el-table-column prop="sort" label="会员卡类型" width="130">
                     <template slot-scope="scope">{{scope.row.memberCardType}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="会员卡类别编码">
+                <el-table-column prop="sort" label="会员卡类别编码" width="130">
                     <template slot-scope="scope">{{scope.row.cardLevelCode}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="会员卡类别名称">
+                <el-table-column prop="sort" label="会员卡类别名称" width="130">
                     <template slot-scope="scope">{{scope.row.cardLevelName}}</template>
                 </el-table-column>
                 <el-table-column prop="sort" label="充值金额" >
@@ -68,7 +68,7 @@
                 <el-table-column prop="sort" label="赠送金额" >
                     <template slot-scope="scope">{{scope.row.givenMoney}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="赠送的券id和张数">
+                <el-table-column prop="sort" label="赠送的券id和张数" width="150">
                     <template slot-scope="scope">{{scope.row.givenTicketsParams}}</template>
                 </el-table-column>
                 <el-table-column label="开始时间" align="center">
@@ -548,44 +548,35 @@
                         if(data.data.code=='success'){
                             this.editVisible = true;
                             this.cinemaList = JSON.parse(Decrypt(data.data.data)).cinemaList  //影院编码下拉选显示对应的选项
-                            let oIndex = 0;
                             for(let i in this.cinemaList){
                                 if(this.cinemaList[i].cinemaCode==JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.cinemaCode){
-                                    oIndex=i;
+                                    this.form.cinemaCode = this.cinemaList[i].cinemaCode;
                                     break;
                                 }
                             }
-                            this.form.cinemaCode = this.cinemaList[oIndex].cinemaCode; //影院编码下拉选显示对应的选项
-                            let businessIndex = 0;  //会员卡类型下拉选显示对应的选项
+                           //会员卡类型下拉选显示对应的选项
                             for(let i in this.memberCardTypeList){
                                 if(this.memberCardTypeList[i].value==JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.memberCardType){
-                                    businessIndex=i;
+                                    this.form.memberCardType = this.memberCardTypeList[i].value;
                                     break;
                                 }
                             }
-                            this.form.memberCardType = this.memberCardTypeList[businessIndex].value; //会员卡类型下拉选显示对应的选项
-
-                            let index = 0;//赠送类型下拉选显示对应的选项
+                           //赠送类型下拉选显示对应的选项
                             for(let i in this.options){
                                 if(this.options[i].value ==JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.givenType){
-                                    index=i;
-                                    break
+                                    this.form.givenType = this.options[i].value
                                 }
                             }
-                            this.form.givenType = this.options[index].value//赠送类型下拉选显示对应的选项
-
-
-                            let statusIndex = 0;//是否启用下拉选显示对应的选项
+                            //是否启用下拉选显示对应的选项
                             for(let i in this.showStatus){
-                                if(this.showStatus[i].value ==JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.statusValue){
-                                    statusIndex=i;
+                                if(this.showStatus[i].value ==JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.status){
+                                    this.form.statusValue = this.showStatus[i].value
                                     break
                                 }
                             }
-                            this.form.statusValue = this.showStatus[statusIndex].value//是否启用下拉选显示对应的选项
-
                             this.changeStartTime = JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.createDate//创建时间
                             this.changeEndTime = JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.endDate//endDate
+                            this.form.givenTicketsParams = JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.couponGroupId//endDate
                         }else if(data.data.code=='nologin'){
                             this.message=data.data.message
                             this.open()

@@ -26,7 +26,7 @@
                     header-cell-class-name="table-header"
                     @selection-change="handleSelectionChange"
             >
-                <el-table-column prop="name" label="轮播图级别">
+                <el-table-column prop="name" label="轮播图级别" width="130">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.bannerLevel=='1'"
                         >商家</el-tag>
@@ -34,10 +34,10 @@
                         >门店</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="所属商家编码">
+                <el-table-column label="所属商家编码" width="130">
                     <template slot-scope="scope">{{scope.row.businessCode}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="适用影院编码" width="100px">
+                <el-table-column prop="memo" label="适用影院编码" width="130">
                     <template slot-scope="scope">{{scope.row.cinemaCodes}}</template>
                 </el-table-column>
                 <el-table-column prop="sort" label="是否显示">
@@ -69,7 +69,7 @@
                                 placement="right"
                                 title=""
                                 trigger="hover">
-                            <img :src="scope.row.imageUrl"/>
+                            <img style="width: 400px" :src="scope.row.imageUrl"/>
                             <img slot="reference" :src="scope.row.imageUrl" :alt="scope.row.imageUrl" style="max-height: 50px;max-width: 130px">
                         </el-popover>
                     </template>
@@ -80,7 +80,7 @@
                         >跳转到文章</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="sort" label="跳转的具体信息">
+                <el-table-column prop="sort" label="跳转的具体信息" width="130">
                     <template slot-scope="scope">{{scope.row.redirectGoal}}</template>
                 </el-table-column>
                 <el-table-column label="状态" align="center">
