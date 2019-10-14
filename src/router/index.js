@@ -60,6 +60,11 @@ export default new Router({
                     meta: { title: '券包管理' }
                 },
                 {
+                    path: '/chatroomAwards',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/chatroomAwards.vue'),
+                    meta: { title: '放映厅奖品设置' }
+                },
+                {
                     path: '/directorPage',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/directorPage.vue'),
                     meta: { title: '导演管理' }

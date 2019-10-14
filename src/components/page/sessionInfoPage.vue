@@ -95,7 +95,7 @@
         <!--新增弹出框-->
         <el-dialog title="获取排期" :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
-                <el-form-item label="影院名称">
+                <el-form-item label="影院名称" :label-width="formLabelWidth">
                     <el-select v-model="oForm.cinemaName" placeholder="请选择">
                         <el-option
                             v-for="info in cinemaInfo"
@@ -105,7 +105,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="开始时间">
+                <el-form-item label="开始时间" :label-width="formLabelWidth">
                     <el-date-picker
                         v-model="oForm.startDate"
                         type="date"
@@ -114,7 +114,7 @@
                         placeholder="选择日期时间"
                     ></el-date-picker>
                 </el-form-item>
-                <el-form-item label="结束时间">
+                <el-form-item label="结束时间" :label-width="formLabelWidth">
                     <el-date-picker
                         v-model="oForm.endDate"
                         type="date"
@@ -132,7 +132,7 @@
         <!-- 编辑弹出框 -->
         <el-dialog title="价格设置" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
-                <el-form-item label="影院名称">
+                <el-form-item label="影院名称" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -141,7 +141,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="影片名称">
+                <el-form-item label="影片名称" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -150,7 +150,7 @@
                         disabled
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="放映时间">
+                <el-form-item label="放映时间" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -159,7 +159,7 @@
                         disabled
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="标准价">
+                <el-form-item label="标准价" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -168,10 +168,10 @@
                         disabled
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="增值服务费">
+                <el-form-item label="增值服务费" :label-width="formLabelWidth">
                     <el-input style="width: 250px" min="1" v-model="oTicketFee" disabled autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="第三方支付代售费">
+                <el-form-item label="第三方支付代售费" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -179,7 +179,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="会员卡支付代售费">
+                <el-form-item label="会员卡支付代售费" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"

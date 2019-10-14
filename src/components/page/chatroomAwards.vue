@@ -3,7 +3,7 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
-                    <i class="el-icon-lx-cascades"></i> 券包管理
+                    <i class="el-icon-lx-cascades"></i> 放映厅实物礼物列表：
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
@@ -16,7 +16,7 @@
                     @click="addPage"
                     icon="el-icon-circle-plus-outline"
                     style="margin-left: 690px"
-                >生成券包</el-button>
+                >新增奖品</el-button>
             </div>
             <el-table
                 :data="tableData"
@@ -26,31 +26,29 @@
                 ref="multipleTable"
                 header-cell-class-name="table-header"
             >
-                <el-table-column prop="name" label="适用影院">
+                <el-table-column prop="name" label="影院">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
-                <el-table-column label="券包名称">
+                <el-table-column label="礼物图片">
                     <template slot-scope="scope">{{scope.row.groupName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="有效期（天）">
+                <el-table-column prop="memo" label="名称">
                     <template slot-scope="scope">{{scope.row.overDays}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="券包说明">
+                <el-table-column prop="sort" label="描述">
                     <template slot-scope="scope">{{scope.row.memo}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="状态">
+                <el-table-column prop="sort" label="房间最大发送组数">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status == 1" type="success">启用</el-tag>
                         <el-tag v-else type="danger">未启用</el-tag>
                     </template>
                 </el-table-column>
+                <el-table-column prop="sort" label="每组数量">
+                    <template slot-scope="scope">{{scope.row.memo}}</template>
+                </el-table-column>
                 <el-table-column label="操作" width="180" align="center">
                     <template slot-scope="scope">
-                        <el-button
-                            type="success"
-                            v-if="scope.row.status == 0"
-                            @click="changeStatus(scope.$index, scope.row)"
-                        >启用</el-button>
                         <el-button
                             type="success"
                             v-if="scope.row.status == 1"
