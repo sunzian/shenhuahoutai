@@ -39,10 +39,7 @@
                     <template slot-scope="scope">{{scope.row.memo}}</template>
                 </el-table-column>
                 <el-table-column prop="sort" label="房间最大发送组数">
-                    <template slot-scope="scope">
-                        <el-tag v-if="scope.row.status == 1" type="success">启用</el-tag>
-                        <el-tag v-else type="danger">未启用</el-tag>
-                    </template>
+                    <template slot-scope="scope">{{scope.row.memo}}</template>
                 </el-table-column>
                 <el-table-column prop="sort" label="每组数量">
                     <template slot-scope="scope">{{scope.row.memo}}</template>
@@ -50,15 +47,10 @@
                 <el-table-column label="操作" width="180" align="center">
                     <template slot-scope="scope">
                         <el-button
-                            type="success"
-                            v-if="scope.row.status == 1"
-                            @click="changeStatus(scope.$index, scope.row)"
-                        >停用</el-button>
-                        <el-button
                             type="text"
                             icon="el-icon-circle-plus-outline"
                             @click="addChange(scope.$index, scope.row)"
-                        >查看详情</el-button>
+                        >编辑</el-button>
                         <el-button
                             type="text"
                             icon="el-icon-delete"
@@ -575,12 +567,12 @@ export default {
             let jsonArr = [];
             jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
             jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
-            // jsonArr.push({ key: 'filmName', value: name });
+            jsonArr.push({ key: 'cinemaCode', value: name });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             var params = ParamsAppend(jsonArr);
             https
-                .fetchPost('couponGroup/couponGroupPage', params)
+                .fetchPost('chatroomAwards/awardsPage', params)
                 .then(data => {
                     if (data.data.code == 'success') {
                         var oData = JSON.parse(Decrypt(data.data.data));
