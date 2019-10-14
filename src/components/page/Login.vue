@@ -107,8 +107,10 @@ export default {
     position: relative;
     width: 100%;
     height: 100%;
-    background-image: url(../../assets/img/login-bg.jpg);
-    background-size: 100%;
+    background-image: url(../../assets/img/login-bg.png);
+    background-repeat:no-repeat;
+    background-size: 750px 500px;
+    background-position:center ;
 }
 .ms-title {
     width: 100%;
@@ -138,11 +140,6 @@ export default {
     width: 100%;
     height: 36px;
     margin-bottom: 10px;
-}
-.login-tips {
-    font-size: 12px;
-    line-height: 30px;
-    color: #fff;
 }
 .code-img{
     width: 90px;
