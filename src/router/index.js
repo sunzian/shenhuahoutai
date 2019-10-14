@@ -125,6 +125,21 @@ export default new Router({
                     meta: { title: '金币商品管理' }
                 },
                 {
+                    path: '/merchandise',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/merchandise.vue'),
+                    meta: { title: '卖品信息' }
+                },
+                {
+                    path: '/merchandiseType',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/merchandiseType.vue'),
+                    meta: { title: '卖品分类' }
+                },
+                {
+                    path: '/merchandiseCombo',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/merchandiseCombo.vue'),
+                    meta: { title: '卖品套餐' }
+                },
+                {
                     // vue-schart组件
                     path: '/charts',
                     component: () => import(/* webpackChunkName: "chart" */ '../components/page/BaseCharts.vue'),
