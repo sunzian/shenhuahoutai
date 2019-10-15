@@ -133,18 +133,15 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="所属商家编码" :label-width="formLabelWidth">
-                    <el-select v-model="oForm.businessCode" placeholder="请选择商家">
+                <el-form-item label="适用影院编码" :label-width="formLabelWidth">
+                    <el-select v-model="oForm.cinemaCode" placeholder="请选择影院">
                         <el-option
-                                v-for="item in businessOptiones"
-                                :key="item.business_code"
-                                :label="item.business_name"
-                                :value="item.business_code">
+                                v-for="item in cinemaList"
+                                :key="item.cinemaCode"
+                                :label="item.cinemaName"
+                                :value="item.cinemaCode">
                         </el-option>
                     </el-select>
-                </el-form-item>
-                <el-form-item label="适用影院编码" :label-width="formLabelWidth">
-                    <el-input style="width: 150px" maxlength="9" v-model.number="oForm.cinemaCode" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="是否显示" :label-width="formLabelWidth">
                     <el-select v-model="oForm.statusValue" placeholder="选择是否显示">
@@ -231,18 +228,15 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="所属商家编码" :label-width="formLabelWidth">
-                    <el-select v-model="form.businessCode" placeholder="请选择商家">
+                <el-form-item label="适用影院编码" :label-width="formLabelWidth">
+                    <el-select v-model="form.cinemaCodes" placeholder="请选择影院">
                         <el-option
-                                v-for="item in businessOptiones"
-                                :key="item.business_code"
-                                :label="item.business_name"
-                                :value="item.business_code">
+                                v-for="item in cinemaList"
+                                :key="item.cinemaCode"
+                                :label="item.cinemaName"
+                                :value="item.cinemaCode">
                         </el-option>
                     </el-select>
-                </el-form-item>
-                <el-form-item label="适用影院编码" :label-width="formLabelWidth">
-                    <el-input style="width: 150px" maxlength="9" v-model.number="form.cinemaCodes" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="是否显示" :label-width="formLabelWidth">
                     <el-select v-model="form.status" placeholder="选择是否显示">
@@ -337,7 +331,6 @@
         data() {
             return {
                 type:{
-                    // sign: "ed8u$input7$input7jpYsRe8t2aKSKBF/cJ21S1z/10SqwBE2XAQ=",
                     type: ""
                 },
                 imageUrl:'',
@@ -355,6 +348,7 @@
                 tableData: [],
                 multipleSelection: [],
                 delList: [],
+                cinemaList:[],//适用影院编码
                 editVisible: false,
                 pageTotal: 0,
                 form: {
@@ -375,7 +369,6 @@
                     desc: '',
                     value:'',
                     statusValue:'',
-                    businessCode:'',
                 },
                 formLabelWidth: '120px',
                 selectValue:{},
@@ -430,6 +423,7 @@
                         console.log(data);
                         console.log(JSON.parse(Decrypt(data.data.data)));
                         this.businessOptiones = JSON.parse(Decrypt(data.data.data))
+                        this.cinemaList =JSON.parse(Decrypt(data.data.data)).cinemaList
                         if(data.data.code == 'success'){
                             this.dialogFormVisible = true
                         }else if(data.data.code=='nologin'){
@@ -460,16 +454,6 @@
                 }
             },
             addRole(){ //新增按钮操作
-                // console.log(this.startTime);//开始时间
-                // console.log(this.endTime);//结束时间
-                // console.log(this.oForm.value);
-                // console.log(this.oForm.statusValue);
-                // console.log(this.oForm.memo);
-                // console.log(this.oForm.businessCode);
-                // console.log(this.oForm.bannerType);
-                // console.log(this.oForm.tabType);
-                // console.log(this.oForm.goType);
-                // console.log(this.oForm.cinemaCode);
                 const loading = this.$loading({
                     lock: true,
                     text: 'Loading',
@@ -480,7 +464,6 @@
                 setTimeout(() => {
                     var jsonArr = [];
                     jsonArr.push({key:"bannerLevel",value:this.oForm.value});
-                    jsonArr.push({key:"businessCode",value:this.oForm.businessCode});
                     jsonArr.push({key:"cinemaCodes",value:this.oForm.cinemaCode});
                     jsonArr.push({key:"status",value:this.oForm.statusValue});
                     jsonArr.push({key:"startDate",value:this.startTime});
@@ -596,15 +579,6 @@
                             }
                             this.form.bannerLevel = this.options[oIndex].value;
                             this.businessOptiones = JSON.parse(Decrypt(data.data.data)).businessInfos
-                            let businessIndex = 0;  //所属商家编码下拉选显示对应的选项
-                            for(let i in this.businessOptiones){
-                                if(this.businessOptiones[i].business_code==JSON.parse(Decrypt(data.data.data)).banner.businessCode){
-                                    businessIndex=i;
-                                    break;
-                                }
-                            }
-                            this.form.businessCode = this.businessOptiones[businessIndex].business_code;
-                            this.form.cinemaCodes=JSON.parse(Decrypt(data.data.data)).banner.cinemaCodes //适用影院编码
                             let index = 0;  //是否显示下拉选显示对应的选项
                             for(let i in this.showStatus){
                                 if(this.options[i].value==JSON.parse(Decrypt(data.data.data)).banner.status){
@@ -613,6 +587,14 @@
                                 }
                             }
                             this.form.status = this.showStatus[index].value;
+                            //是否显示下拉选显示对应的选项
+                            this.cinemaList=JSON.parse(Decrypt(data.data.data)).cinemaList //适用影院编码
+                            for(let i in this.cinemaList){
+                                if(this.cinemaList[i].cinemaCode==JSON.parse(Decrypt(data.data.data)).banner.cinemaCodes){
+                                    this.form.cinemaCodes = this.cinemaList[i].cinemaCode;
+                                    break;
+                                }
+                            }
                             this.changeStartTime = JSON.parse(Decrypt(data.data.data)).banner.createDate//创建时间
                             this.changeEndTime = JSON.parse(Decrypt(data.data.data)).banner.endDate//结束时间
                             this.form.memo= JSON.parse(Decrypt(data.data.data)).banner.memo//备注
@@ -652,7 +634,6 @@
             // 编辑操作
             exChanger() {
                 console.log(this.form.bannerLevel);
-                console.log(this.form.businessCode);
                 console.log(this.form.cinemaCodes);
                 console.log(this.form.status);
                 console.log(this.changeStartTime);
@@ -674,7 +655,6 @@
                     var jsonArr = [];
                     jsonArr.push({key:"id",value:this.form.id});
                     jsonArr.push({key:"bannerLevel",value:this.form.bannerLevel});
-                    jsonArr.push({key:"businessCode",value:this.form.businessCode});
                     jsonArr.push({key:"cinemaCodes",value:this.form.cinemaCodes});
                     jsonArr.push({key:"status",value:this.form.status});
                     jsonArr.push({key:"startDate",value:this.changeStartTime});
