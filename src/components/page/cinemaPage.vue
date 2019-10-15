@@ -483,10 +483,10 @@
         <!-- 编辑弹出框 -->
         <el-dialog title="编辑" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
-                <el-form-item label="影院编码">
+                <el-form-item label="影院编码" :label-width="formLabelWidth">
                     <el-input style="width: 250px" min="1" v-model="oCinemaCode" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="影院名称">
+                <el-form-item label="影院名称" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -494,7 +494,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="所在省份">
+                <el-form-item label="所在省份" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -502,7 +502,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="所在城市">
+                <el-form-item label="所在城市" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -510,7 +510,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="详细地址">
+                <el-form-item label="详细地址" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -518,7 +518,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="经度">
+                <el-form-item label="经度" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -526,7 +526,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="纬度">
+                <el-form-item label="纬度" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -534,7 +534,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="关联商家编码">
+                <el-form-item label="关联商家编码" :label-width="formLabelWidth">
                     <el-select v-model="selectCode" @change="changeBusinessCode">
                         <el-option
                             v-for="info in businessInfo"
@@ -544,7 +544,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="影院联系人姓名">
+                <el-form-item label="影院联系人姓名" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -552,7 +552,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="影院联系人电话">
+                <el-form-item label="影院联系人电话" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -560,7 +560,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="客服电话">
+                <el-form-item label="客服电话" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -568,7 +568,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="影厅数量">
+                <el-form-item label="影厅数量" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -576,7 +576,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="售票系统影院内码">
+                <el-form-item label="售票系统影院内码" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -584,14 +584,14 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="第三方比价影院编码">
+                <el-form-item label="第三方比价影院编码" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         v-model.trim="oComparePriceCode"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="开场前的购票时间限制">
+                <el-form-item label="开场前的购票时间限制" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -599,7 +599,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="开场前的退票时间限制">
+                <el-form-item label="开场前的退票时间限制" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -607,7 +607,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="退票手续费">
+                <el-form-item label="退票手续费" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -615,7 +615,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="第三方支付代售费（微信支付）">
+                <el-form-item label="第三方支付代售费（微信支付）" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -623,7 +623,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="会员卡支付代售费">
+                <el-form-item label="会员卡支付代售费" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -631,7 +631,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="影院会员服务协议">
+                <el-form-item label="影院会员服务协议" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -639,7 +639,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="购票提示">
+                <el-form-item label="购票提示" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -647,7 +647,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="是否开通套餐">
+                <el-form-item label="是否开通套餐" :label-width="formLabelWidth">
                     <el-select
                     v-model="oOpenSnackStatus" 
                     @change="openServe"
@@ -660,7 +660,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="是否小卖配送">
+                <el-form-item label="是否小卖配送" :label-width="formLabelWidth">
                     <el-select
                     v-model="oSnackDispatcherStatus" 
                     @change="openServe"
@@ -673,7 +673,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="是否可退票">
+                <el-form-item label="是否可退票" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -681,7 +681,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="剩余票数">
+                <el-form-item label="剩余票数" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -689,13 +689,13 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="卖品显示开始时间">
+                <el-form-item label="卖品显示开始时间" :label-width="formLabelWidth">
                     <el-time-picker v-model="oSnackBeginTime" placeholder="选择日期时间"></el-time-picker>
                 </el-form-item>
                 <el-form-item label="卖品显示结束时间">
                     <el-time-picker v-model="oSnackEndTime" placeholder="选择日期时间"></el-time-picker>
                 </el-form-item>
-                <el-form-item label="短信平台类型">
+                <el-form-item label="短信平台类型" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -703,7 +703,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="短信平台账号">
+                <el-form-item label="短信平台账号" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -711,7 +711,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="短信平台密码">
+                <el-form-item label="短信平台密码" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -719,7 +719,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="短信平台签名id">
+                <el-form-item label="短信平台签名id" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -727,7 +727,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="是否开通服务">
+                <el-form-item label="是否开通服务" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -735,10 +735,10 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="到期时间">
+                <el-form-item label="到期时间" :label-width="formLabelWidth">
                     <el-date-picker v-model="oExpireDate" placeholder="选择日期时间"></el-date-picker>
                 </el-form-item>
-                <el-form-item label="费用支付类型">
+                <el-form-item label="费用支付类型" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -746,7 +746,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="票价上报方式">
+                <el-form-item label="票价上报方式" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -754,7 +754,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="是否开通会员卡功能">
+                <el-form-item label="是否开通会员卡功能" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -762,7 +762,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="会员卡是否门店通用">
+                <el-form-item label="会员卡是否门店通用" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -770,7 +770,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="会员卡支付是否可用优惠券">
+                <el-form-item label="会员卡支付是否可用优惠券" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -778,7 +778,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="小程序appSecret">
+                <el-form-item label="小程序appSecret" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -786,7 +786,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="小程序支付商户号">
+                <el-form-item label="小程序支付商户号" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -794,7 +794,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="小程序支付密钥">
+                <el-form-item label="小程序支付密钥" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -802,7 +802,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="小程序退款证书阿里云路径">
+                <el-form-item label="小程序退款证书阿里云路径" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"

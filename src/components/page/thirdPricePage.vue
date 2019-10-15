@@ -147,7 +147,7 @@
         <!-- 编辑弹出框 -->
         <el-dialog title="价格设置" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
-                <el-form-item label="影院名称">
+                <el-form-item label="影院名称" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -156,7 +156,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="影厅名称">
+                <el-form-item label="影厅名称" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -165,7 +165,7 @@
                         disabled
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="影片名称">
+                <el-form-item label="影片名称" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -174,7 +174,7 @@
                         disabled
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="平台名称">
+                <el-form-item label="平台名称" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -183,7 +183,7 @@
                         disabled
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="放映时间">
+                <el-form-item label="放映时间" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -192,7 +192,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="第三方售价">
+                <el-form-item label="第三方售价" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"

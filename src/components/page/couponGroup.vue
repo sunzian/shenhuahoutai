@@ -152,7 +152,7 @@
         </el-dialog>
         <!-- 编辑弹出框 -->
         <el-dialog title="详情" :visible.sync="editVisible">
-            <el-form ref="form" :model="form">
+            <el-form ref="form" :model="form"> ,
                 <el-form-item label="适用影院名称：" :label-width="formLabelWidth">
                     <span>{{oCinemaName}}</span>
                 </el-form-item>
@@ -284,13 +284,14 @@ export default {
                     console.log(data);
                     if (data.data.code == 'success') {
                         var oData = JSON.parse(Decrypt(data.data.data));
+                        this.cinemaInfo = [];
                         for (let i = 0; i < oData.length; i++) {
                             let cinemaInfo = {};
                             cinemaInfo.cinemaCode = oData[i].cinemaCode;
                             cinemaInfo.cinemaName = oData[i].cinemaName;
                             this.cinemaInfo.push(cinemaInfo);
                         }
-                        // console.log(this.cinemaInfo)
+                        console.log(this.cinemaInfo)
                         this.oForm.cinemaCode = this.cinemaInfo[0].cinemaCode;
                         this.selectValue = this.cinemaInfo[0].cinemaCode;
                         this.dialogFormVisible = true;
@@ -532,7 +533,7 @@ export default {
             console.log(jsonArr);
             let params = ParamsAppend(jsonArr);
             https
-                .fetchPost('/filmCoupon/updateCouponStatusById', params)
+                .fetchPost('couponGroup/updateStatusById', params)
                 .then(data => {
                     // console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
