@@ -72,7 +72,7 @@ export default {
                 let menus=Decrypt(data.data.data)//返回的数据进行解密
                 // console.log(menus);
                 this.menuList =JSON.parse(menus)
-                console.log(this.menuList);
+                // console.log(this.menuList);
             }
         }).catch(err=>{
                 console.log(err)

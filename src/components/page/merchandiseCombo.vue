@@ -147,9 +147,9 @@
                         :current-page="query.pageNo"
                         :page-size="query.pageSize"
                         :total="query.totalCount"
-                        @current-change="currentChange"
-                        @prev-click='prev'
-                        @next-click="next"
+                        @current-change="oCurrentChange"
+                        @prev-click='oPrev'
+                        @next-click="oNext"
                 ></el-pagination>
             </div>
         </div>
@@ -176,6 +176,27 @@
                 <el-form-item label="选择商品" :label-width="formLabelWidth">
                     <el-button type="primary" @click="openNext">点击选择</el-button>
                 </el-form-item>
+                <el-form-item
+                        label="所选商品"
+                        :label-width="formLabelWidth"
+                        v-if="selectedSell.length>0"
+                >
+                    <div v-for="(item, index) in selectedSell" style="margin-bottom: 5px">
+                        <el-input
+                                  style="width: 250px"
+                                  v-model="item.merchandiseName"
+                                  autocomplete="off"
+                                  :value="item.merchandiseCode"
+                                  :disabled="true"
+                                  :change="one(item.merchandiseCode)"
+                        >
+                        </el-input>
+                        <span
+                                style="color:red;cursor: pointer;"
+                                @click="deleteSell()"
+                        >删除</span>
+                    </div>
+                </el-form-item>
                 <el-form-item label="排序" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oForm.showSeqNo" autocomplete="off"></el-input>
                 </el-form-item>
@@ -183,7 +204,6 @@
                     <el-input style="width: 250px" v-model="oForm.originalPrice" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="套餐类型" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="oForm.comboType" autocomplete="off"></el-input>
                     <el-select v-model="oForm.comboType" placeholder="请选择套餐状态">
                         <el-option
                                 v-for="item in showTypes"
@@ -194,7 +214,6 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="套餐状态" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="oForm.status" autocomplete="off"></el-input>
                     <el-select v-model="oForm.status" placeholder="请选择套餐状态">
                         <el-option
                                 v-for="item in showStatus"
@@ -209,35 +228,6 @@
                 <el-button @click="dialogFormVisible = false">取 消</el-button>
                 <el-button type="primary" @click="addRole">确 定</el-button>
             </div>
-        </el-dialog>
-        <!-- 编辑弹出框 -->
-        <el-dialog title="编辑" :visible.sync="editVisible">
-            <el-form ref="form" :model="form">
-                <el-form-item label="分类名称" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="form.typeName" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item  label="分类图片" :label-width="formLabelWidth">
-                    <el-upload
-                            :before-upload="beforeUpload"
-                            :data="type"
-                            class="upload-demo"
-                            drag
-                            action="/api/upload/uploadImage"
-                            :on-success="unSuccess"
-                            multiple>
-                        <i class="el-icon-upload"></i>
-                        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
-                    </el-upload>
-                </el-form-item>
-                <el-form-item label="展示顺序" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="form.showSeqNo" autocomplete="off"></el-input>
-                </el-form-item>
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="editVisible = false">取 消</el-button>
-                <el-button type="primary" @click="exChanger">确 定</el-button>
-            </span>
         </el-dialog>
         <!--新增抽屉弹出框-->
         <el-dialog title="选择卖品" :visible.sync="drawer">
@@ -262,7 +252,7 @@
                 >
                     <el-table-column label="操作" width="100" align="center">
                         <template slot-scope="scope">
-                            <el-radio v-model="id" :label="scope.row.id">&nbsp;</el-radio>
+                            <el-radio v-model="id" :label="scope.$index" @change.native="getCurrentRow(scope.$index)">&nbsp;</el-radio>
                         </template>
                     </el-table-column>
                     <el-table-column prop="name" label="图片">
@@ -290,9 +280,9 @@
                             :current-page="query.pageNo"
                             :page-size="query.pageSize"
                             :total="query.totalCount"
-                            @current-change="currentChange"
-                            @prev-click='prev'
-                            @next-click="next"
+                            @current-change="aCurrentChange"
+                            @prev-click='aPrev'
+                            @next-click="aNext"
                     ></el-pagination>
                 </div>
             </div>
@@ -301,6 +291,83 @@
                 <el-button type="primary" @click="sureNext">确 定</el-button>
             </div>
         </el-dialog>
+        <!-- 编辑弹出框 -->
+        <el-dialog title="编辑" :visible.sync="editVisible">
+            <el-form ref="form" :model="form">
+                <el-form-item  label="套餐名称" :label-width="formLabelWidth">
+                    <el-input style="width: 250px" v-model="form.comboName" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item  label="套餐图片" :label-width="formLabelWidth">
+                    <el-upload
+                            :before-upload="beforeUpload"
+                            :data="type"
+                            class="upload-demo"
+                            drag
+                            action="/api/upload/uploadImage"
+                            :on-success="unSuccess"
+                            multiple>
+                        <i class="el-icon-upload"></i>
+                        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
+                    </el-upload>
+                </el-form-item>
+                <el-form-item label="选择商品" :label-width="formLabelWidth">
+                    <el-button type="primary" @click="openNext">点击选择</el-button>
+                </el-form-item>
+                <el-form-item
+                        label="所选商品"
+                        :label-width="formLabelWidth"
+                        v-if="selectedSell.length>0"
+                >
+                    <div v-for="(item, index) in selectedSell" style="margin-bottom: 5px">
+                        <el-input
+                                style="width: 250px"
+                                v-model="item.merchandiseName"
+                                autocomplete="off"
+                                :value="item.merchandiseCode"
+                                :disabled="true"
+                                :change="one(item.merchandiseCode)"
+                        >
+                        </el-input>
+                        <span
+                                style="color:red;cursor: pointer;"
+                                @click="deleteSell()"
+                        >删除</span>
+                    </div>
+                </el-form-item>
+                <el-form-item label="排序" :label-width="formLabelWidth">
+                    <el-input style="width: 250px" v-model="form.showSeqNo" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="套餐价格" :label-width="formLabelWidth">
+                    <el-input style="width: 250px" v-model="form.originalPrice" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="套餐类型" :label-width="formLabelWidth">
+                    <el-select v-model="form.comboType" placeholder="请选择套餐状态">
+                        <el-option
+                                v-for="item in showTypes"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="套餐状态" :label-width="formLabelWidth">
+                    <el-select v-model="form.status" placeholder="请选择套餐状态">
+                        <el-option
+                                v-for="item in showStatus"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="editVisible = false">取 消</el-button>
+                <el-button type="primary" @click="exChanger">确 定</el-button>
+            </span>
+        </el-dialog>
+
     </div>
 </template>
 
@@ -314,6 +381,8 @@
         name: 'basetable',
         data() {
             return {
+                sellIndex:'',//被选中的index值
+                selectedSell:[],//被选中商品
                 selectValue:[],
                 drawer: false,//新增抽屉弹出框
                 showSell:true,//卖品信息页面是否展示开关
@@ -398,11 +467,18 @@
         },
         created() {
             this.showSell=true
+            this.selectedSell=[]
         },
         mounted(){
             this.getMenu()
         },
         methods: {
+            deleteSell(index) {
+                this.selectedSell.splice(index, 1);
+            },
+            getCurrentRow(index){
+                this.sellIndex=index
+            },
             addPage(){//获取新增按钮权限
                 const loading = this.$loading({
                     lock: true,
@@ -415,7 +491,9 @@
                     https.fetchPost('/merchandiseCombo/addPage','').then((data) => {
                         console.log(data);
                         if(data.data.code == 'success'){
-                            this.oForm=[]
+                            this.selectedSell=[];
+                            this.oForm.image_url='';
+                            this.oForm=[];
                             this.dialogFormVisible = true
                         }else if(data.data.code=='nologin'){
                             this.message=data.data.message
@@ -443,16 +521,20 @@
                 setTimeout(() => {
                     var jsonArr = [];
                     jsonArr.push({key:"cinemaCode",value:this.cinemaCode});
-                    jsonArr.push({key:"comboName",value:this.oForm.name});
-                    jsonArr.push({key:"typePic",value:this.oForm.image_url});
+                    jsonArr.push({key:"comboName",value:this.oForm.comboName});
+                    jsonArr.push({key:"imageUrl",value:this.oForm.image_url});
                     jsonArr.push({key:"showSeqNo",value:this.oForm.showSeqNo});
+                    jsonArr.push({key:"comboType",value:this.oForm.comboType});
+                    jsonArr.push({key:"merchandiseSet",value:this.oForm.merchandiseCode});
+                    jsonArr.push({key:"originalPrice",value:this.oForm.originalPrice});
+                    jsonArr.push({key:"status",value:this.oForm.status});
                     let sign =md5(preSign(jsonArr));
                     jsonArr.push({key:"sign",value:sign});
                     let params = ParamsAppend(jsonArr);
                     // console.log(params);
                     if(this.dialogFormVisible == true){
                         https.fetchPost('/merchandiseCombo/addMerchandiseCombo',params).then((data) => {//新增
-                            console.log(data);
+                            // console.log(data);
                             if(data.data.code=='success'){
                                 this.dialogFormVisible = false
                                 this.$message.success(`新增成功`);
@@ -476,7 +558,15 @@
                     loading.close();
                 }, 500);
             },
+            one(a){//获取卖品绑定的value值
+                // console.log(a);
+                this.oForm.merchandiseCode =a
+            },
             sureNext() {
+                if(this.sellIndex>=0){
+                    this.selectedSell=[]
+                    this.selectedSell.push(this.sellTableData[this.sellIndex]);
+                }
                 this.drawer = false;
             },
             openNext() {
@@ -581,6 +671,7 @@
                 }, 500);
             },
             addChange(index, row){//是否修改权限
+                console.log(row);
                 const loading = this.$loading({
                     lock: true,
                     text: 'Loading',
@@ -601,9 +692,23 @@
                         console.log(JSON.parse(Decrypt(data.data.data)));
                         if(data.data.code=='success'){
                             this.editVisible = true;
-                            this.form.typeName=JSON.parse(Decrypt(data.data.data)).typeName;
-                            this.form.imageUrl=JSON.parse(Decrypt(data.data.data)).typePic;
-                            this.form.showSeqNo=JSON.parse(Decrypt(data.data.data)).showSeqNo;
+                            // this.form.typeName=JSON.parse(Decrypt(data.data.data)).typeName;
+                            // this.form.imageUrl=JSON.parse(Decrypt(data.data.data)).typePic;
+                            // this.form.showSeqNo=JSON.parse(Decrypt(data.data.data)).showSeqNo;
+                            //套餐类型下拉选显示对应的选项
+                            for(let x in this.showTypes){
+                                if(this.showTypes[x].value==JSON.parse(Decrypt(data.data.data)).comboType){
+                                    this.form.comboType = this.showTypes[x].value;
+                                    break;
+                                }
+                            }
+                            //套餐状态下拉选显示对应的选项
+                            for(let x in this.showStatus){
+                                if(this.showStatus[x].value==JSON.parse(Decrypt(data.data.data)).status){
+                                    this.form.status = this.showStatus[x].value;
+                                    break;
+                                }
+                            }
                         }else if(data.data.code=='nologin'){
                             this.message=data.data.message
                             this.open()
@@ -621,6 +726,13 @@
             },
             // 编辑操作
             exChanger() {
+                // console.log(this.form.comboName);
+                // console.log(this.form.image_url);
+                // console.log(this.oForm.merchandiseCode);
+                // console.log(this.form.showSeqNo);
+                // console.log(this.form.originalPrice);
+                // console.log(this.form.comboType);
+                // console.log(this.form.status);
                 const loading = this.$loading({
                     lock: true,
                     text: 'Loading',
@@ -634,9 +746,14 @@
                     }
                     var jsonArr = [];
                     jsonArr.push({key:"id",value:this.form.id});
+                    jsonArr.push({key:"cinemaCode",value:this.cinemaCode});
+                    jsonArr.push({key:"comboName",value:this.form.comboName});
+                    jsonArr.push({key:"imageUrl",value:this.form.image_url});
                     jsonArr.push({key:"showSeqNo",value:this.form.showSeqNo});
-                    jsonArr.push({key:"typePic",value:this.form.image_url});
-                    jsonArr.push({key:"typeName",value:this.form.typeName});
+                    jsonArr.push({key:"comboType",value:this.form.comboType});
+                    jsonArr.push({key:"merchandiseSet",value:this.oForm.merchandiseCode});
+                    jsonArr.push({key:"originalPrice",value:this.form.originalPrice});
+                    jsonArr.push({key:"status",value:this.form.status});
                     let sign =md5(preSign(jsonArr));
                     jsonArr.push({key:"sign",value:sign});
                     console.log(jsonArr);
@@ -647,6 +764,7 @@
                         console.log(data);
                         // console.log(JSON.parse(Decrypt(data.data.data)));
                         if(data.data.code=='success'){
+                            this.selectedSell=[];
                             this.$message.success(`编辑成功`);
                             this.refresh()
                         }else if(data.data.code=='nologin'){
@@ -829,7 +947,7 @@
                 }, 500);
             },
             beforeUpload(){//上传之前
-                this.type.type=EncryptReplace('product')
+                this.type.type=EncryptReplace('business')
             },
             onSuccess(data){//上传文件 登录超时
                 // console.log(data);
@@ -858,6 +976,7 @@
             handleSelectionChange(val) {
                 this.multipleSelection = val;
             },
+            //影院页面
             currentChange(val){//点击选择具体页数
                 this.query.pageNo = val
                 this.getMenu()
@@ -869,6 +988,32 @@
             next(){//分页按钮下一页
                 this.query.pageNo++
                 this.getMenu()
+            },
+            //卖品页面
+            oCurrentChange(val){//点击选择具体页数
+                this.query.pageNo = val
+                this.refresh()
+            },
+            oPrev(){//分页按钮上一页
+                this.query.pageNo--
+                this.refresh()
+            },
+            oNext(){//分页按钮下一页
+                this.query.pageNo++
+                this.refresh()
+            },
+            //新增套餐选择卖品页面
+            aCurrentChange(val){//点击选择具体页数
+                this.query.pageNo = val
+                this.openNext()
+            },
+            aPrev(){//分页按钮上一页
+                this.query.pageNo--
+                this.openNext()
+            },
+            aNext(){//分页按钮下一页
+                this.query.pageNo++
+                this.openNext()
             }
         }
     };
