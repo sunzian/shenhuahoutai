@@ -579,7 +579,7 @@ export default {
                     });
                 });
         },
-        addChange(index, row) {
+        addChange: function (index, row) {
             //是否拥有权限
             const loading = this.$loading({
                 lock: true,
@@ -591,39 +591,37 @@ export default {
             this.idx = index;
             this.form = row;
             var jsonArr = [];
-            jsonArr.push({ key: 'id', value: row.id });
+            jsonArr.push({key: 'id', value: row.id});
             let sign = md5(preSign(jsonArr));
-            jsonArr.push({ key: 'sign', value: sign });
+            jsonArr.push({key: 'sign', value: sign});
             let params = ParamsAppend(jsonArr);
-            https
-                .fetchPost('/filmCoupon/getFilmCouponById', params)
-                .then(data => {
-                    console.log(data);
-                    console.log(JSON.parse(Decrypt(data.data.data)));
-                    if (data.data.code == 'success') {
-                        this.editVisible = true;
-                        this.oCinemaName = JSON.parse(Decrypt(data.data.data)).cinemaNames;
-                        this.oScreenName = JSON.parse(Decrypt(data.data.data)).screenNames;
-                        this.oFilmName = JSON.parse(Decrypt(data.data.data)).filmNames;
-                        this.oName = JSON.parse(Decrypt(data.data.data)).name;
-                        this.oCreateDate = JSON.parse(Decrypt(data.data.data)).createDate;
-                        this.oEndDate = JSON.parse(Decrypt(data.data.data)).endDate;
-                        this.oValidPayType = JSON.parse(Decrypt(data.data.data)).validPayType;
-                        this.oAchieveMoney = JSON.parse(Decrypt(data.data.data)).achieveMoney;
-                        this.oReduceType = JSON.parse(Decrypt(data.data.data)).reduceType;
-                        this.oDiscountMoney = JSON.parse(Decrypt(data.data.data)).discountMoney;
-                        this.oCouponDesc = JSON.parse(Decrypt(data.data.data)).couponDesc;
-                        this.oId = JSON.parse(Decrypt(data.data.data)).id;
-                        this.oStatus = JSON.parse(Decrypt(data.data.data)).status;
-                    } else if (data.data.code == 'nologin') {
-                        this.message = data.data.message;
-                        this.open();
-                        this.$router.push('/login');
-                    } else {
-                        this.message = data.data.message;
-                        this.open();
-                    }
-                })
+            https.fetchPost('/filmCoupon/getFilmCouponById', params).then(data => {
+                console.log(data);
+                // console.log(JSON.parse(Decrypt(data.data.data)));
+                if (data.data.code == 'success') {
+                    this.editVisible = true;
+                    this.oCinemaName = JSON.parse(Decrypt(data.data.data)).cinemaNames;
+                    this.oScreenName = JSON.parse(Decrypt(data.data.data)).screenNames;
+                    this.oFilmName = JSON.parse(Decrypt(data.data.data)).filmNames;
+                    this.oName = JSON.parse(Decrypt(data.data.data)).name;
+                    this.oCreateDate = JSON.parse(Decrypt(data.data.data)).createDate;
+                    this.oEndDate = JSON.parse(Decrypt(data.data.data)).endDate;
+                    this.oValidPayType = JSON.parse(Decrypt(data.data.data)).validPayType;
+                    this.oAchieveMoney = JSON.parse(Decrypt(data.data.data)).achieveMoney;
+                    this.oReduceType = JSON.parse(Decrypt(data.data.data)).reduceType;
+                    this.oDiscountMoney = JSON.parse(Decrypt(data.data.data)).discountMoney;
+                    this.oCouponDesc = JSON.parse(Decrypt(data.data.data)).couponDesc;
+                    this.oId = JSON.parse(Decrypt(data.data.data)).id;
+                    this.oStatus = JSON.parse(Decrypt(data.data.data)).status;
+                } else if (data.data.code == 'nologin') {
+                    this.message = data.data.message;
+                    this.open();
+                    this.$router.push('/login');
+                } else {
+                    this.message = data.data.message;
+                    this.open();
+                }
+            })
                 .catch(err => {
                     console.log(err);
                 });

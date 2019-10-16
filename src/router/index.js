@@ -140,6 +140,11 @@ export default new Router({
                     meta: { title: '卖品套餐' }
                 },
                 {
+                    path: '/filmActivity',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/filmActivity.vue'),
+                    meta: { title: '影票活动管理' }
+                },
+                {
                     // vue-schart组件
                     path: '/charts',
                     component: () => import(/* webpackChunkName: "chart" */ '../components/page/BaseCharts.vue'),

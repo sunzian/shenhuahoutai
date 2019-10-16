@@ -32,9 +32,6 @@
                 <el-table-column label="券包名称">
                     <template slot-scope="scope">{{scope.row.groupName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="有效期（天）">
-                    <template slot-scope="scope">{{scope.row.overDays}}</template>
-                </el-table-column>
                 <el-table-column prop="sort" label="券包说明">
                     <template slot-scope="scope">{{scope.row.memo}}</template>
                 </el-table-column>
@@ -128,9 +125,6 @@
                         >删除</span>
                     </div>
                 </el-form-item>
-                <el-form-item label="有效期：" :label-width="formLabelWidth" prop="date1">
-                    <el-input style="width: 150px" v-model="oForm.overDays" autocomplete="off"></el-input>（天）
-                </el-form-item>
                 <el-form-item label="开启状态：" :label-width="formLabelWidth">
                     <el-select v-model="oForm.status" placeholder="请选择">
                         <el-option
@@ -173,9 +167,6 @@
                         </div>
                     </div>
                 </el-form-item>
-                <el-form-item label="有效期：" :label-width="formLabelWidth">
-                    <el-input style="width: 75px" v-model="oOverDays" autocomplete="off"></el-input>（天）
-                </el-form-item>
                 <el-form-item label="使用须知：" :label-width="formLabelWidth">
                     <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="oMemo"></el-input>
                 </el-form-item>
@@ -200,7 +191,6 @@ export default {
         return {
             oCinemaName: '',
             oGroupName: '',
-            oOverDays: '',
             oMemo: '',
             oId: '',
             oStatus: '',
@@ -249,7 +239,6 @@ export default {
                 groupId: '',
                 memo: '',
                 number: '',
-                overDays: '',
                 id: '',
                 status: ''
             },
@@ -327,7 +316,6 @@ export default {
             jsonArr.push({ key: 'groupName', value: this.oForm.name });
             jsonArr.push({ key: 'couponNumbers', value: newCoupon });
             jsonArr.push({ key: 'cinemaCodes', value: this.selectValue });
-            jsonArr.push({ key: 'overDays', value: this.oForm.overDays });
             jsonArr.push({ key: 'status', value: this.oForm.status });
             jsonArr.push({ key: 'memo', value: this.oForm.memo });
             let sign = md5(preSign(jsonArr));
@@ -347,7 +335,6 @@ export default {
                             this.oForm.cinemaCode = [];
                             this.selectValue = '';
                             this.selectGroup = {};
-                            this.oForm.overDays = '';
                             this.cinemaInfo = [];
                             this.oForm.cinemaName = '';
                             this.oForm.status = '';
@@ -444,7 +431,6 @@ export default {
                         this.couponList = JSON.parse(Decrypt(data.data.data)).couponGroup.couponList;
                         this.oCinemaName = JSON.parse(Decrypt(data.data.data)).couponGroup.cinemaName;
                         this.oGroupName = JSON.parse(Decrypt(data.data.data)).couponGroup.groupName;
-                        this.oOverDays = JSON.parse(Decrypt(data.data.data)).couponGroup.overDays;
                         this.oMemo = JSON.parse(Decrypt(data.data.data)).couponGroup.memo;
                         this.oId = JSON.parse(Decrypt(data.data.data)).couponGroup.id;
                         this.oStatus = JSON.parse(Decrypt(data.data.data)).couponGroup.status;
@@ -478,7 +464,6 @@ export default {
             }
             let newCoupon = coupon.join(',');
             jsonArr.push({ key: 'groupName', value: this.oGroupName });
-            jsonArr.push({ key: 'overDays', value: this.oOverDays });
             jsonArr.push({ key: 'memo', value: this.oMemo });
             jsonArr.push({ key: 'couponNumbers', value: newCoupon });
             jsonArr.push({ key: 'id', value: this.oId });
