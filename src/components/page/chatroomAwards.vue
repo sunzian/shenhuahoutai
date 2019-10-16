@@ -89,7 +89,7 @@
         <!--新增弹出框-->
         <el-dialog :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
-                <el-form-item label="影院编码：" :label-width="formLabelWidth" prop="name">
+                <el-form-item label="影院名称：" :label-width="formLabelWidth" prop="name">
                     <el-select v-model="oForm.cinemaCode" placeholder="请选择">
                         <el-option
                             v-for="item in cinemaInfo"
