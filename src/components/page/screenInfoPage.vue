@@ -315,33 +315,19 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            this.idx = index;
             this.form = row;
             var jsonArr = [];
-            jsonArr.push({ key: 'id', value: row.id });
+            jsonArr.push({ key: 'cinemaCode', value: row.cinemaCode });
+            jsonArr.push({ key: 'screenCode', value: row.screenCode });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             let params = ParamsAppend(jsonArr);
             https
-                .fetchPost('/role/modifyPage', params)
+                .fetchPost('/screenSeat/updateScreenSeat', params)
                 .then(data => {
                     // console.log(data);
-                    console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
-                        this.editVisible = true;
-                        this.oName = JSON.parse(Decrypt(data.data.data)).roleName;
-                        this.form.sort = JSON.parse(Decrypt(data.data.data)).sort;
-                        this.form.memo = JSON.parse(Decrypt(data.data.data)).memo;
-                        this.form.id = row.id;
-                        this.value = JSON.parse(Decrypt(data.data.data)).status;
-                        let _index = 0;
-                        for (let x in this.options) {
-                            if (this.options[x].value == JSON.parse(Decrypt(data.data.data)).status) {
-                                _index = x;
-                                break;
-                            }
-                        }
-                        this.selectValue = this.options[_index].value;
+                        
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
@@ -501,7 +487,7 @@ export default {
             var params = ParamsAppend(jsonArr);
             console.log(jsonArr)
             https
-                .fetchPost('/screenInfo/batchUpdateScreenSeat ', params)
+                .fetchPost('/screenSeat/batchUpdateScreenSeat', params)
                 .then(data => {
                     console.log(data)
                     if (data.data.code == 'success') {

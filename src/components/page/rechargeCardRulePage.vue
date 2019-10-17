@@ -35,12 +35,6 @@
                 <el-table-column prop="name" label="充值规则名称">
                     <template slot-scope="scope">{{scope.row.ruleName}}</template>
                 </el-table-column>
-                <!-- <el-table-column prop="time" label="创建时间">
-                    <template slot-scope="scope">{{scope.row.createDate}}</template>
-                </el-table-column> -->
-                <!-- <el-table-column prop="time" label="规则类别">
-                    <template slot-scope="scope">{{scope.row.sessionTime}}</template>
-                </el-table-column> -->
                 <el-table-column prop="number" label="会员卡类别名称">
                     <template slot-scope="scope">{{scope.row.cardLevelName}}</template>
                 </el-table-column>
@@ -50,9 +44,6 @@
                 <el-table-column prop="number" label="赠送金额">
                     <template slot-scope="scope">{{scope.row.givenMoney}}</template>
                 </el-table-column>
-                <!-- <el-table-column prop="booleans" label="修改时间">
-                    <template slot-scope="scope">{{scope.row.settlePrice}}</template>
-                </el-table-column> -->
                 <el-table-column prop="booleans" label="状态">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status == 1" type="success">已开通</el-tag>
@@ -89,7 +80,7 @@
             </div>
         </div>
         <!--新增弹出框-->
-        <el-dialog title="获取排期" :visible.sync="dialogFormVisible">
+        <el-dialog title="设置规则" :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
                 <el-form-item label="影院名称"  :label-width="formLabelWidth">
                     <el-select v-model="oForm.cinemaName" placeholder="请选择" @change="getCinemaCode">
@@ -109,32 +100,6 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <!-- <el-form-item label="规则类型">
-                    <el-input
-                        style="width: 250px"
-                        min="1"
-                        v-model="oSessionTime"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item> -->
-                <!-- <el-form-item label="影院名称">
-                    <el-select v-model="oForm.cinemaName" placeholder="请选择" @change="getCinemaCode">
-                        <el-option
-                            v-for="info in cinemaInfo"
-                            :key="info.cinemaCode"
-                            :value="info.cinemaName"
-                            :label="info.cinemaName"
-                        ></el-option>
-                    </el-select>
-                </el-form-item> -->
-                <!-- <el-form-item label="会员卡">
-                    <el-input
-                        style="width: 250px"
-                        min="1"
-                        v-model="oStandardPrice"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item> -->
                 <el-form-item label="充值金额(起充金额)" :label-width="formLabelWidth">
                     <el-input style="width: 250px" min="1" v-model="oForm.rechargeAmount" autocomplete="off"></el-input>
                 </el-form-item>
@@ -144,6 +109,7 @@
                         min="1"
                         v-model="oForm.givenMoney"
                         autocomplete="off"
+                        placeholder="不填默认为0"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="设置优惠券" :label-width="formLabelWidth">
@@ -155,10 +121,17 @@
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="优惠描述" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" min="1" v-model="oForm.ruleMemo" autocomplete="off"></el-input>
+                    <el-input style="width: 250px" min="1" v-model="oForm.ruleMemo" placeholder="建议长度不超过15字" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="状态" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" min="1" v-model="oForm.status" autocomplete="off"></el-input>
+                    <el-select v-model="oForm.status" placeholder="请选择">
+                        <el-option
+                            v-for="item in options"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value"
+                        ></el-option>
+                    </el-select>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -186,22 +159,6 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <!-- <el-form-item label="规则类型">
-                    <el-input
-                        style="width: 250px"
-                        min="1"
-                        v-model="oSessionTime"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item> -->
-                <!-- <el-form-item label="会员卡">
-                    <el-input
-                        style="width: 250px"
-                        min="1"
-                        v-model="oStandardPrice"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item> -->
                 <el-form-item label="充值金额(起充金额)" :label-width="formLabelWidth">
                     <el-input style="width: 250px" min="1" v-model="oRechargeAmount" autocomplete="off"></el-input>
                 </el-form-item>
@@ -260,14 +217,14 @@ export default {
                 pageNo: 1,
                 pageSize: 10
             },
-            boolean: [
+            options: [
                 {
-                    value: '是',
-                    id: '1'
+                    value: '1',
+                    label: '启用'
                 },
                 {
-                    value: '否',
-                    id: '2'
+                    value: '2',
+                    label: '未启用'
                 }
             ],
             cinemaInfo: [],
@@ -335,13 +292,13 @@ export default {
         },
         addRole() {
             //新增按钮操作
-            const loading = this.$loading({
-                lock: true,
-                text: 'Loading',
-                spinner: 'el-icon-loading',
-                background: 'rgba(0, 0, 0, 0.7)',
-                target: document.querySelector('.div1')
-            });
+            // const loading = this.$loading({
+            //     lock: true,
+            //     text: 'Loading',
+            //     spinner: 'el-icon-loading',
+            //     background: 'rgba(0, 0, 0, 0.7)',
+            //     target: document.querySelector('.div1')
+            // });
             //获取所选影院编码
             // for (let i = 0; i < this.cinemaInfo.length; i++) {
             //     if (this.cinemaInfo[i].cinemaName == this.oForm.cinemaName) {
@@ -349,8 +306,12 @@ export default {
             //     }
             // }
             console.log(this.cardList)
-            // return
+            console.log(this.oForm.cinemaCode)
+            return
             var jsonArr = [];
+            if (this.oForm.givenMoney != '') {
+                jsonArr.push({ key: 'givenMoney', value: this.oForm.givenMoney });
+            }
             jsonArr.push({ key: 'cinemaCode', value: this.oForm.cinemaCode });
             jsonArr.push({ key: 'cinemaName', value: this.oForm.cinemaName });
             jsonArr.push({ key: 'ruleName', value: this.oForm.ruleName });
@@ -359,7 +320,6 @@ export default {
             jsonArr.push({ key: 'cardLevelCode', value: 8888 });
             jsonArr.push({ key: 'cardLevelName', value: "普通类型" });
             // jsonArr.push({ key: 'givenType', value: this.oForm.givenType }); // 赠送类型
-            // jsonArr.push({ key: 'givenMoney', value: this.oForm.givenMoney });
             jsonArr.push({ key: 'ruleMemo', value: this.oForm.ruleMemo });
             jsonArr.push({ key: 'status', value: 1 });
             // jsonArr.push({ key: 'status', value: this.oForm.status });
@@ -654,7 +614,6 @@ export default {
                 .then(data => {
                     if (data.data.code == 'success') {
                         var res = JSON.parse(Decrypt(data.data.data));
-                        console.log(res);
                         this.cardList = res;
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;

@@ -57,7 +57,7 @@
                             type="text"
                             icon="el-icon-circle-plus-outline"
                             @click="addChange(scope.$index, scope.row)"
-                        >查看详情</el-button>
+                        >修改</el-button>
                         <el-button
                             type="text"
                             icon="el-icon-delete"
@@ -140,7 +140,7 @@
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogFormVisible = false">取 消</el-button>
+                <el-button @click="cancel">取 消</el-button>
                 <el-button type="primary" @click="addRole">确 定</el-button>
             </div>
         </el-dialog>
@@ -231,6 +231,7 @@ export default {
                 }
             ],
             oForm: {
+                name: '',
                 groupName: '',
                 cinemaName: '',
                 cinemaCode: [],
@@ -284,6 +285,16 @@ export default {
                         this.oForm.cinemaCode = this.cinemaInfo[0].cinemaCode;
                         this.selectValue = this.cinemaInfo[0].cinemaCode;
                         this.dialogFormVisible = true;
+                        this.oForm.name = '';
+                        this.oForm.couponName = '';
+                        this.oForm.cinemaCode = [];
+                        this.selectValue = '';
+                        this.selectGroup = {};
+                        this.couponInfo = [];
+                        this.oForm.cinemaName = '';
+                        this.oForm.status = '';
+                        this.oForm.number = '';
+                        this.oForm.memo = '';
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
@@ -331,15 +342,6 @@ export default {
                         if (data.data.code == 'success') {
                             this.dialogFormVisible = false;
                             this.$message.success(`新增成功`);
-                            this.oForm.name = '';
-                            this.oForm.cinemaCode = [];
-                            this.selectValue = '';
-                            this.selectGroup = {};
-                            this.cinemaInfo = [];
-                            this.oForm.cinemaName = '';
-                            this.oForm.status = '';
-                            this.oForm.number = '';
-                            this.oForm.memo = '';
                             this.getMenu();
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
@@ -425,7 +427,6 @@ export default {
                 .fetchPost('couponGroup/updateCouponGroupPage', params)
                 .then(data => {
                     console.log(data);
-                    console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.editVisible = true;
                         this.couponList = JSON.parse(Decrypt(data.data.data)).couponGroup.couponList;
@@ -654,7 +655,6 @@ export default {
                 .then(data => {
                     if (data.data.code == 'success') {
                         let couponName = JSON.parse(Decrypt(data.data.data));
-                        console.log(couponName);
                         this.restaurants = couponName;
                         var restaurants = this.restaurants;
                         var results = restaurants;
@@ -673,11 +673,55 @@ export default {
                     console.log(err);
                 });
         },
+        // 取消按钮操作
+        cancel() {
+            this.$confirm('该操作将清空页面数据, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            })
+                .then(() => {
+                    this.dialogFormVisible = false;
+                })
+                .catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消'
+                    });
+                });
+        },
         addCoupon() {
-            // 筛选重复优惠券
+            this.selectGroup = {};
+            if (this.oForm.couponName == '') {
+                return
+            }
+            if (this.oForm.number == '') {
+                return
+            }
+            if (this.restaurants.length == 0) {
+                this.message = '暂无优惠券可选';
+                this.open();
+                return
+            }
+            for (let i = 0;i < this.restaurants.length; i ++) {
+                if (this.oForm.couponName == this.restaurants[i].value) {
+                    this.selectGroup = this.restaurants[i]
+                }
+            }
+            if (!this.selectGroup.value) {
+                return
+            }
             this.selectGroup.number = this.oForm.number;
+            // 筛选重复优惠券
+            var result = this.couponInfo.some(item => {
+                if (item.value == this.selectGroup.value) {
+                    return true;
+                }
+            });
+            if (result) {
+                return;
+            }
             this.couponInfo.push(this.selectGroup);
-            this.couponInfo = [...new Set(this.couponInfo)];
         },
         deletCoupon(index) {
             this.couponInfo.splice(index, 1);
@@ -696,6 +740,7 @@ export default {
             this.couponList[index].number = 0;
         },
         handleSelect(item) {
+            console.log(item)
             this.selectGroup = {};
             this.selectGroup = item;
         },

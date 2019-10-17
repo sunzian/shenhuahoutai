@@ -7,15 +7,75 @@
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
-        <div class="container">
+        <div class="container" v-if="showSell">
+            <div class="handle-box">
+                <el-input v-model="query.name" placeholder="选择影院" class="handle-input mr10"></el-input>
+                <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
+            </div>
+            <el-table
+                :data="tableData"
+                border
+                height="500"
+                class="table"
+                ref="multipleTable"
+                header-cell-class-name="table-header"
+            >
+                <el-table-column prop="name" label="影院编码">
+                    <template slot-scope="scope">{{scope.row.cinemaCode}}</template>
+                </el-table-column>
+                <el-table-column prop="name" label="影院名称">
+                    <template slot-scope="scope">{{scope.row.cinemaName}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="省份">
+                    <template slot-scope="scope">{{scope.row.province}}</template>
+                </el-table-column>
+                <el-table-column prop="sort" label="城市">
+                    <template slot-scope="scope">{{scope.row.city}}</template>
+                </el-table-column>
+                <el-table-column prop="sort" label="详细地址">
+                    <template slot-scope="scope">{{scope.row.address}}</template>
+                </el-table-column>
+                <el-table-column prop="sort" label="联系方式" width="150">
+                    <template slot-scope="scope">{{scope.row.serviceMobile}}</template>
+                </el-table-column>
+                <el-table-column label="操作" width="180" align="center">
+                    <template slot-scope="scope">
+                        <el-button
+                            type="text"
+                            icon="el-icon-circle-plus-outline"
+                            @click="show(scope.row)"
+                        >查看礼物详情</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <div class="pagination">
+                <el-pagination
+                    background
+                    layout="total, prev, pager, next"
+                    :current-page="query.pageNo"
+                    :page-size="query.pageSize"
+                    :total="query.totalCount"
+                    @current-change="currentChange"
+                    @prev-click="prev"
+                    @next-click="next"
+                ></el-pagination>
+            </div>
+        </div>
+        <div class="container" v-if="!showSell">
             <div class="handle-box">
                 <el-input v-model="query.name" placeholder="选择影院" class="handle-input mr10"></el-input>
                 <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
                 <el-button
                     type="primary"
+                    @click="back"
+                    icon="el-icon-circle-plus-outline"
+                    style="margin-left: 430px"
+                >返回影院列表</el-button>
+                <el-button
+                    type="primary"
                     @click="addPage"
                     icon="el-icon-circle-plus-outline"
-                    style="margin-left: 690px"
+                    style="margin-left: 140px"
                 >新增奖品</el-button>
             </div>
             <el-table
@@ -89,16 +149,6 @@
         <!--新增弹出框-->
         <el-dialog :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
-                <el-form-item label="影院名称：" :label-width="formLabelWidth" prop="name">
-                    <el-select v-model="oForm.cinemaCode" placeholder="请选择">
-                        <el-option
-                            v-for="item in cinemaInfo"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value"
-                        ></el-option>
-                    </el-select>
-                </el-form-item>
                 <el-form-item label="礼品类型：" :label-width="formLabelWidth" prop="cinemaName">
                     <el-select v-model="oForm.type" placeholder="请选择">
                         <el-option
@@ -331,6 +381,7 @@ export default {
             oLimitStatus: '',
             oSingleLimitNumber: '',
             drawer: false,
+            showSell:true,//卖品信息页面是否展示开关
             type: {
                 type: ''
             },
@@ -393,7 +444,9 @@ export default {
             couponList: []
         };
     },
-    created() {},
+    created() {
+        this.showSell=true
+    },
     mounted() {
         this.getMenu();
     },
@@ -436,7 +489,7 @@ export default {
                 jsonArr.push({ key: 'couponId', value: this.couponInfo.id });
             }
             jsonArr.push({ key: 'name', value: this.oForm.name });
-            jsonArr.push({ key: 'cinemaCode', value: this.oForm.cinemaCode });
+            jsonArr.push({ key: 'cinemaCode', value: this.cinemaCode });
             jsonArr.push({ key: 'singleNumber', value: this.oForm.singleNumber });
             jsonArr.push({ key: 'overDays', value: this.oForm.overDays });
             jsonArr.push({ key: 'groupNumber', value: this.oForm.groupNumber });
@@ -455,7 +508,7 @@ export default {
                         if (data.data.code == 'success') {
                             this.dialogFormVisible = false;
                             this.$message.success(`新增成功`);
-                            this.getMenu();
+                            this.show(this.cinemaCode);
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
                             this.open();
@@ -499,7 +552,7 @@ export default {
                         .then(data => {
                             if (data.data.code == 'success') {
                                 this.$message.error(`删除了`);
-                                this.getMenu();
+                                this.show(this.cinemaCode);
                             } else if (data.data.code == 'nologin') {
                                 this.message = data.data.message;
                                 this.open();
@@ -520,27 +573,25 @@ export default {
                     });
                 });
         },
-        addChange(index, row) {
-            //是否拥有权限
-            const loading = this.$loading({
-                lock: true,
-                text: 'Loading',
-                spinner: 'el-icon-loading',
-                background: 'rgba(0, 0, 0, 0.7)',
-                target: document.querySelector('.div1')
-            });
-            this.idx = index;
-            this.form = row;
-            var jsonArr = [];
-            jsonArr.push({ key: 'id', value: row.id });
-            let sign = md5(preSign(jsonArr));
-            jsonArr.push({ key: 'sign', value: sign });
-            let params = ParamsAppend(jsonArr);
-            https
-                .fetchPost('chatroomAwards/updateAwardsPage', params)
-                .then(data => {
-                    // console.log(JSON.parse(Decrypt(data.data.data)));
-                    if (data.data.code == 'success') {
+        addChange(index, row){//是否修改权限
+                const loading = this.$loading({
+                    lock: true,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)',
+                    target: document.querySelector('.div1')
+                });
+                this.idx = index;
+                this.form = row;
+                var jsonArr = [];
+                jsonArr.push({key:"id",value:row.id});
+                let sign =md5(preSign(jsonArr));
+                jsonArr.push({key:"sign",value:sign});
+                let params = ParamsAppend(jsonArr);
+                https.fetchPost('chatroomAwards/updateAwardsPage',params).then((data) => {
+                    console.log(data);
+                    console.log(JSON.parse(Decrypt(data.data.data)));
+                    if(data.data.code=='success'){
                         this.oCinemaName = JSON.parse(Decrypt(data.data.data)).cinemaName;
                         this.oName = JSON.parse(Decrypt(data.data.data)).name;
                         this.oSingleNumber = JSON.parse(Decrypt(data.data.data)).singleNumber;
@@ -552,6 +603,51 @@ export default {
                         this.oId = JSON.parse(Decrypt(data.data.data)).id;
                         this.oSingleLimitNumber = JSON.parse(Decrypt(data.data.data)).singleLimitNumber;
                         this.editVisible = true;
+                    }else if(data.data.code=='nologin'){
+                        this.message=data.data.message
+                        this.open()
+                        this.$router.push('/login');
+                    }else{
+                        this.message=data.data.message
+                        this.open()
+                    }
+                }).catch(err=>{
+                        console.log(err)
+                    }
+                )
+                loading.close();
+            },
+        show(row) {
+            this.showSell=false
+            //是否拥有权限
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
+            if (row.cinemaCode) {
+                this.cinemaCode = row.cinemaCode
+            }
+            var jsonArr = [];
+            jsonArr.push({key:"pageNo",value:this.query.pageNo});
+            jsonArr.push({key:"pageSize",value:this.query.pageSize});
+            jsonArr.push({key:"cinemaCode",value:this.cinemaCode});
+            let sign = md5(preSign(jsonArr));
+            jsonArr.push({ key: 'sign', value: sign });
+            let params = ParamsAppend(jsonArr);
+            https
+                .fetchPost('/chatroomAwards/awardsPage', params)
+                .then(data => {
+                    if (data.data.code == 'success') {
+                        var oData = JSON.parse(Decrypt(data.data.data));
+                        console.log(oData);
+                        this.tableData = oData.data;
+                        this.query.pageSize = oData.pageSize;
+                        this.query.pageNo = oData.pageNo;
+                        this.query.totalCount = oData.totalCount;
+                        this.query.totalPage = oData.totalPage;
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
@@ -595,7 +691,7 @@ export default {
                     // console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.$message.success(`编辑成功`);
-                        this.getMenu();
+                        this.show(this.cinemaCode);
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
@@ -684,7 +780,7 @@ export default {
             jsonArr.push({ key: 'sign', value: sign });
             var params = ParamsAppend(jsonArr);
             https
-                .fetchPost('chatroomAwards/awardsPage', params)
+                .fetchPost('/cinema/myCinemaPage', params)
                 .then(data => {
                     if (data.data.code == 'success') {
                         var oData = JSON.parse(Decrypt(data.data.data));
@@ -707,6 +803,10 @@ export default {
                     console.log(err);
                 });
             loading.close();
+        },
+        back() {
+            this.showSell=true
+            this.getMenu();
         },
         open() {
             //错误信息弹出框
@@ -767,11 +867,6 @@ export default {
             let name = this.couponName;
             if (!name) {
                 name = '';
-            }
-            if (this.oForm.cinemaCode == '') {
-                this.message = '请选择影院';
-                this.open();
-                return;
             }
             let date = new Date();
             let today =
