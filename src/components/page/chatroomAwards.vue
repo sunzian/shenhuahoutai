@@ -288,7 +288,7 @@
             </span>
         </el-dialog>
         <!-- 选择优惠券弹出窗 -->
-        <el-dialog title="选择卖品" :visible.sync="drawer">
+        <el-dialog title="选择优惠券" :visible.sync="drawer">
             <div class="container">
                 <div class="handle-box">
                     <el-input v-model="couponName" placeholder="优惠券名称" class="handle-input mr10"></el-input>
@@ -440,8 +440,7 @@ export default {
             cinemaInfo: [],
             couponInfo: {},
             value: [],
-            couponName: '',
-            couponList: []
+            couponName: ''
         };
     },
     created() {
