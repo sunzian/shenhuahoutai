@@ -34,8 +34,8 @@
                         >门店</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="所属商家编码" width="130">
-                    <template slot-scope="scope">{{scope.row.businessCode}}</template>
+                <el-table-column label="适用影院" width="130">
+                    <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="适用影院编码" width="130">
                     <template slot-scope="scope">{{scope.row.cinemaCodes}}</template>
@@ -133,7 +133,7 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="适用影院编码" :label-width="formLabelWidth">
+                <el-form-item label="适用影院" :label-width="formLabelWidth" v-if="oForm.value == 2">
                     <el-select v-model="oForm.cinemaCode" placeholder="请选择影院">
                         <el-option
                                 v-for="item in cinemaList"
@@ -158,6 +158,8 @@
                             style="width: 150px"
                             v-model="startTime"
                             type="datetime"
+                            value-format="yyyy-MM-dd hh:mm:ss"
+                            format="yyyy-MM-dd hh:mm:ss"
                             placeholder="选择日期时间">
                     </el-date-picker>
                 </el-form-item>
@@ -166,6 +168,8 @@
                             style="width: 150px"
                             v-model="endTime"
                             type="datetime"
+                            value-format="yyyy-MM-dd hh:mm:ss"
+                            format="yyyy-MM-dd hh:mm:ss"
                             placeholder="选择日期时间">
                     </el-date-picker>
                 </el-form-item>
@@ -228,7 +232,7 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="适用影院编码" :label-width="formLabelWidth">
+                <el-form-item label="适用影院" :label-width="formLabelWidth" v-if="form.bannerLevel == 2">
                     <el-select v-model="form.cinemaCodes" placeholder="请选择影院">
                         <el-option
                                 v-for="item in cinemaList"
@@ -374,10 +378,10 @@
                 selectValue:{},
                 options: [{
                     value: '1',
-                    label: '商家'
+                    label: '全部影院'
                 }, {
                     value: '2',
-                    label: '门店'
+                    label: '部分影院'
                 }],
                 showStatus: [{
                     value: '1',
@@ -463,8 +467,10 @@
                 });
                 setTimeout(() => {
                     var jsonArr = [];
+                    if (this.oForm.value == 2) {
+                        jsonArr.push({key:"cinemaCodes",value:this.oForm.cinemaCode});
+                    }
                     jsonArr.push({key:"bannerLevel",value:this.oForm.value});
-                    jsonArr.push({key:"cinemaCodes",value:this.oForm.cinemaCode});
                     jsonArr.push({key:"status",value:this.oForm.statusValue});
                     jsonArr.push({key:"startDate",value:this.startTime});
                     jsonArr.push({key:"endDate",value:this.endTime});
@@ -503,6 +509,12 @@
                 }, 500);
             },
             delChange(index, row){//删除数据
+            this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            })
+            .then(() => {
                 const loading = this.$loading({
                     lock: true,
                     text: 'Loading',
@@ -548,6 +560,13 @@
                     )
                     loading.close();
                 }, 500);
+                })
+                .catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
             },
             addChange(index, row){//是否修改权限
                 const loading = this.$loading({

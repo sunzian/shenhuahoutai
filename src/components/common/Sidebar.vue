@@ -14,7 +14,6 @@
                 <template v-if="item.submenuList" >
                     <el-submenu :index="item.id+''" :key="item.id">
                         <template slot="title">
-                            <!--<i :class="item.icon"></i>-->
                             <span slot="title">{{ item.menuName }}</span>
                         </template>
                         <template v-for="subItem in item.submenuList" >
@@ -79,20 +78,12 @@ export default {
             }
         )
     },
+    watch: {
+        
+    },
     computed: {
         onRoutes() {
-            // https.fetchPost('/admin/getMenus','').then((data) => {//获取用户是否可以跳转
-            //     if(data.data.code == 'success'){
-            //         let menus=Decrypt(data.data.data)//返回的数据进行解密
-            //         // localStorage.setItem("menu", menusList)//将后端返回的菜单栏存入缓存
-            //         // this.menuList =JSON.parse(localStorage.getItem('menu'))//将登录页面拿到的菜单栏数据取出来
-            //         this.menuList =JSON.parse(menus)
-            //         console.log(this.menuList);
-            //     }
-            // }).catch(err=>{
-            //         console.log(err)
-            //     }
-            // )
+            // console.log(this.$route.path)
             return this.$route.path.replace('/', '');
         }
     },

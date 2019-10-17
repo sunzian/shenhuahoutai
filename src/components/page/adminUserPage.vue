@@ -50,9 +50,9 @@
                 <el-table-column prop="memo" label="登陆时间">
                     <template slot-scope="scope">{{scope.row.loginDate}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="登录IP">
+                <!-- <el-table-column prop="memo" label="登录IP">
                 <template slot-scope="scope">{{scope.row.loginIp}}</template>
-            </el-table-column>
+                </el-table-column> -->
                 <el-table-column label="状态" align="center">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status=='1'" type='success'

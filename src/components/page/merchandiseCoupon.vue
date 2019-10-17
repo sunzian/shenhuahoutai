@@ -111,14 +111,14 @@
                     <el-input style="width: 150px" v-model="oForm.name" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="选择影院：" :label-width="formLabelWidth">
-                    <el-checkbox-group v-model="oForm.cinemaCode" @change="selectCinema">
-                        <el-checkbox
+                    <el-radio-group v-model="oForm.cinemaCode" @change="selectCinema">
+                        <el-radio
                             v-for="item in cinemaInfo"
                             :label="item.cinemaCode"
                             :key="item.cinemaCode"
                             :value="item.cinemaName"
-                        >{{item.cinemaName}}</el-checkbox>
-                    </el-checkbox-group>
+                        >{{item.cinemaName}}</el-radio>
+                    </el-radio-group>
                 </el-form-item>
                 <el-form-item label="适用卖品：" :label-width="formLabelWidth">
                     <el-checkbox-group v-model="oForm.merchandiseCode" @change="selectGoods">
@@ -187,8 +187,8 @@
                 <el-form-item label="星期几不可用：" :label-width="formLabelWidth">
                     <el-checkbox-group v-model="oForm.checkedDays" @change="selectDay">
                         <el-checkbox
-                            v-for="day in oForm.exceptWeekDay"
-                            :label="day"
+                            v-for="(day, index) in oForm.exceptWeekDay"
+                            :label="index+1"
                             :key="day"
                         >{{day}}</el-checkbox>
                     </el-checkbox-group>
@@ -318,7 +318,7 @@ export default {
                 merchandiseName: '',
                 merchandiseCode: [],
                 checkedDays: [],
-                exceptWeekDay: [1, 2, 3, 4, 5, 6, 7],
+                exceptWeekDay: ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日'],
                 startDate: '',
                 endDate: '',
                 validPayType: '',
@@ -664,6 +664,7 @@ export default {
                 status = '';
             }
             let jsonArr = [];
+            jsonArr.push({ key: 'couponType', value: 2 });
             jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
             jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
             // jsonArr.push({ key: 'filmName', value: name });
@@ -710,11 +711,8 @@ export default {
             });
         },
         selectCinema(val) {
-            // console.log(val)
-            let selectValue = val.join(',');
-            this.selectValue = selectValue;
-            this.getAllGoods(selectValue);
-            // console.log(this.goodsInfo)
+            this.selectValue = val;
+            this.getAllGoods(val);
         },
         selectGoods(val) {
             // console.log(val)
