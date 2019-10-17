@@ -27,37 +27,19 @@
                     header-cell-class-name="table-header"
             >
                 <el-table-column prop="name" label="适用影院">
-                    <template slot-scope="scope">{{scope.row.cinemaNames}}</template>
+                    <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="卡券类型">
-                    <template slot-scope="scope">
-                        <el-tag v-if="scope.row.reduceType == 1" type="success">兑换券</el-tag>
-                        <el-tag v-else type="danger">代金券</el-tag>
-                    </template>
-                </el-table-column>
-                <el-table-column label="卡券名称">
+                <el-table-column label="活动名称">
                     <template slot-scope="scope">{{scope.row.name}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="有效期">
                     <template slot-scope="scope">{{scope.row.startDate}}至{{scope.row.endDate}}</template>
                 </el-table-column>
-                <!-- <el-table-column prop="sort" label="有效天数">
-                    <template slot-scope="scope">{{scope.row.publishDate}}</template>
-                </el-table-column>-->
                 <el-table-column prop="sort" label="满多少可用">
                     <template slot-scope="scope">{{scope.row.achieveMoney}}</template>
                 </el-table-column>
                 <el-table-column prop="sort" label="优惠金额">
                     <template slot-scope="scope">{{scope.row.discountMoney}}</template>
-                </el-table-column>
-                <el-table-column prop="sort" label="已发放">
-                    <template slot-scope="scope">{{scope.row.sendNumber}}</template>
-                </el-table-column>
-                <el-table-column prop="sort" label="已领取">
-                    <template slot-scope="scope">{{scope.row.acquireNumber}}</template>
-                </el-table-column>
-                <el-table-column prop="sort" label="已使用">
-                    <template slot-scope="scope">{{scope.row.usedNumber}}</template>
                 </el-table-column>
                 <el-table-column prop="sort" label="状态">
                     <template slot-scope="scope">
@@ -251,6 +233,19 @@
                             end-placeholder="结束时间"
                             placeholder="选择时间范围">
                     </el-time-picker>
+                    <span style="cursor: pointer;color: blue" @click="addTime">添加</span>
+                </el-form-item>
+                <el-form-item
+                        label="所选时间段："
+                        :label-width="formLabelWidth"
+                        v-if="dateInfo.length>0">
+                    <div v-for="(item, index) in dateInfo">
+                        {{item}}
+                        <span
+                                style="color:red;cursor: pointer;"
+                                @click="deletTime(index)"
+                        >删除</span>
+                    </div>
                 </el-form-item>
                 <el-form-item label="星期几不可用：" :label-width="formLabelWidth">
                     <el-checkbox-group v-model="oForm.checkedDays" @change="selectDay">
@@ -271,9 +266,6 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <!--<el-form-item label="活动数量：" :label-width="formLabelWidth">-->
-                    <!--<el-input style="width: 50px" v-model="oForm.sendNumber" autocomplete="off"></el-input>-->
-                <!--</el-form-item>-->
                 <el-form-item label="是否限制张数：" :label-width="formLabelWidth">
                     <el-select v-model="oForm.oCanNum" placeholder="请选择">
                         <el-option
@@ -418,9 +410,10 @@
                     screenName: '',
                     screenCode: [],
                     formatCode:[],
-                    selectFilmType: '0',
-                    selectHallType: '0',
-                    selectMovieType:'0',
+                    selectFilmType: '0',//选择影片
+                    selectHallType: '0',//选择影厅
+                    selectMovieType:'0',//选择制式
+                    code:[],//选择影院
                     filmCode: '',
                     filmName: '',
                     checkedDays: [],
@@ -442,7 +435,10 @@
                 selectFilm: {},
                 cinemaInfo: [],
                 screenInfo: [],
-                filmInfo: [],
+                filmInfo: [],//所选影片
+                dateInfo:[],//所选时间段
+                startArr:[],
+                endArr:[],
                 value: '',
             };
         },
@@ -451,6 +447,47 @@
             this.getMenu();
         },
         methods: {
+            addTime(){
+                // 筛选重复时间段
+                var result = this.dateInfo.some(item => {
+                    if (item == this.value1) {
+                        return true;
+                    }
+                });
+                if (result) {
+                    return;
+                }
+                this.dateInfo.push(this.value1);
+                this.startArr.push(this.value1[0])
+                this.endArr.push(this.value1[1])
+                console.log(this.startArr.join(','));
+                console.log(this.endArr.join(','));
+
+                // console.log(this.dateInfo);
+                // if(this.dateInfo.length==1){
+                //     console.log(this.dateInfo[0]);
+                //     for(let x in this.dateInfo[0]){
+                //         this.oForm.startTimeVal=this.dateInfo[0][0]
+                //         this.oForm.endTimeVal=this.dateInfo[0][1]
+                //     }
+                // }
+                // else if(this.dateInfo.length>1){
+                //     console.log(this.dateInfo);
+                //     for(let i in this.dateInfo){
+                //         console.log(this.dateInfo[i]);
+                //         for(let k in this.dateInfo[i]){
+                //             console.log(this.dateInfo[i][k]);
+                //             this.oForm.startTimeVal=this.dateInfo[i][k]
+                //             this.oForm.endTimeVal=this.dateInfo[i][k]
+                //         }
+                //     }
+                // }
+                // console.log(this.oForm.startTimeVal);
+                // console.log(this.oForm.endTimeVal);
+            },
+            deletTime(index) {
+                this.dateInfo.splice(index, 1);
+            },
             addPage() {
                 //获取新增按钮权限
                 const loading = this.$loading({
@@ -463,6 +500,7 @@
                 https.fetchPost('/filmDiscountActivity/AddPage', '').then(data => {
                         console.log(data);
                         if (data.data.code == 'success') {
+                            this.oForm.code = this.cinemaInfo[0].cinemaCode;
                             console.log(JSON.parse(Decrypt(data.data.data)));
                             let formats = JSON.parse(Decrypt(data.data.data)).formatList;
                             this.formatList = [];
@@ -489,101 +527,110 @@
                 loading.close();
             },
             addRole() {//新增按钮操作
-                // const loading = this.$loading({
-                //     lock: true,
-                //     text: 'Loading',
-                //     spinner: 'el-icon-loading',
-                //     background: 'rgba(0, 0, 0, 0.7)',
-                //     target: document.querySelector('.div1')
-                // });
-                // if (this.oForm.cinemaCode == true) {
-                //     this.oForm.cinemaCode = this.cinemaInfo[0].cinemaCode;
-                // }
-                // let filmeCodes = [];
-                // for (let i = 0; i < this.filmInfo.length; i++) {
-                //     filmeCodes.push(this.filmInfo[i].filmCode);
-                // }
-                // this.oForm.filmCode = filmeCodes.join(',');
-                // if (this.oForm.selectFilmType == 0) {
-                //     this.oForm.filmCode = '';
-                // }
-                // if (this.oForm.selectHallType == 0) {
-                //     this.selectScreenCode = '';
-                // }
-                // if (this.oForm.reduceType == 1) {
-                //     this.oForm.achieveMoney = '';
-                // }
-                // var jsonArr = [];
-                // jsonArr.push({ key: 'name', value: this.oForm.name });
-                // jsonArr.push({ key: 'cinemaCode', value: this.selectValue });
-                // jsonArr.push({ key: 'selectHallType', value: this.oForm.selectHallType });
-                // jsonArr.push({ key: 'screenCode', value: this.selectScreenCode });
-                // jsonArr.push({ key: 'selectFilmType', value: this.oForm.selectFilmType });
-                // jsonArr.push({ key: 'filmCode', value: this.oForm.filmCode });
-                // jsonArr.push({ key: 'startDate', value: this.oForm.startDate });
-                // jsonArr.push({ key: 'endDate', value: this.oForm.endDate });
-                // jsonArr.push({ key: 'reduceType', value: this.oForm.reduceType });
-                // jsonArr.push({ key: 'validPayType', value: this.oForm.validPayType });
-                // jsonArr.push({ key: 'achieveMoney', value: this.oForm.achieveMoney });
-                // jsonArr.push({ key: 'discountMoney', value: this.oForm.discountMoney });
-                // jsonArr.push({ key: 'status', value: this.oForm.status });
-                // jsonArr.push({ key: 'isHolidayValid', value: this.oForm.holidayValid });
-                // jsonArr.push({ key: 'validWeekDay', value: this.checkedDays });
-                // jsonArr.push({ key: 'isCouponTogether', value: this.oForm.activityTogether });
-                // jsonArr.push({ key: 'activityDesc', value: this.oForm.couponDesc });
-                //
+                const loading = this.$loading({
+                    lock: true,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)',
+                    target: document.querySelector('.div1')
+                });
+                if (this.oForm.code == true) {
+                    this.oForm.code = this.cinemaInfo[0].code;
+                }
+                let filmeCodes = [];
+                for (let i = 0; i < this.filmInfo.length; i++) {
+                    filmeCodes.push(this.filmInfo[i].filmCode);
+                }
+                this.oForm.filmCode = filmeCodes.join(',');
+                if (this.oForm.selectFilmType == 0) {
+                    this.oForm.filmCode = '';
+                }
+                if (this.oForm.selectHallType == 0) {
+                    this.selectScreenCode = '';
+                }
+                if (this.oForm.reduceType == 1) {
+                    this.oForm.achieveMoney = '';
+                }
+                var jsonArr = [];
+                jsonArr.push({ key: 'name', value: this.oForm.name });
+                jsonArr.push({ key: 'cinemaCode', value: this.selectValue });
+                jsonArr.push({ key: 'selectHallType', value: this.oForm.selectHallType });
+                jsonArr.push({ key: 'screenCode', value: this.selectScreenCode });
+                jsonArr.push({ key: 'selectFilmType', value: this.oForm.selectFilmType });
+                jsonArr.push({ key: 'filmCode', value: this.oForm.filmCode });
+                jsonArr.push({ key: 'startDate', value: this.oForm.startDate });
+                jsonArr.push({ key: 'endDate', value: this.oForm.endDate });
+                jsonArr.push({ key: 'reduceType', value: this.oForm.reduceType });
+                jsonArr.push({ key: 'validPayType', value: this.oForm.validPayType });
+                jsonArr.push({ key: 'achieveMoney', value: this.oForm.achieveMoney });
+                jsonArr.push({ key: 'discountMoney', value: this.oForm.discountMoney });
+                jsonArr.push({ key: 'status', value: this.oForm.status });
+                jsonArr.push({ key: 'isHolidayValid', value: this.oForm.holidayValid });
+                jsonArr.push({ key: 'validWeekDay', value: this.checkedDays });
+                jsonArr.push({ key: 'isCouponTogether', value: this.oForm.activityTogether });
+                jsonArr.push({ key: 'activityDesc', value: this.oForm.couponDesc });
+                jsonArr.push({ key: 'startTimeVal', value: this.startArr.join(',')});
+                jsonArr.push({ key: 'endTimeVal', value: this.endArr.join(',')});
+
                 // jsonArr.push({ key: 'cinemaName', value: this.selectValue });
-                // jsonArr.push({ key: 'isLimitTotal', value: this.oForm.endDate });
-                // jsonArr.push({ key: 'totalNumber', value: this.oForm.endDate });
-                // jsonArr.push({ key: 'isLimitSingle', value: this.oForm.endDate });
-                // jsonArr.push({ key: 'singleNumber', value: this.oForm.endDate });
-                // jsonArr.push({ key: 'selectFilmFormatType', value: this.oForm.startDate });
-                // jsonArr.push({ key: 'FilmFormatCode', value: this.oForm.startDate });
+                jsonArr.push({ key: 'isLimitTotal', value: this.oForm.oCanNum });
+                jsonArr.push({ key: 'totalNumber', value: this.oForm.oNum });
+                jsonArr.push({ key: 'isLimitSingle', value: this.oForm.oneCanNum });
+                jsonArr.push({ key: 'singleNumber', value: this.oForm.oneNum });
+                jsonArr.push({ key: 'selectFilmFormatType', value: this.oForm.selectMovieType});
+                jsonArr.push({ key: 'FilmFormatCode', value: this.oForm.formatCode});
                 // jsonArr.push({ key: 'FilmFormatName', value: this.oForm.startDate });
                 // jsonArr.push({ key: 'filmName', value: this.oForm.filmCode });
                 // jsonArr.push({ key: 'screenName', value: this.selectScreenCode });
-                // let sign = md5(preSign(jsonArr));
-                // jsonArr.push({ key: 'sign', value: sign });
-                // console.log(jsonArr);
-                // let params = ParamsAppend(jsonArr);
-                // if (this.dialogFormVisible == true) {
-                //     https.fetchPost('/filmDiscountActivity/addActivity', params).then(data => {//新增
-                //             console.log(data);
-                //             if (data.data.code == 'success') {
-                //                 this.dialogFormVisible = false;
-                //                 this.$message.success(`新增成功`);
-                //                 // this.oForm.name = '';
-                //                 // this.oForm.cinemaCode = [];
-                //                 // this.cinemaInfo = [];
-                //                 // this.oForm.cinemaName = '';
-                //                 // this.oForm.merchandiseCode = [];
-                //                 // this.oForm.merchandiseName = '';
-                //                 // this.oForm.startDate = '';
-                //                 // this.oForm.endDate = '';
-                //                 // this.oForm.validPayType = '';
-                //                 // this.oForm.reduceType = '';
-                //                 // this.oForm.achieveMoney = '';
-                //                 // this.oForm.discountMoney = '';
-                //                 // this.oForm.holidayValid = '';
-                //                 // this.oForm.checkedDays = [];
-                //                 // this.oForm.status = '';
-                //                 // this.oForm.activityTogether = '';
-                //                 // this.oForm.sendNumber = '';
-                //                 // this.oForm.couponDesc = '';
-                //                 this.getMenu();
-                //             } else if (data.data.code == 'nologin') {
-                //                 this.message = data.data.message;
-                //                 this.open();
-                //                 this.$router.push('/login');
-                //             } else {
-                //                 this.message = data.data.message;
-                //                 this.open();
-                //             }
-                //         }).catch(err => {
-                //             console.log(err);
-                //         });
-                // }
-                // loading.close();
+                let sign = md5(preSign(jsonArr));
+                jsonArr.push({ key: 'sign', value: sign });
+                console.log(jsonArr);
+                let params = ParamsAppend(jsonArr);
+                if (this.dialogFormVisible == true) {
+                    https.fetchPost('/filmDiscountActivity/addActivity', params).then(data => {//新增
+                            console.log(data);
+                            if (data.data.code == 'success') {
+                                this.dialogFormVisible = false;
+                                this.$message.success(`新增成功`);
+                                this.oForm.name = '';
+                                this.selectValue = [];
+                                this.oForm.selectHallType = [];
+                                this.selectScreenCode = '';
+                                this.oForm.selectFilmType = [];
+                                this.oForm.filmCode = '';
+                                this.oForm.startDate = '';
+                                this.oForm.endDate = '';
+                                this.oForm.validPayType = '';
+                                this.oForm.reduceType = '';
+                                this.oForm.achieveMoney = '';
+                                this.oForm.discountMoney = '';
+                                this.oForm.holidayValid = '';
+                                this.oForm.checkedDays = [];
+                                this.oForm.status = '';
+                                this.oForm.activityTogether = '';
+                                this.oForm.sendNumber = '';
+                                this.oForm.couponDesc = '';
+                                this.oForm.oCanNum = '';
+                                this.oForm.oNum = '';
+                                this.oForm.oneCanNum = '';
+                                this.oForm.oneNum = '';
+                                this.oForm.selectMovieType = '';
+                                this.oForm.formatCode = '';
+                                this.oForm.code = '';
+                                this.getMenu();
+                            } else if (data.data.code == 'nologin') {
+                                this.message = data.data.message;
+                                this.open();
+                                this.$router.push('/login');
+                            } else {
+                                this.message = data.data.message;
+                                this.open();
+                            }
+                        }).catch(err => {
+                            console.log(err);
+                        });
+                }
+                loading.close();
             },
             delChange(index, row) {
                 //删除数据
@@ -607,7 +654,7 @@
                         let sign = md5(preSign(jsonArr));
                         jsonArr.push({ key: 'sign', value: sign });
                         let params = ParamsAppend(jsonArr);
-                        https.fetchPost('/filmCoupon/deleteById', params).then(data => {
+                        https.fetchPost('/filmDiscountActivity/deleteById', params).then(data => {
                                 if (data.data.code == 'success') {
                                     this.$message.error(`删除了`);
                                     this.getMenu();

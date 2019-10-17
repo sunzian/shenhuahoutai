@@ -420,7 +420,7 @@
                     let params = ParamsAppend(jsonArr);
                     https.fetchPost('/user/modifyAdminPage',params).then((data) => {
                         console.log(data);
-                        console.log(JSON.parse(Decrypt(data.data.data)));
+                        // console.log(JSON.parse(Decrypt(data.data.data)));
                         if(data.data.code=='success'){
                             this.editVisible = true;
                             this.form.id=row.id;

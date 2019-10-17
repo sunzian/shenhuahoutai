@@ -753,9 +753,7 @@ export default {
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             var params = ParamsAppend(jsonArr);
-            https
-                .fetchPost('/filmCoupon/filmCouponPage', params)
-                .then(data => {
+            https.fetchPost('/filmCoupon/filmCouponPage', params).then(data => {
                     if (data.data.code == 'success') {
                         var oData = JSON.parse(Decrypt(data.data.data));
                         console.log(oData);
