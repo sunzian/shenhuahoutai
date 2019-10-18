@@ -94,7 +94,7 @@
                     type="primary"
                     @click="back"
                     icon="el-icon-circle-plus-outline"
-                    style="margin-left: 540px"
+                    style="margin-left: 400px"
                 >返回卖品列表</el-button>
             </div>
             <el-table

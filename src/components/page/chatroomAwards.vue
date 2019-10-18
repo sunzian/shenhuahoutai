@@ -69,13 +69,13 @@
                     type="primary"
                     @click="back"
                     icon="el-icon-circle-plus-outline"
-                    style="margin-left: 630px"
+                    style="margin-left: 700px"
                 >返回影院列表</el-button>
                 <el-button
                     type="primary"
                     @click="addPage"
                     icon="el-icon-circle-plus-outline"
-                    style="margin-left: 140px"
+                    style="margin-left: 25px"
                 >新增奖品</el-button>
             </div>
             <el-table
