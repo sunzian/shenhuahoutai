@@ -588,6 +588,7 @@
                 https.fetchPost('/merchandiseDiscountActivity/addPage', '').then(data => {
                     console.log(data);
                     if (data.data.code == 'success') {
+                        this.selectedSell=[];
                         this.oForm.code = this.cinemaInfo[0].cinemaCode;
                         console.log(JSON.parse(Decrypt(data.data.data)));
                         // let formats = JSON.parse(Decrypt(data.data.data)).formatList;
@@ -1061,7 +1062,7 @@
             },
             sureNext() {
                 if(this.sellIndex>=0){
-                    this.selectedSell=[]
+                    // this.selectedSell=[]
                     this.selectedSell.push(this.sellTableData[this.sellIndex]);
                 }
                 this.drawer = false;
