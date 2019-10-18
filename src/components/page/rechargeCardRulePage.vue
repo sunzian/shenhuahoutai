@@ -711,28 +711,28 @@ export default {
                 this.couponId = '';
                 this.groupName = '';
                 if (this.oGivenMoney == '') {
-                    this.message = '请输入赠送金额';
-                    this.open();
+                    alert("请输入赠送金额")
+                    loading.close();
                     return;
                 }
             } else if (this.oGivenType == '赠送券包') {
                 jsonArr.push({ key: 'givenType', value: 3 });
                 this.oGivenMoney = '';
-                if (this.couponId == '') {
-                    this.message = '请选择券包';
-                    this.open();
+                if (this.couponId == '' || !this.couponId) {
+                    alert("请选择券包")
+                    loading.close();
                     return;
                 }
             } else if (this.oGivenType == '两者都送') {
                 jsonArr.push({ key: 'givenType', value: 4 });
                 if (this.oGivenMoney == '') {
-                    this.message = '请输入赠送金额';
-                    this.open();
+                    alert("请输入赠送金额")
+                    loading.close();
                     return;
                 }
-                if (this.couponId == '') {
-                    this.message = '请选择券包';
-                    this.open();
+                if (this.couponId == '' || !this.couponId) {
+                    alert("请选择券包")
+                    loading.close();
                     return;
                 }
             } else {
@@ -745,9 +745,9 @@ export default {
             }
             if (this.oGivenType == 3) {
                 this.oGivenMoney = '';
-                if (this.couponId == '') {
-                    this.message = '请选择券包';
-                    this.open();
+                if (this.couponId == '' || !this.couponId) {
+                    alert("请选择券包")
+                    loading.close();
                     return;
                 }
             }
@@ -755,20 +755,20 @@ export default {
                 this.couponId = '';
                 this.groupName = '';
                 if (this.oGivenMoney == '') {
-                    this.message = '请输入赠送金额';
-                    this.open();
+                    alert("请输入赠送金额")
+                    loading.close();
                     return;
                 }
             }
             if (this.oGivenType == 4) {
                 if (this.oGivenMoney == '') {
-                    this.message = '请输入赠送金额';
-                    this.open();
+                    alert("请输入赠送金额")
+                    loading.close();
                     return;
                 }
-                if (this.couponId == '') {
-                    this.message = '请选择券包';
-                    this.open();
+                if (this.couponId == '' || !this.couponId) {
+                    alert("请选择券包")
+                    loading.close();
                     return;
                 }
             }
