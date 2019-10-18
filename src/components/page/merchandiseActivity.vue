@@ -3,7 +3,7 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
-                    <i class="el-icon-lx-cascades"></i> 影票活动管理
+                    <i class="el-icon-lx-cascades"></i> 卖品活动管理
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
@@ -45,25 +45,11 @@
                 <el-table-column prop="name" label="适用影院">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="适用影厅">
+                <el-table-column prop="name" label="适用商品">
                     <template slot-scope="scope">
-                        <el-tag v-if="scope.row.selectHallType == 0">全部影厅</el-tag>
-                        <el-tag v-else-if="scope.row.reduceType == 1" >{{scope.row.screenName}}</el-tag>
-                        <el-tag v-else-if="scope.row.reduceType == 2" >除{{scope.row.screenName}}外所有影厅</el-tag>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="name" label="适用制式" width="100">
-                    <template slot-scope="scope">
-                        <el-tag v-if="scope.row.selectFilmFormatType == 0">全部制式</el-tag>
-                        <el-tag v-else-if="scope.row.selectFilmFormatType == 1" >{{scope.row.filmFormatName}}</el-tag>
-                        <el-tag v-else-if="scope.row.selectFilmFormatType == 2" >除{{scope.row.filmFormatName}}外所有制式</el-tag>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="name" label="适用影片">
-                    <template slot-scope="scope">
-                        <el-tag v-if="scope.row.selectFilmType == 0">全部影片</el-tag>
-                        <el-tag v-else-if="scope.row.selectFilmType == 1" >{{scope.row.filmName}}</el-tag>
-                        <el-tag v-else-if="scope.row.selectFilmType == 2" >除{{scope.row.filmName}}外所有影片</el-tag>
+                        <el-tag v-if="scope.row.selectMerchandiseType == 0">全部商品</el-tag>
+                        <el-tag v-else-if="scope.row.selectMerchandiseType == 1" >{{scope.row.merchandiseName}}</el-tag>
+                        <el-tag v-else-if="scope.row.selectMerchandiseType == 2" >除{{scope.row.merchandiseName}}外所有商品</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column label="活动名称">
@@ -87,7 +73,7 @@
                 <el-table-column prop="sort" label="优惠方式" width="100">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.reduceType == 1">特惠价格</el-tag>
-                        <el-tag v-else-if="scope.row.reduceType == 2" >立减金额</el-tag>
+                        <el-tag v-else-if="scope.row.reduceType == 2" >满减金额</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column prop="sort" label="金额">
@@ -154,60 +140,43 @@
                         >{{item.cinemaName}}</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item label="选择影厅：" :label-width="formLabelWidth" prop="screenName">
-                <el-radio-group v-model="oForm.selectHallType">
-                    <el-radio label="0">全部影厅</el-radio>
-                    <el-radio label="1">指定影厅参加</el-radio>
-                    <el-radio label="2">指定影厅不参加</el-radio>
-                </el-radio-group>
-                <el-checkbox-group v-model="oForm.screenCode" @change="selectScreens" v-if="oForm.selectHallType != 0">
-                    <el-checkbox
-                            v-for="item in screenInfo"
-                            :label="item.screenCode"
-                            :key="item.screenCode"
-                            :value="item.screenName"
-                    >{{item.screenName}}</el-checkbox>
-                </el-checkbox-group>
-                </el-form-item>
-                <el-form-item label="选择制式：" :label-width="formLabelWidth" prop="formatName">
-                    <el-radio-group v-model="oForm.selectMovieType">
-                        <el-radio label="0">全部制式参加</el-radio>
-                        <el-radio label="1">指定制式参加</el-radio>
-                        <el-radio label="2">指定制式不参加</el-radio>
+                <el-form-item label="优惠方式：" :label-width="formLabelWidth" prop="reduceType">
+                    <el-radio-group v-model="oForm.reduceType">
+                        <el-radio label="1">固定价格</el-radio>
+                        <el-radio label="2">满减</el-radio>
                     </el-radio-group>
-                    <el-checkbox-group v-model="oForm.formatCode" @change="selectFormat" v-if="oForm.selectMovieType != 0">
-                        <el-checkbox
-                                v-for="item in formatList"
-                                :label="item.formatCode"
-                                :key="item.formatCode"
-                                :value="item.formatName"
-                        >{{item.formatName}}</el-checkbox>
-                    </el-checkbox-group>
                 </el-form-item>
-
-                <el-form-item label="选择影片：" :label-width="formLabelWidth" prop="filmName">
+                <el-form-item label="固定金额：" :label-width="formLabelWidth" v-if="oForm.reduceType == 1">
+                    <el-input style="width: 150px" v-model="oForm.discountMoney" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="减免金额：" :label-width="formLabelWidth" v-if="oForm.reduceType == 2">
+                    满
+                    <el-input style="width: 150px" v-model="oForm.achieveMoney" autocomplete="off"></el-input>减
+                    <el-input style="width: 150px" v-model="oForm.discountMoney" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="选择商品：" :label-width="formLabelWidth" prop="filmName">
                     <el-radio-group v-model="oForm.selectFilmType">
-                        <el-radio label="0">全部影片</el-radio>
-                        <el-radio label="1">部分影片</el-radio>
-                        <el-radio label="2">排除影片</el-radio>
+                        <el-radio label="0">全部商品</el-radio>
+                        <el-radio label="1">部分商品</el-radio>
+                        <el-radio label="2">排除商品</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item v-if="oForm.selectFilmType != 0" label="选择影片" :label-width="formLabelWidth">
+                <el-form-item v-if="oForm.selectFilmType != 0" label="选择商品" :label-width="formLabelWidth">
                     <el-button type="primary" @click="openNext">点击选择</el-button>
                 </el-form-item>
                 <el-form-item
-                        label="所选影片"
+                        label="所选商品"
                         :label-width="formLabelWidth"
                         v-if="selectedSell.length>0"
                 >
                     <div v-for="(item, index) in selectedSell" style="margin-bottom: 5px">
                         <el-input
                                 style="width: 250px"
-                                v-model="item.filmName"
+                                v-model="item.merchandiseName"
                                 autocomplete="off"
-                                :value="item.filmCode"
+                                :value="item.merchandiseCode"
                                 :disabled="true"
-                                :change="one(item.filmCode)"
+                                :change="one(item.merchandiseCode)"
                         >
                         </el-input>
                         <span
@@ -238,21 +207,6 @@
                         <el-radio label="1">仅非会员卡支付</el-radio>
                         <el-radio label="2">仅会员卡支付</el-radio>
                     </el-radio-group>
-                </el-form-item>
-                <el-form-item label="优惠方式：" :label-width="formLabelWidth" prop="reduceType">
-                    <el-radio-group v-model="oForm.reduceType">
-                        <el-radio label="1">固定价格</el-radio>
-                        <el-radio label="2">立减</el-radio>
-                    </el-radio-group>
-                </el-form-item>
-                <el-form-item label="固定金额：" :label-width="formLabelWidth" v-if="oForm.reduceType == 1">
-                    <el-input style="width: 150px" v-model="oForm.discountMoney" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="立减金额：" :label-width="formLabelWidth" v-if="oForm.reduceType == 2">
-                    <!--满-->
-                    <!--<el-input style="width: 150px" v-model="oForm.achieveMoney" autocomplete="off"></el-input>-->
-                    减
-                    <el-input style="width: 150px" v-model="oForm.discountMoney" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="开启状态：" :label-width="formLabelWidth">
                     <el-select v-model="oForm.status" placeholder="请选择">
@@ -360,7 +314,7 @@
             </div>
         </el-dialog>
         <!--新增抽屉弹出框-->
-        <el-dialog title="选择影片" :visible.sync="drawer">
+        <el-dialog title="选择卖品" :visible.sync="drawer">
             <div class="container">
                 <div class="handle-box">
                     <el-input v-model="query.name" placeholder="角色名" class="handle-input mr10"></el-input>
@@ -391,13 +345,13 @@
                                     placement="right"
                                     title=""
                                     trigger="hover">
-                                <img style="width:400px" :src="scope.row.image"/>
-                                <img slot="reference" :src="scope.row.image" :alt="scope.row.image" style="max-height: 50px;max-width: 130px">
+                                <img style="width:400px" :src="scope.row.merchandisePic"/>
+                                <img slot="reference" :src="scope.row.merchandisePic" :alt="scope.row.merchandisePic" style="max-height: 50px;max-width: 130px">
                             </el-popover>
                         </template>
                     </el-table-column>
                     <el-table-column prop="sort" label="影片名称" width="150">
-                        <template slot-scope="scope">{{scope.row.filmName}}</template>
+                        <template slot-scope="scope">{{scope.row.merchandiseName}}</template>
                     </el-table-column>
                 </el-table>
                 <div class="pagination">
@@ -427,16 +381,6 @@
                 <el-form-item label="适用影院名称：" :label-width="formLabelWidth">
                     <span>{{oCinemaName}}</span>
                 </el-form-item>
-                <el-form-item label="适用影厅名称：" :label-width="formLabelWidth">
-                    <span v-if="selectHallType == 0">全部影厅</span>
-                    <span v-if="selectHallType == 1">{{oScreenName}}</span>
-                    <span v-if="selectHallType == 2">除{{oScreenName}}外所有影厅</span>
-                </el-form-item>
-                <el-form-item label="适用制式名称：" :label-width="formLabelWidth">
-                    <span v-if="selectFilmFormatType == 0">全部制式</span>
-                    <span v-if="selectFilmFormatType == 1">{{oFilmFormatName}}</span>
-                    <span v-if="selectFilmFormatType == 2">除{{oFilmFormatName}}外所有制式</span>
-                </el-form-item>
                 <el-form-item label="适用影片名称：" :label-width="formLabelWidth">
                     <span v-if="selectFilmType == 0">全部影片</span>
                     <span v-if="selectFilmType == 1">{{oFilmName}}</span>
@@ -454,7 +398,7 @@
                 </el-form-item>
                 <el-form-item label="优惠方式：" :label-width="formLabelWidth">
                     <span v-if="oReduceType == 1">特惠价格{{oDiscountMoney}}元</span>
-                    <span v-if="oReduceType == 2">减{{oDiscountMoney}}元</span>
+                    <span v-if="oReduceType == 2">满{{oAchieveMoney}}元减{{oDiscountMoney}}元</span>
                 </el-form-item>
                 <el-form-item label="启用状态：" :label-width="formLabelWidth">
                     <span v-if="oStatus == 1">启用</span>
@@ -548,17 +492,17 @@
                 id: -1,
                 dialogFormVisible: false,
                 options: [{
-                        value: '0',
-                        label: '未启用'
-                    },
+                    value: '0',
+                    label: '未启用'
+                },
                     {
                         value: '1',
                         label: '启用'
                     }],
                 canUse: [{
-                        value: '0',
-                        label: '否'
-                    },
+                    value: '0',
+                    label: '否'
+                },
                     {
                         value: '1',
                         label: '是'
@@ -641,30 +585,30 @@
                     background: 'rgba(0, 0, 0, 0.7)',
                     target: document.querySelector('.div1')
                 });
-                https.fetchPost('/filmDiscountActivity/addPage', '').then(data => {
-                        console.log(data);
-                        if (data.data.code == 'success') {
-                            this.oForm.code = this.cinemaInfo[0].cinemaCode;
-                            console.log(JSON.parse(Decrypt(data.data.data)));
-                            let formats = JSON.parse(Decrypt(data.data.data)).formatList;
-                            this.formatList = [];
-                            for (let i = 0; i < formats.length; i++) {
-                                let formatList = {};
-                                formatList.formatCode = formats[i].formatCode;
-                                formatList.formatName = formats[i].formatName;
-                                this.formatList.push(formatList);
-                            }
-                            // this.formatList=JSON.parse(Decrypt(data.data.data)).formatList
-                            this.dialogFormVisible = true;
-                        } else if (data.data.code == 'nologin') {
-                            this.message = data.data.message;
-                            this.open();
-                            this.$router.push('/login');
-                        } else {
-                            this.message = data.data.message;
-                            this.open();
-                        }
-                    })
+                https.fetchPost('/merchandiseDiscountActivity/addPage', '').then(data => {
+                    console.log(data);
+                    if (data.data.code == 'success') {
+                        this.oForm.code = this.cinemaInfo[0].cinemaCode;
+                        console.log(JSON.parse(Decrypt(data.data.data)));
+                        // let formats = JSON.parse(Decrypt(data.data.data)).formatList;
+                        // this.formatList = [];
+                        // for (let i = 0; i < formats.length; i++) {
+                        //     let formatList = {};
+                        //     formatList.formatCode = formats[i].formatCode;
+                        //     formatList.formatName = formats[i].formatName;
+                        //     this.formatList.push(formatList);
+                        // }
+                        // this.formatList=JSON.parse(Decrypt(data.data.data)).formatList
+                        this.dialogFormVisible = true;
+                    } else if (data.data.code == 'nologin') {
+                        this.message = data.data.message;
+                        this.open();
+                        this.$router.push('/login');
+                    } else {
+                        this.message = data.data.message;
+                        this.open();
+                    }
+                })
                     .catch(err => {
                         console.log(err);
                     });
@@ -685,10 +629,10 @@
                 for (let i = 0; i < this.filmInfo.length; i++) {
                     filmeCodes.push(this.filmInfo[i].filmCode);
                 }
-                this.oForm.filmCode = filmeCodes.join(',');
-                if (this.oForm.selectFilmType == 0) {
-                    this.oForm.filmCode = '';
-                }
+                // this.oForm.filmCode = filmeCodes.join(',');
+                // if (this.oForm.selectFilmType == 0) {
+                //     this.oForm.filmCode = '';
+                // }
                 if (this.oForm.selectHallType == 0) {
                     this.selectScreenCode = '';
                 }
@@ -698,15 +642,13 @@
                 var jsonArr = [];
                 jsonArr.push({ key: 'name', value: this.oForm.name });
                 jsonArr.push({ key: 'cinemaCode', value: this.selectValue });
-                jsonArr.push({ key: 'selectHallType', value: this.oForm.selectHallType });
-                jsonArr.push({ key: 'screenCode', value: this.selectScreenCode });
-                jsonArr.push({ key: 'selectFilmType', value: this.oForm.selectFilmType });
-                jsonArr.push({ key: 'filmCode', value: this.oForm.filmCode });
+                jsonArr.push({ key: 'selectMerchandiseType', value: this.oForm.selectFilmType });
+                jsonArr.push({ key: 'merchandiseCode', value: this.oForm.filmCode });
                 jsonArr.push({ key: 'startDate', value: this.oForm.startDate });
                 jsonArr.push({ key: 'endDate', value: this.oForm.endDate });
                 jsonArr.push({ key: 'reduceType', value: this.oForm.reduceType });
                 jsonArr.push({ key: 'validPayType', value: this.oForm.validPayType });
-                // jsonArr.push({ key: 'achieveMoney', value: this.oForm.achieveMoney });
+                jsonArr.push({ key: 'achieveMoney', value: this.oForm.achieveMoney });
                 jsonArr.push({ key: 'discountMoney', value: this.oForm.discountMoney });
                 jsonArr.push({ key: 'status', value: this.oForm.status });
                 jsonArr.push({ key: 'isHolidayValid', value: this.oForm.holidayValid });
@@ -715,64 +657,57 @@
                 jsonArr.push({ key: 'activityDesc', value: this.oForm.couponDesc });
                 jsonArr.push({ key: 'startTimeVal', value: this.startArr.join(',')});
                 jsonArr.push({ key: 'endTimeVal', value: this.endArr.join(',')});
-
-                // jsonArr.push({ key: 'cinemaName', value: this.selectValue });
                 jsonArr.push({ key: 'isLimitTotal', value: this.oForm.oCanNum });
                 jsonArr.push({ key: 'totalNumber', value: this.oForm.oNum });
                 jsonArr.push({ key: 'isLimitSingle', value: this.oForm.oneCanNum });
                 jsonArr.push({ key: 'singleNumber', value: this.oForm.oneNum });
-                jsonArr.push({ key: 'selectFilmFormatType', value: this.oForm.selectMovieType});
-                jsonArr.push({ key: 'FilmFormatCode', value: this.oForm.formatCode});
-                // jsonArr.push({ key: 'FilmFormatName', value: this.oForm.startDate });
-                // jsonArr.push({ key: 'filmName', value: this.oForm.filmCode });
-                // jsonArr.push({ key: 'screenName', value: this.selectScreenCode });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
                 console.log(jsonArr);
                 let params = ParamsAppend(jsonArr);
                 if (this.dialogFormVisible == true) {
-                    https.fetchPost('/filmDiscountActivity/addActivity', params).then(data => {//新增
-                            console.log(data);
-                            if (data.data.code == 'success') {
-                                this.dialogFormVisible = false;
-                                this.$message.success(`新增成功`);
-                                this.oForm.name = '';
-                                this.selectValue = [];
-                                this.oForm.selectHallType = '0';
-                                this.selectScreenCode = '';
-                                this.oForm.selectFilmType = '0';
-                                this.oForm.filmCode = '';
-                                this.oForm.startDate = '';
-                                this.oForm.endDate = '';
-                                this.oForm.validPayType = '';
-                                this.oForm.reduceType = '';
-                                this.oForm.achieveMoney = '';
-                                this.oForm.discountMoney = '';
-                                this.oForm.holidayValid = '';
-                                this.oForm.checkedDays = [];
-                                this.oForm.status = '';
-                                this.oForm.activityTogether = '';
-                                this.oForm.sendNumber = '';
-                                this.oForm.couponDesc = '';
-                                this.oForm.oCanNum = '';
-                                this.oForm.oNum = '';
-                                this.oForm.oneCanNum = '';
-                                this.oForm.oneNum = '';
-                                this.oForm.selectMovieType = '0';
-                                this.oForm.formatCode = '';
-                                this.oForm.code = '';
-                                this.getMenu();
-                            } else if (data.data.code == 'nologin') {
-                                this.message = data.data.message;
-                                this.open();
-                                this.$router.push('/login');
-                            } else {
-                                this.message = data.data.message;
-                                this.open();
-                            }
-                        }).catch(err => {
-                            console.log(err);
-                        });
+                    https.fetchPost('/merchandiseDiscountActivity/addActivity', params).then(data => {//新增
+                        console.log(data);
+                        if (data.data.code == 'success') {
+                            this.dialogFormVisible = false;
+                            this.$message.success(`新增成功`);
+                            this.oForm.name = '';
+                            this.selectValue = [];
+                            this.oForm.selectHallType = '0';
+                            this.selectScreenCode = '';
+                            this.oForm.selectFilmType = '0';
+                            this.oForm.filmCode = '';
+                            this.oForm.startDate = '';
+                            this.oForm.endDate = '';
+                            this.oForm.validPayType = '';
+                            this.oForm.reduceType = '';
+                            this.oForm.achieveMoney = '';
+                            this.oForm.discountMoney = '';
+                            this.oForm.holidayValid = '';
+                            this.oForm.checkedDays = [];
+                            this.oForm.status = '';
+                            this.oForm.activityTogether = '';
+                            this.oForm.sendNumber = '';
+                            this.oForm.couponDesc = '';
+                            this.oForm.oCanNum = '';
+                            this.oForm.oNum = '';
+                            this.oForm.oneCanNum = '';
+                            this.oForm.oneNum = '';
+                            this.oForm.selectMovieType = '0';
+                            this.oForm.formatCode = '';
+                            this.oForm.code = '';
+                            this.getMenu();
+                        } else if (data.data.code == 'nologin') {
+                            this.message = data.data.message;
+                            this.open();
+                            this.$router.push('/login');
+                        } else {
+                            this.message = data.data.message;
+                            this.open();
+                        }
+                    }).catch(err => {
+                        console.log(err);
+                    });
                 }
                 loading.close();
             },
@@ -783,38 +718,38 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                        this.idx = index;
-                        this.form = row;
-                        let name = this.query.name;
-                        let status = this.query.status;
-                        if (!name) {
-                            name = '';
+                    this.idx = index;
+                    this.form = row;
+                    let name = this.query.name;
+                    let status = this.query.status;
+                    if (!name) {
+                        name = '';
+                    }
+                    if (!status) {
+                        status = '';
+                    }
+                    let jsonArr = [];
+                    jsonArr.push({ key: 'id', value: row.id });
+                    let sign = md5(preSign(jsonArr));
+                    jsonArr.push({ key: 'sign', value: sign });
+                    let params = ParamsAppend(jsonArr);
+                    https.fetchPost('/merchandiseDiscountActivity/deleteById', params).then(data => {
+                        if (data.data.code == 'success') {
+                            this.$message.error(`删除了`);
+                            this.getMenu();
+                        } else if (data.data.code == 'nologin') {
+                            this.message = data.data.message;
+                            this.open();
+                            this.$router.push('/login');
+                        } else {
+                            this.message = data.data.message;
+                            this.open();
                         }
-                        if (!status) {
-                            status = '';
-                        }
-                        let jsonArr = [];
-                        jsonArr.push({ key: 'id', value: row.id });
-                        let sign = md5(preSign(jsonArr));
-                        jsonArr.push({ key: 'sign', value: sign });
-                        let params = ParamsAppend(jsonArr);
-                        https.fetchPost('/filmDiscountActivity/deleteById', params).then(data => {
-                                if (data.data.code == 'success') {
-                                    this.$message.error(`删除了`);
-                                    this.getMenu();
-                                } else if (data.data.code == 'nologin') {
-                                    this.message = data.data.message;
-                                    this.open();
-                                    this.$router.push('/login');
-                                } else {
-                                    this.message = data.data.message;
-                                    this.open();
-                                }
-                            })
-                            .catch(err => {
-                                console.log(err);
-                            });
                     })
+                        .catch(err => {
+                            console.log(err);
+                        });
+                })
                     .catch(() => {
                         this.$message({
                             type: 'info',
@@ -838,44 +773,44 @@
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
                 let params = ParamsAppend(jsonArr);
-                https.fetchPost('/filmDiscountActivity/getActivityById', params).then(data => {
-                        console.log(data);
-                        console.log(JSON.parse(Decrypt(data.data.data)));
-                        if (data.data.code == 'success') {
-                            this.editVisible = true;
-                            this.oCinemaName = JSON.parse(Decrypt(data.data.data)).cinemaName;
-                            this.oScreenName = JSON.parse(Decrypt(data.data.data)).screenName;
-                            this.selectHallType =JSON.parse(Decrypt(data.data.data)).selectHallType;
-                            this.selectFilmFormatType =JSON.parse(Decrypt(data.data.data)).selectFilmFormatType;
-                            this.selectFilmType =JSON.parse(Decrypt(data.data.data)).selectFilmType;
-                            this.oFilmFormatName = JSON.parse(Decrypt(data.data.data)).filmFormatName;
-                            this.oFilmName = JSON.parse(Decrypt(data.data.data)).filmName;
-                            this.oName = JSON.parse(Decrypt(data.data.data)).name;
-                            this.oCreateDate = JSON.parse(Decrypt(data.data.data)).createDate;
-                            this.oEndDate = JSON.parse(Decrypt(data.data.data)).endDate;
-                            this.oValidPayType = JSON.parse(Decrypt(data.data.data)).validPayType;
-                            this.oReduceType = JSON.parse(Decrypt(data.data.data)).reduceType;
-                            // this.oAchieveMoney = JSON.parse(Decrypt(data.data.data)).achieveMoney;
-                            this.oDiscountMoney = JSON.parse(Decrypt(data.data.data)).discountMoney;
-                            this.oIsHolidayValid = JSON.parse(Decrypt(data.data.data)).isHolidayValid;
-                            this.oValidWeekDay = JSON.parse(Decrypt(data.data.data)).validWeekDay;
-                            this.oIsCouponTogether = JSON.parse(Decrypt(data.data.data)).isCouponTogether;
-                            this.oCouponDesc = JSON.parse(Decrypt(data.data.data)).activityDesc
-                            this.oIsLimitTotal = JSON.parse(Decrypt(data.data.data)).isLimitTotal
-                            this.oTotalNumber = JSON.parse(Decrypt(data.data.data)).totalNumber
-                            this.oTotalSurplus = JSON.parse(Decrypt(data.data.data)).totalSurplus
-                            this.oIsLimitSingle = JSON.parse(Decrypt(data.data.data)).isLimitSingle
-                            this.oSingleNumber = JSON.parse(Decrypt(data.data.data)).singleNumber
-                            this.oStatus = JSON.parse(Decrypt(data.data.data)).status;
-                        } else if (data.data.code == 'nologin') {
-                            this.message = data.data.message;
-                            this.open();
-                            this.$router.push('/login');
-                        } else {
-                            this.message = data.data.message;
-                            this.open();
-                        }
-                    })
+                https.fetchPost('/merchandiseDiscountActivity/getActivityById', params).then(data => {
+                    console.log(data);
+                    console.log(JSON.parse(Decrypt(data.data.data)));
+                    if (data.data.code == 'success') {
+                        this.editVisible = true;
+                        this.oCinemaName = JSON.parse(Decrypt(data.data.data)).cinemaName;
+                        this.oScreenName = JSON.parse(Decrypt(data.data.data)).screenName;
+                        this.selectHallType =JSON.parse(Decrypt(data.data.data)).selectHallType;
+                        this.selectFilmFormatType =JSON.parse(Decrypt(data.data.data)).selectFilmFormatType;
+                        this.selectFilmType =JSON.parse(Decrypt(data.data.data)).selectFilmType;
+                        this.oFilmFormatName = JSON.parse(Decrypt(data.data.data)).filmFormatName;
+                        this.oFilmName = JSON.parse(Decrypt(data.data.data)).filmName;
+                        this.oName = JSON.parse(Decrypt(data.data.data)).name;
+                        this.oCreateDate = JSON.parse(Decrypt(data.data.data)).createDate;
+                        this.oEndDate = JSON.parse(Decrypt(data.data.data)).endDate;
+                        this.oValidPayType = JSON.parse(Decrypt(data.data.data)).validPayType;
+                        this.oReduceType = JSON.parse(Decrypt(data.data.data)).reduceType;
+                        this.oAchieveMoney = JSON.parse(Decrypt(data.data.data)).achieveMoney;
+                        this.oDiscountMoney = JSON.parse(Decrypt(data.data.data)).discountMoney;
+                        this.oIsHolidayValid = JSON.parse(Decrypt(data.data.data)).isHolidayValid;
+                        this.oValidWeekDay = JSON.parse(Decrypt(data.data.data)).validWeekDay;
+                        this.oIsCouponTogether = JSON.parse(Decrypt(data.data.data)).isCouponTogether;
+                        this.oCouponDesc = JSON.parse(Decrypt(data.data.data)).activityDesc
+                        this.oIsLimitTotal = JSON.parse(Decrypt(data.data.data)).isLimitTotal
+                        this.oTotalNumber = JSON.parse(Decrypt(data.data.data)).totalNumber
+                        this.oTotalSurplus = JSON.parse(Decrypt(data.data.data)).totalSurplus
+                        this.oIsLimitSingle = JSON.parse(Decrypt(data.data.data)).isLimitSingle
+                        this.oSingleNumber = JSON.parse(Decrypt(data.data.data)).singleNumber
+                        this.oStatus = JSON.parse(Decrypt(data.data.data)).status;
+                    } else if (data.data.code == 'nologin') {
+                        this.message = data.data.message;
+                        this.open();
+                        this.$router.push('/login');
+                    } else {
+                        this.message = data.data.message;
+                        this.open();
+                    }
+                })
                     .catch(err => {
                         console.log(err);
                     });
@@ -914,19 +849,19 @@
                 let params = ParamsAppend(jsonArr);
                 this.editVisible = false;
                 https.fetchPost('/film/updateFilm', params).then(data => {
-                        // console.log(JSON.parse(Decrypt(data.data.data)));
-                        if (data.data.code == 'success') {
-                            this.$message.success(`编辑成功`);
-                            this.getMenu();
-                        } else if (data.data.code == 'nologin') {
-                            this.message = data.data.message;
-                            this.open();
-                            this.$router.push('/login');
-                        } else {
-                            this.message = data.data.message;
-                            this.open();
-                        }
-                    })
+                    // console.log(JSON.parse(Decrypt(data.data.data)));
+                    if (data.data.code == 'success') {
+                        this.$message.success(`编辑成功`);
+                        this.getMenu();
+                    } else if (data.data.code == 'nologin') {
+                        this.message = data.data.message;
+                        this.open();
+                        this.$router.push('/login');
+                    } else {
+                        this.message = data.data.message;
+                        this.open();
+                    }
+                })
                     .catch(err => {
                         console.log(err);
                     });
@@ -956,21 +891,21 @@
                 jsonArr.push({ key: 'sign', value: sign });
                 console.log(jsonArr);
                 let params = ParamsAppend(jsonArr);
-                https.fetchPost('/filmDiscountActivity/updateStatusById', params).then(data => {
+                https.fetchPost('/merchandiseDiscountActivity/updateStatusById', params).then(data => {
                     console.log(data);
                     // console.log(JSON.parse(Decrypt(data.data.data)));
-                        if (data.data.code == 'success') {
-                            this.$message.success(`修改成功`);
-                            this.getMenu();
-                        } else if (data.data.code == 'nologin') {
-                            this.message = data.data.message;
-                            this.open();
-                            this.$router.push('/login');
-                        } else {
-                            this.message = data.data.message;
-                            this.open();
-                        }
-                    })
+                    if (data.data.code == 'success') {
+                        this.$message.success(`修改成功`);
+                        this.getMenu();
+                    } else if (data.data.code == 'nologin') {
+                        this.message = data.data.message;
+                        this.open();
+                        this.$router.push('/login');
+                    } else {
+                        this.message = data.data.message;
+                        this.open();
+                    }
+                })
                     .catch(err => {
                         console.log(err);
                     });
@@ -1005,35 +940,35 @@
                 jsonArr.push({ key: 'sign', value: sign });
                 console.log(jsonArr);
                 var params = ParamsAppend(jsonArr);
-                https.fetchPost('/filmDiscountActivity/page', params).then(data => {
-                        if (data.data.code == 'success') {
-                            var oData = JSON.parse(Decrypt(data.data.data));
-                            console.log(oData);
-                            // console.log(oData.pageResult);
-                            this.cinemaInfo = [];
-                            for (let i = 0; i < oData.cinemaList.length; i++) {
-                                let cinemaList = {};
-                                cinemaList.cinemaCode = oData.cinemaList[i].cinemaCode;
-                                cinemaList.cinemaName = oData.cinemaList[i].cinemaName;
-                                this.cinemaInfo.push(cinemaList);
-                            }
-                            console.log(this.cinemaInfo)
-                            this.oForm.cinemaCode = this.cinemaInfo[0].cinemaCode;
-                            this.selectValue = this.cinemaInfo[0].cinemaCode;
-                            this.tableData = oData.pageResult.data;
-                            this.query.pageSize = oData.pageResult.pageSize;
-                            this.query.pageNo = oData.pageResult.pageNo;
-                            this.query.totalCount = oData.pageResult.totalCount;
-                            this.query.totalPage = oData.pageResult.totalPage;
-                        } else if (data.data.code == 'nologin') {
-                            this.message = data.data.message;
-                            this.open();
-                            this.$router.push('/login');
-                        } else {
-                            this.message = data.data.message;
-                            this.open();
+                https.fetchPost('/merchandiseDiscountActivity/page', params).then(data => {
+                    if (data.data.code == 'success') {
+                        var oData = JSON.parse(Decrypt(data.data.data));
+                        console.log(oData);
+                        // console.log(oData.pageResult);
+                        this.cinemaInfo = [];
+                        for (let i = 0; i < oData.cinemaList.length; i++) {
+                            let cinemaList = {};
+                            cinemaList.cinemaCode = oData.cinemaList[i].cinemaCode;
+                            cinemaList.cinemaName = oData.cinemaList[i].cinemaName;
+                            this.cinemaInfo.push(cinemaList);
                         }
-                    })
+                        console.log(this.cinemaInfo)
+                        this.oForm.cinemaCode = this.cinemaInfo[0].cinemaCode;
+                        this.selectValue = this.cinemaInfo[0].cinemaCode;
+                        this.tableData = oData.pageResult.data;
+                        this.query.pageSize = oData.pageResult.pageSize;
+                        this.query.pageNo = oData.pageResult.pageNo;
+                        this.query.totalCount = oData.pageResult.totalCount;
+                        this.query.totalPage = oData.pageResult.totalPage;
+                    } else if (data.data.code == 'nologin') {
+                        this.message = data.data.message;
+                        this.open();
+                        this.$router.push('/login');
+                    } else {
+                        this.message = data.data.message;
+                        this.open();
+                    }
+                })
                     .catch(err => {
                         console.log(err);
                     });
@@ -1078,25 +1013,25 @@
                 jsonArr.push({ key: 'sign', value: sign });
                 var params = ParamsAppend(jsonArr);
                 https.fetchPost('filmCoupon/getScreenInfoByCinemaCode', params).then(data => {
-                        if (data.data.code == 'success') {
-                            console.log(JSON.parse(Decrypt(data.data.data)));
-                            let screens = JSON.parse(Decrypt(data.data.data));
-                            this.screenInfo = [];
-                            for (let i = 0; i < screens.length; i++) {
-                                let screenList = {};
-                                screenList.screenCode = screens[i].screenCode;
-                                screenList.screenName = screens[i].screenName;
-                                this.screenInfo.push(screenList);
-                            }
-                        } else if (data.data.code == 'nologin') {
-                            this.message = data.data.message;
-                            this.open();
-                            this.$router.push('/login');
-                        } else {
-                            this.message = data.data.message;
-                            this.open();
+                    if (data.data.code == 'success') {
+                        console.log(JSON.parse(Decrypt(data.data.data)));
+                        let screens = JSON.parse(Decrypt(data.data.data));
+                        this.screenInfo = [];
+                        for (let i = 0; i < screens.length; i++) {
+                            let screenList = {};
+                            screenList.screenCode = screens[i].screenCode;
+                            screenList.screenName = screens[i].screenName;
+                            this.screenInfo.push(screenList);
                         }
-                    })
+                    } else if (data.data.code == 'nologin') {
+                        this.message = data.data.message;
+                        this.open();
+                        this.$router.push('/login');
+                    } else {
+                        this.message = data.data.message;
+                        this.open();
+                    }
+                })
                     .catch(err => {
                         console.log(err);
                     });
@@ -1147,7 +1082,7 @@
                     let sign =md5(preSign(jsonArr));
                     jsonArr.push({key:"sign",value:sign});
                     var params = ParamsAppend(jsonArr);
-                    https.fetchPost('film/filmPage',params).then((data) => {
+                    https.fetchPost('/merchandise/list',params).then((data) => {
                         console.log(data);
                         if(data.data.code=='success') {
                             this.drawer=true
