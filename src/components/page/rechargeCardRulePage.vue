@@ -32,14 +32,32 @@
                 <el-table-column prop="code" label="影院编码">
                     <template slot-scope="scope">{{scope.row.cinemaCode}}</template>
                 </el-table-column>
+                <el-table-column prop="sort" label="会员卡名称">
+                    <template slot-scope="scope">{{scope.row.cardLevelName}}</template>
+                </el-table-column>
                 <el-table-column prop="name" label="充值规则名称">
                     <template slot-scope="scope">{{scope.row.ruleName}}</template>
                 </el-table-column>
                 <el-table-column prop="number" label="充值金额">
                     <template slot-scope="scope">{{scope.row.rechargeAmount}}</template>
                 </el-table-column>
+                <el-table-column prop="sort" label="赠送类型" >
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row.givenType=='1'"
+                        >不赠送</el-tag>
+                        <el-tag v-else-if="scope.row.givenType=='2'"
+                        >赠送金额</el-tag>
+                        <el-tag v-else-if="scope.row.givenType=='3'"
+                        >赠送券包</el-tag>
+                        <el-tag v-else-if="scope.row.givenType=='4'"
+                        >两者都送</el-tag>
+                    </template>
+                </el-table-column>
                 <el-table-column prop="number" label="赠送金额">
                     <template slot-scope="scope">{{scope.row.givenMoney}}</template>
+                </el-table-column>
+                <el-table-column prop="number" label="赠送券包">
+                    <template slot-scope="scope">{{scope.row.couponGroupName}}</template>
                 </el-table-column>
                 <el-table-column prop="booleans" label="状态">
                     <template slot-scope="scope">
@@ -363,7 +381,7 @@ export default {
             oRechargeAmount: '', // 充值金额
             oGivenType: '', // 赠送类型
             oGivenMoney: '', //赠送金额
-            oGivenTicketsParams: '', //赠送优惠券
+            oGivenCouponGroupId: '', //赠送优惠券
             oRuleMemo: '', // 活动描述
             oCouponGroupName: '',
             oStartDate: '',
@@ -426,7 +444,7 @@ export default {
                 rechargeAmount: '', // 充值金额
                 givenType: '', // 赠送类型
                 givenMoney: '', //赠送金额
-                givenTicketsParams: '', //赠送优惠券
+                givenCouponGroupId: '', //赠送优惠券
                 ruleMemo: '', // 活动描述
                 status: '', // 启用状态
                 id: '',
@@ -504,7 +522,7 @@ export default {
                 }
             }
             if (this.couponId != '') {
-                jsonArr.push({ key: 'givenTicketsParams', value: this.couponId });
+                jsonArr.push({ key: 'givenCouponGroupId', value: this.couponId });
             }
             if (this.oForm.givenMoney != '') {
                 jsonArr.push({ key: 'givenMoney', value: this.oForm.givenMoney });
@@ -634,7 +652,7 @@ export default {
                         this.oRuleName = JSON.parse(Decrypt(data.data.data)).rechargeCardRules.ruleName;
                         this.oRechargeAmount = JSON.parse(Decrypt(data.data.data)).rechargeCardRules.rechargeAmount;
                         this.groupName = JSON.parse(Decrypt(data.data.data)).rechargeCardRules.couponGroupName;
-                        this.couponId = JSON.parse(Decrypt(data.data.data)).rechargeCardRules.givenTicketsParams;
+                        this.couponId = JSON.parse(Decrypt(data.data.data)).rechargeCardRules.givenCouponGroupId;
                         if (JSON.parse(Decrypt(data.data.data)).rechargeCardRules.givenMoney) {
                             this.oGivenMoney = JSON.parse(Decrypt(data.data.data)).rechargeCardRules.givenMoney;
                         }
@@ -765,7 +783,7 @@ export default {
                 jsonArr.push({ key: 'givenMoney', value: this.oGivenMoney });
             }
             if (this.couponId != '') {
-                jsonArr.push({ key: 'givenTicketsParams', value: this.couponId });
+                jsonArr.push({ key: 'givenCouponGroupId', value: this.couponId });
             }
             jsonArr.push({ key: 'cinemaCode', value: this.oCinemaCode });
             jsonArr.push({ key: 'ruleName', value: this.oRuleName });
