@@ -477,7 +477,7 @@ export default {
             });
             var jsonArr = [];
             if (this.oForm.limitStatus == 2) {
-                jsonArr.push({ key: 'singleLimitNumber', value: this.oForm.singleLimitNumber });
+                jsonArr.push({ key: 'monthLimitNumber', value: this.oForm.singleLimitNumber });
             }
             // 选择实物奖品
             if (this.oForm.type == 2) {
@@ -600,7 +600,7 @@ export default {
                         this.oOverDays = JSON.parse(Decrypt(data.data.data)).overDays;
                         this.oLimitStatus = JSON.parse(Decrypt(data.data.data)).limitStatus;
                         this.oId = JSON.parse(Decrypt(data.data.data)).id;
-                        this.oSingleLimitNumber = JSON.parse(Decrypt(data.data.data)).singleLimitNumber;
+                        this.oSingleLimitNumber = JSON.parse(Decrypt(data.data.data)).monthLimitNumber;
                         this.editVisible = true;
                     }else if(data.data.code=='nologin'){
                         this.message=data.data.message
@@ -672,7 +672,7 @@ export default {
             });
             var jsonArr = [];
             if(this.oLimitStatus == 2) {
-                jsonArr.push({ key: 'singleLimitNumber', value: this.oSingleLimitNumber });
+                jsonArr.push({ key: 'monthLimitNumber', value: this.oSingleLimitNumber });
             }
             jsonArr.push({ key: 'singleNumber', value: this.oSingleNumber });
             jsonArr.push({ key: 'groupNumber', value: this.oGroupNumber });
