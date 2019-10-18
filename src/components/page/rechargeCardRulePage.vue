@@ -785,7 +785,6 @@ export default {
             if (this.couponId != '') {
                 jsonArr.push({ key: 'givenCouponGroupId', value: this.couponId });
             }
-            jsonArr.push({ key: 'cinemaCode', value: this.oCinemaCode });
             jsonArr.push({ key: 'ruleName', value: this.oRuleName });
             jsonArr.push({ key: 'startDate', value: this.oStartDate });
             jsonArr.push({ key: 'endDate', value: this.oEndDate });

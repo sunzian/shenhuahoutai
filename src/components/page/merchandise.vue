@@ -378,7 +378,7 @@ export default {
         };
     },
     created() {
-        this.showSell = true;
+        this.showSell=true;
     },
     mounted() {
         this.getMenu();
