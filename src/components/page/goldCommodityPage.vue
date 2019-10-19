@@ -1011,7 +1011,6 @@ export default {
                             for (let x in this.showType) {
                                 if (this.showType[x].value == JSON.parse(Decrypt(data.data.data)).goldCommodity.changeType) {
                                     this.form.changeType = this.showType[x].value;
-
                                     break;
                                 }
                             }

@@ -150,6 +150,16 @@ export default new Router({
                     meta: { title: '卖品活动管理' }
                 },
                 {
+                    path: '/benefitCard',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/benefitCard.vue'),
+                    meta: { title: '权益卡管理' }
+                },
+                {
+                    path: '/couponSendActivity',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/couponSendActivity.vue'),
+                    meta: { title: '送券活动管理' }
+                },
+                {
                     // vue-schart组件
                     path: '/charts',
                     component: () => import(/* webpackChunkName: "chart" */ '../components/page/BaseCharts.vue'),

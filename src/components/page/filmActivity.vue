@@ -464,6 +464,28 @@
                     <span v-if="oIsHolidayValid == 1">是</span>
                     <span v-if="oIsHolidayValid == 0">否</span>
                 </el-form-item>
+                <el-form-item
+                        label="可用时间段"
+                        :label-width="formLabelWidth"
+                        v-if="canTimeList.length>0"
+                >
+                    <div v-for="(item, index) in canTimeList" style="margin-bottom: 5px">
+                        <el-input
+                                style="width: 150px"
+                                v-model="item.startTime"
+                                autocomplete="off"
+                                :disabled="true"
+                        >
+                        </el-input>至
+                        <el-input
+                                style="width: 150px"
+                                v-model="item.endTime"
+                                autocomplete="off"
+                                :disabled="true"
+                        >
+                        </el-input>
+                    </div>
+                </el-form-item>
                 <el-form-item label="星期几可用：" :label-width="formLabelWidth">
                     <span>{{oValidWeekDay}}</span>
                 </el-form-item>
@@ -600,6 +622,7 @@
                 startArr:[],
                 endArr:[],
                 value: '',
+                canTimeList:[],//可用时间段列表
             };
         },
         created() {},
@@ -839,6 +862,16 @@
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
                 let params = ParamsAppend(jsonArr);
+                https.fetchPost('/filmDiscountActivity/getTimesById', params).then(data => { //查询可用时间段
+                    console.log(data);
+                    if(JSON.parse(Decrypt(data.data.data))){
+                        this.canTimeList=JSON.parse(Decrypt(data.data.data))
+                    }
+                    console.log(this.canTimeList);
+
+                }).catch(err => {
+                    console.log(err);
+                });
                 https.fetchPost('/filmDiscountActivity/getActivityById', params).then(data => {
                         console.log(data);
                         console.log(JSON.parse(Decrypt(data.data.data)));
@@ -1059,7 +1092,7 @@
                 console.log(selectValue);
             },
             selectFormat(val) {
-                // console.log(val)
+                console.log(val)
                 this.selectFormatCode = val.join(',');
                 console.log(this.selectFormatCode);
             },
@@ -1122,7 +1155,7 @@
                 this.getMenu();
             },
             one(a){//获取卖品绑定的value值
-                console.log(a);
+                // console.log(a);
                 this.oForm.filmCode =a
             },
             sureNext() {
