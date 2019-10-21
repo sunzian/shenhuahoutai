@@ -381,11 +381,6 @@
                 <el-form-item label="适用影院名称：" :label-width="formLabelWidth">
                     <span>{{oCinemaName}}</span>
                 </el-form-item>
-                <el-form-item label="适用影片名称：" :label-width="formLabelWidth">
-                    <span v-if="selectFilmType == 0">全部影片</span>
-                    <span v-if="selectFilmType == 1">{{oFilmName}}</span>
-                    <span v-if="selectFilmType == 2">除{{oFilmName}}外所有影片</span>
-                </el-form-item>
                 <el-form-item label="有效期：" :label-width="formLabelWidth">
                     <span>{{oCreateDate}}</span>
                     至
@@ -407,6 +402,28 @@
                 <el-form-item label="节假日是否可用：" :label-width="formLabelWidth">
                     <span v-if="oIsHolidayValid == 1">是</span>
                     <span v-if="oIsHolidayValid == 0">否</span>
+                </el-form-item>
+                <el-form-item
+                        label="可用时间段"
+                        :label-width="formLabelWidth"
+                        v-if="canTimeList.length>0"
+                >
+                    <div v-for="(item, index) in canTimeList" style="margin-bottom: 5px">
+                        <el-input
+                                style="width: 150px"
+                                v-model="item.startTime"
+                                autocomplete="off"
+                                :disabled="true"
+                        >
+                        </el-input>至
+                        <el-input
+                                style="width: 150px"
+                                v-model="item.endTime"
+                                autocomplete="off"
+                                :disabled="true"
+                        >
+                        </el-input>
+                    </div>
                 </el-form-item>
                 <el-form-item label="星期几可用：" :label-width="formLabelWidth">
                     <span>{{oValidWeekDay}}</span>
@@ -544,6 +561,7 @@
                 startArr:[],
                 endArr:[],
                 value: '',
+                canTimeList:[],//可用时间段列表
             };
         },
         created() {},
@@ -630,10 +648,6 @@
                 for (let i = 0; i < this.filmInfo.length; i++) {
                     filmeCodes.push(this.filmInfo[i].filmCode);
                 }
-                // this.oForm.filmCode = filmeCodes.join(',');
-                // if (this.oForm.selectFilmType == 0) {
-                //     this.oForm.filmCode = '';
-                // }
                 if (this.oForm.selectHallType == 0) {
                     this.selectScreenCode = '';
                 }
@@ -644,12 +658,16 @@
                 jsonArr.push({ key: 'name', value: this.oForm.name });
                 jsonArr.push({ key: 'cinemaCode', value: this.selectValue });
                 jsonArr.push({ key: 'selectMerchandiseType', value: this.oForm.selectFilmType });
-                jsonArr.push({ key: 'merchandiseCode', value: this.oForm.filmCode });
+                if(this.oForm.selectFilmType!=0){
+                    jsonArr.push({ key: 'merchandiseCode', value: this.oForm.filmCode });
+                }
                 jsonArr.push({ key: 'startDate', value: this.oForm.startDate });
                 jsonArr.push({ key: 'endDate', value: this.oForm.endDate });
                 jsonArr.push({ key: 'reduceType', value: this.oForm.reduceType });
+                if( this.oForm.reduceType==2){
+                    jsonArr.push({ key: 'achieveMoney', value: this.oForm.achieveMoney });
+                }
                 jsonArr.push({ key: 'validPayType', value: this.oForm.validPayType });
-                jsonArr.push({ key: 'achieveMoney', value: this.oForm.achieveMoney });
                 jsonArr.push({ key: 'discountMoney', value: this.oForm.discountMoney });
                 jsonArr.push({ key: 'status', value: this.oForm.status });
                 jsonArr.push({ key: 'isHolidayValid', value: this.oForm.holidayValid });
@@ -659,9 +677,13 @@
                 jsonArr.push({ key: 'startTimeVal', value: this.startArr.join(',')});
                 jsonArr.push({ key: 'endTimeVal', value: this.endArr.join(',')});
                 jsonArr.push({ key: 'isLimitTotal', value: this.oForm.oCanNum });
-                jsonArr.push({ key: 'totalNumber', value: this.oForm.oNum });
+                if(this.oForm.oCanNum!=0){
+                    jsonArr.push({ key: 'totalNumber', value: this.oForm.oNum });
+                }
+                if(this.oForm.oneCanNum!=0){
+                    jsonArr.push({ key: 'singleNumber', value: this.oForm.oneNum });
+                }
                 jsonArr.push({ key: 'isLimitSingle', value: this.oForm.oneCanNum });
-                jsonArr.push({ key: 'singleNumber', value: this.oForm.oneNum });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
                 console.log(jsonArr);
@@ -774,6 +796,16 @@
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
                 let params = ParamsAppend(jsonArr);
+                https.fetchPost('/filmDiscountActivity/getTimesById', params).then(data => { //查询可用时间段
+                    console.log(data);
+                    if(JSON.parse(Decrypt(data.data.data))){
+                        this.canTimeList=JSON.parse(Decrypt(data.data.data))
+                    }
+                    console.log(this.canTimeList);
+
+                }).catch(err => {
+                    console.log(err);
+                });
                 https.fetchPost('/merchandiseDiscountActivity/getActivityById', params).then(data => {
                     console.log(data);
                     console.log(JSON.parse(Decrypt(data.data.data)));

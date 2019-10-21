@@ -464,6 +464,28 @@
                     <span v-if="oIsHolidayValid == 1">是</span>
                     <span v-if="oIsHolidayValid == 0">否</span>
                 </el-form-item>
+                <el-form-item
+                        label="可用时间段"
+                        :label-width="formLabelWidth"
+                        v-if="canTimeList.length>0"
+                >
+                    <div v-for="(item, index) in canTimeList" style="margin-bottom: 5px">
+                        <el-input
+                                style="width: 150px"
+                                v-model="item.startTime"
+                                autocomplete="off"
+                                :disabled="true"
+                        >
+                        </el-input>至
+                        <el-input
+                                style="width: 150px"
+                                v-model="item.endTime"
+                                autocomplete="off"
+                                :disabled="true"
+                        >
+                        </el-input>
+                    </div>
+                </el-form-item>
                 <el-form-item label="星期几可用：" :label-width="formLabelWidth">
                     <span>{{oValidWeekDay}}</span>
                 </el-form-item>
@@ -600,6 +622,7 @@
                 startArr:[],
                 endArr:[],
                 value: '',
+                canTimeList:[],//可用时间段列表
             };
         },
         created() {},
@@ -700,14 +723,17 @@
                 jsonArr.push({ key: 'name', value: this.oForm.name });
                 jsonArr.push({ key: 'cinemaCode', value: this.selectValue });
                 jsonArr.push({ key: 'selectHallType', value: this.oForm.selectHallType });
-                jsonArr.push({ key: 'screenCode', value: this.selectScreenCode });
+                if(this.oForm.selectHallType!=0){
+                    jsonArr.push({ key: 'screenCode', value: this.selectScreenCode });
+                }
                 jsonArr.push({ key: 'selectFilmType', value: this.oForm.selectFilmType });
-                jsonArr.push({ key: 'filmCode', value: this.oForm.filmCode });
+                if(this.oForm.selectFilmType!=0){
+                    jsonArr.push({ key: 'filmCode', value: this.oForm.filmCode });
+                }
                 jsonArr.push({ key: 'startDate', value: this.oForm.startDate });
                 jsonArr.push({ key: 'endDate', value: this.oForm.endDate });
                 jsonArr.push({ key: 'reduceType', value: this.oForm.reduceType });
                 jsonArr.push({ key: 'validPayType', value: this.oForm.validPayType });
-                // jsonArr.push({ key: 'achieveMoney', value: this.oForm.achieveMoney });
                 jsonArr.push({ key: 'discountMoney', value: this.oForm.discountMoney });
                 jsonArr.push({ key: 'status', value: this.oForm.status });
                 jsonArr.push({ key: 'isHolidayValid', value: this.oForm.holidayValid });
@@ -716,17 +742,18 @@
                 jsonArr.push({ key: 'activityDesc', value: this.oForm.couponDesc });
                 jsonArr.push({ key: 'startTimeVal', value: this.startArr.join(',')});
                 jsonArr.push({ key: 'endTimeVal', value: this.endArr.join(',')});
-
-                // jsonArr.push({ key: 'cinemaName', value: this.selectValue });
                 jsonArr.push({ key: 'isLimitTotal', value: this.oForm.oCanNum });
-                jsonArr.push({ key: 'totalNumber', value: this.oForm.oNum });
+                if(this.oForm.oCanNum!=0){
+                    jsonArr.push({ key: 'totalNumber', value: this.oForm.oNum });
+                }
+                if(this.oForm.oneCanNum!=0){
+                    jsonArr.push({ key: 'singleNumber', value: this.oForm.oneNum });
+                }
                 jsonArr.push({ key: 'isLimitSingle', value: this.oForm.oneCanNum });
-                jsonArr.push({ key: 'singleNumber', value: this.oForm.oneNum });
                 jsonArr.push({ key: 'selectFilmFormatType', value: this.oForm.selectMovieType});
-                jsonArr.push({ key: 'FilmFormatCode', value: this.oForm.formatCode});
-                // jsonArr.push({ key: 'FilmFormatName', value: this.oForm.startDate });
-                // jsonArr.push({ key: 'filmName', value: this.oForm.filmCode });
-                // jsonArr.push({ key: 'screenName', value: this.selectScreenCode });
+                if(this.oForm.selectMovieType!=0){
+                    jsonArr.push({ key: 'FilmFormatCode', value: this.oForm.formatCode});
+                }
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
                 console.log(jsonArr);
@@ -839,6 +866,16 @@
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
                 let params = ParamsAppend(jsonArr);
+                https.fetchPost('/filmDiscountActivity/getTimesById', params).then(data => { //查询可用时间段
+                    console.log(data);
+                    if(JSON.parse(Decrypt(data.data.data))){
+                        this.canTimeList=JSON.parse(Decrypt(data.data.data))
+                    }
+                    console.log(this.canTimeList);
+
+                }).catch(err => {
+                    console.log(err);
+                });
                 https.fetchPost('/filmDiscountActivity/getActivityById', params).then(data => {
                         console.log(data);
                         console.log(JSON.parse(Decrypt(data.data.data)));
@@ -1059,7 +1096,7 @@
                 console.log(selectValue);
             },
             selectFormat(val) {
-                // console.log(val)
+                console.log(val)
                 this.selectFormatCode = val.join(',');
                 console.log(this.selectFormatCode);
             },
@@ -1122,7 +1159,7 @@
                 this.getMenu();
             },
             one(a){//获取卖品绑定的value值
-                console.log(a);
+                // console.log(a);
                 this.oForm.filmCode =a
             },
             sureNext() {
