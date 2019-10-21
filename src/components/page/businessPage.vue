@@ -138,54 +138,6 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="售票系统类型" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 150px"
-                        maxlength="9"
-                        v-model.number="oForm.ticketingSystemType"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="售票系统账号" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 150px"
-                        maxlength="9"
-                        v-model.number="oForm.ticketingSystemAccount"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="售票系统密码" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 150px"
-                        maxlength="9"
-                        v-model.number="oForm.ticketingSystemPassword"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="小程序appId" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 150px"
-                        maxlength="9"
-                        v-model.number="oForm.miniAppId"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="售票系统接口地址" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 150px"
-                        maxlength="9"
-                        v-model.number="oForm.interfaceAddress"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="售票系统会员接口地址" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 150px"
-                        maxlength="9"
-                        v-model.number="oForm.memberInterfaceAddress"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取 消</el-button>

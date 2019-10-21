@@ -885,7 +885,7 @@ export default {
             jsonArr.push({ key: 'name', value: name });
             jsonArr.push({ key: 'endDate', value: today });
             jsonArr.push({ key: 'status', value: 1 });
-            jsonArr.push({ key: 'cinemaCodes', value: this.oForm.cinemaCode });
+            jsonArr.push({ key: 'cinemaCodes', value: this.cinemaCode });
             jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
             jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
             let sign = md5(preSign(jsonArr));
@@ -910,7 +910,6 @@ export default {
                         this.query.pageNo = oData.pageResult.pageNo;
                         this.query.totalCount = oData.pageResult.totalCount;
                         this.query.totalPage = oData.pageResult.totalPage;
-                        return;
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
@@ -947,7 +946,7 @@ export default {
         },
         onSuccess(data) {
             //上传文件 登录超时
-            // console.log(data);
+            console.log(data);
             this.oForm.image_url = data.data;
             if (data.code == 'nologin') {
                 this.message = data.message;
