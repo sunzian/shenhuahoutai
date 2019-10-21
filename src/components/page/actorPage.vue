@@ -93,9 +93,11 @@
                         :data="type"
                         class="upload-demo"
                         drag
+                        :limit="1"
                         action="api/upload/uploadImage"
                         :on-success="setPicture"
                         multiple
+                        list-type="picture"
                     >
                         <i class="el-icon-upload"></i>
                         <div class="el-upload__text">
@@ -124,22 +126,31 @@
                     <el-input style="width: 250px" v-model="oIntroduction" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="图片地址" :label-width="formLabelWidth">
-                    <el-popover
-                            placement="right"
-                            title=""
-                            trigger="hover">
-                        <img :src="oPicture"/>
-                        <img slot="reference" :src="oPicture" :alt="oPicture" style="max-height: 50px;max-width: 130px">
+                    <el-popover placement="right" title trigger="hover">
+                        <img :src="oPicture" />
+                        <img
+                            slot="reference"
+                            :src="oPicture"
+                            :alt="oPicture"
+                            style="max-height: 50px;max-width: 130px"
+                        />
                     </el-popover>
                     <el-upload
-                            :data="type"
-                            class="upload-demo"
-                            drag
-                            action="api/upload/uploadImage"
-                            :on-success="onSuccess"
-                            multiple>
+                        :data="type"
+                        class="upload-demo"
+                        drag
+                        :limit="1"
+                        action="api/upload/uploadImage"
+                        :before-upload="beforeUpload"
+                        :on-success="onSuccess"
+                        list-type="picture"
+                        multiple
+                    >
                         <i class="el-icon-upload"></i>
-                        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+                        <div class="el-upload__text">
+                            将文件拖到此处，或
+                            <em>点击上传</em>
+                        </div>
                         <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
                     </el-upload>
                 </el-form-item>
@@ -162,10 +173,9 @@ export default {
     name: 'basetable',
     data() {
         return {
-            type:{
-                    // sign: "ed8u$input7$input7jpYsRe8t2aKSKBF/cJ21S1z/10SqwBE2XAQ=",
-                    type: "HaqvR9QhxCCGBAiSE6veKw=="
-                },
+            type: {
+                type: 'performer'
+            },
             oName: '',
             oCountry: '',
             oIntroduction: '',
@@ -468,7 +478,11 @@ export default {
                 dangerouslyUseHTMLString: true
             });
         },
-                onSuccess(data) {
+        beforeUpload() {
+            //上传之前
+            this.type.type = EncryptReplace('performer');
+        },
+        onSuccess(data) {
             // 修改图片
             console.log(data);
             this.oPicture = data.data;
