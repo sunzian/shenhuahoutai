@@ -477,7 +477,7 @@ export default {
             });
             var jsonArr = [];
             if (this.oForm.limitStatus == 2) {
-                jsonArr.push({ key: 'singleLimitNumber', value: this.oForm.singleLimitNumber });
+                jsonArr.push({ key: 'monthLimitNumber', value: this.oForm.singleLimitNumber });
             }
             // 选择实物奖品
             if (this.oForm.type == 2) {
@@ -600,7 +600,7 @@ export default {
                         this.oOverDays = JSON.parse(Decrypt(data.data.data)).overDays;
                         this.oLimitStatus = JSON.parse(Decrypt(data.data.data)).limitStatus;
                         this.oId = JSON.parse(Decrypt(data.data.data)).id;
-                        this.oSingleLimitNumber = JSON.parse(Decrypt(data.data.data)).singleLimitNumber;
+                        this.oSingleLimitNumber = JSON.parse(Decrypt(data.data.data)).monthLimitNumber;
                         this.editVisible = true;
                     }else if(data.data.code=='nologin'){
                         this.message=data.data.message
@@ -672,7 +672,7 @@ export default {
             });
             var jsonArr = [];
             if(this.oLimitStatus == 2) {
-                jsonArr.push({ key: 'singleLimitNumber', value: this.oSingleLimitNumber });
+                jsonArr.push({ key: 'monthLimitNumber', value: this.oSingleLimitNumber });
             }
             jsonArr.push({ key: 'singleNumber', value: this.oSingleNumber });
             jsonArr.push({ key: 'groupNumber', value: this.oGroupNumber });
@@ -885,7 +885,7 @@ export default {
             jsonArr.push({ key: 'name', value: name });
             jsonArr.push({ key: 'endDate', value: today });
             jsonArr.push({ key: 'status', value: 1 });
-            jsonArr.push({ key: 'cinemaCodes', value: this.oForm.cinemaCode });
+            jsonArr.push({ key: 'cinemaCodes', value: this.cinemaCode });
             jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
             jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
             let sign = md5(preSign(jsonArr));
@@ -910,7 +910,6 @@ export default {
                         this.query.pageNo = oData.pageResult.pageNo;
                         this.query.totalCount = oData.pageResult.totalCount;
                         this.query.totalPage = oData.pageResult.totalPage;
-                        return;
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
@@ -947,7 +946,7 @@ export default {
         },
         onSuccess(data) {
             //上传文件 登录超时
-            // console.log(data);
+            console.log(data);
             this.oForm.image_url = data.data;
             if (data.code == 'nologin') {
                 this.message = data.message;

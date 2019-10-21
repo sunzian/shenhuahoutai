@@ -3,7 +3,7 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
-                    <i class="el-icon-lx-cascades"></i> 影厅管理
+                    <i class="el-icon-lx-cascades"></i> 影片信息维护
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
@@ -32,8 +32,18 @@
                 <el-table-column prop="name" label="影片名称">
                     <template slot-scope="scope">{{scope.row.filmName}}</template>
                 </el-table-column>
-                <el-table-column label="影片图片">
-                    <template slot-scope="scope">{{scope.row.image}}</template>
+                <el-table-column prop="name" label="图片">
+                    <template slot-scope="scope">
+                        <el-popover placement="right" title trigger="hover">
+                            <img style="width:400px" :src="scope.row.image" />
+                            <img
+                                slot="reference"
+                                :src="scope.row.image"
+                                :alt="scope.row.image"
+                                style="max-height: 50px;max-width: 130px"
+                            />
+                        </el-popover>
+                    </template>
                 </el-table-column>
                 <el-table-column prop="memo" label="影片时长">
                     <template slot-scope="scope">{{scope.row.duration}}</template>
@@ -91,16 +101,24 @@
                     <el-input style="width: 250px" v-model="oForm.duration" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="上映时间" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="oForm.publishDate" autocomplete="off"></el-input>
+                    <el-date-picker
+                        v-model="oForm.publishDate"
+                        type="datetime"
+                        placeholder="请选择日期"
+                        value-format="yyyy-MM-dd hh:mm:ss"
+                        format="yyyy-MM-dd hh:mm:ss"
+                    ></el-date-picker>
                 </el-form-item>
                 <el-form-item label="可选导演列表" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="oForm.directorId" autocomplete="off"></el-input>
+                    <el-button type="primary" @click="getAllDirector">选择导演</el-button>
+                    <!-- <el-input style="width: 250px" v-model="oForm.directorId" autocomplete="off"></el-input> -->
                 </el-form-item>
                 <el-form-item label="已选导演" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oForm.directorId" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="可选演员列表" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="oForm.castId" autocomplete="off"></el-input>
+                    <el-button type="primary" @click="getAllActor">选择演员</el-button>
+                    <!-- <el-input style="width: 250px" v-model="oForm.castId" autocomplete="off"></el-input> -->
                 </el-form-item>
                 <el-form-item label="已选演员" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oForm.castId" autocomplete="off"></el-input>
@@ -124,10 +142,36 @@
                     <el-input style="width: 250px" v-model="oForm.status" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="图片" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="oForm.image" autocomplete="off"></el-input>
+                    <el-upload
+                        class="upload-demo"
+                        action="/api/upload/uploadImage"
+                        :before-upload="beforeUpload"
+                        :data="type"
+                        :limit="1"
+                        :on-success="onSuccess"
+                        :file-list="fileList"
+                        list-type="picture"
+                    >
+                        <el-button size="small" type="primary">点击上传</el-button>
+                        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+                    </el-upload>
                 </el-form-item>
                 <el-form-item label="影片剧照" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="oForm.stagePhoto" autocomplete="off"></el-input>
+                    <el-upload
+                        action="/api/upload/uploadImage"
+                        :file-list="fileList"
+                        list-type="picture-card"
+                        :before-upload="beforeUploadPhoto"
+                        :data="photoType"
+                        :on-success="onPhotoSuccess"
+                        :on-preview="handlePictureCardPreview"
+                        :on-remove="handleRemove"
+                    >
+                        <i class="el-icon-plus"></i>
+                    </el-upload>
+                    <el-dialog :visible.sync="dialogVisible">
+                        <img width="100%" :src="dialogImageUrl" alt />
+                    </el-dialog>
                 </el-form-item>
                 <el-form-item label="预告片" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oForm.trailer" autocomplete="off"></el-input>
@@ -201,6 +245,63 @@
                 <el-button type="primary" @click="exChanger">确 定</el-button>
             </span>
         </el-dialog>
+        <!-- 选择导演弹出窗 -->
+        <el-dialog title="选择导演" :visible.sync="allDirector">
+            <div class="container">
+                <el-table
+                    :data="sellTableData"
+                    border
+                    class="table"
+                    ref="multipleTable"
+                    header-cell-class-name="table-header"
+                    @selection-change="handleSelectionChange"
+                >
+                    <el-table-column label="选择" width="100" align="center">
+                        <template slot-scope="scope">
+                            <el-checkbox :v-model="director.id" :label="scope.row.id">&nbsp;</el-checkbox>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="name" label="图片">
+                        <template slot-scope="scope">
+                            <el-popover placement="right" title trigger="hover">
+                                <img style="width:400px" :src="scope.row.picture" />
+                                <img
+                                    slot="reference"
+                                    :src="scope.row.picture"
+                                    :alt="scope.row.picture"
+                                    style="max-height: 50px;max-width: 130px"
+                                />
+                            </el-popover>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="sort" label="导演名称" width="150">
+                        <template slot-scope="scope">{{scope.row.name}}</template>
+                    </el-table-column>
+                    <el-table-column prop="sort" label="导演介绍" width="150">
+                        <template slot-scope="scope">{{scope.row.introduction}}</template>
+                    </el-table-column>
+                    <el-table-column prop="sort" label="国籍" width="150">
+                        <template slot-scope="scope">{{scope.row.country}}</template>
+                    </el-table-column>
+                </el-table>
+                <div class="pagination">
+                    <el-pagination
+                        background
+                        layout="total, prev, pager, next"
+                        :current-page="query.pageNo"
+                        :page-size="query.pageSize"
+                        :total="query.totalCount"
+                        @current-change="currentChange"
+                        @prev-click="prev"
+                        @next-click="next"
+                    ></el-pagination>
+                </div>
+            </div>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="drawer = false">取 消</el-button>
+                <el-button type="primary" @click="sureNext(director.id)">确 定</el-button>
+            </div>
+        </el-dialog>
     </div>
 </template>
 
@@ -233,6 +334,14 @@ export default {
             oStatus: '',
             oTrailer: '',
             oType: '',
+            type: {
+                type: ''
+            },
+            photoType: {
+                type: ''
+            },
+            dialogImageUrl: '',
+            dialogVisible: false,
             oVersion: '',
             message: '', //弹出框消息
             query: {
@@ -242,12 +351,17 @@ export default {
             tableData: [],
             multipleSelection: [],
             delList: [],
+            fileList: [],
             editVisible: false,
             pageTotal: 0,
             form: {},
+            director: {},
+            sellTableData: [],
+            allDirector: false,
+            allActor: false,
             selectScreen: '', // 选中的影厅
             idx: -1,
-            id: -1,
+            id: '',
             dialogFormVisible: false,
             options: [],
             oForm: {
@@ -266,7 +380,7 @@ export default {
                 publishDate: '',
                 publisher: '',
                 score: '',
-                stagePhoto: '',
+                stagePhoto: [],
                 status: '',
                 trailer: '',
                 type: '',
@@ -298,6 +412,7 @@ export default {
                     console.log(data);
                     if (data.data.code == 'success') {
                         this.dialogFormVisible = true;
+                        this.fileList = [];
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
@@ -454,8 +569,8 @@ export default {
                         this.oCreateDate = JSON.parse(Decrypt(data.data.data)).createDate;
                         this.oDirectorId = JSON.parse(Decrypt(data.data.data)).directorId;
                         this.oDuration = JSON.parse(Decrypt(data.data.data)).duration;
-                        this.OFilmCode = JSON.parse(Decrypt(data.data.data)).filmCode;
-                        this.OFilmName = JSON.parse(Decrypt(data.data.data)).filmName;
+                        this.oFilmCode = JSON.parse(Decrypt(data.data.data)).filmCode;
+                        this.oFilmName = JSON.parse(Decrypt(data.data.data)).filmName;
                         this.oId = JSON.parse(Decrypt(data.data.data)).id;
                         this.oImage = JSON.parse(Decrypt(data.data.data)).image;
                         this.oIntroduction = JSON.parse(Decrypt(data.data.data)).introduction;
@@ -589,6 +704,118 @@ export default {
                     console.log(err);
                 });
             loading.close();
+        },
+        beforeUpload() {
+            //上传之前
+            this.type.type = EncryptReplace('activity');
+        },
+        onSuccess(response) {
+            //上传文件 登录超时
+            this.oForm.image = response.data;
+            if (response.code == 'nologin') {
+                this.message = response.message;
+                this.open();
+                this.$router.push('/login');
+            }
+        },
+        beforeUploadPhoto() {
+            //上传之前
+            this.photoType.type = EncryptReplace('activity');
+        },
+        onPhotoSuccess(response, file) {
+            this.oForm.stagePhoto.push({ name: file.name, url: response.data });
+            if (response.code == 'nologin') {
+                this.message = response.message;
+                this.open();
+                this.$router.push('/login');
+            }
+        },
+        handleRemove(response) {
+            console.log(response);
+            this.oForm.stagePhoto.splice(
+                // 找到要删除的元素的下标
+                this.oForm.stagePhoto.indexOf(
+                    this.oForm.stagePhoto.find(function(element) {
+                        return element.name == response.name;
+                    })
+                ),
+                1
+            );
+        },
+        handlePictureCardPreview(file) {
+            this.dialogImageUrl = file.url;
+            this.dialogVisible = true;
+        },
+        // 获取所有导演
+        getAllDirector() {
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
+            https
+                .fetchPost('/director/directorPage', '')
+                .then(data => {
+                    if (data.data.code == 'success') {
+                        let director = JSON.parse(Decrypt(data.data.data));
+                        console.log(director);
+                        this.allDirector = true;
+                        this.sellTableData = director.data;
+                        this.query.pageSize = director.pageSize;
+                        this.query.pageNo = director.pageNo;
+                        this.query.totalCount = director.totalCount;
+                        this.query.totalPage = director.totalPage;
+                    } else if (data.data.code == 'nologin') {
+                        this.message = data.data.message;
+                        this.open();
+                        this.$router.push('/login');
+                    } else {
+                        this.message = data.data.message;
+                        this.open();
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+            loading.close();
+        },
+        // 获取所有演员
+        getAllActor() {
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
+            https
+                .fetchPost('/actor/actorPage', '')
+                .then(data => {
+                    if (data.data.code == 'success') {
+                        let actor = JSON.parse(Decrypt(data.data.data));
+                        console.log(actor);
+                    } else if (data.data.code == 'nologin') {
+                        this.message = data.data.message;
+                        this.open();
+                        this.$router.push('/login');
+                    } else {
+                        this.message = data.data.message;
+                        this.open();
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+            loading.close();
+        },
+        sureNext(id) {
+            console.log(this.director);
+            // this.drawer = false;
+        },
+        change(val) {
+            console.log(val)
         },
         open() {
             //错误信息弹出框

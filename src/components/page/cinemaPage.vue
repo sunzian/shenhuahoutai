@@ -146,7 +146,7 @@
         <!--新增弹出框-->
         <el-dialog title="新增" :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
-                <el-form-item label="影院编码">
+                <el-form-item label="影院编码" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         maxlength="10"
@@ -155,7 +155,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="影院名称">
+                <el-form-item label="影院名称" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -163,7 +163,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="所在省份">
+                <el-form-item label="所在省份" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -171,7 +171,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="所在城市">
+                <el-form-item label="所在城市" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -179,7 +179,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="详细地址">
+                <el-form-item label="详细地址" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -187,7 +187,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="经度">
+                <el-form-item label="经度" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -195,7 +195,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="纬度">
+                <el-form-item label="纬度" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -203,7 +203,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="关联商家编码">
+                <el-form-item label="关联商家编码" :label-width="formLabelWidth">
                     <el-select v-model="oForm.belongBusinessCode" placeholder="请选择">
                         <el-option
                             v-for="info in businessInfo"
@@ -213,7 +213,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="影院联系人姓名">
+                <el-form-item label="影院联系人姓名" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -221,7 +221,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="影院联系人电话">
+                <el-form-item label="影院联系人电话" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -229,7 +229,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="客服电话">
+                <el-form-item label="客服电话" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -237,7 +237,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="影厅数量">
+                <el-form-item label="影厅数量" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -245,7 +245,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="售票系统影院内码">
+                <el-form-item label="售票系统影院内码" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -253,7 +253,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="第三方比价影院编码">
+                <el-form-item label="第三方比价影院编码" :label-width="formLabelWidth">
                     <el-input
                         maxlength="30"
                         type="textarea"
@@ -263,7 +263,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="开场前的购票时间限制">
+                <el-form-item label="开场前的购票时间限制" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -271,7 +271,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="开场前的退票时间限制">
+                <el-form-item label="开场前的退票时间限制" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -279,7 +279,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="退票手续费">
+                <el-form-item label="退票手续费" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -287,7 +287,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="第三方支付代售费（微信支付）">
+                <el-form-item label="第三方支付代售费（微信支付）" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -295,7 +295,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="会员卡支付代售费">
+                <el-form-item label="会员卡支付代售费" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -303,7 +303,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="影院会员服务协议">
+                <el-form-item label="影院会员服务协议" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -311,7 +311,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="购票提示">
+                <el-form-item label="购票提示" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -319,7 +319,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="是否开通套餐">
+                <el-form-item label="是否开通套餐" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -327,7 +327,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="是否小卖配送">
+                <el-form-item label="是否小卖配送" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -335,7 +335,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="是否可退票">
+                <el-form-item label="是否可退票" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -343,7 +343,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="剩余票数">
+                <el-form-item label="剩余票数" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -351,15 +351,15 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="卖品显示开始时间">
+                <el-form-item label="卖品显示开始时间" :label-width="formLabelWidth">
                     <el-time-picker v-model="oForm.snackBeginTime" :picker-options="{
     }"></el-time-picker>
                 </el-form-item>
-                <el-form-item label="卖品显示结束时间">
+                <el-form-item label="卖品显示结束时间" :label-width="formLabelWidth">
                     <el-time-picker v-model="oForm.snackEndTime" :picker-options="{
     }"></el-time-picker>
                 </el-form-item>
-                <el-form-item label="短信平台类型">
+                <el-form-item label="短信平台类型" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -367,7 +367,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="短信平台账号">
+                <el-form-item label="短信平台账号" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -375,7 +375,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="短信平台密码">
+                <el-form-item label="短信平台密码" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -383,7 +383,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="短信平台签名id">
+                <el-form-item label="短信平台签名id" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -391,7 +391,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="是否开通服务">
+                <el-form-item label="是否开通服务" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -399,10 +399,10 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="到期时间">
+                <el-form-item label="到期时间" :label-width="formLabelWidth">
                     <el-date-picker v-model="oExpireDate" placeholder="选择日期时间"></el-date-picker>
                 </el-form-item>
-                <el-form-item label="费用支付类型">
+                <el-form-item label="费用支付类型" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -410,7 +410,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="票价上报方式">
+                <el-form-item label="票价上报方式" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -418,7 +418,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="是否开通会员卡功能">
+                <el-form-item label="是否开通会员卡功能" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -426,7 +426,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="会员卡是否门店通用">
+                <el-form-item label="会员卡是否门店通用" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -434,7 +434,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="会员卡支付是否可用优惠券">
+                <el-form-item label="会员卡支付是否可用优惠券" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -442,7 +442,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="小程序appSecret">
+                <el-form-item label="小程序appSecret" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -450,7 +450,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="小程序支付商户号">
+                <el-form-item label="小程序支付商户号" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -458,7 +458,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="小程序支付密钥">
+                <el-form-item label="小程序支付密钥" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -466,11 +466,67 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="小程序退款证书阿里云路径">
+                <el-form-item label="小程序退款证书阿里云路径" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
                         v-model.trim="oForm.miniRefundCertificateUrl"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="售票系统类型" :label-width="formLabelWidth">
+                    <el-input
+                        style="width: 150px"
+                        maxlength="9"
+                        v-model.number="oForm.ticketingSystemType"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="售票系统账号" :label-width="formLabelWidth">
+                    <el-input
+                        style="width: 150px"
+                        maxlength="9"
+                        v-model.number="oForm.ticketingSystemAccount"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="售票系统密码" :label-width="formLabelWidth">
+                    <el-input
+                        style="width: 150px"
+                        maxlength="9"
+                        v-model.number="oForm.ticketingSystemPassword"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="小程序appId" :label-width="formLabelWidth">
+                    <el-input
+                        style="width: 150px"
+                        maxlength="9"
+                        v-model.number="oForm.miniAppId"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="售票系统接口地址" :label-width="formLabelWidth">
+                    <el-input
+                        style="width: 150px"
+                        maxlength="9"
+                        v-model.number="oForm.interfaceAddress"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="售票系统会员接口地址" :label-width="formLabelWidth">
+                    <el-input
+                        style="width: 150px"
+                        maxlength="9"
+                        v-model.number="oForm.memberInterfaceAddress"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="影院奖品核销码" :label-width="formLabelWidth">
+                    <el-input
+                        style="width: 150px"
+                        maxlength="9"
+                        v-model.number="oForm.verificationCode"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
@@ -692,7 +748,7 @@
                 <el-form-item label="卖品显示开始时间" :label-width="formLabelWidth">
                     <el-time-picker v-model="oSnackBeginTime" placeholder="选择日期时间"></el-time-picker>
                 </el-form-item>
-                <el-form-item label="卖品显示结束时间">
+                <el-form-item label="卖品显示结束时间" :label-width="formLabelWidth">
                     <el-time-picker v-model="oSnackEndTime" placeholder="选择日期时间"></el-time-picker>
                 </el-form-item>
                 <el-form-item label="短信平台类型" :label-width="formLabelWidth">
@@ -810,6 +866,62 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
+                <el-form-item label="售票系统类型" :label-width="formLabelWidth">
+                    <el-input
+                        style="width: 150px"
+                        maxlength="9"
+                        v-model.number="oTicketingSystemType"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="售票系统账号" :label-width="formLabelWidth">
+                    <el-input
+                        style="width: 150px"
+                        maxlength="9"
+                        v-model.number="oTicketingSystemAccount"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="售票系统密码" :label-width="formLabelWidth">
+                    <el-input
+                        style="width: 150px"
+                        maxlength="9"
+                        v-model.number="oTicketingSystemPassword"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="小程序appId" :label-width="formLabelWidth">
+                    <el-input
+                        style="width: 150px"
+                        maxlength="9"
+                        v-model.number="oMiniAppId"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="售票系统接口地址" :label-width="formLabelWidth">
+                    <el-input
+                        style="width: 150px"
+                        maxlength="9"
+                        v-model.number="oInterfaceAddress"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="售票系统会员接口地址" :label-width="formLabelWidth">
+                    <el-input
+                        style="width: 150px"
+                        maxlength="9"
+                        v-model.number="oMemberInterfaceAddress"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="影院奖品核销码" :label-width="formLabelWidth">
+                    <el-input
+                        style="width: 150px"
+                        maxlength="9"
+                        v-model.number="oVerificationCode"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false">取 消</el-button>
@@ -872,6 +984,13 @@ export default {
             oMiniMerchantNo: '',
             oMiniMerchantSecret: '',
             oMiniRefundCertificateUrl: '',
+            oTicketingSystemType: '',
+            oTicketingSystemAccount: '',
+            oTicketingSystemPassword: '',
+            oMiniAppId: '',
+            oInterfaceAddress: '',
+            oMemberInterfaceAddress: '',
+            oVerificationCode: '',
             oId: '',
             message: '', //弹出框消息
             query: {
@@ -941,7 +1060,14 @@ export default {
                 miniAppSecret: '',
                 miniMerchantNo: '',
                 miniMerchantSecret: '',
-                miniRefundCertificateUrl: ''
+                miniRefundCertificateUrl: '',
+                ticketingSystemType: '',
+                ticketingSystemAccount: '',
+                ticketingSystemPassword: '',
+                miniAppId: '',
+                interfaceAddress: '',
+                memberInterfaceAddress: '',
+                verificationCode: ''
             },
             formLabelWidth: '160px',
             selectValue: {},
@@ -1045,6 +1171,13 @@ export default {
             jsonArr.push({ key: 'miniMerchantNo', value: this.oForm.miniMerchantNo });
             jsonArr.push({ key: 'miniMerchantSecret', value: this.oForm.miniMerchantSecret });
             jsonArr.push({ key: 'miniRefundCertificateUrl', value: this.oForm.miniRefundCertificateUrl });
+            jsonArr.push({ key: 'ticketingSystemType', value: this.oForm.ticketingSystemType });
+            jsonArr.push({ key: 'ticketingSystemAccount', value: this.oForm.ticketingSystemAccount });
+            jsonArr.push({ key: 'ticketingSystemPassword', value: this.oForm.ticketingSystemPassword });
+            jsonArr.push({ key: 'miniAppId', value: this.oForm.miniAppId });
+            jsonArr.push({ key: 'interfaceAddress', value: this.oForm.interfaceAddress });
+            jsonArr.push({ key: 'memberInterfaceAddress', value: this.oForm.memberInterfaceAddress });
+            jsonArr.push({ key: 'verificationCode', value: this.oForm.verificationCode });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             console.log(jsonArr);
@@ -1102,6 +1235,13 @@ export default {
                             this.oForm.miniMerchantNo = '';
                             this.oForm.miniMerchantSecret = '';
                             this.oForm.miniRefundCertificateUrl = '';
+                            this.oForm.ticketingSystemType = '';
+                            this.oForm.ticketingSystemAccount = '';
+                            this.oForm.ticketingSystemPassword = '';
+                            this.oForm.miniAppId = '';
+                            this.oForm.interfaceAddress = '';
+                            this.oForm.memberInterfaceAddress = '';
+                            this.oForm.verificationCode = '';
                             this.getMenu();
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
@@ -1227,6 +1367,13 @@ export default {
                         this.oMiniMerchantNo = JSON.parse(Decrypt(data.data.data)).miniMerchantNo;
                         this.oMiniMerchantSecret = JSON.parse(Decrypt(data.data.data)).miniMerchantSecret;
                         this.oMiniRefundCertificateUrl = JSON.parse(Decrypt(data.data.data)).miniRefundCertificateUrl;
+                        this.oTicketingSystemType = JSON.parse(Decrypt(data.data.data)).ticketingSystemType;
+                        this.oTicketingSystemAccount = JSON.parse(Decrypt(data.data.data)).ticketingSystemAccount;
+                        this.oTicketingSystemPassword = JSON.parse(Decrypt(data.data.data)).ticketingSystemPassword;
+                        this.oMiniAppId = JSON.parse(Decrypt(data.data.data)).miniAppId;
+                        this.oInterfaceAddress = JSON.parse(Decrypt(data.data.data)).interfaceAddress;
+                        this.oMemberInterfaceAddress = JSON.parse(Decrypt(data.data.data)).memberInterfaceAddress;
+                        this.oVerificationCode = JSON.parse(Decrypt(data.data.data)).verificationCode;
                         this.oId = JSON.parse(Decrypt(data.data.data)).id;
                         this.openServe();
                         // 获取所选影院名称
@@ -1303,6 +1450,13 @@ export default {
             jsonArr.push({ key: 'miniMerchantNo', value: this.oMiniMerchantNo });
             jsonArr.push({ key: 'miniMerchantSecret', value: this.oMiniMerchantSecret });
             jsonArr.push({ key: 'miniRefundCertificateUrl', value: this.oMiniRefundCertificateUrl });
+            jsonArr.push({ key: 'ticketingSystemType', value: this.oTicketingSystemType });
+            jsonArr.push({ key: 'ticketingSystemAccount', value: this.oTicketingSystemAccount });
+            jsonArr.push({ key: 'ticketingSystemPassword', value: this.oTicketingSystemPassword });
+            jsonArr.push({ key: 'miniAppId', value: this.oMiniAppId });
+            jsonArr.push({ key: 'interfaceAddress', value: this.oInterfaceAddress });
+            jsonArr.push({ key: 'memberInterfaceAddress', value: this.oMemberInterfaceAddress });
+            jsonArr.push({ key: 'verificationCode', value: this.oVerificationCode });
             jsonArr.push({ key: 'id', value: this.oId });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
