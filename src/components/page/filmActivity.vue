@@ -723,14 +723,17 @@
                 jsonArr.push({ key: 'name', value: this.oForm.name });
                 jsonArr.push({ key: 'cinemaCode', value: this.selectValue });
                 jsonArr.push({ key: 'selectHallType', value: this.oForm.selectHallType });
-                jsonArr.push({ key: 'screenCode', value: this.selectScreenCode });
+                if(this.oForm.selectHallType!=0){
+                    jsonArr.push({ key: 'screenCode', value: this.selectScreenCode });
+                }
                 jsonArr.push({ key: 'selectFilmType', value: this.oForm.selectFilmType });
-                jsonArr.push({ key: 'filmCode', value: this.oForm.filmCode });
+                if(this.oForm.selectFilmType!=0){
+                    jsonArr.push({ key: 'filmCode', value: this.oForm.filmCode });
+                }
                 jsonArr.push({ key: 'startDate', value: this.oForm.startDate });
                 jsonArr.push({ key: 'endDate', value: this.oForm.endDate });
                 jsonArr.push({ key: 'reduceType', value: this.oForm.reduceType });
                 jsonArr.push({ key: 'validPayType', value: this.oForm.validPayType });
-                // jsonArr.push({ key: 'achieveMoney', value: this.oForm.achieveMoney });
                 jsonArr.push({ key: 'discountMoney', value: this.oForm.discountMoney });
                 jsonArr.push({ key: 'status', value: this.oForm.status });
                 jsonArr.push({ key: 'isHolidayValid', value: this.oForm.holidayValid });
@@ -739,17 +742,18 @@
                 jsonArr.push({ key: 'activityDesc', value: this.oForm.couponDesc });
                 jsonArr.push({ key: 'startTimeVal', value: this.startArr.join(',')});
                 jsonArr.push({ key: 'endTimeVal', value: this.endArr.join(',')});
-
-                // jsonArr.push({ key: 'cinemaName', value: this.selectValue });
                 jsonArr.push({ key: 'isLimitTotal', value: this.oForm.oCanNum });
-                jsonArr.push({ key: 'totalNumber', value: this.oForm.oNum });
+                if(this.oForm.oCanNum!=0){
+                    jsonArr.push({ key: 'totalNumber', value: this.oForm.oNum });
+                }
+                if(this.oForm.oneCanNum!=0){
+                    jsonArr.push({ key: 'singleNumber', value: this.oForm.oneNum });
+                }
                 jsonArr.push({ key: 'isLimitSingle', value: this.oForm.oneCanNum });
-                jsonArr.push({ key: 'singleNumber', value: this.oForm.oneNum });
                 jsonArr.push({ key: 'selectFilmFormatType', value: this.oForm.selectMovieType});
-                jsonArr.push({ key: 'FilmFormatCode', value: this.oForm.formatCode});
-                // jsonArr.push({ key: 'FilmFormatName', value: this.oForm.startDate });
-                // jsonArr.push({ key: 'filmName', value: this.oForm.filmCode });
-                // jsonArr.push({ key: 'screenName', value: this.selectScreenCode });
+                if(this.oForm.selectMovieType!=0){
+                    jsonArr.push({ key: 'FilmFormatCode', value: this.oForm.formatCode});
+                }
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
                 console.log(jsonArr);

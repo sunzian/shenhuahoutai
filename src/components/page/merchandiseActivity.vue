@@ -648,10 +648,6 @@
                 for (let i = 0; i < this.filmInfo.length; i++) {
                     filmeCodes.push(this.filmInfo[i].filmCode);
                 }
-                // this.oForm.filmCode = filmeCodes.join(',');
-                // if (this.oForm.selectFilmType == 0) {
-                //     this.oForm.filmCode = '';
-                // }
                 if (this.oForm.selectHallType == 0) {
                     this.selectScreenCode = '';
                 }
@@ -662,12 +658,16 @@
                 jsonArr.push({ key: 'name', value: this.oForm.name });
                 jsonArr.push({ key: 'cinemaCode', value: this.selectValue });
                 jsonArr.push({ key: 'selectMerchandiseType', value: this.oForm.selectFilmType });
-                jsonArr.push({ key: 'merchandiseCode', value: this.oForm.filmCode });
+                if(this.oForm.selectFilmType!=0){
+                    jsonArr.push({ key: 'merchandiseCode', value: this.oForm.filmCode });
+                }
                 jsonArr.push({ key: 'startDate', value: this.oForm.startDate });
                 jsonArr.push({ key: 'endDate', value: this.oForm.endDate });
                 jsonArr.push({ key: 'reduceType', value: this.oForm.reduceType });
+                if( this.oForm.reduceType==2){
+                    jsonArr.push({ key: 'achieveMoney', value: this.oForm.achieveMoney });
+                }
                 jsonArr.push({ key: 'validPayType', value: this.oForm.validPayType });
-                jsonArr.push({ key: 'achieveMoney', value: this.oForm.achieveMoney });
                 jsonArr.push({ key: 'discountMoney', value: this.oForm.discountMoney });
                 jsonArr.push({ key: 'status', value: this.oForm.status });
                 jsonArr.push({ key: 'isHolidayValid', value: this.oForm.holidayValid });
@@ -677,9 +677,13 @@
                 jsonArr.push({ key: 'startTimeVal', value: this.startArr.join(',')});
                 jsonArr.push({ key: 'endTimeVal', value: this.endArr.join(',')});
                 jsonArr.push({ key: 'isLimitTotal', value: this.oForm.oCanNum });
-                jsonArr.push({ key: 'totalNumber', value: this.oForm.oNum });
+                if(this.oForm.oCanNum!=0){
+                    jsonArr.push({ key: 'totalNumber', value: this.oForm.oNum });
+                }
+                if(this.oForm.oneCanNum!=0){
+                    jsonArr.push({ key: 'singleNumber', value: this.oForm.oneNum });
+                }
                 jsonArr.push({ key: 'isLimitSingle', value: this.oForm.oneCanNum });
-                jsonArr.push({ key: 'singleNumber', value: this.oForm.oneNum });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
                 console.log(jsonArr);
