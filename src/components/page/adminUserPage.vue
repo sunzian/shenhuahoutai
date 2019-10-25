@@ -283,6 +283,7 @@
                 });
                 setTimeout(() => {
                     https.fetchPost('/user/addAdminPage','').then((data) => {
+                        loading.close();
                         console.log(data);
                         if(data.data.code == 'success'){
                             this.oForm=[]
@@ -300,10 +301,10 @@
                             this.open()
                         }
                     }).catch(err=>{
-                            console.log(err)
+                        loading.close();
+                        console.log(err)
                         }
                     )
-                    loading.close();
                 }, 500);
             },
             getCheckedKeys() {//新增数据操作
@@ -332,6 +333,7 @@
                     let params = ParamsAppend(jsonArr);
                     if(this.dialogFormVisible == true){
                         https.fetchPost('/user/addAdminUser',params).then((data) => {//新增
+                            loading.close();
                             console.log(data);
                             if(data.data.code=='success'){
                                 this.dialogFormVisible = false
@@ -349,11 +351,11 @@
                                 this.open()
                             }
                         }).catch(err=>{
-                                console.log(err)
+                            loading.close();
+                            console.log(err)
                             }
                         )
                     }
-                    loading.close();
                 }, 500);
             },
             delChange(index, row){//删除数据
@@ -381,6 +383,7 @@
                     jsonArr.push({key:"sign",value:sign});
                     let params = ParamsAppend(jsonArr);
                     https.fetchPost('/user/deleteAdminUser',params).then((data) => {
+                        loading.close();
                         console.log(data);
                         // console.log(JSON.parse(Decrypt(data.data.data)));
                         if(data.data.code=='success'){
@@ -396,10 +399,10 @@
                             this.open()
                         }
                     }).catch(err=>{
-                            console.log(err)
+                        loading.close();
+                        console.log(err)
                         }
                     )
-                    loading.close();
                 }, 500);
             },
             addChange(index, row){//是否修改权限
@@ -419,6 +422,7 @@
                     jsonArr.push({key:"sign",value:sign});
                     let params = ParamsAppend(jsonArr);
                     https.fetchPost('/user/modifyAdminPage',params).then((data) => {
+                        loading.close();
                         console.log(data);
                         // console.log(JSON.parse(Decrypt(data.data.data)));
                         if(data.data.code=='success'){
@@ -462,10 +466,10 @@
                             this.open()
                         }
                     }).catch(err=>{
-                            console.log(err)
+                        loading.close();
+                        console.log(err)
                         }
                     )
-                    loading.close();
                 }, 500);
 
             },
@@ -496,6 +500,7 @@
                     let params = ParamsAppend(jsonArr);
                     this.editVisible = false;
                     https.fetchPost('/user/modifyAdminUser',params).then((data) => {
+                        loading.close();
                         console.log(data);
                         // console.log(JSON.parse(Decrypt(data.data.data)));
                         if(data.data.code=='success'){
@@ -511,7 +516,8 @@
                             this.open()
                         }
                     }).catch(err=>{
-                            console.log(err)
+                        loading.close();
+                        console.log(err)
                         }
                     )
                     loading.close();
@@ -552,6 +558,7 @@
                     jsonArr.push({key:"sign",value:sign});
                     var params = ParamsAppend(jsonArr);
                     https.fetchPost('/user/businessUserPage',params).then((data) => {
+                        loading.close();
                         // console.log(data);
                         if(data.data.code=='success') {
                             var oData = JSON.parse(Decrypt(data.data.data));
@@ -572,10 +579,10 @@
                         }
 
                     }).catch(err=>{
-                            console.log(err)
+                        loading.close();
+                        console.log(err)
                         }
                     )
-                    loading.close();
                 }, 500);
             },
             open() {     //错误信息弹出框

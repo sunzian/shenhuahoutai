@@ -188,15 +188,11 @@ export default {
             },
             tableData: [],
             multipleSelection: [],
-            delList: [],
             editVisible: false,
-            pageTotal: 0,
             form: {},
-            selectScreen: '', // 选中的影厅
             idx: -1,
             id: -1,
             dialogFormVisible: false,
-            options: [],
             oForm: {
                 name: '',
                 country: '',
@@ -206,8 +202,6 @@ export default {
                 type: []
             },
             formLabelWidth: '120px',
-            selectValue: {},
-            cinemaInfo: [],
             value: ''
         };
     },
@@ -225,9 +219,8 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            https
-                .fetchPost('/actor/addPage', '')
-                .then(data => {
+            https.fetchPost('/actor/addPage', '').then(data => {
+                loading.close();
                     console.log(data);
                     if (data.data.code == 'success') {
                         this.dialogFormVisible = true;
@@ -241,9 +234,9 @@ export default {
                     }
                 })
                 .catch(err => {
+                    loading.close();
                     console.log(err);
                 });
-            loading.close();
         },
         addRole() {
             //新增按钮操作
@@ -263,10 +256,9 @@ export default {
             jsonArr.push({ key: 'sign', value: sign });
             let params = ParamsAppend(jsonArr);
             if (this.dialogFormVisible == true) {
-                https
-                    .fetchPost('/actor/addActor', params)
-                    .then(data => {
+                https.fetchPost('/actor/addActor', params).then(data => {
                         //新增
+                        loading.close();
                         console.log(data);
                         if (data.data.code == 'success') {
                             this.dialogFormVisible = false;
@@ -286,10 +278,10 @@ export default {
                         }
                     })
                     .catch(err => {
+                        loading.close();
                         console.log(err);
                     });
             }
-            loading.close();
         },
         delChange(index, row) {
             //删除数据
@@ -315,9 +307,8 @@ export default {
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             let params = ParamsAppend(jsonArr);
-            https
-                .fetchPost('/actor/deleteActor', params)
-                .then(data => {
+            https.fetchPost('/actor/deleteActor', params).then(data => {
+                    loading.close();
                     if (data.data.code == 'success') {
                         this.$message.error(`删除了`);
                         this.getMenu();
@@ -331,9 +322,9 @@ export default {
                     }
                 })
                 .catch(err => {
+                    loading.close();
                     console.log(err);
                 });
-            loading.close();
         },
         addChange(index, row) {
             //是否修改权限
@@ -351,10 +342,9 @@ export default {
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             let params = ParamsAppend(jsonArr);
-            https
-                .fetchPost('/actor/getActorById', params)
-                .then(data => {
-                    // console.log(data);
+            https.fetchPost('/actor/getActorById', params).then(data => {
+                    // console.log(data)
+                    loading.close();
                     console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.editVisible = true;
@@ -373,6 +363,7 @@ export default {
                     }
                 })
                 .catch(err => {
+                    loading.close();
                     console.log(err);
                 });
             loading.close();
@@ -397,10 +388,9 @@ export default {
             console.log(jsonArr);
             let params = ParamsAppend(jsonArr);
             this.editVisible = false;
-            https
-                .fetchPost('/actor/updateActor', params)
-                .then(data => {
+            https.fetchPost('/actor/updateActor', params).then(data => {
                     // console.log(JSON.parse(Decrypt(data.data.data)));
+                    loading.close();
                     if (data.data.code == 'success') {
                         this.$message.success(`编辑成功`);
                         this.getMenu();
@@ -414,6 +404,7 @@ export default {
                     }
                 })
                 .catch(err => {
+                    loading.close();
                     console.log(err);
                 });
             loading.close();
@@ -446,9 +437,8 @@ export default {
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             var params = ParamsAppend(jsonArr);
-            https
-                .fetchPost('/actor/actorPage', params)
-                .then(data => {
+            https.fetchPost('/actor/actorPage', params).then(data => {
+                    loading.close();
                     if (data.data.code == 'success') {
                         var oData = JSON.parse(Decrypt(data.data.data));
                         console.log(oData);
@@ -468,6 +458,7 @@ export default {
                     }
                 })
                 .catch(err => {
+                    loading.close();
                     console.log(err);
                 });
             loading.close();

@@ -821,7 +821,7 @@ export default {
             this.getAllScreen(val);
         },
         selectScreens(val) {
-            // console.log(val)
+            console.log(val)
             let selectValue = val.join(',');
             this.selectScreenCode = selectValue;
             console.log(selectValue);
@@ -854,6 +854,7 @@ export default {
                             screenList.screenName = screens[i].screenName;
                             this.screenInfo.push(screenList);
                         }
+                        // console.log(this.screenInfo);
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
