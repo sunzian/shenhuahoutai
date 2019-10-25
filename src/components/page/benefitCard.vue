@@ -420,7 +420,7 @@
                         >删除</span>
                     </div>
                 </el-form-item>
-                <el-form-item label="星期几可用：" :label-width="formLabelWidth" v-if="oForm.cardType==1">
+                <el-form-item label="星期几不可用：" :label-width="formLabelWidth" v-if="oForm.cardType==1">
                     <el-checkbox-group v-model="oForm.validWeekDay" @change="selectDay">
                         <el-checkbox
                                 v-for="(day, index) in oForm.exceptWeekDay"
@@ -629,7 +629,7 @@
                     <span v-if="oIsHolidayValid == 0">不可用</span>
                     <span v-if="oIsHolidayValid == 1">可用</span>
                 </el-form-item>
-                <el-form-item v-if="oCardType == 1" label="星期几可用：" :label-width="formLabelWidth">
+                <el-form-item v-if="oCardType == 1" label="星期几不可用：" :label-width="formLabelWidth">
                     <span>{{oValidWeekDay}}</span>
                 </el-form-item>
                 <el-form-item v-if="oCardType == 1" label="是否和券共用：" :label-width="formLabelWidth">

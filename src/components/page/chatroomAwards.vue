@@ -883,7 +883,7 @@ export default {
             let jsonArr = [];
             jsonArr.push({ key: 'simpleType', value: 1 });
             jsonArr.push({ key: 'name', value: name });
-            jsonArr.push({ key: 'endDate', value: today });
+            // jsonArr.push({ key: 'endDate', value: today });
             jsonArr.push({ key: 'status', value: 1 });
             jsonArr.push({ key: 'cinemaCodes', value: this.cinemaCode });
             jsonArr.push({ key: 'pageNo', value: this.query.pageNo });

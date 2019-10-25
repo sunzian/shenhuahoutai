@@ -85,6 +85,11 @@ export default new Router({
                     meta: { title: '充值规则管理' }
                 },
                 {
+                    path: '/memberCardLevel',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/memberCardLevel.vue'),
+                    meta: { title: '卡类别管理' }
+                },
+                {
                     path: '/actorPage',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/actorPage.vue'),
                     meta: { title: '演员管理' }
@@ -158,6 +163,16 @@ export default new Router({
                     path: '/couponSendActivity',
                     component: () => import(/* webpackChunkName: "table" */ '../components/page/couponSendActivity.vue'),
                     meta: { title: '送券活动管理' }
+                },
+                {
+                    path: '/turnplateGameRule',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/turnplateGameRule.vue'),
+                    meta: { title: '大转盘游戏管理' }
+                },
+                {
+                    path: '/signinRule',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/signinRule.vue'),
+                    meta: { title: '签到规则' }
                 },
                 {
                     // vue-schart组件

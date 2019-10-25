@@ -108,14 +108,17 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="会员卡名称：" :label-width="formLabelWidth">
-                    <el-select v-model="oForm.levelName" placeholder="请选择" @change="getCardInfo">
-                        <el-option
-                            v-for="info in cardList"
-                            :key="info.levelCode"
-                            :value="info.levelName"
-                            :label="info.levelName"
-                        ></el-option>
-                    </el-select>
+                    <el-checkbox-group
+                            v-model="oForm.levelCode"
+                            @change="selectLevelCode"
+                    >
+                        <el-checkbox
+                                v-for="item in cardList"
+                                :label="item.levelCode"
+                                :key="item.levelCode"
+                                :value="item.levelName"
+                        >{{item.levelName}}</el-checkbox>
+                    </el-checkbox-group>
                 </el-form-item>
                 <el-form-item label="充值规则名称：" :label-width="formLabelWidth">
                     <el-input
@@ -228,13 +231,17 @@
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="会员卡名称：" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 250px"
-                        min="1"
-                        disabled
-                        v-model="oCardLevelName"
-                        autocomplete="off"
-                    ></el-input>
+                    <el-checkbox-group
+                            v-model="oForm.levelCode"
+                            @change="selectLevelCode"
+                    >
+                        <el-checkbox
+                                v-for="item in cardList"
+                                :label="item.levelCode"
+                                :key="item.levelCode"
+                                :value="item.levelName"
+                        >{{item.levelName}}</el-checkbox>
+                    </el-checkbox-group>
                 </el-form-item>
                 <el-form-item label="充值规则名称：" :label-width="formLabelWidth">
                     <el-input style="width: 250px" min="1" v-model="oRuleName" autocomplete="off"></el-input>
@@ -439,7 +446,7 @@ export default {
             dialogFormVisible: false,
             oForm: {
                 cinemaName: '',
-                levelCode: '',
+                // levelCode: '',
                 ruleName: '', // 规则名称
                 rechargeAmount: '', // 充值金额
                 givenType: '', // 赠送类型
@@ -449,10 +456,11 @@ export default {
                 status: '', // 启用状态
                 id: '',
                 startDate: '',
-                endDate: ''
+                endDate: '',
+                levelCode: [],
             },
             formLabelWidth: '160px',
-            selectValue: {},
+            selectValue: '',
             selectCode: {},
             couponName: '',
             value: ''
@@ -463,6 +471,11 @@ export default {
         this.getMenu();
     },
     methods: {
+        selectLevelCode(val) {
+            // console.log(val)
+            this.selectValue = val.join(',');
+            console.log(this.selectValue);
+        },
         addPage() {
             //获取新增按钮权限
             const loading = this.$loading({
@@ -472,14 +485,14 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            https
-                .fetchPost('/rechargeCardRule/addPage', '')
-                .then(data => {
+            https.fetchPost('/rechargeCardRule/addPage', '').then(data => {
                     this.cinemaInfo = JSON.parse(Decrypt(data.data.data));
                     if (data.data.code == 'success') {
+                        this.cardList=[];
                         for (let key in this.oForm) {
                             this.oForm[key] = '';
                         }
+                        this.oForm.levelCode = [];
                         this.couponId = '';
                         this.groupName = '';
                         this.dialogFormVisible = true;
@@ -530,8 +543,8 @@ export default {
             jsonArr.push({ key: 'cinemaCode', value: this.oForm.cinemaCode });
             jsonArr.push({ key: 'ruleName', value: this.oForm.ruleName });
             jsonArr.push({ key: 'rechargeAmount', value: this.oForm.rechargeAmount });
-            jsonArr.push({ key: 'cardLevelCode', value: this.oForm.levelCode });
-            jsonArr.push({ key: 'cardLevelName', value: this.oForm.levelName });
+            jsonArr.push({ key: 'cardLevelCode', value: this.selectValue });
+            // jsonArr.push({ key: 'cardLevelName', value: this.oForm.levelName });
             jsonArr.push({ key: 'givenType', value: this.oForm.givenType });
             jsonArr.push({ key: 'ruleMemo', value: this.oForm.ruleMemo });
             jsonArr.push({ key: 'startDate', value: this.oForm.startDate });
@@ -543,10 +556,8 @@ export default {
             console.log(jsonArr);
             let params = ParamsAppend(jsonArr);
             if (this.dialogFormVisible == true) {
-                https
-                    .fetchPost('/rechargeCardRule/addRechargeCardRule', params)
-                    .then(data => {
-                        console.log(data);
+                https.fetchPost('/rechargeCardRule/addRechargeCardRule', params).then(data => {
+                            console.log(data);
                         if (data.data.code == 'success') {
                             this.dialogFormVisible = false;
                             this.$message.success(`新增成功`);
@@ -634,14 +645,40 @@ export default {
             });
             this.idx = index;
             this.form = row;
+
+            console.log(this.form.cinemaCode);
+            let jsonArr1 = [];
+            jsonArr1.push({ key: 'pageNo', value: this.query.pageNo });
+            jsonArr1.push({ key: 'pageSize', value: this.query.pageSize });
+            jsonArr1.push({ key: 'cinemaCode', value: this.form.cinemaCode});
+            jsonArr1.push({ key: 'status', value: 1 });
+            let sign1 = md5(preSign(jsonArr1));
+            jsonArr1.push({ key: 'sign', value: sign1 });
+            var params1 = ParamsAppend(jsonArr1);
+            https.fetchPost('/rechargeCardRule/listCardLevel', params1).then(data => {
+                if (data.data.code == 'success') {
+                    var res = JSON.parse(Decrypt(data.data.data));
+                    this.cardList = res;
+                    console.log(this.cardList)
+                } else if (data.data.code == 'nologin') {
+                    this.message = data.data.message;
+                    this.open();
+                    this.$router.push('/login');
+                } else {
+                    this.message = data.data.message;
+                    this.open();
+                }
+            })
+                .catch(err => {
+                    console.log(err);
+                });
+
             var jsonArr = [];
             jsonArr.push({ key: 'id', value: row.id });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             let params = ParamsAppend(jsonArr);
-            https
-                .fetchPost('/rechargeCardRule/modifyPage', params)
-                .then(data => {
+            https.fetchPost('/rechargeCardRule/modifyPage', params).then(data => {
                     console.log(data);
                     if (data.data.code == 'success') {
                         console.log(JSON.parse(Decrypt(data.data.data)));
@@ -788,6 +825,7 @@ export default {
             jsonArr.push({ key: 'ruleName', value: this.oRuleName });
             jsonArr.push({ key: 'startDate', value: this.oStartDate });
             jsonArr.push({ key: 'endDate', value: this.oEndDate });
+            jsonArr.push({ key: 'cardLevelCode', value: this.selectValue });
             jsonArr.push({ key: 'rechargeAmount', value: this.oRechargeAmount });
             jsonArr.push({ key: 'ruleMemo', value: this.oRuleMemo });
             jsonArr.push({ key: 'id', value: this.oId });
@@ -796,9 +834,7 @@ export default {
             console.log(jsonArr);
             let params = ParamsAppend(jsonArr);
             this.editVisible = false;
-            https
-                .fetchPost('/rechargeCardRule/modifyRechargeCardRule', params)
-                .then(data => {
+            https.fetchPost('/rechargeCardRule/modifyRechargeCardRule', params).then(data => {
                     console.log(data);
                     // console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
@@ -945,9 +981,7 @@ export default {
         },
         // 获取所有影院
         getAllCinema() {
-            https
-                .fetchPost('/cinema/getAllCinema')
-                .then(data => {
+            https.fetchPost('/cinema/getAllCinema').then(data => {
                     if (data.data.code == 'success') {
                         var res = JSON.parse(Decrypt(data.data.data));
                         console.log(res);
@@ -1043,17 +1077,16 @@ export default {
             let jsonArr = [];
             jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
             jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
-            jsonArr.push({ key: 'cinemaCode', value: this.oForm.cinemaCode });
+            jsonArr.push({ key: 'cinemaCode', value: this.oForm.cinemaCode});
             jsonArr.push({ key: 'status', value: 1 });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             var params = ParamsAppend(jsonArr);
-            https
-                .fetchPost('/rechargeCardRule/listCardLevel', params)
-                .then(data => {
+            https.fetchPost('/rechargeCardRule/listCardLevel', params).then(data => {
                     if (data.data.code == 'success') {
                         var res = JSON.parse(Decrypt(data.data.data));
-                        this.cardList = res.data;
+                        this.cardList = res;
+                        console.log(this.cardList)
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();

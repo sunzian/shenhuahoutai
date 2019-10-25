@@ -228,13 +228,14 @@
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="会员卡名称：" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 250px"
-                        min="1"
-                        disabled
-                        v-model="oCardLevelName"
-                        autocomplete="off"
-                    ></el-input>
+                    <el-select v-model="oCardLevelName" placeholder="请选择" @change="getCardInfo">
+                        <el-option
+                                v-for="info in cardList"
+                                :key="info.levelCode"
+                                :value="info.levelName"
+                                :label="info.levelName"
+                        ></el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item label="开卡规则名称：" :label-width="formLabelWidth">
                     <el-input style="width: 250px" min="1" v-model="oRuleName" autocomplete="off"></el-input>
@@ -472,9 +473,7 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            https
-                .fetchPost('/openCardRule/addPage', '')
-                .then(data => {
+            https.fetchPost('/openCardRule/addPage', '').then(data => {
                     this.cinemaInfo = JSON.parse(Decrypt(data.data.data));
                     if (data.data.code == 'success') {
                         for (let key in this.oForm) {
@@ -639,12 +638,13 @@ export default {
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             let params = ParamsAppend(jsonArr);
-            https
-                .fetchPost('/openCardRule/modifyPage', params)
-                .then(data => {
+            https.fetchPost('/openCardRule/modifyPage', params).then(data => {
                     console.log(data);
                     if (data.data.code == 'success') {
                         console.log(JSON.parse(Decrypt(data.data.data)));
+                        // JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.cinemaCode
+                        this.oForm.cinemaCode=JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.cinemaCode
+                        this.getAllCinemaCard()
                         this.editVisible = true;
                         this.oCinemaName = JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.cinemaName;
                         this.oCinemaCode = JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.cinemaCode;
@@ -790,6 +790,8 @@ export default {
             jsonArr.push({ key: 'endDate', value: this.oEndDate });
             jsonArr.push({ key: 'rechargeAmount', value: this.oRechargeAmount });
             jsonArr.push({ key: 'ruleMemo', value: this.oRuleMemo });
+            jsonArr.push({ key: 'cardLevelCode', value: this.oForm.levelCode });
+            jsonArr.push({ key: 'cardLevelName', value: this.oForm.levelName });
             jsonArr.push({ key: 'id', value: this.oId });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
@@ -832,7 +834,9 @@ export default {
             this.getAllCinemaCard();
         },
         getCardInfo(e) {
+            console.log(e);
             this.oForm.levelName = e;
+            // this.oForm.cardLevelCode = e;
             // 获取所选会员卡名称
             for (let i = 0; i < this.cardList.length; i++) {
                 if (this.cardList[i].levelName == e) {
@@ -945,9 +949,7 @@ export default {
         },
         // 获取所有影院
         getAllCinema() {
-            https
-                .fetchPost('/cinema/getAllCinema')
-                .then(data => {
+            https.fetchPost('/cinema/getAllCinema').then(data => {
                     if (data.data.code == 'success') {
                         var res = JSON.parse(Decrypt(data.data.data));
                         console.log(res);
@@ -1048,12 +1050,11 @@ export default {
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             var params = ParamsAppend(jsonArr);
-            https
-                .fetchPost('/rechargeCardRule/listCardLevel', params)
-                .then(data => {
+            https.fetchPost('/rechargeCardRule/listCardLevel', params).then(data => {
                     if (data.data.code == 'success') {
                         var res = JSON.parse(Decrypt(data.data.data));
-                        this.cardList = res.data;
+                        console.log(res);
+                        this.cardList = res;
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
