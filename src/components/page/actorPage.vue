@@ -484,7 +484,6 @@ export default {
         },
         onSuccess(data) {
             // 修改图片
-            console.log(data);
             this.oPicture = data.data;
             if (data.code == 'nologin') {
                 this.message = data.message;
