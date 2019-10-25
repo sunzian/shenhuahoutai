@@ -86,16 +86,19 @@
                     <el-input style="width: 250px" v-model="oForm.country" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="介绍" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="oForm.introduction" autocomplete="off"></el-input>
+                    <el-input type="textarea" style="width: 250px" v-model="oForm.introduction" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="导演图片" :label-width="formLabelWidth">
                     <el-upload
                         :data="type"
                         class="upload-demo"
                         drag
+                        :limit="1"
                         action="api/upload/uploadImage"
+                        :before-upload="beforeUpload"
                         :on-success="setPicture"
                         multiple
+                        list-type="picture"
                     >
                         <i class="el-icon-upload"></i>
                         <div class="el-upload__text">
@@ -104,6 +107,15 @@
                         </div>
                         <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
                     </el-upload>
+                    <el-popover placement="right" title trigger="hover">
+                            <img :src="oForm.picture" />
+                            <img
+                                slot="reference"
+                                :src="oForm.picture"
+                                :alt="oForm.picture"
+                                style="max-height: 50px;max-width: 130px"
+                            />
+                    </el-popover>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -121,27 +133,31 @@
                     <el-input style="width: 250px" v-model="oCountry" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="介绍" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="oIntroduction" autocomplete="off"></el-input>
+                    <el-input type="textarea" style="width: 250px" v-model="oIntroduction" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="图片地址" :label-width="formLabelWidth">
-                    <el-popover
-                            placement="right"
-                            title=""
-                            trigger="hover">
-                        <img :src="oPicture"/>
-                        <img slot="reference" :src="oPicture" :alt="oPicture" style="max-height: 50px;max-width: 130px">
+                    <el-popover placement="right" title trigger="hover">
+                        <img :src="oPicture" />
+                        <img
+                            slot="reference"
+                            :src="oPicture"
+                            :alt="oPicture"
+                            style="max-height: 50px;max-width: 130px"
+                        />
                     </el-popover>
                     <el-upload
-                            :data="type"
-                            class="upload-demo"
-                            drag
-                            action="api/upload/uploadImage"
-                            :on-success="onSuccess"
-                            multiple>
-                        <i class="el-icon-upload"></i>
-                        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
-                    </el-upload>
+                        class="upload-demo"
+                        action="/api/upload/uploadImage"
+                        :before-upload="beforeUpload"
+                        :data="type"
+                        :limit="1"
+                        :on-success="onSuccess"
+                        :file-list="fileList"
+                        list-type="picture"
+                    >
+                        <el-button size="small" type="primary">点击上传修改</el-button>
+                        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+                        </el-upload>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -164,8 +180,7 @@ export default {
     data() {
         return {
             type:{
-                    // sign: "ed8u$input7$input7jpYsRe8t2aKSKBF/cJ21S1z/10SqwBE2XAQ=",
-                    type: "HaqvR9QhxCCGBAiSE6veKw=="
+                    type: ''
                 },
             oName: '',
             oCountry: '',
@@ -199,6 +214,7 @@ export default {
             formLabelWidth: '120px',
             selectValue: {},
             cinemaInfo: [],
+            fileList: [],
             value: ''
         };
     },
@@ -469,9 +485,12 @@ export default {
                 dangerouslyUseHTMLString: true
             });
         },
+        beforeUpload() {
+            //上传之前
+            this.type.type = EncryptReplace('director');
+        },
         onSuccess(data) {
             // 修改图片
-            console.log(data);
             this.oPicture = data.data;
             if (data.code == 'nologin') {
                 this.message = data.message;
@@ -481,7 +500,6 @@ export default {
         },
         setPicture(data) {
             // 上传图片
-            console.log(data);
             this.oForm.picture = data.data;
             if (data.code == 'nologin') {
                 this.message = data.message;

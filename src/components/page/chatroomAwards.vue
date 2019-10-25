@@ -63,8 +63,6 @@
         </div>
         <div class="container" v-if="!showSell">
             <div class="handle-box">
-                <!-- <el-input v-model="query.name" placeholder="选择影院" class="handle-input mr10"></el-input>
-                <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button> -->
                 <el-button
                     type="primary"
                     @click="back"
