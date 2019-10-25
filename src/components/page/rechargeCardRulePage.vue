@@ -61,8 +61,8 @@
                 </el-table-column>
                 <el-table-column prop="booleans" label="状态">
                     <template slot-scope="scope">
-                        <el-tag v-if="scope.row.status == 1" type="success">已开通</el-tag>
-                        <el-tag v-else type="danger">未开通</el-tag>
+                        <el-tag v-if="scope.row.status == 1" type="success">正常</el-tag>
+                        <el-tag v-if="scope.row.status == 2" type="danger">禁用</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column label="操作" width="100" align="center" fixed="right">
@@ -405,11 +405,11 @@ export default {
             options: [
                 {
                     value: '1',
-                    label: '启用'
+                    label: '正常'
                 },
                 {
                     value: '2',
-                    label: '未启用'
+                    label: '禁用'
                 }
             ],
             type: [
@@ -486,6 +486,7 @@ export default {
                 target: document.querySelector('.div1')
             });
             https.fetchPost('/rechargeCardRule/addPage', '').then(data => {
+                    loading.close();
                     this.cinemaInfo = JSON.parse(Decrypt(data.data.data));
                     if (data.data.code == 'success') {
                         this.cardList=[];
@@ -506,9 +507,9 @@ export default {
                     }
                 })
                 .catch(err => {
+                    loading.close();
                     console.log(err);
                 });
-            loading.close();
         },
         addRole() {
             //新增按钮操作
@@ -557,6 +558,7 @@ export default {
             let params = ParamsAppend(jsonArr);
             if (this.dialogFormVisible == true) {
                 https.fetchPost('/rechargeCardRule/addRechargeCardRule', params).then(data => {
+                        loading.close();
                             console.log(data);
                         if (data.data.code == 'success') {
                             this.dialogFormVisible = false;
@@ -572,9 +574,9 @@ export default {
                         }
                     })
                     .catch(err => {
+                        loading.close();
                         console.log(err);
                     });
-                loading.close();
             }
         },
         delChange(index, row) {
@@ -610,6 +612,7 @@ export default {
                     https
                         .fetchDelete('/rechargeCardRule/deleteRechargeCardRule', params)
                         .then(data => {
+                            loading.close();
                             if (data.data.code == 'success') {
                                 this.$message.error(`删除了`);
                                 this.getMenu();
@@ -623,9 +626,9 @@ export default {
                             }
                         })
                         .catch(err => {
+                            loading.close();
                             console.log(err);
                         });
-                    loading.close();
                 })
                 .catch(() => {
                     this.$message({
@@ -656,6 +659,7 @@ export default {
             jsonArr1.push({ key: 'sign', value: sign1 });
             var params1 = ParamsAppend(jsonArr1);
             https.fetchPost('/rechargeCardRule/listCardLevel', params1).then(data => {
+                loading.close();
                 if (data.data.code == 'success') {
                     var res = JSON.parse(Decrypt(data.data.data));
                     this.cardList = res;
@@ -670,6 +674,7 @@ export default {
                 }
             })
                 .catch(err => {
+                    loading.close();
                     console.log(err);
                 });
 
@@ -679,6 +684,7 @@ export default {
             jsonArr.push({ key: 'sign', value: sign });
             let params = ParamsAppend(jsonArr);
             https.fetchPost('/rechargeCardRule/modifyPage', params).then(data => {
+                    loading.close();
                     console.log(data);
                     if (data.data.code == 'success') {
                         console.log(JSON.parse(Decrypt(data.data.data)));
@@ -709,9 +715,9 @@ export default {
                         this.oStartDate = JSON.parse(Decrypt(data.data.data)).rechargeCardRules.startDate;
                         this.oEndDate = JSON.parse(Decrypt(data.data.data)).rechargeCardRules.endDate;
                         if (JSON.parse(Decrypt(data.data.data)).rechargeCardRules.status == 1) {
-                            this.oStatus = '启用';
+                            this.oStatus = '正常';
                         } else {
-                            this.oStatus = '未启用';
+                            this.oStatus = '禁用';
                         }
                         this.oId = JSON.parse(Decrypt(data.data.data)).rechargeCardRules.id;
                     } else if (data.data.code == 'nologin') {
@@ -724,9 +730,9 @@ export default {
                     }
                 })
                 .catch(err => {
+                    loading.close();
                     console.log(err);
                 });
-            loading.close();
         },
         // 编辑操作
         exChanger() {
@@ -835,6 +841,7 @@ export default {
             let params = ParamsAppend(jsonArr);
             this.editVisible = false;
             https.fetchPost('/rechargeCardRule/modifyRechargeCardRule', params).then(data => {
+                    loading.close();
                     console.log(data);
                     // console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
@@ -850,9 +857,9 @@ export default {
                     }
                 })
                 .catch(err => {
+                    loading.close();
                     console.log(err);
                 });
-            loading.close();
         },
         Search() {
             this.query.pageNo = 1;
@@ -903,6 +910,7 @@ export default {
             https
                 .fetchPost('/rechargeCardRule/rechargePage', params)
                 .then(data => {
+                    loading.close();
                     if (data.data.code == 'success') {
                         var oData = JSON.parse(Decrypt(data.data.data));
                         this.tableData = oData.data;
@@ -921,9 +929,9 @@ export default {
                     }
                 })
                 .catch(err => {
+                    loading.close();
                     console.log(err);
                 });
-            loading.close();
         },
         open() {
             //错误信息弹出框

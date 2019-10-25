@@ -500,6 +500,7 @@ export default {
                 https
                     .fetchPost('chatroomAwards/addAwards', params)
                     .then(data => {
+                        loading.close();
                         //新增
                         console.log(data);
                         if (data.data.code == 'success') {
@@ -516,10 +517,10 @@ export default {
                         }
                     })
                     .catch(err => {
+                        loading.close();
                         console.log(err);
                     });
             }
-            loading.close();
         },
         delChange(index, row) {
             //删除数据
@@ -586,6 +587,7 @@ export default {
                 jsonArr.push({key:"sign",value:sign});
                 let params = ParamsAppend(jsonArr);
                 https.fetchPost('chatroomAwards/updateAwardsPage',params).then((data) => {
+                    loading.close();
                     console.log(data);
                     console.log(JSON.parse(Decrypt(data.data.data)));
                     if(data.data.code=='success'){
@@ -609,10 +611,10 @@ export default {
                         this.open()
                     }
                 }).catch(err=>{
-                        console.log(err)
+                    loading.close();
+                    console.log(err)
                     }
                 )
-                loading.close();
             },
         show(row) {
             this.showSell=false
@@ -637,6 +639,7 @@ export default {
             https
                 .fetchPost('/chatroomAwards/awardsPage', params)
                 .then(data => {
+                    loading.close();
                     if (data.data.code == 'success') {
                         var oData = JSON.parse(Decrypt(data.data.data));
                         console.log(oData);
@@ -655,9 +658,9 @@ export default {
                     }
                 })
                 .catch(err => {
+                    loading.close();
                     console.log(err);
                 });
-            loading.close();
         },
         // 编辑操作
         exChanger() {
@@ -685,6 +688,7 @@ export default {
             https
                 .fetchPost('chatroomAwards/updateAwards', params)
                 .then(data => {
+                    loading.close();
                     // console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.$message.success(`编辑成功`);
@@ -699,9 +703,9 @@ export default {
                     }
                 })
                 .catch(err => {
+                    loading.close();
                     console.log(err);
                 });
-            loading.close();
         },
         // 修改状态
         changeStatus(index, row) {
@@ -730,6 +734,7 @@ export default {
             https
                 .fetchPost('couponGroup/updateStatusById', params)
                 .then(data => {
+                    loading.close();
                     // console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.$message.success(`修改成功`);
@@ -744,9 +749,9 @@ export default {
                     }
                 })
                 .catch(err => {
+                    loading.close();
                     console.log(err);
                 });
-            loading.close();
         },
         Search() {
             this.query.pageNo = 1;
@@ -779,6 +784,7 @@ export default {
             https
                 .fetchPost('/cinema/myCinemaPage', params)
                 .then(data => {
+                    loading.close();
                     if (data.data.code == 'success') {
                         var oData = JSON.parse(Decrypt(data.data.data));
                         console.log(oData);
@@ -797,9 +803,9 @@ export default {
                     }
                 })
                 .catch(err => {
+                    loading.close();
                     console.log(err);
                 });
-            loading.close();
         },
         back() {
             this.showSell=true
@@ -830,6 +836,7 @@ export default {
             https
                 .fetchPost('/cinema/getAllCinema', '')
                 .then(data => {
+                    loading.close();
                     if (data.data.code == 'success') {
                         let cinemas = JSON.parse(Decrypt(data.data.data));
                         for (let i = 0; i < cinemas.length; i++) {
@@ -848,9 +855,9 @@ export default {
                     }
                 })
                 .catch(err => {
+                    loading.close();
                     console.log(err);
                 });
-            loading.close();
         },
         // 获取所有优惠券
         getAllCoupon() {
@@ -893,6 +900,7 @@ export default {
             https
                 .fetchPost('merchandiseCoupon/merchandiseCouponPage', params)
                 .then(data => {
+                    loading.close();
                     if (data.data.code == 'success') {
                         let oData = JSON.parse(Decrypt(data.data.data));
                         this.drawer = true;
@@ -918,9 +926,9 @@ export default {
                     }
                 })
                 .catch(err => {
+                    loading.close();
                     console.log(err);
                 });
-            loading.close();
         },
         sureNext(id) {
             this.couponInfo.imgUrl = 'http://xiangshan-wexin.oss-cn-hangzhou.aliyuncs.com/images/201909262039272.jpg';

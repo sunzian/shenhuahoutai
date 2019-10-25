@@ -394,6 +394,7 @@ export default {
                 https
                     .fetchPost('/merchandiseType/addPage', '')
                     .then(data => {
+                        loading.close();
                         console.log(data);
                         if (data.data.code == 'success') {
                             this.oForm = [];
@@ -408,9 +409,9 @@ export default {
                         }
                     })
                     .catch(err => {
+                        loading.close();
                         console.log(err);
                     });
-                loading.close();
             }, 500);
         },
         addRole() {
@@ -436,6 +437,7 @@ export default {
                     https
                         .fetchPost('/merchandiseType/addMerchandiseType', params)
                         .then(data => {
+                            loading.close();
                             //新增
                             console.log(data);
                             if (data.data.code == 'success') {
@@ -455,10 +457,10 @@ export default {
                             }
                         })
                         .catch(err => {
+                            loading.close();
                             console.log(err);
                         });
                 }
-                loading.close();
             }, 500);
         },
         delChange(index, row) {
@@ -491,6 +493,7 @@ export default {
                 https
                     .fetchPost('/merchandiseType/deleteMerchandiseType', params)
                     .then(data => {
+                        loading.close();
                         // console.log(data);
                         // console.log(JSON.parse(Decrypt(data.data.data)));
                         if (data.data.code == 'success') {
@@ -506,9 +509,9 @@ export default {
                         }
                     })
                     .catch(err => {
+                        loading.close();
                         console.log(err);
                     });
-                loading.close();
             }, 500);
         },
         addChange(index, row) {
@@ -531,6 +534,7 @@ export default {
                 https
                     .fetchPost('/merchandiseType/modifyPage', params)
                     .then(data => {
+                        loading.close();
                         console.log(data);
                         console.log(JSON.parse(Decrypt(data.data.data)));
                         if (data.data.code == 'success') {
@@ -548,9 +552,9 @@ export default {
                         }
                     })
                     .catch(err => {
+                        loading.close();
                         console.log(err);
                     });
-                loading.close();
             }, 500);
         },
         // 编辑操作
@@ -580,6 +584,7 @@ export default {
                 https
                     .fetchPost('/merchandiseType/modifyMerchandiseType', params)
                     .then(data => {
+                        loading.close();
                         console.log(data);
                         // console.log(JSON.parse(Decrypt(data.data.data)));
                         if (data.data.code == 'success') {
@@ -595,9 +600,9 @@ export default {
                         }
                     })
                     .catch(err => {
+                        loading.close();
                         console.log(err);
                     });
-                loading.close();
             }, 500);
         },
         Search() {
@@ -637,6 +642,7 @@ export default {
                 https
                     .fetchPost('/cinema//myCinemaPage', params)
                     .then(data => {
+                        loading.close();
                         console.log(data);
                         if (data.data.code == 'success') {
                             var oData = JSON.parse(Decrypt(data.data.data));
@@ -657,9 +663,9 @@ export default {
                         }
                     })
                     .catch(err => {
+                        loading.close();
                         console.log(err);
                     });
-                loading.close();
             }, 500);
         },
         refresh() {
@@ -692,6 +698,7 @@ export default {
                 https
                     .fetchPost('/merchandiseType/list', params)
                     .then(data => {
+                        loading.close();
                         console.log(data);
                         if (data.data.code == 'success') {
                             var oData = JSON.parse(Decrypt(data.data.data));
@@ -712,9 +719,9 @@ export default {
                         }
                     })
                     .catch(err => {
+                        loading.close();
                         console.log(err);
                     });
-                loading.close();
             }, 500);
         },
         show(row) {
@@ -749,6 +756,7 @@ export default {
                 https
                     .fetchPost('/merchandiseType/list', params)
                     .then(data => {
+                        loading.close();
                         console.log(data);
                         if (data.data.code == 'success') {
                             var oData = JSON.parse(Decrypt(data.data.data));
@@ -769,9 +777,9 @@ export default {
                         }
                     })
                     .catch(err => {
+                        loading.close();
                         console.log(err);
                     });
-                loading.close();
             }, 500);
         },
         beforeUpload() {

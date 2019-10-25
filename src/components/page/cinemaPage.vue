@@ -705,7 +705,7 @@
                 </el-form-item>
                 <el-form-item label="是否开通套餐" :label-width="formLabelWidth">
                     <el-select
-                    v-model="oOpenSnackStatus" 
+                    v-model="oOpenSnackStatus"
                     @change="openServe"
                     >
                         <el-option
@@ -718,7 +718,7 @@
                 </el-form-item>
                 <el-form-item label="是否小卖配送" :label-width="formLabelWidth">
                     <el-select
-                    v-model="oSnackDispatcherStatus" 
+                    v-model="oSnackDispatcherStatus"
                     @change="openServe"
                     >
                         <el-option
@@ -1092,6 +1092,7 @@ export default {
             https
                 .fetchPost('/cinema/addPage', '')
                 .then(data => {
+                    loading.close();
                     // console.log(data);
                     if (data.data.code == 'success') {
                         this.dialogFormVisible = true;
@@ -1106,9 +1107,9 @@ export default {
                     }
                 })
                 .catch(err => {
+                    loading.close();
                     console.log(err);
                 });
-            loading.close();
         },
         addRole() {
             //新增按钮操作
@@ -1187,6 +1188,7 @@ export default {
                 https
                     .fetchPost('/cinema/addCinema', params)
                     .then(data => {
+                        loading.close();
                         //新增
                         console.log(data);
                         if (data.data.code == 'success') {
@@ -1253,9 +1255,9 @@ export default {
                         }
                     })
                     .catch(err => {
+                        loading.close();
                         console.log(err);
                     });
-                loading.close();
             }
         },
         delChange(index, row) {
@@ -1285,6 +1287,7 @@ export default {
             https
                 .fetchDelete('/cinema/deleteCinema', params)
                 .then(data => {
+                    loading.close();
                     if (data.data.code == 'success') {
                         this.$message.error(`删除了`);
                         this.getMenu();
@@ -1298,9 +1301,9 @@ export default {
                     }
                 })
                 .catch(err => {
+                    loading.close();
                     console.log(err);
                 });
-            loading.close();
         },
         addChange(index, row) {
             //是否拥有修改权限
@@ -1322,6 +1325,7 @@ export default {
             https
                 .fetchPost('/cinema/getCinemaById', params)
                 .then(data => {
+                    loading.close();
                     console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.editVisible = true;
@@ -1392,9 +1396,9 @@ export default {
                     }
                 })
                 .catch(err => {
+                    loading.close();
                     console.log(err);
                 });
-            loading.close();
         },
         // 编辑操作
         exChanger() {
@@ -1466,6 +1470,7 @@ export default {
             https
                 .fetchPost('/cinema/updateCinema', params)
                 .then(data => {
+                    loading.close();
                     console.log(data);
                     // console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
@@ -1481,9 +1486,9 @@ export default {
                     }
                 })
                 .catch(err => {
+                    loading.close();
                     console.log(err);
                 });
-            loading.close();
         },
         Search() {
             this.query.pageNo = 1;
@@ -1538,6 +1543,7 @@ export default {
             https
                 .fetchPost('/cinema/cinemaPage', params)
                 .then(data => {
+                    loading.close();
                     if (data.data.code == 'success') {
                         var oData = JSON.parse(Decrypt(data.data.data));
                         console.log(oData);
@@ -1556,9 +1562,9 @@ export default {
                     }
                 })
                 .catch(err => {
+                    loading.close();
                     console.log(err);
                 });
-            loading.close();
         },
         open() {
             //错误信息弹出框

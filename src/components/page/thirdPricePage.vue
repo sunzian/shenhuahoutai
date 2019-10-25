@@ -285,6 +285,7 @@ export default {
             https
                 .fetchPost('/thirdPrice/updateThirdPrice', '')
                 .then(data => {
+                    loading.close();
                     // console.log(data);
                     if (data.data.code == 'success') {
                         this.dialogFormVisible = true;
@@ -299,9 +300,9 @@ export default {
                     }
                 })
                 .catch(err => {
+                    loading.close();
                     console.log(err);
                 });
-            loading.close();
         },
         addRole() {
             //新增按钮操作
@@ -330,6 +331,7 @@ export default {
                 https
                     .fetchPost('/sessionInfo/updateSessionInfo', params)
                     .then(data => {
+                        loading.close();
                         console.log(data);
                         if (data.data.code == 'success') {
                             this.dialogFormVisible = false;
@@ -348,9 +350,9 @@ export default {
                         }
                     })
                     .catch(err => {
+                        loading.close();
                         console.log(err);
                     });
-                loading.close();
             }
         },
         delChange(index, row) {
@@ -380,6 +382,7 @@ export default {
             https
                 .fetchDelete('/thirdPrice/deleteThirdPrice', params)
                 .then(data => {
+                    loading.close();
                     if (data.data.code == 'success') {
                         this.$message.error(`删除了`);
                         this.getMenu();
@@ -393,9 +396,9 @@ export default {
                     }
                 })
                 .catch(err => {
+                    loading.close();
                     console.log(err);
                 });
-            loading.close();
         },
         addChange(index, row) {
             //是否拥有修改权限
@@ -416,6 +419,7 @@ export default {
             https
                 .fetchPost('/thirdPrice/getThirdPriceById', params)
                 .then(data => {
+                    loading.close();
                     console.log(data);
                     console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
@@ -437,9 +441,9 @@ export default {
                     }
                 })
                 .catch(err => {
+                    loading.close();
                     console.log(err);
                 });
-            loading.close();
         },
         // 编辑操作
         exChanger() {
@@ -461,6 +465,7 @@ export default {
             https
                 .fetchPost('/thirdPrice/updateThirdPrice', params)
                 .then(data => {
+                    loading.close();
                     console.log(data);
                     // console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
@@ -476,9 +481,9 @@ export default {
                     }
                 })
                 .catch(err => {
+                    loading.close();
                     console.log(err);
                 });
-            loading.close();
         },
         Search() {
             this.query.pageNo = 1;
@@ -511,6 +516,7 @@ export default {
             https
                 .fetchPost('/thirdPrice/thirdPricePage', params)
                 .then(data => {
+                    loading.close();
                     if (data.data.code == 'success') {
                         var oData = JSON.parse(Decrypt(data.data.data));
                         console.log(oData);
@@ -529,9 +535,9 @@ export default {
                     }
                 })
                 .catch(err => {
+                    loading.close();
                     console.log(err);
                 });
-            loading.close();
         },
         updatePage() {
             this.$confirm('同步时间可能较长，确定同步第三方价格数据吗?', '提示', {
@@ -568,6 +574,7 @@ export default {
                             }
                         })
                         .catch(err => {
+                            loading.close();
                             console.log(err);
                         });
                 })

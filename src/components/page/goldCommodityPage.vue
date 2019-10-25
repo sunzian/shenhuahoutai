@@ -788,6 +788,7 @@ export default {
                 https
                     .fetchPost('/goldCommodity/addPage', '')
                     .then(data => {
+                        loading.close();
                         // console.log(data);
                         if (data.data.code == 'success') {
                             console.log(JSON.parse(Decrypt(data.data.data)));
@@ -809,9 +810,9 @@ export default {
                         }
                     })
                     .catch(err => {
+                        loading.close();
                         console.log(err);
                     });
-                loading.close();
             }, 500);
         },
         addRole() {
@@ -857,6 +858,7 @@ export default {
                     https
                         .fetchPost('/goldCommodity/addGoldCommodity', params)
                         .then(data => {
+                            loading.close();
                             //新增
                             console.log(data);
                             if (data.data.code == 'success') {
@@ -873,10 +875,10 @@ export default {
                             }
                         })
                         .catch(err => {
+                            loading.close();
                             console.log(err);
                         });
                 }
-                loading.close();
             }, 500);
         },
         cancel() {
@@ -931,6 +933,7 @@ export default {
                         https
                             .fetchPost('goldCommodity/deleteById', params)
                             .then(data => {
+                                loading.close();
                                 // console.log(data);
                                 // console.log(JSON.parse(Decrypt(data.data.data)));
                                 if (data.data.code == 'success') {
@@ -946,9 +949,9 @@ export default {
                                 }
                             })
                             .catch(err => {
+                                loading.close();
                                 console.log(err);
                             });
-                        loading.close();
                     }, 500);
                 })
                 .catch(() => {
@@ -979,6 +982,7 @@ export default {
                 https
                     .fetchPost('goldCommodity/modifyPage', params)
                     .then(data => {
+                        loading.close();
                         console.log(data);
                         console.log(JSON.parse(Decrypt(data.data.data)));
                         if (data.data.code == 'success') {
@@ -1048,9 +1052,9 @@ export default {
                         }
                     })
                     .catch(err => {
+                        loading.close();
                         console.log(err);
                     });
-                loading.close();
             }, 500);
         },
         // 编辑操作
@@ -1092,6 +1096,7 @@ export default {
                 https
                     .fetchPost('goldCommodity/updateById', params)
                     .then(data => {
+                        loading.close();
                         // console.log(data);
                         // console.log(JSON.parse(Decrypt(data.data.data)));
                         if (data.data.code == 'success') {
@@ -1107,9 +1112,9 @@ export default {
                         }
                     })
                     .catch(err => {
+                        loading.close();
                         console.log(err);
                     });
-                loading.close();
             }, 500);
         },
         Search() {
@@ -1145,6 +1150,7 @@ export default {
                 https
                     .fetchPost('/goldCommodity/goldCommodityPage', params)
                     .then(data => {
+                        loading.close();
                         // console.log(data);
                         if (data.data.code == 'success') {
                             var oData = JSON.parse(Decrypt(data.data.data));
@@ -1165,9 +1171,9 @@ export default {
                         }
                     })
                     .catch(err => {
+                        loading.close();
                         console.log(err);
                     });
-                loading.close();
             }, 500);
         },
         beforeUpload() {

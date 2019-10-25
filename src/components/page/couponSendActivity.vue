@@ -476,11 +476,14 @@
                     target: document.querySelector('.div1')
                 });
                 https.fetchPost('/cinema/myCinemaPage', '').then(data => {
+                    loading.close();
                    this.cinemaList=JSON.parse(Decrypt(data.data.data)).data;
                 }).catch(err => {
+                    loading.close();
                     console.log(err);
                 });
                 https.fetchPost('/couponSendActivity/addPage', '').then(data => {
+                    loading.close();
                         // this.cinemaInfo = JSON.parse(Decrypt(data.data.data));
                     console.log(data);
                     if (data.data.code == 'success') {
@@ -500,9 +503,9 @@
                         }
                     })
                     .catch(err => {
+                        loading.close();
                         console.log(err);
                     });
-                loading.close();
             },
             addRole() {
                 //新增按钮操作
@@ -534,6 +537,7 @@
                     https
                         .fetchPost('/couponSendActivity/addCouponSendActivity', params)
                         .then(data => {
+                            loading.close();
                             console.log(data);
                             if (data.data.code == 'success') {
                                 this.dialogFormVisible = false;
@@ -549,9 +553,9 @@
                             }
                         })
                         .catch(err => {
+                            loading.close();
                             console.log(err);
                         });
-                    loading.close();
                 }
             },
             delChange(index, row) {
@@ -587,6 +591,7 @@
                         https
                             .fetchDelete('/couponSendActivity/deleteById', params)
                             .then(data => {
+                                loading.close();
                                 if (data.data.code == 'success') {
                                     this.$message.error(`删除了`);
                                     this.getMenu();
@@ -600,9 +605,9 @@
                                 }
                             })
                             .catch(err => {
+                                loading.close();
                                 console.log(err);
                             });
-                        loading.close();
                     })
                     .catch(() => {
                         this.$message({
@@ -633,6 +638,7 @@
                     console.log(err);
                 });
                 https.fetchPost('/couponSendActivity/updatePage', params).then(data => {
+                        loading.close();
                         console.log(data);
                         if (data.data.code == 'success') {
                             console.log(JSON.parse(Decrypt(data.data.data)));
@@ -703,9 +709,9 @@
                         }
                     })
                     .catch(err => {
+                        loading.close();
                         console.log(err);
                     });
-                loading.close();
             },
             // 编辑操作
             exChanger() {
@@ -736,6 +742,7 @@
                 let params = ParamsAppend(jsonArr);
                 this.editVisible = false;
                 https.fetchPost('/couponSendActivity/updateCouponSendActivityById', params).then(data => {
+                        loading.close();
                         console.log(data);
                         // console.log(JSON.parse(Decrypt(data.data.data)));
                         if (data.data.code == 'success') {
@@ -751,9 +758,9 @@
                         }
                     })
                     .catch(err => {
+                        loading.close();
                         console.log(err);
                     });
-                loading.close();
             },
             Search() {
                 this.query.pageNo = 1;
@@ -802,6 +809,7 @@
                 jsonArr.push({ key: 'sign', value: sign });
                 var params = ParamsAppend(jsonArr);
                 https.fetchPost('/couponSendActivity/couponSendActivityPage', params).then(data => {
+                        loading.close();
                         if (data.data.code == 'success') {
                             var oData = JSON.parse(Decrypt(data.data.data));
                             this.tableData = oData.data;
@@ -820,9 +828,9 @@
                         }
                     })
                     .catch(err => {
+                        loading.close();
                         console.log(err);
                     });
-                loading.close();
             },
             open() {
                 //错误信息弹出框

@@ -354,6 +354,7 @@ export default {
             https
                 .fetchPost('merchandiseCoupon/merchandiseCouponAddPage', '')
                 .then(data => {
+                    loading.close();
                     console.log(data);
                     if (data.data.code == 'success') {
                         this.dialogFormVisible = true;
@@ -369,9 +370,9 @@ export default {
                     }
                 })
                 .catch(err => {
+                    loading.close();
                     console.log(err);
                 });
-            loading.close();
         },
         addRole() {
             //新增按钮操作
@@ -408,6 +409,7 @@ export default {
                 https
                     .fetchPost('merchandiseCoupon/addMerchandiseCoupon', params)
                     .then(data => {
+                        loading.close();
                         //新增
                         console.log(data);
                         if (data.data.code == 'success') {
@@ -442,10 +444,10 @@ export default {
                         }
                     })
                     .catch(err => {
+                        loading.close();
                         console.log(err);
                     });
             }
-            loading.close();
         },
         delChange(index, row) {
             //删除数据
@@ -515,6 +517,7 @@ export default {
             https
                 .fetchPost('merchandiseCoupon/getMerchandiseCouponById', params)
                 .then(data => {
+                    loading.close();
                     console.log(data);
                     console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
@@ -540,9 +543,9 @@ export default {
                     }
                 })
                 .catch(err => {
+                    loading.close();
                     console.log(err);
                 });
-            loading.close();
         },
         // 编辑操作
         exChanger() {
@@ -579,6 +582,7 @@ export default {
             https
                 .fetchPost('/film/updateFilm', params)
                 .then(data => {
+                    loading.close();
                     // console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.$message.success(`编辑成功`);
@@ -593,9 +597,9 @@ export default {
                     }
                 })
                 .catch(err => {
+                    loading.close();
                     console.log(err);
                 });
-            loading.close();
         },
         // 修改状态
         changeStatus(index, row) {
@@ -624,6 +628,7 @@ export default {
             https
                 .fetchPost('merchandiseCoupon/updateCouponStatusById', params)
                 .then(data => {
+                    loading.close();
                     // console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.$message.success(`修改成功`);
@@ -638,9 +643,9 @@ export default {
                     }
                 })
                 .catch(err => {
+                    loading.close();
                     console.log(err);
                 });
-            loading.close();
         },
         Search() {
             this.query.pageNo = 1;
@@ -674,6 +679,7 @@ export default {
             https
                 .fetchPost('merchandiseCoupon/merchandiseCouponPage', params)
                 .then(data => {
+                    loading.close();
                     if (data.data.code == 'success') {
                         var oData = JSON.parse(Decrypt(data.data.data));
                         console.log(oData);
@@ -700,9 +706,9 @@ export default {
                     }
                 })
                 .catch(err => {
+                    loading.close();
                     console.log(err);
                 });
-            loading.close();
         },
         open() {
             //错误信息弹出框

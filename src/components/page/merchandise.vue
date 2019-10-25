@@ -420,6 +420,7 @@ export default {
                         https
                             .fetchPost('goldCommodity/deleteById', params)
                             .then(data => {
+                                loading.close();
                                 // console.log(data);
                                 // console.log(JSON.parse(Decrypt(data.data.data)));
                                 if (data.data.code == 'success') {
@@ -435,9 +436,9 @@ export default {
                                 }
                             })
                             .catch(err => {
+                                loading.close();
                                 console.log(err);
                             });
-                        loading.close();
                     }, 500);
                 })
                 .catch(() => {
@@ -467,6 +468,7 @@ export default {
                 https
                     .fetchPost('/merchandise/modifyPage', params)
                     .then(data => {
+                        loading.close();
                         console.log(data);
                         console.log(JSON.parse(Decrypt(data.data.data)));
                         if (data.data.code == 'success') {
@@ -490,9 +492,9 @@ export default {
                         }
                     })
                     .catch(err => {
+                        loading.close();
                         console.log(err);
                     });
-                loading.close();
             }, 500);
         },
         // 编辑操作
@@ -524,6 +526,7 @@ export default {
                 https
                     .fetchPost('/merchandise/modify', params)
                     .then(data => {
+                        loading.close();
                         console.log(data);
                         // console.log(JSON.parse(Decrypt(data.data.data)));
                         if (data.data.code == 'success') {
@@ -539,9 +542,9 @@ export default {
                         }
                     })
                     .catch(err => {
+                        loading.close();
                         console.log(err);
                     });
-                loading.close();
             }, 500);
         },
         Search() {
@@ -577,6 +580,7 @@ export default {
                 https
                     .fetchPost('/cinema//myCinemaPage', params)
                     .then(data => {
+                        loading.close();
                         console.log(data);
                         if (data.data.code == 'success') {
                             var oData = JSON.parse(Decrypt(data.data.data));
@@ -597,6 +601,7 @@ export default {
                         }
                     })
                     .catch(err => {
+                        loading.close();
                         console.log(err);
                     });
                 loading.close();
@@ -632,6 +637,7 @@ export default {
                 https
                     .fetchPost('/merchandise/list', params)
                     .then(data => {
+                        loading.close();
                         console.log(data);
                         if (data.data.code == 'success') {
                             var oData = JSON.parse(Decrypt(data.data.data));
@@ -652,9 +658,9 @@ export default {
                         }
                     })
                     .catch(err => {
+                        loading.close();
                         console.log(err);
                     });
-                loading.close();
             }, 500);
         },
         show(row) {
@@ -689,6 +695,7 @@ export default {
                 https
                     .fetchPost('/merchandise/list', params)
                     .then(data => {
+                        loading.close();
                         console.log(data);
                         if (data.data.code == 'success') {
                             var oData = JSON.parse(Decrypt(data.data.data));
@@ -709,9 +716,9 @@ export default {
                         }
                     })
                     .catch(err => {
+                        loading.close();
                         console.log(err);
                     });
-                loading.close();
             }, 500);
         },
         UserPassword(index, row) {
@@ -733,6 +740,7 @@ export default {
                 https
                     .fetchPost('/merchandise/queryMerchandise', params)
                     .then(data => {
+                        loading.close();
                         console.log(data);
                         if (data.data.code == 'success') {
                             var oData = JSON.parse(Decrypt(data.data.data));
@@ -747,9 +755,9 @@ export default {
                         }
                     })
                     .catch(err => {
+                        loading.close();
                         console.log(err);
                     });
-                loading.close();
             }, 500);
         },
         beforeUpload() {

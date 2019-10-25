@@ -648,6 +648,7 @@
                 console.log(jsonArr);
                 var params = ParamsAppend(jsonArr);
                 https.fetchPost('merchandiseCoupon/merchandiseCouponPage', params).then(data => {
+                        loading.close();
                         if (data.data.code == 'success') {
                             let oData = JSON.parse(Decrypt(data.data.data));
                             this.drawer = true;
@@ -667,9 +668,9 @@
                         }
                     })
                     .catch(err => {
+                        loading.close();
                         console.log(err);
                     });
-                loading.close();
             },
             sureNext(id) {
                 for (let i = 0; i < this.sellTableData.length; i++) {
@@ -718,6 +719,7 @@
                     let params = ParamsAppend(jsonArr);
                     console.log(params);
                     https.fetchPost('turnplateGameRule/addTurnplateGameRule', params).then(data => {
+                            loading.close();
                             console.log(data);
                             if (data.data.code == 'success') {
                                 this.showSell = true;
@@ -734,9 +736,9 @@
                             }
                         })
                         .catch(err => {
+                            loading.close();
                             console.log(err);
                         });
-                    loading.close();
                 }, 500);
             },
             exChangeChanger(){
@@ -766,6 +768,7 @@
                     let params = ParamsAppend(jsonArr);
                     console.log(params);
                     https.fetchPost('turnplateGameRule/updateTurnplateGameRuleById', params).then(data => {
+                        loading.close();
                         console.log(data);
                         if (data.data.code == 'success') {
                             this.showSell = true;
@@ -782,9 +785,9 @@
                         }
                     })
                         .catch(err => {
+                            loading.close();
                             console.log(err);
                         });
-                    loading.close();
                 }, 500);
             },
             exChanger() {
@@ -869,6 +872,7 @@
                     jsonArr.push({ key: 'sign', value: sign });
                     var params = ParamsAppend(jsonArr);
                     https.fetchPost('/turnplateGameRule/turnplateGameRulePage', params).then(data => {
+                            loading.close();
                             console.log(data);
                             if (data.data.code == 'success') {
                                 var oData = JSON.parse(Decrypt(data.data.data));
@@ -889,9 +893,9 @@
                             }
                         })
                         .catch(err => {
+                            loading.close();
                             console.log(err);
                         });
-                    loading.close();
                 }, 500);
             },
             show(row) {
@@ -911,6 +915,7 @@
                     jsonArr1.push({ key: 'sign', value: sign1 });
                     var params1 = ParamsAppend(jsonArr1);
                     https.fetchPost('/turnplateGameRule/getByCinemaCode',params1).then(data => {
+                        loading.close();
                         console.log(data);
                         if (data.data.code == 'success') {
                             this.prizeInfoList=[];
@@ -945,9 +950,9 @@
                         }
                     })
                         .catch(err => {
+                            loading.close();
                             console.log(err);
                         });
-                    loading.close();
                 }, 500);
             },
             beforeUpload() {

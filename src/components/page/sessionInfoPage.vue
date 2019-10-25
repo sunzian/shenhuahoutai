@@ -285,6 +285,7 @@ export default {
             https
                 .fetchPost('/sessionInfo/updatePage', '')
                 .then(data => {
+                    loading.close();
                     // console.log(data);
                     if (data.data.code == 'success') {
                         this.dialogFormVisible = true;
@@ -299,9 +300,9 @@ export default {
                     }
                 })
                 .catch(err => {
+                    loading.close();
                     console.log(err);
                 });
-            loading.close();
         },
         addRole() {
             //新增按钮操作
@@ -330,6 +331,7 @@ export default {
                 https
                     .fetchPost('/sessionInfo/updateSessionInfo', params)
                     .then(data => {
+                        loading.close();
                         console.log(data);
                         if (data.data.code == 'success') {
                             this.dialogFormVisible = false;
@@ -348,9 +350,9 @@ export default {
                         }
                     })
                     .catch(err => {
+                        loading.close();
                         console.log(err);
                     });
-                loading.close();
             }
         },
         delChange(index, row) {
@@ -380,6 +382,7 @@ export default {
             https
                 .fetchDelete('/cinema/deleteCinema', params)
                 .then(data => {
+                    loading.close();
                     if (data.data.code == 'success') {
                         this.$message.error(`删除了`);
                         this.getMenu();
@@ -393,9 +396,9 @@ export default {
                     }
                 })
                 .catch(err => {
+                    loading.close();
                     console.log(err);
                 });
-            loading.close();
         },
         addChange(index, row) {
             //是否拥有修改权限
@@ -416,6 +419,7 @@ export default {
             https
                 .fetchPost('/sessionInfo/getSessionInfoById', params)
                 .then(data => {
+                    loading.close();
                     console.log(data)
                     console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
@@ -438,9 +442,9 @@ export default {
                     }
                 })
                 .catch(err => {
+                    loading.close();
                     console.log(err);
                 });
-            loading.close();
         },
         // 编辑操作
         exChanger() {
@@ -463,6 +467,7 @@ export default {
             https
                 .fetchPost('/sessionInfo/updatePartyPayCommissionFee', params)
                 .then(data => {
+                    loading.close();
                     console.log(data);
                     // console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
@@ -478,9 +483,9 @@ export default {
                     }
                 })
                 .catch(err => {
+                    loading.close();
                     console.log(err);
                 });
-            loading.close();
         },
         Search() {
             this.query.pageNo = 1;
@@ -513,6 +518,7 @@ export default {
             https
                 .fetchPost('/sessionInfo/sessionInfoPage', params)
                 .then(data => {
+                    loading.close();
                     if (data.data.code == 'success') {
                         var oData = JSON.parse(Decrypt(data.data.data));
                         console.log(oData);
@@ -531,9 +537,9 @@ export default {
                     }
                 })
                 .catch(err => {
+                    loading.close();
                     console.log(err);
                 });
-            loading.close();
         },
         open() {
             //错误信息弹出框

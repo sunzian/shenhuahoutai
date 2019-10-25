@@ -61,8 +61,8 @@
                 </el-table-column>
                 <el-table-column prop="booleans" label="状态">
                     <template slot-scope="scope">
-                        <el-tag v-if="scope.row.status == 1" type="success">已开通</el-tag>
-                        <el-tag v-else type="danger">未开通</el-tag>
+                        <el-tag v-if="scope.row.status == 1" type="success">正常</el-tag>
+                        <el-tag v-else-if="scope.row.status == 2" type="danger">禁用</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column label="操作" width="100" align="center" fixed="right">
@@ -399,11 +399,11 @@ export default {
             options: [
                 {
                     value: '1',
-                    label: '启用'
+                    label: '正常'
                 },
                 {
                     value: '2',
-                    label: '未启用'
+                    label: '禁用'
                 }
             ],
             type: [
@@ -474,7 +474,8 @@ export default {
                 target: document.querySelector('.div1')
             });
             https.fetchPost('/openCardRule/addPage', '').then(data => {
-                    this.cinemaInfo = JSON.parse(Decrypt(data.data.data));
+                loading.close();
+                this.cinemaInfo = JSON.parse(Decrypt(data.data.data));
                     if (data.data.code == 'success') {
                         for (let key in this.oForm) {
                             this.oForm[key] = '';
@@ -492,9 +493,9 @@ export default {
                     }
                 })
                 .catch(err => {
+                    loading.close();
                     console.log(err);
                 });
-            loading.close();
         },
         addRole() {
             //新增按钮操作
@@ -545,6 +546,7 @@ export default {
                 https
                     .fetchPost('/openCardRule/addOpenCardRule', params)
                     .then(data => {
+                        loading.close();
                         console.log(data);
                         if (data.data.code == 'success') {
                             this.dialogFormVisible = false;
@@ -560,9 +562,9 @@ export default {
                         }
                     })
                     .catch(err => {
+                        loading.close();
                         console.log(err);
                     });
-                loading.close();
             }
         },
         delChange(index, row) {
@@ -598,6 +600,7 @@ export default {
                     https
                         .fetchDelete('/openCardRule/deleteOpenCardRule', params)
                         .then(data => {
+                            loading.close();
                             if (data.data.code == 'success') {
                                 this.$message.error(`删除了`);
                                 this.getMenu();
@@ -611,9 +614,9 @@ export default {
                             }
                         })
                         .catch(err => {
+                            loading.close();
                             console.log(err);
                         });
-                    loading.close();
                 })
                 .catch(() => {
                     this.$message({
@@ -639,6 +642,7 @@ export default {
             jsonArr.push({ key: 'sign', value: sign });
             let params = ParamsAppend(jsonArr);
             https.fetchPost('/openCardRule/modifyPage', params).then(data => {
+                    loading.close();
                     console.log(data);
                     if (data.data.code == 'success') {
                         console.log(JSON.parse(Decrypt(data.data.data)));
@@ -687,9 +691,9 @@ export default {
                     }
                 })
                 .catch(err => {
+                    loading.close();
                     console.log(err);
                 });
-            loading.close();
         },
         // 编辑操作
         exChanger() {
@@ -801,6 +805,7 @@ export default {
             https
                 .fetchPost('/openCardRule/modifyOpenCardRule', params)
                 .then(data => {
+                    loading.close();
                     console.log(data);
                     // console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
@@ -816,9 +821,9 @@ export default {
                     }
                 })
                 .catch(err => {
+                    loading.close();
                     console.log(err);
                 });
-            loading.close();
         },
         Search() {
             this.query.pageNo = 1;
@@ -871,6 +876,7 @@ export default {
             https
                 .fetchPost('/openCardRule/openPage', params)
                 .then(data => {
+                    loading.close();
                     if (data.data.code == 'success') {
                         var oData = JSON.parse(Decrypt(data.data.data));
                         this.tableData = oData.data;
@@ -889,9 +895,9 @@ export default {
                     }
                 })
                 .catch(err => {
+                    loading.close();
                     console.log(err);
                 });
-            loading.close();
         },
         open() {
             //错误信息弹出框

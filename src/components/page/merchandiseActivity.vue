@@ -158,7 +158,7 @@
                     <el-radio-group v-model="oForm.selectFilmType">
                         <el-radio label="0">全部商品</el-radio>
                         <el-radio label="1">部分商品</el-radio>
-                        <el-radio label="2">排除商品</el-radio>
+                        <el-radio v-if="oForm.reduceType==2" label="2">排除商品</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item v-if="oForm.selectFilmType != 0" label="选择商品" :label-width="formLabelWidth">
@@ -295,6 +295,14 @@
                                 :value="item.value"
                         ></el-option>
                     </el-select>
+                </el-form-item>
+                <el-form-item label="限购时间：" v-if="oForm.oneCanNum==1" :label-width="formLabelWidth">
+                    <el-radio-group v-model="oForm.limitSingleUnit">
+                        <el-radio label="年">年</el-radio>
+                        <el-radio label="月">月</el-radio>
+                        <el-radio label="周">周</el-radio>
+                        <el-radio label="日">日</el-radio>
+                    </el-radio-group>
                 </el-form-item>
                 <el-form-item label="个人总张数：" v-if="oForm.oneCanNum==1" :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oForm.oneNum" autocomplete="off"></el-input>
@@ -604,6 +612,7 @@
                     target: document.querySelector('.div1')
                 });
                 https.fetchPost('/merchandiseDiscountActivity/addPage', '').then(data => {
+                    loading.close();
                     console.log(data);
                     if (data.data.code == 'success') {
                         this.selectedSell=[];
@@ -629,9 +638,9 @@
                     }
                 })
                     .catch(err => {
+                        loading.close();
                         console.log(err);
                     });
-                loading.close();
             },
             addRole() {//新增按钮操作
                 const loading = this.$loading({
@@ -682,6 +691,7 @@
                 }
                 if(this.oForm.oneCanNum!=0){
                     jsonArr.push({ key: 'singleNumber', value: this.oForm.oneNum });
+                    jsonArr.push({ key: 'limitSingleUnit', value: this.oForm.limitSingleUnit });
                 }
                 jsonArr.push({ key: 'isLimitSingle', value: this.oForm.oneCanNum });
                 let sign = md5(preSign(jsonArr));
@@ -690,6 +700,7 @@
                 let params = ParamsAppend(jsonArr);
                 if (this.dialogFormVisible == true) {
                     https.fetchPost('/merchandiseDiscountActivity/addActivity', params).then(data => {//新增
+                        loading.close();
                         console.log(data);
                         if (data.data.code == 'success') {
                             this.dialogFormVisible = false;
@@ -729,10 +740,10 @@
                             this.open();
                         }
                     }).catch(err => {
+                        loading.close();
                         console.log(err);
                     });
                 }
-                loading.close();
             },
             delChange(index, row) {
                 //删除数据
@@ -797,6 +808,7 @@
                 jsonArr.push({ key: 'sign', value: sign });
                 let params = ParamsAppend(jsonArr);
                 https.fetchPost('/filmDiscountActivity/getTimesById', params).then(data => { //查询可用时间段
+                    loading.close();
                     console.log(data);
                     if(JSON.parse(Decrypt(data.data.data))){
                         this.canTimeList=JSON.parse(Decrypt(data.data.data))
@@ -804,9 +816,11 @@
                     console.log(this.canTimeList);
 
                 }).catch(err => {
+                    loading.close();
                     console.log(err);
                 });
                 https.fetchPost('/merchandiseDiscountActivity/getActivityById', params).then(data => {
+                    loading.close();
                     console.log(data);
                     console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
@@ -845,9 +859,9 @@
                     }
                 })
                     .catch(err => {
+                        loading.close();
                         console.log(err);
                     });
-                loading.close();
             },
             // 编辑操作
             exChanger() {
@@ -882,6 +896,7 @@
                 let params = ParamsAppend(jsonArr);
                 this.editVisible = false;
                 https.fetchPost('/film/updateFilm', params).then(data => {
+                    loading.close();
                     // console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.$message.success(`编辑成功`);
@@ -896,9 +911,9 @@
                     }
                 })
                     .catch(err => {
+                        loading.close();
                         console.log(err);
                     });
-                loading.close();
             },
             // 修改状态
             changeStatus(index, row) {
@@ -925,6 +940,7 @@
                 console.log(jsonArr);
                 let params = ParamsAppend(jsonArr);
                 https.fetchPost('/merchandiseDiscountActivity/updateStatusById', params).then(data => {
+                    loading.close();
                     console.log(data);
                     // console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
@@ -940,9 +956,9 @@
                     }
                 })
                     .catch(err => {
+                        loading.close();
                         console.log(err);
                     });
-                loading.close();
             },
             Search() {
                 console.log(this.query.reduceType);
@@ -974,6 +990,7 @@
                 console.log(jsonArr);
                 var params = ParamsAppend(jsonArr);
                 https.fetchPost('/merchandiseDiscountActivity/page', params).then(data => {
+                    loading.close();
                     if (data.data.code == 'success') {
                         var oData = JSON.parse(Decrypt(data.data.data));
                         console.log(oData);
@@ -1003,9 +1020,9 @@
                     }
                 })
                     .catch(err => {
+                        loading.close();
                         console.log(err);
                     });
-                loading.close();
             },
             open() {
                 //错误信息弹出框
@@ -1116,6 +1133,7 @@
                     jsonArr.push({key:"sign",value:sign});
                     var params = ParamsAppend(jsonArr);
                     https.fetchPost('/merchandise/list',params).then((data) => {
+                        loading.close();
                         console.log(data);
                         if(data.data.code=='success') {
                             this.drawer=true
@@ -1137,10 +1155,10 @@
                         }
 
                     }).catch(err=>{
-                            console.log(err)
+                        loading.close();
+                        console.log(err)
                         }
                     )
-                    loading.close();
                 }, 500);
             },
             //新增套餐选择卖品页面

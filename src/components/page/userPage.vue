@@ -12,10 +12,8 @@
                 <el-input placeholder="用户名" style="width: 150px" v-model="query.name" autocomplete="off"></el-input>
                 <el-input placeholder="真实姓名" style="width: 150px" v-model="query.realName" autocomplete="off"></el-input>
                 <el-select clearable v-model="query.status" placeholder="状态" class="handle-select mr10">
-                    <el-option key="1" label="审核中" value="1"></el-option>
-                    <el-option key="2" label="未审核" value="2"></el-option>
-                    <el-option key="3" label="通过" value="3"></el-option>
-                    <el-option key="4" label="审核失败" value="4"></el-option>
+                    <el-option key="1" label="正常" value="1"></el-option>
+                    <el-option key="2" label="禁用" value="2"></el-option>
                 </el-select>
                 <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
                 <el-button
@@ -62,8 +60,8 @@
                 </el-table-column>
                 <el-table-column label="状态" align="center">
                     <template slot-scope="scope">
-                        <el-tag v-if="scope.row.status=='1'" type="success">成功</el-tag>
-                        <el-tag v-else type="danger">未通过</el-tag>
+                        <el-tag v-if="scope.row.status=='1'" type="success">正常</el-tag>
+                        <el-tag v-else-if="scope.row.status=='2'" type="danger">禁用</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column label="操作"  align="center"  fixed="right">
@@ -378,19 +376,11 @@
                 selectCode:{},
                 options: [{
                     value: '1',
-                    label: '审核中'
+                    label: '正常'
                 },
                 {
                     value: '2',
-                    label: '未审核'
-                },
-                {
-                    value: '3',
-                    label: '通过'
-                },
-                {
-                    value: '4',
-                    label: '审核失败'
+                    label: '禁用'
                 }
             ],
             businessInfoList: [],
@@ -417,6 +407,7 @@
                 https
                     .fetchPost('/user/updateUserPasswordPage', '')
                     .then(data => {
+                        loading.close();
                         console.log(data);
                         if (data.data.code == 'success') {
                             this.oldPass = '';
@@ -434,9 +425,9 @@
                         }
                     })
                     .catch(err => {
+                        loading.close();
                         console.log(err);
                     });
-                loading.close();
             }, 500);
         },
         surePassword() {
@@ -465,6 +456,7 @@
                     https
                         .fetchPost('/user/updateUserPassword', params)
                         .then(data => {
+                            loading.close();
                             console.log(data);
                             // console.log(JSON.parse(Decrypt(data.data.data)));
                             if (data.data.code == 'success') {
@@ -480,9 +472,9 @@
                             }
                         })
                         .catch(err => {
+                            loading.close();
                             console.log(err);
                         });
-                    loading.close();
                 }
             }, 500);
         },
@@ -513,6 +505,7 @@
                     https
                         .fetchPost('/user/getMenusByRole', params)
                         .then(data => {
+                            loading.close();
                             console.log(data);
                             if (data.data.code == 'success') {
                                 this.data = JSON.parse(Decrypt(data.data.data)).permissionList;
@@ -530,9 +523,9 @@
                             }
                         })
                         .catch(err => {
+                            loading.close();
                             console.log(err);
                         });
-                    loading.close();
                 }, 500);
             } else {
                 this.message = '请先选择角色';
@@ -552,6 +545,7 @@
                 https
                     .fetchPost('/user/addPage', '')
                     .then(data => {
+                        loading.close();
                         // console.log(data);
                         if (data.data.code == 'success') {
                             this.oForm = [];
@@ -571,7 +565,6 @@
                         }
                         }
                     )
-                    loading.close();
                 }, 500);
             },
             getCheckedKeys() {//新增数据操作
@@ -600,6 +593,7 @@
                     let params = ParamsAppend(jsonArr);
                     if(this.dialogFormVisible == true){
                         https.fetchPost('/user/addUser',params).then((data) => {//新增
+                                loading.close();
                             console.log(data);
                             if (data.data.code == 'success') {
                                 this.dialogFormVisible = false;
@@ -615,7 +609,6 @@
                         }
                         )
                     }
-                    loading.close();
                 }, 500);
             },
             delChange(index, row){//删除数据
@@ -635,6 +628,7 @@
                     jsonArr.push({key:"sign",value:sign});
                     let params = ParamsAppend(jsonArr);
                     https.fetchPost('/user/deleteUser',params).then((data) => {
+                        loading.close();
                         console.log(data);
                         // console.log(JSON.parse(Decrypt(data.data.data)));
                         if (data.data.code == 'success') {
@@ -650,9 +644,9 @@
                         }
                     })
                     .catch(err => {
+                        loading.close();
                         console.log(err);
                     });
-                loading.close();
             }, 500);
         },
         addChange(index, row) {
@@ -675,6 +669,7 @@
                 https
                     .fetchPost('/user/modifyPage', params)
                     .then(data => {
+                        loading.close();
                         console.log(data);
                         console.log(JSON.parse(Decrypt(data.data.data)));
                         if (data.data.code == 'success') {
@@ -717,10 +712,10 @@
                             this.open();
                         }
                     }).catch(err=>{
-                            console.log(err)
+                        loading.close();
+                        console.log(err)
                         }
                     )
-                    loading.close();
                 }, 500);
             },
             // 修改操作
@@ -750,6 +745,7 @@
                     let params = ParamsAppend(jsonArr);
                     this.editVisible = false;
                     https.fetchPost('/user/modifyUser',params).then((data) => {
+                        loading.close();
                         console.log(data);
                         // console.log(JSON.parse(Decrypt(data.data.data)));
                         if (data.data.code == 'success') {
@@ -764,10 +760,10 @@
                             this.open()
                         }
                     }).catch(err=>{
-                            console.log(err)
+                        loading.close();
+                        console.log(err)
                         }
                     )
-                    loading.close();
                 }, 500);
             },
             Search(){
@@ -805,6 +801,7 @@
                     jsonArr.push({key:"sign",value:sign});
                     var params = ParamsAppend(jsonArr);
                     https.fetchPost('/user/userPage',params).then((data) => {
+                        loading.close();
                         console.log(data);
                         if (data.data.code == 'success') {
                             var oData = JSON.parse(Decrypt(data.data.data));
@@ -825,9 +822,9 @@
                         }
                     })
                     .catch(err => {
+                        loading.close();
                         console.log(err);
                     });
-                loading.close();
             }, 500);
         },
         open() {

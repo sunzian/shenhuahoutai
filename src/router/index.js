@@ -120,11 +120,6 @@ export default new Router({
                     meta: { title: '开卡规则管理' }
                 },
                 {
-                    path: '/couponPage',
-                    component: () => import(/* webpackChunkName: "table" */ '../components/page/couponPage.vue'),
-                    meta: { title: '优惠券配置' }
-                },
-                {
                     path: '/goldCommodityPage',
                     component: () => import(/* webpackChunkName: "table" */ '../components/page/goldCommodityPage.vue'),
                     meta: { title: '金币商品管理' }

@@ -11,10 +11,8 @@
             <div class="handle-box">
                 <el-input placeholder="名称" style="width: 150px" v-model="query.name" autocomplete="off"></el-input>
                 <el-select clearable v-model="query.status" placeholder="状态" class="handle-select mr10">
-                    <el-option key="1" label="审核中" value="1"></el-option>
-                    <el-option key="2" label="未审核" value="2"></el-option>
-                    <el-option key="3" label="通过" value="3"></el-option>
-                    <el-option key="4" label="审核失败" value="4"></el-option>
+                    <el-option key="1" label="正常" value="1"></el-option>
+                    <el-option key="2" label="禁用" value="2"></el-option>
                 </el-select>
                 <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
             </div>
@@ -41,9 +39,9 @@
                 <el-table-column label="状态" align="center">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status=='1'" type='success'
-                        >成功</el-tag>
-                        <el-tag v-else type='danger'
-                        >未通过</el-tag>
+                        >正常</el-tag>
+                        <el-tag v-else-if="scope.row.status=='2'" type='danger'
+                        >禁用</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column label="操作" width="180" align="center" fixed="right">
@@ -164,16 +162,10 @@
                 selectValue:{},
                 options: [{
                     value: '1',
-                    label: '审核中'
+                    label: '正常'
                 }, {
                     value: '2',
-                    label: '未审核'
-                }, {
-                    value: '3',
-                    label: '通过'
-                }, {
-                    value: '4',
-                    label: '审核失败'
+                    label: '禁用'
                 }],
                 value: ''
             };
@@ -202,6 +194,7 @@
                     jsonArr.push({key:"sign",value:sign});
                     let params = ParamsAppend(jsonArr);
                     https.fetchPost('/role/viewRolePermission',params).then((data) => {
+                        loading.close();
                         console.log(data);
                         if(data.data.data){
                             console.log(JSON.parse(Decrypt(data.data.data)));
@@ -222,10 +215,10 @@
                             this.open()
                         }
                     }).catch(err=>{
-                            console.log(err)
+                        loading.close();
+                        console.log(err)
                         }
                     )
-                    loading.close();
                 }, 500);
             },
             addChange(index, row){//是否修改权限
@@ -245,6 +238,7 @@
                     jsonArr.push({key:"sign",value:sign});
                     let params = ParamsAppend(jsonArr);
                     https.fetchPost('/role/permissionForRolePage',params).then((data) => {
+                        loading.close();
                         console.log(data);
                         console.log(JSON.parse(Decrypt(data.data.data)));
                         if(data.data.code=='success'){
@@ -275,10 +269,10 @@
                             this.open()
                         }
                     }).catch(err=>{
-                            console.log(err)
+                        loading.close();
+                        console.log(err)
                         }
                     )
-                    loading.close();
                 }, 500);
             },
             // 编辑操作
@@ -300,6 +294,7 @@
                     let params = ParamsAppend(jsonArr);
                     this.editVisible = false;
                     https.fetchPost('/role/permissionForRole',params).then((data) => {
+                        loading.close();
                         console.log(data);
                         // console.log(JSON.parse(Decrypt(data.data.data)));
                         if(data.data.code=='success'){
@@ -314,10 +309,10 @@
                             this.open()
                         }
                     }).catch(err=>{
-                            console.log(err)
+                        loading.close();
+                        console.log(err)
                         }
                     )
-                    loading.close();
                 }, 500);
             },
             Search(){//搜索操作
@@ -350,6 +345,7 @@
                     jsonArr.push({key:"sign",value:sign});
                     var params = ParamsAppend(jsonArr);
                     https.fetchPost('/role/rolePermission',params).then((data) => {
+                        loading.close();
                         // console.log(data);
                         if(data.data.code=='success') {
                             var oData = JSON.parse(Decrypt(data.data.data));
@@ -370,10 +366,10 @@
                         }
 
                     }).catch(err=>{
-                            console.log(err)
+                        loading.close();
+                        console.log(err)
                         }
                     )
-                    loading.close();
                 }, 500);
             },
             open() {     //错误信息弹出框

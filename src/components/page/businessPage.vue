@@ -281,6 +281,7 @@ export default {
             https
                 .fetchPost('/businessInfo/addPage', '')
                 .then(data => {
+                    loading.close();
                     console.log(data);
                     if (data.data.code == 'success') {
                         this.dialogFormVisible = true;
@@ -294,9 +295,9 @@ export default {
                     }
                 })
                 .catch(err => {
+                    loading.close();
                     console.log(err);
                 });
-            loading.close();
         },
         addRole() {
             //新增按钮操作
@@ -329,6 +330,7 @@ export default {
                 https
                     .fetchPost('/businessInfo', params)
                     .then(data => {
+                        loading.close();
                         //新增
                         // console.log(data);
                         if (data.data.code == 'success') {
@@ -359,9 +361,9 @@ export default {
                         }
                     })
                     .catch(err => {
+                        loading.close();
                         console.log(err);
                     });
-                loading.close();
             }
         },
         delChange(index, row) {
@@ -391,6 +393,7 @@ export default {
             https
                 .fetchDelete('/businessInfo/deleteBusinessInfo', params)
                 .then(data => {
+                    loading.close();
                     if (data.data.code == 'success') {
                         this.$message.error(`删除了`);
                         this.getMenu();
@@ -404,9 +407,9 @@ export default {
                     }
                 })
                 .catch(err => {
+                    loading.close();
                     console.log(err);
                 });
-            loading.close();
         },
         addChange(index, row) {
             //是否拥有修改权限
@@ -427,6 +430,7 @@ export default {
             https
                 .fetchPost('/businessInfo/modifyPage', params)
                 .then(data => {
+                    loading.close();
                     // console.log(data);
                     console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
@@ -448,9 +452,9 @@ export default {
                     }
                 })
                 .catch(err => {
+                    loading.close();
                     console.log(err);
                 });
-            loading.close();
         },
         // 编辑操作
         exChanger() {
@@ -477,6 +481,7 @@ export default {
             https
                 .fetchPost('/businessInfo/updateById', params)
                 .then(data => {
+                    loading.close();
                     console.log(data);
                     // console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
@@ -492,9 +497,9 @@ export default {
                     }
                 })
                 .catch(err => {
+                    loading.close();
                     console.log(err);
                 });
-            loading.close();
         },
         Search() {
             this.query.pageNo = 1;
@@ -527,6 +532,7 @@ export default {
             https
                 .fetchPost('/businessInfo/businessInfoPage', params)
                 .then(data => {
+                    loading.close();
                     if (data.data.code == 'success') {
                         var oData = JSON.parse(Decrypt(data.data.data));
                         console.log(oData);
@@ -546,9 +552,9 @@ export default {
                     }
                 })
                 .catch(err => {
+                    loading.close();
                     console.log(err);
                 });
-            loading.close();
         },
         open() {
             //错误信息弹出框

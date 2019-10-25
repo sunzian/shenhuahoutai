@@ -212,6 +212,7 @@ export default {
             });
             setTimeout(() => {
                 https.fetchPost('/role/addPage','').then((data) => {
+                    loading.close();
                     console.log(data);
                     if(data.data.code == 'success'){
                         this.dialogFormVisible = true
@@ -224,10 +225,10 @@ export default {
                         this.open()
                     }
                 }).catch(err=>{
-                        console.log(err)
+                    loading.close();
+                    console.log(err)
                     }
                 )
-                loading.close();
             }, 500);
         },
         addRole(){ //新增按钮操作
@@ -249,6 +250,7 @@ export default {
                 let params = ParamsAppend(jsonArr);
                 if(this.dialogFormVisible == true){
                     https.fetchPost('/role/addRole',params).then((data) => {//新增
+                        loading.close();
                         // console.log(data);
                         if(data.data.code=='success'){
                             this.dialogFormVisible = false
@@ -266,11 +268,11 @@ export default {
                             this.open()
                         }
                     }).catch(err=>{
-                            console.log(err)
+                        loading.close();
+                        console.log(err)
                         }
                     )
                 }
-                loading.close();
             }, 500);
         },
         delChange(index, row){//删除数据
@@ -300,6 +302,7 @@ export default {
                 jsonArr.push({key:"sign",value:sign});
                 let params = ParamsAppend(jsonArr);
                 https.fetchPost('/role/deleteRole',params).then((data) => {
+                    loading.close();
                     // console.log(data);
                     // console.log(JSON.parse(Decrypt(data.data.data)));
                     if(data.data.code=='success'){
@@ -314,10 +317,10 @@ export default {
                         this.open()
                     }
                 }).catch(err=>{
-                        console.log(err)
+                    loading.close();
+                    console.log(err)
                     }
                 )
-                loading.close();
             }, 500);
         },
         addChange(index, row){//是否修改权限
@@ -337,6 +340,7 @@ export default {
                 jsonArr.push({key:"sign",value:sign});
                 let params = ParamsAppend(jsonArr);
                 https.fetchPost('/role/modifyPage',params).then((data) => {
+                    loading.close();
                     // console.log(data);
                     console.log(JSON.parse(Decrypt(data.data.data)));
                     if(data.data.code=='success'){
@@ -364,10 +368,10 @@ export default {
                         this.open()
                     }
                 }).catch(err=>{
-                        console.log(err)
+                    loading.close();
+                    console.log(err)
                     }
                 )
-                loading.close();
             }, 500);
         },
         // 编辑操作
@@ -395,6 +399,7 @@ export default {
                 console.log(params);
                 this.editVisible = false;
                 https.fetchPost('/role/modifyRole',params).then((data) => {
+                    loading.close();
                     // console.log(data);
                     // console.log(JSON.parse(Decrypt(data.data.data)));
                     if(data.data.code=='success'){
@@ -409,10 +414,10 @@ export default {
                         this.open()
                     }
                 }).catch(err=>{
-                        console.log(err)
+                    loading.close();
+                    console.log(err)
                     }
                 )
-                loading.close();
             }, 500);
         },
         Search(){
@@ -445,6 +450,7 @@ export default {
                 jsonArr.push({key:"sign",value:sign});
                 var params = ParamsAppend(jsonArr);
                 https.fetchPost('/role/rolePage',params).then((data) => {
+                    loading.close();
                     if(data.data.code=='success') {
                         var oData = JSON.parse(Decrypt(data.data.data));
                         // console.log(oData);
@@ -464,10 +470,10 @@ export default {
                     }
 
                 }).catch(err=>{
-                        console.log(err)
+                    loading.close();
+                    console.log(err)
                     }
                 )
-                loading.close();
             }, 500);
         },
         open() {     //错误信息弹出框

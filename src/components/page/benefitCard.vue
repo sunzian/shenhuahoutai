@@ -992,6 +992,7 @@
                     target: document.querySelector('.div1')
                 });
                 https.fetchPost('/benefitCard/addPage', '').then(data => {
+                    loading.close();
                     console.log(data);
                     if (data.data.code == 'success') {
                         this.selectedSell=[];
@@ -1018,9 +1019,9 @@
                     }
                 })
                     .catch(err => {
+                        loading.close();
                         console.log(err);
                     });
-                loading.close();
             },
             addRole() {//新增按钮操作
                 const loading = this.$loading({
@@ -1118,6 +1119,7 @@
                 let params = ParamsAppend(jsonArr);
                 if (this.dialogFormVisible == true) {
                     https.fetchPost('/benefitCard/addBenefit', params).then(data => {//新增
+                        loading.close();
                         console.log(data);
                         if (data.data.code == 'success') {
                             this.dialogFormVisible = false;
@@ -1163,10 +1165,10 @@
                             this.open();
                         }
                     }).catch(err => {
+                        loading.close();
                         console.log(err);
                     });
                 }
-                loading.close();
             },
             delChange(index, row) {
                 //删除数据
@@ -1231,6 +1233,7 @@
                 jsonArr.push({ key: 'sign', value: sign });
                 let params = ParamsAppend(jsonArr);
                 https.fetchPost('/benefitCard/getTimesById', params).then(data => { //查询可用时间段
+                    loading.close();
                     console.log(data);
                     if(JSON.parse(Decrypt(data.data.data))){
                         this.canTimeList=JSON.parse(Decrypt(data.data.data))
@@ -1238,9 +1241,11 @@
                     console.log(this.canTimeList);
 
                 }).catch(err => {
+                    loading.close();
                     console.log(err);
                 });
                 https.fetchPost('/benefitCard/getBenefitById', params).then(data => {
+                    loading.close();
                     console.log(data);
                     console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
@@ -1297,9 +1302,9 @@
                     }
                 })
                     .catch(err => {
+                        loading.close();
                         console.log(err);
                     });
-                loading.close();
             },
             // 编辑操作
             exChanger() {
@@ -1334,6 +1339,7 @@
                 let params = ParamsAppend(jsonArr);
                 this.editVisible = false;
                 https.fetchPost('/film/updateFilm', params).then(data => {
+                    loading.close();
                     // console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.$message.success(`编辑成功`);
@@ -1348,9 +1354,9 @@
                     }
                 })
                     .catch(err => {
+                        loading.close();
                         console.log(err);
                     });
-                loading.close();
             },
             // 修改状态
             changeStatus(index, row) {
@@ -1377,6 +1383,7 @@
                 console.log(jsonArr);
                 let params = ParamsAppend(jsonArr);
                 https.fetchPost('/benefitCard/updateStatusById', params).then(data => {
+                    loading.close();
                     console.log(data);
                     // console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
@@ -1392,9 +1399,9 @@
                     }
                 })
                     .catch(err => {
+                        loading.close();
                         console.log(err);
                     });
-                loading.close();
             },
             Search() {
                 console.log(this.query.reduceType);
@@ -1426,6 +1433,7 @@
                 console.log(jsonArr);
                 var params = ParamsAppend(jsonArr);
                 https.fetchPost('/benefitCard/page', params).then(data => {
+                    loading.close();
                     if (data.data.code == 'success') {
                         var oData = JSON.parse(Decrypt(data.data.data));
                         console.log(oData);
@@ -1455,9 +1463,9 @@
                     }
                 })
                     .catch(err => {
+                        loading.close();
                         console.log(err);
                     });
-                loading.close();
             },
             open() {
                 //错误信息弹出框
@@ -1587,6 +1595,7 @@
                     jsonArr.push({key:"sign",value:sign});
                     var params = ParamsAppend(jsonArr);
                     https.fetchPost('film/filmPage',params).then((data) => {
+                        loading.close();
                         console.log(data);
                         if(data.data.code=='success') {
                             this.drawer=true
@@ -1609,10 +1618,10 @@
                         }
 
                     }).catch(err=>{
-                            console.log(err)
+                        loading.close();
+                        console.log(err)
                         }
                     )
-                    loading.close();
                 }, 500);
             },
             selectSell() {
@@ -1632,6 +1641,7 @@
                     jsonArr.push({key:"sign",value:sign});
                     var params = ParamsAppend(jsonArr);
                     https.fetchPost('/merchandise/list',params).then((data) => {
+                        loading.close();
                         console.log(data);
                         if(data.data.code=='success') {
                             this.oDrawer=true
@@ -1653,10 +1663,10 @@
                         }
 
                     }).catch(err=>{
-                            console.log(err)
+                        loading.close();
+                        console.log(err)
                         }
                     )
-                    loading.close();
                 }, 500);
             },
             //新增套餐选择卖品页面

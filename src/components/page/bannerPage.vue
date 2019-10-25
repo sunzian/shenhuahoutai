@@ -424,6 +424,7 @@
                 });
                 setTimeout(() => {
                     https.fetchPost('/banner/addPage','').then((data) => {
+                        loading.close();
                         console.log(data);
                         console.log(JSON.parse(Decrypt(data.data.data)));
                         this.businessOptiones = JSON.parse(Decrypt(data.data.data))
@@ -439,10 +440,10 @@
                             this.open()
                         }
                     }).catch(err=>{
-                            console.log(err)
+                        loading.close();
+                        console.log(err)
                         }
                     )
-                    loading.close();
                 }, 500);
             },
             beforeUpload(){//上传之前
@@ -484,6 +485,7 @@
                     let params = ParamsAppend(jsonArr);
                     if(this.dialogFormVisible == true){
                         https.fetchPost('/banner/addBanner',params).then((data) => {//新增
+                            loading.close();
                             console.log(data);
                             if(data.data.code=='success'){
                                 this.dialogFormVisible = false
@@ -501,11 +503,11 @@
                                 this.open()
                             }
                         }).catch(err=>{
-                                console.log(err)
+                            loading.close();
+                            console.log(err)
                             }
                         )
                     }
-                    loading.close();
                 }, 500);
             },
             delChange(index, row){//删除数据
@@ -513,8 +515,7 @@
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
-            })
-            .then(() => {
+            }).then(() => {
                 const loading = this.$loading({
                     lock: true,
                     text: 'Loading',
@@ -541,6 +542,7 @@
                     jsonArr.push({key:"sign",value:sign});
                     let params = ParamsAppend(jsonArr);
                     https.fetchPost('/banner/deleteBanner',params).then((data) => {
+                        loading.close();
                         console.log(data);
                         // console.log(JSON.parse(Decrypt(data.data.data)));
                         if(data.data.code=='success'){
@@ -555,13 +557,12 @@
                             this.open()
                         }
                     }).catch(err=>{
-                            console.log(err)
+                        loading.close();
+                        console.log(err)
                         }
                     )
-                    loading.close();
                 }, 500);
-                })
-                .catch(() => {
+                }).catch(() => {
                     this.$message({
                         type: 'info',
                         message: '已取消删除'
@@ -585,6 +586,7 @@
                     jsonArr.push({key:"sign",value:sign});
                     let params = ParamsAppend(jsonArr);
                     https.fetchPost('/banner/modifyPage',params).then((data) => {
+                        loading.close();
                         console.log(data);
                         console.log(JSON.parse(Decrypt(data.data.data)));
                         if(data.data.code=='success'){
@@ -644,23 +646,23 @@
                             this.open()
                         }
                     }).catch(err=>{
-                            console.log(err)
+                        loading.close();
+                        console.log(err)
                         }
                     )
-                    loading.close();
                 }, 500);
             },
             // 编辑操作
             exChanger() {
-                console.log(this.form.bannerLevel);
-                console.log(this.form.cinemaCodes);
-                console.log(this.form.status);
-                console.log(this.changeStartTime);
-                console.log(this.changeEndTime);
-                console.log(this.form.memo);
-                console.log(this.form.bannerType);
-                console.log(this.form.tabType);
-                console.log(this.goType);
+                // console.log(this.form.bannerLevel);
+                // console.log(this.form.cinemaCodes);
+                // console.log(this.form.status);
+                // console.log(this.changeStartTime);
+                // console.log(this.changeEndTime);
+                // console.log(this.form.memo);
+                // console.log(this.form.bannerType);
+                // console.log(this.form.tabType);
+                // console.log(this.goType);
                 const loading = this.$loading({
                     lock: true,
                     text: 'Loading',
@@ -689,6 +691,7 @@
                     console.log(params);
                     this.editVisible = false;
                     https.fetchPost('/banner/updateById',params).then((data) => {
+                        loading.close();
                         console.log(data);
                         // console.log(JSON.parse(Decrypt(data.data.data)));
                         if(data.data.code=='success'){
@@ -703,10 +706,10 @@
                             this.open()
                         }
                     }).catch(err=>{
-                            console.log(err)
+                        loading.close();
+                        console.log(err)
                         }
                     )
-                    loading.close();
                 }, 500);
             },
             Search(){
@@ -737,6 +740,7 @@
                     jsonArr.push({key:"sign",value:sign});
                     var params = ParamsAppend(jsonArr);
                     https.fetchPost('/banner/bannerPage',params).then((data) => {
+                        loading.close();
                         if(data.data.code=='success') {
                             var oData = JSON.parse(Decrypt(data.data.data));
                             console.log(oData);
@@ -755,10 +759,10 @@
                         }
 
                     }).catch(err=>{
-                            console.log(err)
+                        loading.close();
+                        console.log(err)
                         }
                     )
-                    loading.close();
                 }, 500);
             },
             open() {     //错误信息弹出框

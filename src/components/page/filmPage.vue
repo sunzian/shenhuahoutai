@@ -384,7 +384,7 @@
                             style="margin-top:30px;"
                         ></el-progress>
                     </el-upload>
-                </el-form-item>    
+                </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false">取 消</el-button>
@@ -626,6 +626,7 @@ export default {
             https
                 .fetchPost('/film/addPage', '')
                 .then(data => {
+                    loading.close();
                     if (data.data.code == 'success') {
                         this.dialogFormVisible = true;
                         this.fileList = [];
@@ -657,9 +658,9 @@ export default {
                     }
                 })
                 .catch(err => {
+                    loading.close();
                     console.log(err);
                 });
-            loading.close();
         },
         addRole() {
             //新增按钮操作
@@ -713,6 +714,7 @@ export default {
                 https
                     .fetchPost('/film/addFilm', params)
                     .then(data => {
+                        loading.close();
                         //新增
                         if (data.data.code == 'success') {
                             this.dialogFormVisible = false;
@@ -728,10 +730,10 @@ export default {
                         }
                     })
                     .catch(err => {
+                        loading.close();
                         console.log(err);
                     });
             }
-            loading.close();
         },
         delChange(index, row) {
             //删除数据
@@ -760,6 +762,7 @@ export default {
             https
                 .fetchPost('/film/deleteFilm', params)
                 .then(data => {
+                    loading.close();
                     if (data.data.code == 'success') {
                         this.$message.error(`删除了`);
                         this.getMenu();
@@ -773,9 +776,9 @@ export default {
                     }
                 })
                 .catch(err => {
+                    loading.close();
                     console.log(err);
                 });
-            loading.close();
         },
         addChange(index, row) {
             //是否修改权限
@@ -796,6 +799,7 @@ export default {
             https
                 .fetchPost('/film/getFilmById', params)
                 .then(data => {
+                    loading.close();
                     console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.editVisible = true;
@@ -837,9 +841,9 @@ export default {
                     }
                 })
                 .catch(err => {
+                    loading.close();
                     console.log(err);
                 });
-            loading.close();
         },
         // 编辑操作
         exChanger() {
@@ -909,6 +913,7 @@ export default {
             https
                 .fetchPost('/film/updateFilm', params)
                 .then(data => {
+                    loading.close();
                     // console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.$message.success(`编辑成功`);
@@ -923,9 +928,9 @@ export default {
                     }
                 })
                 .catch(err => {
+                    loading.close();
                     console.log(err);
                 });
-            loading.close();
         },
         Search() {
             this.query.pageNo = 1;
@@ -958,6 +963,7 @@ export default {
             https
                 .fetchPost('/film/filmPage', params)
                 .then(data => {
+                    loading.close();
                     if (data.data.code == 'success') {
                         var oData = JSON.parse(Decrypt(data.data.data));
                         console.log(oData);
@@ -977,9 +983,9 @@ export default {
                     }
                 })
                 .catch(err => {
+                    loading.close();
                     console.log(err);
                 });
-            loading.close();
         },
         beforeUpload() {
             //上传之前
@@ -1067,6 +1073,7 @@ export default {
             https
                 .fetchPost('/director/directorPage', '')
                 .then(data => {
+                    loading.close();
                     if (data.data.code == 'success') {
                         let director = JSON.parse(Decrypt(data.data.data));
                         console.log(director);
@@ -1086,9 +1093,9 @@ export default {
                     }
                 })
                 .catch(err => {
+                    loading.close();
                     console.log(err);
                 });
-            loading.close();
         },
         // 获取所有演员
         getAllActor() {
@@ -1102,6 +1109,7 @@ export default {
             https
                 .fetchPost('/actor/actorPage', '')
                 .then(data => {
+                    loading.close();
                     if (data.data.code == 'success') {
                         let actor = JSON.parse(Decrypt(data.data.data));
                         console.log(actor);
@@ -1121,9 +1129,9 @@ export default {
                     }
                 })
                 .catch(err => {
+                    loading.close();
                     console.log(err);
                 });
-            loading.close();
         },
         sureDirector() {
             if (this.directorList.length == 0) {

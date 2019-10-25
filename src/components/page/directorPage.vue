@@ -235,6 +235,7 @@ export default {
             https
                 .fetchPost('/director/addPage', '')
                 .then(data => {
+                    loading.close();
                     console.log(data);
                     if (data.data.code == 'success') {
                         this.dialogFormVisible = true;
@@ -248,9 +249,9 @@ export default {
                     }
                 })
                 .catch(err => {
+                    loading.close();
                     console.log(err);
                 });
-            loading.close();
         },
         addRole() {
             //新增按钮操作
@@ -273,6 +274,7 @@ export default {
                 https
                     .fetchPost('/director/addDirector', params)
                     .then(data => {
+                        loading.close();
                         //新增
                         console.log(data);
                         if (data.data.code == 'success') {
@@ -293,10 +295,10 @@ export default {
                         }
                     })
                     .catch(err => {
+                        loading.close();
                         console.log(err);
                     });
             }
-            loading.close();
         },
         delChange(index, row) {
             //删除数据
@@ -325,6 +327,7 @@ export default {
             https
                 .fetchPost('/director/deleteDirector', params)
                 .then(data => {
+                    loading.close();
                     if (data.data.code == 'success') {
                         this.$message.error(`删除了`);
                         this.getMenu();
@@ -338,9 +341,9 @@ export default {
                     }
                 })
                 .catch(err => {
+                    loading.close();
                     console.log(err);
                 });
-            loading.close();
         },
         addChange(index, row) {
             //是否修改权限
@@ -361,6 +364,7 @@ export default {
             https
                 .fetchPost('/director/getDirectorById', params)
                 .then(data => {
+                    loading.close();
                     // console.log(data);
                     console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
@@ -380,9 +384,9 @@ export default {
                     }
                 })
                 .catch(err => {
+                    loading.close();
                     console.log(err);
                 });
-            loading.close();
         },
         // 编辑操作
         exChanger() {
@@ -407,6 +411,7 @@ export default {
             https
                 .fetchPost('/director/updateDirector', params)
                 .then(data => {
+                    loading.close();
                     // console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.$message.success(`编辑成功`);
@@ -421,9 +426,9 @@ export default {
                     }
                 })
                 .catch(err => {
+                    loading.close();
                     console.log(err);
                 });
-            loading.close();
         },
         Search() {
             this.query.pageNo = 1;
@@ -456,6 +461,7 @@ export default {
             https
                 .fetchPost('/director/directorPage', params)
                 .then(data => {
+                    loading.close();
                     if (data.data.code == 'success') {
                         var oData = JSON.parse(Decrypt(data.data.data));
                         console.log(oData);
@@ -475,9 +481,9 @@ export default {
                     }
                 })
                 .catch(err => {
+                    loading.close();
                     console.log(err);
                 });
-            loading.close();
         },
         open() {
             //错误信息弹出框

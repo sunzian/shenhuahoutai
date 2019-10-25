@@ -17,10 +17,8 @@
                         placeholder="状态"
                         class="handle-select mr10"
                 >
-                    <el-option key="1" label="审核中" value="1"></el-option>
-                    <el-option key="2" label="未审核" value="2"></el-option>
-                    <el-option key="3" label="通过" value="3"></el-option>
-                    <el-option key="4" label="审核失败" value="4"></el-option>
+                    <el-option key="1" label="正常" value="1"></el-option>
+                    <el-option key="2" label="禁用" value="2"></el-option>
                 </el-select>
                 <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
             </div>
@@ -84,10 +82,8 @@
                         placeholder="状态"
                         class="handle-select mr10"
                 >
-                    <el-option key="1" label="审核中" value="1"></el-option>
-                    <el-option key="2" label="未审核" value="2"></el-option>
-                    <el-option key="3" label="通过" value="3"></el-option>
-                    <el-option key="4" label="审核失败" value="4"></el-option>
+                    <el-option key="1" label="正常" value="1"></el-option>
+                    <el-option key="2" label="禁用" value="2"></el-option>
                 </el-select>
                 <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
                 <el-button
@@ -133,8 +129,8 @@
                 </el-table-column>
                 <el-table-column prop="sort" label="状态" width="150">
                     <template slot-scope="scope">
-                        <el-tag v-if="scope.row.status == 1" type="success">启用</el-tag>
-                        <el-tag v-else-if="scope.row.status == 2" type="danger">未启用</el-tag>
+                        <el-tag v-if="scope.row.status == 1" type="success">正常</el-tag>
+                        <el-tag v-else-if="scope.row.status == 2" type="danger">禁用</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column label="操作" width="100" align="center" fixed="right">
@@ -278,19 +274,11 @@
                 options: [
                     {
                         value: '1',
-                        label: '审核中'
+                        label: '正常'
                     },
                     {
                         value: '2',
-                        label: '未审核'
-                    },
-                    {
-                        value: '3',
-                        label: '通过'
-                    },
-                    {
-                        value: '4',
-                        label: '审核失败'
+                        label: '禁用'
                     }
                 ],
                 showStatus: [
@@ -343,6 +331,7 @@
                 console.log(jsonArr);
                 let params = ParamsAppend(jsonArr);
                 https.fetchPost('/memberCardLevel/modifyCardStatus', params).then(data => {
+                    loading.close();
                     console.log(data);
                     // console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
@@ -358,9 +347,9 @@
                     }
                 })
                     .catch(err => {
+                        loading.close();
                         console.log(err);
                     });
-                loading.close();
             },
             delChange(index, row) {
                 //删除数据
@@ -390,6 +379,7 @@
                             https
                                 .fetchPost('goldCommodity/deleteById', params)
                                 .then(data => {
+                                    loading.close();
                                     // console.log(data);
                                     // console.log(JSON.parse(Decrypt(data.data.data)));
                                     if (data.data.code == 'success') {
@@ -405,9 +395,9 @@
                                     }
                                 })
                                 .catch(err => {
+                                    loading.close();
                                     console.log(err);
                                 });
-                            loading.close();
                         }, 500);
                     })
                     .catch(() => {
@@ -435,6 +425,7 @@
                     jsonArr.push({ key: 'sign', value: sign });
                     let params = ParamsAppend(jsonArr);
                     https.fetchPost('/memberCardLevel/modifyPage', params).then(data => {
+                            loading.close();
                             console.log(data);
                             console.log(JSON.parse(Decrypt(data.data.data)));
                             if (data.data.code == 'success') {
@@ -461,9 +452,9 @@
                             }
                         })
                         .catch(err => {
+                            loading.close();
                             console.log(err);
                         });
-                    loading.close();
                 }, 500);
             },
             // 编辑操作
@@ -492,6 +483,7 @@
                     console.log(params);
                     this.editVisible = false;
                     https.fetchPost('/memberCardLevel/modify', params).then(data => {
+                            loading.close();
                             console.log(data);
                             // console.log(JSON.parse(Decrypt(data.data.data)));
                             if (data.data.code == 'success') {
@@ -507,9 +499,9 @@
                             }
                         })
                         .catch(err => {
+                            loading.close();
                             console.log(err);
                         });
-                    loading.close();
                 }, 500);
             },
             Search() {
@@ -543,6 +535,7 @@
                     jsonArr.push({ key: 'sign', value: sign });
                     var params = ParamsAppend(jsonArr);
                     https.fetchPost('/cinema//myCinemaPage', params).then(data => {
+                            loading.close();
                             console.log(data);
                             if (data.data.code == 'success') {
                                 var oData = JSON.parse(Decrypt(data.data.data));
@@ -563,9 +556,9 @@
                             }
                         })
                         .catch(err => {
+                            loading.close();
                             console.log(err);
                         });
-                    loading.close();
                 }, 500);
             },
             refresh() {
@@ -598,6 +591,7 @@
                     https
                         .fetchPost('/merchandise/list', params)
                         .then(data => {
+                            loading.close();
                             console.log(data);
                             if (data.data.code == 'success') {
                                 var oData = JSON.parse(Decrypt(data.data.data));
@@ -618,9 +612,9 @@
                             }
                         })
                         .catch(err => {
+                            loading.close();
                             console.log(err);
                         });
-                    loading.close();
                 }, 500);
             },
             show(row) {
@@ -655,6 +649,7 @@
                     https
                         .fetchPost('/memberCardLevel/list', params)
                         .then(data => {
+                            loading.close();
                             console.log(data);
                             if (data.data.code == 'success') {
                                 var oData = JSON.parse(Decrypt(data.data.data));
@@ -675,9 +670,9 @@
                             }
                         })
                         .catch(err => {
+                            loading.close();
                             console.log(err);
                         });
-                    loading.close();
                 }, 500);
             },
             UserPassword(index, row) {
@@ -699,6 +694,7 @@
                     https
                         .fetchPost('/memberCardLevel/queryCardLevel', params)
                         .then(data => {
+                            loading.close();
                             console.log(data);
                             if (data.data.code == 'success') {
                                 var oData = JSON.parse(Decrypt(data.data.data));
@@ -713,9 +709,9 @@
                             }
                         })
                         .catch(err => {
+                            loading.close();
                             console.log(err);
                         });
-                    loading.close();
                 }, 500);
             },
             beforeUpload() {
