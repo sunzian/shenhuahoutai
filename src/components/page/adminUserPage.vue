@@ -10,10 +10,8 @@
         <div class="container">
             <div class="handle-box">
                 <el-select clearable v-model="query.status" placeholder="状态" class="handle-select mr10">
-                    <el-option key="1" label="审核中" value="1"></el-option>
-                    <el-option key="2" label="未审核" value="2"></el-option>
-                    <el-option key="3" label="通过" value="3"></el-option>
-                    <el-option key="4" label="审核失败" value="4"></el-option>
+                    <el-option key="1" label="通过" value="1"></el-option>
+                    <el-option key="2" label="禁用" value="2"></el-option>
                 </el-select>
                 <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
                 <el-button type="primary"  @click="addPage" icon="el-icon-circle-plus-outline"  style="margin-left: 910px">新增</el-button>
@@ -56,9 +54,9 @@
                 <el-table-column label="状态" align="center">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status=='1'" type='success'
-                        >成功</el-tag>
-                        <el-tag v-else type='danger'
-                        >未通过</el-tag>
+                        >通过</el-tag>
+                        <el-tag v-else-if="scope.row.status=='2'" type='danger'
+                        >禁用</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column label="操作" width="140" align="center" fixed="right">
@@ -251,16 +249,10 @@
                 selectCode:{},
                 options: [{
                     value: '1',
-                    label: '审核中'
-                }, {
-                    value: '2',
-                    label: '未审核'
-                }, {
-                    value: '3',
                     label: '通过'
                 }, {
-                    value: '4',
-                    label: '审核失败'
+                    value: '2',
+                    label: '禁用'
                 }],
                 businessInfoList:[],
                 value: ''

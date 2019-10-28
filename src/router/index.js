@@ -35,6 +35,11 @@ export default new Router({
                     meta: { title: '影院管理' }
                 },
                 {
+                    path: '/cinema',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/cinema.vue'),
+                    meta: { title: '影院设置' }
+                },
+                {
                     path: '/screenInfoPage',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/screenInfoPage.vue'),
                     meta: { title: '影厅管理' }

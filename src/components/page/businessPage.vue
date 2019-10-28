@@ -126,8 +126,8 @@
                 </el-form-item>
                 <el-form-item label="过期优惠券是否发送短信通知会员" :label-width="formLabelWidth">
                     <el-select v-model="oForm.messageForExpireTickets" placeholder="请选择">
-                        <el-option label="是" value="shanghai"></el-option>
-                        <el-option label="否" value="beijing"></el-option>
+                        <el-option label="是" value="0"></el-option>
+                        <el-option label="否" value="1"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="优惠券到期前几天发送短信通知会员" :label-width="formLabelWidth">
@@ -328,7 +328,7 @@ export default {
             let params = ParamsAppend(jsonArr);
             if (this.dialogFormVisible == true) {
                 https
-                    .fetchPost('/businessInfo', params)
+                    .fetchPost('/businessInfo/addBusinessInfo', params)
                     .then(data => {
                         loading.close();
                         //新增

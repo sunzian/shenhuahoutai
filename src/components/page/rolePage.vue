@@ -11,10 +11,8 @@
             <div class="handle-box">
                 <el-input v-model="query.name" placeholder="角色名" class="handle-input mr10"></el-input>
                 <el-select clearable v-model="query.status" placeholder="状态" class="handle-select mr10">
-                    <el-option key="1" label="审核中" value="1"></el-option>
-                    <el-option key="2" label="未审核" value="2"></el-option>
-                    <el-option key="3" label="通过" value="3"></el-option>
-                    <el-option key="4" label="审核失败" value="4"></el-option>
+                    <el-option key="1" label="正常" value="1"></el-option>
+                    <el-option key="2" label="禁用" value="2"></el-option>
                 </el-select>
                 <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
                 <el-button type="primary"  @click="addPage" icon="el-icon-circle-plus-outline"  style="margin-left: 600px">新增</el-button>
@@ -42,9 +40,9 @@
                 <el-table-column label="状态" align="center">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status=='1'" type='success'
-                        >成功</el-tag>
-                        <el-tag v-else type='danger'
-                        >未通过</el-tag>
+                        >正常</el-tag>
+                        <el-tag v-else-if="scope.row.status=='2'" type='danger'
+                        >禁用</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column label="操作" width="180" align="center" fixed="right">
@@ -78,18 +76,15 @@
         </div>
         <!--新增弹出框-->
         <el-dialog title="新增角色" :visible.sync="dialogFormVisible">
-            <el-form :model="oForm">
-                <el-form-item label="角色名" :label-width="formLabelWidth">
+            <el-form :model="oForm" :rules="rules">
+                <el-form-item prop="name" label="角色名" :label-width="formLabelWidth">
                     <el-input style="width: 250px" maxlength="10" show-word-limit v-model="oForm.name" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="描述" :label-width="formLabelWidth">
                     <el-input maxlength="30" type="textarea"
                               :rows="2" show-word-limit v-model="oForm.memo" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="排序" :label-width="formLabelWidth">
-                    <el-input style="width: 150px" maxlength="9" v-model.number="oForm.sort" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="状态" :label-width="formLabelWidth">
+                <el-form-item prop="value" label="状态" :label-width="formLabelWidth">
                 <el-select v-model="oForm.value" placeholder="请选择状态">
                     <el-option
                                 v-for="item in options"
@@ -107,18 +102,15 @@
         </el-dialog>
         <!-- 编辑弹出框 -->
         <el-dialog title="编辑" :visible.sync="editVisible">
-            <el-form ref="form" :model="form">
-                <el-form-item label="角色名" :label-width="formLabelWidth">
+            <el-form ref="form" :model="form" :rules="rules">
+                <el-form-item prop="oName" label="角色名" :label-width="formLabelWidth">
                     <el-input style="width: 250px" maxlength="10" show-word-limit v-model="oName" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="描述" :label-width="formLabelWidth">
                     <el-input maxlength="30" type="textarea"
                               :rows="2" show-word-limit v-model="form.memo" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="排序" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" min="1"  maxlength="7" v-model="form.sort" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="状态" :label-width="formLabelWidth">
+                <el-form-item prop="value" label="状态" :label-width="formLabelWidth">
                     <el-select v-model="selectValue">
                         <el-option
                                 v-for="item in options"
@@ -147,6 +139,11 @@ export default {
     name: 'basetable',
     data() {
         return {
+            rules: {
+                name: [{required: true, message: '请输入角色名', trigger: 'blur'}],
+                oName: [{required: true, message: '请输入角色名', trigger: 'blur'}],
+                value: [{required: true, message: '请选择', trigger: 'change'}],
+            },
             oName:'',
             message:'',//弹出框消息
             query: {
@@ -161,7 +158,6 @@ export default {
             pageTotal: 0,
             form: {
                 memo: '',
-                sort: '',
                 id:'',
             },
             idx: -1,
@@ -170,7 +166,6 @@ export default {
             oForm: {
                 name: '',
                 memo: '',
-                sort: '',
                 delivery: false,
                 type: [],
                 resource: '',
@@ -181,16 +176,10 @@ export default {
             selectValue:{},
             options: [{
                 value: '1',
-                label: '审核中'
+                label: '正常'
             }, {
                 value: '2',
-                label: '未审核'
-            }, {
-                value: '3',
-                label: '通过'
-            }, {
-                value: '4',
-                label: '审核失败'
+                label: '禁用'
             }],
             value: ''
         };
@@ -244,7 +233,6 @@ export default {
                 jsonArr.push({key:"roleName",value:this.oForm.name});
                 jsonArr.push({key:"status",value:this.oForm.value});
                 jsonArr.push({key:"memo",value:this.oForm.memo});
-                jsonArr.push({key:"sort",value:this.oForm.sort});
                 let sign =md5(preSign(jsonArr));
                 jsonArr.push({key:"sign",value:sign});
                 let params = ParamsAppend(jsonArr);
@@ -346,7 +334,6 @@ export default {
                     if(data.data.code=='success'){
                         this.editVisible = true;
                         this.oName=JSON.parse(Decrypt(data.data.data)).roleName;
-                        this.form.sort=JSON.parse(Decrypt(data.data.data)).sort;
                         this.form.memo=JSON.parse(Decrypt(data.data.data)).memo;
                         this.form.id=row.id;
                         this.value=JSON.parse(Decrypt(data.data.data)).status;
@@ -384,12 +371,9 @@ export default {
                 target: document.querySelector('.div1')
             });
             setTimeout(() => {
-                console.log(this.form.sort);
-                // console.log(this.from.sort.toString());
                 var jsonArr = [];
                 jsonArr.push({key:"id",value:this.form.id});
                 jsonArr.push({key:"roleName",value:this.oName});
-                jsonArr.push({key:"sort",value:''+this.form.sort+''});
                 jsonArr.push({key:"memo",value:this.form.memo});
                 jsonArr.push({key:"status",value:this.selectValue});
                 let sign =md5(preSign(jsonArr));

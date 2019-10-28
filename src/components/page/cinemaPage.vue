@@ -145,70 +145,65 @@
         </div>
         <!--新增弹出框-->
         <el-dialog title="新增" :visible.sync="dialogFormVisible">
-            <el-form :model="oForm">
-                <el-form-item label="影院编码" :label-width="formLabelWidth">
+            <el-form :model="oForm" :rules="rules">
+                <el-form-item prop="cinemaCode" label="影院编码" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        maxlength="10"
-                        show-word-limit
                         v-model="oForm.cinemaCode"
                         autocomplete="off"
+                        type="number"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="影院名称" :label-width="formLabelWidth">
+                <el-form-item prop="cinemaName" label="影院名称" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        min="1"
-                        v-model.number="oForm.cinemaName"
+                        v-model="oForm.cinemaName"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="所在省份" :label-width="formLabelWidth">
+                <el-form-item prop="province" label="所在省份" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        min="1"
-                        v-model.number="oForm.province"
+                        v-model="oForm.province"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="所在城市" :label-width="formLabelWidth">
+                <el-form-item prop="city" label="所在城市" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        min="1"
-                        v-model.number="oForm.city"
+                        v-model="oForm.city"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="详细地址" :label-width="formLabelWidth">
+                <el-form-item prop="address" label="详细地址" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        min="1"
-                        v-model.number="oForm.address"
+                        v-model="oForm.address"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="经度" :label-width="formLabelWidth">
+                <el-form-item prop="longitude" label="经度" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        min="1"
-                        v-model.number="oForm.longitude"
+                        v-model="oForm.longitude"
                         autocomplete="off"
+                        type="number"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="纬度" :label-width="formLabelWidth">
+                <el-form-item prop="latitude" label="纬度" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        min="1"
-                        v-model.number="oForm.latitude"
+                        v-model="oForm.latitude"
                         autocomplete="off"
+                        type="number"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="关联商家编码" :label-width="formLabelWidth">
+                <el-form-item prop="belongBusinessCode" label="关联商家编码" :label-width="formLabelWidth">
                     <el-select v-model="oForm.belongBusinessCode" placeholder="请选择">
                         <el-option
                             v-for="info in businessInfo"
                             :key="info.businessCode"
-                            :value="info.businessName"
+                            :value="info.businessCode"
                             :label="info.businessName"
                         ></el-option>
                     </el-select>
@@ -216,65 +211,41 @@
                 <el-form-item label="影院联系人姓名" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        min="1"
-                        v-model.number="oForm.concatName"
+                        v-model="oForm.concatName"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="影院联系人电话" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        min="1"
-                        v-model.number="oForm.concatMobile"
+                        v-model="oForm.concatMobile"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="客服电话" :label-width="formLabelWidth">
+                <el-form-item prop="serviceMobile" label="客服电话" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        min="1"
-                        v-model.number="oForm.serviceMobile"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="影厅数量" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 250px"
-                        min="1"
-                        v-model.number="oForm.screenCount"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="售票系统影院内码" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 250px"
-                        min="1"
-                        v-model.number="oForm.ticketSystemCode"
+                        v-model="oForm.serviceMobile"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="第三方比价影院编码" :label-width="formLabelWidth">
                     <el-input
-                        maxlength="30"
-                        type="textarea"
-                        :rows="2"
-                        show-word-limit
-                        v-model.trim="oForm.comparePriceCode"
+                        style="width: 250px"
+                        v-model="oForm.comparePriceCode"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="开场前的购票时间限制" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        min="1"
-                        v-model.number="oForm.buyMinutesLimit"
+                        v-model="oForm.buyMinutesLimit"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="开场前的退票时间限制" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        min="1"
                         v-model="oForm.refundMinutesLimit"
                         autocomplete="off"
                     ></el-input>
@@ -282,95 +253,103 @@
                 <el-form-item label="退票手续费" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        min="1"
-                        v-model.trim="oForm.refundFee"
+                        v-model="oForm.refundFee"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="第三方支付代售费（微信支付）" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        min="1"
-                        v-model.trim="oForm.thirdPartyPayCommissionFee"
+                        v-model="oForm.thirdPartyPayCommissionFee"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="会员卡支付代售费" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        min="1"
-                        v-model.trim="oForm.memberCardPayCommissionFee"
+                        v-model="oForm.memberCardPayCommissionFee"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="影院会员服务协议" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        min="1"
-                        v-model.trim="oForm.membershipServiceAgreement"
+                        type="textarea"
+                        rows="6"
+                        v-model="oForm.membershipServiceAgreement"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="购票提示" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        min="1"
-                        v-model.trim="oForm.buyTicketHint"
+                        v-model="oForm.buyTicketHint"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="是否开通套餐" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 250px"
-                        min="1"
-                        v-model.trim="oForm.openSnackStatus"
-                        autocomplete="off"
-                    ></el-input>
+                <el-form-item prop="openSnackStatus" label="是否开通套餐" :label-width="formLabelWidth">
+                    <el-select
+                            v-model="oForm.openSnackStatus"
+                    >
+                        <el-option
+                                v-for="info in boolean"
+                                :key="info.value"
+                                :label="info.label"
+                                :value="info.value"
+                        ></el-option>
+                    </el-select>
                 </el-form-item>
-                <el-form-item label="是否小卖配送" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 250px"
-                        min="1"
-                        v-model.trim="oForm.snackDispatcherStatus"
-                        autocomplete="off"
-                    ></el-input>
+                <el-form-item prop="snackDispatcherStatus" label="是否小卖配送" :label-width="formLabelWidth">
+                    <el-select
+                            v-model="oForm.snackDispatcherStatus"
+                    >
+                        <el-option
+                                v-for="info in boolean"
+                                :key="info.value"
+                                :label="info.label"
+                                :value="info.value"
+                        ></el-option>
+                    </el-select>
                 </el-form-item>
-                <el-form-item label="是否可退票" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 250px"
-                        min="1"
-                        v-model.trim="oForm.refundable"
-                        autocomplete="off"
-                    ></el-input>
+                <el-form-item prop="refundable" label="是否可退票" :label-width="formLabelWidth">
+                    <el-select
+                            v-model="oForm.refundable"
+                    >
+                        <el-option
+                                v-for="info in boolean"
+                                :key="info.value"
+                                :label="info.label"
+                                :value="info.value"
+                        ></el-option>
+                    </el-select>
                 </el-form-item>
-                <el-form-item label="剩余票数" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 250px"
-                        min="1"
-                        v-model.trim="oForm.remainTicketsNumber"
-                        autocomplete="off"
-                    ></el-input>
+                <el-form-item prop="snackBeginTime" label="卖品显示开始时间" :label-width="formLabelWidth">
+                    <el-time-picker
+                            type="date"
+                            format="HH-mm-ss"
+                            value-format="HH-mm-ss"
+                            placeholder="选择日期时间"
+                            v-model="oForm.snackBeginTime"
+                            :picker-options="{}"></el-time-picker>
                 </el-form-item>
-                <el-form-item label="卖品显示开始时间" :label-width="formLabelWidth">
-                    <el-time-picker v-model="oForm.snackBeginTime" :picker-options="{
-    }"></el-time-picker>
-                </el-form-item>
-                <el-form-item label="卖品显示结束时间" :label-width="formLabelWidth">
-                    <el-time-picker v-model="oForm.snackEndTime" :picker-options="{
-    }"></el-time-picker>
+                <el-form-item prop="snackEndTime" label="卖品显示结束时间" :label-width="formLabelWidth">
+                    <el-time-picker
+                            type="date"
+                            format="HH-mm-ss"
+                            value-format="HH-mm-ss"
+                            placeholder="选择日期时间"
+                            v-model="oForm.snackEndTime"
+                            :picker-options="{}"></el-time-picker>
                 </el-form-item>
                 <el-form-item label="短信平台类型" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 250px"
-                        min="1"
-                        v-model.trim="oForm.messagePlatformType"
-                        autocomplete="off"
-                    ></el-input>
+                    <el-radio-group v-model="oForm.messagePlatformType">
+                        <el-radio label="1">专信云</el-radio>
+                        <el-radio label="2">三体</el-radio>
+                    </el-radio-group>
                 </el-form-item>
                 <el-form-item label="短信平台账号" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        min="1"
                         v-model="oForm.messagePlatformAccount"
                         autocomplete="off"
                     ></el-input>
@@ -378,7 +357,6 @@
                 <el-form-item label="短信平台密码" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        min="1"
                         v-model="oForm.messagePlatformPassword"
                         autocomplete="off"
                     ></el-input>
@@ -386,147 +364,197 @@
                 <el-form-item label="短信平台签名id" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        min="1"
                         v-model="oForm.messagePlatformSignId"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="是否开通服务" :label-width="formLabelWidth">
+                <el-form-item prop="openStatus" label="是否开通服务" :label-width="formLabelWidth">
+                    <el-select
+                            v-model="oForm.openStatus"
+                    >
+                        <el-option
+                                v-for="info in boolean"
+                                :key="info.value"
+                                :label="info.label"
+                                :value="info.value"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item prop="paymentType" label="费用支付类型" :label-width="formLabelWidth">
+                    <el-radio-group v-model="oForm.paymentType">
+                        <el-radio label="1">包年</el-radio>
+                        <el-radio label="2">按票收费</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item v-if="oForm.paymentType==2" label="剩余票数" :label-width="formLabelWidth">
+                    <el-input
+                            style="width: 250px"
+                            v-model="oForm.remainTicketsNumber"
+                            autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item v-if="oForm.paymentType==1"  label="到期时间" :label-width="formLabelWidth">
+                    <el-date-picker
+                            type="date"
+                            format="yyyy-MM-dd HH:mm:ss"
+                            value-format="yyyy-MM-dd HH:mm:ss"
+                            v-model="oForm.expireDate"
+                            placeholder="选择日期时间"></el-date-picker>
+                </el-form-item>
+                <el-form-item prop="reportedType" label="票价上报方式" :label-width="formLabelWidth">
+                    <el-radio-group v-model="oForm.reportedType">
+                        <el-radio label="1">标准价格上报</el-radio>
+                        <el-radio label="2">优惠后价格上报</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item prop="openMemberCardStatus" label="是否开通会员卡功能" :label-width="formLabelWidth">
+                    <el-select
+                            v-model="oForm.openMemberCardStatus"
+                    >
+                        <el-option
+                                v-for="info in boolean"
+                                :key="info.value"
+                                :label="info.label"
+                                :value="info.value"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item prop="videoStatus" label="是否开通预告片" :label-width="formLabelWidth">
+                    <el-select
+                            v-model="oForm.videoStatus"
+                    >
+                        <el-option
+                                v-for="info in boolean"
+                                :key="info.value"
+                                :label="info.label"
+                                :value="info.value"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item prop="memberCardCommonUseStatus" label="会员卡是否门店通用" :label-width="formLabelWidth">
+                    <el-select
+                            v-model="oForm.memberCardCommonUseStatus"
+                    >
+                        <el-option
+                                v-for="info in boolean"
+                                :key="info.value"
+                                :label="info.label"
+                                :value="info.value"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item prop="ticketsForMemberCardPayStatus" label="会员卡支付是否可用优惠券" :label-width="formLabelWidth">
+                    <el-select
+                            v-model="oForm.ticketsForMemberCardPayStatus"
+                    >
+                        <el-option
+                                v-for="info in boolean"
+                                :key="info.value"
+                                :label="info.label"
+                                :value="info.value"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="小程序名称" :label-width="formLabelWidth">
+                    <el-input
+                            style="width: 150px"
+                            v-model="oForm.miniAppName"
+                            autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="小程序二维码" :label-width="formLabelWidth">
+                    <el-input
+                            style="width: 150px"
+                            v-model="oForm.miniAppQRCode"
+                            autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item prop="miniAppId" label="小程序appId" :label-width="formLabelWidth">
+                    <el-input
+                            style="width: 150px"
+                            v-model="oForm.miniAppId"
+                            autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item prop="miniAppSecret" label="小程序appSecret" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        min="1"
-                        v-model.trim="oForm.openStatus"
+                        v-model="oForm.miniAppSecret"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="到期时间" :label-width="formLabelWidth">
-                    <el-date-picker v-model="oExpireDate" placeholder="选择日期时间"></el-date-picker>
-                </el-form-item>
-                <el-form-item label="费用支付类型" :label-width="formLabelWidth">
+                <el-form-item prop="miniMerchantNo" label="小程序支付商户号" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        min="1"
-                        v-model.trim="oForm.paymentType"
+                        v-model="oForm.miniMerchantNo"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="票价上报方式" :label-width="formLabelWidth">
+                <el-form-item prop="miniMerchantSecret" label="小程序支付密钥" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        min="1"
-                        v-model.trim="oForm.reportedType"
+                        v-model="oForm.miniMerchantSecret"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="是否开通会员卡功能" :label-width="formLabelWidth">
+                <el-form-item prop="miniRefundCertificateUrl"  label="小程序退款证书阿里云路径" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        min="1"
-                        v-model.trim="oForm.openMemberCardStatus"
+                        v-model="oForm.miniRefundCertificateUrl"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="会员卡是否门店通用" :label-width="formLabelWidth">
+                <el-form-item prop="ticketingSystemType" label="售票系统类型" :label-width="formLabelWidth">
+                    <el-radio-group v-model="oForm.ticketingSystemType">
+                        <el-radio label="1">辰星</el-radio>
+                        <el-radio label="2">电影1905</el-radio>
+                        <el-radio label="4">满天星</el-radio>
+                        <el-radio label="8">粤科</el-radio>
+                        <el-radio label="16">云智</el-radio>
+                        <el-radio label="32">火烈鸟</el-radio>
+                        <el-radio label="64">鼎新</el-radio>
+                        <el-radio label="128">vista</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item prop="mtxPayType" v-if="oForm.ticketingSystemType==4" label="满天星的付费类型" :label-width="formLabelWidth">
                     <el-input
-                        style="width: 250px"
-                        min="1"
-                        v-model.trim="oForm.memberCardCommonUseStatus"
-                        autocomplete="off"
+                            style="width: 150px"
+                            v-model="oForm.mtxPayType"
+                            autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="会员卡支付是否可用优惠券" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 250px"
-                        min="1"
-                        v-model.trim="oForm.ticketsForMemberCardPayStatus"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="小程序appSecret" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 250px"
-                        min="1"
-                        v-model.trim="oForm.miniAppSecret"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="小程序支付商户号" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 250px"
-                        min="1"
-                        v-model.trim="oForm.miniMerchantNo"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="小程序支付密钥" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 250px"
-                        min="1"
-                        v-model.trim="oForm.miniMerchantSecret"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="小程序退款证书阿里云路径" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 250px"
-                        min="1"
-                        v-model.trim="oForm.miniRefundCertificateUrl"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="售票系统类型" :label-width="formLabelWidth">
+                <el-form-item prop="ticketingSystemAccount" label="售票系统账号" :label-width="formLabelWidth">
                     <el-input
                         style="width: 150px"
-                        maxlength="9"
-                        v-model.number="oForm.ticketingSystemType"
+                        v-model="oForm.ticketingSystemAccount"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="售票系统账号" :label-width="formLabelWidth">
+                <el-form-item prop="ticketingSystemPassword" label="售票系统密码" :label-width="formLabelWidth">
                     <el-input
                         style="width: 150px"
-                        maxlength="9"
-                        v-model.number="oForm.ticketingSystemAccount"
+                        v-model="oForm.ticketingSystemPassword"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="售票系统密码" :label-width="formLabelWidth">
+                <el-form-item prop="interfaceAddress" label="售票系统接口地址" :label-width="formLabelWidth">
                     <el-input
                         style="width: 150px"
-                        maxlength="9"
-                        v-model.number="oForm.ticketingSystemPassword"
+                        v-model="oForm.interfaceAddress"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="小程序appId" :label-width="formLabelWidth">
+                <el-form-item prop="memberInterfaceAddress" label="售票系统会员接口地址" :label-width="formLabelWidth">
                     <el-input
                         style="width: 150px"
-                        maxlength="9"
-                        v-model.number="oForm.miniAppId"
+                        v-model="oForm.memberInterfaceAddress"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="售票系统接口地址" :label-width="formLabelWidth">
+                <el-form-item prop="verificationCode" label="影院奖品核销码" :label-width="formLabelWidth">
                     <el-input
                         style="width: 150px"
-                        maxlength="9"
-                        v-model.number="oForm.interfaceAddress"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="售票系统会员接口地址" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 150px"
-                        maxlength="9"
-                        v-model.number="oForm.memberInterfaceAddress"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="影院奖品核销码" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 150px"
-                        maxlength="9"
-                        v-model.number="oForm.verificationCode"
+                        v-model="oForm.verificationCode"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
@@ -538,59 +566,53 @@
         </el-dialog>
         <!-- 编辑弹出框 -->
         <el-dialog title="编辑" :visible.sync="editVisible">
-            <el-form ref="form" :model="form">
-                <el-form-item label="影院编码" :label-width="formLabelWidth">
+            <el-form ref="form" :model="form" :rules="rules">
+                <el-form-item prop="cinemaCode" label="影院编码" :label-width="formLabelWidth">
                     <el-input style="width: 250px" min="1" v-model="oCinemaCode" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="影院名称" :label-width="formLabelWidth">
+                <el-form-item prop="cinemaName" label="影院名称" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        min="1"
-                        v-model.number="oCinemaName"
+                        v-model="oCinemaName"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="所在省份" :label-width="formLabelWidth">
+                <el-form-item prop="province" label="所在省份" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        min="1"
-                        v-model.number="oProvince"
+                        v-model="oProvince"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="所在城市" :label-width="formLabelWidth">
+                <el-form-item prop="city" label="所在城市" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        min="1"
-                        v-model.number="oCity"
+                        v-model="oCity"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="详细地址" :label-width="formLabelWidth">
+                <el-form-item prop="address" label="详细地址" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        min="1"
-                        v-model.number="oAddress"
+                        v-model="oAddress"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="经度" :label-width="formLabelWidth">
+                <el-form-item prop="longitude" label="经度" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        min="1"
-                        v-model.number="oLongitude"
+                        v-model="oLongitude"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="纬度" :label-width="formLabelWidth">
+                <el-form-item prop="latitude" label="纬度" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        min="1"
-                        v-model.number="oLatitude"
+                        v-model="oLatitude"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="关联商家编码" :label-width="formLabelWidth">
+                <el-form-item prop="belongBusinessCode" label="关联商家编码" :label-width="formLabelWidth">
                     <el-select v-model="selectCode" @change="changeBusinessCode">
                         <el-option
                             v-for="info in businessInfo"
@@ -603,62 +625,41 @@
                 <el-form-item label="影院联系人姓名" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        min="1"
-                        v-model.number="oConcatName"
+                        v-model="oConcatName"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="影院联系人电话" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        min="1"
-                        v-model.number="oConcatMobile"
+                        v-model="oConcatMobile"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="客服电话" :label-width="formLabelWidth">
+                <el-form-item prop="serviceMobile" label="客服电话" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        min="1"
-                        v-model.number="oServiceMobile"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="影厅数量" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 250px"
-                        min="1"
-                        v-model.number="oScreenCount"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="售票系统影院内码" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 250px"
-                        min="1"
-                        v-model.number="oTicketSystemCode"
+                        v-model="oServiceMobile"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="第三方比价影院编码" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        v-model.trim="oComparePriceCode"
+                        v-model="oComparePriceCode"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="开场前的购票时间限制" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        min="1"
-                        v-model.number="oBuyMinutesLimit"
+                        v-model="oBuyMinutesLimit"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="开场前的退票时间限制" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        min="1"
                         v-model="oRefundMinutesLimit"
                         autocomplete="off"
                     ></el-input>
@@ -666,259 +667,313 @@
                 <el-form-item label="退票手续费" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        min="1"
-                        v-model.trim="oRefundFee"
+                        v-model="oRefundFee"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="第三方支付代售费（微信支付）" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        min="1"
-                        v-model.trim="oThirdPartyPayCommissionFee"
+                        v-model="oThirdPartyPayCommissionFee"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="会员卡支付代售费" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        min="1"
-                        v-model.trim="oMemberCardPayCommissionFee"
+                        v-model="oMemberCardPayCommissionFee"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="影院会员服务协议" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        min="1"
-                        v-model.trim="oMembershipServiceAgreement"
+                        v-model="oMembershipServiceAgreement"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="购票提示" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        min="1"
-                        v-model.trim="oBuyTicketHint"
+                        v-model="oBuyTicketHint"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="是否开通套餐" :label-width="formLabelWidth">
+                <el-form-item prop="openSnackStatus" label="是否开通套餐" :label-width="formLabelWidth">
                     <el-select
                     v-model="oOpenSnackStatus"
                     @change="openServe"
                     >
                         <el-option
                             v-for="info in boolean"
-                            :key="info.id"
-                            :label="info.value"
-                            :value="info.id"
+                            :key="info.value"
+                            :label="info.label"
+                            :value="info.value"
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="是否小卖配送" :label-width="formLabelWidth">
+                <el-form-item prop="snackDispatcherStatus" label="是否小卖配送" :label-width="formLabelWidth">
                     <el-select
                     v-model="oSnackDispatcherStatus"
                     @change="openServe"
                     >
                         <el-option
-                            v-for="info in boolean"
-                            :key="info.id"
-                            :label="info.value"
-                            :value="info.id"
+                                v-for="info in boolean"
+                                :key="info.value"
+                                :label="info.label"
+                                :value="info.value"
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="是否可退票" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 250px"
-                        min="1"
-                        v-model.trim="oRefundable"
-                        autocomplete="off"
-                    ></el-input>
+                <el-form-item prop="refundable" label="是否可退票" :label-width="formLabelWidth">
+                    <el-select
+                            v-model="oRefundable"
+                            @change="openServe"
+                    >
+                        <el-option
+                                v-for="info in boolean"
+                                :key="info.value"
+                                :label="info.label"
+                                :value="info.value"
+                        ></el-option>
+                    </el-select>
                 </el-form-item>
-                <el-form-item label="剩余票数" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 250px"
-                        min="1"
-                        v-model.trim="oRemainTicketsNumber"
-                        autocomplete="off"
-                    ></el-input>
+                <el-form-item prop="snackBeginTime" label="卖品显示开始时间" :label-width="formLabelWidth">
+                    <el-time-picker
+                            type="date"
+                            format="HH-mm-ss"
+                            value-format="HH-mm-ss"
+                            v-model="oSnackBeginTime"
+                            placeholder="选择日期时间"></el-time-picker>
                 </el-form-item>
-                <el-form-item label="卖品显示开始时间" :label-width="formLabelWidth">
-                    <el-time-picker v-model="oSnackBeginTime" placeholder="选择日期时间"></el-time-picker>
-                </el-form-item>
-                <el-form-item label="卖品显示结束时间" :label-width="formLabelWidth">
-                    <el-time-picker v-model="oSnackEndTime" placeholder="选择日期时间"></el-time-picker>
+                <el-form-item prop="snackEndTime" label="卖品显示结束时间" :label-width="formLabelWidth">
+                    <el-time-picker
+                            type="date"
+                            format="HH-mm-ss"
+                            value-format="HH-mm-ss"
+                            v-model="oSnackEndTime"
+                            placeholder="选择日期时间"></el-time-picker>
                 </el-form-item>
                 <el-form-item label="短信平台类型" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        min="1"
-                        v-model.trim="oMessagePlatformType"
+                        v-model="oMessagePlatformType"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="短信平台账号" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        min="1"
-                        v-model.trim="oMessagePlatformAccount"
+                        v-model="oMessagePlatformAccount"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="短信平台密码" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        min="1"
-                        v-model.trim="oMessagePlatformPassword"
+                        v-model="oMessagePlatformPassword"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="短信平台签名id" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        min="1"
-                        v-model.trim="oMessagePlatformSignId"
+                        v-model="oMessagePlatformSignId"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="是否开通服务" :label-width="formLabelWidth">
+                <el-form-item prop="openStatus" label="是否开通服务" :label-width="formLabelWidth">
+                    <el-select
+                            v-model="oOpenStatus"
+                            @change="openServe"
+                    >
+                        <el-option
+                                v-for="info in boolean"
+                                :key="info.value"
+                                :label="info.label"
+                                :value="info.value"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item prop="paymentType" label="费用支付类型" :label-width="formLabelWidth">
+                    <el-radio-group v-model="oPaymentType">
+                        <el-radio label="1">包年</el-radio>
+                        <el-radio label="2">按票收费</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item v-if="oPaymentType==1" label="到期时间" :label-width="formLabelWidth">
+                    <el-date-picker
+                            type="date"
+                            format="yyyy-MM-dd HH:mm:ss"
+                            value-format="yyyy-MM-dd HH:mm:ss"
+                            v-model="oExpireDate"
+                            placeholder="选择日期时间"></el-date-picker>
+                </el-form-item>
+                <el-form-item v-if="oPaymentType==2" label="剩余票数" :label-width="formLabelWidth">
+                    <el-input
+                            style="width: 250px"
+                            v-model="oRemainTicketsNumber"
+                            autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item prop="reportedType" label="票价上报方式" :label-width="formLabelWidth">
+                    <el-radio-group v-model="oReportedType">
+                        <el-radio label="1">标准价格上报</el-radio>
+                        <el-radio label="2">优惠后价格上报</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item prop="openMemberCardStatus" label="是否开通会员卡功能" :label-width="formLabelWidth">
+                    <el-select
+                            v-model="oOpenMemberCardStatus"
+                            @change="openServe"
+                    >
+                        <el-option
+                                v-for="info in boolean"
+                                :key="info.value"
+                                :label="info.label"
+                                :value="info.value"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item prop="videoStatus" label="是否开通预告片" :label-width="formLabelWidth">
+                    <el-select
+                            v-model="oVideoStatus"
+                            @change="openServe"
+                    >
+                        <el-option
+                                v-for="info in boolean"
+                                :key="info.value"
+                                :label="info.label"
+                                :value="info.value"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item prop="memberCardCommonUseStatus" label="会员卡是否门店通用" :label-width="formLabelWidth">
+                    <el-select
+                            v-model="oMemberCardCommonUseStatus"
+                            @change="openServe"
+                    >
+                        <el-option
+                                v-for="info in boolean"
+                                :key="info.value"
+                                :label="info.label"
+                                :value="info.value"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item prop="ticketsForMemberCardPayStatus" label="会员卡支付是否可用优惠券" :label-width="formLabelWidth">
+                    <el-select
+                            v-model="oTicketsForMemberCardPayStatus"
+                            @change="openServe"
+                    >
+                        <el-option
+                                v-for="info in boolean"
+                                :key="info.value"
+                                :label="info.label"
+                                :value="info.value"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="小程序名称" :label-width="formLabelWidth">
+                    <el-input
+                            style="width: 150px"
+                            v-model="oMiniAppName"
+                            autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="小程序二维码" :label-width="formLabelWidth">
+                    <el-input
+                            style="width: 150px"
+                            v-model="oMiniAppQRCode"
+                            autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item prop="miniAppId" label="小程序appId" :label-width="formLabelWidth">
+                    <el-input
+                            style="width: 150px"
+                            v-model="oMiniAppId"
+                            autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item prop="miniAppSecret" label="小程序appSecret" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        min="1"
-                        v-model.trim="oOpenStatus"
+                        v-model="oMiniAppSecret"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="到期时间" :label-width="formLabelWidth">
-                    <el-date-picker v-model="oExpireDate" placeholder="选择日期时间"></el-date-picker>
-                </el-form-item>
-                <el-form-item label="费用支付类型" :label-width="formLabelWidth">
+                <el-form-item prop="miniMerchantNo" label="小程序支付商户号" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        min="1"
-                        v-model.trim="oPaymentType"
+                        v-model="oMiniMerchantNo"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="票价上报方式" :label-width="formLabelWidth">
+                <el-form-item prop="miniMerchantSecret" label="小程序支付密钥" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        min="1"
-                        v-model.trim="oReportedType"
+                        v-model="oMiniMerchantSecret"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="是否开通会员卡功能" :label-width="formLabelWidth">
+                <el-form-item prop="miniRefundCertificateUrl" label="小程序退款证书阿里云路径" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        min="1"
-                        v-model.trim="oOpenMemberCardStatus"
+                        v-model="oMiniRefundCertificateUrl"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="会员卡是否门店通用" :label-width="formLabelWidth">
+                <el-form-item prop="ticketingSystemType" label="售票系统类型" :label-width="formLabelWidth">
+                    <el-radio-group v-model="oTicketingSystemType">
+                        <el-radio label="1">辰星</el-radio>
+                        <el-radio label="2">电影1905</el-radio>
+                        <el-radio label="4">满天星</el-radio>
+                        <el-radio label="8">粤科</el-radio>
+                        <el-radio label="16">云智</el-radio>
+                        <el-radio label="32">火烈鸟</el-radio>
+                        <el-radio label="64">鼎新</el-radio>
+                        <el-radio label="128">vista</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item v-if="oTicketingSystemType==4" prop="mtxPayType" label="满天星的付费类型" :label-width="formLabelWidth">
                     <el-input
-                        style="width: 250px"
-                        min="1"
-                        v-model.trim="oMemberCardCommonUseStatus"
-                        autocomplete="off"
+                            style="width: 150px"
+                            v-model="oMtxPayType"
+                            autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="会员卡支付是否可用优惠券" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 250px"
-                        min="1"
-                        v-model.trim="oTicketsForMemberCardPayStatus"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="小程序appSecret" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 250px"
-                        min="1"
-                        v-model.trim="oMiniAppSecret"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="小程序支付商户号" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 250px"
-                        min="1"
-                        v-model.trim="oMiniMerchantNo"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="小程序支付密钥" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 250px"
-                        min="1"
-                        v-model.trim="oMiniMerchantSecret"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="小程序退款证书阿里云路径" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 250px"
-                        min="1"
-                        v-model.trim="oMiniRefundCertificateUrl"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="售票系统类型" :label-width="formLabelWidth">
+                <el-form-item prop="ticketingSystemAccount" label="售票系统账号" :label-width="formLabelWidth">
                     <el-input
                         style="width: 150px"
-                        maxlength="9"
-                        v-model.number="oTicketingSystemType"
+                        v-model="oTicketingSystemAccount"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="售票系统账号" :label-width="formLabelWidth">
+                <el-form-item prop="ticketingSystemPassword" label="售票系统密码" :label-width="formLabelWidth">
+                    <el-input
+                            style="width: 150px"
+                            v-model="oTicketingSystemPassword"
+                            autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item prop="interfaceAddress" label="售票系统接口地址" :label-width="formLabelWidth">
                     <el-input
                         style="width: 150px"
-                        maxlength="9"
-                        v-model.number="oTicketingSystemAccount"
+                        v-model="oInterfaceAddress"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="售票系统密码" :label-width="formLabelWidth">
+                <el-form-item prop="memberInterfaceAddress" label="售票系统会员接口地址" :label-width="formLabelWidth">
                     <el-input
                         style="width: 150px"
-                        maxlength="9"
-                        v-model.number="oTicketingSystemPassword"
+                        v-model="oMemberInterfaceAddress"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="小程序appId" :label-width="formLabelWidth">
+                <el-form-item prop="verificationCode" label="影院奖品核销码" :label-width="formLabelWidth">
                     <el-input
                         style="width: 150px"
-                        maxlength="9"
-                        v-model.number="oMiniAppId"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="售票系统接口地址" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 150px"
-                        maxlength="9"
-                        v-model.number="oInterfaceAddress"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="售票系统会员接口地址" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 150px"
-                        maxlength="9"
-                        v-model.number="oMemberInterfaceAddress"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="影院奖品核销码" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 150px"
-                        maxlength="9"
-                        v-model.number="oVerificationCode"
+                        v-model="oVerificationCode"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
@@ -941,6 +996,47 @@ export default {
     name: 'basetable',
     data() {
         return {
+            rules: {
+                cinemaCode: [{required: true, message: '请输入影院编码', trigger: 'blur'}],
+                cinemaName: [{required: true, message: '请输入影院名称', trigger: 'blur'}],
+                province: [{required: true, message: '请输入所在省份', trigger: 'blur'}],
+                city: [{required: true, message: '请输入所在城市', trigger: 'blur'}],
+                address: [{required: true, message: '请输入详细地址', trigger: 'blur'}],
+                longitude: [{required: true, message: '请输入经度', trigger: 'blur'}],
+                latitude: [{required: true, message: '请输入纬度', trigger: 'blur'}],
+                belongBusinessCode: [{required: true, message: '请选择', trigger: 'change'}],
+                serviceMobile: [{required: true, message: '请输入客服电话', trigger: 'blur'}],
+                openSnackStatus: [{required: true, message: '请选择', trigger: 'change'}],
+                snackDispatcherStatus: [{required: true, message: '请选择', trigger: 'change'}],
+                refundable: [{required: true, message: '请选择', trigger: 'change'}],
+                snackBeginTime: [{required: true, message: '请选择开始时间', trigger: 'blur'}],
+                snackEndTime: [{required: true, message: '请选择结束时间', trigger: 'blur'}],
+                openStatus: [{required: true, message: '请选择', trigger: 'change'}],
+                paymentType: [{required: true, message: '请选择', trigger: 'change'}],
+                remainTicketsNumber: [{required: true, message: '请输入正确票数', trigger: 'blur'}],
+                oExpireDate: [{required: true, message: '请选择', trigger: 'change'}],
+                reportedType: [{required: true, message: '请选择', trigger: 'change'}],
+                openMemberCardStatus: [{required: true, message: '请选择', trigger: 'change'}],
+                videoStatus: [{required: true, message: '请选择', trigger: 'change'}],
+                memberCardCommonUseStatus: [{required: true, message: '请选择', trigger: 'change'}],
+                ticketsForMemberCardPayStatus: [{required: true, message: '请选择', trigger: 'change'}],
+                miniAppId: [{required: true, message: '请输入appId', trigger: 'blur'}],
+                miniAppSecret: [{required: true, message: '请输入appSecret', trigger: 'blur'}],
+                miniMerchantNo: [{required: true, message: '请输入商户号', trigger: 'blur'}],
+                miniMerchantSecret: [{required: true, message: '请输入支付密钥', trigger: 'blur'}],
+                miniRefundCertificateUrl: [{required: true, message: '请输入路径', trigger: 'blur'}],
+                ticketingSystemType: [{required: true, message: '请选择', trigger: 'change'}],
+                mtxPayType: [{required: true, message: '请输入付费类型', trigger: 'blur'}],
+                ticketingSystemAccount: [{required: true, message: '请输入账号', trigger: 'blur'}],
+                ticketingSystemPassword: [{required: true, message: '请输入密码', trigger: 'blur'}],
+                interfaceAddress: [{required: true, message: '请输入接口地址', trigger: 'blur'}],
+                memberInterfaceAddress: [{required: true, message: '请输入会员接口地址', trigger: 'blur'}],
+                verificationCode: [{required: true, message: '请输入核销码', trigger: 'blur'}],
+            },
+            oMiniAppName:'',
+            oMiniAppQRCode:'',
+            oMtxPayType:'',
+            oVideoStatus:'',
             oCinemaName: '',
             oCinemaCode: '',
             oProvince: '',
@@ -999,12 +1095,12 @@ export default {
             },
             boolean: [
                 {
-                    value: '是',
-                    id: '1'
+                    value: '1',
+                    label:'是',
                 },
                 {
-                    value: '否',
-                    id: '2'
+                    value: '2',
+                    label:'否',
                 }
             ],
             businessInfo: [], //关联商家信息
@@ -1044,8 +1140,8 @@ export default {
                 snackDispatcherStatus: '',
                 refundable: '',
                 remainTicketsNumber: '',
-                snackBeginTime: 'new Date(00, 00)',
-                snackEndTime: 'new Date(00, 00)',
+                snackBeginTime: '',
+                snackEndTime: '',
                 messagePlatformType: '',
                 messagePlatformAccount: '',
                 messagePlatformPassword: '',
@@ -1120,15 +1216,6 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            // 获取所选影院编码
-            for (let i = 0; i < this.businessInfo.length; i++) {
-                if (this.businessInfo[i].businessName == this.oForm.belongBusinessCode) {
-                    this.oForm.businessCode = this.businessInfo[i].businessCode;
-                }
-            }
-            console.log(this.oForm.businessCode);
-            let bSnackBeginTime = this.oForm.snackBeginTime.getHours() + ':' + this.oForm.snackBeginTime.getMinutes();
-            let sSnackEndTime = this.oForm.snackEndTime.getHours() + ':' + this.oForm.snackEndTime.getMinutes();
             var jsonArr = [];
             jsonArr.push({ key: 'cinemaName', value: this.oForm.cinemaName });
             jsonArr.push({ key: 'cinemaCode', value: this.oForm.cinemaCode });
@@ -1137,26 +1224,44 @@ export default {
             jsonArr.push({ key: 'address', value: this.oForm.address });
             jsonArr.push({ key: 'longitude', value: this.oForm.longitude });
             jsonArr.push({ key: 'latitude', value: this.oForm.latitude });
-            jsonArr.push({ key: 'belongBusinessCode', value: this.oForm.businessCode });
+            jsonArr.push({ key: 'belongBusinessCode', value: this.oForm.belongBusinessCode });
             jsonArr.push({ key: 'concatName', value: this.oForm.concatName });
             jsonArr.push({ key: 'concatMobile', value: this.oForm.concatMobile });
             jsonArr.push({ key: 'serviceMobile', value: this.oForm.serviceMobile });
-            jsonArr.push({ key: 'screenCount', value: this.oForm.screenCount });
-            jsonArr.push({ key: 'ticketSystemCode', value: this.oForm.ticketSystemCode });
             jsonArr.push({ key: 'comparePriceCode', value: this.oForm.comparePriceCode });
-            jsonArr.push({ key: 'buyMinutesLimit', value: this.oForm.buyMinutesLimit });
-            jsonArr.push({ key: 'refundMinutesLimit', value: this.oForm.refundMinutesLimit });
-            jsonArr.push({ key: 'refundFee', value: this.oForm.refundFee });
-            jsonArr.push({ key: 'thirdPartyPayCommissionFee', value: this.oForm.thirdPartyPayCommissionFee });
-            jsonArr.push({ key: 'memberCardPayCommissionFee', value: this.oForm.memberCardPayCommissionFee });
+            if(!this.oForm.buyMinutesLimit){
+                jsonArr.push({ key: 'buyMinutesLimit', value: 0 });
+            }else {
+                jsonArr.push({ key: 'buyMinutesLimit', value: this.oForm.buyMinutesLimit });
+            }
+            if(!this.oForm.refundMinutesLimit){
+                jsonArr.push({ key: 'refundMinutesLimit', value: 0 });
+            }else {
+                jsonArr.push({ key: 'refundMinutesLimit', value: this.oForm.refundMinutesLimit });
+            }
+            if(!this.oForm.refundFee){
+                jsonArr.push({ key: 'refundFee', value: 0 });
+            }else {
+                jsonArr.push({ key: 'refundFee', value: this.oForm.refundFee });
+            }
+            if(!this.oForm.thirdPartyPayCommissionFee){
+                jsonArr.push({ key: 'thirdPartyPayCommissionFee', value: 0 });
+            }else {
+                jsonArr.push({ key: 'thirdPartyPayCommissionFee', value: this.oForm.thirdPartyPayCommissionFee });
+            }
+            if(!this.oForm.memberCardPayCommissionFee){
+                jsonArr.push({ key: 'memberCardPayCommissionFee', value: 0 });
+            }else {
+                jsonArr.push({ key: 'memberCardPayCommissionFee', value: this.oForm.memberCardPayCommissionFee });
+            }
             jsonArr.push({ key: 'membershipServiceAgreement', value: this.oForm.membershipServiceAgreement });
             jsonArr.push({ key: 'buyTicketHint', value: this.oForm.buyTicketHint });
             jsonArr.push({ key: 'openSnackStatus', value: this.oForm.openSnackStatus });
             jsonArr.push({ key: 'snackDispatcherStatus', value: this.oForm.snackDispatcherStatus });
             jsonArr.push({ key: 'refundable', value: this.oForm.refundable });
             jsonArr.push({ key: 'remainTicketsNumber', value: this.oForm.remainTicketsNumber });
-            jsonArr.push({ key: 'snackBeginTime', value: bSnackBeginTime });
-            jsonArr.push({ key: 'snackEndTime', value: sSnackEndTime });
+            jsonArr.push({ key: 'snackBeginTime', value: this.oForm.snackBeginTime});
+            jsonArr.push({ key: 'snackEndTime', value: this.oForm.snackEndTime });
             jsonArr.push({ key: 'messagePlatformType', value: this.oForm.messagePlatformType });
             jsonArr.push({ key: 'messagePlatformAccount', value: this.oForm.messagePlatformAccount });
             jsonArr.push({ key: 'messagePlatformPassword', value: this.oForm.messagePlatformPassword });
@@ -1168,7 +1273,6 @@ export default {
             jsonArr.push({ key: 'openMemberCardStatus', value: this.oForm.openMemberCardStatus });
             jsonArr.push({ key: 'memberCardCommonUseStatus', value: this.oForm.memberCardCommonUseStatus });
             jsonArr.push({ key: 'ticketsForMemberCardPayStatus', value: this.oForm.ticketsForMemberCardPayStatus });
-            jsonArr.push({ key: 'miniAppSecret', value: this.oForm.miniAppSecret });
             jsonArr.push({ key: 'miniMerchantNo', value: this.oForm.miniMerchantNo });
             jsonArr.push({ key: 'miniMerchantSecret', value: this.oForm.miniMerchantSecret });
             jsonArr.push({ key: 'miniRefundCertificateUrl', value: this.oForm.miniRefundCertificateUrl });
@@ -1176,9 +1280,14 @@ export default {
             jsonArr.push({ key: 'ticketingSystemAccount', value: this.oForm.ticketingSystemAccount });
             jsonArr.push({ key: 'ticketingSystemPassword', value: this.oForm.ticketingSystemPassword });
             jsonArr.push({ key: 'miniAppId', value: this.oForm.miniAppId });
+            jsonArr.push({ key: 'miniAppSecret', value: this.oForm.miniAppSecret });
             jsonArr.push({ key: 'interfaceAddress', value: this.oForm.interfaceAddress });
             jsonArr.push({ key: 'memberInterfaceAddress', value: this.oForm.memberInterfaceAddress });
             jsonArr.push({ key: 'verificationCode', value: this.oForm.verificationCode });
+            jsonArr.push({ key: 'mtxPayType', value: this.oForm.mtxPayType });
+            jsonArr.push({ key: 'videoStatus', value: this.oForm.videoStatus });
+            jsonArr.push({ key: 'miniAppName', value: this.oForm.miniAppName });
+            jsonArr.push({ key: 'miniAppQRCode', value: this.oForm.miniAppQRCode });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             console.log(jsonArr);
@@ -1350,9 +1459,6 @@ export default {
                         this.oMemberCardPayCommissionFee = JSON.parse(Decrypt(data.data.data)).memberCardPayCommissionFee;
                         this.oMembershipServiceAgreement = JSON.parse(Decrypt(data.data.data)).membershipServiceAgreement;
                         this.oBuyTicketHint = JSON.parse(Decrypt(data.data.data)).buyTicketHint;
-                        this.oOpenSnackStatus = this.changeGetStatus(JSON.parse(Decrypt(data.data.data)).openSnackStatus);
-                        this.oSnackDispatcherStatus = JSON.parse(Decrypt(data.data.data)).snackDispatcherStatus;
-                        this.oRefundable = JSON.parse(Decrypt(data.data.data)).refundable;
                         this.oRemainTicketsNumber = JSON.parse(Decrypt(data.data.data)).remainTicketsNumber;
                         this.oSnackBeginTime = JSON.parse(Decrypt(data.data.data)).snackBeginTime;
                         this.oSnackEndTime = JSON.parse(Decrypt(data.data.data)).snackEndTime;
@@ -1360,24 +1466,71 @@ export default {
                         this.oMessagePlatformAccount = JSON.parse(Decrypt(data.data.data)).messagePlatformAccount;
                         this.oMessagePlatformPassword = JSON.parse(Decrypt(data.data.data)).messagePlatformPassword;
                         this.oMessagePlatformSignId = JSON.parse(Decrypt(data.data.data)).messagePlatformSignId;
-                        this.oOpenStatus = JSON.parse(Decrypt(data.data.data)).openStatus;
                         this.oExpireDate = JSON.parse(Decrypt(data.data.data)).expireDate;
                         this.oPaymentType = JSON.parse(Decrypt(data.data.data)).paymentType;
                         this.oReportedType = JSON.parse(Decrypt(data.data.data)).reportedType;
-                        this.oOpenMemberCardStatus = JSON.parse(Decrypt(data.data.data)).openMemberCardStatus;
-                        this.oMemberCardCommonUseStatus = JSON.parse(Decrypt(data.data.data)).memberCardCommonUseStatus;
-                        this.oTicketsForMemberCardPayStatus = JSON.parse(Decrypt(data.data.data)).ticketsForMemberCardPayStatus;
+                        for (let x in this.boolean) {
+                            if (this.boolean[x].value == JSON.parse(Decrypt(data.data.data)).memberCardCommonUseStatus) {
+                                this.oMemberCardCommonUseStatus = this.boolean[x].value;
+                                break;
+                            }
+                        }
+                        for (let x in this.boolean) {
+                            if (this.boolean[x].value == JSON.parse(Decrypt(data.data.data)).openSnackStatus) {
+                                this.oOpenSnackStatus = this.boolean[x].value;
+                                break;
+                            }
+                        }
+                        for (let x in this.boolean) {
+                            if (this.boolean[x].value == JSON.parse(Decrypt(data.data.data)).snackDispatcherStatus) {
+                                this.oSnackDispatcherStatus = this.boolean[x].value;
+                                break;
+                            }
+                        }
+                        for (let x in this.boolean) {
+                            if (this.boolean[x].value == JSON.parse(Decrypt(data.data.data)).refundable) {
+                                this.oRefundable = this.boolean[x].value;
+                                break;
+                            }
+                        }
+                        for (let x in this.boolean) {
+                            if (this.boolean[x].value == JSON.parse(Decrypt(data.data.data)).openStatus) {
+                                this.oOpenStatus = this.boolean[x].value;
+                                break;
+                            }
+                        }
+                        for (let x in this.boolean) {
+                            if (this.boolean[x].value == JSON.parse(Decrypt(data.data.data)).openMemberCardStatus) {
+                                this.oOpenMemberCardStatus = this.boolean[x].value;
+                                break;
+                            }
+                        }
+                        for (let x in this.boolean) {
+                            if (this.boolean[x].value == JSON.parse(Decrypt(data.data.data)).videoStatus) {
+                                this.oVideoStatus = this.boolean[x].value;
+                                break;
+                            }
+                        }
+                        for (let x in this.boolean) {
+                            if (this.boolean[x].value == JSON.parse(Decrypt(data.data.data)).ticketsForMemberCardPayStatus) {
+                                this.oTicketsForMemberCardPayStatus = this.boolean[x].value;
+                                break;
+                            }
+                        }
                         this.oMiniAppSecret = JSON.parse(Decrypt(data.data.data)).miniAppSecret;
                         this.oMiniMerchantNo = JSON.parse(Decrypt(data.data.data)).miniMerchantNo;
                         this.oMiniMerchantSecret = JSON.parse(Decrypt(data.data.data)).miniMerchantSecret;
                         this.oMiniRefundCertificateUrl = JSON.parse(Decrypt(data.data.data)).miniRefundCertificateUrl;
                         this.oTicketingSystemType = JSON.parse(Decrypt(data.data.data)).ticketingSystemType;
+                        this.oMtxPayType = JSON.parse(Decrypt(data.data.data)).mtxPayType;
                         this.oTicketingSystemAccount = JSON.parse(Decrypt(data.data.data)).ticketingSystemAccount;
                         this.oTicketingSystemPassword = JSON.parse(Decrypt(data.data.data)).ticketingSystemPassword;
                         this.oMiniAppId = JSON.parse(Decrypt(data.data.data)).miniAppId;
                         this.oInterfaceAddress = JSON.parse(Decrypt(data.data.data)).interfaceAddress;
                         this.oMemberInterfaceAddress = JSON.parse(Decrypt(data.data.data)).memberInterfaceAddress;
                         this.oVerificationCode = JSON.parse(Decrypt(data.data.data)).verificationCode;
+                        this.oMiniAppName = JSON.parse(Decrypt(data.data.data)).miniAppName;
+                        this.oMiniAppQRCode = JSON.parse(Decrypt(data.data.data)).miniAppQRCode;
                         this.oId = JSON.parse(Decrypt(data.data.data)).id;
                         this.openServe();
                         // 获取所选影院名称
@@ -1409,8 +1562,6 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            let dSnackBeginTime = this.oSnackBeginTime.getHours() + ':' + this.oSnackBeginTime.getMinutes();
-            let dSnackEndTime = this.oSnackEndTime.getHours() + ':' + this.oSnackEndTime.getMinutes();
             var jsonArr = [];
             jsonArr.push({ key: 'cinemaName', value: this.oCinemaName });
             jsonArr.push({ key: 'cinemaCode', value: this.oCinemaCode });
@@ -1423,8 +1574,6 @@ export default {
             jsonArr.push({ key: 'concatName', value: this.oConcatName });
             jsonArr.push({ key: 'concatMobile', value: this.oConcatMobile });
             jsonArr.push({ key: 'serviceMobile', value: this.oServiceMobile });
-            jsonArr.push({ key: 'screenCount', value: this.oScreenCount });
-            jsonArr.push({ key: 'ticketSystemCode', value: this.oTicketSystemCode });
             jsonArr.push({ key: 'comparePriceCode', value: this.oComparePriceCode });
             jsonArr.push({ key: 'buyMinutesLimit', value: this.oBuyMinutesLimit });
             jsonArr.push({ key: 'refundMinutesLimit', value: this.oRefundMinutesLimit });
@@ -1437,8 +1586,8 @@ export default {
             jsonArr.push({ key: 'snackDispatcherStatus', value: this.oSnackDispatcherStatus });
             jsonArr.push({ key: 'refundable', value: this.oRefundable });
             jsonArr.push({ key: 'remainTicketsNumber', value: this.oRemainTicketsNumber });
-            jsonArr.push({ key: 'snackBeginTime', value: dSnackBeginTime });
-            jsonArr.push({ key: 'snackEndTime', value: dSnackEndTime });
+            jsonArr.push({ key: 'snackBeginTime', value: this.oSnackBeginTime });
+            jsonArr.push({ key: 'snackEndTime', value: this.oSnackEndTime });
             jsonArr.push({ key: 'messagePlatformType', value: this.oMessagePlatformType });
             jsonArr.push({ key: 'messagePlatformAccount', value: this.oMessagePlatformAccount });
             jsonArr.push({ key: 'messagePlatformPassword', value: this.oMessagePlatformPassword });
@@ -1461,6 +1610,9 @@ export default {
             jsonArr.push({ key: 'interfaceAddress', value: this.oInterfaceAddress });
             jsonArr.push({ key: 'memberInterfaceAddress', value: this.oMemberInterfaceAddress });
             jsonArr.push({ key: 'verificationCode', value: this.oVerificationCode });
+            jsonArr.push({ key: 'mtxPayType', value: this.oMtxPayType });
+            jsonArr.push({ key: 'miniAppName', value: this.oMiniAppName });
+            jsonArr.push({ key: 'miniAppQRCode', value: this.oMiniAppQRCode });
             jsonArr.push({ key: 'id', value: this.oId });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
@@ -1614,19 +1766,20 @@ export default {
                 return item
             }
         },
-        changeSetStatus(item) {
-            if (item == '是') {
-                item = 1
-                return item
-            }
-            if (item == '否') {
-                item = 2
-                return item
-            }
-        }
     }
 };
 </script>
+<style>
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+    }
+
+    input[type="number"] {
+        -moz-appearance: textfield;
+    }
+</style>
 
 <style scoped>
 .handle-box {
