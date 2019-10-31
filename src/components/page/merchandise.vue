@@ -215,7 +215,7 @@
                     <el-input style="width: 250px" v-model="form.showSeqNo" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="库存" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="form.stockCount" autocomplete="off"></el-input>
+                    <el-input style="width: 250px" v-model="form.stockCount" autocomplete="off" type="number"></el-input>
                 </el-form-item>
                 <el-form-item label="分类" :label-width="formLabelWidth">
                     <el-select v-model="form.typeCode" placeholder="请选择分类">
@@ -743,8 +743,7 @@ export default {
                         loading.close();
                         console.log(data);
                         if (data.data.code == 'success') {
-                            var oData = JSON.parse(Decrypt(data.data.data));
-                            console.log(oData);
+                            this.$message.success(`同步成功`);
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
                             this.open();
@@ -817,6 +816,16 @@ export default {
 };
 </script>
 
+<style>
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+    }
+
+    input[type="number"] {
+        -moz-appearance: textfield;
+    }
+</style>
 <style scoped>
 .handle-box {
     margin-bottom: 20px;

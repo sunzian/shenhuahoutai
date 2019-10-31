@@ -707,8 +707,8 @@
                     this.oForm.code = this.cinemaInfo[0].code;
                 }
                 let filmeCodes = [];
-                for (let i = 0; i < this.filmInfo.length; i++) {
-                    filmeCodes.push(this.filmInfo[i].filmCode);
+                for (let i = 0; i < this.selectedSell.length; i++) {
+                    filmeCodes.push(this.selectedSell[i].filmCode);
                 }
                 this.oForm.filmCode = filmeCodes.join(',');
                 if (this.oForm.selectFilmType == 0) {
@@ -1176,6 +1176,9 @@
                     this.selectedSell.push(this.sellTableData[this.sellIndex]);
                 }
                 this.drawer = false;
+                console.log(this.sellIndex);
+                console.log(this.sellTableData);
+                console.log(this.selectedSell);
             },
             openNext() {
                 //获取商品列表

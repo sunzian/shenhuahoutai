@@ -576,8 +576,6 @@
                     target: document.querySelector('.div1')
                 });
                 setTimeout(() => {
-                    console.log(this.$refs.tree.getCheckedKeys());
-                    console.log(this.checkedCities);
                     var jsonArr = [];
                     jsonArr.push({key:"userName",value:this.oForm.userName});
                     jsonArr.push({key:"userPass",value:this.oForm.userPass});
@@ -728,8 +726,6 @@
                     target: document.querySelector('.div1')
                 });
                 setTimeout(() => {
-                    console.log(this.oCheckedCities);
-                    // console.log(this.$refs.tree.getCheckedKeys());
                     var jsonArr = [];
                     jsonArr.push({key:"id",value:this.form.id});
                     jsonArr.push({key:"userName",value:this.userName});

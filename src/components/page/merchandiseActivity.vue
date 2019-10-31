@@ -616,6 +616,7 @@
                     console.log(data);
                     if (data.data.code == 'success') {
                         this.selectedSell=[];
+                        // console.log(this.cinemaInfo);
                         this.oForm.code = this.cinemaInfo[0].cinemaCode;
                         console.log(JSON.parse(Decrypt(data.data.data)));
                         // let formats = JSON.parse(Decrypt(data.data.data)).formatList;
@@ -1002,7 +1003,7 @@
                             cinemaList.cinemaName = oData.cinemaList[i].cinemaName;
                             this.cinemaInfo.push(cinemaList);
                         }
-                        console.log(this.cinemaInfo)
+                        console.log(this.cinemaInfo);
                         this.oForm.cinemaCode = this.cinemaInfo[0].cinemaCode;
                         this.selectValue = this.cinemaInfo[0].cinemaCode;
                         this.tableData = oData.pageResult.data;

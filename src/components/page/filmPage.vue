@@ -799,14 +799,15 @@ export default {
             https
                 .fetchPost('/film/getFilmById', params)
                 .then(data => {
+                    console.log(data);
                     loading.close();
                     console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.editVisible = true;
                         this.oArea = JSON.parse(Decrypt(data.data.data)).area;
-                        this.actorList = JSON.parse(Decrypt(data.data.data)).actorList;
+                        // this.actorList = JSON.parse(Decrypt(data.data.data)).actorList;
                         this.oCreateDate = JSON.parse(Decrypt(data.data.data)).createDate;
-                        this.directorList = JSON.parse(Decrypt(data.data.data)).directorList;
+                        // this.directorList = JSON.parse(Decrypt(data.data.data)).directorList;
                         this.oDuration = JSON.parse(Decrypt(data.data.data)).duration;
                         this.oFilmCode = JSON.parse(Decrypt(data.data.data)).filmCode;
                         this.oFilmName = JSON.parse(Decrypt(data.data.data)).filmName;

@@ -204,7 +204,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="库存：" :label-width="formLabelWidth">
-                    <el-input style="width: 50px" v-model="oForm.sendNumber" autocomplete="off"></el-input>
+                    <el-input style="width: 100px" v-model="oForm.sendNumber" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="使用须知：" :label-width="formLabelWidth">
                     <el-input

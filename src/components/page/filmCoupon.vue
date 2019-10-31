@@ -403,7 +403,9 @@ export default {
             value: ''
         };
     },
-    created() {},
+    created() {
+
+    },
     mounted() {
         this.getMenu();
     },
@@ -424,27 +426,7 @@ export default {
                     console.log(data);
                     if (data.data.code == 'success') {
                         this.dialogFormVisible = true;
-                        this.selectFilm = {};
-                        this.oForm.filmName = '';
-                        this.oForm.selectHallType = '0';
-                        this.oForm.selectFilmType = '0';
-                        this.oForm.name = '';
-                        this.oForm.cinemaCode = [];
-                        this.oForm.cinemaName = '';
-                        this.oForm.merchandiseCode = [];
-                        this.oForm.merchandiseName = '';
-                        this.oForm.startDate = '';
-                        this.oForm.endDate = '';
-                        this.oForm.validPayType = '';
-                        this.oForm.reduceType = '';
-                        this.oForm.achieveMoney = '';
-                        this.oForm.discountMoney = '';
-                        this.oForm.holidayValid = '';
-                        this.oForm.checkedDays = [];
-                        this.oForm.status = '';
-                        this.oForm.activityTogether = '';
-                        this.oForm.sendNumber = '';
-                        this.oForm.couponDesc = '';
+
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
@@ -517,6 +499,27 @@ export default {
                         console.log(data);
                         if (data.data.code == 'success') {
                             this.dialogFormVisible = false;
+                            this.selectFilm = {};
+                            this.oForm.filmName = '';
+                            this.oForm.selectHallType = '0';
+                            this.oForm.selectFilmType = '0';
+                            this.oForm.name = '';
+                            this.oForm.cinemaCode = [];
+                            this.oForm.cinemaName = '';
+                            this.oForm.merchandiseCode = [];
+                            this.oForm.merchandiseName = '';
+                            this.oForm.startDate = '';
+                            this.oForm.endDate = '';
+                            this.oForm.validPayType = '';
+                            this.oForm.reduceType = '';
+                            this.oForm.achieveMoney = '';
+                            this.oForm.discountMoney = '';
+                            this.oForm.holidayValid = '';
+                            this.oForm.checkedDays = [];
+                            this.oForm.status = '';
+                            this.oForm.activityTogether = '';
+                            this.oForm.sendNumber = '';
+                            this.oForm.couponDesc = '';
                             this.$message.success(`新增成功`);
                             this.getMenu();
                         } else if (data.data.code == 'nologin') {
