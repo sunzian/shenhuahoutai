@@ -326,8 +326,8 @@
                 <el-form-item prop="snackBeginTime" label="卖品显示开始时间" :label-width="formLabelWidth">
                     <el-time-picker
                             type="date"
-                            format="HH-mm-ss"
-                            value-format="HH-mm-ss"
+                            format="HH:mm:ss"
+                            value-format="HH:mm:ss"
                             placeholder="选择日期时间"
                             v-model="oForm.snackBeginTime"
                             :picker-options="{}"></el-time-picker>
@@ -335,8 +335,8 @@
                 <el-form-item prop="snackEndTime" label="卖品显示结束时间" :label-width="formLabelWidth">
                     <el-time-picker
                             type="date"
-                            format="HH-mm-ss"
-                            value-format="HH-mm-ss"
+                            format="HH:mm:ss"
+                            value-format="HH:mm:ss"
                             placeholder="选择日期时间"
                             v-model="oForm.snackEndTime"
                             :picker-options="{}"></el-time-picker>
@@ -346,6 +346,120 @@
                         <el-radio label="1">专信云</el-radio>
                         <el-radio label="2">三体</el-radio>
                     </el-radio-group>
+                </el-form-item>
+                <el-form-item label="注册验证码" :label-width="formLabelWidth" v-if="oForm.messagePlatformType">
+                    <el-input
+                        style="width: 250px"
+                        v-model="oForm.messageType1"
+                        autocomplete="off"
+                        v-if='oForm.messagePlatformType==2'
+                        placeholder="短信模板id"
+                    ></el-input>
+                    <el-input
+                        v-if='oForm.messagePlatformType==1'
+                        style="width: 250px"
+                        v-model="oForm.messageType1"
+                        autocomplete="off"
+                        type='textarea'
+                        placeholder="短信内容，长度不超过200个汉字"
+                        maxlength="200"
+                        show-word-limit
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="购票成功" :label-width="formLabelWidth" v-if="oForm.messagePlatformType">
+                    <el-input
+                        style="width: 250px"
+                        v-model="oForm.messageType2"
+                        autocomplete="off"
+                        v-if='oForm.messagePlatformType==2'
+                        placeholder="短信模板id"
+                    ></el-input>
+                    <el-input
+                        v-if='oForm.messagePlatformType==1'
+                        style="width: 250px"
+                        v-model="oForm.messageType2"
+                        autocomplete="off"
+                        type='textarea'
+                        placeholder="短信内容，长度不超过200个汉字"
+                        maxlength="200"
+                        show-word-limit
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="下单失败" :label-width="formLabelWidth" v-if="oForm.messagePlatformType">
+                    <el-input
+                        style="width: 250px"
+                        v-model="oForm.messageType3"
+                        autocomplete="off"
+                        v-if='oForm.messagePlatformType==2'
+                        placeholder="短信模板id"
+                    ></el-input>
+                    <el-input
+                        v-if='oForm.messagePlatformType==1'
+                        style="width: 250px"
+                        v-model="oForm.messageType3"
+                        autocomplete="off"
+                        type='textarea'
+                        placeholder="短信内容，长度不超过200个汉字"
+                        maxlength="200"
+                        show-word-limit
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="退票通知" :label-width="formLabelWidth" v-if="oForm.messagePlatformType">
+                    <el-input
+                        style="width: 250px"
+                        v-model="oForm.messageType4"
+                        autocomplete="off"
+                        v-if='oForm.messagePlatformType==2'
+                        placeholder="短信模板id"
+                    ></el-input>
+                    <el-input
+                        v-if='oForm.messagePlatformType==1'
+                        style="width: 250px"
+                        v-model="oForm.messageType4"
+                        autocomplete="off"
+                        type='textarea'
+                        placeholder="短信内容，长度不超过200个汉字"
+                        maxlength="200"
+                        show-word-limit
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="会员卡充值" :label-width="formLabelWidth" v-if="oForm.messagePlatformType">
+                    <el-input
+                        style="width: 250px"
+                        v-model="oForm.messageType5"
+                        autocomplete="off"
+                        v-if='oForm.messagePlatformType==2'
+                        placeholder="短信模板id"
+                    ></el-input>
+                    <el-input
+                        v-if='oForm.messagePlatformType==1'
+                        style="width: 250px"
+                        v-model="oForm.messageType5"
+                        autocomplete="off"
+                        type='textarea'
+                        placeholder="短信内容，长度不超过200个汉字"
+                        maxlength="200"
+                        show-word-limit
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="卖品送餐" :label-width="formLabelWidth" v-if="oForm.messagePlatformType">
+                    <el-input
+                        style="width: 250px"
+                        v-model="oForm.messageType6"
+                        autocomplete="off"
+                        v-if='oForm.messagePlatformType==2'
+                        placeholder="短信模板id"
+                    ></el-input>
+                    <el-input
+                        v-if='oForm.messagePlatformType==1'
+                        style="width: 250px"
+                        v-model="oForm.messageType6"
+                        autocomplete="off"
+                        type='textarea'
+                        placeholder="短信内容，长度不超过200个汉字"
+                        maxlength="200"
+                        show-word-limit
+                    ></el-input>
                 </el-form-item>
                 <el-form-item label="短信平台账号" :label-width="formLabelWidth">
                     <el-input
@@ -568,7 +682,7 @@
         <el-dialog title="编辑" :visible.sync="editVisible">
             <el-form ref="form" :model="form" :rules="rules">
                 <el-form-item prop="cinemaCode" label="影院编码" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" min="1" v-model="oCinemaCode" autocomplete="off"></el-input>
+                    <el-input style="width: 250px" min="1" v-model="oCinemaCode" autocomplete="off" disabled></el-input>
                 </el-form-item>
                 <el-form-item prop="cinemaName" label="影院名称" :label-width="formLabelWidth">
                     <el-input
@@ -741,24 +855,137 @@
                 <el-form-item prop="snackBeginTime" label="卖品显示开始时间" :label-width="formLabelWidth">
                     <el-time-picker
                             type="date"
-                            format="HH-mm-ss"
-                            value-format="HH-mm-ss"
+                            format="HH:mm:ss"
+                            value-format="HH:mm:ss"
                             v-model="oSnackBeginTime"
                             placeholder="选择日期时间"></el-time-picker>
                 </el-form-item>
                 <el-form-item prop="snackEndTime" label="卖品显示结束时间" :label-width="formLabelWidth">
                     <el-time-picker
                             type="date"
-                            format="HH-mm-ss"
-                            value-format="HH-mm-ss"
+                            format="HH:mm:ss"
+                            value-format="HH:mm:ss"
                             v-model="oSnackEndTime"
                             placeholder="选择日期时间"></el-time-picker>
                 </el-form-item>
                 <el-form-item label="短信平台类型" :label-width="formLabelWidth">
+                    <el-radio-group v-model="oMessagePlatformType">
+                        <el-radio label="1">专信云</el-radio>
+                        <el-radio label="2">三体</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item label="注册验证码" :label-width="formLabelWidth" v-if="oMessagePlatformType">
                     <el-input
                         style="width: 250px"
-                        v-model="oMessagePlatformType"
+                        v-model="oMessageType1"
                         autocomplete="off"
+                        v-if='oMessagePlatformType==2'
+                        placeholder="短信模板id"
+                    ></el-input>
+                    <el-input
+                        v-if='oMessagePlatformType==1'
+                        style="width: 250px"
+                        v-model="oMessageType1"
+                        autocomplete="off"
+                        type='textarea'
+                        placeholder="短信内容，长度不超过200个汉字"
+                        maxlength="200"
+                        show-word-limit
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="购票成功" :label-width="formLabelWidth" v-if="oMessagePlatformType">
+                    <el-input
+                        style="width: 250px"
+                        v-model="oMessageType2"
+                        autocomplete="off"
+                        v-if='oMessagePlatformType==2'
+                        placeholder="短信模板id"
+                    ></el-input>
+                    <el-input
+                        v-if='oMessagePlatformType==1'
+                        style="width: 250px"
+                        v-model="oMessageType2"
+                        autocomplete="off"
+                        type='textarea'
+                        placeholder="短信内容，长度不超过200个汉字"
+                        maxlength="200"
+                        show-word-limit
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="下单失败" :label-width="formLabelWidth" v-if="oMessagePlatformType">
+                    <el-input
+                        style="width: 250px"
+                        v-model="oMessageType3"
+                        autocomplete="off"
+                        v-if='oMessagePlatformType==2'
+                        placeholder="短信模板id"
+                    ></el-input>
+                    <el-input
+                        v-if='oMessagePlatformType==1'
+                        style="width: 250px"
+                        v-model="oMessageType3"
+                        autocomplete="off"
+                        type='textarea'
+                        placeholder="短信内容，长度不超过200个汉字"
+                        maxlength="200"
+                        show-word-limit
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="退票通知" :label-width="formLabelWidth" v-if="oMessagePlatformType">
+                    <el-input
+                        style="width: 250px"
+                        v-model="oMessageType4"
+                        autocomplete="off"
+                        v-if='oMessagePlatformType==2'
+                        placeholder="短信模板id"
+                    ></el-input>
+                    <el-input
+                        v-if='oMessagePlatformType==1'
+                        style="width: 250px"
+                        v-model="oMessageType4"
+                        autocomplete="off"
+                        type='textarea'
+                        placeholder="短信内容，长度不超过200个汉字"
+                        maxlength="200"
+                        show-word-limit
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="会员卡充值" :label-width="formLabelWidth" v-if="oMessagePlatformType">
+                    <el-input
+                        style="width: 250px"
+                        v-model="oMessageType5"
+                        autocomplete="off"
+                        v-if='oMessagePlatformType==2'
+                        placeholder="短信模板id"
+                    ></el-input>
+                    <el-input
+                        v-if='oMessagePlatformType==1'
+                        style="width: 250px"
+                        v-model="oMessageType5"
+                        autocomplete="off"
+                        type='textarea'
+                        placeholder="短信内容，长度不超过200个汉字"
+                        maxlength="200"
+                        show-word-limit
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="卖品送餐" :label-width="formLabelWidth" v-if="oMessagePlatformType">
+                    <el-input
+                        style="width: 250px"
+                        v-model="oMessageType6"
+                        autocomplete="off"
+                        v-if='oMessagePlatformType==2'
+                        placeholder="短信模板id"
+                    ></el-input>
+                    <el-input
+                        v-if='oMessagePlatformType==1'
+                        style="width: 250px"
+                        v-model="oMessageType6"
+                        autocomplete="off"
+                        type='textarea'
+                        placeholder="短信内容，长度不超过200个汉字"
+                        maxlength="200"
+                        show-word-limit
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="短信平台账号" :label-width="formLabelWidth">
@@ -1069,6 +1296,12 @@ export default {
             oMessagePlatformAccount: '',
             oMessagePlatformPassword: '',
             oMessagePlatformSignId: '',
+            oMessageType1: '',
+            oMessageType2: '',
+            oMessageType3: '',
+            oMessageType4: '',
+            oMessageType5: '',
+            oMessageType6: '',
             oOpenStatus: '',
             oExpireDate: '',
             oPaymentType: '',
@@ -1143,6 +1376,12 @@ export default {
                 snackBeginTime: '',
                 snackEndTime: '',
                 messagePlatformType: '',
+                messageType1: '',
+                messageType2: '',
+                messageType3: '',
+                messageType4: '',
+                messageType5: '',
+                messageType6: '',
                 messagePlatformAccount: '',
                 messagePlatformPassword: '',
                 messagePlatformSignId: '',
@@ -1263,6 +1502,28 @@ export default {
             jsonArr.push({ key: 'snackBeginTime', value: this.oForm.snackBeginTime});
             jsonArr.push({ key: 'snackEndTime', value: this.oForm.snackEndTime });
             jsonArr.push({ key: 'messagePlatformType', value: this.oForm.messagePlatformType });
+            let messageInfos = [];
+            if (this.oForm.messageType1) {
+                messageInfos.push({ 'messageType':  1 , 'content': this.oForm.messageType1 });
+            }
+            if (this.oForm.messageType2) {
+                messageInfos.push({ 'messageType': 2 ,  'content': this.oForm.messageType2 });
+            }
+            if (this.oForm.messageType3) {
+                messageInfos.push({ 'messageType': 3 , 'content': this.oForm.messageType3 });
+            }
+            if (this.oForm.messageType4) {
+                messageInfos.push({ 'messageType': 4 , 'content': this.oForm.messageType4 });
+            }
+            if (this.oForm.messageType5) {
+                messageInfos.push({ 'messageType': 5 , 'content': this.oForm.messageType5 });
+            }
+            if (this.oForm.messageType6) {
+                messageInfos.push({ 'messageType': 6 , 'content': this.oForm.messageType6 });
+            }
+            if (messageInfos.length>0) {
+                jsonArr.push({ key: 'messageInfos', value: JSON.stringify(messageInfos)})
+            }
             jsonArr.push({ key: 'messagePlatformAccount', value: this.oForm.messagePlatformAccount });
             jsonArr.push({ key: 'messagePlatformPassword', value: this.oForm.messagePlatformPassword });
             jsonArr.push({ key: 'messagePlatformSignId', value: this.oForm.messagePlatformSignId });
@@ -1292,14 +1553,11 @@ export default {
             jsonArr.push({ key: 'sign', value: sign });
             console.log(jsonArr);
             let params = ParamsAppend(jsonArr);
-            // console.log(params);
             if (this.dialogFormVisible == true) {
                 https
                     .fetchPost('/cinema/addCinema', params)
                     .then(data => {
                         loading.close();
-                        //新增
-                        console.log(data);
                         if (data.data.code == 'success') {
                             this.dialogFormVisible = false;
                             this.$message.success(`新增成功`);
@@ -1438,100 +1696,141 @@ export default {
                     console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.editVisible = true;
-                        this.oCinemaName = JSON.parse(Decrypt(data.data.data)).cinemaName;
-                        this.oCinemaCode = JSON.parse(Decrypt(data.data.data)).cinemaCode;
-                        this.oProvince = JSON.parse(Decrypt(data.data.data)).province;
-                        this.oCity = JSON.parse(Decrypt(data.data.data)).city;
-                        this.oBelongBusinessCode = JSON.parse(Decrypt(data.data.data)).belongBusinessCode;
-                        this.oAddress = JSON.parse(Decrypt(data.data.data)).address;
-                        this.oLongitude = JSON.parse(Decrypt(data.data.data)).longitude;
-                        this.oLatitude = JSON.parse(Decrypt(data.data.data)).latitude;
-                        this.oConcatName = JSON.parse(Decrypt(data.data.data)).concatName;
-                        this.oConcatMobile = JSON.parse(Decrypt(data.data.data)).concatMobile;
-                        this.oServiceMobile = JSON.parse(Decrypt(data.data.data)).serviceMobile;
-                        this.oScreenCount = JSON.parse(Decrypt(data.data.data)).screenCount;
-                        this.oTicketSystemCode = JSON.parse(Decrypt(data.data.data)).ticketSystemCode;
-                        this.oComparePriceCode = JSON.parse(Decrypt(data.data.data)).comparePriceCode;
-                        this.oBuyMinutesLimit = JSON.parse(Decrypt(data.data.data)).buyMinutesLimit;
-                        this.oRefundMinutesLimit = JSON.parse(Decrypt(data.data.data)).refundMinutesLimit;
-                        this.oRefundFee = JSON.parse(Decrypt(data.data.data)).refundFee;
-                        this.oThirdPartyPayCommissionFee = JSON.parse(Decrypt(data.data.data)).thirdPartyPayCommissionFee;
-                        this.oMemberCardPayCommissionFee = JSON.parse(Decrypt(data.data.data)).memberCardPayCommissionFee;
-                        this.oMembershipServiceAgreement = JSON.parse(Decrypt(data.data.data)).membershipServiceAgreement;
-                        this.oBuyTicketHint = JSON.parse(Decrypt(data.data.data)).buyTicketHint;
-                        this.oRemainTicketsNumber = JSON.parse(Decrypt(data.data.data)).remainTicketsNumber;
-                        this.oSnackBeginTime = JSON.parse(Decrypt(data.data.data)).snackBeginTime;
-                        this.oSnackEndTime = JSON.parse(Decrypt(data.data.data)).snackEndTime;
-                        this.oMessagePlatformType = JSON.parse(Decrypt(data.data.data)).messagePlatformType;
-                        this.oMessagePlatformAccount = JSON.parse(Decrypt(data.data.data)).messagePlatformAccount;
-                        this.oMessagePlatformPassword = JSON.parse(Decrypt(data.data.data)).messagePlatformPassword;
-                        this.oMessagePlatformSignId = JSON.parse(Decrypt(data.data.data)).messagePlatformSignId;
-                        this.oExpireDate = JSON.parse(Decrypt(data.data.data)).expireDate;
-                        this.oPaymentType = JSON.parse(Decrypt(data.data.data)).paymentType;
-                        this.oReportedType = JSON.parse(Decrypt(data.data.data)).reportedType;
+                        this.oCinemaName = JSON.parse(Decrypt(data.data.data)).Cinema.cinemaName;
+                        this.oCinemaCode = JSON.parse(Decrypt(data.data.data)).Cinema.cinemaCode;
+                        this.oProvince = JSON.parse(Decrypt(data.data.data)).Cinema.province;
+                        this.oCity = JSON.parse(Decrypt(data.data.data)).Cinema.city;
+                        this.oBelongBusinessCode = JSON.parse(Decrypt(data.data.data)).Cinema.belongBusinessCode;
+                        this.oAddress = JSON.parse(Decrypt(data.data.data)).Cinema.address;
+                        this.oLongitude = JSON.parse(Decrypt(data.data.data)).Cinema.longitude;
+                        this.oLatitude = JSON.parse(Decrypt(data.data.data)).Cinema.latitude;
+                        this.oConcatName = JSON.parse(Decrypt(data.data.data)).Cinema.concatName;
+                        this.oConcatMobile = JSON.parse(Decrypt(data.data.data)).Cinema.concatMobile;
+                        this.oServiceMobile = JSON.parse(Decrypt(data.data.data)).Cinema.serviceMobile;
+                        this.oScreenCount = JSON.parse(Decrypt(data.data.data)).Cinema.screenCount;
+                        this.oTicketSystemCode = JSON.parse(Decrypt(data.data.data)).Cinema.ticketSystemCode;
+                        this.oComparePriceCode = JSON.parse(Decrypt(data.data.data)).Cinema.comparePriceCode;
+                        this.oBuyMinutesLimit = JSON.parse(Decrypt(data.data.data)).Cinema.buyMinutesLimit;
+                        this.oRefundMinutesLimit = JSON.parse(Decrypt(data.data.data)).Cinema.refundMinutesLimit;
+                        this.oRefundFee = JSON.parse(Decrypt(data.data.data)).Cinema.refundFee;
+                        this.oThirdPartyPayCommissionFee = JSON.parse(Decrypt(data.data.data)).Cinema.thirdPartyPayCommissionFee;
+                        this.oMemberCardPayCommissionFee = JSON.parse(Decrypt(data.data.data)).Cinema.memberCardPayCommissionFee;
+                        this.oMembershipServiceAgreement = JSON.parse(Decrypt(data.data.data)).Cinema.membershipServiceAgreement;
+                        this.oBuyTicketHint = JSON.parse(Decrypt(data.data.data)).Cinema.buyTicketHint;
+                        this.oRemainTicketsNumber = JSON.parse(Decrypt(data.data.data)).Cinema.remainTicketsNumber;
+                        this.oSnackBeginTime = JSON.parse(Decrypt(data.data.data)).Cinema.snackBeginTime;
+                        this.oSnackEndTime = JSON.parse(Decrypt(data.data.data)).Cinema.snackEndTime;
+                        this.oMessagePlatformType = JSON.parse(Decrypt(data.data.data)).Cinema.messagePlatformType;
+                        this.oMessagePlatformAccount = JSON.parse(Decrypt(data.data.data)).Cinema.messagePlatformAccount;
+                        this.oMessagePlatformPassword = JSON.parse(Decrypt(data.data.data)).Cinema.messagePlatformPassword;
+                        this.oMessagePlatformSignId = JSON.parse(Decrypt(data.data.data)).Cinema.messagePlatformSignId;
+                        this.oExpireDate = JSON.parse(Decrypt(data.data.data)).Cinema.expireDate;
+                        this.oPaymentType = JSON.parse(Decrypt(data.data.data)).Cinema.paymentType;
+                        this.oReportedType = JSON.parse(Decrypt(data.data.data)).Cinema.reportedType;
                         for (let x in this.boolean) {
-                            if (this.boolean[x].value == JSON.parse(Decrypt(data.data.data)).memberCardCommonUseStatus) {
+                            if (this.boolean[x].value == JSON.parse(Decrypt(data.data.data)).Cinema.memberCardCommonUseStatus) {
                                 this.oMemberCardCommonUseStatus = this.boolean[x].value;
                                 break;
                             }
                         }
                         for (let x in this.boolean) {
-                            if (this.boolean[x].value == JSON.parse(Decrypt(data.data.data)).openSnackStatus) {
+                            if (this.boolean[x].value == JSON.parse(Decrypt(data.data.data)).Cinema.openSnackStatus) {
                                 this.oOpenSnackStatus = this.boolean[x].value;
                                 break;
                             }
                         }
                         for (let x in this.boolean) {
-                            if (this.boolean[x].value == JSON.parse(Decrypt(data.data.data)).snackDispatcherStatus) {
+                            if (this.boolean[x].value == JSON.parse(Decrypt(data.data.data)).Cinema.snackDispatcherStatus) {
                                 this.oSnackDispatcherStatus = this.boolean[x].value;
                                 break;
                             }
                         }
                         for (let x in this.boolean) {
-                            if (this.boolean[x].value == JSON.parse(Decrypt(data.data.data)).refundable) {
+                            if (this.boolean[x].value == JSON.parse(Decrypt(data.data.data)).Cinema.refundable) {
                                 this.oRefundable = this.boolean[x].value;
                                 break;
                             }
                         }
                         for (let x in this.boolean) {
-                            if (this.boolean[x].value == JSON.parse(Decrypt(data.data.data)).openStatus) {
+                            if (this.boolean[x].value == JSON.parse(Decrypt(data.data.data)).Cinema.openStatus) {
                                 this.oOpenStatus = this.boolean[x].value;
                                 break;
                             }
                         }
                         for (let x in this.boolean) {
-                            if (this.boolean[x].value == JSON.parse(Decrypt(data.data.data)).openMemberCardStatus) {
+                            if (this.boolean[x].value == JSON.parse(Decrypt(data.data.data)).Cinema.openMemberCardStatus) {
                                 this.oOpenMemberCardStatus = this.boolean[x].value;
                                 break;
                             }
                         }
                         for (let x in this.boolean) {
-                            if (this.boolean[x].value == JSON.parse(Decrypt(data.data.data)).videoStatus) {
+                            if (this.boolean[x].value == JSON.parse(Decrypt(data.data.data)).Cinema.videoStatus) {
                                 this.oVideoStatus = this.boolean[x].value;
                                 break;
                             }
                         }
                         for (let x in this.boolean) {
-                            if (this.boolean[x].value == JSON.parse(Decrypt(data.data.data)).ticketsForMemberCardPayStatus) {
+                            if (this.boolean[x].value == JSON.parse(Decrypt(data.data.data)).Cinema.ticketsForMemberCardPayStatus) {
                                 this.oTicketsForMemberCardPayStatus = this.boolean[x].value;
                                 break;
                             }
                         }
-                        this.oMiniAppSecret = JSON.parse(Decrypt(data.data.data)).miniAppSecret;
-                        this.oMiniMerchantNo = JSON.parse(Decrypt(data.data.data)).miniMerchantNo;
-                        this.oMiniMerchantSecret = JSON.parse(Decrypt(data.data.data)).miniMerchantSecret;
-                        this.oMiniRefundCertificateUrl = JSON.parse(Decrypt(data.data.data)).miniRefundCertificateUrl;
-                        this.oTicketingSystemType = JSON.parse(Decrypt(data.data.data)).ticketingSystemType;
-                        this.oMtxPayType = JSON.parse(Decrypt(data.data.data)).mtxPayType;
-                        this.oTicketingSystemAccount = JSON.parse(Decrypt(data.data.data)).ticketingSystemAccount;
-                        this.oTicketingSystemPassword = JSON.parse(Decrypt(data.data.data)).ticketingSystemPassword;
-                        this.oMiniAppId = JSON.parse(Decrypt(data.data.data)).miniAppId;
-                        this.oInterfaceAddress = JSON.parse(Decrypt(data.data.data)).interfaceAddress;
-                        this.oMemberInterfaceAddress = JSON.parse(Decrypt(data.data.data)).memberInterfaceAddress;
-                        this.oVerificationCode = JSON.parse(Decrypt(data.data.data)).verificationCode;
-                        this.oMiniAppName = JSON.parse(Decrypt(data.data.data)).miniAppName;
-                        this.oMiniAppQRCode = JSON.parse(Decrypt(data.data.data)).miniAppQRCode;
-                        this.oId = JSON.parse(Decrypt(data.data.data)).id;
+                        for (let x in this.boolean) {
+                            if (this.boolean[x].value == JSON.parse(Decrypt(data.data.data)).Cinema.paymentType) {
+                                this.oPaymentType = this.boolean[x].value;
+                                break;
+                            }
+                        }
+                        for (let x in this.boolean) {
+                            if (this.boolean[x].value == JSON.parse(Decrypt(data.data.data)).Cinema.reportedType) {
+                                this.oReportedType = this.boolean[x].value;
+                                break;
+                            }
+                        }
+                        for (let x in this.boolean) {
+                            if (this.boolean[x].value == JSON.parse(Decrypt(data.data.data)).CinemaMessagePlatFormInfo.messagePlatformType) {
+                                this.oMessagePlatformType = this.boolean[x].value;
+                                break;
+                            }
+                        }
+                        for (let i = 0; i < JSON.parse(Decrypt(data.data.data)).MessageInfo.length; i ++) {
+                            if (JSON.parse(Decrypt(data.data.data)).MessageInfo[i].messageType == 1) {
+                                this.oMessageType1 = JSON.parse(Decrypt(data.data.data)).MessageInfo[i].content
+                            }
+                            if (JSON.parse(Decrypt(data.data.data)).MessageInfo[i].messageType == 2) {
+                                this.oMessageType2 = JSON.parse(Decrypt(data.data.data)).MessageInfo[i].content
+                            }
+                            if (JSON.parse(Decrypt(data.data.data)).MessageInfo[i].messageType == 3) {
+                                this.oMessageType3 = JSON.parse(Decrypt(data.data.data)).MessageInfo[i].content
+                            }
+                            if (JSON.parse(Decrypt(data.data.data)).MessageInfo[i].messageType == 4) {
+                                this.oMessageType4 = JSON.parse(Decrypt(data.data.data)).MessageInfo[i].content
+                            }
+                            if (JSON.parse(Decrypt(data.data.data)).MessageInfo[i].messageType == 5) {
+                                this.oMessageType5 = JSON.parse(Decrypt(data.data.data)).MessageInfo[i].content
+                            }
+                            if (JSON.parse(Decrypt(data.data.data)).MessageInfo[i].messageType == 6) {
+                                this.oMessageType6 = JSON.parse(Decrypt(data.data.data)).MessageInfo[i].content
+                            }
+                        }
+                        this.oMessagePlatformAccount = JSON.parse(Decrypt(data.data.data)).CinemaMessagePlatFormInfo.messagePlatformAccount;
+                        this.oMessagePlatformPassword = JSON.parse(Decrypt(data.data.data)).CinemaMessagePlatFormInfo.messagePlatformPassword;
+                        this.oMessagePlatformSignId = JSON.parse(Decrypt(data.data.data)).CinemaMessagePlatFormInfo.messagePlatformSignId;
+                        this.oMiniAppSecret = JSON.parse(Decrypt(data.data.data)).Cinema.miniAppSecret;
+                        this.oMiniMerchantNo = JSON.parse(Decrypt(data.data.data)).Cinema.miniMerchantNo;
+                        this.oMiniMerchantSecret = JSON.parse(Decrypt(data.data.data)).Cinema.miniMerchantSecret;
+                        this.oMiniRefundCertificateUrl = JSON.parse(Decrypt(data.data.data)).Cinema.miniRefundCertificateUrl;
+                        this.oTicketingSystemType = JSON.parse(Decrypt(data.data.data)).Cinema.ticketingSystemType;
+                        this.oMtxPayType = JSON.parse(Decrypt(data.data.data)).Cinema.mtxPayType;
+                        this.oTicketingSystemAccount = JSON.parse(Decrypt(data.data.data)).Cinema.ticketingSystemAccount;
+                        this.oTicketingSystemPassword = JSON.parse(Decrypt(data.data.data)).Cinema.ticketingSystemPassword;
+                        this.oMiniAppId = JSON.parse(Decrypt(data.data.data)).Cinema.miniAppId;
+                        this.oInterfaceAddress = JSON.parse(Decrypt(data.data.data)).Cinema.interfaceAddress;
+                        this.oMemberInterfaceAddress = JSON.parse(Decrypt(data.data.data)).Cinema.memberInterfaceAddress;
+                        this.oVerificationCode = JSON.parse(Decrypt(data.data.data)).Cinema.verificationCode;
+                        this.oMiniAppName = JSON.parse(Decrypt(data.data.data)).Cinema.miniAppName;
+                        this.oMiniAppQRCode = JSON.parse(Decrypt(data.data.data)).Cinema.miniAppQRCode;
+                        this.oId = JSON.parse(Decrypt(data.data.data)).Cinema.id;
                         this.openServe();
                         // 获取所选影院名称
                         for (let i = 0; i < this.businessInfo.length; i++) {
@@ -1564,7 +1863,6 @@ export default {
             });
             var jsonArr = [];
             jsonArr.push({ key: 'cinemaName', value: this.oCinemaName });
-            jsonArr.push({ key: 'cinemaCode', value: this.oCinemaCode });
             jsonArr.push({ key: 'province', value: this.oProvince });
             jsonArr.push({ key: 'city', value: this.oCity });
             jsonArr.push({ key: 'address', value: this.oAddress });
@@ -1589,6 +1887,28 @@ export default {
             jsonArr.push({ key: 'snackBeginTime', value: this.oSnackBeginTime });
             jsonArr.push({ key: 'snackEndTime', value: this.oSnackEndTime });
             jsonArr.push({ key: 'messagePlatformType', value: this.oMessagePlatformType });
+            let messageInfos = [];
+            if (this.oMessageType1) {
+                messageInfos.push({ 'messageType':  1 , 'content': this.oMessageType1 });
+            }
+            if (this.oMessageType2) {
+                messageInfos.push({ 'messageType': 2 ,  'content': this.oMessageType2 });
+            }
+            if (this.oMessageType3) {
+                messageInfos.push({ 'messageType': 3 , 'content': this.oMessageType3 });
+            }
+            if (this.oMessageType4) {
+                messageInfos.push({ 'messageType': 4 , 'content': this.oMessageType4 });
+            }
+            if (this.oMessageType5) {
+                messageInfos.push({ 'messageType': 5 , 'content': this.oMessageType5 });
+            }
+            if (this.oMessageType6) {
+                messageInfos.push({ 'messageType': 6 , 'content': this.oMessageType6 });
+            }
+            if (messageInfos.length>0) {
+                jsonArr.push({ key: 'messageInfos', value: JSON.stringify(messageInfos)})
+            }
             jsonArr.push({ key: 'messagePlatformAccount', value: this.oMessagePlatformAccount });
             jsonArr.push({ key: 'messagePlatformPassword', value: this.oMessagePlatformPassword });
             jsonArr.push({ key: 'messagePlatformSignId', value: this.oMessagePlatformSignId });
@@ -1753,8 +2073,6 @@ export default {
         },
         openServe(e) {
             // 开通各种服务状态
-            console.log(this.oOpenSnackStatus)
-            console.log(this.oSnackDispatcherStatus)
         },
         changeGetStatus(item) {
             if (item == 1) {

@@ -109,8 +109,8 @@
                     <el-date-picker
                         v-model="oForm.startDate"
                         type="date"
-                        value-format="yyyy-MM-dd hh:mm:ss"
-                        format="yyyy-MM-dd hh:mm:ss"
+                        value-format="yyyy-MM-dd"
+                        format="yyyy-MM-dd"
                         placeholder="选择日期时间"
                     ></el-date-picker>
                 </el-form-item>
@@ -118,8 +118,8 @@
                     <el-date-picker
                         v-model="oForm.endDate"
                         type="date"
-                        value-format="yyyy-MM-dd hh:mm:ss"
-                        format="yyyy-MM-dd hh:mm:ss"
+                        value-format="yyyy-MM-dd"
+                        format="yyyy-MM-dd"
                         placeholder="选择日期时间"
                     ></el-date-picker>
                 </el-form-item>
