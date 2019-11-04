@@ -9,14 +9,24 @@
         </div>
         <div class="container">
             <div class="handle-box">
+                <el-input v-model="query.cinemaName" placeholder="影院名称" class="handle-input mr10"></el-input>
                 <el-select clearable v-model="query.status" placeholder="状态" class="handle-select mr10">
-                    <el-option key="1" label="审核中" value="1"></el-option>
-                    <el-option key="2" label="未审核" value="2"></el-option>
-                    <el-option key="3" label="通过" value="3"></el-option>
-                    <el-option key="4" label="审核失败" value="4"></el-option>
+                    <el-option key="1" label="显示" value="1"></el-option>
+                    <el-option key="2" label="不显示" value="2"></el-option>
+                </el-select>
+                <el-select clearable v-model="query.bannerLevel" placeholder="轮播图级别" class="handle-select mr10">
+                    <el-option key="1" label="全部影院" value="1"></el-option>
+                    <el-option key="2" label="部分影院" value="2"></el-option>
+                </el-select>
+                <el-select clearable v-model="query.category" placeholder="轮播图类别" class="handle-select mr10">
+                    <el-option key="1" label="卖品首页" value="1"></el-option>
+                    <el-option key="2" label="积分商城首页" value="2"></el-option>
+                    <el-option key="3" label="个人中心首页" value="3"></el-option>
+                    <el-option key="4" label="支付成功页" value="4"></el-option>
+                    <el-option key="5" label="放映厅首页" value="5"></el-option>
                 </el-select>
                 <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
-                <el-button type="primary"  @click="addPage" icon="el-icon-circle-plus-outline"  style="margin-left: 910px">新增</el-button>
+                <el-button type="primary"  @click="addPage" icon="el-icon-circle-plus-outline"  style="margin-left: 340px">新增</el-button>
             </div>
             <el-table
                     :data="tableData"
@@ -29,9 +39,9 @@
                 <el-table-column prop="name" label="轮播图级别" width="130">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.bannerLevel=='1'"
-                        >商家</el-tag>
+                        >全部影院</el-tag>
                         <el-tag v-else-if="scope.row.bannerLevel=='2'"
-                        >门店</el-tag>
+                        >部分影院</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column label="适用影院" width="130">
@@ -59,8 +69,11 @@
                 </el-table-column>
                 <el-table-column prop="sort" label="轮播图类别" width="120px">
                     <template slot-scope="scope">
-                        <el-tag v-if="scope.row.category=='1'"
-                        >电影首页轮播图</el-tag>
+                        <el-tag v-if="scope.row.category=='1'">卖品首页</el-tag>
+                        <el-tag v-if="scope.row.category=='2'">积分商城首页</el-tag>
+                        <el-tag v-if="scope.row.category=='3'">个人中心首页</el-tag>
+                        <el-tag v-if="scope.row.category=='4'">支付成功页</el-tag>
+                        <el-tag v-if="scope.row.category=='5'">放映厅首页</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column prop="sort" label="图片地址" width="200px">
@@ -82,14 +95,6 @@
                 </el-table-column>
                 <el-table-column prop="sort" label="跳转的具体信息" width="130">
                     <template slot-scope="scope">{{scope.row.redirectGoal}}</template>
-                </el-table-column>
-                <el-table-column label="状态" align="center">
-                    <template slot-scope="scope">
-                        <el-tag v-if="scope.row.status=='1'" type='success'
-                        >成功</el-tag>
-                        <el-tag v-else type='danger'
-                        >未通过</el-tag>
-                    </template>
                 </el-table-column>
                 <el-table-column label="操作" width="100" align="center" fixed="right">
                     <template slot-scope="scope">
@@ -155,29 +160,29 @@
                 </el-form-item>
                 <el-form-item label="开始时间" :label-width="formLabelWidth">
                     <el-date-picker
-                            style="width: 150px"
+                            style="width: 200px"
                             v-model="startTime"
                             type="datetime"
-                            value-format="yyyy-MM-dd hh:mm:ss"
-                            format="yyyy-MM-dd hh:mm:ss"
+                            value-format="yyyy-MM-dd HH:mm:ss"
+                            format="yyyy-MM-dd HH:mm:ss"
                             placeholder="选择日期时间">
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="结束时间" :label-width="formLabelWidth">
                     <el-date-picker
-                            style="width: 150px"
+                            style="width: 200px"
                             v-model="endTime"
                             type="datetime"
-                            value-format="yyyy-MM-dd hh:mm:ss"
-                            format="yyyy-MM-dd hh:mm:ss"
+                            value-format="yyyy-MM-dd HH:mm:ss"
+                            format="yyyy-MM-dd HH:mm:ss"
                             placeholder="选择日期时间">
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="备注" :label-width="formLabelWidth">
-                    <el-input style="width: 150px" maxlength="9" v-model.number="oForm.memo" autocomplete="off"></el-input>
+                    <el-input style="width: 250px" maxlength="30" v-model="oForm.memo" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="轮播图类别" :label-width="formLabelWidth">
-                    <el-select v-model="oForm.bannerType" placeholder="请选择商家">
+                    <el-select v-model="oForm.bannerType" placeholder="请选择">
                         <el-option
                                 v-for="item in bannerType"
                                 :key="item.value"
@@ -190,6 +195,7 @@
                     <el-upload
                             :before-upload="beforeUpload"
                             :data="type"
+                            :limit="1"
                             class="upload-demo"
                             drag
                             action="/api/upload/uploadImage"
@@ -197,7 +203,7 @@
                             multiple>
                         <i class="el-icon-upload"></i>
                         <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
+                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb 建议尺寸750*360或按比例上传</div>
                     </el-upload>
                 </el-form-item>
                 <el-form-item label="跳转类型" :label-width="formLabelWidth">
@@ -257,6 +263,8 @@
                             style="width: 190px"
                             v-model="changeStartTime"
                             type="datetime"
+                            value-format="yyyy-MM-dd HH:mm:ss"
+                            format="yyyy-MM-dd HH:mm:ss"
                             placeholder="选择日期时间">
                     </el-date-picker>
                 </el-form-item>
@@ -265,6 +273,8 @@
                             style="width: 190px"
                             v-model="changeEndTime"
                             type="datetime"
+                            value-format="yyyy-MM-dd HH:mm:ss"
+                            format="yyyy-MM-dd HH:mm:ss"
                             placeholder="选择日期时间">
                     </el-date-picker>
                 </el-form-item>
@@ -272,7 +282,7 @@
                     <el-input style="width: 150px" maxlength="9" v-model.number="form.memo" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="轮播图类别" :label-width="formLabelWidth">
-                    <el-select v-model="form.bannerType" placeholder="请选择商家">
+                    <el-select v-model="form.bannerType" placeholder="请选择">
                         <el-option
                                 v-for="item in bannerType"
                                 :key="item.value"
@@ -292,6 +302,7 @@
                     <el-upload
                             :before-upload="beforeUpload"
                             :data="type"
+                            :limit="1"
                             class="upload-demo"
                             drag
                             action="/api/upload/uploadImage"
@@ -299,7 +310,7 @@
                             multiple>
                         <i class="el-icon-upload"></i>
                         <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
+                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb 建议尺寸750*360或按比例上传</div>
                     </el-upload>
                 </el-form-item>
                 <el-form-item label="跳转类型" :label-width="formLabelWidth">
@@ -394,8 +405,24 @@
                 bannerType:[
                     {
                         value: '1',
-                        label: '电影首页轮播图'
-                    }
+                        label: '卖品首页'
+                    },
+                    {
+                        value: '2',
+                        label: '积分商城首页'
+                    },
+                    {
+                        value: '3',
+                        label: '个人中心首页'
+                    },
+                    {
+                        value: '4',
+                        label: '支付成功页'
+                    },
+                    {
+                        value: '5',
+                        label: '放映厅首页'
+                    },
                 ],
                 tabType:[
                     {
@@ -445,18 +472,6 @@
                         }
                     )
                 }, 500);
-            },
-            beforeUpload(){//上传之前
-                this.type.type=EncryptReplace('activity')
-            },
-            onSuccess(data){//上传文件 登录超时
-                // console.log(data);
-                this.oForm.imageUrl=data.data
-                if(data.code=='nologin'){
-                    this.message=data.message
-                    this.open()
-                    this.$router.push('/login');
-                }
             },
             addRole(){ //新增按钮操作
                 const loading = this.$loading({
@@ -616,7 +631,7 @@
                                     break;
                                 }
                             }
-                            this.changeStartTime = JSON.parse(Decrypt(data.data.data)).banner.createDate//创建时间
+                            this.changeStartTime = JSON.parse(Decrypt(data.data.data)).banner.startDate//创建时间
                             this.changeEndTime = JSON.parse(Decrypt(data.data.data)).banner.endDate//结束时间
                             this.form.memo= JSON.parse(Decrypt(data.data.data)).banner.memo//备注
                             let typeIndex = 0;  //轮播图级别下拉选显示对应的选项
@@ -712,8 +727,21 @@
                     )
                 }, 500);
             },
+            beforeUpload(){//上传之前
+                this.type.type=EncryptReplace('activity')
+            },
+            onSuccess(data){//上传文件 登录超时
+                // console.log(data);
+                // console.log(data);
+                this.oForm.imageUrl=data.data
+                if(data.code=='nologin'){
+                    this.message=data.message
+                    this.open()
+                    this.$router.push('/login');
+                }
+            },
             Search(){
-                this.query.pageNo=1
+                this.query.pageNo=1;
                 this.getMenu()
             },
             getMenu(){//获取菜单栏
@@ -725,15 +753,27 @@
                     target: document.querySelector('.div1')
                 });
                 setTimeout(() => {
-                    let name=this.query.name
-                    let status=this.query.status
-                    if(!name){
-                        name=''
-                    }
+                    let status=this.query.status;
+                    let bannerLevel=this.query.bannerLevel;
+                    let cinemaName=this.query.cinemaName;
+                    let category=this.query.category;
                     if(!status){
                         status=''
                     }
+                    if(!bannerLevel){
+                        bannerLevel=''
+                    }
+                    if(!cinemaName){
+                        cinemaName=''
+                    }
+                    if(!category){
+                        category=''
+                    }
                     let jsonArr = [];
+                    jsonArr.push({key:"status",value:status});
+                    jsonArr.push({key:"bannerLevel",value:bannerLevel});
+                    jsonArr.push({key:"cinemaName",value:cinemaName});
+                    jsonArr.push({key:"category",value:category});
                     jsonArr.push({key:"pageNo",value:this.query.pageNo});
                     jsonArr.push({key:"pageSize",value:this.query.pageSize});
                     let sign =md5(preSign(jsonArr));

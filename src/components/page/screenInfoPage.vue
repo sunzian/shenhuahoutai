@@ -9,14 +9,16 @@
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-input v-model="query.name" placeholder="影厅名" class="handle-input mr10"></el-input>
+                <el-input v-model="query.cinemaName" placeholder="影院名称" class="handle-input mr10"></el-input>
+                <el-input v-model="query.screenName" placeholder="影厅名称" class="handle-input mr10"></el-input>
                 <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
                 <el-button
                     type="primary"
                     @click="addPage"
                     icon="el-icon-circle-plus-outline"
-                    style="margin-left: 680px"
+                    style="margin-left: 210px"
                 >重新获取影厅</el-button>
+                <el-button type="primary" icon="el-icon-circle-plus-outline" style="margin-left: 15px" @click="getScreenSeat">获取选中影厅座位</el-button>
             </div>
             <el-table
                 :data="tableData"
@@ -57,9 +59,6 @@
                     </template>
                 </el-table-column>
             </el-table>
-            <div style="margin-top: 20px">
-                <el-button type="primary" @click="getScreenSeat">获取选中影厅座位</el-button>
-            </div>
             <div class="pagination">
                 <el-pagination
                     background
@@ -243,7 +242,7 @@ export default {
                         // console.log(data);
                         if (data.data.code == 'success') {
                             this.dialogFormVisible = false;
-                            this.$message.success(`新增成功`);
+                            this.$message.success(`获取成功`);
                             this.getMenu();
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
@@ -331,7 +330,8 @@ export default {
                     loading.close();
                     // console.log(data);
                     if (data.data.code == 'success') {
-
+                        this.$message.success(`获取成功`);
+                        this.getMenu();
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
@@ -405,15 +405,17 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            let name = this.query.name;
-            let status = this.query.status;
-            if (!name) {
-                name = '';
+            let cinemaName = this.query.cinemaName;
+            let screenName = this.query.screenName;
+            if (!cinemaName) {
+                cinemaName = '';
             }
-            if (!status) {
-                status = '';
+            if (!screenName) {
+                screenName = '';
             }
             let jsonArr = [];
+            jsonArr.push({ key: 'cinemaName', value: cinemaName });
+            jsonArr.push({ key: 'screenName', value: screenName });
             jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
             jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
             let sign = md5(preSign(jsonArr));
@@ -486,6 +488,13 @@ export default {
         },
         // 获取选中影厅座位
         getScreenSeat() {
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
             let jsonArr = [];
             jsonArr.push({ key: 'cinemaCodes', value: this.selectScreen });
             let sign = md5(preSign(jsonArr));
@@ -495,7 +504,8 @@ export default {
             https
                 .fetchPost('/screenSeat/batchUpdateScreenSeat', params)
                 .then(data => {
-                    console.log(data)
+                    loading.close();
+                    console.log(data);
                     if (data.data.code == 'success') {
                         this.$message.success(`获取成功`);
                         this.getMenu();

@@ -9,7 +9,7 @@
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-input v-model="query.name" placeholder="影院名称" class="handle-input mr10"></el-input>
+                <el-input v-model="query.cinemaName" placeholder="影院名称" class="handle-input mr10"></el-input>
                 <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
             </div>
             <el-table

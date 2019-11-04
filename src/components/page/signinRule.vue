@@ -498,8 +498,8 @@
             },
             addChange(index,row){
                 this.index=index;
-                this.form.continuousDays=this.tableData[this.index].continuousDays
-                this.editVisible=true
+                this.form.continuousDays=this.tableData[this.index].continuousDays;
+                this.editVisible=true;
                 console.log(this.tableData);
             },
             exChanger() {
@@ -518,35 +518,6 @@
                 console.log(this.tableData);
                 this.editVisible=false
                 this.form.goldAward=''
-                // console.log(this.form.continuousDays);
-                // console.log(this.form.goldAward);
-                // console.log(this.form.extraFlag);
-                // console.log(this.form.extraPrizeName);
-                // console.log(this.form.extraPrizePicture);
-                // console.log(this.form.expireDays);
-                // console.log(this.form.extraPrizeType);
-                // 新增奖项操作
-                // let onePrize={
-                //     prizeLevel:this.form.prizeLevel,
-                //     prizeName:this.form.prizeName,
-                //     prizePicture:this.form.image_url,
-                //     prizeNumber:this.form.prizeNumber,
-                //     percent:this.form.percent,
-                //     prizeType:this.form.prizeType,
-                //     expireDay:this.form.expireDay,
-                //     couponId:this.couponInfo.id,
-                //     couponName:this.couponInfo.couponName
-                // };
-                // this.prizeInfoList.push(onePrize);
-                // this.form.prizeLevel='';
-                // this.form.prizeName='';
-                // this.form.image_url='';
-                // this.form.expireDay='';
-                // this.form.prizeNumber='';
-                // this.form.percent='';
-                // this.form.prizeType='';
-                // this.couponInfo={};
-                // this.editVisible = false
             },
             prizeModify(row,index){
                 this.oIndex=index

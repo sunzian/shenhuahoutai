@@ -166,6 +166,9 @@
                 <el-form-item label="权益卡名称：" :label-width="formLabelWidth" prop="name">
                     <el-input style="width: 150px" v-model="oForm.name" autocomplete="off"></el-input>
                 </el-form-item>
+                <el-form-item label="权益卡简短描述：" :label-width="formLabelWidth" prop="name">
+                    <el-input style="width: 150px" v-model="oForm.simpleDesc" autocomplete="off"></el-input>
+                </el-form-item>
                 <el-form-item label="选择影院：" :label-width="formLabelWidth" prop="cinemaName">
                     <el-radio-group v-model="oForm.cinemaCode" @change="selectCinema">
                         <el-radio
@@ -187,6 +190,9 @@
                         <el-radio label="1">参加</el-radio>
                         <el-radio label="0">不参加</el-radio>
                     </el-radio-group>
+                </el-form-item>
+                <el-form-item v-if="oForm.isFilmJoin==1&&oForm.cardType==1" label="影票优惠简短描述：" :label-width="formLabelWidth" prop="screenName">
+                  <el-input v-model="oForm.filmSimpleDesc"></el-input>
                 </el-form-item>
                 <el-form-item v-if="oForm.isFilmJoin==1&&oForm.cardType==1" label="选择影厅：" :label-width="formLabelWidth" prop="screenName">
                     <el-radio-group v-model="oForm.selectHallType">
@@ -285,6 +291,9 @@
                         <el-radio label="0">不参加</el-radio>
                     </el-radio-group>
                 </el-form-item>
+                <el-form-item v-if="oForm.isMerchandiseJoin==1&&oForm.cardType==1" label="卖品优惠简短描述：" :label-width="formLabelWidth" prop="screenName">
+                    <el-input v-model="oForm.merchandiseSimpleDesc"></el-input>
+                </el-form-item>
                 <el-form-item v-if="oForm.isMerchandiseJoin==1&&oForm.cardType==1"  label="优惠方式：" :label-width="formLabelWidth" prop="reduceType">
                     <el-radio-group v-model="oForm.reduceTypeMerchandise">
                         <el-radio label="1">固定价格</el-radio>
@@ -347,6 +356,9 @@
                 </el-form-item>
                 <el-form-item label="每日限购次数：" v-if="oForm.isLimitMerchandise==1&&oForm.cardType==1" :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oForm.numberMerchandise" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item v-if="oForm.cardType==2" label="券包简短描述：" :label-width="formLabelWidth" prop="name">
+                    <el-input style="width: 150px" v-model="oForm.couponSimpleDesc" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item
                         v-if="oForm.cardType==2"
@@ -468,7 +480,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="权益卡描述：" :label-width="formLabelWidth">
+                <el-form-item label="使用说明：" :label-width="formLabelWidth">
                     <el-input
                             type="textarea"
                             :rows="2"
@@ -1064,6 +1076,7 @@
                 jsonArr.push({ key: 'unit', value: this.oForm.unit});
                 jsonArr.push({ key: 'number', value: this.oForm.number});
                 jsonArr.push({ key: 'expense', value: this.oForm.expense});
+                jsonArr.push({ key: 'simpleDesc', value: this.oForm.simpleDesc});
                 if(this.oForm.cardType==1){
                     jsonArr.push({ key: 'isFilmJoin', value: this.oForm.isFilmJoin});
                     jsonArr.push({ key: 'startTimeVal', value: this.startArr.join(',')});
@@ -1074,6 +1087,7 @@
                     jsonArr.push({ key: 'validPayType', value: this.oForm.validPayType});
                     jsonArr.push({ key: 'isCouponTogether', value: this.oForm.isCouponTogether});
                     if(this.oForm.isFilmJoin==1){
+                        jsonArr.push({ key: 'filmSimpleDesc', value: this.oForm.filmSimpleDesc});
                         jsonArr.push({ key: 'reduceTypeFilm', value: this.oForm.reduceTypeFilm});
                         jsonArr.push({ key: 'discountMoneyFilm', value: this.oForm.discountMoneyFilm});
                         jsonArr.push({ key: 'selectHallType', value: this.oForm.selectHallType});
@@ -1095,6 +1109,7 @@
                     }
                     if(this.oForm.isMerchandiseJoin==1){
                         jsonArr.push({ key: 'reduceTypeMerchandise', value: this.oForm.reduceTypeMerchandise});
+                        jsonArr.push({ key: 'merchandiseSimpleDesc', value: this.oForm.erchandiseSimpleDesc});
                         jsonArr.push({ key: 'discountMoneyMerchandise', value: this.oForm.discountMoneyMerchandise});
                         jsonArr.push({ key: 'selectMerchandiseType', value: this.oForm.selectMerchandiseType});
                         jsonArr.push({ key: 'isLimitMerchandise', value: this.oForm.isLimitMerchandise});
@@ -1112,6 +1127,7 @@
                 }
                 else if(this.oForm.cardType==2){
                     jsonArr.push({ key: 'couponGroupId', value: this.couponId});
+                    jsonArr.push({ key: 'couponSimpleDesc', value: this.oForm.couponSimpleDesc});
                 }
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });

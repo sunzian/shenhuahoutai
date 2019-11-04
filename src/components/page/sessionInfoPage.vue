@@ -9,13 +9,14 @@
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-input v-model="query.name" placeholder="影院名称" class="handle-input mr10"></el-input>
+                <el-input v-model="query.cinemaName" placeholder="影院名称" class="handle-input mr10"></el-input>
+                <el-input v-model="query.filmName" placeholder="影片名称" class="handle-input mr10"></el-input>
                 <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
                 <el-button
                     type="primary"
                     @click="addPage"
                     icon="el-icon-circle-plus-outline"
-                    style="margin-left: 680px"
+                    style="margin-left: 370px"
                 >重新获取排期</el-button>
             </div>
             <el-table
@@ -463,7 +464,6 @@ export default {
             jsonArr.push({ key: 'sign', value: sign });
             let params = ParamsAppend(jsonArr);
             console.log(jsonArr);
-            this.editVisible = false;
             https
                 .fetchPost('/sessionInfo/updatePartyPayCommissionFee', params)
                 .then(data => {
@@ -471,6 +471,7 @@ export default {
                     console.log(data);
                     // console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
+                        this.editVisible = false;
                         this.$message.success(`编辑成功`);
                         this.getMenu();
                     } else if (data.data.code == 'nologin') {
@@ -500,16 +501,17 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            let name = this.query.name;
-            let status = this.query.status;
-            if (!name) {
-                name = '';
+            let cinemaName = this.query.cinemaName;
+            let filmName = this.query.filmName;
+            if (!cinemaName) {
+                cinemaName = '';
             }
-            if (!status) {
-                status = '';
+            if (!filmName) {
+                filmName = '';
             }
             let jsonArr = [];
-            // jsonArr.push({ key: 'cinemaName', value: name });
+            jsonArr.push({ key: 'cinemaName', value: cinemaName });
+            jsonArr.push({ key: 'filmName', value: filmName });
             jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
             jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
             let sign = md5(preSign(jsonArr));
