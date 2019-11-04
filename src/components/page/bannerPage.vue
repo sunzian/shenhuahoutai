@@ -195,9 +195,10 @@
                     <el-upload
                             :before-upload="beforeUpload"
                             :data="type"
-                            :limit="1"
+                            :limit="8"
                             class="upload-demo"
                             drag
+                            ref="upload"
                             action="/api/upload/uploadImage"
                             :on-success="onSuccess"
                             multiple>
@@ -282,7 +283,7 @@
                     <el-input style="width: 150px" maxlength="9" v-model.number="form.memo" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="轮播图类别" :label-width="formLabelWidth">
-                    <el-select v-model="form.bannerType" placeholder="请选择">
+                    <el-select v-model="oBannerType" placeholder="请选择">
                         <el-option
                                 v-for="item in bannerType"
                                 :key="item.value"
@@ -296,17 +297,18 @@
                             placement="right"
                             title=""
                             trigger="hover">
-                        <img :src="imageUrl"/>
+                        <img style="width: 400px" :src="imageUrl"/>
                         <img slot="reference" :src="imageUrl" :alt="imageUrl" style="max-height: 50px;max-width: 130px">
                     </el-popover>
                     <el-upload
                             :before-upload="beforeUpload"
                             :data="type"
-                            :limit="1"
+                            :limit="8"
+                            ref="download"
                             class="upload-demo"
                             drag
                             action="/api/upload/uploadImage"
-                            :on-success="onSuccess"
+                            :on-success="unSuccess"
                             multiple>
                         <i class="el-icon-upload"></i>
                         <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
@@ -345,6 +347,7 @@
         name: 'basetable',
         data() {
             return {
+                oBannerType:'',
                 type:{
                     type: ""
                 },
@@ -505,9 +508,17 @@
                             if(data.data.code=='success'){
                                 this.dialogFormVisible = false
                                 this.$message.success(`新增成功`);
-                                this.oForm.name = ''
-                                this.oForm.value = ''
-                                this.oForm.memo = ''
+                                this.$refs.upload.clearFiles();//清除已上传文件
+                                this.oForm.cinemaCode = '';
+                                this.oForm.value = '';
+                                this.oForm.statusValue = '';
+                                this.startTime = '';
+                                this.endTime = '';
+                                this.oForm.memo = '';
+                                this.oForm.bannerType = '';
+                                this.oForm.imageUrl = '';
+                                this.oForm.tabType = '';
+                                this.oForm.goType = '';
                                 this.getMenu()
                             }else if(data.data.code=='nologin'){
                                 this.message=data.data.message
@@ -624,24 +635,23 @@
                             }
                             this.form.status = this.showStatus[index].value;
                             //是否显示下拉选显示对应的选项
-                            this.cinemaList=JSON.parse(Decrypt(data.data.data)).cinemaList //适用影院编码
+                            this.cinemaList=JSON.parse(Decrypt(data.data.data)).cinemaList; //适用影院编码
                             for(let i in this.cinemaList){
                                 if(this.cinemaList[i].cinemaCode==JSON.parse(Decrypt(data.data.data)).banner.cinemaCodes){
                                     this.form.cinemaCodes = this.cinemaList[i].cinemaCode;
                                     break;
                                 }
                             }
-                            this.changeStartTime = JSON.parse(Decrypt(data.data.data)).banner.startDate//创建时间
-                            this.changeEndTime = JSON.parse(Decrypt(data.data.data)).banner.endDate//结束时间
-                            this.form.memo= JSON.parse(Decrypt(data.data.data)).banner.memo//备注
-                            let typeIndex = 0;  //轮播图级别下拉选显示对应的选项
+                            this.changeStartTime = JSON.parse(Decrypt(data.data.data)).banner.startDate;//创建时间
+                            this.changeEndTime = JSON.parse(Decrypt(data.data.data)).banner.endDate;//结束时间
+                            this.form.memo= JSON.parse(Decrypt(data.data.data)).banner.memo;//备注
                             for(let i in this.bannerType){//轮播图类型下拉框显示对应的选项
                                 if(this.bannerType[i].value==JSON.parse(Decrypt(data.data.data)).banner.category){
-                                    typeIndex=i;
+                                    this.oBannerType = this.bannerType[i].value;
                                     break;
                                 }
                             }
-                            this.form.bannerType = this.bannerType[typeIndex].value;
+
                             this.imageUrl = JSON.parse(Decrypt(data.data.data)).banner.imageUrl
                             let tabIndex = 0;  //跳转类型下拉选显示对应的选项
                             for(let i in this.tabType){//轮播图类型下拉框显示对应的选项
@@ -694,9 +704,10 @@
                     jsonArr.push({key:"cinemaCodes",value:this.form.cinemaCodes});
                     jsonArr.push({key:"status",value:this.form.status});
                     jsonArr.push({key:"startDate",value:this.changeStartTime});
+                    jsonArr.push({key:"imageUrl",value:this.form.imageUrl});
                     jsonArr.push({key:"endDate",value:this.changeEndTime});
                     jsonArr.push({key:"memo",value:this.form.memo});
-                    jsonArr.push({key:"category",value:this.form.bannerType});
+                    jsonArr.push({key:"category",value:this.oBannerType});
                     jsonArr.push({key:"redirectType",value:this.form.tabType});
                     jsonArr.push({key:"redirectGoal",value:this.goType});
                     let sign =md5(preSign(jsonArr));
@@ -710,6 +721,7 @@
                         console.log(data);
                         // console.log(JSON.parse(Decrypt(data.data.data)));
                         if(data.data.code=='success'){
+                            this.$refs.download.clearFiles();//清除已上传文件
                             this.$message.success(`编辑成功`);
                             this.getMenu()
                         }else if(data.data.code=='nologin'){
@@ -734,6 +746,16 @@
                 // console.log(data);
                 // console.log(data);
                 this.oForm.imageUrl=data.data
+                if(data.code=='nologin'){
+                    this.message=data.message
+                    this.open()
+                    this.$router.push('/login');
+                }
+            },
+            unSuccess(data){//上传文件 登录超时
+                // console.log(data);
+                // console.log(data);
+                this.form.imageUrl=data.data
                 if(data.code=='nologin'){
                     this.message=data.message
                     this.open()

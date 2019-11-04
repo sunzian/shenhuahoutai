@@ -9,24 +9,26 @@
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-input v-model="query.name" placeholder="角色名" class="handle-input mr10"></el-input>
-                <el-select
-                    clearable
-                    v-model="query.status"
-                    placeholder="状态"
-                    class="handle-select mr10"
-                >
-                    <el-option key="1" label="审核中" value="1"></el-option>
-                    <el-option key="2" label="未审核" value="2"></el-option>
-                    <el-option key="3" label="通过" value="3"></el-option>
-                    <el-option key="4" label="审核失败" value="4"></el-option>
+                <el-input v-model="query.cinemaNames" placeholder="门店名称" class="handle-input mr10"></el-input>
+                <el-select clearable v-model="query.status" placeholder="状态" class="handle-select mr10">
+                    <el-option key="1" label="上架" value="1"></el-option>
+                    <el-option key="2" label="未上架" value="2"></el-option>
+                </el-select>
+                <el-select clearable v-model="query.changeType" placeholder="兑换方式" class="handle-select mr10">
+                    <el-option key="1" label="纯金币兑换" value="1"></el-option>
+                    <el-option key="2" label="纯RMB兑换" value="2"></el-option>
+                    <el-option key="3" label="金币加RMB兑换" value="3"></el-option>
+                </el-select>
+                <el-select clearable v-model="query.commodityType" placeholder="商品类型" class="handle-select mr10">
+                    <el-option key="1" label="实物" value="1"></el-option>
+                    <el-option key="2" label="优惠券" value="2"></el-option>
                 </el-select>
                 <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
                 <el-button
                     type="primary"
                     @click="addPage"
                     icon="el-icon-circle-plus-outline"
-                    style="margin-left: 600px"
+                    style="margin-left: 340px"
                 >新增</el-button>
             </div>
             <el-table
@@ -571,7 +573,8 @@ export default {
                 type: [],
                 resource: '',
                 desc: '',
-                value: '1'
+                value: '1',
+                commodity_type:'1',
             },
             formLabelWidth: '120px',
             selectValue: {},
@@ -793,12 +796,12 @@ export default {
                         if (data.data.code == 'success') {
                             console.log(JSON.parse(Decrypt(data.data.data)));
                             this.cities = JSON.parse(Decrypt(data.data.data));
-                            this.oForm = [];
-                            this.oForm.name = '';
-                            this.oForm.value = '';
-                            this.oForm.memo = '';
-                            this.filmInfo = [];
-                            this.checkedCities = [];
+                            // this.oForm = [];
+                            // this.oForm.name = '';
+                            // this.oForm.value = '';
+                            // this.oForm.memo = '';
+                            // this.filmInfo = [];
+                            // this.checkedCities = [];
                             this.dialogFormVisible = true;
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
@@ -1131,17 +1134,27 @@ export default {
                 target: document.querySelector('.div1')
             });
             setTimeout(() => {
-                let name = this.query.name;
+                let cinemaNames = this.query.cinemaNames;
                 let status = this.query.status;
-                if (!name) {
-                    name = '';
+                let changeType = this.query.changeType;
+                let commodityType = this.query.commodityType;
+                if (!cinemaNames) {
+                    cinemaNames = '';
                 }
                 if (!status) {
                     status = '';
                 }
+                if (!changeType) {
+                    changeType = '';
+                }
+                if (!commodityType) {
+                    commodityType = '';
+                }
                 let jsonArr = [];
-                jsonArr.push({ key: 'roleName', value: name });
+                jsonArr.push({ key: 'cinemaNames', value: cinemaNames });
                 jsonArr.push({ key: 'status', value: status });
+                jsonArr.push({ key: 'changeType', value: changeType });
+                jsonArr.push({ key: 'commodityType', value: commodityType });
                 jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
                 jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
                 let sign = md5(preSign(jsonArr));
