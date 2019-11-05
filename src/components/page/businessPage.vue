@@ -103,8 +103,7 @@
                 <el-form-item label="商家电话" :label-width="formLabelWidth">
                     <el-input
                         style="width: 150px"
-                        maxlength="9"
-                        v-model.number="oForm.mobile"
+                        v-model="oForm.mobile"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>

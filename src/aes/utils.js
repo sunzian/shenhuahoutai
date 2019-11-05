@@ -60,7 +60,8 @@ export function Decrypt(word, keyStr, ivStr) {
     }
 }
 export function preSign(jsonArr) {
-    let precodeStr = jsonArr.sort((a, b) => a.key < b.key? -1: 1).reduce((all, u) => all + (u.value==undefined?"":u.value), '') + SIGN_KEY;
+    let precodeStr = jsonArr.sort((a, b) => a.key < b.key? -1: 1).reduce((all, u) => all + (u.value==undefined?"":u.value), '').replace(/^\s+|\s+$/g,"") + SIGN_KEY;
+    console.log(precodeStr);
     return precodeStr;
 }
 

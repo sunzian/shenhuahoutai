@@ -92,6 +92,7 @@ export default {
 
                 }else if(data.data.code=='error'){
                     alert(data.data.message)
+                    this.fresh()
                 }
             }).catch(err=>{
                     console.log(err)

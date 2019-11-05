@@ -414,12 +414,13 @@ export default {
                 screenName = '';
             }
             let jsonArr = [];
-            jsonArr.push({ key: 'cinemaName', value: cinemaName });
+            jsonArr.push({ key: 'cinemaName', value: cinemaName});
             jsonArr.push({ key: 'screenName', value: screenName });
             jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
             jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
+            console.log(jsonArr);
             var params = ParamsAppend(jsonArr);
             https
                 .fetchPost('/screenInfo/screenInfoPage', params)

@@ -727,12 +727,12 @@
                     ></el-input>
                 </el-form-item>
                 <el-form-item prop="belongBusinessCode" label="关联商家编码" :label-width="formLabelWidth">
-                    <el-select v-model="selectCode" @change="changeBusinessCode">
+                    <el-select v-model="oBelongBusinessCode">
                         <el-option
                             v-for="info in businessInfo"
                             :key="info.businessCode"
                             :label="info.businessName"
-                            :value="info.businessName"
+                            :value="info.businessCode"
                         ></el-option>
                     </el-select>
                 </el-form-item>
@@ -816,7 +816,6 @@
                 <el-form-item prop="openSnackStatus" label="是否开通套餐" :label-width="formLabelWidth">
                     <el-select
                     v-model="oOpenSnackStatus"
-                    @change="openServe"
                     >
                         <el-option
                             v-for="info in boolean"
@@ -829,7 +828,6 @@
                 <el-form-item prop="snackDispatcherStatus" label="是否小卖配送" :label-width="formLabelWidth">
                     <el-select
                     v-model="oSnackDispatcherStatus"
-                    @change="openServe"
                     >
                         <el-option
                                 v-for="info in boolean"
@@ -842,7 +840,6 @@
                 <el-form-item prop="refundable" label="是否可退票" :label-width="formLabelWidth">
                     <el-select
                             v-model="oRefundable"
-                            @change="openServe"
                     >
                         <el-option
                                 v-for="info in boolean"
@@ -1012,7 +1009,6 @@
                 <el-form-item prop="openStatus" label="是否开通服务" :label-width="formLabelWidth">
                     <el-select
                             v-model="oOpenStatus"
-                            @change="openServe"
                     >
                         <el-option
                                 v-for="info in boolean"
@@ -1052,7 +1048,6 @@
                 <el-form-item prop="openMemberCardStatus" label="是否开通会员卡功能" :label-width="formLabelWidth">
                     <el-select
                             v-model="oOpenMemberCardStatus"
-                            @change="openServe"
                     >
                         <el-option
                                 v-for="info in boolean"
@@ -1065,7 +1060,6 @@
                 <el-form-item prop="videoStatus" label="是否开通预告片" :label-width="formLabelWidth">
                     <el-select
                             v-model="oVideoStatus"
-                            @change="openServe"
                     >
                         <el-option
                                 v-for="info in boolean"
@@ -1078,7 +1072,6 @@
                 <el-form-item prop="memberCardCommonUseStatus" label="会员卡是否门店通用" :label-width="formLabelWidth">
                     <el-select
                             v-model="oMemberCardCommonUseStatus"
-                            @change="openServe"
                     >
                         <el-option
                                 v-for="info in boolean"
@@ -1091,7 +1084,6 @@
                 <el-form-item prop="ticketsForMemberCardPayStatus" label="会员卡支付是否可用优惠券" :label-width="formLabelWidth">
                     <el-select
                             v-model="oTicketsForMemberCardPayStatus"
-                            @change="openServe"
                     >
                         <el-option
                                 v-for="info in boolean"
@@ -1549,7 +1541,9 @@ export default {
             jsonArr.push({ key: 'videoStatus', value: this.oForm.videoStatus });
             jsonArr.push({ key: 'miniAppName', value: this.oForm.miniAppName });
             jsonArr.push({ key: 'miniAppQRCode', value: this.oForm.miniAppQRCode });
+            console.log(preSign(jsonArr));
             let sign = md5(preSign(jsonArr));
+            console.log(sign);
             jsonArr.push({ key: 'sign', value: sign });
             console.log(jsonArr);
             let params = ParamsAppend(jsonArr);
@@ -1700,7 +1694,6 @@ export default {
                         this.oCinemaCode = JSON.parse(Decrypt(data.data.data)).Cinema.cinemaCode;
                         this.oProvince = JSON.parse(Decrypt(data.data.data)).Cinema.province;
                         this.oCity = JSON.parse(Decrypt(data.data.data)).Cinema.city;
-                        this.oBelongBusinessCode = JSON.parse(Decrypt(data.data.data)).Cinema.belongBusinessCode;
                         this.oAddress = JSON.parse(Decrypt(data.data.data)).Cinema.address;
                         this.oLongitude = JSON.parse(Decrypt(data.data.data)).Cinema.longitude;
                         this.oLatitude = JSON.parse(Decrypt(data.data.data)).Cinema.latitude;
@@ -1727,9 +1720,16 @@ export default {
                         this.oExpireDate = JSON.parse(Decrypt(data.data.data)).Cinema.expireDate;
                         this.oPaymentType = JSON.parse(Decrypt(data.data.data)).Cinema.paymentType;
                         this.oReportedType = JSON.parse(Decrypt(data.data.data)).Cinema.reportedType;
+                        this.oBelongBusinessCode = JSON.parse(Decrypt(data.data.data)).Cinema.belongBusinessCode;
                         for (let x in this.boolean) {
                             if (this.boolean[x].value == JSON.parse(Decrypt(data.data.data)).Cinema.memberCardCommonUseStatus) {
                                 this.oMemberCardCommonUseStatus = this.boolean[x].value;
+                                break;
+                            }
+                        }
+                        for (let x in this.businessInfo) {
+                            if (this.businessInfo[x].businessCode == JSON.parse(Decrypt(data.data.data)).Cinema.belongBusinessCode) {
+                                this.oBelongBusinessCode = this.businessInfo[x].businessCode;
                                 break;
                             }
                         }
@@ -1831,13 +1831,6 @@ export default {
                         this.oMiniAppName = JSON.parse(Decrypt(data.data.data)).Cinema.miniAppName;
                         this.oMiniAppQRCode = JSON.parse(Decrypt(data.data.data)).Cinema.miniAppQRCode;
                         this.oId = JSON.parse(Decrypt(data.data.data)).Cinema.id;
-                        this.openServe();
-                        // 获取所选影院名称
-                        for (let i = 0; i < this.businessInfo.length; i++) {
-                            if (this.businessInfo[i].businessCode == this.oBelongBusinessCode) {
-                                this.oBusinessName = this.businessInfo[i].businessName;
-                            }
-                        }
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
@@ -2062,27 +2055,6 @@ export default {
             //分页按钮下一页
             this.query.pageNo++;
             this.getMenu();
-        },
-        changeBusinessCode() {
-            // 获取商家编码
-            for (let i = 0; i < this.businessInfo.length; i++) {
-                if (this.businessInfo[i].businessName == this.selectCode) {
-                    this.oBelongBusinessCode = this.businessInfo[i].businessCode;
-                }
-            }
-        },
-        openServe(e) {
-            // 开通各种服务状态
-        },
-        changeGetStatus(item) {
-            if (item == 1) {
-                item = '是'
-                return item
-            }
-            if (item == 2) {
-                item = '否'
-                return item
-            }
         },
     }
 };

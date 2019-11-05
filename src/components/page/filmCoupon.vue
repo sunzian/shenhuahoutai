@@ -212,7 +212,7 @@
                 <el-form-item label="优惠方式：" :label-width="formLabelWidth" prop="reduceType">
                     <el-radio-group v-model="oForm.reduceType">
                         <el-radio label="1">固定价格</el-radio>
-                        <el-radio label="2">满减</el-radio>
+                        <el-radio label="2">立减</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item
@@ -226,10 +226,7 @@
                     label="减免金额："
                     :label-width="formLabelWidth"
                     v-if="oForm.reduceType == 2"
-                >
-                    满
-                    <el-input style="width: 150px" v-model="oForm.achieveMoney" autocomplete="off"></el-input>减
-                    <el-input style="width: 150px" v-model="oForm.discountMoney" autocomplete="off"></el-input>
+                >   立减<el-input style="width: 150px" v-model="oForm.discountMoney" autocomplete="off"></el-input>元
                 </el-form-item>
                 <el-form-item label="开启状态：" :label-width="formLabelWidth">
                     <el-select v-model="oForm.status" placeholder="请选择">
@@ -311,10 +308,7 @@
                     <span>{{oValidPayType}}</span>
                 </el-form-item>
                 <el-form-item label="减免金额：" :label-width="formLabelWidth">
-                    满
-                    <span>{{oAchieveMoney}}</span>
-                    减
-                    <span>{{oDiscountMoney}}</span>
+                    立减<span>{{oDiscountMoney}}</span>元
                 </el-form-item>
                 <el-form-item label="使用须知：" :label-width="formLabelWidth">
                     <span>{{oCouponDesc}}</span>
@@ -346,7 +340,6 @@ export default {
             oValidPayType: '',
             oReduceType: '',
             oDiscountMoney: '',
-            oAchieveMoney: '',
             oCouponDesc: '',
             oId: '',
             oStatus: '',
@@ -506,7 +499,7 @@ export default {
             jsonArr.push({ key: 'endDate', value: this.oForm.endDate });
             jsonArr.push({ key: 'reduceType', value: this.oForm.reduceType });
             jsonArr.push({ key: 'validPayType', value: this.oForm.validPayType });
-            jsonArr.push({ key: 'achieveMoney', value: this.oForm.achieveMoney });
+            // jsonArr.push({ key: 'achieveMoney', value: this.oForm.achieveMoney });
             jsonArr.push({ key: 'discountMoney', value: this.oForm.discountMoney });
             jsonArr.push({ key: 'status', value: this.oForm.status });
             jsonArr.push({ key: 'holidayValid', value: this.oForm.holidayValid });
@@ -664,7 +657,6 @@ export default {
                         this.oCreateDate = JSON.parse(Decrypt(data.data.data)).createDate;
                         this.oEndDate = JSON.parse(Decrypt(data.data.data)).endDate;
                         this.oValidPayType = JSON.parse(Decrypt(data.data.data)).validPayType;
-                        this.oAchieveMoney = JSON.parse(Decrypt(data.data.data)).achieveMoney;
                         this.oReduceType = JSON.parse(Decrypt(data.data.data)).reduceType;
                         this.oDiscountMoney = JSON.parse(Decrypt(data.data.data)).discountMoney;
                         this.oCouponDesc = JSON.parse(Decrypt(data.data.data)).couponDesc;

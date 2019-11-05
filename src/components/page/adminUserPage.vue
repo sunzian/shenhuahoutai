@@ -42,9 +42,9 @@
                 <el-table-column prop="memo" label="影院公司名">
                     <template slot-scope="scope">{{scope.row.businessName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="影院编码">
-                    <template slot-scope="scope">{{scope.row.cinemaCodes}}</template>
-                </el-table-column>
+                <!--<el-table-column prop="memo" label="影院编码">-->
+                    <!--<template slot-scope="scope">{{scope.row.cinemaCodes}}</template>-->
+                <!--</el-table-column>-->
                 <el-table-column prop="memo" label="登陆时间">
                     <template slot-scope="scope">{{scope.row.loginDate}}</template>
                 </el-table-column>

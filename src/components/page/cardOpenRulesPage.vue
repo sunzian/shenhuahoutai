@@ -10,12 +10,16 @@
         <div class="container">
             <div class="handle-box">
                 <el-input v-model="query.cinemaName" placeholder="影院名称" class="handle-input mr10"></el-input>
+                <el-select clearable v-model="query.status" placeholder="状态" class="handle-select mr10">
+                    <el-option key="1" label="启用" value="1"></el-option>
+                    <el-option key="2" label="禁用" value="2"></el-option>
+                </el-select>
                 <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
                 <el-button
                     type="primary"
                     @click="addPage"
                     icon="el-icon-circle-plus-outline"
-                    style="margin-left: 730px"
+                    style="margin-left: 600px"
                 >添加</el-button>
             </div>
             <el-table
@@ -859,11 +863,16 @@ export default {
                 target: document.querySelector('.div1')
             });
             let cinemaName = this.query.cinemaName;
+            let status = this.query.status;
             if (!cinemaName) {
                 cinemaName = '';
             }
+            if (!status) {
+                status = '';
+            }
             let jsonArr = [];
             jsonArr.push({ key: 'cinemaName', value: cinemaName });
+            jsonArr.push({ key: 'status', value: status });
             jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
             jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
             let sign = md5(preSign(jsonArr));

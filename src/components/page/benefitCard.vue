@@ -410,8 +410,8 @@
                     <el-time-picker
                             is-range
                             type="date"
-                            format="HH-mm-ss"
-                            value-format="HH-mm-ss"
+                            format="HH:mm:ss"
+                            value-format="HH:mm:ss"
                             v-model="value1"
                             range-separator="至"
                             start-placeholder="开始时间"
@@ -459,15 +459,15 @@
                             v-model="oForm.startDate"
                             type="datetime"
                             placeholder="开始时间"
-                            value-format="yyyy-MM-dd hh:mm:ss"
-                            format="yyyy-MM-dd hh:mm:ss"
+                            value-format="yyyy-MM-dd HH:mm:ss"
+                            format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>至
                     <el-date-picker
                             v-model="oForm.endDate"
                             type="datetime"
                             placeholder="结束时间"
-                            value-format="yyyy-MM-dd hh:mm:ss"
-                            format="yyyy-MM-dd hh:mm:ss"
+                            value-format="yyyy-MM-dd HH:mm:ss"
+                            format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
                 </el-form-item>
                 <el-form-item label="售卖状态：" :label-width="formLabelWidth">

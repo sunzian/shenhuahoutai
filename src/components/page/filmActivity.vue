@@ -278,8 +278,8 @@
                     <el-time-picker
                             is-range
                             type="date"
-                            format="HH-mm-ss"
-                            value-format="HH-mm-ss"
+                            format="HH:mm:ss"
+                            value-format="HH:mm:ss"
                             v-model="value1"
                             range-separator="至"
                             start-placeholder="开始时间"

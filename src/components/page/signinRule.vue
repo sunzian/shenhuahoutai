@@ -9,21 +9,21 @@
         </div>
         <!--新增游戏规则页面-->
         <div class="container">
-            <el-form ref="form" :model="oForm">
-                <el-form-item label="签到天数" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" autocomplete="off" :disabled="true" :value="1"></el-input>
-                </el-form-item>
-                <el-form-item label="签到奖励金币数" :label-width="formLabelWidth">
-                    <el-input
-                            style="width: 250px"
-                            v-model="oForm.goldAward"
-                            autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="签到规则" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="oForm.signTips" autocomplete="off"></el-input>
-                </el-form-item>
-            </el-form>
+            <!--<el-form ref="form" :model="oForm">-->
+                <!--<el-form-item label="签到天数" :label-width="formLabelWidth">-->
+                    <!--<el-input style="width: 250px" autocomplete="off" :disabled="true" :value="1"></el-input>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item label="签到奖励金币数" :label-width="formLabelWidth">-->
+                    <!--<el-input-->
+                            <!--style="width: 250px"-->
+                            <!--v-model="oForm.goldAward"-->
+                            <!--autocomplete="off"-->
+                    <!--&gt;</el-input>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item label="签到规则" :label-width="formLabelWidth">-->
+                    <!--<el-input style="width: 250px" v-model="oForm.signTips" autocomplete="off"></el-input>-->
+                <!--</el-form-item>-->
+            <!--</el-form>-->
             <el-table
                     :data="tableData"
                     border
@@ -70,20 +70,23 @@
                             autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item v-if="index==5" label="是否设置连续7天额外奖励" :label-width="formLabelWidth">
+                <el-form-item v-if="form.continuousDays==1" label="签到规则" :label-width="formLabelWidth">
+                <el-input style="width: 250px" v-model="form.signTips" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item v-if="form.continuousDays==7" label="是否设置连续7天额外奖励" :label-width="formLabelWidth">
                     <el-radio-group v-model="form.extraFlag">
                         <el-radio label="1">是</el-radio>
                         <el-radio label="2">否</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item v-if="form.extraFlag==1&&index==5" label="额外奖励的礼物名称" :label-width="formLabelWidth">
+                <el-form-item v-if="form.extraFlag==1&&form.continuousDays==7" label="额外奖励的礼物名称" :label-width="formLabelWidth">
                     <el-input
                             style="width: 250px"
                             v-model="form.extraPrizeName"
                             autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item v-if="form.extraFlag==1&&index==5" label="额外奖励的礼物图片" :label-width="formLabelWidth">
+                <el-form-item v-if="form.extraFlag==1&&form.continuousDays==7" label="额外奖励的礼物图片" :label-width="formLabelWidth">
                     <el-upload
                             :before-upload="beforeUpload"
                             :data="type"
@@ -101,23 +104,23 @@
                         <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
                     </el-upload>
                 </el-form-item>
-                <el-form-item v-if="form.extraFlag==1&&index==5" label="领取后几天过期" :label-width="formLabelWidth">
+                <el-form-item v-if="form.extraFlag==1&&form.continuousDays==7" label="领取后几天过期" :label-width="formLabelWidth">
                     <el-input
                             style="width: 250px"
                             v-model="form.expireDays"
                             autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item v-if="form.extraFlag==1&&index==5" label="额外奖励的礼物类型" :label-width="formLabelWidth">
+                <el-form-item v-if="form.extraFlag==1&&form.continuousDays==7" label="额外奖励的礼物类型" :label-width="formLabelWidth">
                     <el-radio-group v-model="form.extraPrizeType">
                         <el-radio label="1">优惠券</el-radio>
                         <el-radio label="2">实物</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item v-if="form.extraPrizeType==1&&index==5" label="选择优惠券" :label-width="formLabelWidth">
+                <el-form-item v-if="form.extraPrizeType==1&&form.continuousDays==7" label="选择优惠券" :label-width="formLabelWidth">
                     <el-button type="primary" @click="getAllCoupon">选择优惠券</el-button>
                 </el-form-item>
-                <el-form-item v-if="form.extraPrizeType==1&&index==5" label="所选优惠券：" :label-width="formLabelWidth">
+                <el-form-item v-if="form.extraPrizeType==1&&form.continuousDays==7" label="所选优惠券：" :label-width="formLabelWidth">
                     <el-input
                             style="width: 150px"
                             v-model="couponInfo.couponName"
@@ -497,8 +500,11 @@
                 }
             },
             addChange(index,row){
+                console.log(index);
                 this.index=index;
                 this.form.continuousDays=this.tableData[this.index].continuousDays;
+                this.form.goldAward=this.tableData[this.index].goldAward;
+                this.form.signTips=this.tableData.signTips;
                 this.editVisible=true;
                 console.log(this.tableData);
             },
@@ -737,8 +743,8 @@
                             console.log(oData);
                             this.id=oData.id;
                             // console.log(this.query);
-                            this.oForm.goldAward=oData.goldAward
-                            this.oForm.signTips=oData.signTips
+                            // this.oForm.goldAward=oData.goldAward
+                            // this.oForm.signTips=oData.signTips
                             this.tableData = oData.extraRuleList;
                             this.query.pageSize = oData.pageSize;
                             this.query.pageNo = oData.pageNo;
