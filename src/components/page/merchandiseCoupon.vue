@@ -120,7 +120,14 @@
                         >{{item.cinemaName}}</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item label="适用卖品：" :label-width="formLabelWidth">
+                <el-form-item label="选择商品：" :label-width="formLabelWidth" prop="filmName">
+                    <el-radio-group v-model="oForm.selectMerchandiseType">
+                        <el-radio label="0">全部商品</el-radio>
+                        <el-radio label="1">部分商品</el-radio>
+                        <el-radio label="2">排除商品</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item v-if="oForm.selectMerchandiseType==1||oForm.selectMerchandiseType==2" label="适用卖品：" :label-width="formLabelWidth">
                     <el-checkbox-group v-model="oForm.merchandiseCode" @change="selectGoods">
                         <el-checkbox
                             v-for="item in goodsInfo"
@@ -159,7 +166,10 @@
                         <el-radio label="2">满减</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item label="减免金额：" :label-width="formLabelWidth">
+                <el-form-item v-if="oForm.reduceType == 1" label="固定金额：" :label-width="formLabelWidth">
+                    <el-input style="width: 150px" v-model="oForm.discountMoney" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item v-if="oForm.reduceType==2" label="减免金额：" :label-width="formLabelWidth">
                     满
                     <el-input style="width: 150px" v-model="oForm.achieveMoney" autocomplete="off"></el-input>减
                     <el-input style="width: 150px" v-model="oForm.discountMoney" autocomplete="off"></el-input>
@@ -389,6 +399,7 @@ export default {
             var jsonArr = [];
             jsonArr.push({ key: 'name', value: this.oForm.name });
             jsonArr.push({ key: 'cinemaCodes', value: this.selectValue });
+            jsonArr.push({ key: 'selectMerchandiseType', value: this.oForm.selectMerchandiseType });
             jsonArr.push({ key: 'merchandiseCode', value: this.selectGoodsCode });
             jsonArr.push({ key: 'startDate', value: this.oForm.startDate });
             jsonArr.push({ key: 'endDate', value: this.oForm.endDate });

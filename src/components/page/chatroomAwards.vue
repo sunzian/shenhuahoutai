@@ -157,7 +157,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="礼品名称：" :label-width="formLabelWidth" prop="cinemaName">
+                <el-form-item v-if="oForm.type==2" label="礼品名称：" :label-width="formLabelWidth" prop="cinemaName">
                     <el-input style="width: 150px" v-model="oForm.name" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="优惠券名称：" :label-width="formLabelWidth" v-if="oForm.type == 1">

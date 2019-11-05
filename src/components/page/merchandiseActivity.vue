@@ -506,6 +506,7 @@
                     pageSize: 10
                 },
                 restaurants: [],
+                merSelect:[],
                 tableData: [],
                 multipleSelection: [],
                 delList: [],
@@ -644,6 +645,11 @@
                     });
             },
             addRole() {//新增按钮操作
+                console.log(this.selectedSell);
+                for(let x in this.selectedSell){
+                    this.merSelect.push(this.selectedSell[x].merchandiseCode)
+                }
+                console.log(this.merSelect.join(','));
                 const loading = this.$loading({
                     lock: true,
                     text: 'Loading',
@@ -669,7 +675,7 @@
                 jsonArr.push({ key: 'cinemaCode', value: this.selectValue });
                 jsonArr.push({ key: 'selectMerchandiseType', value: this.oForm.selectFilmType });
                 if(this.oForm.selectFilmType!=0){
-                    jsonArr.push({ key: 'merchandiseCode', value: this.oForm.filmCode });
+                    jsonArr.push({ key: 'merchandiseCode', value: this.merSelect.join(',') });
                 }
                 jsonArr.push({ key: 'startDate', value: this.oForm.startDate });
                 jsonArr.push({ key: 'endDate', value: this.oForm.endDate });
@@ -706,6 +712,8 @@
                         if (data.data.code == 'success') {
                             this.dialogFormVisible = false;
                             this.$message.success(`新增成功`);
+                            this.selectedSell=[];
+                            this.merSelect=[];
                             this.oForm.name = '';
                             this.selectValue = [];
                             this.oForm.selectHallType = '0';

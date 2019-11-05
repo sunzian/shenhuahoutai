@@ -139,6 +139,21 @@
                         >{{item.screenName}}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
+                <el-form-item label="选择制式：" :label-width="formLabelWidth" prop="formatName">
+                    <el-radio-group v-model="oForm.selectFilmFormatType">
+                        <el-radio label="0">全部制式参加</el-radio>
+                        <el-radio label="1">指定制式参加</el-radio>
+                        <el-radio label="2">指定制式不参加</el-radio>
+                    </el-radio-group>
+                    <el-checkbox-group v-model="oForm.filmFormatCode" @change="selectFormat" v-if="oForm.selectFilmFormatType != 0">
+                        <el-checkbox
+                                v-for="item in formatList"
+                                :label="item.formatCode"
+                                :key="item.formatCode"
+                                :value="item.formatName"
+                        >{{item.formatName}}</el-checkbox>
+                    </el-checkbox-group>
+                </el-form-item>
                 <el-form-item label="选择影片：" :label-width="formLabelWidth" prop="filmName">
                     <el-radio-group v-model="oForm.selectFilmType">
                         <el-radio label="0">全部影片</el-radio>
@@ -256,7 +271,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="库存：" :label-width="formLabelWidth">
-                    <el-input style="width: 50px" v-model="oForm.sendNumber" autocomplete="off"></el-input>
+                    <el-input style="width: 150px" v-model="oForm.sendNumber" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="使用须知：" :label-width="formLabelWidth">
                     <el-input
@@ -343,6 +358,7 @@ export default {
             restaurants: [],
             tableData: [],
             multipleSelection: [],
+            formatList:[],//电影制式列表
             delList: [],
             editVisible: false,
             pageTotal: 0,
@@ -379,8 +395,10 @@ export default {
                 screenCode: [],
                 selectFilmType: '0',
                 selectHallType: '0',
+                selectFilmFormatType:'0',//选择制式
                 filmCode: '',
                 filmName: '',
+                filmFormatCode:[],
                 checkedDays: [],
                 exceptWeekDay: ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日'],
                 startDate: '',
@@ -397,6 +415,7 @@ export default {
             selectValue: {},
             selectScreenCode: {},
             selectFilm: {},
+            selectFormatCode: {},
             cinemaInfo: [],
             screenInfo: [],
             filmInfo: [],
@@ -426,6 +445,15 @@ export default {
                     console.log(data);
                     if (data.data.code == 'success') {
                         this.dialogFormVisible = true;
+                        console.log(JSON.parse(Decrypt(data.data.data)));
+                        let formats = JSON.parse(Decrypt(data.data.data)).formatList;
+                        this.formatList = [];
+                        for (let i = 0; i < formats.length; i++) {
+                            let formatArr = {};
+                            formatArr.formatCode = formats[i].formatCode;
+                            formatArr.formatName = formats[i].formatName;
+                            this.formatList.push(formatArr);
+                        }
 
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
@@ -486,6 +514,8 @@ export default {
             jsonArr.push({ key: 'activityTogether', value: this.oForm.activityTogether });
             jsonArr.push({ key: 'sendNumber', value: this.oForm.sendNumber });
             jsonArr.push({ key: 'couponDesc', value: this.oForm.couponDesc });
+            jsonArr.push({ key: 'selectFilmFormatType', value: this.oForm.selectFilmFormatType });
+            jsonArr.push({ key: 'filmFormatCode', value: this.selectFormatCode });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             console.log(jsonArr);
@@ -943,6 +973,11 @@ export default {
         },
         deletFilm(index) {
             this.filmInfo.splice(index, 1);
+        },
+        selectFormat(val) {
+            console.log(val);
+            this.selectFormatCode = val.join(',');
+            console.log(this.selectFormatCode);
         },
         // 多选操作
         handleSelectionChange(val) {

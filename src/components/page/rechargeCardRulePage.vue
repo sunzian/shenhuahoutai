@@ -3,7 +3,7 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
-                    <i class="el-icon-lx-cascades"></i> 规则管理
+                    <i class="el-icon-lx-cascades"></i> 充值规则管理
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
@@ -191,15 +191,15 @@
                         v-model="oForm.startDate"
                         type="datetime"
                         placeholder="开始时间"
-                        value-format="yyyy-MM-dd hh:mm:ss"
-                        format="yyyy-MM-dd hh:mm:ss"
+                        value-format="yyyy-MM-dd HH:mm:ss"
+                        format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>至
                     <el-date-picker
                         v-model="oForm.endDate"
                         type="datetime"
                         placeholder="结束时间"
-                        value-format="yyyy-MM-dd hh:mm:ss"
-                        format="yyyy-MM-dd hh:mm:ss"
+                        value-format="yyyy-MM-dd HH:mm:ss"
+                        format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
                 </el-form-item>
                 <el-form-item label="状态：" :label-width="formLabelWidth">
@@ -293,15 +293,15 @@
                         v-model="oStartDate"
                         type="datetime"
                         placeholder="开始时间"
-                        value-format="yyyy-MM-dd hh:mm:ss"
-                        format="yyyy-MM-dd hh:mm:ss"
+                        value-format="yyyy-MM-dd HH:mm:ss"
+                        format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>至
                     <el-date-picker
                         v-model="oEndDate"
                         type="datetime"
                         placeholder="结束时间"
-                        value-format="yyyy-MM-dd hh:mm:ss"
-                        format="yyyy-MM-dd hh:mm:ss"
+                        value-format="yyyy-MM-dd HH:mm:ss"
+                        format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
                 </el-form-item>
                 <el-form-item label="状态：" :label-width="formLabelWidth">

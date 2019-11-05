@@ -3,13 +3,13 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
-                    <i class="el-icon-lx-cascades"></i> 规则管理
+                    <i class="el-icon-lx-cascades"></i> 开卡规则管理
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-input v-model="query.name" placeholder="影院名称" class="handle-input mr10"></el-input>
+                <el-input v-model="query.cinemaName" placeholder="影院名称" class="handle-input mr10"></el-input>
                 <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
                 <el-button
                     type="primary"
@@ -35,7 +35,7 @@
                 <el-table-column prop="sort" label="会员卡名称">
                     <template slot-scope="scope">{{scope.row.cardLevelName}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="充值规则名称">
+                <el-table-column prop="name" label="开卡规则名称">
                     <template slot-scope="scope">{{scope.row.ruleName}}</template>
                 </el-table-column>
                 <el-table-column prop="number" label="充值金额">
@@ -188,15 +188,15 @@
                         v-model="oForm.startDate"
                         type="datetime"
                         placeholder="开始时间"
-                        value-format="yyyy-MM-dd hh:mm:ss"
-                        format="yyyy-MM-dd hh:mm:ss"
+                        value-format="yyyy-MM-dd HH:mm:ss"
+                        format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>至
                     <el-date-picker
                         v-model="oForm.endDate"
                         type="datetime"
                         placeholder="结束时间"
-                        value-format="yyyy-MM-dd hh:mm:ss"
-                        format="yyyy-MM-dd hh:mm:ss"
+                        value-format="yyyy-MM-dd HH:mm:ss"
+                        format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
                 </el-form-item>
                 <el-form-item label="状态：" :label-width="formLabelWidth">
@@ -287,15 +287,15 @@
                         v-model="oStartDate"
                         type="datetime"
                         placeholder="开始时间"
-                        value-format="yyyy-MM-dd hh:mm:ss"
-                        format="yyyy-MM-dd hh:mm:ss"
+                        value-format="yyyy-MM-dd HH:mm:ss"
+                        format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>至
                     <el-date-picker
                         v-model="oEndDate"
                         type="datetime"
                         placeholder="结束时间"
-                        value-format="yyyy-MM-dd hh:mm:ss"
-                        format="yyyy-MM-dd hh:mm:ss"
+                        value-format="yyyy-MM-dd HH:mm:ss"
+                        format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
                 </el-form-item>
                 <el-form-item label="状态：" :label-width="formLabelWidth">
@@ -858,16 +858,12 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            let name = this.query.name;
-            let status = this.query.status;
-            if (!name) {
-                name = '';
-            }
-            if (!status) {
-                status = '';
+            let cinemaName = this.query.cinemaName;
+            if (!cinemaName) {
+                cinemaName = '';
             }
             let jsonArr = [];
-            // jsonArr.push({ key: 'cinemaName', value: name });
+            jsonArr.push({ key: 'cinemaName', value: cinemaName });
             jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
             jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
             let sign = md5(preSign(jsonArr));

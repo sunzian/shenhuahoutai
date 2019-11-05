@@ -9,7 +9,7 @@
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-input placeholder="用户名" style="width: 150px" v-model="query.name" autocomplete="off"></el-input>
+                <el-input placeholder="用户名" style="width: 150px" v-model="query.userName" autocomplete="off"></el-input>
                 <el-input placeholder="真实姓名" style="width: 150px" v-model="query.realName" autocomplete="off"></el-input>
                 <el-select clearable v-model="query.status" placeholder="状态" class="handle-select mr10">
                     <el-option key="1" label="正常" value="1"></el-option>
@@ -101,7 +101,7 @@
             </div>
         </div>
         <!--新增弹出框-->
-        <el-dialog title="新增员工" :visible.sync="dialogFormVisible">
+        <el-dialog title="新增用户" :visible.sync="dialogFormVisible">
             <el-form v-model="oForm">
                 <el-form-item label="用户名" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oForm.userName" autocomplete="off"></el-input>
@@ -123,7 +123,7 @@
                     <el-input
                         style="width: 250px"
                         maxlength="9"
-                        v-model.number="oForm.realName"
+                        v-model="oForm.realName"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
@@ -136,10 +136,9 @@
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="描述" :label-width="formLabelWidth">
-                    <el-input
+                    <el-input type="textarea"
                         style="width: 250px"
-                        maxlength="9"
-                        v-model.number="oForm.memo"
+                        v-model="oForm.memo"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
@@ -775,11 +774,11 @@
                     target: document.querySelector('.div1')
                 });
                 setTimeout(() => {
-                    let businessCode=this.query.businessCode
-                    let userName=this.query.userName
-                    let status=this.query.status
-                    if(!businessCode){
-                        businessCode=''
+                    let realName=this.query.realName;
+                    let userName=this.query.userName;
+                    let status=this.query.status;
+                    if(!realName){
+                        realName=''
                     }
                     if(!userName){
                         userName=''
@@ -788,7 +787,7 @@
                         status=''
                     }
                     let jsonArr = [];
-                    jsonArr.push({key:"businessCode",value:businessCode});
+                    jsonArr.push({key:"realName",value:realName});
                     jsonArr.push({key:"userName",value:userName});
                     jsonArr.push({key:"status",value:status});
                     jsonArr.push({key:"pageNo",value:this.query.pageNo});
