@@ -285,46 +285,60 @@ export default {
         },
         delChange(index, row) {
             //删除数据
-            const loading = this.$loading({
-                lock: true,
-                text: 'Loading',
-                spinner: 'el-icon-loading',
-                background: 'rgba(0, 0, 0, 0.7)',
-                target: document.querySelector('.div1')
-            });
-            this.idx = index;
-            this.form = row;
-            let name = this.query.name;
-            let status = this.query.status;
-            if (!name) {
-                name = '';
-            }
-            if (!status) {
-                status = '';
-            }
-            let jsonArr = [];
-            jsonArr.push({ key: 'id', value: row.id });
-            let sign = md5(preSign(jsonArr));
-            jsonArr.push({ key: 'sign', value: sign });
-            let params = ParamsAppend(jsonArr);
-            https.fetchPost('/actor/deleteActor', params).then(data => {
-                    loading.close();
-                    if (data.data.code == 'success') {
-                        this.$message.error(`删除了`);
-                        this.getMenu();
-                    } else if (data.data.code == 'nologin') {
-                        this.message = data.data.message;
-                        this.open();
-                        this.$router.push('/login');
-                    } else {
-                        this.message = data.data.message;
-                        this.open();
+            this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            })
+                .then(() => {
+                    const loading = this.$loading({
+                        lock: true,
+                        text: 'Loading',
+                        spinner: 'el-icon-loading',
+                        background: 'rgba(0, 0, 0, 0.7)',
+                        target: document.querySelector('.div1')
+                    });
+                    this.idx = index;
+                    this.form = row;
+                    let name = this.query.name;
+                    let status = this.query.status;
+                    if (!name) {
+                        name = '';
                     }
-                })
-                .catch(err => {
-                    loading.close();
-                    console.log(err);
+                    if (!status) {
+                        status = '';
+                    }
+                    let jsonArr = [];
+                    jsonArr.push({key: 'id', value: row.id});
+                    let sign = md5(preSign(jsonArr));
+                    jsonArr.push({key: 'sign', value: sign});
+                    let params = ParamsAppend(jsonArr);
+                    https.fetchPost('/actor/deleteActor', params).then(data => {
+                        loading.close();
+                        if (data.data.code == 'success') {
+                            this.$message.error(`删除了`);
+                            this.getMenu();
+                        } else if (data.data.code == 'nologin') {
+                            this.message = data.data.message;
+                            this.open();
+                            this.$router.push('/login');
+                        } else {
+                            this.message = data.data.message;
+                            this.open();
+                        }
+                    })
+                        .catch(err => {
+                            loading.close();
+                            console.log(err);
+                        });
+                })   .catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消删除'
                 });
+            });
+
+
         },
         addChange(index, row) {
             //是否修改权限

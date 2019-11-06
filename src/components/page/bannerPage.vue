@@ -24,6 +24,7 @@
                     <el-option key="3" label="个人中心首页" value="3"></el-option>
                     <el-option key="4" label="支付成功页" value="4"></el-option>
                     <el-option key="5" label="放映厅首页" value="5"></el-option>
+                    <el-option key="6" label="首页广告弹窗" value="5"></el-option>
                 </el-select>
                 <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
                 <el-button type="primary"  @click="addPage" icon="el-icon-circle-plus-outline"  style="margin-left: 340px">新增</el-button>
@@ -74,6 +75,7 @@
                         <el-tag v-if="scope.row.category=='3'">个人中心首页</el-tag>
                         <el-tag v-if="scope.row.category=='4'">支付成功页</el-tag>
                         <el-tag v-if="scope.row.category=='5'">放映厅首页</el-tag>
+                        <el-tag v-if="scope.row.category=='6'">首页广告弹窗</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column prop="sort" label="图片地址" width="200px">
@@ -425,6 +427,10 @@
                     {
                         value: '5',
                         label: '放映厅首页'
+                    },
+                    {
+                        value: '6',
+                        label: '首页广告弹窗'
                     },
                 ],
                 tabType:[

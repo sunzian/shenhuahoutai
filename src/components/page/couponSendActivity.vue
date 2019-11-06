@@ -36,10 +36,10 @@
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.type=='1'"
                         >注册送券</el-tag>
-                        <el-tag v-else-if="scope.row.type=='2'"
-                        >活动抢券</el-tag>
-                        <el-tag v-else-if="scope.row.type=='3'"
-                        >生日送券</el-tag>
+                        <!--<el-tag v-else-if="scope.row.type=='2'"-->
+                        <!--&gt;活动抢券</el-tag>-->
+                        <!--<el-tag v-else-if="scope.row.type=='3'"-->
+                        <!--&gt;生日送券</el-tag>-->
                     </template>
                 </el-table-column>
                 <el-table-column prop="sort" label="活动开始时间">
@@ -113,6 +113,25 @@
             <el-form :model="oForm">
                 <el-form-item label="活动名称：" :label-width="formLabelWidth">
                     <el-input style="width: 250px" min="1" v-model="oForm.name" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="活动图片：" :label-width="formLabelWidth">
+                    <el-upload
+                            :before-upload="beforeUpload"
+                            :data="imgType"
+                            ref="download"
+                            class="upload-demo"
+                            drag
+                            action="/api/upload/uploadImage"
+                            :on-success="unSuccess"
+                            multiple
+                    >
+                        <i class="el-icon-upload"></i>
+                        <div class="el-upload__text">
+                            将文件拖到此处，或
+                            <em>点击上传</em>
+                        </div>
+                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
+                    </el-upload>
                 </el-form-item>
                 <el-form-item label="选择影院：" :label-width="formLabelWidth">
                     <el-select v-model="oForm.cinemaCode" placeholder="请选择" @change="getCardInfo">
@@ -220,6 +239,25 @@
             <el-form-item label="活动名称：" :label-width="formLabelWidth">
                 <el-input style="width: 250px" min="1" v-model="form.name" autocomplete="off"></el-input>
             </el-form-item>
+                <el-form-item label="活动图片：" :label-width="formLabelWidth">
+                    <el-upload
+                            :before-upload="beforeUpload"
+                            :data="imgType"
+                            ref="download"
+                            class="upload-demo"
+                            drag
+                            action="/api/upload/uploadImage"
+                            :on-success="unSuccess"
+                            multiple
+                    >
+                        <i class="el-icon-upload"></i>
+                        <div class="el-upload__text">
+                            将文件拖到此处，或
+                            <em>点击上传</em>
+                        </div>
+                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
+                    </el-upload>
+                </el-form-item>
             <el-form-item label="选择影院：" :label-width="formLabelWidth">
                 <el-select v-model="form.cinemaCode" placeholder="请选择" @change="getCardInfo">
                     <el-option
@@ -382,6 +420,10 @@
         name: 'basetable',
         data() {
             return {
+                oActivityImageUrl:'',
+                imgType: {
+                    type: ''
+                },
                 oCinemaName: '',
                 oCardLevelName: '',
                 oRuleName: '', // 规则名称
@@ -417,14 +459,15 @@
                         value: '1',
                         label: '注册送券'
                     },
-                    {
-                        value: '2',
-                        label: '活动抢券'
-                    },
-                    {
-                        value: '3',
-                        label: '生日送券'
-                    },],
+                    // {
+                    //     value: '2',
+                    //     label: '活动抢券'
+                    // },
+                    // {
+                    //     value: '3',
+                    //     label: '生日送券'
+                    // },
+                ],
                 cinemaList:[],//影院列表
                 cinemaInfo: [],
                 cardList: [],
@@ -466,6 +509,18 @@
             this.getMenu();
         },
         methods: {
+            beforeUpload() {
+                //上传之前
+                this.imgType.type = EncryptReplace('activity');
+            },
+            unSuccess(data) {
+                this.oActivityImageUrl = data.data;
+                if (data.code == 'nologin') {
+                    this.message = data.message;
+                    this.open();
+                    this.$router.push('/login');
+                }
+            },
             addPage() {
                 //获取新增按钮权限
                 const loading = this.$loading({
@@ -518,6 +573,7 @@
                 });
                 var jsonArr = [];
                 jsonArr.push({ key: 'cinemaCode', value: this.oForm.cinemaCode });
+                jsonArr.push({ key: 'activityImageUrl', value: this.oActivityImageUrl });
                 jsonArr.push({ key: 'name', value: this.oForm.name });
                 jsonArr.push({ key: 'type', value: this.oForm.type });
                 jsonArr.push({ key: 'startDate', value: this.oForm.startDate });
@@ -540,6 +596,7 @@
                             loading.close();
                             console.log(data);
                             if (data.data.code == 'success') {
+                                this.$refs.download.clearFiles();//清除已上传文件
                                 this.dialogFormVisible = false;
                                 this.$message.success(`新增成功`);
                                 this.getMenu();
@@ -724,6 +781,7 @@
                 });
                 var jsonArr = [];
                 jsonArr.push({ key: 'cinemaCode', value: this.form.cinemaCode});
+                jsonArr.push({ key: 'activityImageUrl', value: this.oActivityImageUrl});
                 jsonArr.push({ key: 'name', value: this.form.name });
                 jsonArr.push({ key: 'type', value: this.form.type });
                 jsonArr.push({ key: 'startDate', value: this.form.startDate });
@@ -746,6 +804,7 @@
                         console.log(data);
                         // console.log(JSON.parse(Decrypt(data.data.data)));
                         if (data.data.code == 'success') {
+                            this.$refs.download.clearFiles();//清除已上传文件
                             this.$message.success(`编辑成功`);
                             this.getMenu();
                         } else if (data.data.code == 'nologin') {

@@ -87,6 +87,25 @@
                             autocomplete="off"
                     ></el-input>
                 </el-form-item>
+                <el-form-item label="大转盘背景图" :label-width="formLabelWidth">
+                    <el-upload
+                            :before-upload="beforeUpload"
+                            :data="type"
+                            class="upload-demo"
+                            ref="download"
+                            drag
+                            action="/api/upload/uploadImage"
+                            :on-success="unSuccess"
+                            multiple
+                    >
+                        <i class="el-icon-upload"></i>
+                        <div class="el-upload__text">
+                            将文件拖到此处，或
+                            <em>点击上传</em>
+                        </div>
+                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
+                    </el-upload>
+                </el-form-item>
                 <el-form-item label="活动开始时间" :label-width="formLabelWidth">
                     <el-date-picker
                             style="width:250px"
@@ -433,6 +452,25 @@
                             autocomplete="off"
                     ></el-input>
                 </el-form-item>
+                <el-form-item label="大转盘背景图" :label-width="formLabelWidth">
+                    <el-upload
+                            :before-upload="beforeUpload"
+                            :data="type"
+                            class="upload-demo"
+                            ref="download"
+                            drag
+                            action="/api/upload/uploadImage"
+                            :on-success="unSuccess"
+                            multiple
+                    >
+                        <i class="el-icon-upload"></i>
+                        <div class="el-upload__text">
+                            将文件拖到此处，或
+                            <em>点击上传</em>
+                        </div>
+                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
+                    </el-upload>
+                </el-form-item>
                 <el-form-item label="活动开始时间" :label-width="formLabelWidth">
                     <el-date-picker
                             style="width:250px"
@@ -526,7 +564,6 @@
                 </el-table-column>
             </el-table>
             <span slot="footer" class="dialog-footer" style="margin-left: 1040px">
-                    <!--<el-button @click="changeShow = false,showSell=true">取 消</el-button>-->
                 <el-button style="margin-top: 20px;margin-left: 78px" type="primary" @click="exChangeChanger">确 定</el-button>
             </span>
         </div>
@@ -563,6 +600,7 @@
                 multipleSelection: [],
                 editVisible: false,
                 pageTotal: 0,
+                oImageUrl:'',
                 pForm:{
                     memo: '',
                     sort: '',
@@ -616,6 +654,18 @@
             this.getMenu();
         },
         methods: {
+            beforeUpload() {
+                //上传之前
+                this.type.type = EncryptReplace('activity');
+            },
+            unSuccess(data) {
+                this.oImageUrl = data.data;
+                if (data.code == 'nologin') {
+                    this.message = data.message;
+                    this.open();
+                    this.$router.push('/login');
+                }
+            },
             prizeModify(row,index){
                 this.oIndex=index
                 console.log(index);
@@ -707,6 +757,7 @@
                     jsonArr.push({ key: 'cinemaCode', value:this.cinemaCode });
                     jsonArr.push({ key: 'gameName', value:this.oForm.gameName });
                     jsonArr.push({ key: 'startDate', value:this.oForm.startDate });
+                    jsonArr.push({ key: 'imageUrl', value:this.oImageUrl });
                     jsonArr.push({ key: 'endDate', value:this.oForm.endDate });
                     jsonArr.push({ key: 'status', value:this.oForm.status });
                     jsonArr.push({ key: 'prizeNumber', value:this.prizeInfoList.length});
@@ -755,6 +806,7 @@
                     jsonArr.push({ key: 'cinemaCode', value:this.cinemaCode });
                     jsonArr.push({ key: 'gameName', value:this.form.gameName });
                     jsonArr.push({ key: 'startDate', value:this.form.startDate });
+                    jsonArr.push({ key: 'imageUrl', value:this.oImageUrl });
                     jsonArr.push({ key: 'endDate', value:this.form.endDate });
                     jsonArr.push({ key: 'status', value:this.form.status });
                     jsonArr.push({ key: 'prizeNumber', value:this.prizeInfoList.length});
@@ -954,10 +1006,6 @@
                             console.log(err);
                         });
                 }, 500);
-            },
-            beforeUpload() {
-                //上传之前
-                this.type.type = EncryptReplace('activity');
             },
             onSuccess(data) {
                 //上传文件 登录超时

@@ -105,8 +105,8 @@
                         v-model="oForm.publishDate"
                         type="datetime"
                         placeholder="请选择日期"
-                        value-format="yyyy-MM-dd hh:mm:ss"
-                        format="yyyy-MM-dd hh:mm:ss"
+                        value-format="yyyy-MM-dd HH:mm:ss"
+                        format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
                 </el-form-item>
                 <el-form-item label="可选导演列表" :label-width="formLabelWidth">
@@ -248,8 +248,8 @@
                         v-model="oPublishDate"
                         type="datetime"
                         placeholder="请选择日期"
-                        value-format="yyyy-MM-dd hh:mm:ss"
-                        format="yyyy-MM-dd hh:mm:ss"
+                        value-format="yyyy-MM-dd HH:mm:ss"
+                        format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
                 </el-form-item>
                 <el-form-item label="可选导演列表" :label-width="formLabelWidth">

@@ -351,51 +351,63 @@
                 }, 500);
             },
             delChange(index, row){//删除数据
-                const loading = this.$loading({
-                    lock: true,
-                    text: 'Loading',
-                    spinner: 'el-icon-loading',
-                    background: 'rgba(0, 0, 0, 0.7)',
-                    target: document.querySelector('.div1')
+                this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                })
+                    .then(() => {
+                        const loading = this.$loading({
+                            lock: true,
+                            text: 'Loading',
+                            spinner: 'el-icon-loading',
+                            background: 'rgba(0, 0, 0, 0.7)',
+                            target: document.querySelector('.div1')
+                        });
+                        setTimeout(() => {
+                            this.idx = index;
+                            this.form = row;
+                            // let name=this.query.name
+                            // let status=this.query.status
+                            // if(!name){
+                            //     name=''
+                            // }
+                            // if(!status){
+                            //     status=''
+                            // }
+                            let jsonArr = [];
+                            jsonArr.push({key:"id",value:row.id});
+                            let sign =md5(preSign(jsonArr));
+                            jsonArr.push({key:"sign",value:sign});
+                            let params = ParamsAppend(jsonArr);
+                            https.fetchPost('/user/deleteAdminUser',params).then((data) => {
+                                loading.close();
+                                console.log(data);
+                                // console.log(JSON.parse(Decrypt(data.data.data)));
+                                if(data.data.code=='success'){
+                                    this.$message.error(`删除了`);
+                                    this.getMenu()
+                                }else if(data.data.code=='nologin'){
+                                    this.message=data.data.message
+                                    this.open()
+                                    this.$router.push('/login');
+                                }
+                                else{
+                                    this.message=data.data.message
+                                    this.open()
+                                }
+                            }).catch(err=>{
+                                    loading.close();
+                                    console.log(err)
+                                }
+                            )
+                        }, 500);
+                    })  .catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
                 });
-                setTimeout(() => {
-                    this.idx = index;
-                    this.form = row;
-                    // let name=this.query.name
-                    // let status=this.query.status
-                    // if(!name){
-                    //     name=''
-                    // }
-                    // if(!status){
-                    //     status=''
-                    // }
-                    let jsonArr = [];
-                    jsonArr.push({key:"id",value:row.id});
-                    let sign =md5(preSign(jsonArr));
-                    jsonArr.push({key:"sign",value:sign});
-                    let params = ParamsAppend(jsonArr);
-                    https.fetchPost('/user/deleteAdminUser',params).then((data) => {
-                        loading.close();
-                        console.log(data);
-                        // console.log(JSON.parse(Decrypt(data.data.data)));
-                        if(data.data.code=='success'){
-                            this.$message.error(`删除了`);
-                            this.getMenu()
-                        }else if(data.data.code=='nologin'){
-                            this.message=data.data.message
-                            this.open()
-                            this.$router.push('/login');
-                        }
-                        else{
-                            this.message=data.data.message
-                            this.open()
-                        }
-                    }).catch(err=>{
-                        loading.close();
-                        console.log(err)
-                        }
-                    )
-                }, 500);
             },
             addChange(index, row){//是否修改权限
                 const loading = this.$loading({
