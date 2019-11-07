@@ -3,27 +3,12 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
-                    <i class="el-icon-lx-cascades"></i> 卖品套餐
+                    <i class="el-icon-lx-cascades"></i> 购票推荐卖品设置
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <!--影院信息展示页面-->
         <div class="container" v-if="showSell">
-            <div class="handle-box">
-                <el-input v-model="query.name" placeholder="角色名" class="handle-input mr10"></el-input>
-                <el-select
-                    clearable
-                    v-model="query.status"
-                    placeholder="状态"
-                    class="handle-select mr10"
-                >
-                    <el-option key="1" label="审核中" value="1"></el-option>
-                    <el-option key="2" label="未审核" value="2"></el-option>
-                    <el-option key="3" label="通过" value="3"></el-option>
-                    <el-option key="4" label="审核失败" value="4"></el-option>
-                </el-select>
-                <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
-            </div>
             <el-table
                 :data="tableData"
                 border
@@ -447,24 +432,6 @@ export default {
             dialogFormVisible: false,
             formLabelWidth: '120px',
             selectValue: {},
-            options: [
-                {
-                    value: '1',
-                    label: '审核中'
-                },
-                {
-                    value: '2',
-                    label: '未审核'
-                },
-                {
-                    value: '3',
-                    label: '通过'
-                },
-                {
-                    value: '4',
-                    label: '审核失败'
-                }
-            ],
             showTypes: [
                 {
                     value: '1',
@@ -839,7 +806,7 @@ export default {
         },
         Search() {
             this.query.pageNo = 1;
-            this.getMenu();
+            this.refresh();
         },
         back() {
             this.showSell = true;
@@ -855,17 +822,7 @@ export default {
                 target: document.querySelector('.div1')
             });
             setTimeout(() => {
-                let name = this.query.name;
-                let status = this.query.status;
-                if (!name) {
-                    name = '';
-                }
-                if (!status) {
-                    status = '';
-                }
                 let jsonArr = [];
-                // jsonArr.push({key:"roleName",value:name});
-                // jsonArr.push({key:"status",value:status});
                 jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
                 jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
                 let sign = md5(preSign(jsonArr));
@@ -919,8 +876,6 @@ export default {
                     status = '';
                 }
                 let jsonArr = [];
-                // jsonArr.push({key:"roleName",value:name});
-                // jsonArr.push({key:"status",value:status});
                 jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
                 jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
                 jsonArr.push({ key: 'cinemaCode', value: this.cinemaCode });

@@ -364,12 +364,6 @@
             <div class="container">
                 <div class="handle-box">
                     <el-input v-model="query.name" placeholder="角色名" class="handle-input mr10"></el-input>
-                    <el-select clearable v-model="query.status" placeholder="状态" class="handle-select mr10">
-                        <el-option key="1" label="审核中" value="1"></el-option>
-                        <el-option key="2" label="未审核" value="2"></el-option>
-                        <el-option key="3" label="通过" value="3"></el-option>
-                        <el-option key="4" label="审核失败" value="4"></el-option>
-                    </el-select>
                     <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
                 </div>
                 <el-table
@@ -647,8 +641,8 @@
                     return;
                 }
                 this.dateInfo.push(this.value1);
-                this.startArr.push(this.value1[0])
-                this.endArr.push(this.value1[1])
+                this.startArr.push(this.value1[0]);
+                this.endArr.push(this.value1[1]);
                 console.log(this.startArr.join(','));
                 console.log(this.endArr.join(','));
             },
@@ -780,6 +774,8 @@
                                 this.oForm.discountMoney = '';
                                 this.oForm.holidayValid = '';
                                 this.oForm.checkedDays = [];
+                                this.startArr = [];
+                                this.endArr = [];
                                 this.oForm.status = '';
                                 this.oForm.activityTogether = '';
                                 this.oForm.sendNumber = '';
@@ -978,48 +974,60 @@
             },
             // 修改状态
             changeStatus(index, row) {
-                const loading = this.$loading({
-                    lock: true,
-                    text: 'Loading',
-                    spinner: 'el-icon-loading',
-                    background: 'rgba(0, 0, 0, 0.7)',
-                    target: document.querySelector('.div1')
-                });
-                this.idx = index;
-                this.form = row;
-                var jsonArr = [];
-                let status;
-                if (row.status == 1) {
-                    status = 0;
-                } else if (row.status == 0) {
-                    status = 1;
-                }
-                jsonArr.push({ key: 'id', value: row.id });
-                jsonArr.push({ key: 'status', value: status });
-                let sign = md5(preSign(jsonArr));
-                jsonArr.push({ key: 'sign', value: sign });
-                console.log(jsonArr);
-                let params = ParamsAppend(jsonArr);
-                https.fetchPost('/filmDiscountActivity/updateStatusById', params).then(data => {
-                    loading.close();
-                    console.log(data);
-                    // console.log(JSON.parse(Decrypt(data.data.data)));
-                        if (data.data.code == 'success') {
-                            this.$message.success(`修改成功`);
-                            this.getMenu();
-                        } else if (data.data.code == 'nologin') {
-                            this.message = data.data.message;
-                            this.open();
-                            this.$router.push('/login');
-                        } else {
-                            this.message = data.data.message;
-                            this.open();
+                this.$confirm('此操作将修改状态, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                })
+                    .then(() => {
+                        const loading = this.$loading({
+                            lock: true,
+                            text: 'Loading',
+                            spinner: 'el-icon-loading',
+                            background: 'rgba(0, 0, 0, 0.7)',
+                            target: document.querySelector('.div1')
+                        });
+                        this.idx = index;
+                        this.form = row;
+                        var jsonArr = [];
+                        let status;
+                        if (row.status == 1) {
+                            status = 0;
+                        } else if (row.status == 0) {
+                            status = 1;
                         }
-                    })
-                    .catch(err => {
-                        loading.close();
-                        console.log(err);
+                        jsonArr.push({ key: 'id', value: row.id });
+                        jsonArr.push({ key: 'status', value: status });
+                        let sign = md5(preSign(jsonArr));
+                        jsonArr.push({ key: 'sign', value: sign });
+                        console.log(jsonArr);
+                        let params = ParamsAppend(jsonArr);
+                        https.fetchPost('/filmDiscountActivity/updateStatusById', params).then(data => {
+                            loading.close();
+                            console.log(data);
+                            // console.log(JSON.parse(Decrypt(data.data.data)));
+                            if (data.data.code == 'success') {
+                                this.$message.success(`修改成功`);
+                                this.getMenu();
+                            } else if (data.data.code == 'nologin') {
+                                this.message = data.data.message;
+                                this.open();
+                                this.$router.push('/login');
+                            } else {
+                                this.message = data.data.message;
+                                this.open();
+                            }
+                        })
+                            .catch(err => {
+                                loading.close();
+                                console.log(err);
+                            });
+                    }) .catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消修改'
                     });
+                });
             },
             Search() {
                 console.log(this.query.reduceType);

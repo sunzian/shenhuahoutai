@@ -331,14 +331,13 @@ export default {
                             loading.close();
                             console.log(err);
                         });
-                })   .catch(() => {
+                })
+                .catch(() => {
                 this.$message({
                     type: 'info',
                     message: '已取消删除'
                 });
             });
-
-
         },
         addChange(index, row) {
             //是否修改权限

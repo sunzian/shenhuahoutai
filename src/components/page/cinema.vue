@@ -9,8 +9,28 @@
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-input v-model="query.cinemaName" placeholder="影院名称" class="handle-input mr10"></el-input>
-                <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
+                <el-input style="width: 200px;" v-model="query.cinemaName" placeholder="影院名称" class="handle-input mr10"></el-input>
+                <el-date-picker
+                        style="width: 200px;"
+                        v-model="query.startDate"
+                        type="date"
+                        placeholder="开始时间">
+                </el-date-picker>至
+                <el-date-picker
+                        style="width: 200px;"
+                        v-model="query.endDate"
+                        type="date"
+                        placeholder="结束时间">
+                </el-date-picker>
+                <el-select  style="width: 200px;" clearable v-model="query.paymentType" placeholder="费用支付类型" class="handle-select mr10">
+                    <el-option key="1" label="包年" value="1"></el-option>
+                    <el-option key="2" label="按票收费" value="2"></el-option>
+                </el-select>
+                <el-select  style="width: 200px;" clearable v-model="query.reportedType" placeholder="票价上报方式" class="handle-select mr10">
+                    <el-option key="1" label="标准价格上报" value="1"></el-option>
+                    <el-option key="2" label="优惠后价格上报" value="2"></el-option>
+                </el-select>
+                <el-button style="margin-left: 60px" type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
             </div>
             <el-table
                 :data="tableData"
@@ -980,16 +1000,32 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            let name = this.query.name;
-            let status = this.query.status;
-            if (!name) {
-                name = '';
+            let cinemaName = this.query.cinemaName;
+            let startDate = this.query.startDate;
+            let endDate = this.query.endDate;
+            let reportedType = this.query.reportedType;
+            let paymentType = this.query.paymentType;
+            if (!cinemaName) {
+                cinemaName = '';
             }
-            if (!status) {
-                status = '';
+            if (!startDate) {
+                startDate = '';
+            }
+            if (!endDate) {
+                endDate = '';
+            }
+            if (!reportedType) {
+                reportedType = '';
+            }
+            if (!paymentType) {
+                paymentType = '';
             }
             let jsonArr = [];
-            jsonArr.push({ key: 'cinemaName', value: name });
+            jsonArr.push({ key: 'cinemaName', value: cinemaName });
+            jsonArr.push({ key: 'startDate', value: startDate });
+            jsonArr.push({ key: 'endDate', value: endDate });
+            jsonArr.push({ key: 'reportedType', value: reportedType });
+            jsonArr.push({ key: 'paymentType', value: paymentType });
             jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
             jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
             let sign = md5(preSign(jsonArr));

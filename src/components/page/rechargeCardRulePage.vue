@@ -111,7 +111,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="会员卡名称：" :label-width="formLabelWidth">
+                <el-form-item v-if="oForm.cinemaName" label="会员卡名称：" :label-width="formLabelWidth">
                     <el-checkbox-group
                             v-model="oForm.levelCode"
                             @change="selectLevelCode"
@@ -324,7 +324,7 @@
                 <el-button type="primary" @click="exChanger">确 定</el-button>
             </span>
         </el-dialog>
-        <!-- 选择优惠券弹出窗 -->
+        <!-- 新增选择优惠券弹出窗 -->
         <el-dialog title="选择优惠券" :visible.sync="drawer">
             <div class="container">
                 <div class="handle-box">
@@ -362,14 +362,63 @@
                         :current-page="query.pageNo"
                         :page-size="query.pageSize"
                         :total="query.totalCount"
-                        @current-change="currentChange"
-                        @prev-click="prev"
-                        @next-click="next"
+                        @current-change="oCurrentChange"
+                        @prev-click="oPrev"
+                        @next-click="oNext"
                     ></el-pagination>
                 </div>
             </div>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="drawer = false">取 消</el-button>
+                <el-button type="primary" @click="sureNext(couponId)">确 定</el-button>
+            </div>
+        </el-dialog>
+        <!-- 修改选择优惠券弹出窗 -->
+        <el-dialog title="选择优惠券" :visible.sync="exDrawer">
+            <div class="container">
+                <div class="handle-box">
+                    <el-input v-model="couponName" placeholder="券包名称" class="handle-input mr10"></el-input>
+                    <el-button type="primary" icon="el-icon-search" @click="changeCoupon">搜索</el-button>
+                </div>
+                <el-table
+                        :data="couponList"
+                        border
+                        class="table"
+                        ref="multipleTable"
+                        header-cell-class-name="table-header"
+                        @selection-change="handleSelectionChange"
+                >
+                    <el-table-column label="操作" width="100" align="center">
+                        <template slot-scope="scope">
+                            <el-radio v-model="couponId" :label="scope.row.id">&nbsp;</el-radio>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="sort" label="券包名称" width="150">
+                        <template slot-scope="scope">{{scope.row.groupName}}</template>
+                    </el-table-column>
+                    <el-table-column prop="sort" label="优惠券详情">
+                        <template slot-scope="scope">
+                            <span
+                                    v-for="item in scope.row.couponList"
+                            >{{item.couponName}}x{{item.number}}&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        </template>
+                    </el-table-column>
+                </el-table>
+                <div class="pagination">
+                    <el-pagination
+                            background
+                            layout="total, prev, pager, next"
+                            :current-page="query.pageNo"
+                            :page-size="query.pageSize"
+                            :total="query.totalCount"
+                            @current-change="aCurrentChange"
+                            @prev-click="aPrev"
+                            @next-click="aNext"
+                    ></el-pagination>
+                </div>
+            </div>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="exDrawer = false">取 消</el-button>
                 <el-button type="primary" @click="sureNext(couponId)">确 定</el-button>
             </div>
         </el-dialog>
@@ -401,6 +450,7 @@ export default {
             oId: '',
             groupName: '',
             drawer: false,
+            exDrawer: false,
             message: '', //弹出框消息
             query: {
                 pageNo: 1,
@@ -979,6 +1029,36 @@ export default {
             this.query.pageNo++;
             this.getMenu();
         },
+        oCurrentChange(val) {
+            //点击选择具体页数
+            this.query.pageNo = val;
+            this.getAllCoupon();
+        },
+        oPrev() {
+            //分页按钮上一页
+            this.query.pageNo--;
+            this.getAllCoupon();
+        },
+        oNext() {
+            //分页按钮下一页
+            this.query.pageNo++;
+            this.getAllCoupon();
+        },
+        aCurrentChange(val) {
+            //点击选择具体页数
+            this.query.pageNo = val;
+            this.changeCoupon();
+        },
+        aPrev() {
+            //分页按钮上一页
+            this.query.pageNo--;
+            this.changeCoupon();
+        },
+        aNext() {
+            //分页按钮下一页
+            this.query.pageNo++;
+            this.changeCoupon();
+        },
         deletCoupon() {
             this.groupName = '';
             this.couponId = '';
@@ -991,6 +1071,7 @@ export default {
                 }
             }
             this.drawer = false;
+            this.exDrawer = false;
         },
         // 获取所有影院
         getAllCinema() {
@@ -1021,6 +1102,8 @@ export default {
             }
             let jsonArr = [];
             jsonArr.push({ key: 'cinemaCodes', value: this.oForm.cinemaCode });
+            jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
+            jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
             jsonArr.push({ key: 'status', value: 1 });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
@@ -1030,6 +1113,7 @@ export default {
                 .then(data => {
                     if (data.data.code == 'success') {
                         var res = JSON.parse(Decrypt(data.data.data));
+                        console.log(res);
                         if (res.data.length == 0) {
                             this.message = '暂无券包';
                             this.open();
@@ -1037,6 +1121,10 @@ export default {
                         }
                         this.couponList = res.data;
                         console.log(this.couponList);
+                        this.query.pageSize = res.pageSize;
+                        this.query.pageNo = res.pageNo;
+                        this.query.totalCount = res.totalCount;
+                        this.query.totalPage = res.totalPage;
                         this.drawer = true;
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
@@ -1055,6 +1143,8 @@ export default {
         changeCoupon() {
             let jsonArr = [];
             jsonArr.push({ key: 'cinemaCodes', value: this.oCinemaCode });
+            jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
+            jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
             jsonArr.push({ key: 'status', value: 1 });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
@@ -1071,7 +1161,11 @@ export default {
                             return;
                         }
                         this.couponList = res.data;
-                        this.drawer = true;
+                        this.query.pageSize = res.pageSize;
+                        this.query.pageNo = res.pageNo;
+                        this.query.totalCount = res.totalCount;
+                        this.query.totalPage = res.totalPage;
+                        this.exDrawer = true;
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();

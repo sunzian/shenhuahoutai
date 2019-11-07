@@ -65,8 +65,8 @@
                 </el-table-column>
                 <el-table-column prop="booleans" label="状态">
                     <template slot-scope="scope">
-                        <el-tag v-if="scope.row.status == 1" type="success">正常</el-tag>
-                        <el-tag v-else-if="scope.row.status == 2" type="danger">禁用</el-tag>
+                        <el-tag v-if="scope.row.status == 1" type="success">启用</el-tag>
+                        <el-tag v-else-if="scope.row.status == 2" type="danger">未启用</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column label="操作" width="100" align="center" fixed="right">
@@ -125,7 +125,7 @@
                     <el-input
                         style="width: 250px"
                         min="1"
-                        v-model="oForm.ruleName"
+                        v-model.trim="oForm.ruleName"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
@@ -133,7 +133,7 @@
                     <el-input
                         style="width: 250px"
                         min="1"
-                        v-model="oForm.rechargeAmount"
+                        v-model.trim="oForm.rechargeAmount"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
@@ -182,7 +182,7 @@
                     <el-input
                         style="width: 250px"
                         min="1"
-                        v-model="oForm.ruleMemo"
+                        v-model.trim="oForm.ruleMemo"
                         placeholder="建议长度不超过15字"
                         autocomplete="off"
                     ></el-input>
@@ -242,13 +242,13 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="开卡规则名称：" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" min="1" v-model="oRuleName" autocomplete="off"></el-input>
+                    <el-input style="width: 250px" min="1" v-model.trim="oRuleName" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="充值金额(起充金额)：" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
-                        v-model="oRechargeAmount"
+                        v-model.trim="oRechargeAmount"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
@@ -284,7 +284,7 @@
                     <el-button type="primary" @click="changeCoupon">更换券包</el-button>
                 </el-form-item>
                 <el-form-item label="优惠描述：" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" min="1" v-model="oRuleMemo" autocomplete="off"></el-input>
+                    <el-input style="width: 250px" min="1" v-model.trim="oRuleMemo" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="有效期：" :label-width="formLabelWidth" prop="date1">
                     <el-date-picker
@@ -403,7 +403,7 @@ export default {
             options: [
                 {
                     value: '1',
-                    label: '正常'
+                    label: '启用'
                 },
                 {
                     value: '2',

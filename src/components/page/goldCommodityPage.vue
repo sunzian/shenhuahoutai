@@ -186,6 +186,8 @@
                         :data="type"
                         class="upload-demo"
                         drag
+                        :limit="1"
+                        ref="upload"
                         action="/api/upload/uploadImage"
                         :on-success="onSuccess"
                         multiple
@@ -198,11 +200,20 @@
                         <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
                     </el-upload>
                 </el-form-item>
-                <el-form-item label="商品描述" :label-width="formLabelWidth">
+                <el-form-item label="兑换须知" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oForm.memo" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="详情" :label-width="formLabelWidth">
+                    <el-input style="width: 250px" v-model="oForm.details" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item v-if="oForm.commodity_type==1" label="原价" :label-width="formLabelWidth">
+                    <el-input style="width: 250px" v-model="oForm.originalPrice" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="库存" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oForm.store" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="领取几天后过期" :label-width="formLabelWidth">
+                    <el-input style="width: 250px" v-model="oForm.expireDay" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="兑换方式" :label-width="formLabelWidth">
                     <el-select v-model="oForm.change_type" placeholder="请选择兑换方式">
@@ -237,6 +248,16 @@
                             :value="city.cinemaCode"
                         >{{city.cinemaName}}</el-checkbox>
                     </el-checkbox-group>
+                </el-form-item>
+                <el-form-item label="是否置顶" :label-width="formLabelWidth">
+                    <el-select v-model="oForm.topStatus" placeholder="请选择">
+                        <el-option
+                                v-for="item in topStatusList"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                        ></el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item label="上架状态" :label-width="formLabelWidth">
                     <el-select v-model="oForm.status" placeholder="请选择上架状态">
@@ -287,7 +308,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item
-                    v-if="oForm.assign_type==1"
+                    v-if="oForm.assign_type==2"
                     label="选择指定日期"
                     :label-width="formLabelWidth"
                 >
@@ -300,21 +321,21 @@
                     ></el-date-picker>
                 </el-form-item>
                 <el-form-item
-                    v-if="oForm.assign_type==2"
+                    v-if="oForm.assign_type==3"
                     label="输入每月几号"
                     :label-width="formLabelWidth"
                 >
                     <el-input style="width: 250px" v-model="oForm.assign_info" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item
-                    v-if="oForm.assign_type==3"
+                    v-if="oForm.assign_type==4"
                     label="输入每月第几周"
                     :label-width="formLabelWidth"
                 >
                     <el-input style="width: 250px" v-model="oForm.assign_info" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item
-                    v-if="oForm.assign_type==4"
+                    v-if="oForm.assign_type==5"
                     label="输入每周几"
                     :label-width="formLabelWidth"
                 >
@@ -331,7 +352,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item
-                    v-if="oForm.limit_type==1||oForm.limit_type==2||oForm.limit_type==3"
+                    v-if="oForm.limit_type==2||oForm.limit_type==3||oForm.limit_type==4"
                     label="对应上方的限制兑换数量"
                     :label-width="formLabelWidth"
                 >
@@ -385,11 +406,20 @@
                         <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
                     </el-upload>
                 </el-form-item>
-                <el-form-item label="商品描述" :label-width="formLabelWidth">
+                <el-form-item label="兑换须知" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="form.memo" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="详情" :label-width="formLabelWidth">
+                    <el-input style="width: 250px" v-model="form.details" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="原价" :label-width="formLabelWidth">
+                    <el-input style="width: 250px" v-model="form.originalPrice" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="库存" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="form.store" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="领取几天后过期" :label-width="formLabelWidth">
+                    <el-input style="width: 250px" v-model="form.expireDay" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="兑换方式" :label-width="formLabelWidth">
                     <el-select v-model="form.changeType" placeholder="请选择兑换方式" @change="change">
@@ -416,7 +446,8 @@
                     <el-input style="width: 250px" v-model="form.money" autocomplete="off"></el-input>
                 </el-form-item>
                 <!--<el-form-item label="允许兑换的门店" :label-width="formLabelWidth">-->
-                <!--<el-checkbox-group v-model="checkedCities"  :max="1">-->
+                    <!--<el-input v-model="form.cinemaCodes"  ></el-input>-->
+                <!--<el-checkbox-group v-model="form.cinemaCodes"  :max="1">-->
                 <!--<el-checkbox-->
                 <!--v-for="city in cities"-->
                 <!--:label="city.cinemaCode"-->
@@ -425,6 +456,16 @@
                 <!--&gt;{{city.cinemaName}}</el-checkbox>-->
                 <!--</el-checkbox-group>-->
                 <!--</el-form-item>-->
+                <el-form-item label="是否置顶" :label-width="formLabelWidth">
+                    <el-select v-model="oTopstatus" placeholder="请选择">
+                        <el-option
+                                v-for="item in topStatusList"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
                 <el-form-item label="上架状态" :label-width="formLabelWidth">
                     <el-select v-model="form.status" placeholder="请选择上架状态">
                         <el-option
@@ -474,7 +515,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item
-                    v-if="form.assignType==1"
+                    v-if="form.assignType==2"
                     label="选择指定日期"
                     :label-width="formLabelWidth"
                 >
@@ -487,20 +528,20 @@
                     ></el-date-picker>
                 </el-form-item>
                 <el-form-item
-                    v-if="form.assignType==2"
+                    v-if="form.assignType==3"
                     label="输入每月几号"
                     :label-width="formLabelWidth"
                 >
                     <el-input style="width: 250px" v-model="form.assignInfo" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item
-                    v-if="form.assignType==3"
+                    v-if="form.assignType==4"
                     label="输入每月第几周"
                     :label-width="formLabelWidth"
                 >
                     <el-input style="width: 250px" v-model="form.assignInfo" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item v-if="form.assignType==4" label="输入每周几" :label-width="formLabelWidth">
+                <el-form-item v-if="form.assignType==5" label="输入每周几" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="form.assignInfo" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="是否限制一段时间内可兑换数量" :label-width="formLabelWidth">
@@ -514,7 +555,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item
-                    v-if="form.limitType==1||form.limitType==2||form.limitType==3"
+                    v-if="form.limitType==2||form.limitType==3||form.limitType==4"
                     label="对应上方的限制兑换数量"
                     :label-width="formLabelWidth"
                 >
@@ -539,6 +580,7 @@ export default {
     name: 'basetable',
     data() {
         return {
+            oTopstatus:'',
             type: {
                 type: ''
             },
@@ -620,6 +662,16 @@ export default {
                     label: '未上架'
                 }
             ],
+            topStatusList: [
+                {
+                    value: '1',
+                    label: '否'
+                },
+                {
+                    value: '2',
+                    label: '是'
+                }
+            ],
             commodityType: [
                 {
                     value: '1',
@@ -632,41 +684,41 @@ export default {
             ],
             assignType: [
                 {
-                    value: '0',
+                    value: '1',
                     label: '不允许指定日期'
                 },
                 {
-                    value: '1',
+                    value: '2',
                     label: '指定日期'
                 },
                 {
-                    value: '2',
+                    value: '3',
                     label: '指定每月几号'
                 },
                 {
-                    value: '3',
+                    value: '4',
                     label: '指定每月第几周'
                 },
                 {
-                    value: '4',
+                    value: '5',
                     label: '指定每周几'
                 }
             ],
             limitType: [
                 {
-                    value: '0',
+                    value: '1',
                     label: '不限制'
                 },
                 {
-                    value: '1',
+                    value: '2',
                     label: '限制每年可兑换数量'
                 },
                 {
-                    value: '2',
+                    value: '3',
                     label: '限制每月可兑换数量'
                 },
                 {
-                    value: '3',
+                    value: '4',
                     label: '限制每周可兑换数量'
                 }
             ],
@@ -853,6 +905,10 @@ export default {
                 jsonArr.push({ key: 'assignInfo', value: this.oForm.assign_info });
                 jsonArr.push({ key: 'limitType', value: this.oForm.limit_type });
                 jsonArr.push({ key: 'limitNumber', value: this.oForm.limit_number });
+                jsonArr.push({ key: 'details', value: this.oForm.details });
+                jsonArr.push({ key: 'originalPrice', value: this.oForm.originalPrice });
+                jsonArr.push({ key: 'topStatus', value: this.oForm.topStatus });
+                jsonArr.push({ key: 'expireDay', value: this.oForm.expireDay });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
                 let params = ParamsAppend(jsonArr);
@@ -865,6 +921,26 @@ export default {
                             //新增
                             console.log(data);
                             if (data.data.code == 'success') {
+                                this.$refs.upload.clearFiles();//清除已上传文件
+                                this.oForm.name='';
+                                this.oForm.image_url='';
+                                this.oForm.memo='';
+                                this.oForm.store='';
+                                this.oForm.change_type='';
+                                this.oForm.gold='';
+                                this.oForm.money='';
+                                this.oForm.checkedCities='';
+                                this.oForm.status='';
+                                this.oForm.commodity_type='';
+                                this.oForm.ticket_ids='';
+                                this.oForm.assign_type='';
+                                this.oForm.assign_info='';
+                                this.oForm.limit_type='';
+                                this.oForm.limit_number='';
+                                this.oForm.details='';
+                                this.oForm.originalPrice='';
+                                this.oForm.topStatus='';
+                                this.oForm.expireDay='';
                                 this.dialogFormVisible = false;
                                 this.$message.success(`新增成功`);
                                 this.getMenu();
@@ -966,7 +1042,6 @@ export default {
         },
         addChange(index, row) {
             //是否修改权限
-            let that = this;
             const loading = this.$loading({
                 lock: true,
                 text: 'Loading',
@@ -1000,6 +1075,7 @@ export default {
                             this.form.cinemaCodes = JSON.parse(Decrypt(data.data.data)).goldCommodity.cinemaCodes;
                             this.form.status = JSON.parse(Decrypt(data.data.data)).goldCommodity.status;
                             this.form.commodityType = JSON.parse(Decrypt(data.data.data)).goldCommodity.commodityType;
+                            this.oTopstatus = JSON.parse(Decrypt(data.data.data)).goldCommodity.topStatus;
                             this.form.ticketIds = JSON.parse(Decrypt(data.data.data)).goldCommodity.ticketIds;
                             this.form.assignType = JSON.parse(Decrypt(data.data.data)).goldCommodity.assignType;
                             this.form.assignInfo = JSON.parse(Decrypt(data.data.data)).goldCommodity.assignInfo;
@@ -1010,6 +1086,13 @@ export default {
                             for (let x in this.commodityType) {
                                 if (this.commodityType[x].value == JSON.parse(Decrypt(data.data.data)).goldCommodity.commodityType) {
                                     this.form.commodityType = this.commodityType[x].value;
+                                    break;
+                                }
+                            }
+                            //是否置顶下拉选显示对应的选项
+                            for (let x in this.topStatusList) {
+                                if (this.topStatusList[x].value == JSON.parse(Decrypt(data.data.data)).goldCommodity.topStatus) {
+                                    this.oTopstatus = this.topStatusList[x].value;
                                     break;
                                 }
                             }
@@ -1090,6 +1173,10 @@ export default {
                 jsonArr.push({ key: 'assignInfo', value: this.form.assignInfo });
                 jsonArr.push({ key: 'limitType', value: this.form.limitType });
                 jsonArr.push({ key: 'limitNumber', value: this.form.limitNumber });
+                jsonArr.push({ key: 'details', value: this.form.details });
+                jsonArr.push({ key: 'originalPrice', value: this.form.originalPrice });
+                jsonArr.push({ key: 'expireDay', value: this.form.expireDay });
+                jsonArr.push({ key: 'topStatus', value: this.oTopstatus });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
                 console.log(jsonArr);

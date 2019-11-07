@@ -197,9 +197,9 @@
                     <el-upload
                             :before-upload="beforeUpload"
                             :data="type"
-                            :limit="8"
                             class="upload-demo"
                             drag
+                            :limit="8"
                             ref="upload"
                             action="/api/upload/uploadImage"
                             :on-success="onSuccess"

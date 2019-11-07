@@ -9,21 +9,6 @@
         </div>
         <!--影院信息展示页面-->
         <div class="container" v-if="showSell">
-            <div class="handle-box">
-                <el-input v-model="query.name" placeholder="角色名" class="handle-input mr10"></el-input>
-                <el-select
-                    clearable
-                    v-model="query.status"
-                    placeholder="状态"
-                    class="handle-select mr10"
-                >
-                    <el-option key="1" label="审核中" value="1"></el-option>
-                    <el-option key="2" label="未审核" value="2"></el-option>
-                    <el-option key="3" label="通过" value="3"></el-option>
-                    <el-option key="4" label="审核失败" value="4"></el-option>
-                </el-select>
-                <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
-            </div>
             <el-table
                 :data="tableData"
                 border
@@ -72,24 +57,13 @@
         <!--卖品分类展示页面-->
         <div class="container" v-if="!showSell">
             <div class="handle-box">
-                <el-input v-model="query.name" placeholder="角色名" class="handle-input mr10"></el-input>
-                <el-select
-                    clearable
-                    v-model="query.status"
-                    placeholder="状态"
-                    class="handle-select mr10"
-                >
-                    <el-option key="1" label="审核中" value="1"></el-option>
-                    <el-option key="2" label="未审核" value="2"></el-option>
-                    <el-option key="3" label="通过" value="3"></el-option>
-                    <el-option key="4" label="审核失败" value="4"></el-option>
-                </el-select>
+                <el-input v-model="query.typeName" placeholder="分类名称" class="handle-input mr10"></el-input>
                 <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
                 <el-button
                     type="primary"
                     @click="back"
                     icon="el-icon-circle-plus-outline"
-                    style="margin-left: 400px"
+                    style="margin-left: 560px"
                 >返回卖品列表</el-button>
                 <el-button
                     type="primary"
@@ -148,9 +122,9 @@
                     :current-page="query.pageNo"
                     :page-size="query.pageSize"
                     :total="query.totalCount"
-                    @current-change="currentChange"
-                    @prev-click="prev"
-                    @next-click="next"
+                    @current-change="oCurrentChange"
+                    @prev-click="oPrev"
+                    @next-click="oNext"
                 ></el-pagination>
             </div>
         </div>
@@ -274,98 +248,6 @@ export default {
             dialogFormVisible: false,
             formLabelWidth: '120px',
             selectValue: {},
-            options: [
-                {
-                    value: '1',
-                    label: '审核中'
-                },
-                {
-                    value: '2',
-                    label: '未审核'
-                },
-                {
-                    value: '3',
-                    label: '通过'
-                },
-                {
-                    value: '4',
-                    label: '审核失败'
-                }
-            ],
-            showType: [
-                {
-                    value: '1',
-                    label: '纯金币兑换'
-                },
-                {
-                    value: '2',
-                    label: '纯RMB兑换'
-                },
-                {
-                    value: '3',
-                    label: '金币 + RMB 兑换'
-                }
-            ],
-            showStatus: [
-                {
-                    value: '1',
-                    label: '上架'
-                },
-                {
-                    value: '2',
-                    label: '未上架'
-                }
-            ],
-            commodityType: [
-                {
-                    value: '1',
-                    label: '实物'
-                },
-                {
-                    value: '2',
-                    label: '优惠券'
-                }
-            ],
-            assignType: [
-                {
-                    value: '0',
-                    label: '不允许指定日期'
-                },
-                {
-                    value: '1',
-                    label: '指定日期'
-                },
-                {
-                    value: '2',
-                    label: '指定每月几号'
-                },
-                {
-                    value: '3',
-                    label: '指定每月第几周'
-                },
-                {
-                    value: '4',
-                    label: '指定每周几'
-                }
-            ],
-            limitType: [
-                {
-                    value: '0',
-                    label: '不限制'
-                },
-                {
-                    value: '1',
-                    label: '限制每年可兑换数量'
-                },
-                {
-                    value: '2',
-                    label: '限制每月可兑换数量'
-                },
-                {
-                    value: '3',
-                    label: '限制每周可兑换数量'
-                }
-            ],
             value: '',
             restaurants: [],
             state: '',
@@ -475,17 +357,7 @@ export default {
             setTimeout(() => {
                 this.idx = index;
                 this.form = row;
-                let name = this.query.name;
-                let status = this.query.status;
-                if (!name) {
-                    name = '';
-                }
-                if (!status) {
-                    status = '';
-                }
                 let jsonArr = [];
-                // jsonArr.push({key:"roleName",value:name});
-                // jsonArr.push({key:"status",value:status});
                 jsonArr.push({ key: 'id', value: row.id });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
@@ -607,7 +479,7 @@ export default {
         },
         Search() {
             this.query.pageNo = 1;
-            this.getMenu();
+            this.refresh();
         },
         back() {
             this.showSell = true;
@@ -678,17 +550,12 @@ export default {
                 target: document.querySelector('.div1')
             });
             setTimeout(() => {
-                let name = this.query.name;
-                let status = this.query.status;
-                if (!name) {
-                    name = '';
-                }
-                if (!status) {
-                    status = '';
+                let typeName = this.query.typeName;
+                if (!typeName) {
+                    typeName = '';
                 }
                 let jsonArr = [];
-                // jsonArr.push({key:"roleName",value:name});
-                // jsonArr.push({key:"status",value:status});
+                jsonArr.push({ key: 'typeName', value: typeName});
                 jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
                 jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
                 jsonArr.push({ key: 'cinemaCode', value: this.cinemaCode });
@@ -736,17 +603,7 @@ export default {
             });
             setTimeout(() => {
                 this.cinemaCode = row.cinemaCode;
-                let name = this.query.name;
-                let status = this.query.status;
-                if (!name) {
-                    name = '';
-                }
-                if (!status) {
-                    status = '';
-                }
                 let jsonArr = [];
-                // jsonArr.push({key:"roleName",value:name});
-                // jsonArr.push({key:"status",value:status});
                 jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
                 jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
                 jsonArr.push({ key: 'cinemaCode', value: this.cinemaCode });
@@ -830,6 +687,21 @@ export default {
             //分页按钮下一页
             this.query.pageNo++;
             this.getMenu();
+        },
+        oCurrentChange(val) {
+            //点击选择具体页数
+            this.query.pageNo = val;
+            this.refresh();
+        },
+        oPrev() {
+            //分页按钮上一页
+            this.query.pageNo--;
+            this.refresh();
+        },
+        oNext() {
+            //分页按钮下一页
+            this.query.pageNo++;
+            this.refresh();
         }
     }
 };

@@ -7,7 +7,7 @@
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
-        <!--新增游戏规则页面-->
+        <!--签到规则页面-->
         <div class="container">
             <el-table
                     :data="tableData"
@@ -39,7 +39,7 @@
                 </el-table-column>
             </el-table>
             <span slot="footer" class="dialog-footer" style="margin-left: 1040px">
-                <el-button style="margin-top: 20px;margin-left: 78px" type="primary" @click="exAddChanger">确 定</el-button>
+                <el-button style="float: right;margin-top: 10px;" type="primary" @click="exAddChanger">确 定</el-button>
             </span>
         </div>
         <!-- 新增奖项弹出框 -->

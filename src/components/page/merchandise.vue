@@ -9,21 +9,6 @@
         </div>
         <!--影院信息展示页面-->
         <div class="container" v-if="showSell">
-            <div class="handle-box">
-                <el-input v-model="query.name" placeholder="角色名" class="handle-input mr10"></el-input>
-                <el-select
-                    clearable
-                    v-model="query.status"
-                    placeholder="状态"
-                    class="handle-select mr10"
-                >
-                    <el-option key="1" label="审核中" value="1"></el-option>
-                    <el-option key="2" label="未审核" value="2"></el-option>
-                    <el-option key="3" label="通过" value="3"></el-option>
-                    <el-option key="4" label="审核失败" value="4"></el-option>
-                </el-select>
-                <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
-            </div>
             <el-table
                 :data="tableData"
                 border
@@ -77,24 +62,17 @@
         <!--卖品信息展示页面-->
         <div class="container" v-if="!showSell">
             <div class="handle-box">
-                <el-input v-model="query.name" placeholder="角色名" class="handle-input mr10"></el-input>
-                <el-select
-                    clearable
-                    v-model="query.status"
-                    placeholder="状态"
-                    class="handle-select mr10"
-                >
-                    <el-option key="1" label="审核中" value="1"></el-option>
-                    <el-option key="2" label="未审核" value="2"></el-option>
-                    <el-option key="3" label="通过" value="3"></el-option>
-                    <el-option key="4" label="审核失败" value="4"></el-option>
+                <el-input v-model="query.merchandiseName" placeholder="商品名称" class="handle-input mr10"></el-input>
+                <el-select clearable v-model="query.merchandiseStatus" placeholder="状态" class="handle-select mr10">
+                    <el-option key="1" label="上架" value="1"></el-option>
+                    <el-option key="2" label="下架" value="2"></el-option>
                 </el-select>
                 <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
                 <el-button
                     type="primary"
                     @click="back"
                     icon="el-icon-circle-plus-outline"
-                    style="margin-left: 400px"
+                    style="margin-left: 680px"
                 >返回卖品列表</el-button>
             </div>
             <el-table
@@ -136,6 +114,12 @@
                 <el-table-column prop="sort" label="分类" width="150">
                     <template slot-scope="scope">{{scope.row.typeName}}</template>
                 </el-table-column>
+                <el-table-column prop="sort" label="状态" width="150">
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row.merchandiseStatus=='1'" type="success">上架</el-tag>
+                        <el-tag v-else-if="scope.row.merchandiseStatus=='2'" type="danger">下架</el-tag>
+                    </template>
+                </el-table-column>
                 <el-table-column label="操作" width="100" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-button
@@ -153,9 +137,9 @@
                     :current-page="query.pageNo"
                     :page-size="query.pageSize"
                     :total="query.totalCount"
-                    @current-change="currentChange"
-                    @prev-click="prev"
-                    @next-click="next"
+                    @current-change="oCurrentChange"
+                    @prev-click="oPrev"
+                    @next-click="oNext"
                 ></el-pagination>
             </div>
         </div>
@@ -217,6 +201,16 @@
                 <el-form-item label="库存" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="form.stockCount" autocomplete="off" type="number"></el-input>
                 </el-form-item>
+                <el-form-item label="状态" :label-width="formLabelWidth">
+                    <el-select v-model="oMerchandiseStatus" placeholder="请选择状态">
+                        <el-option
+                                v-for="item in showStatus"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
                 <el-form-item label="分类" :label-width="formLabelWidth">
                     <el-select v-model="form.typeCode" placeholder="请选择分类">
                         <el-option
@@ -252,6 +246,7 @@ export default {
                 type: ''
             },
             oName: '',
+            oMerchandiseStatus: '',
             message: '', //弹出框消息
             query: {
                 pageNo: 1,
@@ -277,38 +272,6 @@ export default {
             dialogFormVisible: false,
             formLabelWidth: '120px',
             selectValue: {},
-            options: [
-                {
-                    value: '1',
-                    label: '审核中'
-                },
-                {
-                    value: '2',
-                    label: '未审核'
-                },
-                {
-                    value: '3',
-                    label: '通过'
-                },
-                {
-                    value: '4',
-                    label: '审核失败'
-                }
-            ],
-            showType: [
-                {
-                    value: '1',
-                    label: '纯金币兑换'
-                },
-                {
-                    value: '2',
-                    label: '纯RMB兑换'
-                },
-                {
-                    value: '3',
-                    label: '金币 + RMB 兑换'
-                }
-            ],
             showStatus: [
                 {
                     value: '1',
@@ -317,56 +280,6 @@ export default {
                 {
                     value: '2',
                     label: '未上架'
-                }
-            ],
-            commodityType: [
-                {
-                    value: '1',
-                    label: '实物'
-                },
-                {
-                    value: '2',
-                    label: '优惠券'
-                }
-            ],
-            assignType: [
-                {
-                    value: '0',
-                    label: '不允许指定日期'
-                },
-                {
-                    value: '1',
-                    label: '指定日期'
-                },
-                {
-                    value: '2',
-                    label: '指定每月几号'
-                },
-                {
-                    value: '3',
-                    label: '指定每月第几周'
-                },
-                {
-                    value: '4',
-                    label: '指定每周几'
-                }
-            ],
-            limitType: [
-                {
-                    value: '0',
-                    label: '不限制'
-                },
-                {
-                    value: '1',
-                    label: '限制每年可兑换数量'
-                },
-                {
-                    value: '2',
-                    label: '限制每月可兑换数量'
-                },
-                {
-                    value: '3',
-                    label: '限制每周可兑换数量'
                 }
             ],
             value: '',
@@ -402,17 +315,7 @@ export default {
                     setTimeout(() => {
                         this.idx = index;
                         this.form = row;
-                        let name = this.query.name;
-                        let status = this.query.status;
-                        if (!name) {
-                            name = '';
-                        }
-                        if (!status) {
-                            status = '';
-                        }
                         let jsonArr = [];
-                        // jsonArr.push({key:"roleName",value:name});
-                        // jsonArr.push({key:"status",value:status});
                         jsonArr.push({ key: 'id', value: row.id });
                         let sign = md5(preSign(jsonArr));
                         jsonArr.push({ key: 'sign', value: sign });
@@ -482,6 +385,14 @@ export default {
                             this.form.typeCode = JSON.parse(Decrypt(data.data.data)).merchandise.typeCode;
                             this.form.stockCount = JSON.parse(Decrypt(data.data.data)).merchandise.stockCount;
                             this.selectValue = JSON.parse(Decrypt(data.data.data)).merchandiseType;
+                            this.oMerchandiseStatus = JSON.parse(Decrypt(data.data.data)).merchandise.merchandiseStatus;
+                            for (let x in this.showStatus) {
+                                if (this.showStatus[x].value == JSON.parse(Decrypt(data.data.data)).merchandise.merchandiseStatus) {
+                                    this.oMerchandiseStatus = this.showStatus[x].value;
+                                    break;
+                                }
+                            }
+
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
                             this.open();
@@ -517,6 +428,7 @@ export default {
                 jsonArr.push({ key: 'stockCount', value: this.form.stockCount });
                 jsonArr.push({ key: 'merchandisePic', value: this.form.image_url });
                 jsonArr.push({ key: 'typeCode', value: this.form.typeCode });
+                jsonArr.push({ key: 'merchandiseStatus', value: this.oMerchandiseStatus });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
                 console.log(jsonArr);
@@ -549,7 +461,7 @@ export default {
         },
         Search() {
             this.query.pageNo = 1;
-            this.getMenu();
+            this.refresh();
         },
         getMenu() {
             //获取菜单栏
@@ -561,17 +473,7 @@ export default {
                 target: document.querySelector('.div1')
             });
             setTimeout(() => {
-                let name = this.query.name;
-                let status = this.query.status;
-                if (!name) {
-                    name = '';
-                }
-                if (!status) {
-                    status = '';
-                }
                 let jsonArr = [];
-                // jsonArr.push({key:"roleName",value:name});
-                // jsonArr.push({key:"status",value:status});
                 jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
                 jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
                 let sign = md5(preSign(jsonArr));
@@ -617,17 +519,17 @@ export default {
                 target: document.querySelector('.div1')
             });
             setTimeout(() => {
-                let name = this.query.name;
-                let status = this.query.status;
-                if (!name) {
-                    name = '';
+                let merchandiseName = this.query.merchandiseName;
+                let merchandiseStatus = this.query.merchandiseStatus;
+                if (!merchandiseName) {
+                    merchandiseName = '';
                 }
-                if (!status) {
-                    status = '';
+                if (!merchandiseStatus) {
+                    merchandiseStatus = '';
                 }
                 let jsonArr = [];
-                // jsonArr.push({key:"roleName",value:name});
-                // jsonArr.push({key:"status",value:status});
+                jsonArr.push({ key: 'merchandiseName', value: merchandiseName });
+                jsonArr.push({ key: 'merchandiseStatus', value: merchandiseStatus });
                 jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
                 jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
                 jsonArr.push({ key: 'cinemaCode', value: this.cinemaCode });
@@ -811,6 +713,21 @@ export default {
             //分页按钮下一页
             this.query.pageNo++;
             this.getMenu();
+        },
+        oCurrentChange(val) {
+            //点击选择具体页数
+            this.query.pageNo = val;
+            this.refresh();
+        },
+        oPrev() {
+            //分页按钮上一页
+            this.query.pageNo--;
+            this.refresh();
+        },
+        oNext() {
+            //分页按钮下一页
+            this.query.pageNo++;
+            this.refresh();
         }
     }
 };

@@ -33,7 +33,15 @@
                     <template slot-scope="scope">{{scope.row.businessMemo}}</template>
                 </el-table-column>
                 <el-table-column prop="logo" label="商家logo">
-                    <template slot-scope="scope">{{scope.row.businessLogo}}</template>
+                    <template slot-scope="scope">
+                        <el-popover
+                                placement="right"
+                                title=""
+                                trigger="hover">
+                            <img style="width: 400px" :src="scope.row.businessLogo"/>
+                            <img slot="reference" :src="scope.row.businessLogo" :alt="scope.row.businessLogo" style="max-height: 50px;max-width: 130px">
+                        </el-popover>
+                    </template>
                 </el-table-column>
                 <el-table-column prop="phone" label="商家电话">
                     <template slot-scope="scope">{{scope.row.businessMobile}}</template>
@@ -93,12 +101,20 @@
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="商家logo" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 150px"
-                        maxlength="9"
-                        v-model.number="oForm.logo"
-                        autocomplete="off"
-                    ></el-input>
+                    <el-upload
+                            :before-upload="beforeUpload"
+                            :data="type"
+                            :limit="1"
+                            class="upload-demo"
+                            drag
+                            ref="upload"
+                            action="/api/upload/uploadImage"
+                            :on-success="onSuccess"
+                            multiple>
+                        <i class="el-icon-upload"></i>
+                        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb 建议尺寸750*360或按比例上传</div>
+                    </el-upload>
                 </el-form-item>
                 <el-form-item label="商家电话" :label-width="formLabelWidth">
                     <el-input
@@ -125,8 +141,12 @@
                 </el-form-item>
                 <el-form-item label="过期优惠券是否发送短信通知会员" :label-width="formLabelWidth">
                     <el-select v-model="oForm.messageForExpireTickets" placeholder="请选择">
-                        <el-option label="是" value="0"></el-option>
-                        <el-option label="否" value="1"></el-option>
+                        <el-option
+                                v-for="item in options"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                        ></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="优惠券到期前几天发送短信通知会员" :label-width="formLabelWidth">
@@ -144,7 +164,7 @@
             </div>
         </el-dialog>
         <!-- 编辑弹出框 -->
-        <el-dialog title="编辑" :visible.sync="editVisible" width="30%">
+        <el-dialog title="编辑" :visible.sync="editVisible" width="40%">
             <el-form ref="form" :model="form" label-width="100px">
                 <el-form-item label="商家名称">
                     <el-input
@@ -153,16 +173,6 @@
                         show-word-limit
                         v-model="oName"
                         autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="商家编号">
-                    <el-input
-                        style="width: 250px"
-                        min="1"
-                        maxlength="7"
-                        v-model.number="oCode"
-                        autocomplete="off"
-                        disabled='true'
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="商家描述">
@@ -175,31 +185,64 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
+                <el-form-item label="商家logo">
+                    <el-upload
+                            :before-upload="beforeUpload"
+                            :data="type"
+                            :limit="1"
+                            class="upload-demo"
+                            drag
+                            ref="upload"
+                            action="/api/upload/uploadImage"
+                            :on-success="unSuccess"
+                            multiple>
+                        <i class="el-icon-upload"></i>
+                        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb 建议尺寸750*360或按比例上传</div>
+                    </el-upload>
+                </el-form-item>
                 <el-form-item label="商家电话">
                     <el-input
-                        style="width: 250px"
-                        min="1"
-                        maxlength="7"
-                        v-model.number="oMobile"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="商家logo">
-                    <el-input
-                        style="width: 250px"
-                        min="1"
-                        maxlength="7"
-                        v-model="oLogo"
-                        autocomplete="off"
+                            style="width: 250px"
+                            v-model="oMobile"
+                            autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="金币过期年数">
                     <el-input
-                        style="width: 50px"
+                        style="width: 70px"
                         min="1"
                         maxlength="7"
                         v-model.trim="oGold"
                         autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="会员卡积分兑换比例">
+                    <el-input
+                            style="width: 250px"
+                            min="1"
+                            maxlength="7"
+                            v-model.trim="oPercentageOfPointsIntoGold"
+                            autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="过期优惠券是否发送短信通知会员">
+                    <el-select v-model="oMessageForExpireTickets" placeholder="请选择">
+                        <el-option
+                                v-for="item in options"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="优惠券到期前几天发送短信通知会员">
+                    <el-input
+                            style="width: 70px"
+                            min="1"
+                            maxlength="7"
+                            v-model.trim="oAheadDaysForMessage"
+                            autocomplete="off"
                     ></el-input>
                 </el-form-item>
             </el-form>
@@ -221,13 +264,25 @@ export default {
     name: 'basetable',
     data() {
         return {
+            options: [{
+                value: '0',
+                label: '否'
+            }, {
+                    value: '1',
+                    label: '是'
+                }],
+            type:{
+                type: ""
+            },
             oName: '',
             oId: '',
-            oCode: '',
             oMemo: '',
             oLogo: '',
             oMobile: '',
             oGold: '',
+            oPercentageOfPointsIntoGold: '',
+            oMessageForExpireTickets: '',
+            oAheadDaysForMessage: '',
             message: '', //弹出框消息
             query: {
                 pageNo: 1,
@@ -268,6 +323,29 @@ export default {
         this.getMenu();
     },
     methods: {
+        beforeUpload(){//上传之前
+            this.type.type=EncryptReplace('business')
+        },
+        onSuccess(data){//上传文件 登录超时
+            // console.log(data);
+            // console.log(data);
+            this.oForm.logo=data.data
+            if(data.code=='nologin'){
+                this.message=data.message
+                this.open()
+                this.$router.push('/login');
+            }
+        },
+        unSuccess(data){//上传文件 登录超时
+            // console.log(data);
+            // console.log(data);
+            this.oLogo=data.data
+            if(data.code=='nologin'){
+                this.message=data.message
+                this.open()
+                this.$router.push('/login');
+            }
+        },
         addPage() {
             //获取新增按钮权限
             const loading = this.$loading({
@@ -335,6 +413,7 @@ export default {
                         if (data.data.code == 'success') {
                             this.dialogFormVisible = false;
                             this.$message.success(`新增成功`);
+                            this.$refs.upload.clearFiles();//清除已上传文件
                             this.oForm.name = '';
                             this.oForm.memo = '';
                             this.oForm.logo = '';
@@ -367,48 +446,60 @@ export default {
         },
         delChange(index, row) {
             //删除数据
-            const loading = this.$loading({
-                lock: true,
-                text: 'Loading',
-                spinner: 'el-icon-loading',
-                background: 'rgba(0, 0, 0, 0.7)',
-                target: document.querySelector('.div1')
-            });
-            this.idx = index;
-            this.form = row;
-            let name = this.query.name;
-            let status = this.query.status;
-            if (!name) {
-                name = '';
-            }
-            if (!status) {
-                status = '';
-            }
-            let jsonArr = [];
-            jsonArr.push({ key: 'id', value: row.id });
-            let sign = md5(preSign(jsonArr));
-            jsonArr.push({ key: 'sign', value: sign });
-            let params = ParamsAppend(jsonArr);
-            https
-                .fetchDelete('/businessInfo/deleteBusinessInfo', params)
-                .then(data => {
-                    loading.close();
-                    if (data.data.code == 'success') {
-                        this.$message.error(`删除了`);
-                        this.getMenu();
-                    } else if (data.data.code == 'nologin') {
-                        this.message = data.data.message;
-                        this.open();
-                        this.$router.push('/login');
-                    } else {
-                        this.message = data.data.message;
-                        this.open();
+            this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            })
+                .then(() => {
+                    const loading = this.$loading({
+                        lock: true,
+                        text: 'Loading',
+                        spinner: 'el-icon-loading',
+                        background: 'rgba(0, 0, 0, 0.7)',
+                        target: document.querySelector('.div1')
+                    });
+                    this.idx = index;
+                    this.form = row;
+                    let name = this.query.name;
+                    let status = this.query.status;
+                    if (!name) {
+                        name = '';
                     }
-                })
-                .catch(err => {
-                    loading.close();
-                    console.log(err);
+                    if (!status) {
+                        status = '';
+                    }
+                    let jsonArr = [];
+                    jsonArr.push({ key: 'id', value: row.id });
+                    let sign = md5(preSign(jsonArr));
+                    jsonArr.push({ key: 'sign', value: sign });
+                    let params = ParamsAppend(jsonArr);
+                    https
+                        .fetchDelete('/businessInfo/deleteBusinessInfo', params)
+                        .then(data => {
+                            loading.close();
+                            if (data.data.code == 'success') {
+                                this.$message.error(`删除了`);
+                                this.getMenu();
+                            } else if (data.data.code == 'nologin') {
+                                this.message = data.data.message;
+                                this.open();
+                                this.$router.push('/login');
+                            } else {
+                                this.message = data.data.message;
+                                this.open();
+                            }
+                        })
+                        .catch(err => {
+                            loading.close();
+                            console.log(err);
+                        });
+                })   .catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消删除'
                 });
+            });
         },
         addChange(index, row) {
             //是否拥有修改权限
@@ -438,8 +529,15 @@ export default {
                         this.oMemo = JSON.parse(Decrypt(data.data.data)).businessMemo;
                         this.oMobile = JSON.parse(Decrypt(data.data.data)).businessMobile;
                         this.oLogo = JSON.parse(Decrypt(data.data.data)).businessLogo;
-                        this.oCode = JSON.parse(Decrypt(data.data.data)).businessCode;
                         this.oGold = JSON.parse(Decrypt(data.data.data)).goldExpireYears;
+                        this.oPercentageOfPointsIntoGold = JSON.parse(Decrypt(data.data.data)).percentageOfPointsIntoGold;
+                        for (let x in this.options) {
+                            if (this.options[x].value == JSON.parse(Decrypt(data.data.data)).messageForExpireTickets) {
+                                this.oMessageForExpireTickets = this.options[x].value;
+                                break;
+                            }
+                        }
+                        this.oAheadDaysForMessage = JSON.parse(Decrypt(data.data.data)).aheadDaysForMessage;
                         this.oId = JSON.parse(Decrypt(data.data.data)).id;
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
@@ -470,6 +568,9 @@ export default {
             jsonArr.push({ key: 'businessMobile', value: this.oMobile });
             jsonArr.push({ key: 'businessMemo', value: this.oMemo });
             jsonArr.push({ key: 'businessLogo', value: this.oLogo });
+            jsonArr.push({ key: 'percentageOfPointsIntoGold', value: this.oPercentageOfPointsIntoGold });
+            jsonArr.push({ key: 'messageForExpireTickets', value: this.oMessageForExpireTickets });
+            jsonArr.push({ key: 'aheadDaysForMessage', value: this.oAheadDaysForMessage });
             jsonArr.push({ key: 'id', value: this.oId });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
@@ -482,8 +583,8 @@ export default {
                 .then(data => {
                     loading.close();
                     console.log(data);
-                    // console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
+                        this.$refs.upload.clearFiles();//清除已上传文件
                         this.$message.success(`编辑成功`);
                         this.getMenu();
                     } else if (data.data.code == 'nologin') {

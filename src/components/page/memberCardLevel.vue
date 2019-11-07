@@ -9,19 +9,6 @@
         </div>
         <!--影院信息展示页面-->
         <div class="container" v-if="showSell">
-            <div class="handle-box">
-                <el-input v-model="query.name" placeholder="角色名" class="handle-input mr10"></el-input>
-                <el-select
-                        clearable
-                        v-model="query.status"
-                        placeholder="状态"
-                        class="handle-select mr10"
-                >
-                    <el-option key="1" label="正常" value="1"></el-option>
-                    <el-option key="2" label="禁用" value="2"></el-option>
-                </el-select>
-                <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
-            </div>
             <el-table
                     :data="tableData"
                     border
@@ -75,7 +62,7 @@
         <!--卡等级信息展示页面-->
         <div class="container" v-if="!showSell">
             <div class="handle-box">
-                <el-input v-model="query.name" placeholder="角色名" class="handle-input mr10"></el-input>
+                <el-input v-model="query.levelName" placeholder="会员卡名称" class="handle-input mr10"></el-input>
                 <el-select
                         clearable
                         v-model="query.status"
@@ -160,9 +147,9 @@
                         :current-page="query.pageNo"
                         :page-size="query.pageSize"
                         :total="query.totalCount"
-                        @current-change="currentChange"
-                        @prev-click="prev"
-                        @next-click="next"
+                        @current-change="oCurrentChange"
+                        @prev-click="oPrev"
+                        @next-click="oNext"
                 ></el-pagination>
             </div>
         </div>
@@ -192,7 +179,7 @@
                             将文件拖到此处，或
                             <em>点击上传</em>
                         </div>
-                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
+                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb 建议670*420</div>
                     </el-upload>
                 </el-form-item>
                 <el-form-item label="工本费" :label-width="formLabelWidth">
@@ -505,8 +492,56 @@
                 }, 500);
             },
             Search() {
-                this.query.pageNo = 1;
-                this.getMenu();
+                const loading = this.$loading({
+                    lock: true,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)',
+                    target: document.querySelector('.div1')
+                });
+                setTimeout(() => {
+                    let levelName = this.query.levelName;
+                    let status = this.query.status;
+                    if (!levelName) {
+                        levelName = '';
+                    }
+                    if (!status) {
+                        status = '';
+                    }
+                    let jsonArr = [];
+                    jsonArr.push({key:"levelName",value:levelName});
+                    jsonArr.push({key:"status",value:status});
+                    jsonArr.push({ key: 'pageNo', value: '1' });
+                    jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
+                    let sign = md5(preSign(jsonArr));
+                    jsonArr.push({ key: 'sign', value: sign });
+                    var params = ParamsAppend(jsonArr);
+                    https.fetchPost('/memberCardLevel/list', params).then(data => {
+                        loading.close();
+                        console.log(data);
+                        if (data.data.code == 'success') {
+                            var oData = JSON.parse(Decrypt(data.data.data));
+                            console.log(oData);
+                            // // console.log(this.query);
+                            this.oTableData = oData.data;
+                            this.query.pageSize = oData.pageSize;
+                            this.query.pageNo = oData.pageNo;
+                            this.query.totalCount = oData.totalCount;
+                            this.query.totalPage = oData.totalPage;
+                        } else if (data.data.code == 'nologin') {
+                            this.message = data.data.message;
+                            this.open();
+                            this.$router.push('/login');
+                        } else {
+                            this.message = data.data.message;
+                            this.open();
+                        }
+                    })
+                        .catch(err => {
+                            loading.close();
+                            console.log(err);
+                        });
+                }, 500);
             },
             getMenu() {
                 //获取菜单栏
@@ -518,23 +553,23 @@
                     target: document.querySelector('.div1')
                 });
                 setTimeout(() => {
-                    let name = this.query.name;
+                    let levelName = this.query.levelName;
                     let status = this.query.status;
-                    if (!name) {
-                        name = '';
+                    if (!levelName) {
+                        levelName = '';
                     }
                     if (!status) {
                         status = '';
                     }
                     let jsonArr = [];
-                    // jsonArr.push({key:"roleName",value:name});
-                    // jsonArr.push({key:"status",value:status});
+                    jsonArr.push({key:"levelName",value:levelName});
+                    jsonArr.push({key:"status",value:status});
                     jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
                     jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
                     let sign = md5(preSign(jsonArr));
                     jsonArr.push({ key: 'sign', value: sign });
                     var params = ParamsAppend(jsonArr);
-                    https.fetchPost('/cinema//myCinemaPage', params).then(data => {
+                    https.fetchPost('/cinema/myCinemaPage', params).then(data => {
                             loading.close();
                             console.log(data);
                             if (data.data.code == 'success') {
@@ -571,17 +606,7 @@
                     target: document.querySelector('.div1')
                 });
                 setTimeout(() => {
-                    let name = this.query.name;
-                    let status = this.query.status;
-                    if (!name) {
-                        name = '';
-                    }
-                    if (!status) {
-                        status = '';
-                    }
                     let jsonArr = [];
-                    // jsonArr.push({key:"roleName",value:name});
-                    // jsonArr.push({key:"status",value:status});
                     jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
                     jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
                     jsonArr.push({ key: 'cinemaCode', value: this.cinemaCode });
@@ -630,14 +655,6 @@
                 setTimeout(() => {
                     if(row&&row.cinemaCode){
                         this.cinemaCode = row.cinemaCode;
-                    }
-                    let name = this.query.name;
-                    let status = this.query.status;
-                    if (!name) {
-                        name = '';
-                    }
-                    if (!status) {
-                        status = '';
                     }
                     let jsonArr = [];
                     jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
@@ -697,8 +714,8 @@
                             loading.close();
                             console.log(data);
                             if (data.data.code == 'success') {
-                                var oData = JSON.parse(Decrypt(data.data.data));
-                                console.log(oData);
+                                this.$message.success(`获取成功`);
+                                this.getMenu();
                             } else if (data.data.code == 'nologin') {
                                 this.message = data.data.message;
                                 this.open();
@@ -766,6 +783,21 @@
                 //分页按钮下一页
                 this.query.pageNo++;
                 this.getMenu();
+            },
+            oCurrentChange(val) {
+                //点击选择具体页数
+                this.query.pageNo = val;
+                this.show();
+            },
+            oPrev() {
+                //分页按钮上一页
+                this.query.pageNo--;
+                this.show();
+            },
+            oNext() {
+                //分页按钮下一页
+                this.query.pageNo++;
+                this.show();
             }
         }
     };

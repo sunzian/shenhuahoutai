@@ -195,33 +195,33 @@
                     </el-dialog>
                 </el-form-item>
                 <!-- 暂时只支持单视频上传,要做成多视频上传 -->
-                <el-form-item label="预告片" :label-width="formLabelWidth">
-                    <el-upload
-                        class="avatar-uploader el-upload--text"
-                        action="/api/upload/uploadVideo"
-                        :show-file-list="false"
-                        :on-success="handleVideoSuccess"
-                        :before-upload="beforeUploadVideo"
-                        :on-progress="uploadVideoProcess"
-                    >
-                        <video
-                            v-if="videoForm.Video !='' && videoFlag == false"
-                            :src="videoForm.Video"
-                            class="avatar el-upload--text"
-                            controls="controls"
-                        >您的浏览器不支持视频播放</video>
-                        <i
-                            v-if="videoForm.Video =='' && videoFlag == false"
-                            class="el-icon-plus avatar-uploader-icon"
-                        ></i>
-                        <el-progress
-                            v-if="videoFlag == true"
-                            type="circle"
-                            :percentage="videoUploadPercent"
-                            style="margin-top:30px;"
-                        ></el-progress>
-                    </el-upload>
-                </el-form-item>
+                <!--<el-form-item label="预告片" :label-width="formLabelWidth">-->
+                    <!--<el-upload-->
+                        <!--class="avatar-uploader el-upload&#45;&#45;text"-->
+                        <!--action="/api/upload/uploadVideo"-->
+                        <!--:show-file-list="false"-->
+                        <!--:on-success="handleVideoSuccess"-->
+                        <!--:before-upload="beforeUploadVideo"-->
+                        <!--:on-progress="uploadVideoProcess"-->
+                    <!--&gt;-->
+                        <!--<video-->
+                            <!--v-if="videoForm.Video !='' && videoFlag == false"-->
+                            <!--:src="videoForm.Video"-->
+                            <!--class="avatar el-upload&#45;&#45;text"-->
+                            <!--controls="controls"-->
+                        <!--&gt;您的浏览器不支持视频播放</video>-->
+                        <!--<i-->
+                            <!--v-if="videoForm.Video =='' && videoFlag == false"-->
+                            <!--class="el-icon-plus avatar-uploader-icon"-->
+                        <!--&gt;</i>-->
+                        <!--<el-progress-->
+                            <!--v-if="videoFlag == true"-->
+                            <!--type="circle"-->
+                            <!--:percentage="videoUploadPercent"-->
+                            <!--style="margin-top:30px;"-->
+                        <!--&gt;</el-progress>-->
+                    <!--</el-upload>-->
+                <!--</el-form-item>-->
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="cancel">取 消</el-button>
@@ -351,40 +351,40 @@
                         <img width="100%" :src="dialogImageUrl" alt />
                     </el-dialog>
                 </el-form-item>
-                <el-form-item label="预告片" :label-width="formLabelWidth">
-                    <video
-                            :src="oTrailer"
-                            class="avatar el-upload--text"
-                            controls="controls"
-                        >您的浏览器不支持视频播放</video>
-                </el-form-item>
-                <el-form-item  label="重新上传" :label-width="formLabelWidth">
-                    <el-upload
-                        class="avatar-uploader el-upload--text"
-                        action="/api/upload/uploadVideo"
-                        :show-file-list="false"
-                        :on-success="handleVideoSuccess"
-                        :before-upload="beforeUploadVideo"
-                        :on-progress="uploadVideoProcess"
-                    >
-                        <video
-                            v-if="videoForm.Video !='' && videoFlag == false"
-                            :src="videoForm.Video"
-                            class="avatar el-upload--text"
-                            controls="controls"
-                        >您的浏览器不支持视频播放</video>
-                        <i
-                            v-if="videoForm.Video =='' && videoFlag == false"
-                            class="el-icon-plus avatar-uploader-icon"
-                        ></i>
-                        <el-progress
-                            v-if="videoFlag == true"
-                            type="circle"
-                            :percentage="videoUploadPercent"
-                            style="margin-top:30px;"
-                        ></el-progress>
-                    </el-upload>
-                </el-form-item>
+                <!--<el-form-item label="预告片" :label-width="formLabelWidth">-->
+                    <!--<video-->
+                            <!--:src="oTrailer"-->
+                            <!--class="avatar el-upload&#45;&#45;text"-->
+                            <!--controls="controls"-->
+                        <!--&gt;您的浏览器不支持视频播放</video>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item  label="重新上传" :label-width="formLabelWidth">-->
+                    <!--<el-upload-->
+                        <!--class="avatar-uploader el-upload&#45;&#45;text"-->
+                        <!--action="/api/upload/uploadVideo"-->
+                        <!--:show-file-list="false"-->
+                        <!--:on-success="handleVideoSuccess"-->
+                        <!--:before-upload="beforeUploadVideo"-->
+                        <!--:on-progress="uploadVideoProcess"-->
+                    <!--&gt;-->
+                        <!--<video-->
+                            <!--v-if="videoForm.Video !='' && videoFlag == false"-->
+                            <!--:src="videoForm.Video"-->
+                            <!--class="avatar el-upload&#45;&#45;text"-->
+                            <!--controls="controls"-->
+                        <!--&gt;您的浏览器不支持视频播放</video>-->
+                        <!--<i-->
+                            <!--v-if="videoForm.Video =='' && videoFlag == false"-->
+                            <!--class="el-icon-plus avatar-uploader-icon"-->
+                        <!--&gt;</i>-->
+                        <!--<el-progress-->
+                            <!--v-if="videoFlag == true"-->
+                            <!--type="circle"-->
+                            <!--:percentage="videoUploadPercent"-->
+                            <!--style="margin-top:30px;"-->
+                        <!--&gt;</el-progress>-->
+                    <!--</el-upload>-->
+                <!--</el-form-item>-->
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false">取 消</el-button>
@@ -737,48 +737,60 @@ export default {
         },
         delChange(index, row) {
             //删除数据
-            const loading = this.$loading({
-                lock: true,
-                text: 'Loading',
-                spinner: 'el-icon-loading',
-                background: 'rgba(0, 0, 0, 0.7)',
-                target: document.querySelector('.div1')
-            });
-            this.idx = index;
-            this.form = row;
-            let name = this.query.name;
-            let status = this.query.status;
-            if (!name) {
-                name = '';
-            }
-            if (!status) {
-                status = '';
-            }
-            let jsonArr = [];
-            jsonArr.push({ key: 'id', value: row.id });
-            let sign = md5(preSign(jsonArr));
-            jsonArr.push({ key: 'sign', value: sign });
-            let params = ParamsAppend(jsonArr);
-            https
-                .fetchPost('/film/deleteFilm', params)
-                .then(data => {
-                    loading.close();
-                    if (data.data.code == 'success') {
-                        this.$message.error(`删除了`);
-                        this.getMenu();
-                    } else if (data.data.code == 'nologin') {
-                        this.message = data.data.message;
-                        this.open();
-                        this.$router.push('/login');
-                    } else {
-                        this.message = data.data.message;
-                        this.open();
+            this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            })
+                .then(() => {
+                    const loading = this.$loading({
+                        lock: true,
+                        text: 'Loading',
+                        spinner: 'el-icon-loading',
+                        background: 'rgba(0, 0, 0, 0.7)',
+                        target: document.querySelector('.div1')
+                    });
+                    this.idx = index;
+                    this.form = row;
+                    let name = this.query.name;
+                    let status = this.query.status;
+                    if (!name) {
+                        name = '';
                     }
-                })
-                .catch(err => {
-                    loading.close();
-                    console.log(err);
+                    if (!status) {
+                        status = '';
+                    }
+                    let jsonArr = [];
+                    jsonArr.push({ key: 'id', value: row.id });
+                    let sign = md5(preSign(jsonArr));
+                    jsonArr.push({ key: 'sign', value: sign });
+                    let params = ParamsAppend(jsonArr);
+                    https
+                        .fetchPost('/film/deleteFilm', params)
+                        .then(data => {
+                            loading.close();
+                            if (data.data.code == 'success') {
+                                this.$message.error(`删除了`);
+                                this.getMenu();
+                            } else if (data.data.code == 'nologin') {
+                                this.message = data.data.message;
+                                this.open();
+                                this.$router.push('/login');
+                            } else {
+                                this.message = data.data.message;
+                                this.open();
+                            }
+                        })
+                        .catch(err => {
+                            loading.close();
+                            console.log(err);
+                        });
+                })  .catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消删除'
                 });
+            });
         },
         addChange(index, row) {
             //是否修改权限
