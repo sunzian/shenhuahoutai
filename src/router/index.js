@@ -25,6 +25,11 @@ export default new Router({
                     meta: { title: '商家账号管理' }
                 },
                 {
+                    path: '/ticketOrderPage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/ticketOrderPage.vue'),
+                    meta: { title: '影票订单' }
+                },
+                {
                     path: '/businessPage',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/businessPage.vue'),
                     meta: { title: '商家管理' }

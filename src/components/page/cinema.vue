@@ -3,7 +3,7 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
-                    <i class="el-icon-lx-cascades"></i> 影院设置
+                    <i class="el-icon-lx-cascades"></i> 影院信息维护
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
