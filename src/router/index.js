@@ -60,9 +60,14 @@ export default new Router({
                     meta: { title: '卖品优惠券管理' }
                 },
                 {
-                    path: '/employePage',
+                    path: '/employeePage',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/employePage.vue'),
                     meta: { title: '员工管理' }
+                },
+                {
+                    path: '/merchandiseOrderNotice',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/merchandiseOrderNotice.vue'),
+                    meta: { title: '卖品送餐通知' }
                 },
                 {
                     path: '/filmCoupon',
