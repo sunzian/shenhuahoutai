@@ -143,16 +143,16 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="送券活动类型：" :label-width="formLabelWidth">
-                    <el-select v-model="oForm.type" placeholder="请选择" @change="getCardInfo">
-                        <el-option
-                                v-for="info in type"
-                                :key="info.value"
-                                :value="info.value"
-                                :label="info.label"
-                        ></el-option>
-                    </el-select>
-                </el-form-item>
+                <!--<el-form-item label="送券活动类型：" :label-width="formLabelWidth">-->
+                    <!--<el-select v-model="oForm.type" placeholder="请选择" @change="getCardInfo">-->
+                        <!--<el-option-->
+                                <!--v-for="info in type"-->
+                                <!--:key="info.value"-->
+                                <!--:value="info.value"-->
+                                <!--:label="info.label"-->
+                        <!--&gt;</el-option>-->
+                    <!--</el-select>-->
+                <!--</el-form-item>-->
                 <el-form-item label="活动开始时间" :label-width="formLabelWidth">
                     <el-date-picker
                             v-model="oForm.startDate"
@@ -575,7 +575,7 @@
                 jsonArr.push({ key: 'cinemaCode', value: this.oForm.cinemaCode });
                 jsonArr.push({ key: 'activityImageUrl', value: this.oActivityImageUrl });
                 jsonArr.push({ key: 'name', value: this.oForm.name });
-                jsonArr.push({ key: 'type', value: this.oForm.type });
+                jsonArr.push({ key: 'type', value: '1' });
                 jsonArr.push({ key: 'startDate', value: this.oForm.startDate });
                 jsonArr.push({ key: 'endDate', value: this.oForm.endDate });
                 jsonArr.push({ key: 'status', value: this.oForm.status });

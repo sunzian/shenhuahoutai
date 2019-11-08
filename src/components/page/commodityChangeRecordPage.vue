@@ -11,19 +11,25 @@
             <div class="handle-box">
                 <el-input placeholder="订单号" style="width: 150px" v-model="query.orderNo" autocomplete="off"></el-input>
                 <el-input placeholder="手机号" style="width: 150px" v-model="query.mobile" autocomplete="off"></el-input>
-                <el-input placeholder="取货码" style="width: 150px" v-model="query.printNo" autocomplete="off"></el-input>
-                <el-select clearable v-model="query.payWay" placeholder="支付方式" class="handle-select mr10">
-                    <el-option key="0" label="微信" value="0"></el-option>
-                    <el-option key="1" label="会员卡" value="1"></el-option>
+                <el-select clearable v-model="query.changeType" placeholder="兑换方式" class="handle-select mr10">
+                    <el-option key="1" label="纯金币兑换" value="1"></el-option>
+                    <el-option key="2" label="纯RMB兑换" value="2"></el-option>
+                    <el-option key="3" label="金币加RMB兑换" value="3"></el-option>
+                </el-select>
+                <el-select clearable v-model="query.status" placeholder="领取状态" class="handle-select mr10">
+                    <el-option key="1" label="未领取" value="1"></el-option>
+                    <el-option key="2" label="已领取" value="2"></el-option>
+                    <el-option key="3" label="已过期" value="3"></el-option>
                 </el-select>
                 <el-select clearable v-model="query.payStatus" placeholder="支付状态" class="handle-select mr10">
+                    <el-option key="0" label="未支付" value="0"></el-option>
                     <el-option key="1" label="支付成功" value="1"></el-option>
                     <el-option key="2" label="支付失败" value="2"></el-option>
-                    <el-option key="3" label="退款成功" value="3"></el-option>
                 </el-select>
-                <el-select clearable v-model="query.submitStatus" placeholder="下单状态" class="handle-select mr10">
-                    <el-option key="0" label="下单失败" value="0"></el-option>
-                    <el-option key="1" label="下单成功" value="1"></el-option>
+                <el-select clearable v-model="query.refundStatus" placeholder="退款状态" class="handle-select mr10">
+                    <el-option key="0" label="未退款" value="0"></el-option>
+                    <el-option key="1" label="退款成功" value="1"></el-option>
+                    <el-option key="2" label="退款失败" value="2"></el-option>
                 </el-select>
                 <el-date-picker
                         style="width: 200px;"
@@ -43,12 +49,12 @@
                 </el-date-picker>
                 <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
             </div>
-            <div class="handle-box">
-                总原价<el-input style="width: 150px" v-model="totalData.totalOriginalPrice" :disabled="true"  autocomplete="off"></el-input>
-                总实付金额<el-input style="width: 150px" v-model="totalData.totalActualPrice" :disabled="true"  autocomplete="off"></el-input>
-                总优惠券优惠金额<el-input style="width: 150px" v-model="totalData.totalCouponDiscount" :disabled="true" autocomplete="off"></el-input>
-                总活动优惠金额<el-input style="width: 150px" v-model="totalData.totalActivityDiscount" :disabled="true" autocomplete="off"></el-input>
-            </div>
+            <!--<div class="handle-box">-->
+                <!--总原价<el-input style="width: 150px" v-model="totalData.totalOriginalPrice" :disabled="true"  autocomplete="off"></el-input>-->
+                <!--总实付金额<el-input style="width: 150px" v-model="totalData.totalActualPrice" :disabled="true"  autocomplete="off"></el-input>-->
+                <!--总优惠券优惠金额<el-input style="width: 150px" v-model="totalData.totalCouponDiscount" :disabled="true" autocomplete="off"></el-input>-->
+                <!--总活动优惠金额<el-input style="width: 150px" v-model="totalData.totalActivityDiscount" :disabled="true" autocomplete="off"></el-input>-->
+            <!--</div>-->
             <el-table
                     :data="tableData"
                     border
@@ -57,59 +63,66 @@
                     header-cell-class-name="table-header"
                     @selection-change="handleSelectionChange"
             >
-                <el-table-column prop="name" label="影院编码">
-                    <template slot-scope="scope">{{scope.row.cinemaCode}}</template>
+                <el-table-column prop="name" label="兑换影院名称">
+                    <template slot-scope="scope">{{scope.row.exchangeCinemaName}}</template>
                 </el-table-column>
                 <el-table-column label="订单号">
                     <template slot-scope="scope">{{scope.row.orderNo}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="用户名">
-                    <template slot-scope="scope">{{scope.row.userName}}</template>
-                </el-table-column>
                 <el-table-column prop="memo" label="手机号码">
                     <template slot-scope="scope">{{scope.row.mobile}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="取货码">
-                    <template slot-scope="scope">{{scope.row.printNo}}</template>
+                <el-table-column prop="memo" label="商品名称">
+                    <template slot-scope="scope">{{scope.row.commodityName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="卖品内容">
-                    <template slot-scope="scope">{{scope.row.merNames}}</template>
+                <el-table-column prop="memo" label="兑换方式">
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row.changeType=='1'">纯金币兑换</el-tag>
+                        <el-tag v-else-if="scope.row.changeType=='2'">纯RMB兑换</el-tag>
+                        <el-tag v-else-if="scope.row.changeType=='3'">金币加RMB兑换</el-tag>
+                    </template>
                 </el-table-column>
-                <el-table-column prop="memo" label="卖品总原价">
-                    <template slot-scope="scope">{{scope.row.totalOriginalPrice}}</template>
+                <el-table-column prop="memo" label="支付金币数量">
+                    <template slot-scope="scope">{{scope.row.gold}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="卖品总实付价">
-                    <template slot-scope="scope">{{scope.row.totalActualPrice}}</template>
+                <el-table-column prop="memo" label="支付rmb数量">
+                    <template slot-scope="scope">{{scope.row.money}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="总活动优惠金额">
-                    <template slot-scope="scope">{{scope.row.totalActivityDiscount}}</template>
+                <el-table-column prop="memo" label="领取状态">
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row.changeType=='1'">未领取</el-tag>
+                        <el-tag v-else-if="scope.row.changeType=='2'">已领取</el-tag>
+                        <el-tag v-else-if="scope.row.changeType=='3'">已过期</el-tag>
+                    </template>
                 </el-table-column>
-                <el-table-column prop="memo" label="优惠券总优惠金额">
-                    <template slot-scope="scope">{{scope.row.totalCouponDiscount}}</template>
+                <el-table-column prop="memo" label="支付交易号">
+                    <template slot-scope="scope">{{scope.row.tradeNo}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="优惠券名称">
-                    <template slot-scope="scope">{{scope.row.userCouponName}}</template>
+                <el-table-column label="支付状态" align="center">
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row. payStatus=='0'">未支付</el-tag>
+                        <el-tag v-else-if="scope.row. payStatus=='1'">支付成功</el-tag>
+                        <el-tag v-else-if="scope.row. payStatus=='2'">支付失败</el-tag>
+                    </template>
                 </el-table-column>
                 <el-table-column prop="memo" label="支付时间">
                     <template slot-scope="scope">{{scope.row.payTime}}</template>
                 </el-table-column>
-                <el-table-column label="支付方式" align="center">
+                <el-table-column label="退款状态" align="center">
                     <template slot-scope="scope">
-                        <el-tag v-if="scope.row. payWay=='0'">微信</el-tag>
-                        <el-tag v-else-if="scope.row. payWay=='1'">会员卡</el-tag>
+                        <el-tag v-if="scope.row.refundStatus=='0'" type="danger">未退款</el-tag>
+                        <el-tag v-else-if="scope.row.refundStatus=='1'" type="success">退款成功</el-tag>
+                        <el-tag v-else-if="scope.row.refundStatus=='2'" type="success">退款失败</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="取货方式" align="center">
-                    <template slot-scope="scope">
-                        <el-tag v-if="scope.row.deliveryType=='0'">自取</el-tag>
-                        <el-tag v-else-if="scope.row.deliveryType=='1'">送至影厅</el-tag>
-                    </template>
+                <el-table-column prop="memo" label="退款交易号">
+                    <template slot-scope="scope">{{scope.row.refundNo}}</template>
                 </el-table-column>
-                <el-table-column label="下单状态" align="center">
-                    <template slot-scope="scope">
-                        <el-tag v-if="scope.row.submitStatus=='0'" type="danger">下单失败</el-tag>
-                        <el-tag v-else-if="scope.row.submitStatus=='1'" type="success">支付下单成功成功</el-tag>
-                    </template>
+                <el-table-column prop="memo" label="退款时间">
+                    <template slot-scope="scope">{{scope.row.refundTime}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="退款金额">
+                    <template slot-scope="scope">{{scope.row.refundPrice}}</template>
                 </el-table-column>
                 <el-table-column label="操作"  align="center"  fixed="right">
                     <template slot-scope="scope">
@@ -363,29 +376,29 @@
                 setTimeout(() => {
                     let orderNo=this.query.orderNo;
                     let mobile=this.query.mobile;
-                    let printNo=this.query.printNo;
-                    let payWay=this.query.payWay;
                     let payStatus=this.query.payStatus;
-                    let submitStatus=this.query.submitStatus;
                     let startDate=this.query.startDate;
                     let endDate=this.query.endDate;
+                    let changeType=this.query.changeType;
+                    let status=this.query.status;
+                    let refundStatus=this.query.refundStatus;
                     if(!orderNo){
                         orderNo=''
                     }
                     if(!mobile){
                         mobile=''
                     }
-                    if(!printNo){
-                        printNo=''
+                    if(!status){
+                        status=''
                     }
-                    if(!payWay){
-                        payWay=''
+                    if(!changeType){
+                        changeType=''
                     }
                     if(!payStatus){
                         payStatus=''
                     }
-                    if(!submitStatus){
-                        submitStatus=''
+                    if(!refundStatus){
+                        refundStatus=''
                     }
                     if(!startDate){
                         startDate=''
@@ -394,14 +407,14 @@
                         endDate=''
                     }
                     let jsonArr = [];
-                    // jsonArr.push({key:"orderNo",value:orderNo});
-                    // jsonArr.push({key:"mobile",value:mobile});
-                    // jsonArr.push({key:"printNo",value:printNo});
-                    // jsonArr.push({key:"payWay",value:payWay});
-                    // jsonArr.push({key:"payStatus",value:payStatus});
-                    // jsonArr.push({key:"submitStatus",value:submitStatus});
-                    // jsonArr.push({key:"startDate",value:startDate});
-                    // jsonArr.push({key:"endDate",value:endDate});
+                    jsonArr.push({key:"orderNo",value:orderNo});
+                    jsonArr.push({key:"mobile",value:mobile});
+                    jsonArr.push({key:"payStatus",value:payStatus});
+                    jsonArr.push({key:"changeType",value:changeType});
+                    jsonArr.push({key:"status",value:status});
+                    jsonArr.push({key:"refundStatus",value:refundStatus});
+                    jsonArr.push({key:"startDate",value:startDate});
+                    jsonArr.push({key:"endDate",value:endDate});
                     jsonArr.push({key:"pageNo",value:this.query.pageNo});
                     jsonArr.push({key:"pageSize",value:this.query.pageSize});
                     let sign =md5(preSign(jsonArr));
@@ -415,7 +428,7 @@
                             console.log(oData);
                             // console.log(this.query);
                             this.tableData = oData.pageResult.data;
-                            this.totalData = oData.totalMerchandiseOrder;
+                            // this.totalData = oData.totalMerchandiseOrder;
                             this.query.pageSize = oData.pageResult.pageSize;
                             this.query.pageNo = oData.pageResult.pageNo;
                             this.query.totalCount = oData.pageResult.totalCount;
