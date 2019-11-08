@@ -533,18 +533,18 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item prop="videoStatus" label="是否开通预告片" :label-width="formLabelWidth">
-                    <el-select
-                            v-model="oForm.videoStatus"
-                    >
-                        <el-option
-                                v-for="info in boolean"
-                                :key="info.value"
-                                :label="info.label"
-                                :value="info.value"
-                        ></el-option>
-                    </el-select>
-                </el-form-item>
+                <!--<el-form-item prop="videoStatus" label="是否开通预告片" :label-width="formLabelWidth">-->
+                    <!--<el-select-->
+                            <!--v-model="oForm.videoStatus"-->
+                    <!--&gt;-->
+                        <!--<el-option-->
+                                <!--v-for="info in boolean"-->
+                                <!--:key="info.value"-->
+                                <!--:label="info.label"-->
+                                <!--:value="info.value"-->
+                        <!--&gt;</el-option>-->
+                    <!--</el-select>-->
+                <!--</el-form-item>-->
                 <el-form-item prop="memberCardCommonUseStatus" label="会员卡是否门店通用" :label-width="formLabelWidth">
                     <el-select
                             v-model="oForm.memberCardCommonUseStatus"
@@ -1057,18 +1057,18 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item prop="videoStatus" label="是否开通预告片" :label-width="formLabelWidth">
-                    <el-select
-                            v-model="oVideoStatus"
-                    >
-                        <el-option
-                                v-for="info in boolean"
-                                :key="info.value"
-                                :label="info.label"
-                                :value="info.value"
-                        ></el-option>
-                    </el-select>
-                </el-form-item>
+                <!--<el-form-item prop="videoStatus" label="是否开通预告片" :label-width="formLabelWidth">-->
+                    <!--<el-select-->
+                            <!--v-model="oVideoStatus"-->
+                    <!--&gt;-->
+                        <!--<el-option-->
+                                <!--v-for="info in boolean"-->
+                                <!--:key="info.value"-->
+                                <!--:label="info.label"-->
+                                <!--:value="info.value"-->
+                        <!--&gt;</el-option>-->
+                    <!--</el-select>-->
+                <!--</el-form-item>-->
                 <el-form-item prop="memberCardCommonUseStatus" label="会员卡是否门店通用" :label-width="formLabelWidth">
                     <el-select
                             v-model="oMemberCardCommonUseStatus"
