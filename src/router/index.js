@@ -55,6 +55,11 @@ export default new Router({
                     meta: { title: '卖品优惠券管理' }
                 },
                 {
+                    path: '/employePage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/employePage.vue'),
+                    meta: { title: '员工管理' }
+                },
+                {
                     path: '/filmCoupon',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/filmCoupon.vue'),
                     meta: { title: '影票优惠券管理' }

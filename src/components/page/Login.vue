@@ -88,7 +88,7 @@ export default {
             https.fetchPost('/admin/login',params).then((data) => {
                 if(data.data.code== 'success'){
                     localStorage.setItem('ms_username', this.param.username)
-                    this.$router.push('/');
+                    this.$router.push('/dashboard');
 
                 }else if(data.data.code=='error'){
                     alert(data.data.message)
