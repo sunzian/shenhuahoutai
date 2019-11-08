@@ -3,7 +3,7 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
-                    <i class="el-icon-lx-cascades"></i> 放映厅礼物列表：
+                    <i class="el-icon-lx-cascades"></i> 互动红包奖品设置
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>

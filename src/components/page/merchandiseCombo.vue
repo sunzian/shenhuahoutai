@@ -58,23 +58,12 @@
         <div class="container" v-if="!showSell">
             <div class="handle-box">
                 <el-input v-model="query.name" placeholder="角色名" class="handle-input mr10"></el-input>
-                <el-select
-                    clearable
-                    v-model="query.status"
-                    placeholder="状态"
-                    class="handle-select mr10"
-                >
-                    <el-option key="1" label="审核中" value="1"></el-option>
-                    <el-option key="2" label="未审核" value="2"></el-option>
-                    <el-option key="3" label="通过" value="3"></el-option>
-                    <el-option key="4" label="审核失败" value="4"></el-option>
-                </el-select>
                 <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
                 <el-button
                     type="primary"
                     @click="back"
                     icon="el-icon-circle-plus-outline"
-                    style="margin-left: 400px"
+                    style="margin-left: 560px"
                 >返回卖品列表</el-button>
                 <el-button
                     type="primary"
@@ -197,7 +186,7 @@
                     <el-input style="width: 250px" v-model="oForm.showSeqNo" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="套餐价格" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="oForm.originalPrice" autocomplete="off"></el-input>
+                    <el-input :disabled="true" style="width: 250px" v-model="oForm.originalPrice" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="套餐类型" :label-width="formLabelWidth">
                     <el-select v-model="oForm.comboType" placeholder="请选择套餐状态">
@@ -346,7 +335,7 @@
                     <el-input style="width: 250px" v-model="form.showSeqNo" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="套餐价格" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="form.originalPrice" autocomplete="off"></el-input>
+                    <el-input :disabled="true" style="width: 250px" v-model="form.originalPrice" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="套餐类型" :label-width="formLabelWidth">
                     <el-select v-model="form.comboType" placeholder="请选择套餐状态">
@@ -429,6 +418,7 @@ export default {
             },
             idx: -1,
             id: -1,
+            oCinemaCode:'',
             dialogFormVisible: false,
             formLabelWidth: '120px',
             selectValue: {},
@@ -474,6 +464,7 @@ export default {
     methods: {
         deleteSell(index) {
             this.selectedSell.splice(index, 1);
+            this.oForm.originalPrice=''
         },
         getCurrentRow(index) {
             this.sellIndex = index;
@@ -576,10 +567,10 @@ export default {
                 this.selectedSell = [];
                 this.selectedSell.push(this.sellTableData[this.sellIndex]);
             }
+            this.oForm.originalPrice=this.sellTableData[this.sellIndex].settlePrice;
             this.drawer = false;
         },
-        openNext() {
-            //获取商品列表
+        openNext() {     //获取商品列表
             const loading = this.$loading({
                 lock: true,
                 text: 'Loading',
@@ -598,7 +589,7 @@ export default {
                 }
                 let jsonArr = [];
                 // jsonArr.push({key:"roleName",value:name});
-                // jsonArr.push({key:"status",value:status});
+                jsonArr.push({key:"cinemaCode",value:this.oCinemaCode});
                 jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
                 jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
                 let sign = md5(preSign(jsonArr));
@@ -913,6 +904,7 @@ export default {
         },
         show(row) {
             //获取卖品套餐页面列表
+            this.oCinemaCode=row.cinemaCode;
             this.showSell = false;
             const loading = this.$loading({
                 lock: true,

@@ -309,6 +309,7 @@
                     ></el-date-picker>
                 </el-form-item>
                 <el-form-item label="状态：" :label-width="formLabelWidth">
+                    <el-input v-model="oStatus" ></el-input>
                     <el-select v-model="oStatus" placeholder="请选择">
                         <el-option
                             v-for="item in options"
@@ -579,6 +580,7 @@ export default {
                 if (this.oForm.givenMoney == '') {
                     this.message = '请填写赠送金额';
                     this.open();
+                    loading.close();
                     return;
                 }
             }
@@ -586,6 +588,7 @@ export default {
                 if (this.couponId == '') {
                     this.message = '请选择券包';
                     this.open();
+                    loading.close();
                     return;
                 }
             }
@@ -750,6 +753,7 @@ export default {
                         this.oRechargeAmount = JSON.parse(Decrypt(data.data.data)).rechargeCardRules.rechargeAmount;
                         this.groupName = JSON.parse(Decrypt(data.data.data)).rechargeCardRules.couponGroupName;
                         this.couponId = JSON.parse(Decrypt(data.data.data)).rechargeCardRules.givenCouponGroupId;
+                        this.oForm.levelCode = JSON.parse(Decrypt(data.data.data)).rechargeCardRules.cardLevelCode.split(",");
                         if (JSON.parse(Decrypt(data.data.data)).rechargeCardRules.givenMoney) {
                             this.oGivenMoney = JSON.parse(Decrypt(data.data.data)).rechargeCardRules.givenMoney;
                         }
@@ -768,10 +772,11 @@ export default {
                         this.oRuleMemo = JSON.parse(Decrypt(data.data.data)).rechargeCardRules.ruleMemo;
                         this.oStartDate = JSON.parse(Decrypt(data.data.data)).rechargeCardRules.startDate;
                         this.oEndDate = JSON.parse(Decrypt(data.data.data)).rechargeCardRules.endDate;
-                        if (JSON.parse(Decrypt(data.data.data)).rechargeCardRules.status == 1) {
-                            this.oStatus = '正常';
-                        } else {
-                            this.oStatus = '禁用';
+                        for (let x in this.options) {
+                            if (this.options[x].value == JSON.parse(Decrypt(data.data.data)).rechargeCardRules.status) {
+                                this.oStatus = this.options[x].value;
+                                break;
+                            }
                         }
                         this.oId = JSON.parse(Decrypt(data.data.data)).rechargeCardRules.id;
                     } else if (data.data.code == 'nologin') {

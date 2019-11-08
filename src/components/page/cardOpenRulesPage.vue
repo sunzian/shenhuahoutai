@@ -478,6 +478,7 @@ export default {
                 target: document.querySelector('.div1')
             });
             https.fetchPost('/openCardRule/addPage', '').then(data => {
+                this.cardList=[];
                 loading.close();
                 this.cinemaInfo = JSON.parse(Decrypt(data.data.data));
                     if (data.data.code == 'success') {
@@ -515,6 +516,7 @@ export default {
                 if (this.oForm.givenMoney == '') {
                     this.message = '请填写赠送金额';
                     this.open();
+                    loading.close();
                     return;
                 }
             }
@@ -522,6 +524,7 @@ export default {
                 if (this.couponId == '') {
                     this.message = '请选择券包';
                     this.open();
+                    loading.close();
                     return;
                 }
             }
@@ -588,14 +591,6 @@ export default {
                     });
                     this.idx = index;
                     this.form = row;
-                    let name = this.query.name;
-                    let status = this.query.status;
-                    if (!name) {
-                        name = '';
-                    }
-                    if (!status) {
-                        status = '';
-                    }
                     let jsonArr = [];
                     jsonArr.push({ key: 'id', value: row.id });
                     let sign = md5(preSign(jsonArr));
@@ -991,6 +986,7 @@ export default {
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             var params = ParamsAppend(jsonArr);
+            console.log(jsonArr);
             https
                 .fetchPost('/couponGroup/couponGroupPage', params)
                 .then(data => {
@@ -1003,6 +999,10 @@ export default {
                         }
                         this.couponList = res.data;
                         console.log(this.couponList);
+                        this.query.pageSize = res.pageSize;
+                        this.query.pageNo = res.pageNo;
+                        this.query.totalCount = res.totalCount;
+                        this.query.totalPage = res.totalPage;
                         this.drawer = true;
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
@@ -1025,6 +1025,7 @@ export default {
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             var params = ParamsAppend(jsonArr);
+            console.log(jsonArr);
             https
                 .fetchPost('/couponGroup/couponGroupPage', params)
                 .then(data => {
@@ -1037,6 +1038,10 @@ export default {
                             return;
                         }
                         this.couponList = res.data;
+                        this.query.pageSize = res.pageSize;
+                        this.query.pageNo = res.pageNo;
+                        this.query.totalCount = res.totalCount;
+                        this.query.totalPage = res.totalPage;
                         this.drawer = true;
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;

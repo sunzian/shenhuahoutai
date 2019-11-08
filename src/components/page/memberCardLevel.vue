@@ -3,7 +3,7 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
-                    <i class="el-icon-lx-cascades"></i> 卡等级管理
+                    <i class="el-icon-lx-cascades"></i> 会员卡等级管理
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
