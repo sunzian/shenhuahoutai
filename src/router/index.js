@@ -30,6 +30,16 @@ export default new Router({
                     meta: { title: '影票订单' }
                 },
                 {
+                    path: '/merchandiseOrderPage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/merchandiseOrderPage.vue'),
+                    meta: { title: '卖品订单' }
+                },
+                {
+                    path: '/commodityChangeRecordPage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/commodityChangeRecordPage.vue'),
+                    meta: { title: '金币商城订单' }
+                },
+                {
                     path: '/businessPage',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/businessPage.vue'),
                     meta: { title: '商家管理' }
