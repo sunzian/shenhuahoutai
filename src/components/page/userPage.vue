@@ -3,7 +3,7 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
-                    <i class="el-icon-lx-cascades"></i> 用户管理
+                    <i class="el-icon-lx-cascades"></i> 后台账号管理
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
@@ -171,23 +171,23 @@
                 <el-button type="primary" @click="getCheckedKeys">确 定</el-button>
             </div>
         </el-dialog>
-        <!--新增抽屉弹出框-->
-        <el-drawer title="请选择权限" :visible.sync="drawer">
+        <!--新的新增抽屉弹出框-->
+        <el-dialog title="请选择权限" :visible.sync="drawer">
             <el-tree
-                ref="tree"
-                :data="data"
-                show-checkbox
-                node-key="id"
-                :default-expanded-keys="expandedKeys"
-                :default-checked-keys="checkedKeys"
-                :props="defaultProps"
+                    ref="tree"
+                    :data="data"
+                    show-checkbox
+                    node-key="id"
+                    :default-expanded-keys="expandedKeys"
+                    :default-checked-keys="checkedKeys"
+                    :props="defaultProps"
             ></el-tree>
             <el-button
-                @click="sureNext"
-                type="primary"
-                style="margin-top: 50px;margin-left: 100px"
+                    @click="sureNext"
+                    type="primary"
+                    style="margin-top: 50px;margin-left: 100px"
             >确 定</el-button>
-        </el-drawer>
+        </el-dialog>
         <!-- 编辑弹出框 -->
         <el-dialog title="编辑" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
@@ -257,23 +257,23 @@
                 <el-button type="primary" @click="exChanger">确 定</el-button>
             </span>
         </el-dialog>
-        <!--编辑抽屉弹出框-->
-        <el-drawer title="请选择权限" :visible.sync="drawered">
+        <!-- 新的编辑抽屉弹出框 -->
+        <el-dialog title="请选择权限" :visible.sync="drawered">
             <el-tree
-                ref="tree"
-                :data="data"
-                show-checkbox
-                node-key="id"
-                :default-expanded-keys="expandedKeys"
-                :default-checked-keys="checkedKeys"
-                :props="defaultProps"
+                    ref="tree"
+                    :data="data"
+                    show-checkbox
+                    node-key="id"
+                    :default-expanded-keys="expandedKeys"
+                    :default-checked-keys="checkedKeys"
+                    :props="defaultProps"
             ></el-tree>
             <el-button
-                @click="sureNext"
-                type="primary"
-                style="margin-top: 50px;margin-left: 100px"
+                    @click="sureNext"
+                    type="primary"
+                    style="margin-top: 50px;margin-left: 100px"
             >确 定</el-button>
-        </el-drawer>
+        </el-dialog>
         <!-- 修改密码弹出框 -->
         <el-dialog title="修改密码" :visible.sync="passShow">
             <el-form ref="form" :model="form">

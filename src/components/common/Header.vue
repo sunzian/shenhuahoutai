@@ -29,7 +29,7 @@
                 </div> -->
                 <!-- 用户头像 -->
                 <div class="user-avator">
-                    <img src="../../assets/img/login-bg.jpg" />
+                    <img src="../../assets/img/img.png" />
                 </div>
                 <!-- 用户名下拉菜单 -->
                 <el-dropdown class="user-name" trigger="click" @command="handleCommand">

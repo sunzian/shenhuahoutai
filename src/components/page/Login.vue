@@ -108,9 +108,9 @@ export default {
     position: relative;
     width: 100%;
     height: 100%;
-    background-image: url(../../assets/img/login-bg.png);
+    background-image: url(../../assets/img/login-bg.jpg);
     background-repeat:no-repeat;
-    background-size: 750px 500px;
+    background-size: 100%;
     background-position:center ;
 }
 .ms-title {
@@ -126,7 +126,7 @@ export default {
     left: 50%;
     top: 50%;
     width: 350px;
-    margin: -190px 0 0 -175px;
+    margin: -190px 0 0 210px;
     border-radius: 5px;
     background: rgba(255, 255, 255, 0.3);
     overflow: hidden;

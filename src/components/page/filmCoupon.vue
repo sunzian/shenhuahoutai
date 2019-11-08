@@ -50,10 +50,10 @@
                 <el-table-column prop="sort" label="优惠金额">
                     <template slot-scope="scope">{{scope.row.discountMoney}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="已发放">
+                <el-table-column prop="sort" label="可发放">
                     <template slot-scope="scope">{{scope.row.sendNumber}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="已领取">
+                <el-table-column prop="sort" label="已发放">
                     <template slot-scope="scope">{{scope.row.acquireNumber}}</template>
                 </el-table-column>
                 <el-table-column prop="sort" label="已使用">

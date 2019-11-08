@@ -35,6 +35,9 @@
                 <el-table-column prop="sort" label="券包说明">
                     <template slot-scope="scope">{{scope.row.memo}}</template>
                 </el-table-column>
+                <el-table-column prop="sort" label="已发放数量">
+                    <template slot-scope="scope">{{scope.row.hasSendNumber}}</template>
+                </el-table-column>
                 <el-table-column prop="sort" label="状态">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status == 1" type="success">启用</el-tag>
