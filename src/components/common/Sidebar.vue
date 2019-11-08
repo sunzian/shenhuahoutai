@@ -1,5 +1,5 @@
 <template>
-    <div class="sidebar">
+    <div class="sidebar" v-if="!cinemaCode">
         <el-menu
             class="sidebar-el-menu"
             :default-active="onRoutes"
@@ -89,6 +89,7 @@ export default {
     methods:{
     },
     created() {
+        this.cinemaCode = this.$route.query.cinemaCode
         // 通过 Event Bus 进行组件间通信，来折叠侧边栏
         bus.$on('collapse', msg => {
             this.collapse = msg;
