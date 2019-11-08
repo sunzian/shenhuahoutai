@@ -42,6 +42,7 @@
                         placeholder="结束时间">
                 </el-date-picker>
                 <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
+                <el-button type="primary" @click="openOrderNotice">打开卖品通知</el-button>
             </div>
             <div class="handle-box">
                 总原价<el-input style="width: 150px" v-model="totalData.totalOriginalPrice" :disabled="true"  autocomplete="off"></el-input>
@@ -434,6 +435,12 @@
                             console.log(err);
                         });
                 }, 500);
+            },
+            openOrderNotice() {
+                const {href} = this.$router.resolve({
+                    path: `/merchandiseOrderNotice`
+                });
+                window.open(href, '_blank');
             },
             open() {
                 //错误信息弹出框
