@@ -11,6 +11,7 @@
             <div class="handle-box">
                 <el-input placeholder="订单号" style="width: 150px" v-model="query.orderNo" autocomplete="off"></el-input>
                 <el-input placeholder="手机号" style="width: 150px" v-model="query.mobile" autocomplete="off"></el-input>
+                <el-input placeholder="取货码" style="width: 150px" v-model="query.printNo" autocomplete="off"></el-input>
                 <el-select clearable v-model="query.payWay" placeholder="支付方式" class="handle-select mr10">
                     <el-option key="0" label="微信" value="0"></el-option>
                     <el-option key="1" label="会员卡" value="1"></el-option>
@@ -21,9 +22,8 @@
                     <el-option key="3" label="退款成功" value="3"></el-option>
                 </el-select>
                 <el-select clearable v-model="query.submitStatus" placeholder="下单状态" class="handle-select mr10">
-                    <el-option key="0" label="未下单" value="0"></el-option>
+                    <el-option key="0" label="下单失败" value="0"></el-option>
                     <el-option key="1" label="下单成功" value="1"></el-option>
-                    <el-option key="2" label="下单失败" value="2"></el-option>
                 </el-select>
                 <el-date-picker
                         style="width: 200px;"
@@ -44,12 +44,9 @@
                 <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
             </div>
             <div class="handle-box">
-                总实付价<el-input style="width: 150px" v-model="totalData.totalActualPrice" :disabled="true" autocomplete="off"></el-input>
-                总优惠券金额<el-input style="width: 150px" v-model="totalData.totalCouponDiscount" :disabled="true"  autocomplete="off"></el-input>
                 总原价<el-input style="width: 150px" v-model="totalData.totalOriginalPrice" :disabled="true"  autocomplete="off"></el-input>
-                总平台代售费<el-input style="width: 150px" v-model="totalData.totalPlatHandFee" :disabled="true"  autocomplete="off"></el-input>
-                总回传金额<el-input style="width: 150px" v-model="totalData.totalSubmitPrice" :disabled="true"  autocomplete="off"></el-input>
-                总票数<el-input style="width: 150px" v-model="totalData.totalTicketNumber" :disabled="true"  autocomplete="off"></el-input>
+                总实付金额<el-input style="width: 150px" v-model="totalData.totalActualPrice" :disabled="true"  autocomplete="off"></el-input>
+                总优惠券优惠金额<el-input style="width: 150px" v-model="totalData.totalCouponDiscount" :disabled="true" autocomplete="off"></el-input>
                 总活动优惠金额<el-input style="width: 150px" v-model="totalData.totalActivityDiscount" :disabled="true" autocomplete="off"></el-input>
             </div>
             <el-table
@@ -66,47 +63,35 @@
                 <el-table-column label="订单号">
                     <template slot-scope="scope">{{scope.row.orderNo}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="场次时间">
-                    <template slot-scope="scope">{{scope.row.sessionTime}}</template>
+                <el-table-column prop="memo" label="用户名">
+                    <template slot-scope="scope">{{scope.row.userName}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="手机号码">
                     <template slot-scope="scope">{{scope.row.mobile}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="影片名称">
-                    <template slot-scope="scope">{{scope.row.filmName}}</template>
+                <el-table-column prop="memo" label="取货码">
+                    <template slot-scope="scope">{{scope.row.printNo}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="票数">
-                    <template slot-scope="scope">{{scope.row.number}}</template>
+                <el-table-column prop="memo" label="卖品内容">
+                    <template slot-scope="scope">{{scope.row.merNames}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="座位">
-                    <template slot-scope="scope">{{scope.row.seatName}}</template>
-                </el-table-column>
-                <el-table-column prop="memo" label="影票总原价">
+                <el-table-column prop="memo" label="卖品总原价">
                     <template slot-scope="scope">{{scope.row.totalOriginalPrice}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="影票总实付价">
+                <el-table-column prop="memo" label="卖品总实付价">
                     <template slot-scope="scope">{{scope.row.totalActualPrice}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="总服务费">
-                    <template slot-scope="scope">{{scope.row.totalServiceFee}}</template>
-                </el-table-column>
-                <el-table-column prop="memo" label="总平台手续费">
-                    <template slot-scope="scope">{{scope.row.totalPlatHandFee}}</template>
-                </el-table-column>
-                <el-table-column prop="memo" label="活动优惠金额">
+                <el-table-column prop="memo" label="总活动优惠金额">
                     <template slot-scope="scope">{{scope.row.totalActivityDiscount}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="影票优惠券优惠金额">
+                <el-table-column prop="memo" label="优惠券总优惠金额">
                     <template slot-scope="scope">{{scope.row.totalCouponDiscount}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="优惠券名称">
+                    <template slot-scope="scope">{{scope.row.userCouponName}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="支付时间">
                     <template slot-scope="scope">{{scope.row.payTime}}</template>
-                </el-table-column>
-                <el-table-column prop="memo" label="总最低金额">
-                    <template slot-scope="scope">{{scope.row.totalLowestPrice}}</template>
-                </el-table-column>
-                <el-table-column prop="memo" label="售票系统总提交票价">
-                    <template slot-scope="scope">{{scope.row.totalSubmitPrice}}</template>
                 </el-table-column>
                 <el-table-column label="支付方式" align="center">
                     <template slot-scope="scope">
@@ -114,31 +99,16 @@
                         <el-tag v-else-if="scope.row. payWay=='1'">会员卡</el-tag>
                     </template>
                 </el-table-column>
+                <el-table-column label="取货方式" align="center">
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row.deliveryType=='0'">自取</el-tag>
+                        <el-tag v-else-if="scope.row.deliveryType=='1'">送至影厅</el-tag>
+                    </template>
+                </el-table-column>
                 <el-table-column label="下单状态" align="center">
                     <template slot-scope="scope">
-                        <el-tag v-if="scope.row.submitStatus=='0'" type="danger">未下单</el-tag>
-                        <el-tag v-else-if="scope.row.submitStatus=='1'" type="success">下单成功</el-tag>
-                        <el-tag v-else-if="scope.row.submitStatus=='2'" type="danger">下单失败</el-tag>
-                    </template>
-                </el-table-column>
-                <el-table-column label="取票状态" align="center">
-                    <template slot-scope="scope">
-                        <el-tag v-if="scope.row.printStatus=='0'" type="danger">未取票</el-tag>
-                        <el-tag v-else-if="scope.row.printStatus=='1'" type="success">已取票</el-tag>
-                    </template>
-                </el-table-column>
-                <el-table-column label="退票状态" align="center">
-                    <template slot-scope="scope">
-                        <el-tag v-if="scope.row.cancelStatus=='1'" type="success">已退票</el-tag>
-                        <el-tag v-else type="danger">未退票</el-tag>
-                    </template>
-                </el-table-column>
-                <el-table-column label="支付状态" align="center">
-                    <template slot-scope="scope">
-                        <el-tag v-if="scope.row.payStatus=='0'" type="danger">未支付</el-tag>
-                        <el-tag v-else-if="scope.row.payStatus=='1'" type="success">支付成功</el-tag>
-                        <el-tag v-else-if="scope.row.payStatus=='2'" type="danger">支付失败</el-tag>
-                        <el-tag v-else-if="scope.row.payStatus=='3'" type="success">退款成功</el-tag>
+                        <el-tag v-if="scope.row.submitStatus=='0'" type="danger">下单失败</el-tag>
+                        <el-tag v-else-if="scope.row.submitStatus=='1'" type="success">支付下单成功成功</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column label="操作"  align="center"  fixed="right">
@@ -393,6 +363,7 @@
                 setTimeout(() => {
                     let orderNo=this.query.orderNo;
                     let mobile=this.query.mobile;
+                    let printNo=this.query.printNo;
                     let payWay=this.query.payWay;
                     let payStatus=this.query.payStatus;
                     let submitStatus=this.query.submitStatus;
@@ -403,6 +374,9 @@
                     }
                     if(!mobile){
                         mobile=''
+                    }
+                    if(!printNo){
+                        printNo=''
                     }
                     if(!payWay){
                         payWay=''
@@ -422,6 +396,7 @@
                     let jsonArr = [];
                     jsonArr.push({key:"orderNo",value:orderNo});
                     jsonArr.push({key:"mobile",value:mobile});
+                    jsonArr.push({key:"printNo",value:printNo});
                     jsonArr.push({key:"payWay",value:payWay});
                     jsonArr.push({key:"payStatus",value:payStatus});
                     jsonArr.push({key:"submitStatus",value:submitStatus});
@@ -432,7 +407,7 @@
                     let sign =md5(preSign(jsonArr));
                     jsonArr.push({key:"sign",value:sign});
                     var params = ParamsAppend(jsonArr);
-                    https.fetchPost('/ticketOrder/ticketOrderPage',params).then((data) => {
+                    https.fetchPost('/merchandiseOrder/merchandiseOrderPage',params).then((data) => {
                         loading.close();
                         console.log(data);
                         if (data.data.code == 'success') {
@@ -440,7 +415,7 @@
                             console.log(oData);
                             // console.log(this.query);
                             this.tableData = oData.pageResult.data;
-                            this.totalData = oData.statistics;
+                            this.totalData = oData.totalMerchandiseOrder;
                             this.query.pageSize = oData.pageResult.pageSize;
                             this.query.pageNo = oData.pageResult.pageNo;
                             this.query.totalCount = oData.pageResult.totalCount;
