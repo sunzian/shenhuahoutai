@@ -204,7 +204,7 @@
                     <el-input style="width: 250px" v-model="oForm.memo" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="详情" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="oForm.details" autocomplete="off"></el-input>
+                    <quill-editor ref="text" v-model="oForm.details" class="myQuillEditor" :options="editorOption" />
                 </el-form-item>
                 <el-form-item v-if="oForm.commodity_type==1" label="原价" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oForm.originalPrice" autocomplete="off"></el-input>
@@ -289,7 +289,7 @@
                     :label-width="formLabelWidth"
                     v-if="filmInfo.length>0 && oForm.selectFilmType != 0"
                 >
-                    <div v-for="(item, index) in filmInfo">
+                    <div v-for="(item, index) in filmInfo" :key='index'>
                         {{item.value}}
                         <span
                             style="color:red;cursor: pointer;"
@@ -389,6 +389,15 @@
                     label="商品图片"
                     :label-width="formLabelWidth"
                 >
+                <el-popover placement="right" title trigger="hover">
+                        <img :src="form.image_url" />
+                        <img
+                            slot="reference"
+                            :src="form.image_url"
+                            :alt="form.image_url"
+                            style="max-height: 50px;max-width: 130px"
+                        />
+                    </el-popover>
                     <el-upload
                         :before-upload="beforeUpload"
                         :data="type"
@@ -407,10 +416,10 @@
                     </el-upload>
                 </el-form-item>
                 <el-form-item label="兑换须知" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="form.memo" autocomplete="off"></el-input>
+                    <el-input style="width: 250px" type='textarea' v-model="form.memo" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="详情" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="form.details" autocomplete="off"></el-input>
+                    <quill-editor ref="text" v-model="form.details" class="myQuillEditor" :options="editorOption" />
                 </el-form-item>
                 <el-form-item label="原价" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="form.originalPrice" autocomplete="off"></el-input>
@@ -496,7 +505,7 @@
                     :label-width="formLabelWidth"
                     v-if="filmInfo.length>0 && form.selectFilmType != 0"
                 >
-                    <div v-for="(item, index) in filmInfo">
+                    <div v-for="(item, index) in filmInfo" :key='index'>
                         {{item.value}}
                         <span
                             style="color:red;cursor: pointer;"
@@ -571,8 +580,12 @@
 </template>
 
 <script>
+import { quillEditor } from 'vue-quill-editor';
 import { fetchData } from '../../api/index';
 import { Decrypt, Encrypt, preSign, EncryptReplace, ParamsAppend } from '@/aes/utils';
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
 import md5 from 'js-md5';
 import axios from 'axios';
 import https from '../../https';
@@ -580,6 +593,8 @@ export default {
     name: 'basetable',
     data() {
         return {
+            content: '',
+            editorOption: {} ,
             oTopstatus:'',
             type: {
                 type: ''
@@ -730,6 +745,7 @@ export default {
             filmInfo: []
         };
     },
+    components: { quillEditor },
     created() {},
     mounted() {
         this.getMenu();
@@ -911,8 +927,8 @@ export default {
                 jsonArr.push({ key: 'expireDay', value: this.oForm.expireDay });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
+                console.log(jsonArr)
                 let params = ParamsAppend(jsonArr);
-                // console.log(params);
                 if (this.dialogFormVisible == true) {
                     https
                         .fetchPost('/goldCommodity/addGoldCommodity', params)
@@ -1066,7 +1082,7 @@ export default {
                         if (data.data.code == 'success') {
                             this.editVisible = true;
                             this.form.name = JSON.parse(Decrypt(data.data.data)).goldCommodity.name;
-                            this.form.imageUrl = JSON.parse(Decrypt(data.data.data)).goldCommodity.imageUrl;
+                            this.form.image_url = JSON.parse(Decrypt(data.data.data)).goldCommodity.imageUrl;
                             this.form.memo = JSON.parse(Decrypt(data.data.data)).goldCommodity.memo;
                             this.form.store = JSON.parse(Decrypt(data.data.data)).goldCommodity.store;
                             this.form.alredyChangedNumber = JSON.parse(Decrypt(data.data.data)).goldCommodity.alredyChangedNumber;

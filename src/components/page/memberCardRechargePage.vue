@@ -3,13 +3,13 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
-                    <i class="el-icon-lx-cascades"></i> 卖品订单
+                    <i class="el-icon-lx-cascades"></i> 会员卡充值订单
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-select v-model="query.cinemaCode" placeholder="请选择影院" class="mr10">
+                <el-select clearable v-model="query.cinemaCode" placeholder="请选择充值影院" class="mr10">
                     <el-option
                         v-for="item in cinemaInfo"
                         :key="item.cinemaCode"
@@ -18,13 +18,6 @@
                     ></el-option>
                 </el-select>
                 <el-input
-                    placeholder="订单号"
-                    style="width: 150px"
-                    v-model="query.orderNo"
-                    autocomplete="off"
-                    class="mr10"
-                ></el-input>
-                <el-input
                     placeholder="手机号"
                     style="width: 150px"
                     v-model="query.mobile"
@@ -32,21 +25,12 @@
                     class="mr10"
                 ></el-input>
                 <el-input
-                    placeholder="取货码"
+                    placeholder="会员卡号"
                     style="width: 150px"
-                    v-model="query.printNo"
+                    v-model="query.cardNo"
                     autocomplete="off"
                     class="mr10"
                 ></el-input>
-                <el-select
-                    clearable
-                    v-model="query.payWay"
-                    placeholder="支付方式"
-                    class="handle-select mr10"
-                >
-                    <el-option key="0" label="微信" value="0"></el-option>
-                    <el-option key="1" label="会员卡" value="1"></el-option>
-                </el-select>
                 <el-select
                     clearable
                     v-model="query.payStatus"
@@ -59,12 +43,12 @@
                 </el-select>
                 <el-select
                     clearable
-                    v-model="query.submitStatus"
-                    placeholder="下单状态"
+                    v-model="query.rechargeStatus"
+                    placeholder="充值状态"
                     class="handle-select mr10"
                 >
-                    <el-option key="0" label="下单失败" value="0"></el-option>
-                    <el-option key="1" label="下单成功" value="1"></el-option>
+                    <el-option key="1" label="充值成功" value="1"></el-option>
+                    <el-option key="2" label="充值失败" value="2"></el-option>
                 </el-select>
                 <el-date-picker
                     style="width: 200px;"
@@ -75,49 +59,35 @@
                     placeholder="开始时间"
                 ></el-date-picker>至
                 <el-date-picker
-                    style="width: 200px; margin-top: 10px"
+                    style="width: 200px;"
                     v-model="query.endDate"
                     type="datetime"
                     value-format="yyyy-MM-dd HH:mm:ss"
                     format="yyyy-MM-dd HH:mm:ss"
                     placeholder="结束时间"
-                    class="mr10"
                 ></el-date-picker>
-                <el-button type="primary" class="mr10" icon="el-icon-search" @click="Search">搜索</el-button>
                 <el-button
                     type="primary"
-                    @click="showCinema = true"
-                    style="margin-left:500px;"
-                >打开卖品通知</el-button>
+                    icon="el-icon-search"
+                    style="margin-top: 10px;"
+                    @click="Search"
+                >搜索</el-button>
             </div>
             <div class="handle-box">
-                总原价
-                <el-input
-                    style="width: 150px"
-                    v-model="totalData.totalOriginalPrice"
-                    :disabled="true"
-                    autocomplete="off"
-                    class="mr10"
-                ></el-input>总实付金额
+                总实付金额：
                 <el-input
                     style="width: 150px"
                     v-model="totalData.totalActualPrice"
                     :disabled="true"
                     autocomplete="off"
                     class="mr10"
-                ></el-input>总优惠券优惠金额
+                ></el-input>总充值金额：
                 <el-input
                     style="width: 150px"
-                    v-model="totalData.totalCouponDiscount"
+                    v-model="totalData.totalRechargeAmount"
                     :disabled="true"
                     autocomplete="off"
                     class="mr10"
-                ></el-input>总活动优惠金额
-                <el-input
-                    style="width: 150px"
-                    v-model="totalData.totalActivityDiscount"
-                    :disabled="true"
-                    autocomplete="off"
                 ></el-input>
             </div>
             <el-table
@@ -129,66 +99,43 @@
                 header-cell-class-name="table-header"
                 @selection-change="handleSelectionChange"
             >
-                <el-table-column prop="name" label="影院编码">
-                    <template slot-scope="scope">{{scope.row.cinemaCode}}</template>
+                <el-table-column prop="name" label="注册影院">
+                    <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
-                <el-table-column label="订单号">
-                    <template slot-scope="scope">{{scope.row.orderNo}}</template>
+                <el-table-column label="充值影院">
+                    <template slot-scope="scope">{{scope.row.rechargeCinemaName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="用户名">
-                    <template slot-scope="scope">{{scope.row.userName}}</template>
+                <el-table-column prop="memo" label="卡号">
+                    <template slot-scope="scope">{{scope.row.cardNo}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="手机号码">
-                    <template slot-scope="scope">{{scope.row.mobile}}</template>
+                <el-table-column prop="memo" label="手机号">
+                    <template slot-scope="scope">{{scope.row.mobilePhone}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="取货码">
-                    <template slot-scope="scope">{{scope.row.printNo}}</template>
+                <el-table-column prop="memo" label="支付金额">
+                    <template slot-scope="scope">{{scope.row.payAmount}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="卖品内容">
-                    <template slot-scope="scope">{{scope.row.merNames}}</template>
+                <el-table-column prop="memo" label="赠送金额">
+                    <template slot-scope="scope">{{scope.row.givenMoney}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="原价">
-                    <template slot-scope="scope">{{scope.row.totalOriginalPrice}}</template>
+                <el-table-column prop="memo" label="充值金额">
+                    <template slot-scope="scope">{{scope.row.rechargeAmount}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="实付价">
-                    <template slot-scope="scope">{{scope.row.totalActualPrice}}</template>
-                </el-table-column>
-                <el-table-column prop="memo" label="活动优惠金额">
-                    <template slot-scope="scope">{{scope.row.totalActivityDiscount}}</template>
-                </el-table-column>
-                <el-table-column prop="memo" label="优惠券优惠金额">
-                    <template slot-scope="scope">{{scope.row.totalCouponDiscount}}</template>
-                </el-table-column>
-                <el-table-column prop="memo" label="优惠券名称">
-                    <template slot-scope="scope">{{scope.row.userCouponName}}</template>
-                </el-table-column>
-                <el-table-column label="支付方式" align="center">
+                <el-table-column prop="memo" label="支付状态">
                     <template slot-scope="scope">
-                        <el-tag v-if="scope.row.payWay=='0'">微信</el-tag>
-                        <el-tag v-else-if="scope.row.payWay=='1'">会员卡</el-tag>
+                        <el-tag v-if="scope.row.payStatus=='0'" type="danger">未支付</el-tag>
+                        <el-tag v-else-if="scope.row.payStatus=='1'" type="success">支付成功</el-tag>
+                        <el-tag v-else-if="scope.row.payStatus=='2'" type="danger">支付失败</el-tag>
+                        <el-tag v-else-if="scope.row.payStatus=='3'" type="success">退款成功</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="支付状态" align="center">
+                <el-table-column prop="memo" label="充值状态">
                     <template slot-scope="scope">
-                        <el-tag v-if="scope.row.payStatus=='1'">支付成功</el-tag>
-                        <el-tag v-else-if="scope.row.payStatus=='2'">支付失败</el-tag>
-                        <el-tag v-else-if="scope.row.payStatus=='3'">退款成功</el-tag>
+                        <el-tag v-if="scope.row.rechargeStatus=='1'" type="success">充值成功</el-tag>
+                        <el-tag v-else-if="scope.row.rechargeStatus=='2'" type="danger">充值失败</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="memo" label="支付时间">
+                <el-table-column prop="memo" label="充值时间">
                     <template slot-scope="scope">{{scope.row.payTime}}</template>
-                </el-table-column>
-                <el-table-column label="下单状态" align="center">
-                    <template slot-scope="scope">
-                        <el-tag v-if="scope.row.submitStatus=='0'" type="danger">下单失败</el-tag>
-                        <el-tag v-else-if="scope.row.submitStatus=='1'" type="success">下单成功</el-tag>
-                    </template>
-                </el-table-column>
-                <el-table-column label="取货方式" align="center">
-                    <template slot-scope="scope">
-                        <el-tag v-if="scope.row.deliveryType=='0'">自取</el-tag>
-                        <el-tag v-else-if="scope.row.deliveryType=='1'">送至影厅</el-tag>
-                    </template>
                 </el-table-column>
                 <el-table-column label="操作" align="center" fixed="right">
                     <template slot-scope="scope">
@@ -216,35 +163,35 @@
         <!-- 详情弹出框 -->
         <el-dialog title="详情" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
-                <el-form-item label="本地单号" :label-width="formLabelWidth">
+                <el-form-item label="本地订单号" :label-width="formLabelWidth">
                     <el-input
                         :disabled="true"
                         style="width: 250px"
-                        v-model="form.orderNo"
+                        v-model="form.rechargeOrderNo"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="系统单号" :label-width="formLabelWidth">
+                <el-form-item label="开卡影院" :label-width="formLabelWidth">
                     <el-input
                         :disabled="true"
                         style="width: 250px"
-                        v-model="form.submitOrderCode"
+                        v-model="form.cinemaName"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="影院编码" :label-width="formLabelWidth">
+                <el-form-item label="充值影院" :label-width="formLabelWidth">
                     <el-input
                         :disabled="true"
                         style="width: 250px"
-                        v-model="form.cinemaCode"
+                        v-model="form.rechargeCinemaName"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="卖品内容" :label-width="formLabelWidth">
+                <el-form-item label="卡号" :label-width="formLabelWidth">
                     <el-input
                         :disabled="true"
                         style="width: 250px"
-                        v-model="form.merNames"
+                        v-model="form.cardNo"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
@@ -252,11 +199,11 @@
                     <el-input
                         :disabled="true"
                         style="width: 250px"
-                        v-model="form.mobile"
+                        v-model="form.mobilePhone"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="用户名" :label-width="formLabelWidth">
+                <el-form-item label="用户" :label-width="formLabelWidth">
                     <el-input
                         :disabled="true"
                         style="width: 250px"
@@ -264,59 +211,51 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="原价" :label-width="formLabelWidth">
-                    <el-input
-                        :disabled="true"
-                        style="width: 250px"
-                        v-model="form.totalOriginalPrice"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
                 <el-form-item label="实付金额" :label-width="formLabelWidth">
                     <el-input
                         :disabled="true"
                         style="width: 250px"
-                        v-model="form.totalActualPrice"
+                        v-model="form.payAmount"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="活动类型" :label-width="formLabelWidth">
+                <el-form-item label="充值金额" :label-width="formLabelWidth">
                     <el-input
                         :disabled="true"
                         style="width: 250px"
-                        v-model="form.activityType"
+                        v-model="form.rechargeAmount"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="活动优惠金额" :label-width="formLabelWidth">
+                <el-form-item label="赠送类型" :label-width="formLabelWidth">
                     <el-input
                         :disabled="true"
                         style="width: 250px"
-                        v-model="form.totalActivityDiscount"
+                        v-model="form.givenType"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="优惠券名称" :label-width="formLabelWidth">
+                <el-form-item label="赠送券包id" :label-width="formLabelWidth">
                     <el-input
                         :disabled="true"
                         style="width: 250px"
-                        v-model="form.userCouponName"
+                        v-model="form.givenCouponGroupId"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="优惠券优惠金额" :label-width="formLabelWidth">
+                <el-form-item label="优惠券领取后过期天数" :label-width="formLabelWidth">
                     <el-input
                         :disabled="true"
                         style="width: 250px"
-                        v-model="form.totalCouponDiscount"
+                        v-model="form.overDays"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="订单支付类型" :label-width="formLabelWidth">
+                <el-form-item label="赠送金额" :label-width="formLabelWidth">
                     <el-input
                         :disabled="true"
                         style="width: 250px"
-                        v-model="form.payWay"
+                        v-model="form.givenMoney"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
@@ -336,84 +275,37 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="支付交易号" :label-width="formLabelWidth">
+                <el-form-item label="支付订单号" :label-width="formLabelWidth">
                     <el-input
                         :disabled="true"
                         style="width: 250px"
-                        v-model="form.tradeNo"
+                        v-model="form.payTradeNo"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="订单状态" :label-width="formLabelWidth">
+                <el-form-item label="充值状态" :label-width="formLabelWidth">
                     <el-input
                         :disabled="true"
                         style="width: 250px"
-                        v-model="form.submitStatus"
+                        v-model="form.rechargeStatus"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="取货码" :label-width="formLabelWidth">
-                    <el-input
-                        :disabled="true"
-                        style="width: 250px"
-                        v-model="form.printNo"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="取餐方式" :label-width="formLabelWidth">
-                    <el-input
-                        :disabled="true"
-                        style="width: 250px"
-                        v-model="form.deliveryType"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="送货地址" :label-width="formLabelWidth">
-                    <el-input
-                        :disabled="true"
-                        style="width: 250px"
-                        v-model="form.deliveryAddress"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="备注" :label-width="formLabelWidth">
-                    <el-input
-                        :disabled="true"
-                        style="width: 250px"
-                        v-model="form.deliveryMemo"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="退卖品状态" :label-width="formLabelWidth">
-                    <el-input
-                        :disabled="true"
-                        style="width: 250px"
-                        v-model="form.cancelStatus"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="退款失败原因" :label-width="formLabelWidth">
-                    <el-input
-                        :disabled="true"
-                        style="width: 250px"
-                        v-model="form.refundApply"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="退款时间" :label-width="formLabelWidth">
-                    <el-input
-                        :disabled="true"
-                        style="width: 250px"
-                        v-model="form.refundTime"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="下单失败原因" :label-width="formLabelWidth">
+                <el-form-item label="充值失败原因" :label-width="formLabelWidth">
                     <el-input
                         :disabled="true"
                         type="textarea"
                         style="width: 250px"
-                        v-model="form.submitMessage"
+                        v-model="form.errorMsg"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="退款详情" :label-width="formLabelWidth">
+                    <el-input
+                        :disabled="true"
+                        type="textarea"
+                        style="width: 250px"
+                        v-model="form.refundMsg"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
@@ -421,25 +313,6 @@
             <span slot="footer" class="dialog-footer">
                 <el-button type="primary" @click="editVisible = false">确 定</el-button>
             </span>
-        </el-dialog>
-        <!-- 选择影院 -->
-        <el-dialog :visible.sync="showCinema">
-            <el-form>
-                <el-form-item label="适用影院" :label-width="formLabelWidth">
-                    <el-select v-model="order.cinemaCode" placeholder="请选择影院">
-                        <el-option
-                            v-for="item in cinemaInfo"
-                            :key="item.cinemaCode"
-                            :label="item.cinemaName"
-                            :value="item.cinemaCode"
-                        ></el-option>
-                    </el-select>
-                </el-form-item>
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-                <el-button @click="showCinema = false">取 消</el-button>
-                <el-button type="primary" @click="openOrderNotice">确 定</el-button>
-            </div>
         </el-dialog>
     </div>
 </template>
@@ -462,7 +335,6 @@ export default {
                 pageSize: 10
             },
             editVisible: false,
-            showCinema: false,
             pageTotal: 0,
             idx: -1,
             id: -1,
@@ -470,10 +342,7 @@ export default {
             businessInfoList: [],
             value: '',
             form: [],
-            cinemaInfo: [],
-            order: {
-                cinemaCode: ''
-            }
+            cinemaInfo: []
         };
     },
     created() {},
@@ -499,7 +368,7 @@ export default {
                 jsonArr.push({ key: 'sign', value: sign });
                 let params = ParamsAppend(jsonArr);
                 https
-                    .fetchPost('/merchandiseOrder/getMerchandiseOrderById', params)
+                    .fetchPost('/memberCardRecharge/getRechargeDetailById', params)
                     .then(data => {
                         loading.close();
                         console.log(data);
@@ -522,10 +391,24 @@ export default {
                             } else if (JSON.parse(Decrypt(data.data.data)).payStatus == 3) {
                                 this.form.payStatus = '退款成功';
                             }
+                            if (JSON.parse(Decrypt(data.data.data)).givenType == 1) {
+                                this.form.givenType = '不赠送';
+                            } else if (JSON.parse(Decrypt(data.data.data)).givenType == 2) {
+                                this.form.givenType = '赠送RMB';
+                            } else if (JSON.parse(Decrypt(data.data.data)).givenType == 3) {
+                                this.form.givenType = '赠送券包';
+                            } else if (JSON.parse(Decrypt(data.data.data)).givenType == 4) {
+                                this.form.givenType = '两者都送';
+                            }
+                            if (JSON.parse(Decrypt(data.data.data)).rechargeStatus == 1) {
+                                this.form.rechargeStatus = '充值成功';
+                            } else if (JSON.parse(Decrypt(data.data.data)).rechargeStatus == 2) {
+                                this.form.rechargeStatus = '充值失败';
+                            }
                             if (JSON.parse(Decrypt(data.data.data)).cancelStatus == 0) {
-                                this.form.cancelStatus = '未退货';
+                                this.form.cancelStatus = '未退票';
                             } else if (JSON.parse(Decrypt(data.data.data)).cancelStatus == 1) {
-                                this.form.cancelStatus = '已退货';
+                                this.form.cancelStatus = '已退票';
                             }
                             if (JSON.parse(Decrypt(data.data.data)).submitStatus == 0) {
                                 this.form.submitStatus = '未下单';
@@ -545,11 +428,6 @@ export default {
                                 this.form.refundStatus = '未退款';
                             } else if (JSON.parse(Decrypt(data.data.data)).refundStatus == 1) {
                                 this.form.refundStatus = '已退款';
-                            }
-                            if (JSON.parse(Decrypt(data.data.data)).deliveryType == 0) {
-                                this.form.deliveryType = '自取';
-                            } else if (JSON.parse(Decrypt(data.data.data)).deliveryType == 1) {
-                                this.form.deliveryType = '送至影厅';
                             }
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
@@ -602,34 +480,26 @@ export default {
             });
             setTimeout(() => {
                 let cinemaCode = this.query.cinemaCode;
-                let orderNo = this.query.orderNo;
+                let cardNo = this.query.cardNo;
                 let mobile = this.query.mobile;
-                let printNo = this.query.printNo;
-                let payWay = this.query.payWay;
                 let payStatus = this.query.payStatus;
-                let submitStatus = this.query.submitStatus;
+                let rechargeStatus = this.query.rechargeStatus;
                 let startDate = this.query.startDate;
                 let endDate = this.query.endDate;
                 if (!cinemaCode) {
                     cinemaCode = '';
                 }
-                if (!orderNo) {
-                    orderNo = '';
+                if (!cardNo) {
+                    cardNo = '';
                 }
                 if (!mobile) {
                     mobile = '';
                 }
-                if (!printNo) {
-                    printNo = '';
-                }
-                if (!payWay) {
-                    payWay = '';
-                }
                 if (!payStatus) {
                     payStatus = '';
                 }
-                if (!submitStatus) {
-                    submitStatus = '';
+                if (!rechargeStatus) {
+                    rechargeStatus = '';
                 }
                 if (!startDate) {
                     startDate = '';
@@ -639,12 +509,10 @@ export default {
                 }
                 let jsonArr = [];
                 jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
-                jsonArr.push({ key: 'orderNo', value: orderNo });
-                jsonArr.push({ key: 'mobile', value: mobile });
-                jsonArr.push({ key: 'printNo', value: printNo });
-                jsonArr.push({ key: 'payWay', value: payWay });
+                jsonArr.push({ key: 'cardNo', value: cardNo });
+                jsonArr.push({ key: 'mobilePhone', value: mobile });
                 jsonArr.push({ key: 'payStatus', value: payStatus });
-                jsonArr.push({ key: 'submitStatus', value: submitStatus });
+                jsonArr.push({ key: 'rechargeStatus', value: rechargeStatus });
                 jsonArr.push({ key: 'startDate', value: startDate });
                 jsonArr.push({ key: 'endDate', value: endDate });
                 jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
@@ -653,20 +521,19 @@ export default {
                 jsonArr.push({ key: 'sign', value: sign });
                 var params = ParamsAppend(jsonArr);
                 https
-                    .fetchPost('/merchandiseOrder/merchandiseOrderPage', params)
+                    .fetchPost('/memberCardRecharge/memberCardRechargePage', params)
                     .then(data => {
                         loading.close();
                         console.log(data);
                         if (data.data.code == 'success') {
                             var oData = JSON.parse(Decrypt(data.data.data));
                             console.log(oData);
-                            // console.log(this.query);
-                            this.tableData = oData.pageResult.data;
-                            this.totalData = oData.totalMerchandiseOrder;
-                            this.query.pageSize = oData.pageResult.pageSize;
-                            this.query.pageNo = oData.pageResult.pageNo;
-                            this.query.totalCount = oData.pageResult.totalCount;
-                            this.query.totalPage = oData.pageResult.totalPage;
+                            this.tableData = oData.memberCardRecharge.data;
+                            this.totalData = oData.memberCardStatistics;
+                            this.query.pageSize = oData.memberCardRecharge.pageSize;
+                            this.query.pageNo = oData.memberCardRecharge.pageNo;
+                            this.query.totalCount = oData.memberCardRecharge.totalCount;
+                            this.query.totalPage = oData.memberCardRecharge.totalPage;
                             this.getAllCinema();
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
@@ -682,13 +549,6 @@ export default {
                         console.log(err);
                     });
             }, 500);
-        },
-        openOrderNotice() {
-            let cinemaCode = this.order.cinemaCode;
-            const { href } = this.$router.resolve({
-                path: `/merchandiseOrderNotice?cinemaCode=${cinemaCode}`
-            });
-            window.open(href, '_blank');
         },
         open() {
             //错误信息弹出框

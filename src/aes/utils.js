@@ -60,9 +60,21 @@ export function Decrypt(word, keyStr, ivStr) {
     }
 }
 export function preSign(jsonArr) {
-    let precodeStr = jsonArr.sort((a, b) => a.key < b.key? -1: 1).reduce((all, u) => all + (u.value==undefined?"":u.value), '').replace(/^\s+|\s+$/g,"") + SIGN_KEY;
+    // let precodeStr = jsonArr.sort((a, b) => a.key < b.key? -1: 1).reduce((all, u) => all + (u.value==undefined?"":u.value), '').replace(/^\s+|\s+$/g,"") + SIGN_KEY;
     // console.log(precodeStr);
-    return precodeStr;
+    // return precodeStr;
+    let preCodeArr = jsonArr.sort((a, b) => a.key < b.key? -1: 1);
+    let preCodeStr='';
+    preCodeArr.forEach(item=>{
+        if(item.value!=undefined){
+            preCodeStr+=item.value.toString().trim();
+        }
+    })
+    if(preCodeStr.length>0){
+        preCodeStr+=SIGN_KEY;
+    }
+
+    return preCodeStr;
 }
 
 export function EncryptReplace(word, keyStr, ivStr) { //加密调用这个

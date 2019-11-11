@@ -577,11 +577,24 @@
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="小程序二维码" :label-width="formLabelWidth">
-                    <el-input
-                            style="width: 150px"
-                            v-model="oForm.miniAppQRCode"
-                            autocomplete="off"
-                    ></el-input>
+                    <el-upload
+                        :data="type"
+                        class="upload-demo"
+                        drag
+                        :limit="1"
+                        action="api/upload/uploadImage"
+                        :before-upload="beforeUpload"
+                        :on-success="setPicture"
+                        multiple
+                        list-type="picture"
+                    >
+                        <i class="el-icon-upload"></i>
+                        <div class="el-upload__text">
+                            将文件拖到此处，或
+                            <em>点击上传</em>
+                        </div>
+                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，建议100*100 且大小不超过500kb</div>
+                    </el-upload>
                 </el-form-item>
                 <el-form-item prop="miniAppId" label="小程序appId" :label-width="formLabelWidth">
                     <el-input
@@ -1101,11 +1114,28 @@
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="小程序二维码" :label-width="formLabelWidth">
-                    <el-input
-                            style="width: 150px"
-                            v-model="oMiniAppQRCode"
-                            autocomplete="off"
-                    ></el-input>
+                    <el-popover placement="right" title trigger="hover">
+                        <img :src="oMiniAppQRCode" />
+                        <img
+                            slot="reference"
+                            :src="oMiniAppQRCode"
+                            :alt="oMiniAppQRCode"
+                            style="max-height: 50px;max-width: 130px"
+                        />
+                    </el-popover>
+                    <el-upload
+                        class="upload-demo"
+                        action="/api/upload/uploadImage"
+                        :before-upload="beforeUpload"
+                        :data="type"
+                        :limit="1"
+                        :on-success="onSuccess"
+                        :file-list="fileList"
+                        list-type="picture"
+                    >
+                        <el-button size="small" type="primary">点击上传修改</el-button>
+                        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，建议100*100 且大小不超过500kb</div>
+                        </el-upload>
                 </el-form-item>
                 <el-form-item prop="miniAppId" label="小程序appId" :label-width="formLabelWidth">
                     <el-input
@@ -1252,6 +1282,9 @@ export default {
                 memberInterfaceAddress: [{required: true, message: '请输入会员接口地址', trigger: 'blur'}],
                 verificationCode: [{required: true, message: '请输入核销码', trigger: 'blur'}],
             },
+            type: {
+                type: 'bussiness'
+            },
             oMiniAppName:'',
             oMiniAppQRCode:'',
             oMtxPayType:'',
@@ -1331,6 +1364,7 @@ export default {
             businessInfo: [], //关联商家信息
             form: [],
             tableData: [],
+            fileList: [],
             multipleSelection: [],
             delList: [],
             editVisible: false,
@@ -1394,7 +1428,8 @@ export default {
                 miniAppId: '',
                 interfaceAddress: '',
                 memberInterfaceAddress: '',
-                verificationCode: ''
+                verificationCode: '',
+                type: []
             },
             formLabelWidth: '160px',
             selectValue: {},
@@ -2042,6 +2077,29 @@ export default {
                     loading.close();
                     console.log(err);
                 });
+        },
+        beforeUpload() {
+            //上传之前
+            this.type.type = EncryptReplace('bussiness');
+        },
+        onSuccess(data) {
+            // 修改图片
+            this.oMiniAppQRCode = data.data;
+            if (data.code == 'nologin') {
+                this.message = data.message;
+                this.open();
+                this.$router.push('/login');
+            }
+        },
+        setPicture(data) {
+            // 上传图片
+            console.log(data);
+            this.oForm.miniAppQRCode = data.data;
+            if (data.code == 'nologin') {
+                this.message = data.message;
+                this.open();
+                this.$router.push('/login');
+            }
         },
         open() {
             //错误信息弹出框

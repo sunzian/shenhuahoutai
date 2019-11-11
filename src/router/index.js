@@ -35,6 +35,16 @@ export default new Router({
                     meta: { title: '卖品订单' }
                 },
                 {
+                    path: '/memberCardRechargePage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/memberCardRechargePage.vue'),
+                    meta: { title: '会员卡充值订单' }
+                },
+                {
+                    path: '/memberUserPage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/memberUserPage.vue'),
+                    meta: { title: '注册会员列表' }
+                },
+                {
                     path: '/commodityChangeRecordPage',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/commodityChangeRecordPage.vue'),
                     meta: { title: '金币商城订单' }

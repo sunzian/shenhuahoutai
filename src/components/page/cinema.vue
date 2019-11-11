@@ -216,12 +216,13 @@
                 <el-form-item label="影院会员服务协议" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
+                        type="textarea"
                         v-model="oMembershipServiceAgreement"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="购票提示" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="oBuyTicketHint" autocomplete="off"></el-input>
+                    <el-input style="width: 250px" type="textarea" v-model="oBuyTicketHint" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item prop="openSnackStatus" label="是否开通套餐" :label-width="formLabelWidth">
                     <el-select v-model="oOpenSnackStatus" @change="openServe">
@@ -489,13 +490,13 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="小程序名称" :label-width="formLabelWidth">
-                    <el-input style="width: 150px" v-model="oMiniAppName" autocomplete="off"></el-input>
+                    <el-input style="width: 250px" v-model="oMiniAppName" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="小程序二维码" :label-width="formLabelWidth">
-                    <el-input style="width: 150px" v-model="oMiniAppQRCode" autocomplete="off"></el-input>
+                    <el-input style="width: 250px" v-model="oMiniAppQRCode" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item prop="miniAppId" label="小程序appId" :label-width="formLabelWidth">
-                    <el-input style="width: 150px" v-model="oMiniAppId" autocomplete="off"></el-input>
+                    <el-input style="width: 250px" v-model="oMiniAppId" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item
                     prop="miniAppSecret"
@@ -531,24 +532,25 @@
                     :label-width="formLabelWidth"
                 >
                     <el-input
-                        style="width: 150px"
+                        style="width: 250px"
                         v-model="oTicketingSystemAccount"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item
+                    style="width: 250px"
                     prop="ticketingSystemPassword"
                     label="售票系统密码"
                     :label-width="formLabelWidth"
                 >
                     <el-input
-                        style="width: 150px"
+                        style="width: 250px"
                         v-model="oTicketingSystemPassword"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item prop="verificationCode" label="影院奖品核销码" :label-width="formLabelWidth">
-                    <el-input style="width: 150px" v-model="oVerificationCode" autocomplete="off"></el-input>
+                    <el-input style="width: 250px" v-model="oVerificationCode" autocomplete="off"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
