@@ -235,10 +235,7 @@
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="会员卡名称：" :label-width="formLabelWidth">
-                    <el-checkbox-group
-                            v-model="oForm.levelCode"
-                            @change="selectLevelCode"
-                    >
+                    <el-checkbox-group v-model="oForm.levelCode" @change="selectLevelCode">
                         <el-checkbox
                                 v-for="item in cardList"
                                 :label="item.levelCode"

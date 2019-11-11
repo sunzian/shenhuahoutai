@@ -24,7 +24,11 @@
                     <el-option key="3" label="个人中心首页" value="3"></el-option>
                     <el-option key="4" label="支付成功页" value="4"></el-option>
                     <el-option key="5" label="放映厅首页" value="5"></el-option>
-                    <el-option key="6" label="首页广告弹窗" value="5"></el-option>
+                    <el-option key="6" label="首页广告弹窗" value="6"></el-option>
+                    <el-option key="7" label="今日大牌" value="7"></el-option>
+                    <el-option key="8" label="签到送积分" value="8"></el-option>
+                    <el-option key="9" label="分享得金币" value="9"></el-option>
+                    <el-option key="10" label="积分换金币" value="10"></el-option>
                 </el-select>
                 <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
                 <el-button type="primary"  @click="addPage" icon="el-icon-circle-plus-outline"  style="margin-left: 340px">新增</el-button>
@@ -76,6 +80,10 @@
                         <el-tag v-if="scope.row.category=='4'">支付成功页</el-tag>
                         <el-tag v-if="scope.row.category=='5'">放映厅首页</el-tag>
                         <el-tag v-if="scope.row.category=='6'">首页广告弹窗</el-tag>
+                        <el-tag v-if="scope.row.category=='7'">今日大牌</el-tag>
+                        <el-tag v-if="scope.row.category=='8'">签到送积分</el-tag>
+                        <el-tag v-if="scope.row.category=='9'">分享得金币</el-tag>
+                        <el-tag v-if="scope.row.category=='10'">积分换金币</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column prop="sort" label="图片地址" width="200px">
@@ -431,6 +439,22 @@
                     {
                         value: '6',
                         label: '首页广告弹窗'
+                    },
+                    {
+                        value: '7',
+                        label: '今日大牌'
+                    },
+                    {
+                        value: '8',
+                        label: '签到送积分'
+                    },
+                    {
+                        value: '9',
+                        label: '分享得金币'
+                    },
+                    {
+                        value: '10',
+                        label: '积分换金币'
                     },
                 ],
                 tabType:[

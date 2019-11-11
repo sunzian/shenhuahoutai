@@ -3,7 +3,7 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
-                    <i class="el-icon-lx-cascades"></i> 影票订单
+                    <i class="el-icon-lx-cascades"></i> 金币商城订单
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
@@ -49,12 +49,11 @@
                 </el-date-picker>
                 <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
             </div>
-            <!--<div class="handle-box">-->
-                <!--总原价<el-input style="width: 150px" v-model="totalData.totalOriginalPrice" :disabled="true"  autocomplete="off"></el-input>-->
-                <!--总实付金额<el-input style="width: 150px" v-model="totalData.totalActualPrice" :disabled="true"  autocomplete="off"></el-input>-->
-                <!--总优惠券优惠金额<el-input style="width: 150px" v-model="totalData.totalCouponDiscount" :disabled="true" autocomplete="off"></el-input>-->
-                <!--总活动优惠金额<el-input style="width: 150px" v-model="totalData.totalActivityDiscount" :disabled="true" autocomplete="off"></el-input>-->
-            <!--</div>-->
+            <div class="handle-box">
+                总支付金币<el-input style="width: 150px" v-model="totalData.totalGold" :disabled="true"  autocomplete="off"></el-input>
+                总支付金额<el-input style="width: 150px" v-model="totalData.totalMoney" :disabled="true"  autocomplete="off"></el-input>
+                总退款金额<el-input style="width: 150px" v-model="totalData.totalRefundPrice" :disabled="true" autocomplete="off"></el-input>
+            </div>
             <el-table
                     :data="tableData"
                     border
@@ -90,9 +89,9 @@
                 </el-table-column>
                 <el-table-column prop="memo" label="领取状态">
                     <template slot-scope="scope">
-                        <el-tag v-if="scope.row.changeType=='1'">未领取</el-tag>
-                        <el-tag v-else-if="scope.row.changeType=='2'">已领取</el-tag>
-                        <el-tag v-else-if="scope.row.changeType=='3'">已过期</el-tag>
+                        <el-tag v-if="scope.row.status=='1'">未领取</el-tag>
+                        <el-tag v-else-if="scope.row.status=='2'">已领取</el-tag>
+                        <el-tag v-else-if="scope.row.status=='3'">已过期</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column prop="memo" label="支付交易号">
@@ -150,92 +149,59 @@
         <!-- 详情弹出框 -->
         <el-dialog title="详情" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
-                <el-form-item label="影院编码" :label-width="formLabelWidth">
-                    <el-input :disabled="true" style="width: 250px" v-model="form.cinemaCode" autocomplete="off"></el-input>
+                <el-form-item label="领取影院名称" :label-width="formLabelWidth">
+                    <el-input :disabled="true" style="width: 250px" v-model="form.exchangeCinemaName" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="影片名称" :label-width="formLabelWidth">
-                    <el-input :disabled="true" style="width: 250px" v-model="form.filmName" autocomplete="off"></el-input>
+                <el-form-item label="订单编号" :label-width="formLabelWidth">
+                    <el-input :disabled="true" style="width: 250px" v-model="form.orderNo" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="订单支付类型" :label-width="formLabelWidth">
-                    <el-input :disabled="true" style="width: 250px" v-model="form.payWay" autocomplete="off"></el-input>
+                <el-form-item label="用户手机号" :label-width="formLabelWidth">
+                    <el-input :disabled="true" style="width: 250px" v-model="form.mobile" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="兑换方式" :label-width="formLabelWidth">
+                    <el-input :disabled="true" style="width: 250px" v-model="form.changeType" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="支付的金币数量" :label-width="formLabelWidth">
+                    <el-input :disabled="true" style="width: 250px" v-model="form.gold" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="支付的RMB" :label-width="formLabelWidth">
+                    <el-input :disabled="true" style="width: 250px" v-model="form.money" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="领取状态" :label-width="formLabelWidth">
+                    <el-input :disabled="true" style="width: 250px" v-model="form.status" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="支付交易号" :label-width="formLabelWidth">
+                    <el-input :disabled="true" style="width: 250px" v-model="form.tradeNo" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="支付状态" :label-width="formLabelWidth">
                     <el-input :disabled="true" style="width: 250px" v-model="form.payStatus" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="影片场次时间" :label-width="formLabelWidth">
-                    <el-input :disabled="true" style="width: 250px" v-model="form.sessionTime" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="票数" :label-width="formLabelWidth">
-                    <el-input :disabled="true" style="width: 250px" v-model="form.number" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="原价" :label-width="formLabelWidth">
-                    <el-input :disabled="true" style="width: 250px" v-model="form.totalOriginalPrice" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="服务费" :label-width="formLabelWidth">
-                    <el-input :disabled="true" style="width: 250px" v-model="form.totalServiceFee" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="实付金额" :label-width="formLabelWidth">
-                    <el-input :disabled="true" style="width: 250px" v-model="form.totalActualPrice" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="活动类型" :label-width="formLabelWidth">
-                    <el-input :disabled="true" style="width: 250px" v-model="form.activityType" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="活动优惠金额" :label-width="formLabelWidth">
-                    <el-input :disabled="true" style="width: 250px" v-model="form.totalActivityDiscount" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="影票优惠券优惠金额" :label-width="formLabelWidth">
-                    <el-input :disabled="true" style="width: 250px" v-model="form.totalCouponDiscount" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="影票优惠券名称" :label-width="formLabelWidth">
-                    <el-input :disabled="true" style="width: 250px" v-model="form.userCouponName" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="网络代售费" :label-width="formLabelWidth">
-                    <el-input :disabled="true" style="width: 250px" v-model="form.totalPlatHandFee" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="最低价" :label-width="formLabelWidth">
-                    <el-input :disabled="true" style="width: 250px" v-model="form.totalLowestPrice" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="售票系统影院补贴" :label-width="formLabelWidth">
-                    <el-input :disabled="true" style="width: 250px" v-model="form.totalCinemaAllowance" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="退票手续费" :label-width="formLabelWidth">
-                    <el-input :disabled="true" style="width: 250px" v-model="form.totalRefundHandFee" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="取票码" :label-width="formLabelWidth">
-                    <el-input :disabled="true" style="width: 250px" v-model="form.printNo" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="手机号" :label-width="formLabelWidth">
-                    <el-input :disabled="true" style="width: 250px" v-model="form.mobile" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="订单状态" :label-width="formLabelWidth">
-                    <el-input :disabled="true" style="width: 250px" v-model="form.submitStatus" autocomplete="off"></el-input>
-                </el-form-item>
                 <el-form-item label="支付时间" :label-width="formLabelWidth">
                     <el-input :disabled="true" style="width: 250px" v-model="form.payTime" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="本地单号" :label-width="formLabelWidth">
-                    <el-input :disabled="true" style="width: 250px" v-model="form.orderNo" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="售票系统单号" :label-width="formLabelWidth">
-                    <el-input :disabled="true" style="width: 250px" v-model="form.submitOrderCode" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="座位" :label-width="formLabelWidth">
-                    <el-input :disabled="true" style="width: 250px" v-model="form.seatName" autocomplete="off"></el-input>
+                <el-form-item label="支付回调信息" :label-width="formLabelWidth">
+                    <el-input :disabled="true" style="width: 250px" v-model="form.payReturnMsg" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="退款状态" :label-width="formLabelWidth">
                     <el-input :disabled="true" style="width: 250px" v-model="form.refundStatus" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="退款失败原因" :label-width="formLabelWidth">
+                <el-form-item label="退款交易号" :label-width="formLabelWidth">
+                    <el-input :disabled="true" style="width: 250px" v-model="form.refundNo" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="退款原因" :label-width="formLabelWidth">
+                    <el-input :disabled="true" style="width: 250px" v-model="form.refundReason" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="微信退款回复" :label-width="formLabelWidth">
                     <el-input :disabled="true" style="width: 250px" v-model="form.refundApply" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="退票状态" :label-width="formLabelWidth">
-                    <el-input :disabled="true" style="width: 250px" v-model="form.cancelStatus" autocomplete="off"></el-input>
+                <el-form-item label="退款时间" :label-width="formLabelWidth">
+                    <el-input :disabled="true" style="width: 250px" v-model="form.refundTime" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="退票时间" :label-width="formLabelWidth">
-                    <el-input :disabled="true" style="width: 250px" v-model="form.cancelTime" autocomplete="off"></el-input>
+                <el-form-item label="退款金额" :label-width="formLabelWidth">
+                    <el-input :disabled="true" style="width: 250px" v-model="form.refundPrice" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="错误消息" :label-width="formLabelWidth">
-                    <el-input :disabled="true" type="textarea" style="width: 250px" v-model="form.submitMessage" autocomplete="off"></el-input>
+                <el-form-item label="商品名称" :label-width="formLabelWidth">
+                    <el-input :disabled="true" style="width: 250px" v-model="form.commodityName" autocomplete="off"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -295,7 +261,7 @@
                     jsonArr.push({ key: 'sign', value: sign });
                     let params = ParamsAppend(jsonArr);
                     https
-                        .fetchPost('/ticketOrder/getOrderById', params)
+                        .fetchPost('/commodityChangeRecord/getById', params)
                         .then(data => {
                             loading.close();
                             console.log(data);
@@ -304,10 +270,21 @@
                                 this.editVisible = true;
                                 this.form.id = row.id;
                                 this.form=JSON.parse(Decrypt(data.data.data));
-                                if(JSON.parse(Decrypt(data.data.data)).payWay==0){
-                                    this.form.payWay='微信'
-                                }else if(JSON.parse(Decrypt(data.data.data)).payWay==1){
-                                    this.form.payWay='会员卡'
+                                if(JSON.parse(Decrypt(data.data.data)).changeType==1){
+                                    this.form.changeType='纯金币兑换'
+                                }else if(JSON.parse(Decrypt(data.data.data)).changeType==2){
+                                    this.form.changeType='纯RMB兑换'
+                                }
+                                else if(JSON.parse(Decrypt(data.data.data)).changeType==3){
+                                    this.form.changeType='金币加RMB兑换'
+                                }
+                                if(JSON.parse(Decrypt(data.data.data)).status==1){
+                                    this.form.status='未领取'
+                                }else if(JSON.parse(Decrypt(data.data.data)).status==2){
+                                    this.form.status='已领取'
+                                }
+                                else if(JSON.parse(Decrypt(data.data.data)).status==3){
+                                    this.form.status='已过期'
                                 }
                                 if(JSON.parse(Decrypt(data.data.data)).payStatus==0){
                                     this.form.payStatus='未支付'
@@ -317,34 +294,13 @@
                                 else if(JSON.parse(Decrypt(data.data.data)).payStatus==2){
                                     this.form.payStatus='支付失败'
                                 }
-                                else if(JSON.parse(Decrypt(data.data.data)).payStatus==3){
-                                    this.form.payStatus='退款成功'
-                                }
-                                if(JSON.parse(Decrypt(data.data.data)).cancelStatus==0){
-                                    this.form.cancelStatus='未退票'
-                                }else if(JSON.parse(Decrypt(data.data.data)).cancelStatus==1){
-                                    this.form.cancelStatus='已退票'
-                                }
-                                if(JSON.parse(Decrypt(data.data.data)).submitStatus==0){
-                                    this.form.submitStatus='未下单'
-                                }else if(JSON.parse(Decrypt(data.data.data)).submitStatus==1){
-                                    this.form.submitStatus='下单成功'
-                                }
-                                else if(JSON.parse(Decrypt(data.data.data)).submitStatus==2){
-                                    this.form.submitStatus='下单失败'
-                                }
-                                if(JSON.parse(Decrypt(data.data.data)).activityType==1){
-                                    this.form.activityType='特惠'
-                                }else if(JSON.parse(Decrypt(data.data.data)).activityType==2){
-                                    this.form.activityType='立减'
-                                }
-                                else if(JSON.parse(Decrypt(data.data.data)).activityType==3){
-                                    this.form.activityType='权益卡'
-                                }
                                 if(JSON.parse(Decrypt(data.data.data)).refundStatus==0){
                                     this.form.refundStatus='未退款'
                                 }else if(JSON.parse(Decrypt(data.data.data)).refundStatus==1){
-                                    this.form.refundStatus='已退款'
+                                    this.form.refundStatus='退款成功'
+                                }
+                                else if(JSON.parse(Decrypt(data.data.data)).refundStatus==2){
+                                    this.form.refundStatus='退款失败'
                                 }
                             } else if (data.data.code == 'nologin') {
                                 this.message = data.data.message;
@@ -428,7 +384,7 @@
                             console.log(oData);
                             // console.log(this.query);
                             this.tableData = oData.pageResult.data;
-                            // this.totalData = oData.totalMerchandiseOrder;
+                            this.totalData = oData.statistics;
                             this.query.pageSize = oData.pageResult.pageSize;
                             this.query.pageNo = oData.pageResult.pageNo;
                             this.query.totalCount = oData.pageResult.totalCount;

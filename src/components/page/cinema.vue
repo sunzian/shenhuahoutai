@@ -276,181 +276,181 @@
                         placeholder="选择日期时间"
                     ></el-time-picker>
                 </el-form-item>
-                <el-form-item label="短信平台类型" :label-width="formLabelWidth">
-                    <el-radio-group v-model="oMessagePlatformType">
-                        <el-radio label="1">专信云</el-radio>
-                        <el-radio label="2">三体</el-radio>
-                    </el-radio-group>
-                </el-form-item>
-                <el-form-item
-                    label="注册验证码"
-                    :label-width="formLabelWidth"
-                    v-if="oMessagePlatformType"
-                >
-                    <el-input
-                        style="width: 250px"
-                        v-model="oMessageType1"
-                        autocomplete="off"
-                        v-if="oMessagePlatformType==2"
-                        placeholder="短信模板id"
-                    ></el-input>
-                    <el-input
-                        v-if="oMessagePlatformType==1"
-                        style="width: 250px"
-                        v-model="oMessageType1"
-                        autocomplete="off"
-                        type="textarea"
-                        placeholder="短信内容，长度不超过200个汉字"
-                        maxlength="200"
-                        show-word-limit
-                    ></el-input>
-                </el-form-item>
-                <el-form-item
-                    label="购票成功"
-                    :label-width="formLabelWidth"
-                    v-if="oMessagePlatformType"
-                >
-                    <el-input
-                        style="width: 250px"
-                        v-model="oMessageType2"
-                        autocomplete="off"
-                        v-if="oMessagePlatformType==2"
-                        placeholder="短信模板id"
-                    ></el-input>
-                    <el-input
-                        v-if="oMessagePlatformType==1"
-                        style="width: 250px"
-                        v-model="oMessageType2"
-                        autocomplete="off"
-                        type="textarea"
-                        placeholder="短信内容，长度不超过200个汉字"
-                        maxlength="200"
-                        show-word-limit
-                    ></el-input>
-                </el-form-item>
-                <el-form-item
-                    label="下单失败"
-                    :label-width="formLabelWidth"
-                    v-if="oMessagePlatformType"
-                >
-                    <el-input
-                        style="width: 250px"
-                        v-model="oMessageType3"
-                        autocomplete="off"
-                        v-if="oMessagePlatformType==2"
-                        placeholder="短信模板id"
-                    ></el-input>
-                    <el-input
-                        v-if="oMessagePlatformType==1"
-                        style="width: 250px"
-                        v-model="oMessageType3"
-                        autocomplete="off"
-                        type="textarea"
-                        placeholder="短信内容，长度不超过200个汉字"
-                        maxlength="200"
-                        show-word-limit
-                    ></el-input>
-                </el-form-item>
-                <el-form-item
-                    label="退票通知"
-                    :label-width="formLabelWidth"
-                    v-if="oMessagePlatformType"
-                >
-                    <el-input
-                        style="width: 250px"
-                        v-model="oMessageType4"
-                        autocomplete="off"
-                        v-if="oMessagePlatformType==2"
-                        placeholder="短信模板id"
-                    ></el-input>
-                    <el-input
-                        v-if="oMessagePlatformType==1"
-                        style="width: 250px"
-                        v-model="oMessageType4"
-                        autocomplete="off"
-                        type="textarea"
-                        placeholder="短信内容，长度不超过200个汉字"
-                        maxlength="200"
-                        show-word-limit
-                    ></el-input>
-                </el-form-item>
-                <el-form-item
-                    label="会员卡充值"
-                    :label-width="formLabelWidth"
-                    v-if="oMessagePlatformType"
-                >
-                    <el-input
-                        style="width: 250px"
-                        v-model="oMessageType5"
-                        autocomplete="off"
-                        v-if="oMessagePlatformType==2"
-                        placeholder="短信模板id"
-                    ></el-input>
-                    <el-input
-                        v-if="oMessagePlatformType==1"
-                        style="width: 250px"
-                        v-model="oMessageType5"
-                        autocomplete="off"
-                        type="textarea"
-                        placeholder="短信内容，长度不超过200个汉字"
-                        maxlength="200"
-                        show-word-limit
-                    ></el-input>
-                </el-form-item>
-                <el-form-item
-                    label="卖品送餐"
-                    :label-width="formLabelWidth"
-                    v-if="oMessagePlatformType"
-                >
-                    <el-input
-                        style="width: 250px"
-                        v-model="oMessageType6"
-                        autocomplete="off"
-                        v-if="oMessagePlatformType==2"
-                        placeholder="短信模板id"
-                    ></el-input>
-                    <el-input
-                        v-if="oMessagePlatformType==1"
-                        style="width: 250px"
-                        v-model="oMessageType6"
-                        autocomplete="off"
-                        type="textarea"
-                        placeholder="短信内容，长度不超过200个汉字"
-                        maxlength="200"
-                        show-word-limit
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="短信平台账号" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 250px"
-                        v-model="oMessagePlatformAccount"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="短信平台密码" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 250px"
-                        v-model="oMessagePlatformPassword"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="短信平台签名id" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 250px"
-                        v-model="oMessagePlatformSignId"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item prop="openStatus" label="是否开通服务" :label-width="formLabelWidth">
-                    <el-select v-model="oOpenStatus" @change="openServe">
-                        <el-option
-                            v-for="info in boolean"
-                            :key="info.value"
-                            :label="info.label"
-                            :value="info.value"
-                        ></el-option>
-                    </el-select>
-                </el-form-item>
+                <!--<el-form-item label="短信平台类型" :label-width="formLabelWidth">-->
+                    <!--<el-radio-group v-model="oMessagePlatformType">-->
+                        <!--<el-radio label="1">专信云</el-radio>-->
+                        <!--<el-radio label="2">三体</el-radio>-->
+                    <!--</el-radio-group>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item-->
+                    <!--label="注册验证码"-->
+                    <!--:label-width="formLabelWidth"-->
+                    <!--v-if="oMessagePlatformType"-->
+                <!--&gt;-->
+                    <!--<el-input-->
+                        <!--style="width: 250px"-->
+                        <!--v-model="oMessageType1"-->
+                        <!--autocomplete="off"-->
+                        <!--v-if="oMessagePlatformType==2"-->
+                        <!--placeholder="短信模板id"-->
+                    <!--&gt;</el-input>-->
+                    <!--<el-input-->
+                        <!--v-if="oMessagePlatformType==1"-->
+                        <!--style="width: 250px"-->
+                        <!--v-model="oMessageType1"-->
+                        <!--autocomplete="off"-->
+                        <!--type="textarea"-->
+                        <!--placeholder="短信内容，长度不超过200个汉字"-->
+                        <!--maxlength="200"-->
+                        <!--show-word-limit-->
+                    <!--&gt;</el-input>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item-->
+                    <!--label="购票成功"-->
+                    <!--:label-width="formLabelWidth"-->
+                    <!--v-if="oMessagePlatformType"-->
+                <!--&gt;-->
+                    <!--<el-input-->
+                        <!--style="width: 250px"-->
+                        <!--v-model="oMessageType2"-->
+                        <!--autocomplete="off"-->
+                        <!--v-if="oMessagePlatformType==2"-->
+                        <!--placeholder="短信模板id"-->
+                    <!--&gt;</el-input>-->
+                    <!--<el-input-->
+                        <!--v-if="oMessagePlatformType==1"-->
+                        <!--style="width: 250px"-->
+                        <!--v-model="oMessageType2"-->
+                        <!--autocomplete="off"-->
+                        <!--type="textarea"-->
+                        <!--placeholder="短信内容，长度不超过200个汉字"-->
+                        <!--maxlength="200"-->
+                        <!--show-word-limit-->
+                    <!--&gt;</el-input>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item-->
+                    <!--label="下单失败"-->
+                    <!--:label-width="formLabelWidth"-->
+                    <!--v-if="oMessagePlatformType"-->
+                <!--&gt;-->
+                    <!--<el-input-->
+                        <!--style="width: 250px"-->
+                        <!--v-model="oMessageType3"-->
+                        <!--autocomplete="off"-->
+                        <!--v-if="oMessagePlatformType==2"-->
+                        <!--placeholder="短信模板id"-->
+                    <!--&gt;</el-input>-->
+                    <!--<el-input-->
+                        <!--v-if="oMessagePlatformType==1"-->
+                        <!--style="width: 250px"-->
+                        <!--v-model="oMessageType3"-->
+                        <!--autocomplete="off"-->
+                        <!--type="textarea"-->
+                        <!--placeholder="短信内容，长度不超过200个汉字"-->
+                        <!--maxlength="200"-->
+                        <!--show-word-limit-->
+                    <!--&gt;</el-input>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item-->
+                    <!--label="退票通知"-->
+                    <!--:label-width="formLabelWidth"-->
+                    <!--v-if="oMessagePlatformType"-->
+                <!--&gt;-->
+                    <!--<el-input-->
+                        <!--style="width: 250px"-->
+                        <!--v-model="oMessageType4"-->
+                        <!--autocomplete="off"-->
+                        <!--v-if="oMessagePlatformType==2"-->
+                        <!--placeholder="短信模板id"-->
+                    <!--&gt;</el-input>-->
+                    <!--<el-input-->
+                        <!--v-if="oMessagePlatformType==1"-->
+                        <!--style="width: 250px"-->
+                        <!--v-model="oMessageType4"-->
+                        <!--autocomplete="off"-->
+                        <!--type="textarea"-->
+                        <!--placeholder="短信内容，长度不超过200个汉字"-->
+                        <!--maxlength="200"-->
+                        <!--show-word-limit-->
+                    <!--&gt;</el-input>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item-->
+                    <!--label="会员卡充值"-->
+                    <!--:label-width="formLabelWidth"-->
+                    <!--v-if="oMessagePlatformType"-->
+                <!--&gt;-->
+                    <!--<el-input-->
+                        <!--style="width: 250px"-->
+                        <!--v-model="oMessageType5"-->
+                        <!--autocomplete="off"-->
+                        <!--v-if="oMessagePlatformType==2"-->
+                        <!--placeholder="短信模板id"-->
+                    <!--&gt;</el-input>-->
+                    <!--<el-input-->
+                        <!--v-if="oMessagePlatformType==1"-->
+                        <!--style="width: 250px"-->
+                        <!--v-model="oMessageType5"-->
+                        <!--autocomplete="off"-->
+                        <!--type="textarea"-->
+                        <!--placeholder="短信内容，长度不超过200个汉字"-->
+                        <!--maxlength="200"-->
+                        <!--show-word-limit-->
+                    <!--&gt;</el-input>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item-->
+                    <!--label="卖品送餐"-->
+                    <!--:label-width="formLabelWidth"-->
+                    <!--v-if="oMessagePlatformType"-->
+                <!--&gt;-->
+                    <!--<el-input-->
+                        <!--style="width: 250px"-->
+                        <!--v-model="oMessageType6"-->
+                        <!--autocomplete="off"-->
+                        <!--v-if="oMessagePlatformType==2"-->
+                        <!--placeholder="短信模板id"-->
+                    <!--&gt;</el-input>-->
+                    <!--<el-input-->
+                        <!--v-if="oMessagePlatformType==1"-->
+                        <!--style="width: 250px"-->
+                        <!--v-model="oMessageType6"-->
+                        <!--autocomplete="off"-->
+                        <!--type="textarea"-->
+                        <!--placeholder="短信内容，长度不超过200个汉字"-->
+                        <!--maxlength="200"-->
+                        <!--show-word-limit-->
+                    <!--&gt;</el-input>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item label="短信平台账号" :label-width="formLabelWidth">-->
+                    <!--<el-input-->
+                        <!--style="width: 250px"-->
+                        <!--v-model="oMessagePlatformAccount"-->
+                        <!--autocomplete="off"-->
+                    <!--&gt;</el-input>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item label="短信平台密码" :label-width="formLabelWidth">-->
+                    <!--<el-input-->
+                        <!--style="width: 250px"-->
+                        <!--v-model="oMessagePlatformPassword"-->
+                        <!--autocomplete="off"-->
+                    <!--&gt;</el-input>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item label="短信平台签名id" :label-width="formLabelWidth">-->
+                    <!--<el-input-->
+                        <!--style="width: 250px"-->
+                        <!--v-model="oMessagePlatformSignId"-->
+                        <!--autocomplete="off"-->
+                    <!--&gt;</el-input>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item prop="openStatus" label="是否开通服务" :label-width="formLabelWidth">-->
+                    <!--<el-select v-model="oOpenStatus" @change="openServe">-->
+                        <!--<el-option-->
+                            <!--v-for="info in boolean"-->
+                            <!--:key="info.value"-->
+                            <!--:label="info.label"-->
+                            <!--:value="info.value"-->
+                        <!--&gt;</el-option>-->
+                    <!--</el-select>-->
+                <!--</el-form-item>-->
                 <el-form-item
                     prop="openMemberCardStatus"
                     label="是否开通会员卡功能"
@@ -465,16 +465,16 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item prop="videoStatus" label="是否开通预告片" :label-width="formLabelWidth">
-                    <el-select v-model="oVideoStatus" @change="openServe">
-                        <el-option
-                            v-for="info in boolean"
-                            :key="info.value"
-                            :label="info.label"
-                            :value="info.value"
-                        ></el-option>
-                    </el-select>
-                </el-form-item>
+                <!--<el-form-item prop="videoStatus" label="是否开通预告片" :label-width="formLabelWidth">-->
+                    <!--<el-select v-model="oVideoStatus" @change="openServe">-->
+                        <!--<el-option-->
+                            <!--v-for="info in boolean"-->
+                            <!--:key="info.value"-->
+                            <!--:label="info.label"-->
+                            <!--:value="info.value"-->
+                        <!--&gt;</el-option>-->
+                    <!--</el-select>-->
+                <!--</el-form-item>-->
                 <el-form-item
                     prop="memberCardCommonUseStatus"
                     label="会员卡是否门店通用"
@@ -498,34 +498,34 @@
                 <el-form-item prop="miniAppId" label="小程序appId" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oMiniAppId" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item
-                    prop="miniAppSecret"
-                    label="小程序appSecret"
-                    :label-width="formLabelWidth"
-                >
-                    <el-input style="width: 250px" v-model="oMiniAppSecret" autocomplete="off"></el-input>
-                </el-form-item>
+                <!--<el-form-item-->
+                    <!--prop="miniAppSecret"-->
+                    <!--label="小程序appSecret"-->
+                    <!--:label-width="formLabelWidth"-->
+                <!--&gt;-->
+                    <!--<el-input style="width: 250px" v-model="oMiniAppSecret" autocomplete="off"></el-input>-->
+                <!--</el-form-item>-->
                 <el-form-item prop="miniMerchantNo" label="小程序支付商户号" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oMiniMerchantNo" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item
-                    prop="miniMerchantSecret"
-                    label="小程序支付密钥"
-                    :label-width="formLabelWidth"
-                >
-                    <el-input style="width: 250px" v-model="oMiniMerchantSecret" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item
-                    prop="miniRefundCertificateUrl"
-                    label="小程序退款证书阿里云路径"
-                    :label-width="formLabelWidth"
-                >
-                    <el-input
-                        style="width: 250px"
-                        v-model="oMiniRefundCertificateUrl"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
+                <!--<el-form-item-->
+                    <!--prop="miniMerchantSecret"-->
+                    <!--label="小程序支付密钥"-->
+                    <!--:label-width="formLabelWidth"-->
+                <!--&gt;-->
+                    <!--<el-input style="width: 250px" v-model="oMiniMerchantSecret" autocomplete="off"></el-input>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item-->
+                    <!--prop="miniRefundCertificateUrl"-->
+                    <!--label="小程序退款证书阿里云路径"-->
+                    <!--:label-width="formLabelWidth"-->
+                <!--&gt;-->
+                    <!--<el-input-->
+                        <!--style="width: 250px"-->
+                        <!--v-model="oMiniRefundCertificateUrl"-->
+                        <!--autocomplete="off"-->
+                    <!--&gt;</el-input>-->
+                <!--</el-form-item>-->
                 <el-form-item
                     prop="ticketingSystemAccount"
                     label="售票系统账号"
@@ -537,18 +537,18 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item
-                    style="width: 250px"
-                    prop="ticketingSystemPassword"
-                    label="售票系统密码"
-                    :label-width="formLabelWidth"
-                >
-                    <el-input
-                        style="width: 250px"
-                        v-model="oTicketingSystemPassword"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
+                <!--<el-form-item-->
+                    <!--style="width: 250px"-->
+                    <!--prop="ticketingSystemPassword"-->
+                    <!--label="售票系统密码"-->
+                    <!--:label-width="formLabelWidth"-->
+                <!--&gt;-->
+                    <!--<el-input-->
+                        <!--style="width: 250px"-->
+                        <!--v-model="oTicketingSystemPassword"-->
+                        <!--autocomplete="off"-->
+                    <!--&gt;</el-input>-->
+                <!--</el-form-item>-->
                 <el-form-item prop="verificationCode" label="影院奖品核销码" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oVerificationCode" autocomplete="off"></el-input>
                 </el-form-item>
@@ -780,10 +780,10 @@ export default {
                         this.oBuyTicketHint = JSON.parse(Decrypt(data.data.data)).Cinema.buyTicketHint;
                         this.oSnackBeginTime = JSON.parse(Decrypt(data.data.data)).Cinema.snackBeginTime;
                         this.oSnackEndTime = JSON.parse(Decrypt(data.data.data)).Cinema.snackEndTime;
-                        this.oMessagePlatformType = JSON.parse(Decrypt(data.data.data)).Cinema.messagePlatformType;
-                        this.oMessagePlatformAccount = JSON.parse(Decrypt(data.data.data)).CinemaMessagePlatFormInfo.messagePlatformAccount;
-                        this.oMessagePlatformPassword = JSON.parse(Decrypt(data.data.data)).CinemaMessagePlatFormInfo.messagePlatformPassword;
-                        this.oMessagePlatformSignId = JSON.parse(Decrypt(data.data.data)).CinemaMessagePlatFormInfo.messagePlatformSignId;
+                        // this.oMessagePlatformType = JSON.parse(Decrypt(data.data.data)).Cinema.messagePlatformType;
+                        // this.oMessagePlatformAccount = JSON.parse(Decrypt(data.data.data)).CinemaMessagePlatFormInfo.messagePlatformAccount;
+                        // this.oMessagePlatformPassword = JSON.parse(Decrypt(data.data.data)).CinemaMessagePlatFormInfo.messagePlatformPassword;
+                        // this.oMessagePlatformSignId = JSON.parse(Decrypt(data.data.data)).CinemaMessagePlatFormInfo.messagePlatformSignId;
                         for (let x in this.boolean) {
                             if (this.boolean[x].value == JSON.parse(Decrypt(data.data.data)).Cinema.memberCardCommonUseStatus) {
                                 this.oMemberCardCommonUseStatus = this.boolean[x].value;
@@ -820,14 +820,14 @@ export default {
                                 break;
                             }
                         }
-                        for (let x in this.boolean) {
-                            if (
-                                this.boolean[x].value == JSON.parse(Decrypt(data.data.data)).CinemaMessagePlatFormInfo.messagePlatformType
-                            ) {
-                                this.oMessagePlatformType = this.boolean[x].value;
-                                break;
-                            }
-                        }
+                        // for (let x in this.boolean) {
+                        //     if (
+                        //         this.boolean[x].value == JSON.parse(Decrypt(data.data.data)).CinemaMessagePlatFormInfo.messagePlatformType
+                        //     ) {
+                        //         this.oMessagePlatformType = this.boolean[x].value;
+                        //         break;
+                        //     }
+                        // }
                         for (let i = 0; i < JSON.parse(Decrypt(data.data.data)).MessageInfo.length; i ++) {
                             if (JSON.parse(Decrypt(data.data.data)).MessageInfo[i].messageType == 1) {
                                 this.oMessageType1 = JSON.parse(Decrypt(data.data.data)).MessageInfo[i].content
@@ -921,41 +921,41 @@ export default {
             jsonArr.push({ key: 'refundable', value: this.oRefundable });
             jsonArr.push({ key: 'snackBeginTime', value: this.oSnackBeginTime });
             jsonArr.push({ key: 'snackEndTime', value: this.oSnackEndTime });
-            jsonArr.push({ key: 'messagePlatformType', value: this.oMessagePlatformType });
-            let messageInfos = [];
-            if (this.oMessageType1) {
-                messageInfos.push({ 'messageType':  1 , 'content': this.oMessageType1 });
-            }
-            if (this.oMessageType2) {
-                messageInfos.push({ 'messageType': 2 ,  'content': this.oMessageType2 });
-            }
-            if (this.oMessageType3) {
-                messageInfos.push({ 'messageType': 3 , 'content': this.oMessageType3 });
-            }
-            if (this.oMessageType4) {
-                messageInfos.push({ 'messageType': 4 , 'content': this.oMessageType4 });
-            }
-            if (this.oMessageType5) {
-                messageInfos.push({ 'messageType': 5 , 'content': this.oMessageType5 });
-            }
-            if (this.oMessageType6) {
-                messageInfos.push({ 'messageType': 6 , 'content': this.oMessageType6 });
-            }
-            if (messageInfos.length>0) {
-                jsonArr.push({ key: 'messageInfos', value: JSON.stringify(messageInfos)})
-            }
-            jsonArr.push({ key: 'messagePlatformAccount', value: this.oMessagePlatformAccount });
-            jsonArr.push({ key: 'messagePlatformPassword', value: this.oMessagePlatformPassword });
-            jsonArr.push({ key: 'messagePlatformSignId', value: this.oMessagePlatformSignId });
-            jsonArr.push({ key: 'openStatus', value: this.oOpenStatus });
+            // jsonArr.push({ key: 'messagePlatformType', value: this.oMessagePlatformType });
+            // let messageInfos = [];
+            // if (this.oMessageType1) {
+            //     messageInfos.push({ 'messageType':  1 , 'content': this.oMessageType1 });
+            // }
+            // if (this.oMessageType2) {
+            //     messageInfos.push({ 'messageType': 2 ,  'content': this.oMessageType2 });
+            // }
+            // if (this.oMessageType3) {
+            //     messageInfos.push({ 'messageType': 3 , 'content': this.oMessageType3 });
+            // }
+            // if (this.oMessageType4) {
+            //     messageInfos.push({ 'messageType': 4 , 'content': this.oMessageType4 });
+            // }
+            // if (this.oMessageType5) {
+            //     messageInfos.push({ 'messageType': 5 , 'content': this.oMessageType5 });
+            // }
+            // if (this.oMessageType6) {
+            //     messageInfos.push({ 'messageType': 6 , 'content': this.oMessageType6 });
+            // }
+            // if (messageInfos.length>0) {
+            //     jsonArr.push({ key: 'messageInfos', value: JSON.stringify(messageInfos)})
+            // }
+            // jsonArr.push({ key: 'messagePlatformAccount', value: this.oMessagePlatformAccount });
+            // jsonArr.push({ key: 'messagePlatformPassword', value: this.oMessagePlatformPassword });
+            // jsonArr.push({ key: 'messagePlatformSignId', value: this.oMessagePlatformSignId });
+            // jsonArr.push({ key: 'openStatus', value: this.oOpenStatus });
             jsonArr.push({ key: 'openMemberCardStatus', value: this.oOpenMemberCardStatus });
             jsonArr.push({ key: 'memberCardCommonUseStatus', value: this.oMemberCardCommonUseStatus });
-            jsonArr.push({ key: 'miniAppSecret', value: this.oMiniAppSecret });
+            // jsonArr.push({ key: 'miniAppSecret', value: this.oMiniAppSecret });
             jsonArr.push({ key: 'miniMerchantNo', value: this.oMiniMerchantNo });
-            jsonArr.push({ key: 'miniMerchantSecret', value: this.oMiniMerchantSecret });
-            jsonArr.push({ key: 'miniRefundCertificateUrl', value: this.oMiniRefundCertificateUrl });
+            // jsonArr.push({ key: 'miniMerchantSecret', value: this.oMiniMerchantSecret });
+            // jsonArr.push({ key: 'miniRefundCertificateUrl', value: this.oMiniRefundCertificateUrl });
             jsonArr.push({ key: 'ticketingSystemAccount', value: this.oTicketingSystemAccount });
-            jsonArr.push({ key: 'ticketingSystemPassword', value: this.oTicketingSystemPassword });
+            // jsonArr.push({ key: 'ticketingSystemPassword', value: this.oTicketingSystemPassword });
             jsonArr.push({ key: 'miniAppId', value: this.oMiniAppId });
             jsonArr.push({ key: 'verificationCode', value: this.oVerificationCode });
             jsonArr.push({ key: 'miniAppName', value: this.oMiniAppName });
