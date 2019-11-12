@@ -25,7 +25,7 @@
                             :value="item.cinemaCode"
                     ></el-option>
                 </el-select>
-                <el-input v-model="query.name" placeholder="活动名称" class="handle-input mr10"></el-input>
+                <el-input v-model="query.name" placeholder="权益卡名称" class="handle-input mr10"></el-input>
                 <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
                 <el-button
                         type="primary"

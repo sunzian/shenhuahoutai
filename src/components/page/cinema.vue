@@ -14,12 +14,16 @@
                         style="width: 200px;"
                         v-model="query.startDate"
                         type="date"
+                        value-format="yyyy-MM-dd"
+                        format="yyyy-MM-dd"
                         placeholder="开始时间">
                 </el-date-picker>至
                 <el-date-picker
                         style="width: 200px;"
                         v-model="query.endDate"
                         type="date"
+                        value-format="yyyy-MM-dd"
+                        format="yyyy-MM-dd"
                         placeholder="结束时间">
                 </el-date-picker>
                 <el-select  style="width: 200px;" clearable v-model="query.paymentType" placeholder="费用支付类型" class="handle-select mr10">

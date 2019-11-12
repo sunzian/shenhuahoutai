@@ -95,6 +95,7 @@
                         drag
                         :limit="1"
                         ref="upload"
+                        :before-upload="beforeUpload"
                         action="api/upload/uploadImage"
                         :on-success="setPicture"
                         multiple

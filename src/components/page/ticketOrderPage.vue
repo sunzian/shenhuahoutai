@@ -66,6 +66,7 @@
                     type="datetime"
                     value-format="yyyy-MM-dd HH:mm:ss"
                     format="yyyy-MM-dd HH:mm:ss"
+                    default-time="06:00:00"
                     placeholder="开始时间"
                 ></el-date-picker>至
                 <el-date-picker

@@ -167,7 +167,7 @@
                 <el-form-item
                         label="所选商品"
                         :label-width="formLabelWidth"
-                        v-if="selectedSell.length>0"
+                        v-if="selectedSell.length>0&&oForm.selectFilmType==1"
                 >
                     <div v-for="(item, index) in selectedSell" style="margin-bottom: 5px">
                         <el-input
@@ -602,8 +602,8 @@
             },
             deletTime(index) {
                 this.dateInfo.splice(index, 1);
-                console.log(this.startArr);
-                console.log(this.endArr);
+                this.startArr.splice(index, 1);
+                this.endArr.splice(index, 1);
             },
             addPage() {
                 //获取新增按钮权限
