@@ -139,24 +139,24 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="过期优惠券是否发送短信通知会员" :label-width="formLabelWidth">
-                    <el-select v-model="oForm.messageForExpireTickets" placeholder="请选择">
-                        <el-option
-                                v-for="item in options"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                        ></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="优惠券到期前几天发送短信通知会员" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 150px"
-                        maxlength="9"
-                        v-model.number="oForm.aheadDaysForMessage"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
+                <!--<el-form-item label="过期优惠券是否发送短信通知会员" :label-width="formLabelWidth">-->
+                    <!--<el-select v-model="oForm.messageForExpireTickets" placeholder="请选择">-->
+                        <!--<el-option-->
+                                <!--v-for="item in options"-->
+                                <!--:key="item.value"-->
+                                <!--:label="item.label"-->
+                                <!--:value="item.value"-->
+                        <!--&gt;</el-option>-->
+                    <!--</el-select>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item label="优惠券到期前几天发送短信通知会员" :label-width="formLabelWidth">-->
+                    <!--<el-input-->
+                        <!--style="width: 150px"-->
+                        <!--maxlength="9"-->
+                        <!--v-model.number="oForm.aheadDaysForMessage"-->
+                        <!--autocomplete="off"-->
+                    <!--&gt;</el-input>-->
+                <!--</el-form-item>-->
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -226,25 +226,25 @@
                             autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="过期优惠券是否发送短信通知会员">
-                    <el-select v-model="oMessageForExpireTickets" placeholder="请选择">
-                        <el-option
-                                v-for="item in options"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                        ></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="优惠券到期前几天发送短信通知会员">
-                    <el-input
-                            style="width: 70px"
-                            min="1"
-                            maxlength="7"
-                            v-model.trim="oAheadDaysForMessage"
-                            autocomplete="off"
-                    ></el-input>
-                </el-form-item>
+                <!--<el-form-item label="过期优惠券是否发送短信通知会员">-->
+                    <!--<el-select v-model="oMessageForExpireTickets" placeholder="请选择">-->
+                        <!--<el-option-->
+                                <!--v-for="item in options"-->
+                                <!--:key="item.value"-->
+                                <!--:label="item.label"-->
+                                <!--:value="item.value"-->
+                        <!--&gt;</el-option>-->
+                    <!--</el-select>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item label="优惠券到期前几天发送短信通知会员">-->
+                    <!--<el-input-->
+                            <!--style="width: 70px"-->
+                            <!--min="1"-->
+                            <!--maxlength="7"-->
+                            <!--v-model.trim="oAheadDaysForMessage"-->
+                            <!--autocomplete="off"-->
+                    <!--&gt;</el-input>-->
+                <!--</el-form-item>-->
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false">取 消</el-button>

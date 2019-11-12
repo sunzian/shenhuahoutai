@@ -13,6 +13,12 @@
                 <el-input v-model="query.filmName" placeholder="影片名称" class="handle-input mr10"></el-input>
                 <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
                 <el-button
+                        type="primary"
+                        @click="thirdPrice"
+                        icon="el-icon-circle-plus-outline"
+                        style="margin-left: 250px"
+                >批量修改</el-button>
+                <el-button
                     type="primary"
                     @click="addPage"
                     icon="el-icon-circle-plus-outline"
@@ -28,6 +34,8 @@
                 header-cell-class-name="table-header"
                 @selection-change="handleSelectionChange"
             >
+                <el-table-column type="selection" width="55">
+                </el-table-column>
                 <el-table-column prop="code" label="影院名称" fixed>
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
@@ -194,6 +202,23 @@
                 <el-button type="primary" @click="exChanger">确 定</el-button>
             </span>
         </el-dialog>
+        <!-- 批量修改弹出框 -->
+        <el-dialog title="批量修改" :visible.sync="drawer">
+            <el-form ref="formOne" v-model="formOne">
+                <el-form-item label="第三方售价金额" :label-width="formLabelWidth">
+                    <el-input
+                            style="width: 250px"
+                            min="1"
+                            v-model="manySettlePrice"
+                            autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="drawer = false">取 消</el-button>
+                <el-button type="primary" @click="sureThirdPrice">确 定</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 
@@ -207,6 +232,7 @@ export default {
     name: 'basetable',
     data() {
         return {
+            drawer:false,
             oCinemaName: '',
             oCinemaCode: '',
             oScreenCode: '',
@@ -274,6 +300,47 @@ export default {
         this.getMenu();
     },
     methods: {
+        thirdPrice() {
+            //获取批量修改按钮权限
+            if(this.multipleSelection.length==0){
+                this.message = '请先勾选需要修改的影片';
+                this.open();
+            }else {
+                const loading = this.$loading({
+                    lock: true,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)',
+                    target: document.querySelector('.div1')
+                });
+                https
+                    .fetchPost('/sessionInfo/batchUpdateMemberPrice', '')
+                    .then(data => {
+                        loading.close();
+                        // console.log(data);
+                        if (data.data.code == 'success') {
+
+                            for(let x in this.multipleSelection){
+                                this.selectIdList.push(this.multipleSelection[x].id)
+                            }
+                            this.selectId=this.selectIdList.join(',');
+                            console.log(this.selectId);
+                            this.drawer = true;
+                        } else if (data.data.code == 'nologin') {
+                            this.message = data.data.message;
+                            this.open();
+                            this.$router.push('/login');
+                        } else {
+                            this.message = data.data.message;
+                            this.open();
+                        }
+                    })
+                    .catch(err => {
+                        loading.close();
+                        console.log(err);
+                    });
+            }
+        },
         addPage() {
             //获取新增按钮权限
             const loading = this.$loading({
