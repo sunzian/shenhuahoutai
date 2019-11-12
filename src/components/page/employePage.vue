@@ -416,7 +416,7 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            var jsonArr = [];
+            var jsonArr = []; 
             jsonArr.push({ key: 'employeeName', value: this.oForm.name });
             jsonArr.push({ key: 'cinemaCode', value: this.cinemaCode });
             let sign = md5(preSign(jsonArr));
@@ -546,7 +546,7 @@ export default {
                     console.log(err);
                 });
         },
-        show() {
+        show(row) {
             this.showSell = false;
             //是否拥有权限
             const loading = this.$loading({
@@ -565,11 +565,12 @@ export default {
                 code = '';
             }
             var jsonArr = [];
+            this.cinemaCode = row.cinemaCode;
             jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
             jsonArr.push({ key: 'name', value: this.query.name });
             jsonArr.push({ key: 'code', value: this.query.code });
             jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
-            jsonArr.push({ key: 'cinemaCode', value: this.cinemaCode });
+            jsonArr.push({ key: 'cinemaCode', value: row.cinemaCode });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             let params = ParamsAppend(jsonArr);

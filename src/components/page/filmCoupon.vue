@@ -178,7 +178,7 @@
                     :label-width="formLabelWidth"
                     v-if="filmInfo.length>0 && oForm.selectFilmType != 0"
                 >
-                    <div v-for="(item, index) in filmInfo">
+                    <div v-for="(item, index) in filmInfo" :key="index">
                         {{item.value}}
                         <span
                             style="color:red;cursor: pointer;"
@@ -846,8 +846,6 @@ export default {
             });
         },
         selectCinema(val) {
-            console.log(val);
-            // let selectValue = val.join(',');
             this.selectValue = val;
             this.getAllScreen(val);
         },
@@ -885,7 +883,6 @@ export default {
                             screenList.screenName = screens[i].screenName;
                             this.screenInfo.push(screenList);
                         }
-                        // console.log(this.screenInfo);
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
