@@ -3,7 +3,7 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
-                    <i class="el-icon-lx-cascades"></i> 签到规则管理
+                    <i class="el-icon-lx-cascades"></i> 签到送金币规则设置
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
@@ -344,7 +344,7 @@
                         loading.close();
                         console.log(data);
                         if (data.data.code == 'success') {
-                            if(this.oContinuousDays==7){
+                            if(this.clearFiles==2){
                                 this.$refs.download.clearFiles();//清除已上传文件
                             }
                             this.$message.success(`成功`);
