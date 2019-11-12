@@ -90,6 +90,11 @@ export default new Router({
                     meta: { title: '网络代售服务费' }
                 },
                 {
+                    path: '/cinemaTicketNumRecords',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/cinemaTicketNumRecords.vue'),
+                    meta: { title: '影院购票充值' }
+                },
+                {
                     path: '/merchandiseOrderNotice',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/merchandiseOrderNotice.vue'),
                     meta: { title: '卖品送餐通知' }
