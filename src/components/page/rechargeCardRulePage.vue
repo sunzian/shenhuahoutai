@@ -349,6 +349,7 @@
                         <template slot-scope="scope">
                             <span
                                 v-for="item in scope.row.couponList"
+                                :key="item"
                             >{{item.couponName}}x{{item.number}}&nbsp;&nbsp;&nbsp;&nbsp;</span>
                         </template>
                     </el-table-column>
@@ -398,6 +399,7 @@
                         <template slot-scope="scope">
                             <span
                                     v-for="item in scope.row.couponList"
+                                    :key="item"
                             >{{item.couponName}}x{{item.number}}&nbsp;&nbsp;&nbsp;&nbsp;</span>
                         </template>
                     </el-table-column>

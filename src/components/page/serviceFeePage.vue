@@ -151,7 +151,7 @@
                     </template>
                 </el-table-column>
                 <el-table-column prop="name" label="影厅名称">
-                    <template slot-scope="scope">{{scope.row.screenNames}}</template>
+                    <template  v-if="scope.row.screenType == 2" slot-scope="scope">{{scope.row.screenNames}}</template>
                 </el-table-column>
                 <el-table-column prop="name" label="影片类型">
                     <template slot-scope="scope">
@@ -160,7 +160,7 @@
                     </template>
                 </el-table-column>
                 <el-table-column prop="name" label="影片名称">
-                    <template slot-scope="scope">{{scope.row.filmNames}}</template>
+                    <template v-if="scope.row.filmType == 2" slot-scope="scope">{{scope.row.filmNames}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="开始日期">
                     <template slot-scope="scope">{{scope.row.startDate}}</template>
@@ -246,7 +246,7 @@
                 <el-form-item
                     label="所选影片"
                     :label-width="formLabelWidth"
-                    v-if="selectedSell.length>0"
+                    v-if="selectedSell.length>0&&oForm.selectFilmType == 2"
                 >
                     <div
                         v-for="(item, index) in selectedSell"
@@ -350,8 +350,8 @@
                         <el-checkbox
                             v-for="item in screenInfo"
                             :label="item.screenCode"
-                            :key="item.screenCode"
-                            :value="item.screenCode"
+                            :key="item.screenName"
+                            :value="item.screenName"
                         >{{item.screenName}}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
@@ -522,6 +522,7 @@ export default {
             startSection: '',
             endSection: '',
             date: [],
+            oCinemaCode: '',
             oThirdServiceFee: '',
             oStatus: '',
             oStartSection: '',
@@ -693,6 +694,7 @@ export default {
             jsonArr.push({ key: 'cinemaCode', value: this.cinemaCode });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
+            console.log(jsonArr);
             let params = ParamsAppend(jsonArr);
             if (this.dialogFormVisible == true) {
                 https
@@ -700,12 +702,24 @@ export default {
                     .then(data => {
                         loading.close();
                         //新增
-                        console.log(data);
                         if (data.data.code == 'success') {
                             this.dialogFormVisible = false;
                             this.$message.success(`新增成功`);
-                            this.show(this.cinemaCode);
-                            this.oForm = '';
+                            this.show();
+                            this.oForm.name = '';
+                            (this.oForm.selectHallType = '1'), (this.oForm.selectFilmType = '1'), (this.oForm.cinemaCode = '');
+                            this.oForm.serviceFee = '';
+                            this.oForm.screenCodes = '';
+                            this.oForm.screenNames = '';
+                            this.oForm.filmCodes = '';
+                            this.oForm.filmNames = '';
+                            this.oForm.startDate = '';
+                            this.oForm.endDate = '';
+                            this.oForm.startSection = '';
+                            this.oForm.endSection = '';
+                            this.oForm.status = '';
+                            this.oForm.startDay = '';
+                            this.oForm.endDay = '';
                             this.oForm.screenCode = [];
                             this.selectScreenCode = [];
                             this.date = [];
@@ -729,7 +743,7 @@ export default {
         },
         delChange(index, row) {
             //删除数据
-            this.$confirm('此操作将永久删除该员工数据, 是否继续?', '提示', {
+            this.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
@@ -751,11 +765,11 @@ export default {
                     jsonArr.push({ key: 'sign', value: sign });
                     let params = ParamsAppend(jsonArr);
                     https
-                        .fetchPost('/employee/deleteById', params)
+                        .fetchPost('/serviceFee/deleteServiceFee', params)
                         .then(data => {
                             if (data.data.code == 'success') {
                                 this.$message.error(`删除了`);
-                                this.show(this.cinemaCode);
+                                this.show();
                             } else if (data.data.code == 'nologin') {
                                 this.message = data.data.message;
                                 this.open();
@@ -806,6 +820,7 @@ export default {
                         } else {
                             this.oStatus = '未启用';
                         }
+                        this.oCinemaCode = JSON.parse(Decrypt(data.data.data)).cinemaCode;
                         this.oStartSection = JSON.parse(Decrypt(data.data.data)).startSection;
                         this.oStartDate = JSON.parse(Decrypt(data.data.data)).startDate;
                         this.oScreenType = JSON.parse(Decrypt(data.data.data)).screenType;
@@ -813,10 +828,19 @@ export default {
                         this.oScreenCodes = JSON.parse(Decrypt(data.data.data)).screenCodes;
                         this.oScreenCode = this.oScreenCodes.split(',');
                         this.oScreenName = this.oScreenNames.split(',');
+                        let selectScreenCode = [];
+                        for (let i = 0; i < this.oScreenCode.length; i++) {
+                            selectScreenCode.push({ screenCode: this.oScreenCode[i], screenName: this.oScreenName[i] });
+                        }
+                        this.selectScreenCode = selectScreenCode;
                         this.oMemberServiceFee = JSON.parse(Decrypt(data.data.data)).memberServiceFee;
                         this.oFilmType = JSON.parse(Decrypt(data.data.data)).filmType;
-                        this.oFilmNames = JSON.parse(Decrypt(data.data.data)).filmNames;
-                        this.oFilmCodes = JSON.parse(Decrypt(data.data.data)).filmCodes;
+                        if (JSON.parse(Decrypt(data.data.data)).filmNames) {
+                            this.oFilmNames = JSON.parse(Decrypt(data.data.data)).filmNames;
+                        }
+                        if (JSON.parse(Decrypt(data.data.data)).filmCodes) {
+                            this.oFilmCodes = JSON.parse(Decrypt(data.data.data)).filmCodes;
+                        }
                         this.oFilmName = this.oFilmNames.split(',');
                         this.oFilmCode = this.oFilmCodes.split(',');
                         let selectedSell = [];
@@ -828,11 +852,11 @@ export default {
                         this.oEndDate = JSON.parse(Decrypt(data.data.data)).endDate;
                         let endList = [];
                         let startList = [];
-                        endList = this.oEndSection.split(",");
-                        startList = this.oStartSection.split(",");
+                        endList = this.oEndSection.split(',');
+                        startList = this.oStartSection.split(',');
                         let showTime = [];
                         for (let i = 0; i < this.oFilmCode.length; i++) {
-                            showTime.push(startList[i] + "至" + endList[i]);
+                            showTime.push(startList[i] + '至' + endList[i]);
                         }
                         this.date = showTime;
                         this.oId = JSON.parse(Decrypt(data.data.data)).id;
@@ -935,20 +959,61 @@ export default {
         },
         // 编辑操作
         exChanger() {
-            // const loading = this.$loading({
-            //     lock: true,
-            //     text: 'Loading',
-            //     spinner: 'el-icon-loading',
-            //     background: 'rgba(0, 0, 0, 0.7)',
-            //     target: document.querySelector('.div1')
-            // });
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
             var jsonArr = [];
-            console.log(this)
-            if (this.oScreenType == 1) {
-                jsonArr.push({ key: 'screenType', value: this.oScreenType });
-            } else {
-                jsonArr.push({ key: 'screenType', value: this.oScreenType });
-
+            if (this.date.length == 0) {
+                this.message = '请选择时间段';
+                this.open();
+                return;
+            }
+            if (this.oScreenType == 2) {
+                for (let i = 0; i < this.selectScreenCode.length; i++) {
+                    if (!this.selectScreenCode[i].screenCode) {
+                        let screenCodes = [];
+                        let screenNames = [];
+                        for (let a = 0; a < this.selectScreenCode.length; a++) {
+                            screenCodes.push(this.selectScreenCode[a]);
+                            for (let j = 0; j < this.screenInfo.length; j++) {
+                            if (this.screenInfo[j].screenCode == this.selectScreenCode[a]) {
+                                screenNames.push(this.screenInfo[j].screenName);
+                            }
+                        }
+                        }
+                        this.oScreenCodes = screenCodes.join(',');
+                        this.oScreenNames = screenNames.join(',');
+                    } else {
+                        let screenCodes = [];
+                        let screenNames = [];
+                        for (let b = 0; b < this.selectScreenCode.length; b++) {
+                            screenCodes.push(this.selectScreenCode[b].screenCode);
+                            screenNames.push(this.selectScreenCode[b].screenName);
+                        }
+                        this.oScreenCodes = screenCodes.join(',');
+                        this.oScreenNames = screenNames.join(',');
+                    }
+                }
+                jsonArr.push({ key: 'screenCodes', value: this.oScreenCodes });
+                jsonArr.push({ key: 'screenNames', value: this.oScreenNames });
+            }
+            jsonArr.push({ key: 'screenType', value: this.oScreenType });
+            jsonArr.push({ key: 'filmType', value: this.oFilmType });
+            if (this.oFilmType == 2) {
+                let filmCodes = [];
+                let filmNames = [];
+                for (let i = 0; i < this.selectedSell.length; i++) {
+                    filmCodes.push(this.selectedSell[i].filmCode);
+                    filmNames.push(this.selectedSell[i].filmName);
+                }
+                this.oForm.filmCodes = filmCodes.join(',');
+                this.oForm.filmNames = filmNames.join(',');
+                jsonArr.push({ key: 'filmCodes', value: this.oForm.filmCodes });
+                jsonArr.push({ key: 'filmNames', value: this.oForm.filmNames });
             }
             if (this.oStatus == '启用') {
                 jsonArr.push({ key: 'status', value: 1 });
@@ -967,11 +1032,11 @@ export default {
             this.oEndSection = endArr.join(',');
             jsonArr.push({ key: 'endDate', value: this.oEndDate });
             jsonArr.push({ key: 'startDate', value: this.oStartDate });
-            jsonArr.push({ key: 'startSection', value: this.startSection });
-            jsonArr.push({ key: 'endSection', value: this.endSection });
+            jsonArr.push({ key: 'startSection', value: this.oStartSection });
+            jsonArr.push({ key: 'endSection', value: this.oEndSection });
             jsonArr.push({ key: 'memberServiceFee', value: this.oMemberServiceFee });
             jsonArr.push({ key: 'thirdServiceFee', value: this.oThirdServiceFee });
-            return
+            jsonArr.push({ key: 'cinemaCode', value: this.oCinemaCode });
             jsonArr.push({ key: 'id', value: this.oId });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
@@ -979,12 +1044,36 @@ export default {
             let params = ParamsAppend(jsonArr);
             this.editVisible = false;
             https
-                .fetchPost('chatroomAwards/updateAwards', params)
+                .fetchPost('/serviceFee/modifyServiceFee', params)
                 .then(data => {
                     loading.close();
-                    // console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.$message.success(`编辑成功`);
+                        this.selectScreenCode = [];
+                        this.selectedSell = [];
+                        this.date = [];
+                        this.oCinemaCode = '';
+                        this.oThirdServiceFee = '';
+                        this.oStatus = '';
+                        this.oStartSection = '';
+                        this.oStartDate = '';
+                        this.oStartDay = '';
+                        this.oScreenType = '';
+                        this.oScreenNames = '';
+                        this.oScreenCodes = '';
+                        this.oScreenCode = [];
+                        this.oScreenName = [];
+                        this.oFilmCode = [];
+                        this.oFilmName = [];
+                        this.ostartList = [];
+                        this.oEndList = [];
+                        this.oMemberServiceFee = '';
+                        this.oFilmType = '';
+                        this.oFilmNames = '';
+                        this.oFilmCodes = '';
+                        this.oEndSection = '';
+                        this.oEndDate = '';
+                        this.oEndDay = '';
                         this.show();
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
@@ -1157,7 +1246,6 @@ export default {
                 });
         },
         selectScreens(val) {
-            console.log(val);
             this.selectScreenCode = val;
         },
         // 获取所有影厅
@@ -1194,22 +1282,9 @@ export default {
         },
         sureNext() {
             if (this.sellIndex >= 0) {
-                if (this.selectedSell.length > 0) {
-                    for (let i = 0; i < this.selectedSell.length; i++) {
-                        if (this.selectedSell[i].filmCode == this.sellTableData[this.sellIndex].filmCode) {
-                            this.message = '请选择不同影片';
-                            this.open();
-                            return;
-                        } else {
-                            this.selectedSell.push(this.sellTableData[this.sellIndex]);
-                            this.drawer = false;
-                        }
-                    }
-                } else {
-                    this.selectedSell.push(this.sellTableData[this.sellIndex]);
-                    this.drawer = false;
-                }
-                console.log(this.selectedSell)
+                this.selectedSell.push(this.sellTableData[this.sellIndex]);
+                this.drawer = false;
+                console.log(this.selectedSell);
             }
         },
         deletCoupon() {
