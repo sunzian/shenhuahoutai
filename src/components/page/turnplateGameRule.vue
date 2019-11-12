@@ -3,7 +3,7 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
-                    <i class="el-icon-lx-cascades"></i> 大转盘游戏规则管理
+                    <i class="el-icon-lx-cascades"></i> 金币大转盘规则设置
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
@@ -76,7 +76,7 @@
                         type="primary"
                         @click="back"
                         icon="el-icon-circle-plus-outline"
-                        style="margin-left: 1070px"
+                        style="float: right"
                 >返回影院列表</el-button>
             </div>
             <el-form ref="form" :model="oForm">
@@ -88,6 +88,13 @@
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="大转盘背景图" :label-width="formLabelWidth">
+                    <el-popover
+                            placement="right"
+                            title=""
+                            trigger="hover">
+                        <img style="width: 400px" :src="this.form.imageUrl"/>
+                        <img slot="reference" :src="this.form.imageUrl" :alt="this.form.imageUrl" style="max-height: 50px;max-width: 130px">
+                    </el-popover>
                     <el-upload
                             :before-upload="beforeUpload"
                             :data="type"
@@ -143,7 +150,7 @@
                     </el-select>
                 </el-form-item>
                 <!--<el-form-item label="添加奖项" :label-width="formLabelWidth">-->
-                    <el-button style="margin-left: 1107px" type="primary" @click="changePrize">添加奖项</el-button>
+                    <el-button style="float: right" type="primary" @click="changePrize">添加奖项</el-button>
                 <!--</el-form-item>-->
             </el-form>
             <el-table
@@ -199,7 +206,7 @@
             </el-table>
             <span slot="footer" class="dialog-footer" style="margin-left: 1040px">
                 <!--<el-button @click="addShow = false,showSell=true">取 消</el-button>-->
-                <el-button style="margin-top: 20px;margin-left: 78px" type="primary" @click="exAddChanger">确 定</el-button>
+                <el-button style="margin-top: 10px;float: right" type="primary" @click="exAddChanger">确 定</el-button>
             </span>
         </div>
         <!-- 新增奖项弹出框 -->
@@ -441,7 +448,7 @@
                         type="primary"
                         @click="back"
                         icon="el-icon-circle-plus-outline"
-                        style="margin-left: 1070px"
+                        style="float: right"
                 >返回影院列表</el-button>
             </div>
             <el-form ref="form" :model="form">
@@ -453,6 +460,13 @@
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="大转盘背景图" :label-width="formLabelWidth">
+                    <el-popover
+                            placement="right"
+                            title=""
+                            trigger="hover">
+                        <img style="width: 400px" :src="this.form.imageUrl"/>
+                        <img slot="reference" :src="this.form.imageUrl" :alt="this.form.imageUrl" style="max-height: 50px;max-width: 130px">
+                    </el-popover>
                     <el-upload
                             :before-upload="beforeUpload"
                             :data="type"
@@ -508,7 +522,7 @@
                     </el-select>
                 </el-form-item>
                 <!--<el-form-item label="添加奖项" :label-width="formLabelWidth">-->
-                    <el-button style="margin-left: 1107px" type="primary" @click="changePrize">添加奖项</el-button>
+                    <el-button style="float: right" type="primary" @click="changePrize">添加奖项</el-button>
                 <!--</el-form-item>-->
             </el-form>
             <el-table
@@ -564,7 +578,7 @@
                 </el-table-column>
             </el-table>
             <span slot="footer" class="dialog-footer" style="margin-left: 1040px">
-                <el-button style="margin-top: 20px;margin-left: 78px" type="primary" @click="exChangeChanger">确 定</el-button>
+                <el-button style="margin-top: 10px;float: right" type="primary" @click="exChangeChanger">确 定</el-button>
             </span>
         </div>
     </div>
@@ -659,7 +673,7 @@
                 this.type.type = EncryptReplace('activity');
             },
             unSuccess(data) {
-                this.oImageUrl = data.data;
+                this.form.imageUrl = data.data;
                 if (data.code == 'nologin') {
                     this.message = data.message;
                     this.open();
@@ -757,7 +771,7 @@
                     jsonArr.push({ key: 'cinemaCode', value:this.cinemaCode });
                     jsonArr.push({ key: 'gameName', value:this.oForm.gameName });
                     jsonArr.push({ key: 'startDate', value:this.oForm.startDate });
-                    jsonArr.push({ key: 'imageUrl', value:this.oImageUrl });
+                    jsonArr.push({ key: 'imageUrl', value:this.form.imageUrl });
                     jsonArr.push({ key: 'endDate', value:this.oForm.endDate });
                     jsonArr.push({ key: 'status', value:this.oForm.status });
                     jsonArr.push({ key: 'prizeNumber', value:this.prizeInfoList.length});
@@ -806,7 +820,7 @@
                     jsonArr.push({ key: 'cinemaCode', value:this.cinemaCode });
                     jsonArr.push({ key: 'gameName', value:this.form.gameName });
                     jsonArr.push({ key: 'startDate', value:this.form.startDate });
-                    jsonArr.push({ key: 'imageUrl', value:this.oImageUrl });
+                    jsonArr.push({ key: 'imageUrl', value:this.form.imageUrl });
                     jsonArr.push({ key: 'endDate', value:this.form.endDate });
                     jsonArr.push({ key: 'status', value:this.form.status });
                     jsonArr.push({ key: 'prizeNumber', value:this.prizeInfoList.length});

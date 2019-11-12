@@ -57,13 +57,22 @@
         <!--卖品套餐展示页面-->
         <div class="container" v-if="!showSell">
             <div class="handle-box">
-                <el-input v-model="query.name" placeholder="角色名" class="handle-input mr10"></el-input>
+                <el-input v-model="query.comboName" placeholder="套餐名字" class="handle-input mr10"></el-input>
+                <el-select clearable v-model="query.comboType" placeholder="套餐类型" class="handle-select mr10">
+                    <el-option key="1" label="单人套餐" value="1"></el-option>
+                    <el-option key="2" label="双人套餐" value="2"></el-option>
+                    <el-option key="3" label="多人套餐" value="3"></el-option>
+                </el-select>
+                <el-select clearable v-model="query.status" placeholder="状态" class="handle-select mr10">
+                    <el-option key="1" label="上架" value="1"></el-option>
+                    <el-option key="2" label="下架" value="2"></el-option>
+                </el-select>
                 <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
                 <el-button
                     type="primary"
                     @click="back"
                     icon="el-icon-circle-plus-outline"
-                    style="margin-left: 560px"
+                    style="margin-left: 300px"
                 >返回卖品列表</el-button>
                 <el-button
                     type="primary"
@@ -107,6 +116,12 @@
                         <el-tag v-if="scope.row.comboType=='1'">单人套餐</el-tag>
                         <el-tag v-else-if="scope.row.comboType=='2'">双人套餐</el-tag>
                         <el-tag v-else-if="scope.row.comboType=='3'">多人套餐</el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="sort" label="状态" width="150">
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row.status=='1'">上架</el-tag>
+                        <el-tag v-else-if="scope.row.status=='2'">下架</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column label="操作" width="100" align="center" fixed="right">
@@ -627,54 +642,55 @@ export default {
         },
         delChange(index, row) {
             //删除数据
-            const loading = this.$loading({
-                lock: true,
-                text: 'Loading',
-                spinner: 'el-icon-loading',
-                background: 'rgba(0, 0, 0, 0.7)',
-                target: document.querySelector('.div1')
-            });
-            setTimeout(() => {
-                this.idx = index;
-                this.form = row;
-                let name = this.query.name;
-                let status = this.query.status;
-                if (!name) {
-                    name = '';
-                }
-                if (!status) {
-                    status = '';
-                }
-                let jsonArr = [];
-                // jsonArr.push({key:"roleName",value:name});
-                // jsonArr.push({key:"status",value:status});
-                jsonArr.push({ key: 'id', value: row.id });
-                let sign = md5(preSign(jsonArr));
-                jsonArr.push({ key: 'sign', value: sign });
-                let params = ParamsAppend(jsonArr);
-                https
-                    .fetchPost('/merchandiseCombo/deleteMerchandiseCombo', params)
-                    .then(data => {
-                        loading.close();
-                        // console.log(data);
-                        // console.log(JSON.parse(Decrypt(data.data.data)));
-                        if (data.data.code == 'success') {
-                            this.$message.error(`删除了`);
-                            this.refresh();
-                        } else if (data.data.code == 'nologin') {
-                            this.message = data.data.message;
-                            this.open();
-                            this.$router.push('/login');
-                        } else {
-                            this.message = data.data.message;
-                            this.open();
-                        }
-                    })
-                    .catch(err => {
-                        loading.close();
-                        console.log(err);
+            this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            })
+                .then(() => {
+                    const loading = this.$loading({
+                        lock: true,
+                        text: 'Loading',
+                        spinner: 'el-icon-loading',
+                        background: 'rgba(0, 0, 0, 0.7)',
+                        target: document.querySelector('.div1')
                     });
-            }, 500);
+                    setTimeout(() => {
+                        this.idx = index;
+                        this.form = row;
+                        let jsonArr = [];
+                        jsonArr.push({ key: 'id', value: row.id });
+                        let sign = md5(preSign(jsonArr));
+                        jsonArr.push({ key: 'sign', value: sign });
+                        let params = ParamsAppend(jsonArr);
+                        https
+                            .fetchPost('/merchandiseCombo/deleteMerchandiseCombo', params)
+                            .then(data => {
+                                loading.close();
+                                if (data.data.code == 'success') {
+                                    this.$message.error(`删除了`);
+                                    this.refresh();
+                                } else if (data.data.code == 'nologin') {
+                                    this.message = data.data.message;
+                                    this.open();
+                                    this.$router.push('/login');
+                                } else {
+                                    this.message = data.data.message;
+                                    this.open();
+                                }
+                            })
+                            .catch(err => {
+                                loading.close();
+                                console.log(err);
+                            });
+                    }, 500);
+                }) .catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消删除'
+                });
+            });
+
         },
         addChange(index, row) {
             //是否修改权限
@@ -858,15 +874,22 @@ export default {
                 target: document.querySelector('.div1')
             });
             setTimeout(() => {
-                let name = this.query.name;
+                let comboName = this.query.comboName;
                 let status = this.query.status;
-                if (!name) {
-                    name = '';
+                let comboType = this.query.comboType;
+                if (!comboName) {
+                    comboName = '';
                 }
                 if (!status) {
                     status = '';
                 }
+                if (!comboType) {
+                    comboType = '';
+                }
                 let jsonArr = [];
+                jsonArr.push({ key: 'comboName', value: comboName});
+                jsonArr.push({ key: 'status', value: status});
+                jsonArr.push({ key: 'comboType', value: comboType});
                 jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
                 jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
                 jsonArr.push({ key: 'cinemaCode', value: this.cinemaCode });
@@ -915,17 +938,12 @@ export default {
             });
             setTimeout(() => {
                 this.cinemaCode = row.cinemaCode;
-                let name = this.query.name;
-                let status = this.query.status;
-                if (!name) {
-                    name = '';
-                }
-                if (!status) {
-                    status = '';
+                let comboName = this.query.comboName;
+                if (!comboName) {
+                    comboName = '';
                 }
                 let jsonArr = [];
-                // jsonArr.push({key:"roleName",value:name});
-                // jsonArr.push({key:"status",value:status});
+                jsonArr.push({key:"comboName",value:comboName});
                 jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
                 jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
                 jsonArr.push({ key: 'cinemaCode', value: this.cinemaCode });

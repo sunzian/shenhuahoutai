@@ -131,7 +131,7 @@
                     <el-input
                         style="width: 250px"
                         maxlength="18"
-                        v-model.number="oForm.callNumber"
+                        v-model="oForm.callNumber"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
@@ -608,42 +608,54 @@
                 }, 500);
             },
             delChange(index, row){//删除数据
-                const loading = this.$loading({
-                    lock: true,
-                    text: 'Loading',
-                    spinner: 'el-icon-loading',
-                    background: 'rgba(0, 0, 0, 0.7)',
-                    target: document.querySelector('.div1')
-                });
-                setTimeout(() => {
-                    this.idx = index;
-                    this.form = row;
-                    let jsonArr = [];
-                    jsonArr.push({key:"id",value:row.id});
-                    let sign =md5(preSign(jsonArr));
-                    jsonArr.push({key:"sign",value:sign});
-                    let params = ParamsAppend(jsonArr);
-                    https.fetchPost('/user/deleteUser',params).then((data) => {
-                        loading.close();
-                        console.log(data);
-                        // console.log(JSON.parse(Decrypt(data.data.data)));
-                        if (data.data.code == 'success') {
-                            this.$message.error(`删除了`);
-                            this.getMenu();
-                        } else if (data.data.code == 'nologin') {
-                            this.message = data.data.message;
-                            this.open();
-                            this.$router.push('/login');
-                        } else {
-                            this.message = data.data.message;
-                            this.open();
-                        }
-                    })
-                    .catch(err => {
-                        loading.close();
-                        console.log(err);
+                this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                })
+                    .then(() => {
+                        const loading = this.$loading({
+                            lock: true,
+                            text: 'Loading',
+                            spinner: 'el-icon-loading',
+                            background: 'rgba(0, 0, 0, 0.7)',
+                            target: document.querySelector('.div1')
+                        });
+                        setTimeout(() => {
+                            this.idx = index;
+                            this.form = row;
+                            let jsonArr = [];
+                            jsonArr.push({key:"id",value:row.id});
+                            let sign =md5(preSign(jsonArr));
+                            jsonArr.push({key:"sign",value:sign});
+                            let params = ParamsAppend(jsonArr);
+                            https.fetchPost('/user/deleteUser',params).then((data) => {
+                                loading.close();
+                                console.log(data);
+                                // console.log(JSON.parse(Decrypt(data.data.data)));
+                                if (data.data.code == 'success') {
+                                    this.$message.error(`删除了`);
+                                    this.getMenu();
+                                } else if (data.data.code == 'nologin') {
+                                    this.message = data.data.message;
+                                    this.open();
+                                    this.$router.push('/login');
+                                } else {
+                                    this.message = data.data.message;
+                                    this.open();
+                                }
+                            })
+                                .catch(err => {
+                                    loading.close();
+                                    console.log(err);
+                                });
+                        }, 500);
+                    })  .catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
                     });
-            }, 500);
+                });
         },
         addChange(index, row) {
             //是否修改权限
@@ -671,16 +683,16 @@
                         if (data.data.code == 'success') {
                             this.editVisible = true;
                             this.form.id = row.id;
-                            this.userName = JSON.parse(Decrypt(data.data.data)).userInfo.userName
-                            this.form.realName = JSON.parse(Decrypt(data.data.data)).userInfo.realName
-                            this.form.callNumber = JSON.parse(Decrypt(data.data.data)).userInfo.callNumber
-                            this.form.memo = JSON.parse(Decrypt(data.data.data)).userInfo.memo
-                            this.oCities = JSON.parse(Decrypt(data.data.data)).selectCinemaList//影院列表
-                            this.oSelectList = JSON.parse(Decrypt(data.data.data)).existRoll
-                            this.expandedKeys = JSON.parse(Decrypt(data.data.data)).openPermissionIds
-                            this.checkedKeys = JSON.parse(Decrypt(data.data.data)).exitPermissionIds
-                            this.data = JSON.parse(Decrypt(data.data.data)).permissionList //权限数据
-                            this.businessInfoList = JSON.parse(Decrypt(data.data.data)).businessInfoList //定义下拉选的内容
+                            this.userName = JSON.parse(Decrypt(data.data.data)).userInfo.userName;
+                            this.form.realName = JSON.parse(Decrypt(data.data.data)).userInfo.realName;
+                            this.form.callNumber = JSON.parse(Decrypt(data.data.data)).userInfo.callNumber;
+                            this.form.memo = JSON.parse(Decrypt(data.data.data)).userInfo.memo;
+                            this.oCities = JSON.parse(Decrypt(data.data.data)).selectCinemaList;//影院列表
+                            this.oSelectList = JSON.parse(Decrypt(data.data.data)).existRoll;
+                            this.expandedKeys = JSON.parse(Decrypt(data.data.data)).openPermissionIds;
+                            this.checkedKeys = JSON.parse(Decrypt(data.data.data)).exitPermissionIds;
+                            this.data = JSON.parse(Decrypt(data.data.data)).permissionList; //权限数据
+                            this.businessInfoList = JSON.parse(Decrypt(data.data.data)).businessInfoList; //定义下拉选的内容
                             // this.oCheckedCities=JSON.parse(Decrypt(data.data.data)).userInfo.cinemaCodes
                             // 下拉选显示对应的选项
                             for (let x in this.options) {
@@ -727,7 +739,6 @@
                     let sign =md5(preSign(jsonArr));
                     jsonArr.push({key:"sign",value:sign});
                     let params = ParamsAppend(jsonArr);
-                    this.editVisible = false;
                     https.fetchPost('/user/modifyUser',params).then((data) => {
                         loading.close();
                         console.log(data);
@@ -735,6 +746,7 @@
                         if (data.data.code == 'success') {
                             this.$message.success(`编辑成功`);
                             this.getMenu();
+                            this.editVisible = false;
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
                             this.open();

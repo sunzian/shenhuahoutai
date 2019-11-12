@@ -53,8 +53,8 @@
                 </el-table-column>
                 <el-table-column prop="sort" label="通过状态">
                     <template slot-scope="scope">
-                        <el-tag v-if="scope.row.status == 1" type="success">已开通</el-tag>
-                        <el-tag v-else type="danger">未开通</el-tag>
+                        <el-tag v-if="scope.row.status == 1" type="success">显示</el-tag>
+                        <el-tag v-else type="danger">未显示</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column label="操作" width="180" align="center">
@@ -166,7 +166,7 @@
                 <el-form-item label="语言" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oForm.language" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="是否通过" :label-width="formLabelWidth">
+                <el-form-item label="是否显示" :label-width="formLabelWidth">
                     <el-select v-model="oForm.status" placeholder="请选择">
                         <el-option
                             v-for="item in options"
@@ -319,7 +319,7 @@
                 <el-form-item label="语言" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oLanguage" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="是否通过" :label-width="formLabelWidth">
+                <el-form-item label="是否显示" :label-width="formLabelWidth">
                     <el-select v-model="oStatus" placeholder="请选择">
                         <el-option
                             v-for="item in options"
@@ -344,6 +344,7 @@
                         action="/api/upload/uploadImage"
                         :before-upload="beforeUpload"
                         :data="type"
+                        ref="upload"
                         :limit="1"
                         :on-success="onSuccessChange"
                         :file-list="fileList"
@@ -609,11 +610,11 @@ export default {
             options: [
                 {
                     value: '0',
-                    label: '未通过'
+                    label: '不显示'
                 },
                 {
                     value: '1',
-                    label: '通过'
+                    label: '显示'
                 }
             ],
             oForm: {
@@ -926,9 +927,9 @@ export default {
                 for (let i = 0; i < this.oStagePhoto.length; i++) {
                     this.photoUrl += ',' + this.oStagePhoto[i].url;
                 }
-                if (this.photoUrl.substring(1).length > 0) {
-                    this.photoUrl = this.photoUrl.substring(1);
-                }
+                // if (this.photoUrl.substring(1).length > 0) {
+                //     this.photoUrl = this.photoUrl.substring(1);
+                // }
             }
             jsonArr.push({ key: 'filmCode', value: this.oFilmCode });
             jsonArr.push({ key: 'filmName', value: this.oFilmName });
@@ -965,6 +966,8 @@ export default {
                     // console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.$message.success(`编辑成功`);
+                        this.$refs.upload.clearFiles();//清除已上传文件
+                        this.photoUrl='';
                         this.getMenu();
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
@@ -1070,7 +1073,10 @@ export default {
             }
         },
         onPhotoSuccessChange(response, file) {
+            console.log(response);
+            console.log(file);
             this.oStagePhoto.push({ name: file.name, url: response.data });
+            console.log(this.oStagePhoto);
             if (response.code == 'nologin') {
                 this.message = response.message;
                 this.open();

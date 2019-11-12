@@ -461,7 +461,15 @@
                     {
                         value: '1',
                         label: '跳转到文章'
-                    }
+                    },
+                    {
+                        value: '2',
+                        label: '跳转到电影'
+                    },
+                    {
+                        value: '3',
+                        label: '跳转到金币商品'
+                    },
                 ],
                 value: '',
                 goType:'',

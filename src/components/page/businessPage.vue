@@ -46,9 +46,9 @@
                 <el-table-column prop="phone" label="商家电话">
                     <template slot-scope="scope">{{scope.row.businessMobile}}</template>
                 </el-table-column>
-                <el-table-column prop="year" label="金币过期年数">
-                    <template slot-scope="scope">{{scope.row.goldExpireYears}}</template>
-                </el-table-column>
+                <!--<el-table-column prop="year" label="金币过期年数">-->
+                    <!--<template slot-scope="scope">{{scope.row.goldExpireYears}}</template>-->
+                <!--</el-table-column>-->
                 <el-table-column label="操作" width="180" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-button
@@ -123,22 +123,22 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="金币过期年数" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 150px"
-                        maxlength="9"
-                        v-model.number="oForm.goldExpireYears"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="会员卡积分兑换比例" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 150px"
-                        maxlength="9"
-                        v-model.number="oForm.percentageOfPointsIntoGold"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
+                <!--<el-form-item label="金币过期年数" :label-width="formLabelWidth">-->
+                    <!--<el-input-->
+                        <!--style="width: 150px"-->
+                        <!--maxlength="9"-->
+                        <!--v-model.number="oForm.goldExpireYears"-->
+                        <!--autocomplete="off"-->
+                    <!--&gt;</el-input>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item label="会员卡积分兑换比例" :label-width="formLabelWidth">-->
+                    <!--<el-input-->
+                        <!--style="width: 150px"-->
+                        <!--maxlength="9"-->
+                        <!--v-model.number="oForm.percentageOfPointsIntoGold"-->
+                        <!--autocomplete="off"-->
+                    <!--&gt;</el-input>-->
+                <!--</el-form-item>-->
                 <!--<el-form-item label="过期优惠券是否发送短信通知会员" :label-width="formLabelWidth">-->
                     <!--<el-select v-model="oForm.messageForExpireTickets" placeholder="请选择">-->
                         <!--<el-option-->
@@ -208,24 +208,24 @@
                             autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="金币过期年数">
-                    <el-input
-                        style="width: 70px"
-                        min="1"
-                        maxlength="7"
-                        v-model.trim="oGold"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="会员卡积分兑换比例">
-                    <el-input
-                            style="width: 250px"
-                            min="1"
-                            maxlength="7"
-                            v-model.trim="oPercentageOfPointsIntoGold"
-                            autocomplete="off"
-                    ></el-input>
-                </el-form-item>
+                <!--<el-form-item label="金币过期年数">-->
+                    <!--<el-input-->
+                        <!--style="width: 70px"-->
+                        <!--min="1"-->
+                        <!--maxlength="7"-->
+                        <!--v-model.trim="oGold"-->
+                        <!--autocomplete="off"-->
+                    <!--&gt;</el-input>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item label="会员卡积分兑换比例">-->
+                    <!--<el-input-->
+                            <!--style="width: 250px"-->
+                            <!--min="1"-->
+                            <!--maxlength="7"-->
+                            <!--v-model.trim="oPercentageOfPointsIntoGold"-->
+                            <!--autocomplete="off"-->
+                    <!--&gt;</el-input>-->
+                <!--</el-form-item>-->
                 <!--<el-form-item label="过期优惠券是否发送短信通知会员">-->
                     <!--<el-select v-model="oMessageForExpireTickets" placeholder="请选择">-->
                         <!--<el-option-->
@@ -390,8 +390,8 @@ export default {
             jsonArr.push({ key: 'businessMemo', value: this.oForm.memo });
             jsonArr.push({ key: 'businessLogo', value: this.oForm.logo });
             jsonArr.push({ key: 'businessMobile', value: this.oForm.mobile });
-            jsonArr.push({ key: 'goldExpireYears', value: this.oForm.goldExpireYears });
-            jsonArr.push({ key: 'percentageOfPointsIntoGold', value: this.oForm.percentageOfPointsIntoGold });
+            // jsonArr.push({ key: 'goldExpireYears', value: this.oForm.goldExpireYears });
+            // jsonArr.push({ key: 'percentageOfPointsIntoGold', value: this.oForm.percentageOfPointsIntoGold });
             // jsonArr.push({ key: 'messageForExpireTickets', value: this.oForm.messageForExpireTickets });
             // jsonArr.push({ key: 'aheadDaysForMessage', value: this.oForm.aheadDaysForMessage });
             jsonArr.push({ key: 'ticketingSystemType', value: this.oForm.ticketingSystemType });
@@ -563,12 +563,12 @@ export default {
                 target: document.querySelector('.div1')
             });
             var jsonArr = [];
-            jsonArr.push({ key: 'goldExpireYears', value: this.oGold });
+            // jsonArr.push({ key: 'goldExpireYears', value: this.oGold });
             jsonArr.push({ key: 'businessName', value: this.oName });
             jsonArr.push({ key: 'businessMobile', value: this.oMobile });
             jsonArr.push({ key: 'businessMemo', value: this.oMemo });
             jsonArr.push({ key: 'businessLogo', value: this.oLogo });
-            jsonArr.push({ key: 'percentageOfPointsIntoGold', value: this.oPercentageOfPointsIntoGold });
+            // jsonArr.push({ key: 'percentageOfPointsIntoGold', value: this.oPercentageOfPointsIntoGold });
             // jsonArr.push({ key: 'messageForExpireTickets', value: this.oMessageForExpireTickets });
             // jsonArr.push({ key: 'aheadDaysForMessage', value: this.oAheadDaysForMessage });
             jsonArr.push({ key: 'id', value: this.oId });

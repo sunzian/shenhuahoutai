@@ -55,6 +55,11 @@ export default new Router({
                     meta: { title: '商家管理' }
                 },
                 {
+                    path: '/goldAcquireRulePage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/goldAcquireRulePage.vue'),
+                    meta: { title: '金币获取规则设置' }
+                },
+                {
                     path: '/cinemaPage',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/cinemaPage.vue'),
                     meta: { title: '影院管理' }

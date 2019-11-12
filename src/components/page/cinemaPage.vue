@@ -1730,6 +1730,7 @@ export default {
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             let params = ParamsAppend(jsonArr);
+            console.log(jsonArr);
             https
                 .fetchPost('/cinema/getCinemaById', params)
                 .then(data => {
@@ -1834,10 +1835,12 @@ export default {
                                 break;
                             }
                         }
-                        for (let x in this.boolean) {
-                            if (this.boolean[x].value == JSON.parse(Decrypt(data.data.data)).CinemaMessagePlatFormInfo.messagePlatformType) {
-                                this.oMessagePlatformType = this.boolean[x].value;
-                                break;
+                        if(JSON.parse(Decrypt(data.data.data)).CinemaMessagePlatFormInfo&&JSON.parse(Decrypt(data.data.data)).CinemaMessagePlatFormInfo.messagePlatformType){
+                            for (let x in this.boolean) {
+                                if (this.boolean[x].value == JSON.parse(Decrypt(data.data.data)).CinemaMessagePlatFormInfo.messagePlatformType) {
+                                    this.oMessagePlatformType = this.boolean[x].value;
+                                    break;
+                                }
                             }
                         }
                         for (let i = 0; i < JSON.parse(Decrypt(data.data.data)).MessageInfo.length; i ++) {
@@ -1860,9 +1863,11 @@ export default {
                                 this.oMessageType6 = JSON.parse(Decrypt(data.data.data)).MessageInfo[i].content
                             }
                         }
-                        this.oMessagePlatformAccount = JSON.parse(Decrypt(data.data.data)).CinemaMessagePlatFormInfo.messagePlatformAccount;
-                        this.oMessagePlatformPassword = JSON.parse(Decrypt(data.data.data)).CinemaMessagePlatFormInfo.messagePlatformPassword;
-                        this.oMessagePlatformSignId = JSON.parse(Decrypt(data.data.data)).CinemaMessagePlatFormInfo.messagePlatformSignId;
+                        if(JSON.parse(Decrypt(data.data.data)).CinemaMessagePlatFormInfo){
+                            this.oMessagePlatformAccount = JSON.parse(Decrypt(data.data.data)).CinemaMessagePlatFormInfo.messagePlatformAccount;
+                            this.oMessagePlatformPassword = JSON.parse(Decrypt(data.data.data)).CinemaMessagePlatFormInfo.messagePlatformPassword;
+                            this.oMessagePlatformSignId = JSON.parse(Decrypt(data.data.data)).CinemaMessagePlatFormInfo.messagePlatformSignId;
+                        }
                         this.oMiniAppSecret = JSON.parse(Decrypt(data.data.data)).Cinema.miniAppSecret;
                         this.oMiniMerchantNo = JSON.parse(Decrypt(data.data.data)).Cinema.miniMerchantNo;
                         this.oMiniMerchantSecret = JSON.parse(Decrypt(data.data.data)).Cinema.miniMerchantSecret;

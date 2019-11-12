@@ -94,6 +94,7 @@
                         class="upload-demo"
                         drag
                         :limit="1"
+                        ref="upload"
                         action="api/upload/uploadImage"
                         :before-upload="beforeUpload"
                         :on-success="setPicture"
@@ -151,6 +152,7 @@
                         :before-upload="beforeUpload"
                         :data="type"
                         :limit="1"
+                        ref="download"
                         :on-success="onSuccess"
                         :file-list="fileList"
                         list-type="picture"
@@ -280,6 +282,7 @@ export default {
                         if (data.data.code == 'success') {
                             this.dialogFormVisible = false;
                             this.$message.success(`新增成功`);
+                            this.$refs.upload.clearFiles();//清除已上传文件
                             this.oForm.name = '';
                             this.oForm.country = '';
                             this.oForm.introduction = '';
@@ -427,6 +430,7 @@ export default {
                     // console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.$message.success(`编辑成功`);
+                        this.$refs.download.clearFiles();//清除已上传文件
                         this.getMenu();
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
