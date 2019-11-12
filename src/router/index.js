@@ -85,6 +85,11 @@ export default new Router({
                     meta: { title: '员工管理' }
                 },
                 {
+                    path: '/serviceFeePage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/serviceFeePage.vue'),
+                    meta: { title: '网络代售服务费' }
+                },
+                {
                     path: '/merchandiseOrderNotice',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/merchandiseOrderNotice.vue'),
                     meta: { title: '卖品送餐通知' }

@@ -184,7 +184,6 @@
                         >{{item.formatName}}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
-
                 <el-form-item label="选择影片：" :label-width="formLabelWidth" prop="filmName">
                     <el-radio-group v-model="oForm.selectFilmType">
                         <el-radio label="0">全部影片</el-radio>
@@ -200,7 +199,7 @@
                         :label-width="formLabelWidth"
                         v-if="selectedSell.length>0"
                 >
-                    <div v-for="(item, index) in selectedSell" style="margin-bottom: 5px">
+                    <div v-for="(item, index) in selectedSell" style="margin-bottom: 5px" :key="index">
                         <el-input
                                 style="width: 250px"
                                 v-model="item.filmName"
@@ -292,7 +291,7 @@
                         label="所选时间段："
                         :label-width="formLabelWidth"
                         v-if="dateInfo.length>0">
-                    <div v-for="(item, index) in dateInfo">
+                    <div v-for="(item, index) in dateInfo" :key="index">
                         {{item}}
                         <span
                                 style="color:red;cursor: pointer;"
@@ -463,7 +462,7 @@
                         :label-width="formLabelWidth"
                         v-if="canTimeList.length>0"
                 >
-                    <div v-for="(item, index) in canTimeList" style="margin-bottom: 5px">
+                    <div v-for="(item, index) in canTimeList" style="margin-bottom: 5px" :key="index">
                         <el-input
                                 style="width: 150px"
                                 v-model="item.startTime"

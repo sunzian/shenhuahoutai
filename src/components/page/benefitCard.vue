@@ -239,7 +239,7 @@
                         :label-width="formLabelWidth"
                         v-if="oForm.isFilmJoin==1&&selectedSell.length>0&&oForm.cardType==1&&oForm.selectFilmType!=0"
                 >
-                    <div v-for="(item, index) in selectedSell" style="margin-bottom: 5px">
+                    <div v-for="(item, index) in selectedSell" style="margin-bottom: 5px" :key="index">
                         <el-input
                                 style="width: 250px"
                                 v-model="item.filmName"
@@ -336,7 +336,7 @@
                         :label-width="formLabelWidth"
                         v-if="oSelectedSell.length>0&&oForm.cardType==1&&oForm.selectMerchandiseType!=0"
                 >
-                    <div v-for="(item, index) in oSelectedSell" style="margin-bottom: 5px">
+                    <div v-for="(item, index) in oSelectedSell" style="margin-bottom: 5px" :key="index">
                         <el-input
                                 style="width: 250px"
                                 v-model="item.merchandiseName"
@@ -440,7 +440,7 @@
                         label="所选时间段："
                         :label-width="formLabelWidth"
                         v-if="dateInfo.length>0&&oForm.cardType==1">
-                    <div v-for="(item, index) in dateInfo">
+                    <div v-for="(item, index) in dateInfo" :key="index">
                         {{item}}
                         <span
                                 style="color:red;cursor: pointer;"
@@ -641,7 +641,7 @@
                         :label-width="formLabelWidth"
                         v-if="canTimeList.length>0"
                 >
-                    <div v-for="(item, index) in canTimeList" style="margin-bottom: 5px">
+                    <div v-for="(item, index) in canTimeList" style="margin-bottom: 5px" :key="index">
                         <el-input
                                 style="width: 150px"
                                 v-model="item.startTime"
@@ -779,6 +779,7 @@
                         <template slot-scope="scope">
                             <span
                                     v-for="item in scope.row.couponList"
+                                    :key="item"
                             >{{item.couponName}}x{{item.number}}&nbsp;&nbsp;&nbsp;&nbsp;</span>
                         </template>
                     </el-table-column>
