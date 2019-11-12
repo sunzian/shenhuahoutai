@@ -151,6 +151,7 @@
                         style="width: 250px"
                         v-model="oForm.cinemaCode"
                         autocomplete="off"
+                         maxlength="8"
                         type="number"
                     ></el-input>
                 </el-form-item>
@@ -213,6 +214,7 @@
                         style="width: 250px"
                         v-model="oForm.concatName"
                         autocomplete="off"
+                         maxlength="10"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="影院联系人电话" :label-width="formLabelWidth">
@@ -276,6 +278,7 @@
                         style="width: 250px"
                         type="textarea"
                         rows="6"
+                        maxlength="200"
                         v-model="oForm.membershipServiceAgreement"
                         autocomplete="off"
                     ></el-input>
@@ -285,6 +288,17 @@
                         style="width: 250px"
                         v-model="oForm.buyTicketHint"
                         autocomplete="off"
+                        maxlength="30"
+                        type="textarea"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="充值活动描述" :label-width="formLabelWidth">
+                    <el-input
+                        style="width: 250px"
+                        v-model="oForm.rechargeMemo"
+                        autocomplete="off"
+                        maxlength="30"
+                        type="textarea"
                     ></el-input>
                 </el-form-item>
                 <el-form-item prop="openSnackStatus" label="是否开通套餐" :label-width="formLabelWidth">
@@ -816,14 +830,27 @@
                     <el-input
                         style="width: 250px"
                         v-model="oMembershipServiceAgreement"
+                        type="textarea"
                         autocomplete="off"
+                        maxlength="200"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="购票提示" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         v-model="oBuyTicketHint"
+                        type="textarea"
                         autocomplete="off"
+                        maxlength="30"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="充值活动描述" :label-width="formLabelWidth">
+                    <el-input
+                        style="width: 250px"
+                        v-model="oRechargeMemo"
+                        type="textarea"
+                        autocomplete="off"
+                        maxlength="30"
                     ></el-input>
                 </el-form-item>
                 <el-form-item prop="openSnackStatus" label="是否开通套餐" :label-width="formLabelWidth">
@@ -1296,6 +1323,7 @@ export default {
             oAddress: '',
             oLongitude: '',
             oLatitude: '',
+            oRechargeMemo: '',
             oBelongBusinessCode: '', // 商家编码
             oBusinessName: '', //商家名称
             oConcatName: '',
@@ -1380,6 +1408,7 @@ export default {
                 address: '',
                 longitude: '',
                 latitude: '',
+                rechargeMemo: '',
                 belongBusinessCode: '', // 商家编码
                 businessName: '', // 商家名称
                 concatName: '',
@@ -1521,6 +1550,7 @@ export default {
                 jsonArr.push({ key: 'memberCardPayCommissionFee', value: this.oForm.memberCardPayCommissionFee });
             }
             jsonArr.push({ key: 'membershipServiceAgreement', value: this.oForm.membershipServiceAgreement });
+            jsonArr.push({ key: 'membershipServiceAgreement', value: this.oForm.rechargeMemo });
             jsonArr.push({ key: 'buyTicketHint', value: this.oForm.buyTicketHint });
             jsonArr.push({ key: 'openSnackStatus', value: this.oForm.openSnackStatus });
             jsonArr.push({ key: 'snackDispatcherStatus', value: this.oForm.snackDispatcherStatus });
@@ -1597,6 +1627,7 @@ export default {
                             this.oForm.address = '';
                             this.oForm.longitude = '';
                             this.oForm.latitude = '';
+                            this.oForm.rechargeMemo = '';
                             this.oForm.belongBusinessCode = '';
                             this.oForm.businessCode = '';
                             this.oForm.concatName = '';
@@ -1758,6 +1789,7 @@ export default {
                         this.oMemberCardPayCommissionFee = JSON.parse(Decrypt(data.data.data)).Cinema.memberCardPayCommissionFee;
                         this.oMembershipServiceAgreement = JSON.parse(Decrypt(data.data.data)).Cinema.membershipServiceAgreement;
                         this.oBuyTicketHint = JSON.parse(Decrypt(data.data.data)).Cinema.buyTicketHint;
+                        this.oRechargeMemo = JSON.parse(Decrypt(data.data.data)).Cinema.rechargeMemo;
                         this.oRemainTicketsNumber = JSON.parse(Decrypt(data.data.data)).Cinema.remainTicketsNumber;
                         this.oSnackBeginTime = JSON.parse(Decrypt(data.data.data)).Cinema.snackBeginTime;
                         this.oSnackEndTime = JSON.parse(Decrypt(data.data.data)).Cinema.snackEndTime;
@@ -1925,6 +1957,7 @@ export default {
             jsonArr.push({ key: 'memberCardPayCommissionFee', value: this.oMemberCardPayCommissionFee });
             jsonArr.push({ key: 'membershipServiceAgreement', value: this.oMembershipServiceAgreement });
             jsonArr.push({ key: 'buyTicketHint', value: this.oBuyTicketHint });
+            jsonArr.push({ key: 'rechargeMemo', value: this.oRechargeMemo });
             jsonArr.push({ key: 'openSnackStatus', value: this.oOpenSnackStatus });
             jsonArr.push({ key: 'snackDispatcherStatus', value: this.oSnackDispatcherStatus });
             jsonArr.push({ key: 'refundable', value: this.oRefundable });

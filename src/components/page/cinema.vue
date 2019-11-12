@@ -186,7 +186,7 @@
                     <el-input style="width: 250px" v-model="oLatitude" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="影院联系人姓名" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="oConcatName" autocomplete="off"></el-input>
+                    <el-input style="width: 250px" maxlength="20" v-model="oConcatName" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="影院联系人电话" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oConcatMobile" autocomplete="off"></el-input>
@@ -223,10 +223,14 @@
                         type="textarea"
                         v-model="oMembershipServiceAgreement"
                         autocomplete="off"
+                        maxlength="200"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="购票提示" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" type="textarea" v-model="oBuyTicketHint" autocomplete="off"></el-input>
+                    <el-input style="width: 250px" type="textarea" v-model="oBuyTicketHint" maxlength="20" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="充值活动描述" :label-width="formLabelWidth">
+                    <el-input style="width: 250px" v-model="oRechargeMemo" maxlength="20" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item prop="openSnackStatus" label="是否开通套餐" :label-width="formLabelWidth">
                     <el-select v-model="oOpenSnackStatus" @change="openServe">
@@ -621,6 +625,7 @@ export default {
             oScreenCount: '',
             oTicketSystemCode: '',
             oBuyMinutesLimit: '',
+            oRechargeMemo: '',
             oRefundMinutesLimit: '',
             oRefundFee: '',
             oThirdPartyPayCommissionFee: '',
@@ -774,6 +779,7 @@ export default {
                         this.oConcatMobile = JSON.parse(Decrypt(data.data.data)).Cinema.concatMobile;
                         this.oServiceMobile = JSON.parse(Decrypt(data.data.data)).Cinema.serviceMobile;
                         this.oScreenCount = JSON.parse(Decrypt(data.data.data)).Cinema.screenCount;
+                        this.oRechargeMemo = JSON.parse(Decrypt(data.data.data)).Cinema.rechargeMemo;
                         this.oTicketSystemCode = JSON.parse(Decrypt(data.data.data)).Cinema.ticketSystemCode;
                         this.oBuyMinutesLimit = JSON.parse(Decrypt(data.data.data)).Cinema.buyMinutesLimit;
                         this.oRefundMinutesLimit = JSON.parse(Decrypt(data.data.data)).Cinema.refundMinutesLimit;
@@ -920,6 +926,7 @@ export default {
             jsonArr.push({ key: 'memberCardPayCommissionFee', value: this.oMemberCardPayCommissionFee });
             jsonArr.push({ key: 'membershipServiceAgreement', value: this.oMembershipServiceAgreement });
             jsonArr.push({ key: 'buyTicketHint', value: this.oBuyTicketHint });
+            jsonArr.push({ key: 'rechargeMemo', value: this.oRechargeMemo });
             jsonArr.push({ key: 'openSnackStatus', value: this.oOpenSnackStatus });
             jsonArr.push({ key: 'snackDispatcherStatus', value: this.oSnackDispatcherStatus });
             jsonArr.push({ key: 'refundable', value: this.oRefundable });
