@@ -201,7 +201,11 @@
                     </el-upload>
                 </el-form-item>
                 <el-form-item label="兑换须知" :label-width="formLabelWidth">
+<<<<<<< HEAD
                     <el-input style="width: 360px" type="textarea" v-model="oForm.memo" autocomplete="off"></el-input>
+=======
+                    <el-input style="width: 250px" type='textarea' v-model="oForm.memo" autocomplete="off"></el-input>
+>>>>>>> 37925d3fe094f116e97232c1ef5d6145d3f569bd
                 </el-form-item>
                 <el-form-item label="详情" :label-width="formLabelWidth">
                     <quill-editor ref="text" v-model="oForm.details" class="myQuillEditor" :options="editorOption" />

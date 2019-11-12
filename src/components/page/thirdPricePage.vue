@@ -530,7 +530,6 @@ export default {
                 .then(data => {
                     loading.close();
                     console.log(data);
-                    console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.editVisible = true;
                         this.oCinemaName = JSON.parse(Decrypt(data.data.data)).cinemaName;

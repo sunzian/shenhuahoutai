@@ -118,6 +118,13 @@
                     v-if="directorList.length>0"
                 >
                     <div v-for="(item, index) in directorList">
+                        <el-popover
+                                placement="right"
+                                title=""
+                                trigger="hover">
+                            <img style="width: 400px" :src="item.picture"/>
+                            <img slot="reference" :src="item.picture" :alt="item.picture" style="max-height: 50px;max-width: 130px">
+                        </el-popover>
                         {{item.name}}
                         <span
                             style="color:red;cursor: pointer;"
@@ -130,6 +137,13 @@
                 </el-form-item>
                 <el-form-item label="已选演员" :label-width="formLabelWidth" v-if="actorList.length>0">
                     <div v-for="(item, index) in actorList">
+                        <el-popover
+                                placement="right"
+                                title=""
+                                trigger="hover">
+                            <img style="width: 400px" :src="item.picture"/>
+                            <img slot="reference" :src="item.picture" :alt="item.picture" style="max-height: 50px;max-width: 130px">
+                        </el-popover>
                         {{item.name}}
                         <span
                             style="color:red;cursor: pointer;"
@@ -140,9 +154,9 @@
                 <el-form-item label="影片介绍" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oForm.introduction" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="评分" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="oForm.score" autocomplete="off"></el-input>
-                </el-form-item>
+                <!--<el-form-item label="评分" :label-width="formLabelWidth">-->
+                    <!--<el-input style="width: 250px" v-model="oForm.score" autocomplete="off"></el-input>-->
+                <!--</el-form-item>-->
                 <el-form-item label="地区" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oForm.area" autocomplete="off"></el-input>
                 </el-form-item>
@@ -257,6 +271,13 @@
                 </el-form-item>
                 <el-form-item label="已选导演" :label-width="formLabelWidth">
                     <div v-for="(item, index) in directorList">
+                        <el-popover
+                                placement="right"
+                                title=""
+                                trigger="hover">
+                            <img style="width: 400px" :src="item.picture"/>
+                            <img slot="reference" :src="item.picture" :alt="item.picture" style="max-height: 50px;max-width: 130px">
+                        </el-popover>
                         {{item.name}}
                         <span
                             style="color:red;cursor: pointer;"
@@ -269,6 +290,13 @@
                 </el-form-item>
                 <el-form-item label="已选演员" :label-width="formLabelWidth">
                     <div v-for="(item, index) in actorList">
+                        <el-popover
+                                placement="right"
+                                title=""
+                                trigger="hover">
+                            <img style="width: 400px" :src="item.picture"/>
+                            <img slot="reference" :src="item.picture" :alt="item.picture" style="max-height: 50px;max-width: 130px">
+                        </el-popover>
                         {{item.name}}
                         <span
                             style="color:red;cursor: pointer;"
@@ -279,9 +307,9 @@
                 <el-form-item label="影片介绍" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oIntroduction" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="评分" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="oScore" autocomplete="off"></el-input>
-                </el-form-item>
+                <!--<el-form-item label="评分" :label-width="formLabelWidth">-->
+                    <!--<el-input style="width: 250px" v-model="oScore" autocomplete="off"></el-input>-->
+                <!--</el-form-item>-->
                 <el-form-item label="地区" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oArea" autocomplete="off"></el-input>
                 </el-form-item>
@@ -303,7 +331,7 @@
                 </el-form-item>
                 <el-form-item label="图片" :label-width="formLabelWidth">
                     <el-popover placement="right" title trigger="hover">
-                        <img :src="oImage" />
+                        <img style="width: 400px" :src="oImage" />
                         <img
                             slot="reference"
                             :src="oImage"
@@ -327,7 +355,7 @@
                 </el-form-item>
                 <el-form-item label="影片剧照" :label-width="formLabelWidth">
                     <el-popover placement="right" title trigger="hover" v-for="item in oStagePhotoList">
-                        <img :src="item" />
+                        <img style="width: 400px" :src="item" />
                         <img
                             slot="reference"
                             :src="item"
@@ -393,6 +421,10 @@
         </el-dialog>
         <!-- 选择导演弹出窗 -->
         <el-dialog title="选择导演" :visible.sync="allDirector">
+            <div class="handle-box">
+                <el-input v-model="query.directorName" placeholder="导演名称" class="handle-input mr10"></el-input>
+                <el-button type="primary" icon="el-icon-search" @click="directorSearch">搜索</el-button>
+            </div>
             <div class="container">
                 <el-table
                     :data="directorTableData"
@@ -400,8 +432,7 @@
                     class="table"
                     ref="multipleTable"
                     header-cell-class-name="table-header"
-                    @selection-change="selectDirector"
-                >
+                    @selection-change="selectDirector">
                     <el-table-column type="selection" width="55"></el-table-column>
                     <el-table-column prop="name" label="图片">
                         <template slot-scope="scope">
@@ -433,9 +464,9 @@
                         :current-page="query.pageNo"
                         :page-size="query.pageSize"
                         :total="query.totalCount"
-                        @current-change="currentChange"
-                        @prev-click="prev"
-                        @next-click="next"
+                        @current-change="oCurrentChange"
+                        @prev-click="oPrev"
+                        @next-click="oNext"
                     ></el-pagination>
                 </div>
             </div>
@@ -446,6 +477,10 @@
         </el-dialog>
         <!-- 选择演员弹出窗 -->
         <el-dialog title="选择演员" :visible.sync="allActor">
+            <div class="handle-box">
+                <el-input v-model="query.actorName" placeholder="演员名称" class="handle-input mr10"></el-input>
+                <el-button type="primary" icon="el-icon-search" @click="actorSearch">搜索</el-button>
+            </div>
             <div class="container">
                 <el-table
                     :data="actorTableData"
@@ -486,9 +521,9 @@
                         :current-page="query.pageNo"
                         :page-size="query.pageSize"
                         :total="query.totalCount"
-                        @current-change="currentChange"
-                        @prev-click="prev"
-                        @next-click="next"
+                        @current-change="aCurrentChange"
+                        @prev-click="aPrev"
+                        @next-click="aNext"
                     ></el-pagination>
                 </div>
             </div>
@@ -817,9 +852,9 @@ export default {
                     if (data.data.code == 'success') {
                         this.editVisible = true;
                         this.oArea = JSON.parse(Decrypt(data.data.data)).area;
-                        // this.actorList = JSON.parse(Decrypt(data.data.data)).actorList;
+                        this.actorList = JSON.parse(Decrypt(data.data.data)).actorList;
                         this.oCreateDate = JSON.parse(Decrypt(data.data.data)).createDate;
-                        // this.directorList = JSON.parse(Decrypt(data.data.data)).directorList;
+                        this.directorList = JSON.parse(Decrypt(data.data.data)).directorList;
                         this.oDuration = JSON.parse(Decrypt(data.data.data)).duration;
                         this.oFilmCode = JSON.parse(Decrypt(data.data.data)).filmCode;
                         this.oFilmName = JSON.parse(Decrypt(data.data.data)).filmName;
@@ -833,11 +868,11 @@ export default {
                         this.oScore = JSON.parse(Decrypt(data.data.data)).score;
                         this.oStagePhotoList = JSON.parse(Decrypt(data.data.data)).stagePhotoList;
                         this.oStatus = JSON.parse(Decrypt(data.data.data)).status;
-                        if (this.oStatus == 1) {
-                            this.oStatus = '通过';
-                        }
-                        if (this.oStatus == 2) {
-                            this.oStatus = '未通过';
+                        for (let x in this.options) {
+                            if (this.options[x].value == JSON.parse(Decrypt(data.data.data)).status) {
+                                this.oStatus = this.options[x].value;
+                                break;
+                            }
                         }
                         this.oTrailer = JSON.parse(Decrypt(data.data.data)).trailer;
                         this.oType = JSON.parse(Decrypt(data.data.data)).type;
@@ -1074,6 +1109,10 @@ export default {
         handleVideoCardPreview(file) {
             console.log(file);
         },
+        directorSearch() {
+            this.query.pageNo = 1;
+            this.getAllDirector();
+        },
         // 获取所有导演
         getAllDirector() {
             const loading = this.$loading({
@@ -1083,8 +1122,19 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
+            let directorName = this.query.directorName;
+            if (!directorName) {
+                directorName = '';
+            }
+            let jsonArr = [];
+            jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
+            jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
+            jsonArr.push({ key: 'name', value: directorName });
+            let sign = md5(preSign(jsonArr));
+            jsonArr.push({ key: 'sign', value: sign });
+            var params = ParamsAppend(jsonArr);
             https
-                .fetchPost('/director/directorPage', '')
+                .fetchPost('/director/directorPage',params)
                 .then(data => {
                     loading.close();
                     if (data.data.code == 'success') {
@@ -1110,6 +1160,10 @@ export default {
                     console.log(err);
                 });
         },
+        actorSearch() {
+            this.query.pageNo = 1;
+            this.getAllActor();
+        },
         // 获取所有演员
         getAllActor() {
             const loading = this.$loading({
@@ -1119,8 +1173,19 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
+            let actorName = this.query.actorName;
+            if (!actorName) {
+                actorName = '';
+            }
+            let jsonArr = [];
+            jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
+            jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
+            jsonArr.push({ key: 'name', value: actorName });
+            let sign = md5(preSign(jsonArr));
+            jsonArr.push({ key: 'sign', value: sign });
+            var params = ParamsAppend(jsonArr);
             https
-                .fetchPost('/actor/actorPage', '')
+                .fetchPost('/actor/actorPage', params)
                 .then(data => {
                     loading.close();
                     if (data.data.code == 'success') {
@@ -1147,6 +1212,7 @@ export default {
                 });
         },
         sureDirector() {
+            console.log(this.directorList);
             if (this.directorList.length == 0) {
                 this.message = '请选择导演';
                 this.open();
@@ -1241,7 +1307,37 @@ export default {
             //分页按钮下一页
             this.query.pageNo++;
             this.getMenu();
-        }
+        },
+        oCurrentChange(val) {
+            //点击选择具体页数
+            this.query.pageNo = val;
+            this.getAllDirector();
+        },
+        oPrev() {
+            //分页按钮上一页
+            this.query.pageNo--;
+            this.getAllDirector();
+        },
+        oNext() {
+            //分页按钮下一页
+            this.query.pageNo++;
+            this.getAllDirector();
+        },
+        aCurrentChange(val) {
+            //点击选择具体页数
+            this.query.pageNo = val;
+            this.getAllActor();
+        },
+        aPrev() {
+            //分页按钮上一页
+            this.query.pageNo--;
+            this.getAllActor();
+        },
+        aNext() {
+            //分页按钮下一页
+            this.query.pageNo++;
+            this.getAllActor();
+        },
     }
 };
 </script>
