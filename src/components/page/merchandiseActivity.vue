@@ -1138,6 +1138,8 @@
                     let jsonArr = [];
                     jsonArr.push({key:"pageNo",value:this.query.pageNo});
                     jsonArr.push({key:"pageSize",value:this.query.pageSize});
+                    jsonArr.push({key:"merchandiseStatus",value:1});
+                    jsonArr.push({key:"cinemaCode",value:this.oForm.code});
                     let sign =md5(preSign(jsonArr));
                     jsonArr.push({key:"sign",value:sign});
                     var params = ParamsAppend(jsonArr);

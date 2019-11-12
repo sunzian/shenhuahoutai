@@ -241,8 +241,10 @@ export default {
         return {
             manySettlePrice:'',
             selectIdList:[],
+            selectCodeList:[],
             selectId:'',
             oCinemaName: '',
+            selectCodes:'',
             oCinemaCode: '',
             oScreenName: '',
             oFilmCode: '',
@@ -320,9 +322,12 @@ export default {
 
                             for(let x in this.multipleSelection){
                                 this.selectIdList.push(this.multipleSelection[x].id)
+                                this.selectCodeList.push(this.multipleSelection[x].cinemaCode)
                             }
                             this.selectId=this.selectIdList.join(',');
+                            this.selectCodes=this.selectCodeList.join(',');
                             console.log(this.selectId);
+                            console.log(this.selectCodes);
                             this.drawer = true;
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
@@ -350,6 +355,7 @@ export default {
             });
             var jsonArr = [];
             jsonArr.push({ key: 'id', value: this.selectId});
+            jsonArr.push({ key: 'cinemaCode', value: this.selectCodes});
             jsonArr.push({ key: 'settlePrice', value: this.manySettlePrice });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });

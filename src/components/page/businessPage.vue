@@ -3,7 +3,7 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
-                    <i class="el-icon-lx-cascades"></i> 商家管理
+                    <i class="el-icon-lx-cascades"></i> 影城管理
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
@@ -392,8 +392,8 @@ export default {
             jsonArr.push({ key: 'businessMobile', value: this.oForm.mobile });
             jsonArr.push({ key: 'goldExpireYears', value: this.oForm.goldExpireYears });
             jsonArr.push({ key: 'percentageOfPointsIntoGold', value: this.oForm.percentageOfPointsIntoGold });
-            jsonArr.push({ key: 'messageForExpireTickets', value: this.oForm.messageForExpireTickets });
-            jsonArr.push({ key: 'aheadDaysForMessage', value: this.oForm.aheadDaysForMessage });
+            // jsonArr.push({ key: 'messageForExpireTickets', value: this.oForm.messageForExpireTickets });
+            // jsonArr.push({ key: 'aheadDaysForMessage', value: this.oForm.aheadDaysForMessage });
             jsonArr.push({ key: 'ticketingSystemType', value: this.oForm.ticketingSystemType });
             jsonArr.push({ key: 'ticketingSystemAccount', value: this.oForm.ticketingSystemAccount });
             jsonArr.push({ key: 'ticketingSystemPassword', value: this.oForm.ticketingSystemPassword });
@@ -569,8 +569,8 @@ export default {
             jsonArr.push({ key: 'businessMemo', value: this.oMemo });
             jsonArr.push({ key: 'businessLogo', value: this.oLogo });
             jsonArr.push({ key: 'percentageOfPointsIntoGold', value: this.oPercentageOfPointsIntoGold });
-            jsonArr.push({ key: 'messageForExpireTickets', value: this.oMessageForExpireTickets });
-            jsonArr.push({ key: 'aheadDaysForMessage', value: this.oAheadDaysForMessage });
+            // jsonArr.push({ key: 'messageForExpireTickets', value: this.oMessageForExpireTickets });
+            // jsonArr.push({ key: 'aheadDaysForMessage', value: this.oAheadDaysForMessage });
             jsonArr.push({ key: 'id', value: this.oId });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });

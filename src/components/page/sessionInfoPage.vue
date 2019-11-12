@@ -16,13 +16,13 @@
                         type="primary"
                         @click="thirdPrice"
                         icon="el-icon-circle-plus-outline"
-                        style="margin-left: 250px"
+                        style="margin-left: 220px"
                 >批量修改</el-button>
                 <el-button
                     type="primary"
                     @click="addPage"
                     icon="el-icon-circle-plus-outline"
-                    style="margin-left: 370px"
+                    style="margin-left: 55px"
                 >重新获取排期</el-button>
             </div>
             <el-table
@@ -78,15 +78,15 @@
                 <el-table-column prop="time" label="会员卡支付代售费" width="150">
                     <template slot-scope="scope">{{scope.row.memberCardPayCommissionFee}}</template>
                 </el-table-column>
-                <el-table-column label="操作" width="100" align="center" fixed="right">
-                    <template slot-scope="scope">
-                        <el-button
-                            type="text"
-                            icon="el-icon-edit"
-                            @click="addChange(scope.$index, scope.row)"
-                        >价格设置</el-button>
-                    </template>
-                </el-table-column>
+                <!--<el-table-column label="操作" width="100" align="center" fixed="right">-->
+                    <!--<template slot-scope="scope">-->
+                        <!--<el-button-->
+                            <!--type="text"-->
+                            <!--icon="el-icon-edit"-->
+                            <!--@click="addChange(scope.$index, scope.row)"-->
+                        <!--&gt;价格设置</el-button>-->
+                    <!--</template>-->
+                <!--</el-table-column>-->
             </el-table>
             <div class="pagination">
                 <el-pagination
@@ -205,7 +205,7 @@
         <!-- 批量修改弹出框 -->
         <el-dialog title="批量修改" :visible.sync="drawer">
             <el-form ref="formOne" v-model="formOne">
-                <el-form-item label="第三方售价金额" :label-width="formLabelWidth">
+                <el-form-item label="会员价" :label-width="formLabelWidth">
                     <el-input
                             style="width: 250px"
                             min="1"
@@ -232,6 +232,8 @@ export default {
     name: 'basetable',
     data() {
         return {
+            formOne:[],
+            manySettlePrice:'',
             drawer:false,
             oCinemaName: '',
             oCinemaCode: '',
@@ -274,6 +276,10 @@ export default {
                 }
             ],
             cinemaInfo: [],
+            selectIdList: [],
+            selectCodeList: [],
+            selectId:'',
+            selectCodes:'',
             form: [],
             tableData: [],
             multipleSelection: [],
@@ -314,18 +320,66 @@ export default {
                     target: document.querySelector('.div1')
                 });
                 https
-                    .fetchPost('/sessionInfo/batchUpdateMemberPrice', '')
+                    .fetchPost('/sessionInfo/batchUpdatePage', '')
                     .then(data => {
                         loading.close();
-                        // console.log(data);
+                        console.log(data);
                         if (data.data.code == 'success') {
-
+                            console.log(this.multipleSelection);
                             for(let x in this.multipleSelection){
                                 this.selectIdList.push(this.multipleSelection[x].id)
+                                this.selectCodeList.push(this.multipleSelection[x].cinemaCode)
                             }
                             this.selectId=this.selectIdList.join(',');
+                            this.selectCodes=this.selectCodeList.join(',');
                             console.log(this.selectId);
+                            console.log(this.selectCodes);
                             this.drawer = true;
+                        } else if (data.data.code == 'nologin') {
+                            this.message = data.data.message;
+                            this.open();
+                            this.$router.push('/login');
+                        } else {
+                            this.message = data.data.message;
+                            this.open();
+                        }
+                    })
+                    .catch(err => {
+                        loading.close();
+                        console.log(err);
+                    });
+            }
+        },
+        sureThirdPrice(){
+            //提交确认批量修改
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
+            var jsonArr = [];
+            jsonArr.push({ key: 'id', value: this.selectId});
+            jsonArr.push({ key: 'cinemaCode', value: this.selectCodes});
+            jsonArr.push({ key: 'memberPrice', value: this.manySettlePrice });
+            let sign = md5(preSign(jsonArr));
+            jsonArr.push({ key: 'sign', value: sign });
+            let params = ParamsAppend(jsonArr);
+            if (this.drawer == true) {
+                https
+                    .fetchPost('/sessionInfo/batchUpdateMemberPrice', params)
+                    .then(data => {
+                        loading.close();
+                        console.log(data);
+                        if (data.data.code == 'success') {
+                            this.$message.success(`修改成功`);
+                            this.selectIdList=[];
+                            this.selectId='';
+                            this.selectCodes='';
+                            this.manySettlePrice='';
+                            this.getMenu();
+                            this.drawer = false;
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
                             this.open();
@@ -468,52 +522,52 @@ export default {
                     console.log(err);
                 });
         },
-        addChange(index, row) {
-            //是否拥有修改权限
-            const loading = this.$loading({
-                lock: true,
-                text: 'Loading',
-                spinner: 'el-icon-loading',
-                background: 'rgba(0, 0, 0, 0.7)',
-                target: document.querySelector('.div1')
-            });
-            this.idx = index;
-            this.form = row;
-            var jsonArr = [];
-            jsonArr.push({ key: 'id', value: row.id });
-            let sign = md5(preSign(jsonArr));
-            jsonArr.push({ key: 'sign', value: sign });
-            let params = ParamsAppend(jsonArr);
-            https
-                .fetchPost('/sessionInfo/getSessionInfoById', params)
-                .then(data => {
-                    loading.close();
-                    console.log(data)
-                    console.log(JSON.parse(Decrypt(data.data.data)));
-                    if (data.data.code == 'success') {
-                        this.editVisible = true;
-                        this.oCinemaName = JSON.parse(Decrypt(data.data.data)).cinemaName;
-                        this.oFilmName = JSON.parse(Decrypt(data.data.data)).filmName;
-                        this.oSessionTime = JSON.parse(Decrypt(data.data.data)).sessionTime;
-                        this.oStandardPrice = JSON.parse(Decrypt(data.data.data)).standardPrice;
-                        this.oTicketFee = JSON.parse(Decrypt(data.data.data)).ticketFee;
-                        this.oThirdPartyPayCommissionFee = JSON.parse(Decrypt(data.data.data)).thirdPartyPayCommissionFee;
-                        this.oMemberCardPayCommissionFee = JSON.parse(Decrypt(data.data.data)).memberCardPayCommissionFee;
-                        this.oId = JSON.parse(Decrypt(data.data.data)).id;
-                    } else if (data.data.code == 'nologin') {
-                        this.message = data.data.message;
-                        this.open();
-                        this.$router.push('/login');
-                    } else {
-                        this.message = data.data.message;
-                        this.open();
-                    }
-                })
-                .catch(err => {
-                    loading.close();
-                    console.log(err);
-                });
-        },
+        // addChange(index, row) {
+        //     //是否拥有修改权限
+        //     const loading = this.$loading({
+        //         lock: true,
+        //         text: 'Loading',
+        //         spinner: 'el-icon-loading',
+        //         background: 'rgba(0, 0, 0, 0.7)',
+        //         target: document.querySelector('.div1')
+        //     });
+        //     this.idx = index;
+        //     this.form = row;
+        //     var jsonArr = [];
+        //     jsonArr.push({ key: 'id', value: row.id });
+        //     let sign = md5(preSign(jsonArr));
+        //     jsonArr.push({ key: 'sign', value: sign });
+        //     let params = ParamsAppend(jsonArr);
+        //     https
+        //         .fetchPost('/sessionInfo/getSessionInfoById', params)
+        //         .then(data => {
+        //             loading.close();
+        //             console.log(data)
+        //             console.log(JSON.parse(Decrypt(data.data.data)));
+        //             if (data.data.code == 'success') {
+        //                 this.editVisible = true;
+        //                 this.oCinemaName = JSON.parse(Decrypt(data.data.data)).cinemaName;
+        //                 this.oFilmName = JSON.parse(Decrypt(data.data.data)).filmName;
+        //                 this.oSessionTime = JSON.parse(Decrypt(data.data.data)).sessionTime;
+        //                 this.oStandardPrice = JSON.parse(Decrypt(data.data.data)).standardPrice;
+        //                 this.oTicketFee = JSON.parse(Decrypt(data.data.data)).ticketFee;
+        //                 this.oThirdPartyPayCommissionFee = JSON.parse(Decrypt(data.data.data)).thirdPartyPayCommissionFee;
+        //                 this.oMemberCardPayCommissionFee = JSON.parse(Decrypt(data.data.data)).memberCardPayCommissionFee;
+        //                 this.oId = JSON.parse(Decrypt(data.data.data)).id;
+        //             } else if (data.data.code == 'nologin') {
+        //                 this.message = data.data.message;
+        //                 this.open();
+        //                 this.$router.push('/login');
+        //             } else {
+        //                 this.message = data.data.message;
+        //                 this.open();
+        //             }
+        //         })
+        //         .catch(err => {
+        //             loading.close();
+        //             console.log(err);
+        //         });
+        // },
         // 编辑操作
         exChanger() {
             const loading = this.$loading({
