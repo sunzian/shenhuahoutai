@@ -602,6 +602,8 @@
             },
             deletTime(index) {
                 this.dateInfo.splice(index, 1);
+                console.log(this.startArr);
+                console.log(this.endArr);
             },
             addPage() {
                 //获取新增按钮权限

@@ -759,6 +759,8 @@
                             if (data.data.code == 'success') {
                                 this.dialogFormVisible = false;
                                 this.$message.success(`新增成功`);
+                                this.value1='';
+                                this.dateInfo=[];
                                 this.oForm.name = '';
                                 this.selectValue = [];
                                 this.oForm.selectHallType = '0';

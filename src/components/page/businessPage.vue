@@ -131,14 +131,14 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="会员卡积分兑换比例" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 150px"
-                        maxlength="9"
-                        v-model.number="oForm.percentageOfPointsIntoGold"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
+                <!--<el-form-item label="会员卡积分兑换比例" :label-width="formLabelWidth">-->
+                    <!--<el-input-->
+                        <!--style="width: 150px"-->
+                        <!--maxlength="9"-->
+                        <!--v-model.number="oForm.percentageOfPointsIntoGold"-->
+                        <!--autocomplete="off"-->
+                    <!--&gt;</el-input>-->
+                <!--</el-form-item>-->
                 <!--<el-form-item label="过期优惠券是否发送短信通知会员" :label-width="formLabelWidth">-->
                     <!--<el-select v-model="oForm.messageForExpireTickets" placeholder="请选择">-->
                         <!--<el-option-->
@@ -217,15 +217,15 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="会员卡积分兑换比例">
-                    <el-input
-                            style="width: 250px"
-                            min="1"
-                            maxlength="7"
-                            v-model.trim="oPercentageOfPointsIntoGold"
-                            autocomplete="off"
-                    ></el-input>
-                </el-form-item>
+                <!--<el-form-item label="会员卡积分兑换比例">-->
+                    <!--<el-input-->
+                            <!--style="width: 250px"-->
+                            <!--min="1"-->
+                            <!--maxlength="7"-->
+                            <!--v-model.trim="oPercentageOfPointsIntoGold"-->
+                            <!--autocomplete="off"-->
+                    <!--&gt;</el-input>-->
+                <!--</el-form-item>-->
                 <!--<el-form-item label="过期优惠券是否发送短信通知会员">-->
                     <!--<el-select v-model="oMessageForExpireTickets" placeholder="请选择">-->
                         <!--<el-option-->
