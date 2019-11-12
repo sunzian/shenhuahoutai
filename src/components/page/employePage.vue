@@ -433,7 +433,7 @@ export default {
                         if (data.data.code == 'success') {
                             this.dialogFormVisible = false;
                             this.$message.success(`新增成功`);
-                            this.show(this.cinemaCode);
+                            this.show();
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
                             this.open();
@@ -477,7 +477,7 @@ export default {
                         .then(data => {
                             if (data.data.code == 'success') {
                                 this.$message.error(`删除了`);
-                                this.show(this.cinemaCode);
+                                this.show();
                             } else if (data.data.code == 'nologin') {
                                 this.message = data.data.message;
                                 this.open();
@@ -564,13 +564,15 @@ export default {
             if (!code) {
                 code = '';
             }
+            if (row) {
+                this.cinemaCode = row.cinemaCode;
+            }
             var jsonArr = [];
-            this.cinemaCode = row.cinemaCode;
             jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
             jsonArr.push({ key: 'name', value: this.query.name });
             jsonArr.push({ key: 'code', value: this.query.code });
             jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
-            jsonArr.push({ key: 'cinemaCode', value: row.cinemaCode });
+            jsonArr.push({ key: 'cinemaCode', value: this.cinemaCode });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             let params = ParamsAppend(jsonArr);
@@ -581,8 +583,8 @@ export default {
                     if (data.data.code == 'success') {
                         var oData = JSON.parse(Decrypt(data.data.data));
                         this.tableData = oData.data;
-                        this.query.pageSize = oData.pageSize;
-                        this.query.pageNo = oData.pageNo;
+                        // this.query.pageSize = oData.pageSize;
+                        // this.query.pageNo = oData.pageNo;
                         this.query.totalCount = oData.totalCount;
                         this.query.totalPage = oData.totalPage;
                     } else if (data.data.code == 'nologin') {
@@ -731,8 +733,8 @@ export default {
                         var oData = JSON.parse(Decrypt(data.data.data));
                         console.log(oData);
                         this.tableData = oData.data;
-                        this.query.pageSize = oData.pageSize;
-                        this.query.pageNo = oData.pageNo;
+                        // this.query.pageSize = oData.pageSize;
+                        // this.query.pageNo = oData.pageNo;
                         this.query.totalCount = oData.totalCount;
                         this.query.totalPage = oData.totalPage;
                     } else if (data.data.code == 'nologin') {
@@ -773,7 +775,7 @@ export default {
                 .then(data => {
                     loading.close();
                     if (data.data.code == 'success') {
-                        this.show(this.cinemaCode);
+                        this.show();
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
@@ -890,8 +892,8 @@ export default {
                                 'http://xiangshan-wexin.oss-cn-hangzhou.aliyuncs.com/images/201909262039272.jpg'
                             );
                         }
-                        this.query.pageSize = oData.pageResult.pageSize;
-                        this.query.pageNo = oData.pageResult.pageNo;
+                        // this.query.pageSize = oData.pageResult.pageSize;
+                        // this.query.pageNo = oData.pageResult.pageNo;
                         this.query.totalCount = oData.pageResult.totalCount;
                         this.query.totalPage = oData.pageResult.totalPage;
                     } else if (data.data.code == 'nologin') {
