@@ -70,7 +70,7 @@ export function preSign(jsonArr) {
             preCodeStr+=item.value.toString().trim();
         }
     })
-    if(preCodeStr.length>0){
+    if(preCodeStr.length>=0){
         preCodeStr+=SIGN_KEY;
     }
 

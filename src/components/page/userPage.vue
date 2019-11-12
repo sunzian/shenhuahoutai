@@ -682,23 +682,13 @@
                             this.data = JSON.parse(Decrypt(data.data.data)).permissionList //权限数据
                             this.businessInfoList = JSON.parse(Decrypt(data.data.data)).businessInfoList //定义下拉选的内容
                             // this.oCheckedCities=JSON.parse(Decrypt(data.data.data)).userInfo.cinemaCodes
-                            let _index = 0; //下拉选显示对应的选项
+                            // 下拉选显示对应的选项
                             for (let x in this.options) {
                                 if (this.options[x].value == JSON.parse(Decrypt(data.data.data)).userInfo.status) {
-                                    _index = x;
+                                    this.selectValue = this.options[x].value;
                                     break;
                                 }
                             }
-                            this.selectValue = this.options[_index].value;
-                            //
-                            // let oIndex = 0;  //下拉选显示对应的选项
-                            // for(let i in this.businessInfoList){
-                            //     if(this.businessInfoList[i].businessCode==JSON.parse(Decrypt(data.data.data)).userInfo.businessCode){
-                            //         oIndex=i;
-                            //         break;
-                            //     }
-                            // }
-                            // this.selectCode = this.businessInfoList[oIndex].businessCode;
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
                             this.open();

@@ -9,7 +9,7 @@
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-select v-model="query.cinemaCode" placeholder="请选择影院" class="mr10">
+                <el-select clearable v-model="query.cinemaCode" placeholder="请选择影院" class="mr10">
                     <el-option
                         v-for="item in cinemaInfo"
                         :key="item.cinemaCode"

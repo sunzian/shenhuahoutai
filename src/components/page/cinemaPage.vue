@@ -1115,7 +1115,7 @@
                 </el-form-item>
                 <el-form-item label="小程序二维码" :label-width="formLabelWidth">
                     <el-popover placement="right" title trigger="hover">
-                        <img :src="oMiniAppQRCode" />
+                        <img style="width: 400px" :src="oMiniAppQRCode" />
                         <img
                             slot="reference"
                             :src="oMiniAppQRCode"

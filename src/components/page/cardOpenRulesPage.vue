@@ -982,6 +982,7 @@ export default {
             }
             let jsonArr = [];
             jsonArr.push({ key: 'cinemaCodes', value: this.oForm.cinemaCode });
+            jsonArr.push({ key: 'groupName', value: this.couponName });
             jsonArr.push({ key: 'status', value: 1 });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
