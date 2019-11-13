@@ -471,7 +471,7 @@
                             >&nbsp;</el-radio>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="name" label="图片">
+                    <el-table-column prop="name" label="图片" style="width:200">
                         <template slot-scope="scope">
                             <el-popover placement="right" title trigger="hover">
                                 <img style="width:400px" :src="scope.row.image" />
@@ -484,7 +484,7 @@
                             </el-popover>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="sort" label="影片名称" width="150">
+                    <el-table-column prop="sort" label="影片名称">
                         <template slot-scope="scope">{{scope.row.filmName}}</template>
                     </el-table-column>
                 </el-table>
@@ -626,6 +626,8 @@ export default {
                     if (data.data.code == 'success') {
                         this.dialogFormVisible = true;
                         this.getAllScreen();
+                        this.date=[];
+                        this.selectedSell = [];
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
@@ -640,8 +642,8 @@ export default {
                     console.log(err);
                 });
         },
+        //新增按钮操作
         addRole() {
-            //新增按钮操作
             const loading = this.$loading({
                 lock: true,
                 text: 'Loading',
@@ -855,7 +857,7 @@ export default {
                         endList = this.oEndSection.split(',');
                         startList = this.oStartSection.split(',');
                         let showTime = [];
-                        for (let i = 0; i < this.oFilmCode.length; i++) {
+                        for (let i = 0; i < endList.length; i++) {
                             showTime.push(startList[i] + '至' + endList[i]);
                         }
                         this.date = showTime;
