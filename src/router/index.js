@@ -50,6 +50,11 @@ export default new Router({
                     meta: { title: '金币商城订单' }
                 },
                 {
+                    path: '/noticeOfActivityPage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/noticeOfActivityPage.vue'),
+                    meta: { title: '轮播图文章管理' }
+                },
+                {
                     path: '/businessPage',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/businessPage.vue'),
                     meta: { title: '商家管理' }

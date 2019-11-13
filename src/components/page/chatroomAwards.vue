@@ -9,7 +9,7 @@
         </div>
         <div class="container" v-if="showSell">
             <div class="handle-box">
-                <el-input v-model="query.name" placeholder="选择影院" class="handle-input mr10"></el-input>
+                <el-input v-model="query.cinemaName" placeholder="影院名称" class="handle-input mr10"></el-input>
                 <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
             </div>
             <el-table
@@ -766,15 +766,12 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            let name = this.query.name;
-            let status = this.query.status;
-            if (!name) {
-                name = '';
-            }
-            if (!status) {
-                status = '';
+            let cinemaName = this.query.cinemaName;
+            if (!cinemaName) {
+                cinemaName = '';
             }
             let jsonArr = [];
+            jsonArr.push({ key: 'cinemaName', value: cinemaName });
             jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
             jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
             jsonArr.push({ key: 'cinemaCode', value: name });

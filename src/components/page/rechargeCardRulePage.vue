@@ -500,7 +500,6 @@ export default {
             dialogFormVisible: false,
             oForm: {
                 cinemaName: '',
-                // levelCode: '',
                 ruleName: '', // 规则名称
                 rechargeAmount: '', // 充值金额
                 givenType: '', // 赠送类型

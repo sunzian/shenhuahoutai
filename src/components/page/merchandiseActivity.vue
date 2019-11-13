@@ -325,14 +325,8 @@
         <el-dialog title="选择卖品" :visible.sync="drawer">
             <div class="container">
                 <div class="handle-box">
-                    <el-input v-model="query.name" placeholder="角色名" class="handle-input mr10"></el-input>
-                    <el-select clearable v-model="query.status" placeholder="状态" class="handle-select mr10">
-                        <el-option key="1" label="审核中" value="1"></el-option>
-                        <el-option key="2" label="未审核" value="2"></el-option>
-                        <el-option key="3" label="通过" value="3"></el-option>
-                        <el-option key="4" label="审核失败" value="4"></el-option>
-                    </el-select>
-                    <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
+                    <el-input v-model="query.merchandiseName" placeholder="卖品名称" class="handle-input mr10"></el-input>
+                    <el-button type="primary" icon="el-icon-search" @click="SearchSell">搜索</el-button>
                 </div>
                 <el-table
                         :data="sellTableData"
@@ -358,7 +352,7 @@
                             </el-popover>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="sort" label="影片名称" width="150">
+                    <el-table-column prop="sort" label="卖品名称" width="150">
                         <template slot-scope="scope">{{scope.row.merchandiseName}}</template>
                     </el-table-column>
                 </el-table>
@@ -979,6 +973,10 @@
                 this.query.pageNo = 1;
                 this.getMenu();
             },
+            SearchSell() {
+                this.query.pageNo = 1;
+                this.openNext();
+            },
             getMenu() {
                 //获取菜单栏
                 const loading = this.$loading({
@@ -1138,6 +1136,11 @@
                 });
                 setTimeout(() => {
                     let jsonArr = [];
+                    let merchandiseName = this.query.merchandiseName;
+                    if(!merchandiseName){
+                        merchandiseName=''
+                    }
+                    jsonArr.push({key:"merchandiseName",value:merchandiseName});
                     jsonArr.push({key:"pageNo",value:this.query.pageNo});
                     jsonArr.push({key:"pageSize",value:this.query.pageSize});
                     jsonArr.push({key:"merchandiseStatus",value:1});

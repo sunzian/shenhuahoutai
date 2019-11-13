@@ -260,7 +260,7 @@
         <!-- 新的编辑抽屉弹出框 -->
         <el-dialog title="请选择权限" :visible.sync="drawered">
             <el-tree
-                    ref="tree"
+                    ref="tree_"
                     :data="data"
                     show-checkbox
                     node-key="id"
@@ -693,7 +693,7 @@
                             this.checkedKeys = JSON.parse(Decrypt(data.data.data)).exitPermissionIds;
                             this.data = JSON.parse(Decrypt(data.data.data)).permissionList; //权限数据
                             this.businessInfoList = JSON.parse(Decrypt(data.data.data)).businessInfoList; //定义下拉选的内容
-                            // this.oCheckedCities=JSON.parse(Decrypt(data.data.data)).userInfo.cinemaCodes
+                            this.oCheckedCities=JSON.parse(Decrypt(data.data.data)).userInfo.cinemaCodes.split(",");
                             // 下拉选显示对应的选项
                             for (let x in this.options) {
                                 if (this.options[x].value == JSON.parse(Decrypt(data.data.data)).userInfo.status) {
@@ -718,6 +718,7 @@
             },
             // 修改操作
             exChanger() {
+                // console.log(this.$refs.tree_.getCheckedKeys().concat(this.$refs.tree_.getHalfCheckedKeys()));
                 const loading = this.$loading({
                     lock: true,
                     text: 'Loading',
@@ -738,6 +739,7 @@
                     jsonArr.push({key:"menuIds",value:this.$refs.tree_.getCheckedKeys().concat(this.$refs.tree_.getHalfCheckedKeys())});
                     let sign =md5(preSign(jsonArr));
                     jsonArr.push({key:"sign",value:sign});
+                    console.log(jsonArr);
                     let params = ParamsAppend(jsonArr);
                     https.fetchPost('/user/modifyUser',params).then((data) => {
                         loading.close();

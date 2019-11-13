@@ -362,8 +362,8 @@
         <el-dialog title="选择影片" :visible.sync="drawer">
             <div class="container">
                 <div class="handle-box">
-                    <el-input v-model="query.name" placeholder="角色名" class="handle-input mr10"></el-input>
-                    <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
+                    <el-input v-model="query.filmName" placeholder="影片名称" class="handle-input mr10"></el-input>
+                    <el-button type="primary" icon="el-icon-search" @click="SearchFilm">搜索</el-button>
                 </div>
                 <el-table
                         :data="sellTableData"
@@ -786,8 +786,9 @@
                                 this.oForm.oneCanNum = '';
                                 this.oForm.oneNum = '';
                                 this.oForm.selectMovieType = '0';
-                                this.oForm.formatCode = '';
                                 this.oForm.code = '';
+                                this.oForm.formatCode = [];
+                                this.oForm.screenCode = [];
                                 this.getMenu();
                             } else if (data.data.code == 'nologin') {
                                 this.message = data.data.message;
@@ -1038,6 +1039,10 @@
                 this.query.pageNo = 1;
                 this.getMenu();
             },
+            SearchFilm() {
+                this.query.pageNo = 1;
+                this.openNext();
+            },
             getMenu() {
                 //获取菜单栏
                 const loading = this.$loading({
@@ -1108,8 +1113,7 @@
             },
             selectScreens(val) {
                 // console.log(val)
-                let selectValue = val.join(',');
-                this.selectScreenCode = selectValue;
+                this.selectScreenCode = val.join(',');
                 console.log(selectValue);
             },
             selectFormat(val) {
@@ -1199,7 +1203,12 @@
                     target: document.querySelector('.div1')
                 });
                 setTimeout(() => {
+                    let filmName=this.query.filmName;
+                    if(!filmName){
+                        filmName=''
+                    }
                     let jsonArr = [];
+                    jsonArr.push({key:"filmName",value:filmName});
                     jsonArr.push({key:"pageNo",value:this.query.pageNo});
                     jsonArr.push({key:"pageSize",value:this.query.pageSize});
                     let sign =md5(preSign(jsonArr));

@@ -87,7 +87,7 @@
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.miniRegisterStatus=='1'" type="danger">未注册</el-tag>
                         <el-tag v-else-if="scope.row.miniRegisterStatus=='2'" type="success">已注册</el-tag>
-                    </template>    
+                    </template>
                 </el-table-column> -->
                 <el-table-column prop="memo" label="注册影院">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
@@ -364,44 +364,56 @@ export default {
             }, 500);
         },
         changeRole(index, row) {
-            const loading = this.$loading({
-                lock: true,
-                text: 'Loading',
-                spinner: 'el-icon-loading',
-                background: 'rgba(0, 0, 0, 0.7)',
-                target: document.querySelector('.div1')
-            });
-            var jsonArr = [];
-            let role = 0;
-            if (row.userRole == 1) {
-                role = 2
-            }
-            if (row.userRole == 2) {
-                role = 1
-            }
-            jsonArr.push({ key: 'id', value: row.id });
-            jsonArr.push({ key: 'userRole', value: role });
-            let sign = md5(preSign(jsonArr));
-            jsonArr.push({ key: 'sign', value: sign });
-            let params = ParamsAppend(jsonArr);
-            https
-                .fetchPost('/memberUser/updateUserRole',params)
-                .then(data => {
-                    loading.close();
-                    if (data.data.code == 'success') {
-                        this.getMenu();
-                    } else if (data.data.code == 'nologin') {
-                        this.message = data.data.message;
-                        this.open();
-                        this.$router.push('/login');
-                    } else {
-                        this.message = data.data.message;
-                        this.open();
+            this.$confirm('此操作将更改角色权限, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            })
+                .then(() => {
+                    const loading = this.$loading({
+                        lock: true,
+                        text: 'Loading',
+                        spinner: 'el-icon-loading',
+                        background: 'rgba(0, 0, 0, 0.7)',
+                        target: document.querySelector('.div1')
+                    });
+                    var jsonArr = [];
+                    let role = 0;
+                    if (row.userRole == 1) {
+                        role = 2
                     }
-                })
-                .catch(err => {
-                    console.log(err);
+                    if (row.userRole == 2) {
+                        role = 1
+                    }
+                    jsonArr.push({ key: 'id', value: row.id });
+                    jsonArr.push({ key: 'userRole', value: role });
+                    let sign = md5(preSign(jsonArr));
+                    jsonArr.push({ key: 'sign', value: sign });
+                    let params = ParamsAppend(jsonArr);
+                    https
+                        .fetchPost('/memberUser/updateUserRole',params)
+                        .then(data => {
+                            loading.close();
+                            if (data.data.code == 'success') {
+                                this.getMenu();
+                            } else if (data.data.code == 'nologin') {
+                                this.message = data.data.message;
+                                this.open();
+                                this.$router.push('/login');
+                            } else {
+                                this.message = data.data.message;
+                                this.open();
+                            }
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        });
+                }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消更改'
                 });
+            });
         },
         Search() {
             this.query.pageNo = 1;
