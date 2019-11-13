@@ -41,20 +41,20 @@
                     header-cell-class-name="table-header"
                     @selection-change="handleSelectionChange"
             >
-                <el-table-column prop="name" label="轮播图级别" width="130">
+                <!-- <el-table-column prop="name" label="轮播图级别" width="130">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.bannerLevel=='1'"
                         >全部影院</el-tag>
                         <el-tag v-else-if="scope.row.bannerLevel=='2'"
                         >部分影院</el-tag>
                     </template>
-                </el-table-column>
+                </el-table-column> -->
                 <el-table-column label="适用影院" width="130">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="适用影院编码" width="130">
+                <!-- <el-table-column prop="memo" label="适用影院编码" width="130">
                     <template slot-scope="scope">{{scope.row.cinemaCodes}}</template>
-                </el-table-column>
+                </el-table-column> -->
                 <el-table-column prop="sort" label="是否显示">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status=='1'"
@@ -138,7 +138,7 @@
         <!--新增弹出框-->
         <el-dialog title="新增轮播图" :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
-                <el-form-item label="轮播图级别" :label-width="formLabelWidth">
+                <!-- <el-form-item label="轮播图级别" :label-width="formLabelWidth">
                     <el-select v-model="oForm.value" placeholder="请选择级别">
                         <el-option
                                 v-for="item in options"
@@ -147,8 +147,8 @@
                                 :value="item.value">
                         </el-option>
                     </el-select>
-                </el-form-item>
-                <el-form-item label="适用影院" :label-width="formLabelWidth" v-if="oForm.value == 2">
+                </el-form-item> -->
+                <el-form-item label="适用影院" :label-width="formLabelWidth">
                     <el-select v-model="oForm.cinemaCode" placeholder="请选择影院">
                         <el-option
                                 v-for="item in cinemaList"
@@ -239,7 +239,7 @@
         <!-- 编辑弹出框 -->
         <el-dialog title="编辑" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
-                <el-form-item label="轮播图级别" :label-width="formLabelWidth">
+                <!-- <el-form-item label="轮播图级别" :label-width="formLabelWidth">
                     <el-select v-model="form.bannerLevel" placeholder="请选择级别">
                         <el-option
                                 v-for="item in options"
@@ -248,8 +248,8 @@
                                 :value="item.value">
                         </el-option>
                     </el-select>
-                </el-form-item>
-                <el-form-item label="适用影院" :label-width="formLabelWidth" v-if="form.bannerLevel == 2">
+                </el-form-item> -->
+                <el-form-item label="适用影院" :label-width="formLabelWidth">
                     <el-select v-model="form.cinemaCodes" placeholder="请选择影院">
                         <el-option
                                 v-for="item in cinemaList"
@@ -496,7 +496,8 @@
                         console.log(data);
                         console.log(JSON.parse(Decrypt(data.data.data)));
                         this.businessOptiones = JSON.parse(Decrypt(data.data.data))
-                        this.cinemaList =JSON.parse(Decrypt(data.data.data)).cinemaList
+                        this.cinemaList =JSON.parse(Decrypt(data.data.data)).cinemaList;
+                        this.oForm.cinemaCode = this.cinemaList[0].cinemaCode;
                         if(data.data.code == 'success'){
                             this.dialogFormVisible = true
                         }else if(data.data.code=='nologin'){
@@ -524,10 +525,8 @@
                 });
                 setTimeout(() => {
                     var jsonArr = [];
-                    if (this.oForm.value == 2) {
-                        jsonArr.push({key:"cinemaCodes",value:this.oForm.cinemaCode});
-                    }
-                    jsonArr.push({key:"bannerLevel",value:this.oForm.value});
+                    jsonArr.push({key:"cinemaCodes",value:this.oForm.cinemaCode});
+                    jsonArr.push({key:"bannerLevel",value:2});
                     jsonArr.push({key:"status",value:this.oForm.statusValue});
                     jsonArr.push({key:"startDate",value:this.startTime});
                     jsonArr.push({key:"endDate",value:this.endTime});
@@ -717,15 +716,6 @@
             },
             // 编辑操作
             exChanger() {
-                // console.log(this.form.bannerLevel);
-                // console.log(this.form.cinemaCodes);
-                // console.log(this.form.status);
-                // console.log(this.changeStartTime);
-                // console.log(this.changeEndTime);
-                // console.log(this.form.memo);
-                // console.log(this.form.bannerType);
-                // console.log(this.form.tabType);
-                // console.log(this.goType);
                 const loading = this.$loading({
                     lock: true,
                     text: 'Loading',
@@ -734,11 +724,9 @@
                     target: document.querySelector('.div1')
                 });
                 setTimeout(() => {
-                    // console.log(this.form.sort);
-                    // console.log(this.from.sort.toString());
                     var jsonArr = [];
                     jsonArr.push({key:"id",value:this.form.id});
-                    jsonArr.push({key:"bannerLevel",value:this.form.bannerLevel});
+                    jsonArr.push({key:"bannerLevel",value:2});
                     jsonArr.push({key:"cinemaCodes",value:this.form.cinemaCodes});
                     jsonArr.push({key:"status",value:this.form.status});
                     jsonArr.push({key:"startDate",value:this.changeStartTime});
@@ -752,7 +740,6 @@
                     jsonArr.push({key:"sign",value:sign});
                     console.log(jsonArr);
                     let params = ParamsAppend(jsonArr);
-                    console.log(params);
                     this.editVisible = false;
                     https.fetchPost('/banner/updateById',params).then((data) => {
                         loading.close();

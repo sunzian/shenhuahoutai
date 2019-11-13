@@ -343,6 +343,15 @@
                         type="textarea"
                     ></el-input>
                 </el-form-item>
+                <el-form-item label="金币活动描述" :label-width="formLabelWidth">
+                    <el-input
+                        style="width: 250px"
+                        v-model="oForm.goldActivityMemo"
+                        autocomplete="off"
+                        maxlength="30"
+                        type="textarea"
+                    ></el-input>
+                </el-form-item>
                 <el-form-item prop="openSnackStatus" label="是否开通套餐" :label-width="formLabelWidth">
                     <el-select
                             v-model="oForm.openSnackStatus"
@@ -907,6 +916,15 @@
                         maxlength="30"
                     ></el-input>
                 </el-form-item>
+                <el-form-item label="金币活动描述" :label-width="formLabelWidth">
+                    <el-input
+                        style="width: 250px"
+                        v-model="oGoldActivityMemo"
+                        type="textarea"
+                        autocomplete="off"
+                        maxlength="30"
+                    ></el-input>
+                </el-form-item>
                 <el-form-item prop="openSnackStatus" label="是否开通套餐" :label-width="formLabelWidth">
                     <el-select
                     v-model="oOpenSnackStatus"
@@ -1404,6 +1422,7 @@ export default {
             oMemberCardPayCommissionFee: '',
             oMembershipServiceAgreement: '',
             oBuyTicketHint: '',
+            oGoldActivityMemo: '',
             oOpenSnackStatus: '',
             oSnackDispatcherStatus: '',
             oRefundable: '',
@@ -1481,6 +1500,7 @@ export default {
                 serviceMobile: '',
                 screenCount: '',
                 ticketSystemCode: '',
+                goldActivityMemo: '',
                 comparePriceCode: '',
                 buyMinutesLimit: '',
                 refundMinutesLimit: '',
@@ -1617,6 +1637,7 @@ export default {
             }
             jsonArr.push({ key: 'membershipServiceAgreement', value: this.oForm.membershipServiceAgreement });
             jsonArr.push({ key: 'rechargeMemo', value: this.oForm.rechargeMemo });
+            jsonArr.push({ key: 'goldActivityMemo', value: this.oForm.goldActivityMemo });
             jsonArr.push({ key: 'buyTicketHint', value: this.oForm.buyTicketHint });
             jsonArr.push({ key: 'openSnackStatus', value: this.oForm.openSnackStatus });
             jsonArr.push({ key: 'snackDispatcherStatus', value: this.oForm.snackDispatcherStatus });
@@ -1713,6 +1734,7 @@ export default {
                             this.oForm.openSnackStatus = '';
                             this.oForm.snackDispatcherStatus = '';
                             this.oForm.refundable = '';
+                            this.oForm.goldActivityMemo = '';
                             this.oForm.remainTicketsNumber = '';
                             this.oForm.snackBeginTime = '';
                             this.oForm.snackEndTime = '';
@@ -1857,6 +1879,7 @@ export default {
                         this.oMembershipServiceAgreement = JSON.parse(Decrypt(data.data.data)).Cinema.membershipServiceAgreement;
                         this.oBuyTicketHint = JSON.parse(Decrypt(data.data.data)).Cinema.buyTicketHint;
                         this.oRechargeMemo = JSON.parse(Decrypt(data.data.data)).Cinema.rechargeMemo;
+                        this.oGoldActivityMemo = JSON.parse(Decrypt(data.data.data)).Cinema.goldActivityMemo;
                         this.oRemainTicketsNumber = JSON.parse(Decrypt(data.data.data)).Cinema.remainTicketsNumber;
                         this.oSnackBeginTime = JSON.parse(Decrypt(data.data.data)).Cinema.snackBeginTime;
                         this.oSnackEndTime = JSON.parse(Decrypt(data.data.data)).Cinema.snackEndTime;
@@ -2025,6 +2048,7 @@ export default {
             jsonArr.push({ key: 'membershipServiceAgreement', value: this.oMembershipServiceAgreement });
             jsonArr.push({ key: 'buyTicketHint', value: this.oBuyTicketHint });
             jsonArr.push({ key: 'rechargeMemo', value: this.oRechargeMemo });
+            jsonArr.push({ key: 'goldActivityMemo', value: this.oGoldActivityMemo });
             jsonArr.push({ key: 'openSnackStatus', value: this.oOpenSnackStatus });
             jsonArr.push({ key: 'snackDispatcherStatus', value: this.oSnackDispatcherStatus });
             jsonArr.push({ key: 'refundable', value: this.oRefundable });
@@ -2188,7 +2212,6 @@ export default {
                     loading.close();
                     if (data.data.code == 'success') {
                         var oData = JSON.parse(Decrypt(data.data.data));
-                        console.log(oData);
                         this.tableData = oData.data;
                         this.query.pageSize = oData.pageSize;
                         this.query.pageNo = oData.pageNo;

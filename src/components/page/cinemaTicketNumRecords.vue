@@ -48,6 +48,9 @@
                 <el-table-column prop="name" label="订单号">
                     <template slot-scope="scope">{{scope.row.orderCode}}</template>
                 </el-table-column>
+                <el-table-column prop="name" label="充值张数">
+                    <template slot-scope="scope">{{scope.row.tradeTicketNum}}</template>
+                </el-table-column>
                 <el-table-column prop="sort" label="交易时间" >
                     <template slot-scope="scope">{{scope.row.tradeTime}}</template>
                 </el-table-column>
