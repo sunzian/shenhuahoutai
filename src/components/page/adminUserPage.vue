@@ -108,10 +108,10 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="真实姓名" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" maxlength="9" v-model.number="oForm.realName" autocomplete="off"></el-input>
+                    <el-input style="width: 250px" maxlength="9" v-model="oForm.realName" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="呼叫号码" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" maxlength="18" v-model.number="oForm.callNumber" autocomplete="off"></el-input>
+                    <el-input style="width: 250px" maxlength="18" v-model="oForm.callNumber" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="影院公司名" :label-width="formLabelWidth">
                     <el-select v-model="selectList.businessCode" >
@@ -124,7 +124,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="描述" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" maxlength="9" v-model.number="oForm.memo" autocomplete="off"></el-input>
+                    <el-input style="width: 250px" maxlength="9" v-model="oForm.memo" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="权限" :label-width="formLabelWidth">
                     <el-tree

@@ -300,6 +300,12 @@
                             this.oSignTips=JSON.parse(Decrypt(data.data.data)).signTips;
                             this.oExtraPrizeName=JSON.parse(Decrypt(data.data.data)).extraPrizeName;
                             this.oExpireDays=JSON.parse(Decrypt(data.data.data)).expireDays;
+                            if (JSON.parse(Decrypt(data.data.data)).extraFlag == 1) {
+                                this.oExtraFlag = '1';
+                            }
+                            if (JSON.parse(Decrypt(data.data.data)).extraFlag == 2) {
+                                this.oExtraFlag = '2';
+                            }
                             this.editVisible=true;
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
