@@ -10,16 +10,31 @@
         <div class="container">
             <div class="handle-box">
                 <el-input v-model="query.cinemaNames" placeholder="门店名称" class="handle-input mr10"></el-input>
-                <el-select clearable v-model="query.status" placeholder="状态" class="handle-select mr10">
+                <el-select
+                    clearable
+                    v-model="query.status"
+                    placeholder="状态"
+                    class="handle-select mr10"
+                >
                     <el-option key="1" label="上架" value="1"></el-option>
                     <el-option key="2" label="未上架" value="2"></el-option>
                 </el-select>
-                <el-select clearable v-model="query.changeType" placeholder="兑换方式" class="handle-select mr10">
+                <el-select
+                    clearable
+                    v-model="query.changeType"
+                    placeholder="兑换方式"
+                    class="handle-select mr10"
+                >
                     <el-option key="1" label="纯金币兑换" value="1"></el-option>
                     <el-option key="2" label="纯RMB兑换" value="2"></el-option>
                     <el-option key="3" label="金币加RMB兑换" value="3"></el-option>
                 </el-select>
-                <el-select clearable v-model="query.commodityType" placeholder="商品类型" class="handle-select mr10">
+                <el-select
+                    clearable
+                    v-model="query.commodityType"
+                    placeholder="商品类型"
+                    class="handle-select mr10"
+                >
                     <el-option key="1" label="实物" value="1"></el-option>
                     <el-option key="2" label="优惠券" value="2"></el-option>
                 </el-select>
@@ -201,12 +216,26 @@
                     </el-upload>
                 </el-form-item>
                 <el-form-item label="兑换须知" :label-width="formLabelWidth">
-                    <el-input style="width: 360px" type="textarea" v-model="oForm.memo" autocomplete="off"></el-input>
+                    <el-input
+                        style="width: 360px"
+                        type="textarea"
+                        v-model="oForm.memo"
+                        autocomplete="off"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item label="详情" :label-width="formLabelWidth">
-                    <quill-editor ref="text" v-model="oForm.details" class="myQuillEditor" :options="editorOption" />
+                    <quill-editor
+                        ref="text"
+                        v-model="oForm.details"
+                        class="myQuillEditor"
+                        :options="editorOption"
+                    />
                 </el-form-item>
-                <el-form-item v-if="oForm.commodity_type==1" label="原价" :label-width="formLabelWidth">
+                <el-form-item
+                    v-if="oForm.commodity_type==1"
+                    label="原价"
+                    :label-width="formLabelWidth"
+                >
                     <el-input style="width: 250px" v-model="oForm.originalPrice" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="库存" :label-width="formLabelWidth">
@@ -252,10 +281,10 @@
                 <el-form-item label="是否置顶" :label-width="formLabelWidth">
                     <el-select v-model="oForm.topStatus" placeholder="请选择">
                         <el-option
-                                v-for="item in topStatusList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
+                            v-for="item in topStatusList"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value"
                         ></el-option>
                     </el-select>
                 </el-form-item>
@@ -289,7 +318,7 @@
                     :label-width="formLabelWidth"
                     v-if="filmInfo.length>0 && oForm.selectFilmType != 0"
                 >
-                    <div v-for="(item, index) in filmInfo" :key='index'>
+                    <div v-for="(item, index) in filmInfo" :key="index">
                         {{item.value}}
                         <span
                             style="color:red;cursor: pointer;"
@@ -389,7 +418,7 @@
                     label="商品图片"
                     :label-width="formLabelWidth"
                 >
-                <el-popover placement="right" title trigger="hover">
+                    <el-popover placement="right" title trigger="hover">
                         <img :src="form.image_url" />
                         <img
                             slot="reference"
@@ -416,10 +445,20 @@
                     </el-upload>
                 </el-form-item>
                 <el-form-item label="兑换须知" :label-width="formLabelWidth">
-                    <el-input style="width: 360px" type='textarea' v-model="form.memo" autocomplete="off"></el-input>
+                    <el-input
+                        style="width: 360px"
+                        type="textarea"
+                        v-model="form.memo"
+                        autocomplete="off"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item label="详情" :label-width="formLabelWidth">
-                    <quill-editor ref="text" v-model="form.details" class="myQuillEditor" :options="editorOption" />
+                    <quill-editor
+                        ref="text"
+                        v-model="form.details"
+                        class="myQuillEditor"
+                        :options="editorOption"
+                    />
                 </el-form-item>
                 <el-form-item label="原价" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="form.originalPrice" autocomplete="off"></el-input>
@@ -454,24 +493,34 @@
                 >
                     <el-input style="width: 250px" v-model="form.money" autocomplete="off"></el-input>
                 </el-form-item>
-                <!--<el-form-item label="允许兑换的门店" :label-width="formLabelWidth">-->
-                    <!--<el-input v-model="form.cinemaCodes"  ></el-input>-->
-                <!--<el-checkbox-group v-model="form.cinemaCodes"  :max="1">-->
-                <!--<el-checkbox-->
-                <!--v-for="city in cities"-->
-                <!--:label="city.cinemaCode"-->
-                <!--:key="city.cinemaCode"-->
-                <!--:value="city.cinemaCode"-->
-                <!--&gt;{{city.cinemaName}}</el-checkbox>-->
-                <!--</el-checkbox-group>-->
-                <!--</el-form-item>-->
+                <el-form-item label="允许兑换的门店" :label-width="formLabelWidth">
+                    <el-checkbox-group v-model="oCheckedCities" :max="1" @change="changeCinema">
+                        <el-checkbox
+                            v-for="city in oCities"
+                            :label="city.cinemaCode"
+                            :key="city.cinemaCode"
+                            :value="city.cinemaCode"
+                        >{{city.cinemaName}}</el-checkbox>
+                    </el-checkbox-group>
+                    <!-- <el-checkbox-group
+                        v-model="form.cinemaCode"
+                        @change="changeCinema"
+                    >
+                        <el-checkbox
+                            v-for="item in oCities"
+                            :label="item.cinemaCode"
+                            :key="item.cinemaCode"
+                            :value="item.cinemaName"
+                        >{{item.cinemaName}}</el-checkbox>
+                    </el-checkbox-group> -->
+                </el-form-item>
                 <el-form-item label="是否置顶" :label-width="formLabelWidth">
                     <el-select v-model="oTopstatus" placeholder="请选择">
                         <el-option
-                                v-for="item in topStatusList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
+                            v-for="item in topStatusList"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value"
                         ></el-option>
                     </el-select>
                 </el-form-item>
@@ -505,7 +554,7 @@
                     :label-width="formLabelWidth"
                     v-if="filmInfo.length>0 && form.selectFilmType != 0"
                 >
-                    <div v-for="(item, index) in filmInfo" :key='index'>
+                    <div v-for="(item, index) in filmInfo" :key="index">
                         {{item.value}}
                         <span
                             style="color:red;cursor: pointer;"
@@ -583,9 +632,9 @@
 import { quillEditor } from 'vue-quill-editor';
 import { fetchData } from '../../api/index';
 import { Decrypt, Encrypt, preSign, EncryptReplace, ParamsAppend } from '@/aes/utils';
-import 'quill/dist/quill.core.css'
-import 'quill/dist/quill.snow.css'
-import 'quill/dist/quill.bubble.css'
+import 'quill/dist/quill.core.css';
+import 'quill/dist/quill.snow.css';
+import 'quill/dist/quill.bubble.css';
 import md5 from 'js-md5';
 import axios from 'axios';
 import https from '../../https';
@@ -594,8 +643,8 @@ export default {
     data() {
         return {
             content: '',
-            editorOption: {} ,
-            oTopstatus:'',
+            editorOption: {},
+            oTopstatus: '',
             type: {
                 type: ''
             },
@@ -617,7 +666,9 @@ export default {
             form: {
                 memo: '',
                 sort: '',
-                id: ''
+                id: '',
+                cinemaCode: [],
+                cinemaCodes: ''
             },
             idx: -1,
             id: -1,
@@ -631,7 +682,7 @@ export default {
                 resource: '',
                 desc: '',
                 value: '1',
-                commodity_type:'1',
+                commodity_type: '1'
             },
             formLabelWidth: '120px',
             selectValue: {},
@@ -790,20 +841,20 @@ export default {
         addFilm() {
             this.selectFilm = {};
             if (this.oForm.filmName == '') {
-                return
+                return;
             }
             if (this.restaurants.length == 0) {
                 this.message = '暂无优惠券可选';
                 this.open();
-                return
+                return;
             }
-            for (let i = 0;i < this.restaurants.length; i ++) {
+            for (let i = 0; i < this.restaurants.length; i++) {
                 if (this.oForm.filmName == this.restaurants[i].value) {
-                    this.selectFilm = this.restaurants[i]
+                    this.selectFilm = this.restaurants[i];
                 }
             }
             if (!this.selectFilm.value) {
-                return
+                return;
             }
             var result = this.filmInfo.some(item => {
                 if (item.value == this.selectFilm.value) {
@@ -818,20 +869,20 @@ export default {
         addFilm2() {
             this.selectFilm = {};
             if (!this.form.filmName) {
-                return
+                return;
             }
             if (this.restaurants.length == 0) {
                 this.message = '暂无优惠券可选';
                 this.open();
-                return
+                return;
             }
-            for (let i = 0;i < this.restaurants.length; i ++) {
+            for (let i = 0; i < this.restaurants.length; i++) {
                 if (this.form.filmName == this.restaurants[i].value) {
-                    this.selectFilm = this.restaurants[i]
+                    this.selectFilm = this.restaurants[i];
                 }
             }
             if (!this.selectFilm.value) {
-                return
+                return;
             }
             var result = this.filmInfo.some(item => {
                 if (item.value == this.selectFilm.value) {
@@ -927,7 +978,7 @@ export default {
                 jsonArr.push({ key: 'expireDay', value: this.oForm.expireDay });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
-                console.log(jsonArr)
+                console.log(jsonArr);
                 let params = ParamsAppend(jsonArr);
                 if (this.dialogFormVisible == true) {
                     https
@@ -937,26 +988,26 @@ export default {
                             //新增
                             console.log(data);
                             if (data.data.code == 'success') {
-                                this.$refs.upload.clearFiles();//清除已上传文件
-                                this.oForm.name='';
-                                this.oForm.image_url='';
-                                this.oForm.memo='';
-                                this.oForm.store='';
-                                this.oForm.change_type='';
-                                this.oForm.gold='';
-                                this.oForm.money='';
-                                this.oForm.checkedCities='';
-                                this.oForm.status='';
-                                this.oForm.commodity_type='';
-                                this.oForm.ticket_ids='';
-                                this.oForm.assign_type='';
-                                this.oForm.assign_info='';
-                                this.oForm.limit_type='';
-                                this.oForm.limit_number='';
-                                this.oForm.details='';
-                                this.oForm.originalPrice='';
-                                this.oForm.topStatus='';
-                                this.oForm.expireDay='';
+                                this.$refs.upload.clearFiles(); //清除已上传文件
+                                this.oForm.name = '';
+                                this.oForm.image_url = '';
+                                this.oForm.memo = '';
+                                this.oForm.store = '';
+                                this.oForm.change_type = '';
+                                this.oForm.gold = '';
+                                this.oForm.money = '';
+                                this.oForm.checkedCities = '';
+                                this.oForm.status = '';
+                                this.oForm.commodity_type = '';
+                                this.oForm.ticket_ids = '';
+                                this.oForm.assign_type = '';
+                                this.oForm.assign_info = '';
+                                this.oForm.limit_type = '';
+                                this.oForm.limit_number = '';
+                                this.oForm.details = '';
+                                this.oForm.originalPrice = '';
+                                this.oForm.topStatus = '';
+                                this.oForm.expireDay = '';
                                 this.dialogFormVisible = false;
                                 this.$message.success(`新增成功`);
                                 this.getMenu();
@@ -1077,7 +1128,6 @@ export default {
                     .fetchPost('goldCommodity/modifyPage', params)
                     .then(data => {
                         loading.close();
-                        console.log(data);
                         console.log(JSON.parse(Decrypt(data.data.data)));
                         if (data.data.code == 'success') {
                             this.editVisible = true;
@@ -1089,6 +1139,7 @@ export default {
                             this.form.gold = JSON.parse(Decrypt(data.data.data)).goldCommodity.gold;
                             this.form.money = JSON.parse(Decrypt(data.data.data)).goldCommodity.money;
                             this.form.cinemaCodes = JSON.parse(Decrypt(data.data.data)).goldCommodity.cinemaCodes;
+                            this.oCheckedCities = this.form.cinemaCodes.split(',');
                             this.form.status = JSON.parse(Decrypt(data.data.data)).goldCommodity.status;
                             this.form.commodityType = JSON.parse(Decrypt(data.data.data)).goldCommodity.commodityType;
                             this.oTopstatus = JSON.parse(Decrypt(data.data.data)).goldCommodity.topStatus;
@@ -1097,7 +1148,7 @@ export default {
                             this.form.assignInfo = JSON.parse(Decrypt(data.data.data)).goldCommodity.assignInfo;
                             this.form.limitType = JSON.parse(Decrypt(data.data.data)).goldCommodity.limitType;
                             this.form.limitNumber = JSON.parse(Decrypt(data.data.data)).goldCommodity.limitNumber;
-
+                            this.oCities = JSON.parse(Decrypt(data.data.data)).cinemas;
                             //商品类型下拉选显示对应的选项
                             for (let x in this.commodityType) {
                                 if (this.commodityType[x].value == JSON.parse(Decrypt(data.data.data)).goldCommodity.commodityType) {
@@ -1172,6 +1223,12 @@ export default {
                 console.log(this.form.sort);
                 // console.log(this.from.sort.toString());
                 var jsonArr = [];
+                if (this.oCheckedCities.length == 0) {
+                    this.message='请选择影院！'
+                    this.open();
+                    return
+                }
+                this.form.cinemaCode = this.oCheckedCities.join(",");
                 jsonArr.push({ key: 'id', value: this.form.id });
                 jsonArr.push({ key: 'name', value: this.form.name });
                 jsonArr.push({ key: 'imageUrl', value: this.form.image_url });
@@ -1181,7 +1238,7 @@ export default {
                 jsonArr.push({ key: 'changeType', value: this.form.changeType });
                 jsonArr.push({ key: 'gold', value: this.form.gold });
                 jsonArr.push({ key: 'money', value: this.form.money });
-                jsonArr.push({ key: 'cinemaCodes', value: this.form.cinemaCodes });
+                jsonArr.push({ key: 'cinemaCodes', value: this.form.cinemaCode });
                 jsonArr.push({ key: 'status', value: this.form.status });
                 jsonArr.push({ key: 'commodityType', value: this.form.commodityType });
                 jsonArr.push({ key: 'ticketIds', value: this.form.ticketIds });
@@ -1197,7 +1254,6 @@ export default {
                 jsonArr.push({ key: 'sign', value: sign });
                 console.log(jsonArr);
                 let params = ParamsAppend(jsonArr);
-                console.log(params);
                 this.editVisible = false;
                 https
                     .fetchPost('goldCommodity/updateById', params)
@@ -1315,6 +1371,9 @@ export default {
                 this.open();
                 this.$router.push('/login');
             }
+        },
+        changeCinema(val) {
+            this.oCheckedCities = val;
         },
         open() {
             //错误信息弹出框
