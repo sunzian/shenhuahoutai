@@ -79,7 +79,7 @@
             </div>
         </div>
         <!--新增弹出框-->
-        <el-dialog title="新增商家" :visible.sync="dialogFormVisible">
+        <el-dialog title="新增影城" :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
                 <el-form-item label="商家名" :label-width="formLabelWidth">
                     <el-input
