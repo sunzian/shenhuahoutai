@@ -108,9 +108,6 @@
                         <el-tag v-else type="danger">否</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="number" label="剩余票数">
-                    <template slot-scope="scope">{{scope.row.remainTicketsNumber}}</template>
-                </el-table-column>
                 <el-table-column prop="string" label="短信平台类型">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.messagePlatformType == 1" type="info">专信云</el-tag>
@@ -564,13 +561,6 @@
                         <el-radio label="1">包年</el-radio>
                         <el-radio label="2">按票收费</el-radio>
                     </el-radio-group>
-                </el-form-item>
-                <el-form-item v-if="oForm.paymentType==2" label="剩余票数" :label-width="formLabelWidth">
-                    <el-input
-                            style="width: 250px"
-                            v-model="oForm.remainTicketsNumber"
-                            autocomplete="off"
-                    ></el-input>
                 </el-form-item>
                 <el-form-item v-if="oForm.paymentType==1"  label="到期时间" :label-width="formLabelWidth">
                     <el-date-picker
@@ -1144,13 +1134,6 @@
                             v-model="oExpireDate"
                             placeholder="选择日期时间"></el-date-picker>
                 </el-form-item>
-                <el-form-item v-if="oPaymentType==2" label="剩余票数" :label-width="formLabelWidth">
-                    <el-input
-                            style="width: 250px"
-                            v-model="oRemainTicketsNumber"
-                            autocomplete="off"
-                    ></el-input>
-                </el-form-item>
                 <el-form-item prop="reportedType" label="票价上报方式" :label-width="formLabelWidth">
                     <el-radio-group v-model="oReportedType">
                         <el-radio label="1">标准价格上报</el-radio>
@@ -1372,7 +1355,6 @@ export default {
                 snackEndTime: [{required: true, message: '请选择结束时间', trigger: 'blur'}],
                 openStatus: [{required: true, message: '请选择', trigger: 'change'}],
                 paymentType: [{required: true, message: '请选择', trigger: 'change'}],
-                remainTicketsNumber: [{required: true, message: '请输入正确票数', trigger: 'blur'}],
                 oExpireDate: [{required: true, message: '请选择', trigger: 'change'}],
                 reportedType: [{required: true, message: '请选择', trigger: 'change'}],
                 openMemberCardStatus: [{required: true, message: '请选择', trigger: 'change'}],
@@ -1426,7 +1408,6 @@ export default {
             oOpenSnackStatus: '',
             oSnackDispatcherStatus: '',
             oRefundable: '',
-            oRemainTicketsNumber: '',
             oSnackBeginTime: '',
             oSnackEndTime: '',
             oMessagePlatformType: '',
@@ -1512,7 +1493,6 @@ export default {
                 openSnackStatus: '',
                 snackDispatcherStatus: '',
                 refundable: '',
-                remainTicketsNumber: '',
                 snackBeginTime: '',
                 snackEndTime: '',
                 messagePlatformType: '',
@@ -1642,7 +1622,6 @@ export default {
             jsonArr.push({ key: 'openSnackStatus', value: this.oForm.openSnackStatus });
             jsonArr.push({ key: 'snackDispatcherStatus', value: this.oForm.snackDispatcherStatus });
             jsonArr.push({ key: 'refundable', value: this.oForm.refundable });
-            jsonArr.push({ key: 'remainTicketsNumber', value: this.oForm.remainTicketsNumber });
             jsonArr.push({ key: 'snackBeginTime', value: this.oForm.snackBeginTime});
             jsonArr.push({ key: 'snackEndTime', value: this.oForm.snackEndTime });
             jsonArr.push({ key: 'messagePlatformType', value: this.oForm.messagePlatformType });
@@ -1735,7 +1714,6 @@ export default {
                             this.oForm.snackDispatcherStatus = '';
                             this.oForm.refundable = '';
                             this.oForm.goldActivityMemo = '';
-                            this.oForm.remainTicketsNumber = '';
                             this.oForm.snackBeginTime = '';
                             this.oForm.snackEndTime = '';
                             this.oForm.messagePlatformType = '';
@@ -1880,7 +1858,6 @@ export default {
                         this.oBuyTicketHint = JSON.parse(Decrypt(data.data.data)).Cinema.buyTicketHint;
                         this.oRechargeMemo = JSON.parse(Decrypt(data.data.data)).Cinema.rechargeMemo;
                         this.oGoldActivityMemo = JSON.parse(Decrypt(data.data.data)).Cinema.goldActivityMemo;
-                        this.oRemainTicketsNumber = JSON.parse(Decrypt(data.data.data)).Cinema.remainTicketsNumber;
                         this.oSnackBeginTime = JSON.parse(Decrypt(data.data.data)).Cinema.snackBeginTime;
                         this.oSnackEndTime = JSON.parse(Decrypt(data.data.data)).Cinema.snackEndTime;
                         this.oMessagePlatformType = JSON.parse(Decrypt(data.data.data)).Cinema.messagePlatformType;
@@ -2052,7 +2029,6 @@ export default {
             jsonArr.push({ key: 'openSnackStatus', value: this.oOpenSnackStatus });
             jsonArr.push({ key: 'snackDispatcherStatus', value: this.oSnackDispatcherStatus });
             jsonArr.push({ key: 'refundable', value: this.oRefundable });
-            jsonArr.push({ key: 'remainTicketsNumber', value: this.oRemainTicketsNumber });
             jsonArr.push({ key: 'snackBeginTime', value: this.oSnackBeginTime });
             jsonArr.push({ key: 'snackEndTime', value: this.oSnackEndTime });
             jsonArr.push({ key: 'messagePlatformType', value: this.oMessagePlatformType });

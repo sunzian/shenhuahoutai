@@ -381,6 +381,7 @@ export default {
     data() {
         return {
             oCinemaName: '',
+            oCardLevelCode:'',
             oCardLevelName: '',
             oRuleName: '', // 规则名称
             oRechargeAmount: '', // 充值金额
@@ -644,6 +645,7 @@ export default {
                         this.oCinemaName = JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.cinemaName;
                         this.oCinemaCode = JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.cinemaCode;
                         this.oCardLevelName = JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.cardLevelName;
+                        this.oCardLevelCode = JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.cardLevelCode;
                         this.oRuleName = JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.ruleName;
                         this.oRechargeAmount = JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.rechargeAmount;
                         this.groupName = JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.couponGroupName;
@@ -783,8 +785,8 @@ export default {
             jsonArr.push({ key: 'endDate', value: this.oEndDate });
             jsonArr.push({ key: 'rechargeAmount', value: '0' });
             jsonArr.push({ key: 'ruleMemo', value: this.oRuleMemo });
-            jsonArr.push({ key: 'cardLevelCode', value: this.oForm.levelCode });
-            jsonArr.push({ key: 'cardLevelName', value: this.oForm.levelName });
+            jsonArr.push({ key: 'cardLevelCode', value: this.oCardLevelCode });
+            jsonArr.push({ key: 'cardLevelName', value: this.oCardLevelName });
             jsonArr.push({ key: 'id', value: this.oId });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });

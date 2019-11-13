@@ -1106,7 +1106,8 @@
                 });
             },
             selectCinema(val) {
-                console.log(val)
+                this.selectedSell=[];
+                console.log(val);
                 // let selectValue = val.join(',');
                 this.selectValue = val;
                 this.getAllScreen(val);

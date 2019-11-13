@@ -1040,7 +1040,9 @@
                 });
             },
             selectCinema(val) {
-                console.log(val)
+                console.log(1);
+                this.selectedSell=[];
+                console.log(val);
                 // let selectValue = val.join(',');
                 this.selectValue = val;
                 this.getAllScreen(val);
