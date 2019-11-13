@@ -596,6 +596,7 @@
                         class="upload-demo"
                         drag
                         :limit="1"
+                        ref="upload"
                         action="api/upload/uploadImage"
                         :before-upload="beforeUpload"
                         :on-success="setPicture"
@@ -639,11 +640,22 @@
                     ></el-input>
                 </el-form-item>
                 <el-form-item prop="miniRefundCertificateUrl"  label="小程序退款证书阿里云路径" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 250px"
-                        v-model="oForm.miniRefundCertificateUrl"
-                        autocomplete="off"
-                    ></el-input>
+                    <el-upload
+                            class="upload-demo"
+                            drag
+                            ref="upload"
+                            :limit="1"
+                            action="api/upload/uploadCert"
+                            :on-success="setCert"
+                            multiple
+                            list-type="picture"
+                    >
+                        <i class="el-icon-upload"></i>
+                        <div class="el-upload__text">
+                            将文件拖到此处，或
+                            <em>点击上传</em>
+                        </div>
+                    </el-upload>
                 </el-form-item>
                 <el-form-item prop="ticketingSystemType" label="售票系统类型" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.ticketingSystemType">
@@ -1193,11 +1205,22 @@
                     ></el-input>
                 </el-form-item>
                 <el-form-item prop="miniRefundCertificateUrl" label="小程序退款证书阿里云路径" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 250px"
-                        v-model="oMiniRefundCertificateUrl"
-                        autocomplete="off"
-                    ></el-input>
+                    <el-upload
+                            class="upload-demo"
+                            drag
+                            ref="download"
+                            :limit="1"
+                            action="api/upload/uploadCert"
+                            :on-success="downCert"
+                            multiple
+                            list-type="picture"
+                    >
+                        <i class="el-icon-upload"></i>
+                        <div class="el-upload__text">
+                            将文件拖到此处，或
+                            <em>点击上传</em>
+                        </div>
+                    </el-upload>
                 </el-form-item>
                 <el-form-item prop="ticketingSystemType" label="售票系统类型" :label-width="formLabelWidth">
                     <el-radio-group v-model="oTicketingSystemType">
@@ -1550,7 +1573,7 @@ export default {
                 jsonArr.push({ key: 'memberCardPayCommissionFee', value: this.oForm.memberCardPayCommissionFee });
             }
             jsonArr.push({ key: 'membershipServiceAgreement', value: this.oForm.membershipServiceAgreement });
-            jsonArr.push({ key: 'membershipServiceAgreement', value: this.oForm.rechargeMemo });
+            jsonArr.push({ key: 'rechargeMemo', value: this.oForm.rechargeMemo });
             jsonArr.push({ key: 'buyTicketHint', value: this.oForm.buyTicketHint });
             jsonArr.push({ key: 'openSnackStatus', value: this.oForm.openSnackStatus });
             jsonArr.push({ key: 'snackDispatcherStatus', value: this.oForm.snackDispatcherStatus });
@@ -1620,6 +1643,7 @@ export default {
                         if (data.data.code == 'success') {
                             this.dialogFormVisible = false;
                             this.$message.success(`新增成功`);
+                            this.$refs.upload.clearFiles();//清除已上传文件
                             this.oForm.cinemaName = '';
                             this.oForm.cinemaCode = '';
                             this.oForm.province = '';
@@ -2025,6 +2049,7 @@ export default {
                     // console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.$message.success(`编辑成功`);
+                        this.$refs.download.clearFiles();//清除已上传文件
                         this.getMenu();
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
@@ -2133,6 +2158,26 @@ export default {
             // 上传图片
             console.log(data);
             this.oForm.miniAppQRCode = data.data;
+            if (data.code == 'nologin') {
+                this.message = data.message;
+                this.open();
+                this.$router.push('/login');
+            }
+        },
+        setCert(data) {
+            // 上传图片
+            console.log(data);
+            this.oForm.miniRefundCertificateUrl = data.data;
+            if (data.code == 'nologin') {
+                this.message = data.message;
+                this.open();
+                this.$router.push('/login');
+            }
+        },
+        downCert(data) {
+            // 上传图片
+            console.log(data);
+            this.oMiniRefundCertificateUrl = data.data;
             if (data.code == 'nologin') {
                 this.message = data.message;
                 this.open();

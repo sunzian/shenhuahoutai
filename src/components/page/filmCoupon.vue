@@ -993,6 +993,7 @@ export default {
             });
         },
         selectCinema(val) {
+            console.log(1);
             this.selectValue = val;
             this.getAllScreen(val);
         },
