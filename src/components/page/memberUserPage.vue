@@ -83,17 +83,32 @@
                 <el-table-column prop="memo" label="手机号">
                     <template slot-scope="scope">{{scope.row.userMobile}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="是否在小程序上注册">
+                <!-- <el-table-column prop="memo" label="是否在小程序上注册">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.miniRegisterStatus=='1'" type="danger">未注册</el-tag>
                         <el-tag v-else-if="scope.row.miniRegisterStatus=='2'" type="success">已注册</el-tag>
                     </template>    
-                </el-table-column>
+                </el-table-column> -->
                 <el-table-column prop="memo" label="注册影院">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="注册时间">
                     <template slot-scope="scope">{{scope.row.miniRegisterDate}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="最近登陆时间">
+                    <template slot-scope="scope">{{scope.row.loginDate}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="累计消费金额">
+                    <template slot-scope="scope">{{scope.row.consumptionAmount}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="最近一次消费时间">
+                    <template slot-scope="scope">{{scope.row.lastConsumeDate}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="剩余优惠券数量">
+                    <template slot-scope="scope">{{scope.row.remainCoupons}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="用户金币数量">
+                    <template slot-scope="scope">{{scope.row.goldNumber}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="游戏厅角色">
                     <template slot-scope="scope">
