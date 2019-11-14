@@ -3,7 +3,7 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
-                    <i class="el-icon-lx-cascades"></i> 影票优惠券
+                    <i class="el-icon-lx-cascades"></i> 影票优惠券管理
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
@@ -290,17 +290,81 @@
                 <el-form-item label="优惠券名称：" :label-width="formLabelWidth" prop="name">
                     <el-input style="width: 180px" v-model="oName" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="适用影院：" :label-width="formLabelWidth" prop="cinemaName">
-                    <el-input :disabled="true" style="width: 250px" v-model="oCinemaName" autocomplete="off"></el-input>
+                <el-form-item label="选择影院：" :label-width="formLabelWidth" prop="cinemaName">
+                    <el-radio-group v-model="oCinemaCode" @change="selectCinema">
+                        <el-radio
+                                v-for="item in cinemaInfo"
+                                :label="item.cinemaCode"
+                                :key="item.cinemaCode"
+                                :value="item.cinemaName"
+                        >{{item.cinemaName}}</el-radio>
+                    </el-radio-group>
                 </el-form-item>
-                <el-form-item label="适用影厅：" :label-width="formLabelWidth" prop="screenName">
-                    <el-input :disabled="true" style="width: 250px" v-model="oScreenName" autocomplete="off"></el-input>
+                <el-form-item label="选择影厅：" :label-width="formLabelWidth" prop="screenName">
+                    <el-radio-group v-model="oSelectHallType">
+                        <el-radio label="0">全部影厅</el-radio>
+                        <el-radio label="1">指定影厅参加</el-radio>
+                        <el-radio label="2">指定影厅不参加</el-radio>
+                    </el-radio-group>
+                    <el-checkbox-group
+                            v-model="oScreenCode"
+                            @change="selectScreens"
+                            v-if="oSelectHallType != 0"
+                    >
+                        <el-checkbox
+                                v-for="item in screenInfo"
+                                :label="item.screenCode"
+                                :key="item.screenCode"
+                                :value="item.screenName"
+                        >{{item.screenName}}</el-checkbox>
+                    </el-checkbox-group>
                 </el-form-item>
-                <el-form-item label="适用制式：" :label-width="formLabelWidth" prop="formatName">
-                    <el-input :disabled="true" style="width: 250px" v-model="oFilmFormatName" autocomplete="off"></el-input>
+                <el-form-item label="选择制式：" :label-width="formLabelWidth" prop="formatName">
+                    <el-radio-group v-model="oSelectFilmFormatType">
+                        <el-radio label="0">全部制式参加</el-radio>
+                        <el-radio label="1">指定制式参加</el-radio>
+                        <el-radio label="2">指定制式不参加</el-radio>
+                    </el-radio-group>
+                    <el-checkbox-group v-model="oFilmFormatCode" @change="selectFormat" v-if="oSelectFilmFormatType != 0">
+                        <el-checkbox
+                                v-for="item in formatList"
+                                :label="item.formatCode"
+                                :key="item.formatCode"
+                                :value="item.formatName"
+                        >{{item.formatName}}</el-checkbox>
+                    </el-checkbox-group>
                 </el-form-item>
-                <el-form-item label="适用影片：" :label-width="formLabelWidth" prop="filmName">
-                    <el-input :disabled="true" style="width: 250px" v-model="oFilmName" autocomplete="off"></el-input>
+                <el-form-item label="选择影片：" :label-width="formLabelWidth" prop="filmName">
+                    <el-radio-group v-model="oSelectFilmType">
+                        <el-radio label="0">全部影片</el-radio>
+                        <el-radio label="1">部分影片</el-radio>
+                        <el-radio label="2">排除影片</el-radio>
+                    </el-radio-group>
+                    <el-col :span="12" v-if="oSelectFilmType != 0">
+                        搜索影片：
+                        <el-autocomplete
+                                class="inline-input"
+                                v-model="oFilmName"
+                                :fetch-suggestions="querySearch"
+                                placeholder="请输入内容"
+                                :trigger-on-focus="false"
+                                @select="handleSelect"
+                        ></el-autocomplete>
+                        <span style="color:blue;cursor: pointer;" @click="exAddFilm">添加</span>
+                    </el-col>
+                </el-form-item>
+                <el-form-item
+                        label="所选影片："
+                        :label-width="formLabelWidth"
+                        v-if="filmInfo.length>0 && oSelectFilmType != 0"
+                >
+                    <div v-for="(item, index) in filmInfo" :key="index">
+                        {{item.value}}
+                        <span
+                                style="color:red;cursor: pointer;"
+                                @click="deletFilm(index)"
+                        >删除</span>
+                    </div>
                 </el-form-item>
                 <el-form-item label="有效期：" :label-width="formLabelWidth" prop="date1">
                     <el-date-picker
@@ -443,8 +507,14 @@ export default {
                     value:'星期日'
                 },
             ],
+            oCinemaCode:'',
+            oSelectHallType:'',
+            oScreenCode:[],
+            oFilmFormatCode:[],
+            oSelectFilmFormatType:'',
             oCheckedDays:[],
             oCinemaName: '',
+            oSelectFilmType: '',
             oScreenName: '',
             oFilmName: '',
             oName: '',
@@ -531,7 +601,8 @@ export default {
             cinemaInfo: [],
             screenInfo: [],
             filmInfo: [],
-            value: ''
+            value: '',
+            selectFilmCode:[],
         };
     },
     created() {
@@ -761,56 +832,62 @@ export default {
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             let params = ParamsAppend(jsonArr);
-            https
-                .fetchPost('/filmCoupon/getFilmCouponById', params)
-                .then(data => {
+            https.fetchPost('/filmCoupon/getFilmCouponById', params).then(data => {
                     loading.close();
                     console.log(data);
                     console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
+                        let formats = JSON.parse(Decrypt(data.data.data)).formatList;
+                        this.formatList = [];
+                        for (let i = 0; i < formats.length; i++) {
+                            let formatArr = {};
+                            formatArr.formatCode = formats[i].formatCode;
+                            formatArr.formatName = formats[i].formatName;
+                            this.formatList.push(formatArr);
+                        }
                         this.editVisible = true;
-                        this.oCinemaName = JSON.parse(Decrypt(data.data.data)).cinemaNames;
-                        this.oScreenName = JSON.parse(Decrypt(data.data.data)).screenNames;
-                        this.oFilmName = JSON.parse(Decrypt(data.data.data)).filmNames;
-                        this.oFilmFormatName = JSON.parse(Decrypt(data.data.data)).filmFormatName;
-                        this.oName = JSON.parse(Decrypt(data.data.data)).name;
-                        this.oStartDate = JSON.parse(Decrypt(data.data.data)).startDate;
-                        this.oCheckedDays = JSON.parse(Decrypt(data.data.data)).exceptWeekDay.split(",");
-                        this.oEndDate = JSON.parse(Decrypt(data.data.data)).endDate;
-                        if (JSON.parse(Decrypt(data.data.data)).validPayType == 0) {
+                        this.oCinemaName = JSON.parse(Decrypt(data.data.data)).coupon.cinemaNames;
+                        this.oScreenName = JSON.parse(Decrypt(data.data.data)).coupon.screenNames;
+                        // this.oFilmName = JSON.parse(Decrypt(data.data.data)).coupon.filmNames;
+                        this.oFilmFormatName = JSON.parse(Decrypt(data.data.data)).coupon.filmFormatName;
+                        this.oName = JSON.parse(Decrypt(data.data.data)).coupon.name;
+                        this.oStartDate = JSON.parse(Decrypt(data.data.data)).coupon.startDate;
+                        this.oCheckedDays = JSON.parse(Decrypt(data.data.data)).coupon.exceptWeekDay.split(",");
+                        this.oEndDate = JSON.parse(Decrypt(data.data.data)).coupon.endDate;
+                        if (JSON.parse(Decrypt(data.data.data)).coupon.validPayType == 0) {
                             this.oValidPayType = '0';
                         }
-                        if (JSON.parse(Decrypt(data.data.data)).validPayType == 1) {
+                        if (JSON.parse(Decrypt(data.data.data)).coupon.validPayType == 1) {
                             this.oValidPayType = '1';
                         }
-                        if (JSON.parse(Decrypt(data.data.data)).validPayType == 2) {
+                        if (JSON.parse(Decrypt(data.data.data)).coupon.validPayType == 2) {
                             this.oValidPayType = '2';
                         }
-                        if (JSON.parse(Decrypt(data.data.data)).reduceType == 1) {
+                        if (JSON.parse(Decrypt(data.data.data)).coupon.reduceType == 1) {
                             this.oReduceType = '1';
                         }
-                        if (JSON.parse(Decrypt(data.data.data)).reduceType == 2) {
+                        if (JSON.parse(Decrypt(data.data.data)).coupon.reduceType == 2) {
                             this.oReduceType = '2';
                         }
 
-                        this.oDiscountMoney = JSON.parse(Decrypt(data.data.data)).discountMoney;
-                        this.oCouponDesc = JSON.parse(Decrypt(data.data.data)).couponDesc;
-                        this.oSendNumber = JSON.parse(Decrypt(data.data.data)).sendNumber;
-                        this.oId = JSON.parse(Decrypt(data.data.data)).id;
+                        this.oDiscountMoney = JSON.parse(Decrypt(data.data.data)).coupon.discountMoney;
+                        this.oCouponDesc = JSON.parse(Decrypt(data.data.data)).coupon.couponDesc;
+                        this.oSendNumber = JSON.parse(Decrypt(data.data.data)).coupon.sendNumber;
+                        this.oId = JSON.parse(Decrypt(data.data.data)).coupon.id;
                         for (let x in this.canUse) {
-                            if (this.canUse[x].value == JSON.parse(Decrypt(data.data.data)).activityTogether) {
+                            if (this.canUse[x].value == JSON.parse(Decrypt(data.data.data)).coupon.activityTogether) {
                                 this.oActivityTogether = this.canUse[x].value;
                                 break;
                             }
                         }
                         for (let x in this.canUse) {
-                            if (this.canUse[x].value == JSON.parse(Decrypt(data.data.data)).holidayValid) {
+                            if (this.canUse[x].value == JSON.parse(Decrypt(data.data.data)).coupon.holidayValid) {
                                 this.oHolidayValid = this.canUse[x].value;
                                 break;
                             }
                         }
                         for (let x in this.options) {
-                            if (this.options[x].value == JSON.parse(Decrypt(data.data.data)).status) {
+                            if (this.options[x].value == JSON.parse(Decrypt(data.data.data)).coupon.status) {
                                 this.oStatus = this.options[x].value;
                                 break;
                             }
@@ -831,6 +908,9 @@ export default {
         },
         // 编辑操作
         exChanger() {
+            for(let x in this.filmInfo){
+                this.selectFilmCode.push(this.filmInfo[x].filmCode)
+            }
             const loading = this.$loading({
                 lock: true,
                 text: 'Loading',
@@ -840,6 +920,13 @@ export default {
             });
             var jsonArr = [];
             jsonArr.push({ key: 'name', value: this.oName });
+            jsonArr.push({ key: 'cinemaCodes', value: this.oCinemaCode });
+            jsonArr.push({ key: 'selectFilmFormatType', value: this.oSelectFilmFormatType });
+            jsonArr.push({ key: 'filmCode', value: this.selectFilmCode.join(',') });
+            jsonArr.push({ key: 'selectFilmType', value: this.oSelectFilmType });
+            jsonArr.push({ key: 'filmFormatCode', value: this.oFilmFormatCode.join(',') });
+            jsonArr.push({ key: 'selectHallType', value: this.oSelectHallType });
+            jsonArr.push({ key: 'screenCode', value: this.oScreenCode.join(',') });
             jsonArr.push({ key: 'discountMoney', value: this.oDiscountMoney });
             jsonArr.push({ key: 'startDate', value: this.oStartDate });
             jsonArr.push({ key: 'endDate', value: this.oEndDate });
@@ -879,49 +966,61 @@ export default {
         },
         // 修改状态
         changeStatus(index, row) {
-            const loading = this.$loading({
-                lock: true,
-                text: 'Loading',
-                spinner: 'el-icon-loading',
-                background: 'rgba(0, 0, 0, 0.7)',
-                target: document.querySelector('.div1')
-            });
-            this.idx = index;
-            this.form = row;
-            var jsonArr = [];
-            let status;
-            if (row.status == 1) {
-                status = 0;
-            } else if (row.status == 0) {
-                status = 1;
-            }
-            jsonArr.push({ key: 'id', value: row.id });
-            jsonArr.push({ key: 'status', value: status });
-            let sign = md5(preSign(jsonArr));
-            jsonArr.push({ key: 'sign', value: sign });
-            console.log(jsonArr);
-            let params = ParamsAppend(jsonArr);
-            https
-                .fetchPost('/filmCoupon/updateCouponStatusById', params)
-                .then(data => {
-                    loading.close();
-                    // console.log(JSON.parse(Decrypt(data.data.data)));
-                    if (data.data.code == 'success') {
-                        this.$message.success(`修改成功`);
-                        this.getMenu();
-                    } else if (data.data.code == 'nologin') {
-                        this.message = data.data.message;
-                        this.open();
-                        this.$router.push('/login');
-                    } else {
-                        this.message = data.data.message;
-                        this.open();
+            this.$confirm('此操作将修改状态, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            })
+                .then(() => {
+                    const loading = this.$loading({
+                        lock: true,
+                        text: 'Loading',
+                        spinner: 'el-icon-loading',
+                        background: 'rgba(0, 0, 0, 0.7)',
+                        target: document.querySelector('.div1')
+                    });
+                    this.idx = index;
+                    this.form = row;
+                    var jsonArr = [];
+                    let status;
+                    if (row.status == 1) {
+                        status = 0;
+                    } else if (row.status == 0) {
+                        status = 1;
                     }
-                })
-                .catch(err => {
-                    loading.close();
-                    console.log(err);
+                    jsonArr.push({ key: 'id', value: row.id });
+                    jsonArr.push({ key: 'status', value: status });
+                    let sign = md5(preSign(jsonArr));
+                    jsonArr.push({ key: 'sign', value: sign });
+                    console.log(jsonArr);
+                    let params = ParamsAppend(jsonArr);
+                    https
+                        .fetchPost('/filmCoupon/updateCouponStatusById', params)
+                        .then(data => {
+                            loading.close();
+                            // console.log(JSON.parse(Decrypt(data.data.data)));
+                            if (data.data.code == 'success') {
+                                this.$message.success(`修改成功`);
+                                this.getMenu();
+                            } else if (data.data.code == 'nologin') {
+                                this.message = data.data.message;
+                                this.open();
+                                this.$router.push('/login');
+                            } else {
+                                this.message = data.data.message;
+                                this.open();
+                            }
+                        })
+                        .catch(err => {
+                            loading.close();
+                            console.log(err);
+                        });
+                }) .catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消修改'
                 });
+            });
         },
         Search() {
             this.query.pageNo = 1;
@@ -1091,6 +1190,35 @@ export default {
             }
             for (var i = 0;i < this.restaurants.length; i ++) {
                 if (this.oForm.filmName == this.restaurants[i].value) {
+                    this.selectFilm = this.restaurants[i]
+                }
+            }
+            if (!this.selectFilm.value) {
+                return
+            }
+            // 筛选重复影片
+            var result = this.filmInfo.some(item => {
+                if (item.value == this.selectFilm.value) {
+                    return true;
+                }
+            });
+            if (result) {
+                return;
+            }
+            this.filmInfo.push(this.selectFilm);
+        },
+        exAddFilm() {
+            this.selectFilm = {};
+            if (this.oFilmName == '') {
+                return
+            }
+            if (this.restaurants.length == 0) {
+                this.message = '暂无匹配影片';
+                this.open();
+                return
+            }
+            for (var i = 0;i < this.restaurants.length; i ++) {
+                if (this.oFilmName == this.restaurants[i].value) {
                     this.selectFilm = this.restaurants[i]
                 }
             }
