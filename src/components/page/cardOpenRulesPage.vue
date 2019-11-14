@@ -129,14 +129,14 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="充值金额(起充金额)：" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 250px"
-                        min="1"
-                        v-model.trim="oForm.rechargeAmount"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
+                <!--<el-form-item label="充值金额(起充金额)：" :label-width="formLabelWidth">-->
+                    <!--<el-input-->
+                        <!--style="width: 250px"-->
+                        <!--min="1"-->
+                        <!--v-model.trim="oForm.rechargeAmount"-->
+                        <!--autocomplete="off"-->
+                    <!--&gt;</el-input>-->
+                <!--</el-form-item>-->
                 <el-form-item label="赠送类型：" :label-width="formLabelWidth">
                     <el-select v-model="oForm.givenType" placeholder="请选择">
                         <el-option
@@ -147,22 +147,22 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item
-                    label="赠送金额："
-                    :label-width="formLabelWidth"
-                    v-if="oForm.givenType == 2 || oForm.givenType == 4"
-                >
-                    <el-input
-                        style="width: 250px"
-                        min="1"
-                        v-model="oForm.givenMoney"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
+                <!--<el-form-item-->
+                    <!--label="赠送金额："-->
+                    <!--:label-width="formLabelWidth"-->
+                    <!--v-if="oForm.givenType == 2 || oForm.givenType == 4"-->
+                <!--&gt;-->
+                    <!--<el-input-->
+                        <!--style="width: 250px"-->
+                        <!--min="1"-->
+                        <!--v-model="oForm.givenMoney"-->
+                        <!--autocomplete="off"-->
+                    <!--&gt;</el-input>-->
+                <!--</el-form-item>-->
                 <el-form-item
                     label="设置券包："
                     :label-width="formLabelWidth"
-                    v-if="oForm.givenType == 3 || oForm.givenType == 4"
+                    v-if="oForm.givenType == 3"
                 >
                     <el-button type="primary" @click="getAllCoupon">选择券包</el-button>
                 </el-form-item>
@@ -244,14 +244,14 @@
                 <el-form-item label="开卡规则名称：" :label-width="formLabelWidth">
                     <el-input style="width: 250px" min="1" v-model.trim="oRuleName" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="充值金额(起充金额)：" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 250px"
-                        min="1"
-                        v-model.trim="oRechargeAmount"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
+                <!--<el-form-item label="充值金额(起充金额)：" :label-width="formLabelWidth">-->
+                    <!--<el-input-->
+                        <!--style="width: 250px"-->
+                        <!--min="1"-->
+                        <!--v-model.trim="oRechargeAmount"-->
+                        <!--autocomplete="off"-->
+                    <!--&gt;</el-input>-->
+                <!--</el-form-item>-->
                 <el-form-item label="赠送类型：" :label-width="formLabelWidth">
                     <el-select v-model="oGivenType" placeholder="请选择">
                         <el-option
@@ -262,17 +262,17 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item
-                    label="赠送金额："
-                    :label-width="formLabelWidth"
-                    v-if="oGivenType == 2 || oGivenType == 4 || oGivenType == '赠送金额' || oGivenType == '两者都送'"
-                >
-                    <el-input style="width: 250px" min="1" v-model="oGivenMoney" autocomplete="off"></el-input>
-                </el-form-item>
+                <!--<el-form-item-->
+                    <!--label="赠送金额："-->
+                    <!--:label-width="formLabelWidth"-->
+                    <!--v-if="oGivenType == 2 || oGivenType == 4 || oGivenType == '赠送金额' || oGivenType == '两者都送'"-->
+                <!--&gt;-->
+                    <!--<el-input style="width: 250px" min="1" v-model="oGivenMoney" autocomplete="off"></el-input>-->
+                <!--</el-form-item>-->
                 <el-form-item
                     label="已设券包："
                     :label-width="formLabelWidth"
-                    v-if="oGivenType == 3 || oGivenType == 4 || oGivenType == '赠送券包' || oGivenType == '两者都送'"
+                    v-if="oGivenType == 3 || oGivenType == '赠送券包'"
                 >
                     <el-input
                         style="width: 250px"
@@ -381,6 +381,7 @@ export default {
     data() {
         return {
             oCinemaName: '',
+            oCardLevelCode:'',
             oCardLevelName: '',
             oRuleName: '', // 规则名称
             oRechargeAmount: '', // 充值金额
@@ -416,17 +417,9 @@ export default {
                     label: '不赠送'
                 },
                 {
-                    value: '2',
-                    label: '赠送金额'
-                },
-                {
                     value: '3',
                     label: '赠送券包'
                 },
-                {
-                    value: '4',
-                    label: '两者都送'
-                }
             ],
             cinemaInfo: [],
             cardList: [],
@@ -512,14 +505,14 @@ export default {
                 target: document.querySelector('.div1')
             });
             var jsonArr = [];
-            if (this.oForm.givenType == 2 || this.oForm.givenType == 4) {
-                if (this.oForm.givenMoney == '') {
-                    this.message = '请填写赠送金额';
-                    this.open();
-                    loading.close();
-                    return;
-                }
-            }
+            // if (this.oForm.givenType == 2 || this.oForm.givenType == 4) {
+            //     if (this.oForm.givenMoney == '') {
+            //         this.message = '请填写赠送金额';
+            //         this.open();
+            //         loading.close();
+            //         return;
+            //     }
+            // }
             if (this.oForm.givenType == 3 || this.oForm.givenType == 4) {
                 if (this.couponId == '') {
                     this.message = '请选择券包';
@@ -531,12 +524,12 @@ export default {
             if (this.couponId != '') {
                 jsonArr.push({ key: 'givenCouponGroupId', value: this.couponId });
             }
-            if (this.oForm.givenMoney != '') {
-                jsonArr.push({ key: 'givenMoney', value: this.oForm.givenMoney });
-            }
+            // if (this.oForm.givenMoney != '') {
+            //     jsonArr.push({ key: 'givenMoney', value: this.oForm.givenMoney });
+            // }
             jsonArr.push({ key: 'cinemaCode', value: this.oForm.cinemaCode });
             jsonArr.push({ key: 'ruleName', value: this.oForm.ruleName });
-            jsonArr.push({ key: 'rechargeAmount', value: this.oForm.rechargeAmount });
+            jsonArr.push({ key: 'rechargeAmount', value: '0' });
             jsonArr.push({ key: 'cardLevelCode', value: this.oForm.levelCode });
             jsonArr.push({ key: 'cardLevelName', value: this.oForm.levelName });
             jsonArr.push({ key: 'givenType', value: this.oForm.givenType });
@@ -652,6 +645,7 @@ export default {
                         this.oCinemaName = JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.cinemaName;
                         this.oCinemaCode = JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.cinemaCode;
                         this.oCardLevelName = JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.cardLevelName;
+                        this.oCardLevelCode = JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.cardLevelCode;
                         this.oRuleName = JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.ruleName;
                         this.oRechargeAmount = JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.rechargeAmount;
                         this.groupName = JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.couponGroupName;
@@ -742,39 +736,37 @@ export default {
                 jsonArr.push({ key: 'givenType', value: this.oGivenType });
             }
             if (this.oGivenType == 1) {
-                this.oGivenMoney = '';
                 this.couponId = '';
                 this.groupName = '';
             }
             if (this.oGivenType == 3) {
-                this.oGivenMoney = '';
                 if (this.couponId == '' || !this.couponId) {
-                    alert("请选择券包")
+                    alert("请选择券包");
                     loading.close();
                     return;
                 }
             }
-            if (this.oGivenType == 2) {
-                this.couponId = '';
-                this.groupName = '';
-                if (this.oGivenMoney == '') {
-                    alert("请输入赠送金额")
-                    loading.close();
-                    return;
-                }
-            }
-            if (this.oGivenType == 4) {
-                if (this.oGivenMoney == '') {
-                    alert("请输入赠送金额")
-                    loading.close();
-                    return;
-                }
-                if (this.couponId == '' || !this.couponId) {
-                    alert("请选择券包")
-                    loading.close();
-                    return;
-                }
-            }
+            // if (this.oGivenType == 2) {
+            //     this.couponId = '';
+            //     this.groupName = '';
+            //     if (this.oGivenMoney == '') {
+            //         alert("请输入赠送金额")
+            //         loading.close();
+            //         return;
+            //     }
+            // }
+            // if (this.oGivenType == 4) {
+            //     if (this.oGivenMoney == '') {
+            //         alert("请输入赠送金额")
+            //         loading.close();
+            //         return;
+            //     }
+            //     if (this.couponId == '' || !this.couponId) {
+            //         alert("请选择券包")
+            //         loading.close();
+            //         return;
+            //     }
+            // }
             if (this.oStatus == '启用') {
                 jsonArr.push({ key: 'status', value: 1 });
             } else if (this.oStatus == '不启用') {
@@ -782,19 +774,19 @@ export default {
             } else {
                 jsonArr.push({ key: 'status', value: this.oStatus });
             }
-            if (this.oGivenMoney != '') {
-                jsonArr.push({ key: 'givenMoney', value: this.oGivenMoney });
-            }
+            // if (this.oGivenMoney != '') {
+            //     jsonArr.push({ key: 'givenMoney', value: this.oGivenMoney });
+            // }
             if (this.couponId != '') {
                 jsonArr.push({ key: 'givenCouponGroupId', value: this.couponId });
             }
             jsonArr.push({ key: 'ruleName', value: this.oRuleName });
             jsonArr.push({ key: 'startDate', value: this.oStartDate });
             jsonArr.push({ key: 'endDate', value: this.oEndDate });
-            jsonArr.push({ key: 'rechargeAmount', value: this.oRechargeAmount });
+            jsonArr.push({ key: 'rechargeAmount', value: '0' });
             jsonArr.push({ key: 'ruleMemo', value: this.oRuleMemo });
-            jsonArr.push({ key: 'cardLevelCode', value: this.oForm.levelCode });
-            jsonArr.push({ key: 'cardLevelName', value: this.oForm.levelName });
+            jsonArr.push({ key: 'cardLevelCode', value: this.oCardLevelCode });
+            jsonArr.push({ key: 'cardLevelName', value: this.oCardLevelName });
             jsonArr.push({ key: 'id', value: this.oId });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });

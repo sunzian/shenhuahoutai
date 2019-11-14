@@ -306,6 +306,12 @@
                             if (JSON.parse(Decrypt(data.data.data)).extraFlag == 2) {
                                 this.oExtraFlag = '2';
                             }
+                            if (JSON.parse(Decrypt(data.data.data)).extraPrizeType == 1) {
+                                this.oExtraPrizeType = '1';
+                            }
+                            if (JSON.parse(Decrypt(data.data.data)).extraPrizeType == 2) {
+                                this.oExtraPrizeType = '2';
+                            }
                             this.editVisible=true;
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;

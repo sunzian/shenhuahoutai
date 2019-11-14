@@ -150,7 +150,7 @@
                     </el-select>
                 </el-form-item>
                 <!--<el-form-item label="添加奖项" :label-width="formLabelWidth">-->
-                    <el-button style="float: right" type="primary" @click="changePrize">添加奖项</el-button>
+                    <el-button style="margin-top:-35px;float: right" type="primary" @click="changePrize">添加奖项</el-button>
                 <!--</el-form-item>-->
             </el-form>
             <el-table

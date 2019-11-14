@@ -9,7 +9,49 @@
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-input v-model="query.name" placeholder="影院名称" class="handle-input mr10"></el-input>
+                <el-input v-model="query.cinemaName" placeholder="影院名称" class="handle-input mr10"></el-input>
+                <el-select clearable v-model="query.belongBusinessCode" placeholder="关联商家">
+                    <el-option
+                            v-for="info in businessInfo"
+                            :key="info.businessCode"
+                            :value="info.businessCode"
+                            :label="info.businessName"
+                    ></el-option>
+                </el-select>
+                <el-select clearable v-model="query.paymentType" placeholder="费用支付类型" class="handle-select mr10">
+                    <el-option key="1" label="包年" value="1"></el-option>
+                    <el-option key="2" label="按票收费" value="2"></el-option>
+                </el-select>
+                <el-select clearable v-model="query.reportedType" placeholder="票价上报方式" class="handle-select mr10">
+                    <el-option key="1" label="标准价格上报" value="1"></el-option>
+                    <el-option key="2" label="优惠后价格上报" value="2"></el-option>
+                </el-select>
+                <el-select clearable v-model="query.ticketingSystemType" placeholder="售票系统类型" class="handle-select mr10">
+                    <el-option key="1" label="辰星" value="1"></el-option>
+                    <el-option key="2" label="1905" value="2"></el-option>
+                    <el-option key="4" label="满天星" value="4"></el-option>
+                    <el-option key="8" label="粤科" value="8"></el-option>
+                    <el-option key="16" label="云智" value="16"></el-option>
+                    <el-option key="32" label="火烈鸟" value="32"></el-option>
+                    <el-option key="64" label="鼎新" value="64"></el-option>
+                    <el-option key="128" label="vista" value="128"></el-option>
+                </el-select>
+                <el-date-picker
+                        style="width: 200px;"
+                        v-model="query.startDate"
+                        type="date"
+                        value-format="yyyy-MM-dd"
+                        format="yyyy-MM-dd"
+                        placeholder="开始时间">
+                </el-date-picker>至
+                <el-date-picker
+                        style="width: 200px;"
+                        v-model="query.endDate"
+                        type="date"
+                        value-format="yyyy-MM-dd"
+                        format="yyyy-MM-dd"
+                        placeholder="结束时间">
+                </el-date-picker>
                 <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
                 <el-button
                     type="primary"
@@ -65,9 +107,6 @@
                         <el-tag v-if="scope.row.refundable == 1" type="success">是</el-tag>
                         <el-tag v-else type="danger">否</el-tag>
                     </template>
-                </el-table-column>
-                <el-table-column prop="number" label="剩余票数">
-                    <template slot-scope="scope">{{scope.row.remainTicketsNumber}}</template>
                 </el-table-column>
                 <el-table-column prop="string" label="短信平台类型">
                     <template slot-scope="scope">
@@ -522,13 +561,6 @@
                         <el-radio label="1">包年</el-radio>
                         <el-radio label="2">按票收费</el-radio>
                     </el-radio-group>
-                </el-form-item>
-                <el-form-item v-if="oForm.paymentType==2" label="剩余票数" :label-width="formLabelWidth">
-                    <el-input
-                            style="width: 250px"
-                            v-model="oForm.remainTicketsNumber"
-                            autocomplete="off"
-                    ></el-input>
                 </el-form-item>
                 <el-form-item v-if="oForm.paymentType==1"  label="到期时间" :label-width="formLabelWidth">
                     <el-date-picker
@@ -1102,13 +1134,6 @@
                             v-model="oExpireDate"
                             placeholder="选择日期时间"></el-date-picker>
                 </el-form-item>
-                <el-form-item v-if="oPaymentType==2" label="剩余票数" :label-width="formLabelWidth">
-                    <el-input
-                            style="width: 250px"
-                            v-model="oRemainTicketsNumber"
-                            autocomplete="off"
-                    ></el-input>
-                </el-form-item>
                 <el-form-item prop="reportedType" label="票价上报方式" :label-width="formLabelWidth">
                     <el-radio-group v-model="oReportedType">
                         <el-radio label="1">标准价格上报</el-radio>
@@ -1330,7 +1355,6 @@ export default {
                 snackEndTime: [{required: true, message: '请选择结束时间', trigger: 'blur'}],
                 openStatus: [{required: true, message: '请选择', trigger: 'change'}],
                 paymentType: [{required: true, message: '请选择', trigger: 'change'}],
-                remainTicketsNumber: [{required: true, message: '请输入正确票数', trigger: 'blur'}],
                 oExpireDate: [{required: true, message: '请选择', trigger: 'change'}],
                 reportedType: [{required: true, message: '请选择', trigger: 'change'}],
                 openMemberCardStatus: [{required: true, message: '请选择', trigger: 'change'}],
@@ -1384,7 +1408,6 @@ export default {
             oOpenSnackStatus: '',
             oSnackDispatcherStatus: '',
             oRefundable: '',
-            oRemainTicketsNumber: '',
             oSnackBeginTime: '',
             oSnackEndTime: '',
             oMessagePlatformType: '',
@@ -1470,7 +1493,6 @@ export default {
                 openSnackStatus: '',
                 snackDispatcherStatus: '',
                 refundable: '',
-                remainTicketsNumber: '',
                 snackBeginTime: '',
                 snackEndTime: '',
                 messagePlatformType: '',
@@ -1512,6 +1534,7 @@ export default {
     created() {},
     mounted() {
         this.getMenu();
+        this.getBusinessInfo();
     },
     methods: {
         addPage() {
@@ -1599,7 +1622,6 @@ export default {
             jsonArr.push({ key: 'openSnackStatus', value: this.oForm.openSnackStatus });
             jsonArr.push({ key: 'snackDispatcherStatus', value: this.oForm.snackDispatcherStatus });
             jsonArr.push({ key: 'refundable', value: this.oForm.refundable });
-            jsonArr.push({ key: 'remainTicketsNumber', value: this.oForm.remainTicketsNumber });
             jsonArr.push({ key: 'snackBeginTime', value: this.oForm.snackBeginTime});
             jsonArr.push({ key: 'snackEndTime', value: this.oForm.snackEndTime });
             jsonArr.push({ key: 'messagePlatformType', value: this.oForm.messagePlatformType });
@@ -1692,7 +1714,6 @@ export default {
                             this.oForm.snackDispatcherStatus = '';
                             this.oForm.refundable = '';
                             this.oForm.goldActivityMemo = '';
-                            this.oForm.remainTicketsNumber = '';
                             this.oForm.snackBeginTime = '';
                             this.oForm.snackEndTime = '';
                             this.oForm.messagePlatformType = '';
@@ -1837,7 +1858,6 @@ export default {
                         this.oBuyTicketHint = JSON.parse(Decrypt(data.data.data)).Cinema.buyTicketHint;
                         this.oRechargeMemo = JSON.parse(Decrypt(data.data.data)).Cinema.rechargeMemo;
                         this.oGoldActivityMemo = JSON.parse(Decrypt(data.data.data)).Cinema.goldActivityMemo;
-                        this.oRemainTicketsNumber = JSON.parse(Decrypt(data.data.data)).Cinema.remainTicketsNumber;
                         this.oSnackBeginTime = JSON.parse(Decrypt(data.data.data)).Cinema.snackBeginTime;
                         this.oSnackEndTime = JSON.parse(Decrypt(data.data.data)).Cinema.snackEndTime;
                         this.oMessagePlatformType = JSON.parse(Decrypt(data.data.data)).Cinema.messagePlatformType;
@@ -2009,7 +2029,6 @@ export default {
             jsonArr.push({ key: 'openSnackStatus', value: this.oOpenSnackStatus });
             jsonArr.push({ key: 'snackDispatcherStatus', value: this.oSnackDispatcherStatus });
             jsonArr.push({ key: 'refundable', value: this.oRefundable });
-            jsonArr.push({ key: 'remainTicketsNumber', value: this.oRemainTicketsNumber });
             jsonArr.push({ key: 'snackBeginTime', value: this.oSnackBeginTime });
             jsonArr.push({ key: 'snackEndTime', value: this.oSnackEndTime });
             jsonArr.push({ key: 'messagePlatformType', value: this.oMessagePlatformType });
@@ -2095,9 +2114,7 @@ export default {
         },
         getBusinessInfo() {
             // 获取所有关联商家编码
-            https
-                .fetchPost('/businessInfo/getAllBusinessInfo')
-                .then(data => {
+            https.fetchPost('/businessInfo/getAllBusinessInfo').then(data => {
                     if (data.data.code == 'success') {
                         var res = JSON.parse(Decrypt(data.data.data));
                         console.log(res);
@@ -2124,16 +2141,42 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            let name = this.query.name;
-            let status = this.query.status;
-            if (!name) {
-                name = '';
+            let cinemaName = this.query.cinemaName;
+            let belongBusinessCode = this.query.belongBusinessCode;
+            let paymentType = this.query.paymentType;
+            let reportedType = this.query.reportedType;
+            let ticketingSystemType = this.query.ticketingSystemType;
+            let startDate = this.query.startDate;
+            let endDate = this.query.endDate;
+            if (!cinemaName) {
+                cinemaName = '';
             }
-            if (!status) {
-                status = '';
+            if (!belongBusinessCode) {
+                belongBusinessCode = '';
+            }
+            if (!paymentType) {
+                paymentType = '';
+            }
+            if (!reportedType) {
+                reportedType = '';
+            }
+            if (!ticketingSystemType) {
+                ticketingSystemType = '';
+            }
+            if (!startDate) {
+                startDate = '';
+            }
+            if (!endDate) {
+                endDate = '';
             }
             let jsonArr = [];
-            jsonArr.push({ key: 'cinemaName', value: name });
+            jsonArr.push({ key: 'cinemaName', value: cinemaName });
+            jsonArr.push({ key: 'belongBusinessCode', value: belongBusinessCode });
+            jsonArr.push({ key: 'paymentType', value: paymentType });
+            jsonArr.push({ key: 'reportedType', value: reportedType });
+            jsonArr.push({ key: 'ticketingSystemType', value: ticketingSystemType });
+            jsonArr.push({ key: 'startDate', value: startDate });
+            jsonArr.push({ key: 'endDate', value: endDate });
             jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
             jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
             let sign = md5(preSign(jsonArr));

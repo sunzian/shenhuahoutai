@@ -3,16 +3,14 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
-                    <i class="el-icon-lx-cascades"></i> 商家账号管理
+                    <i class="el-icon-lx-cascades"></i> 影城账号管理
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-select clearable v-model="query.status" placeholder="状态" class="handle-select mr10">
-                    <el-option key="1" label="通过" value="1"></el-option>
-                    <el-option key="2" label="禁用" value="2"></el-option>
-                </el-select>
+                <el-input v-model="query.userName" placeholder="用户名" class="handle-input mr10"></el-input>
+                <el-input v-model="query.businessName" placeholder="影院公司名" class="handle-input mr10"></el-input>
                 <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
                 <el-button type="primary"  @click="addPage" icon="el-icon-circle-plus-outline"  style="margin-left: 910px">新增</el-button>
             </div>
@@ -540,22 +538,17 @@
                     target: document.querySelector('.div1')
                 });
                 setTimeout(() => {
-                    let businessCode=this.query.businessCode
-                    let userName=this.query.userName
-                    let status=this.query.status
-                    if(!businessCode){
-                        businessCode=''
+                    let businessName=this.query.businessName
+                    let userName=this.query.userName;
+                    if(!businessName){
+                        businessName=''
                     }
                     if(!userName){
                         userName=''
                     }
-                    if(!status){
-                        status=''
-                    }
                     let jsonArr = [];
-                    jsonArr.push({key:"businessCode",value:businessCode});
+                    jsonArr.push({key:"businessName",value:businessName});
                     jsonArr.push({key:"userName",value:userName});
-                    jsonArr.push({key:"status",value:status});
                     jsonArr.push({key:"pageNo",value:this.query.pageNo});
                     jsonArr.push({key:"pageSize",value:this.query.pageSize});
                     let sign =md5(preSign(jsonArr));

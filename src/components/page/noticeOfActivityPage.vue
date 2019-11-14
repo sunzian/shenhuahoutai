@@ -10,25 +10,14 @@
         <div class="container">
             <div class="handle-box">
                 <el-input v-model="query.cinemaName" placeholder="影院名称" class="handle-input mr10"></el-input>
+                <el-input v-model="query.title" placeholder="标题名称" class="handle-input mr10"></el-input>
                 <el-select clearable v-model="query.status" placeholder="状态" class="handle-select mr10">
-                    <el-option key="1" label="显示" value="1"></el-option>
-                    <el-option key="2" label="不显示" value="2"></el-option>
+                    <el-option key="1" label="未上线" value="1"></el-option>
+                    <el-option key="2" label="上线" value="2"></el-option>
                 </el-select>
-                <el-select clearable v-model="query.bannerLevel" placeholder="轮播图级别" class="handle-select mr10">
-                    <el-option key="1" label="全部影院" value="1"></el-option>
-                    <el-option key="2" label="部分影院" value="2"></el-option>
-                </el-select>
-                <el-select clearable v-model="query.category" placeholder="轮播图类别" class="handle-select mr10">
-                    <el-option key="1" label="卖品首页" value="1"></el-option>
-                    <el-option key="2" label="积分商城首页" value="2"></el-option>
-                    <el-option key="3" label="个人中心首页" value="3"></el-option>
-                    <el-option key="4" label="支付成功页" value="4"></el-option>
-                    <el-option key="5" label="放映厅首页" value="5"></el-option>
-                    <el-option key="6" label="首页广告弹窗" value="6"></el-option>
-                    <el-option key="7" label="今日大牌" value="7"></el-option>
-                    <el-option key="8" label="签到送积分" value="8"></el-option>
-                    <el-option key="9" label="分享得金币" value="9"></el-option>
-                    <el-option key="10" label="积分换金币" value="10"></el-option>
+                <el-select clearable v-model="query.type" placeholder="类型" class="handle-select mr10">
+                    <el-option key="1" label="纯图片" value="1"></el-option>
+                    <el-option key="2" label="图文" value="2"></el-option>
                 </el-select>
                 <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
                 <el-button type="primary"  @click="addPage" icon="el-icon-circle-plus-outline"  style="margin-left: 340px">新增</el-button>
@@ -41,20 +30,20 @@
                     header-cell-class-name="table-header"
                     @selection-change="handleSelectionChange"
             >
-                <!-- <el-table-column prop="name" label="轮播图级别" width="130">
+                <el-table-column prop="name" label="轮播图级别" width="130">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.bannerLevel=='1'"
                         >全部影院</el-tag>
                         <el-tag v-else-if="scope.row.bannerLevel=='2'"
                         >部分影院</el-tag>
                     </template>
-                </el-table-column> -->
+                </el-table-column>
                 <el-table-column label="适用影院" width="130">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
-                <!-- <el-table-column prop="memo" label="适用影院编码" width="130">
+                <el-table-column prop="memo" label="适用影院编码" width="130">
                     <template slot-scope="scope">{{scope.row.cinemaCodes}}</template>
-                </el-table-column> -->
+                </el-table-column>
                 <el-table-column prop="sort" label="是否显示">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status=='1'"
@@ -136,100 +125,128 @@
             </div>
         </div>
         <!--新增弹出框-->
-        <el-dialog title="新增轮播图" :visible.sync="dialogFormVisible">
+        <el-dialog title="新增文章" :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
-                <!-- <el-form-item label="轮播图级别" :label-width="formLabelWidth">
-                    <el-select v-model="oForm.value" placeholder="请选择级别">
-                        <el-option
-                                v-for="item in options"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value">
-                        </el-option>
-                    </el-select>
-                </el-form-item> -->
-                <el-form-item label="适用影院" :label-width="formLabelWidth">
-                    <el-select v-model="oForm.cinemaCode" placeholder="请选择影院">
-                        <el-option
-                                v-for="item in cinemaList"
+                <el-form-item label="选择影院" :label-width="formLabelWidth" prop="cinemaName">
+                    <el-checkbox-group v-model="oForm.cinemaCode">
+                        <el-checkbox
+                                v-for="item in cinemaInfo"
+                                :label="item.cinemaCode"
                                 :key="item.cinemaCode"
-                                :label="item.cinemaName"
-                                :value="item.cinemaCode">
-                        </el-option>
-                    </el-select>
+                                :value="item.cinemaName"
+                        >{{item.cinemaName}}</el-checkbox>
+                    </el-checkbox-group>
                 </el-form-item>
-                <el-form-item label="是否显示" :label-width="formLabelWidth">
-                    <el-select v-model="oForm.statusValue" placeholder="选择是否显示">
-                        <el-option
-                                v-for="item in showStatus"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value">
-                        </el-option>
-                    </el-select>
+                <el-form-item label="标题" :label-width="formLabelWidth">
+                <el-input style="width: 250px" maxlength="30" v-model="oForm.title" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="开始显示时间" :label-width="formLabelWidth">
-                    <el-date-picker
-                            style="width: 200px"
-                            v-model="startTime"
-                            type="datetime"
-                            value-format="yyyy-MM-dd HH:mm:ss"
-                            format="yyyy-MM-dd HH:mm:ss"
-                            placeholder="选择日期时间">
-                    </el-date-picker>
+                <el-form-item label="概述" :label-width="formLabelWidth">
+                    <el-input style="width: 250px" maxlength="30" v-model="oForm.summary" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="结束显示时间" :label-width="formLabelWidth">
-                    <el-date-picker
-                            style="width: 200px"
-                            v-model="endTime"
-                            type="datetime"
-                            value-format="yyyy-MM-dd HH:mm:ss"
-                            format="yyyy-MM-dd HH:mm:ss"
-                            placeholder="选择日期时间">
-                    </el-date-picker>
+                <el-form-item label="封面图片" :label-width="formLabelWidth">
+                <el-upload
+                :before-upload="beforeUpload"
+                :data="type"
+                class="upload-demo"
+                drag
+                :limit="8"
+                ref="upload"
+                action="/api/upload/uploadImage"
+                :on-success="onSuccess"
+                multiple>
+                <i class="el-icon-upload"></i>
+                <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+                <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb 建议尺寸750*360或按比例上传</div>
+                </el-upload>
                 </el-form-item>
-                <el-form-item label="备注" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" maxlength="30" v-model="oForm.memo" autocomplete="off"></el-input>
+                <el-form-item label="权益类型：" :label-width="formLabelWidth" prop="cinemaName">
+                    <el-radio-group v-model="oForm.type">
+                        <el-radio label="1">纯图片</el-radio>
+                        <el-radio label="2">图文</el-radio>
+                    </el-radio-group>
                 </el-form-item>
-                <el-form-item label="轮播图类别" :label-width="formLabelWidth">
-                    <el-select v-model="oForm.bannerType" placeholder="请选择">
-                        <el-option
-                                v-for="item in bannerType"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="图片地址" :label-width="formLabelWidth">
-                    <el-upload
-                            :before-upload="beforeUpload"
-                            :data="type"
-                            class="upload-demo"
-                            drag
-                            :limit="8"
-                            ref="upload"
-                            action="/api/upload/uploadImage"
-                            :on-success="onSuccess"
-                            multiple>
-                        <i class="el-icon-upload"></i>
-                        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb 建议尺寸750*360或按比例上传</div>
-                    </el-upload>
-                </el-form-item>
-                <el-form-item label="跳转类型" :label-width="formLabelWidth">
-                    <el-select v-model="oForm.tabType" placeholder="请选择跳转类型">
-                        <el-option
-                                v-for="item in tabType"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="跳转的具体类型" :label-width="formLabelWidth">
-                    <el-input style="width: 150px" maxlength="9" v-model.number="oForm.goType" autocomplete="off"></el-input>
-                </el-form-item>
+                <!--<el-form-item label="适用影院" :label-width="formLabelWidth" v-if="oForm.value == 2">-->
+                    <!--<el-select v-model="oForm.cinemaCode" placeholder="请选择影院">-->
+                        <!--<el-option-->
+                                <!--v-for="item in cinemaList"-->
+                                <!--:key="item.cinemaCode"-->
+                                <!--:label="item.cinemaName"-->
+                                <!--:value="item.cinemaCode">-->
+                        <!--</el-option>-->
+                    <!--</el-select>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item label="是否显示" :label-width="formLabelWidth">-->
+                    <!--<el-select v-model="oForm.statusValue" placeholder="选择是否显示">-->
+                        <!--<el-option-->
+                                <!--v-for="item in showStatus"-->
+                                <!--:key="item.value"-->
+                                <!--:label="item.label"-->
+                                <!--:value="item.value">-->
+                        <!--</el-option>-->
+                    <!--</el-select>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item label="开始时间" :label-width="formLabelWidth">-->
+                    <!--<el-date-picker-->
+                            <!--style="width: 200px"-->
+                            <!--v-model="startTime"-->
+                            <!--type="datetime"-->
+                            <!--value-format="yyyy-MM-dd HH:mm:ss"-->
+                            <!--format="yyyy-MM-dd HH:mm:ss"-->
+                            <!--placeholder="选择日期时间">-->
+                    <!--</el-date-picker>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item label="结束时间" :label-width="formLabelWidth">-->
+                    <!--<el-date-picker-->
+                            <!--style="width: 200px"-->
+                            <!--v-model="endTime"-->
+                            <!--type="datetime"-->
+                            <!--value-format="yyyy-MM-dd HH:mm:ss"-->
+                            <!--format="yyyy-MM-dd HH:mm:ss"-->
+                            <!--placeholder="选择日期时间">-->
+                    <!--</el-date-picker>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item label="备注" :label-width="formLabelWidth">-->
+                    <!--<el-input style="width: 250px" maxlength="30" v-model="oForm.memo" autocomplete="off"></el-input>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item label="轮播图类别" :label-width="formLabelWidth">-->
+                    <!--<el-select v-model="oForm.bannerType" placeholder="请选择">-->
+                        <!--<el-option-->
+                                <!--v-for="item in bannerType"-->
+                                <!--:key="item.value"-->
+                                <!--:label="item.label"-->
+                                <!--:value="item.value">-->
+                        <!--</el-option>-->
+                    <!--</el-select>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item label="图片地址" :label-width="formLabelWidth">-->
+                    <!--<el-upload-->
+                            <!--:before-upload="beforeUpload"-->
+                            <!--:data="type"-->
+                            <!--class="upload-demo"-->
+                            <!--drag-->
+                            <!--:limit="8"-->
+                            <!--ref="upload"-->
+                            <!--action="/api/upload/uploadImage"-->
+                            <!--:on-success="onSuccess"-->
+                            <!--multiple>-->
+                        <!--<i class="el-icon-upload"></i>-->
+                        <!--<div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>-->
+                        <!--<div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb 建议尺寸750*360或按比例上传</div>-->
+                    <!--</el-upload>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item label="跳转类型" :label-width="formLabelWidth">-->
+                    <!--<el-select v-model="oForm.tabType" placeholder="请选择跳转类型">-->
+                        <!--<el-option-->
+                                <!--v-for="item in tabType"-->
+                                <!--:key="item.value"-->
+                                <!--:label="item.label"-->
+                                <!--:value="item.value">-->
+                        <!--</el-option>-->
+                    <!--</el-select>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item label="跳转的具体类型" :label-width="formLabelWidth">-->
+                    <!--<el-input style="width: 150px" maxlength="9" v-model.number="oForm.goType" autocomplete="off"></el-input>-->
+                <!--</el-form-item>-->
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -239,7 +256,7 @@
         <!-- 编辑弹出框 -->
         <el-dialog title="编辑" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
-                <!-- <el-form-item label="轮播图级别" :label-width="formLabelWidth">
+                <el-form-item label="轮播图级别" :label-width="formLabelWidth">
                     <el-select v-model="form.bannerLevel" placeholder="请选择级别">
                         <el-option
                                 v-for="item in options"
@@ -248,8 +265,8 @@
                                 :value="item.value">
                         </el-option>
                     </el-select>
-                </el-form-item> -->
-                <el-form-item label="适用影院" :label-width="formLabelWidth">
+                </el-form-item>
+                <el-form-item label="适用影院" :label-width="formLabelWidth" v-if="form.bannerLevel == 2">
                     <el-select v-model="form.cinemaCodes" placeholder="请选择影院">
                         <el-option
                                 v-for="item in cinemaList"
@@ -269,7 +286,7 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="开始显示时间" :label-width="formLabelWidth">
+                <el-form-item label="开始时间" :label-width="formLabelWidth">
                     <el-date-picker
                             style="width: 190px"
                             v-model="changeStartTime"
@@ -279,7 +296,7 @@
                             placeholder="选择日期时间">
                     </el-date-picker>
                 </el-form-item>
-                <el-form-item label="结束显示时间" :label-width="formLabelWidth">
+                <el-form-item label="结束时间" :label-width="formLabelWidth">
                     <el-date-picker
                             style="width: 190px"
                             v-model="changeEndTime"
@@ -373,6 +390,7 @@
                     pageSize:10
 
                 },
+                cinemaInfo:[],
                 tableData: [],
                 multipleSelection: [],
                 delList: [],
@@ -397,6 +415,7 @@
                     desc: '',
                     value:'',
                     statusValue:'',
+                    cinemaCode:[],
                 },
                 formLabelWidth: '120px',
                 selectValue:{},
@@ -491,13 +510,12 @@
                     target: document.querySelector('.div1')
                 });
                 setTimeout(() => {
-                    https.fetchPost('/banner/addPage','').then((data) => {
+                    https.fetchPost('/noticeOfActivity/addPage','').then((data) => {
                         loading.close();
                         console.log(data);
                         console.log(JSON.parse(Decrypt(data.data.data)));
-                        this.businessOptiones = JSON.parse(Decrypt(data.data.data))
-                        this.cinemaList =JSON.parse(Decrypt(data.data.data)).cinemaList;
-                        this.oForm.cinemaCode = this.cinemaList[0].cinemaCode;
+                        this.cinemaInfo =JSON.parse(Decrypt(data.data.data)).cinemaList;
+                        console.log(this.cinemaInfo);
                         if(data.data.code == 'success'){
                             this.dialogFormVisible = true
                         }else if(data.data.code=='nologin'){
@@ -509,8 +527,8 @@
                             this.open()
                         }
                     }).catch(err=>{
-                        loading.close();
-                        console.log(err)
+                            loading.close();
+                            console.log(err)
                         }
                     )
                 }, 500);
@@ -525,8 +543,10 @@
                 });
                 setTimeout(() => {
                     var jsonArr = [];
-                    jsonArr.push({key:"cinemaCodes",value:this.oForm.cinemaCode});
-                    jsonArr.push({key:"bannerLevel",value:2});
+                    if (this.oForm.value == 2) {
+                        jsonArr.push({key:"cinemaCodes",value:this.oForm.cinemaCode});
+                    }
+                    jsonArr.push({key:"bannerLevel",value:this.oForm.value});
                     jsonArr.push({key:"status",value:this.oForm.statusValue});
                     jsonArr.push({key:"startDate",value:this.startTime});
                     jsonArr.push({key:"endDate",value:this.endTime});
@@ -566,65 +586,65 @@
                                 this.open()
                             }
                         }).catch(err=>{
-                            loading.close();
-                            console.log(err)
+                                loading.close();
+                                console.log(err)
                             }
                         )
                     }
                 }, 500);
             },
             delChange(index, row){//删除数据
-            this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-            }).then(() => {
-                const loading = this.$loading({
-                    lock: true,
-                    text: 'Loading',
-                    spinner: 'el-icon-loading',
-                    background: 'rgba(0, 0, 0, 0.7)',
-                    target: document.querySelector('.div1')
-                });
-                setTimeout(() => {
-                    this.idx = index;
-                    this.form = row;
-                    let name=this.query.name
-                    let status=this.query.status
-                    if(!name){
-                        name=''
-                    }
-                    if(!status){
-                        status=''
-                    }
-                    let jsonArr = [];
-                    // jsonArr.push({key:"roleName",value:name});
-                    // jsonArr.push({key:"status",value:status});
-                    jsonArr.push({key:"id",value:row.id});
-                    let sign =md5(preSign(jsonArr));
-                    jsonArr.push({key:"sign",value:sign});
-                    let params = ParamsAppend(jsonArr);
-                    https.fetchPost('/banner/deleteBanner',params).then((data) => {
-                        loading.close();
-                        console.log(data);
-                        // console.log(JSON.parse(Decrypt(data.data.data)));
-                        if(data.data.code=='success'){
-                            this.$message.error(`删除了`);
-                            this.getMenu()
-                        }else if(data.data.code=='nologin'){
-                            this.message=data.data.message
-                            this.open()
-                            this.$router.push('/login');
-                        }else{
-                            this.message=data.data.message
-                            this.open()
+                this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    const loading = this.$loading({
+                        lock: true,
+                        text: 'Loading',
+                        spinner: 'el-icon-loading',
+                        background: 'rgba(0, 0, 0, 0.7)',
+                        target: document.querySelector('.div1')
+                    });
+                    setTimeout(() => {
+                        this.idx = index;
+                        this.form = row;
+                        let name=this.query.name
+                        let status=this.query.status
+                        if(!name){
+                            name=''
                         }
-                    }).catch(err=>{
-                        loading.close();
-                        console.log(err)
+                        if(!status){
+                            status=''
                         }
-                    )
-                }, 500);
+                        let jsonArr = [];
+                        // jsonArr.push({key:"roleName",value:name});
+                        // jsonArr.push({key:"status",value:status});
+                        jsonArr.push({key:"id",value:row.id});
+                        let sign =md5(preSign(jsonArr));
+                        jsonArr.push({key:"sign",value:sign});
+                        let params = ParamsAppend(jsonArr);
+                        https.fetchPost('/banner/deleteBanner',params).then((data) => {
+                            loading.close();
+                            console.log(data);
+                            // console.log(JSON.parse(Decrypt(data.data.data)));
+                            if(data.data.code=='success'){
+                                this.$message.error(`删除了`);
+                                this.getMenu()
+                            }else if(data.data.code=='nologin'){
+                                this.message=data.data.message
+                                this.open()
+                                this.$router.push('/login');
+                            }else{
+                                this.message=data.data.message
+                                this.open()
+                            }
+                        }).catch(err=>{
+                                loading.close();
+                                console.log(err)
+                            }
+                        )
+                    }, 500);
                 }).catch(() => {
                     this.$message({
                         type: 'info',
@@ -708,14 +728,23 @@
                             this.open()
                         }
                     }).catch(err=>{
-                        loading.close();
-                        console.log(err)
+                            loading.close();
+                            console.log(err)
                         }
                     )
                 }, 500);
             },
             // 编辑操作
             exChanger() {
+                // console.log(this.form.bannerLevel);
+                // console.log(this.form.cinemaCodes);
+                // console.log(this.form.status);
+                // console.log(this.changeStartTime);
+                // console.log(this.changeEndTime);
+                // console.log(this.form.memo);
+                // console.log(this.form.bannerType);
+                // console.log(this.form.tabType);
+                // console.log(this.goType);
                 const loading = this.$loading({
                     lock: true,
                     text: 'Loading',
@@ -724,9 +753,11 @@
                     target: document.querySelector('.div1')
                 });
                 setTimeout(() => {
+                    // console.log(this.form.sort);
+                    // console.log(this.from.sort.toString());
                     var jsonArr = [];
                     jsonArr.push({key:"id",value:this.form.id});
-                    jsonArr.push({key:"bannerLevel",value:2});
+                    jsonArr.push({key:"bannerLevel",value:this.form.bannerLevel});
                     jsonArr.push({key:"cinemaCodes",value:this.form.cinemaCodes});
                     jsonArr.push({key:"status",value:this.form.status});
                     jsonArr.push({key:"startDate",value:this.changeStartTime});
@@ -740,6 +771,7 @@
                     jsonArr.push({key:"sign",value:sign});
                     console.log(jsonArr);
                     let params = ParamsAppend(jsonArr);
+                    console.log(params);
                     this.editVisible = false;
                     https.fetchPost('/banner/updateById',params).then((data) => {
                         loading.close();
@@ -758,8 +790,8 @@
                             this.open()
                         }
                     }).catch(err=>{
-                        loading.close();
-                        console.log(err)
+                            loading.close();
+                            console.log(err)
                         }
                     )
                 }, 500);
@@ -770,10 +802,10 @@
             onSuccess(data){//上传文件 登录超时
                 // console.log(data);
                 // console.log(data);
-                this.oForm.imageUrl=data.data
+                this.oForm.imageUrl=data.data;
                 if(data.code=='nologin'){
-                    this.message=data.message
-                    this.open()
+                    this.message=data.message;
+                    this.open();
                     this.$router.push('/login');
                 }
             },
@@ -826,7 +858,7 @@
                     let sign =md5(preSign(jsonArr));
                     jsonArr.push({key:"sign",value:sign});
                     var params = ParamsAppend(jsonArr);
-                    https.fetchPost('/banner/bannerPage',params).then((data) => {
+                    https.fetchPost('noticeOfActivity/noticeOfActivityPage',params).then((data) => {
                         loading.close();
                         if(data.data.code=='success') {
                             var oData = JSON.parse(Decrypt(data.data.data));
@@ -846,8 +878,8 @@
                         }
 
                     }).catch(err=>{
-                        loading.close();
-                        console.log(err)
+                            loading.close();
+                            console.log(err)
                         }
                     )
                 }, 500);

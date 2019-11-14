@@ -3,7 +3,7 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
-                    <i class="el-icon-lx-cascades"></i> 卖品优惠券
+                    <i class="el-icon-lx-cascades"></i> 卖品优惠券管理
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
@@ -236,11 +236,32 @@
                 <el-form-item label="优惠券名称：" :label-width="formLabelWidth">
                     <el-input style="width: 180px" v-model="oName" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="适用影院：" :label-width="formLabelWidth">
-                    <el-input :disabled="true" style="width: 250px" v-model="oCinemaNames" autocomplete="off"></el-input>
+                <el-form-item label="选择影院：" :label-width="formLabelWidth" prop="cinemaName">
+                    <el-radio-group v-model="oCinemaCode" @change="selectCinema">
+                        <el-radio
+                                v-for="item in cinemaInfo"
+                                :label="item.cinemaCode"
+                                :key="item.cinemaCode"
+                                :value="item.cinemaName"
+                        >{{item.cinemaName}}</el-radio>
+                    </el-radio-group>
                 </el-form-item>
-                <el-form-item label="适用商品：" :label-width="formLabelWidth" prop="filmName">
-                    <el-input :disabled="true" type="textarea" style="width: 450px" v-model="oMerchandiseName" autocomplete="off"></el-input>
+                <el-form-item label="选择商品：" :label-width="formLabelWidth" prop="filmName">
+                    <el-radio-group v-model="oSelectMerchandiseType">
+                        <el-radio label="0">全部商品</el-radio>
+                        <el-radio label="1">部分商品</el-radio>
+                        <el-radio label="2">排除商品</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item v-if="oSelectMerchandiseType==1||oSelectMerchandiseType==2" label="适用卖品：" :label-width="formLabelWidth">
+                    <el-checkbox-group v-model="oMerchandiseCode" @change="selectGoods">
+                        <el-checkbox
+                                v-for="item in goodsInfo"
+                                :label="item.merchandiseCode"
+                                :key="item.merchandiseCode"
+                                :value="item.merchandiseName"
+                        >{{item.merchandiseName}}</el-checkbox>
+                    </el-checkbox-group>
                 </el-form-item>
                 <el-form-item label="有效期：" :label-width="formLabelWidth">
                     <el-date-picker
@@ -381,6 +402,9 @@ export default {
             ],
             oCheckedDays:[],
             oMerchandiseName: '',
+            oCinemaCode: '',
+            oMerchandiseCode: [],
+            oSelectMerchandiseType: '',
             oCinemaNames: '',
             oName: '',
             oStartDate: '',
@@ -643,7 +667,7 @@ export default {
                     if (data.data.code == 'success') {
                         this.editVisible = true;
                         this.oMerchandiseName = JSON.parse(Decrypt(data.data.data)).merchandiseNames;
-                        this.oCinemaNames = JSON.parse(Decrypt(data.data.data)).cinemaNames;
+                        this.oCinemaCode = JSON.parse(Decrypt(data.data.data)).cinemaCodes;
                         this.oName = JSON.parse(Decrypt(data.data.data)).name;
                         this.oStartDate = JSON.parse(Decrypt(data.data.data)).startDate;
                         this.oSendNumber = JSON.parse(Decrypt(data.data.data)).sendNumber;
@@ -663,6 +687,15 @@ export default {
                         }
                         if (JSON.parse(Decrypt(data.data.data)).reduceType == 2) {
                             this.oReduceType = '2';
+                        }
+                        if (JSON.parse(Decrypt(data.data.data)).selectMerchandiseType == 0) {
+                            this.oSelectMerchandiseType = '0';
+                        }
+                        if (JSON.parse(Decrypt(data.data.data)).selectMerchandiseType == 1) {
+                            this.oSelectMerchandiseType = '1';
+                        }
+                        if (JSON.parse(Decrypt(data.data.data)).selectMerchandiseType == 2) {
+                            this.oSelectMerchandiseType = '2';
                         }
                         this.oDiscountMoney = JSON.parse(Decrypt(data.data.data)).discountMoney;
                         this.oCouponDesc = JSON.parse(Decrypt(data.data.data)).couponDesc;
@@ -711,6 +744,9 @@ export default {
             });
             var jsonArr = [];
             jsonArr.push({ key: 'name', value: this.oName });
+            jsonArr.push({ key: 'cinemaCodes', value: this.oCinemaCode });
+            jsonArr.push({ key: 'selectMerchandiseType', value: this.oSelectMerchandiseType });
+            jsonArr.push({ key: 'merchandiseCode', value: this.oMerchandiseCode.join(',') });
             jsonArr.push({ key: 'reduceType', value: this.oReduceType });
             jsonArr.push({ key: 'achieveMoney', value: this.oAchieveMoney });
             jsonArr.push({ key: 'discountMoney', value: this.oDiscountMoney });
@@ -753,49 +789,61 @@ export default {
         },
         // 修改状态
         changeStatus(index, row) {
-            const loading = this.$loading({
-                lock: true,
-                text: 'Loading',
-                spinner: 'el-icon-loading',
-                background: 'rgba(0, 0, 0, 0.7)',
-                target: document.querySelector('.div1')
-            });
-            this.idx = index;
-            this.form = row;
-            var jsonArr = [];
-            let status;
-            if (row.status == 1) {
-                status = 0;
-            } else if (row.status == 0) {
-                status = 1;
-            }
-            jsonArr.push({ key: 'id', value: row.id });
-            jsonArr.push({ key: 'status', value: status });
-            let sign = md5(preSign(jsonArr));
-            jsonArr.push({ key: 'sign', value: sign });
-            console.log(jsonArr);
-            let params = ParamsAppend(jsonArr);
-            https
-                .fetchPost('merchandiseCoupon/updateCouponStatusById', params)
-                .then(data => {
-                    loading.close();
-                    // console.log(JSON.parse(Decrypt(data.data.data)));
-                    if (data.data.code == 'success') {
-                        this.$message.success(`修改成功`);
-                        this.getMenu();
-                    } else if (data.data.code == 'nologin') {
-                        this.message = data.data.message;
-                        this.open();
-                        this.$router.push('/login');
-                    } else {
-                        this.message = data.data.message;
-                        this.open();
+            this.$confirm('此操作将修改状态, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            })
+                .then(() => {
+                    const loading = this.$loading({
+                        lock: true,
+                        text: 'Loading',
+                        spinner: 'el-icon-loading',
+                        background: 'rgba(0, 0, 0, 0.7)',
+                        target: document.querySelector('.div1')
+                    });
+                    this.idx = index;
+                    this.form = row;
+                    var jsonArr = [];
+                    let status;
+                    if (row.status == 1) {
+                        status = 0;
+                    } else if (row.status == 0) {
+                        status = 1;
                     }
-                })
-                .catch(err => {
-                    loading.close();
-                    console.log(err);
+                    jsonArr.push({ key: 'id', value: row.id });
+                    jsonArr.push({ key: 'status', value: status });
+                    let sign = md5(preSign(jsonArr));
+                    jsonArr.push({ key: 'sign', value: sign });
+                    console.log(jsonArr);
+                    let params = ParamsAppend(jsonArr);
+                    https
+                        .fetchPost('merchandiseCoupon/updateCouponStatusById', params)
+                        .then(data => {
+                            loading.close();
+                            // console.log(JSON.parse(Decrypt(data.data.data)));
+                            if (data.data.code == 'success') {
+                                this.$message.success(`修改成功`);
+                                this.getMenu();
+                            } else if (data.data.code == 'nologin') {
+                                this.message = data.data.message;
+                                this.open();
+                                this.$router.push('/login');
+                            } else {
+                                this.message = data.data.message;
+                                this.open();
+                            }
+                        })
+                        .catch(err => {
+                            loading.close();
+                            console.log(err);
+                        });
+                }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消修改'
                 });
+            });
         },
         Search() {
             this.query.pageNo = 1;

@@ -108,12 +108,6 @@
                 <el-table-column prop="sort" label="会员卡会费" width="150">
                     <template slot-scope="scope">{{scope.row.memberFee}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="是否支持线上注册" width="150">
-                    <template slot-scope="scope">
-                        <el-tag v-if="scope.row.isOnlineOpenCard=='1'">是</el-tag>
-                        <el-tag v-else-if="scope.row.isOnlineOpenCard=='2'">否</el-tag>
-                    </template>
-                </el-table-column>
                 <el-table-column prop="sort" label="状态" width="150">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status == 1" type="success">正常</el-tag>
@@ -198,16 +192,6 @@
                             :disabled="true"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="是否线上注册：" :label-width="formLabelWidth" prop="reduceType">
-                    <el-select v-model="form.status" placeholder="请选择状态">
-                        <el-option
-                                v-for="item in showStatus"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                        ></el-option>
-                    </el-select>
-                </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false">取 消</el-button>
@@ -266,16 +250,6 @@
                     {
                         value: '2',
                         label: '禁用'
-                    }
-                ],
-                showStatus: [
-                    {
-                        value: '1',
-                        label: '是'
-                    },
-                    {
-                        value: '2',
-                        label: '否'
                     }
                 ],
                 value: '',
@@ -421,14 +395,6 @@
                                 this.form.imageUrl = JSON.parse(Decrypt(data.data.data)).cardPicture;
                                 this.form.standardPrice = JSON.parse(Decrypt(data.data.data)).cardCostFee;
                                 this.form.settlePrice = JSON.parse(Decrypt(data.data.data)).memberFee;
-                                //上架状态下拉选显示对应的选项
-                                for (let x in this.showStatus) {
-                                    if (this.showStatus[x].value == JSON.parse(Decrypt(data.data.data)).isOnlineOpenCard) {
-                                        this.form.status = this.showStatus[x].value;
-                                        break;
-                                    }
-                                }
-                                // this.form.isOnlineOpenCard = JSON.parse(Decrypt(data.data.data)).isOnlineOpenCard;
                             } else if (data.data.code == 'nologin') {
                                 this.message = data.data.message;
                                 this.open();
@@ -460,7 +426,6 @@
                     var jsonArr = [];
                     jsonArr.push({ key: 'id', value: this.form.id });
                     jsonArr.push({ key: 'cardPicture', value: this.form.image_url });
-                    jsonArr.push({ key: 'isOnlineOpenCard', value: this.form.status });
                     jsonArr.push({ key: 'openRuleCode', value: '' });
                     jsonArr.push({ key: 'rechargeRuleCode', value: ''});
                     let sign = md5(preSign(jsonArr));
