@@ -278,7 +278,7 @@
                         >{{city.cinemaName}}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
-                <el-form-item label="是否置顶" :label-width="formLabelWidth">
+                <el-form-item label="是否今日大牌" :label-width="formLabelWidth">
                     <el-select v-model="oForm.topStatus" placeholder="请选择">
                         <el-option
                             v-for="item in topStatusList"
@@ -514,7 +514,7 @@
                         >{{item.cinemaName}}</el-checkbox>
                     </el-checkbox-group> -->
                 </el-form-item>
-                <el-form-item label="是否置顶" :label-width="formLabelWidth">
+                <el-form-item label="是否今日大牌" :label-width="formLabelWidth">
                     <el-select v-model="oTopstatus" placeholder="请选择">
                         <el-option
                             v-for="item in topStatusList"
@@ -1156,7 +1156,7 @@ export default {
                                     break;
                                 }
                             }
-                            //是否置顶下拉选显示对应的选项
+                            //是否今日大牌下拉选显示对应的选项
                             for (let x in this.topStatusList) {
                                 if (this.topStatusList[x].value == JSON.parse(Decrypt(data.data.data)).goldCommodity.topStatus) {
                                     this.oTopstatus = this.topStatusList[x].value;

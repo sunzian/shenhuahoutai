@@ -93,6 +93,9 @@
                 <el-table-column prop="name" label="员工名称">
                     <template slot-scope="scope">{{scope.row.employeeName}}</template>
                 </el-table-column>
+                <el-table-column prop="name" label="员工手机号">
+                    <template slot-scope="scope">{{scope.row.employeeMobile}}</template>
+                </el-table-column>
                 <el-table-column prop="memo" label="推荐注册人数">
                     <template slot-scope="scope">{{scope.row.registerNumber}}</template>
                 </el-table-column>
@@ -118,11 +121,11 @@
                 </el-table-column>
                 <el-table-column label="操作" width="180" align="center">
                     <template slot-scope="scope">
-                        <!-- <el-button
+                        <el-button
                             type="text"
                             icon="el-icon-circle-plus-outline"
                             @click="addChange(scope.$index, scope.row)"
-                        >编辑</el-button>-->
+                        >编辑</el-button>
                         <el-button
                             type="text"
                             icon="el-icon-delete"
@@ -151,6 +154,9 @@
                 <el-form-item label="员工名称：" :label-width="formLabelWidth" prop="cinemaName">
                     <el-input style="width: 150px" v-model="oForm.name" autocomplete="off"></el-input>
                 </el-form-item>
+                <el-form-item label="员工手机号码：" :label-width="formLabelWidth" prop="cinemaName">
+                    <el-input style="width: 150px" v-model="oForm.employeeMobile" autocomplete="off"></el-input>
+                </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -160,128 +166,21 @@
         <!-- 编辑弹出框 -->
         <el-dialog title="详情" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
-                <el-form-item label="影院名称：" :label-width="formLabelWidth">
+                <el-form-item label="员工名称：" :label-width="formLabelWidth">
                     <el-input
                         style="width: 150px"
-                        v-model="oCinemaName"
+                        v-model="oName"
                         autocomplete="off"
-                        disabled
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="奖品名称：" :label-width="formLabelWidth">
-                    <el-input style="width: 150px" v-model="oName" autocomplete="off" disabled></el-input>
-                </el-form-item>
-                <el-form-item label="奖品类型：" :label-width="formLabelWidth">
-                    <el-tag v-if="oType=='1'">优惠券</el-tag>
-                    <el-tag v-if="oType=='2'">实物</el-tag>
-                </el-form-item>
-                <el-form-item label="礼物图片：" :label-width="formLabelWidth">
-                    <el-popover placement="right" title trigger="hover">
-                        <img style="width:400px" :src="oImageUrl" />
-                        <img
-                            slot="reference"
-                            :src="oImageUrl"
-                            :alt="oImageUrl"
-                            style="max-height: 50px;max-width: 130px"
-                        />
-                    </el-popover>
-                </el-form-item>
-                <el-form-item label="发放组数：" :label-width="formLabelWidth">
-                    <el-input style="width: 75px" v-model="oGroupNumber" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="每组发放数量：" :label-width="formLabelWidth">
-                    <el-input style="width: 75px" v-model="oSingleNumber" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="领取后多少天过期：" :label-width="formLabelWidth">
-                    <el-input style="width: 75px" v-model="oOverDays" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="是否限制用户每月领取数量：" :label-width="formLabelWidth">
-                    <el-radio-group v-model="oLimitStatus">
-                        <el-radio :label="1">不限制</el-radio>
-                        <el-radio :label="2">限制</el-radio>
-                    </el-radio-group>
-                </el-form-item>
-                <el-form-item
-                    label="用户单月领取张数限制："
-                    :label-width="formLabelWidth"
-                    v-if="oLimitStatus == 2"
-                >
-                    <el-input style="width: 75px" v-model="oSingleLimitNumber" autocomplete="off"></el-input>
+                <el-form-item label="员工手机号码：" :label-width="formLabelWidth">
+                    <el-input style="width: 150px" v-model="oEmployeeMobile" autocomplete="off"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false">取 消</el-button>
                 <el-button type="primary" @click="exChanger">确 定</el-button>
             </span>
-        </el-dialog>
-        <!-- 选择优惠券弹出窗 -->
-        <el-dialog title="选择优惠券" :visible.sync="drawer">
-            <div class="container">
-                <div class="handle-box">
-                    <el-input v-model="couponName" placeholder="优惠券名称" class="handle-input mr10"></el-input>
-                    <el-button type="primary" icon="el-icon-search" @click="getAllCoupon">搜索</el-button>
-                </div>
-                <el-table
-                    :data="sellTableData"
-                    border
-                    class="table"
-                    ref="multipleTable"
-                    header-cell-class-name="table-header"
-                    @selection-change="handleSelectionChange"
-                >
-                    <el-table-column label="操作" width="100" align="center">
-                        <template slot-scope="scope">
-                            <el-radio v-model="couponInfo.id" :label="scope.row.id">&nbsp;</el-radio>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="name" label="图片">
-                        <template slot-scope="scope">
-                            <el-popover placement="right" title trigger="hover">
-                                <img style="width:400px" :src="scope.row.imgUrl" />
-                                <img
-                                    slot="reference"
-                                    :src="scope.row.imgUrl"
-                                    :alt="scope.row.imgUrl"
-                                    style="max-height: 50px;max-width: 130px"
-                                />
-                            </el-popover>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="sort" label="优惠券类型" width="150">
-                        <template slot-scope="scope">
-                            <el-tag v-if="scope.row.couponType=='1'">影票优惠券</el-tag>
-                            <el-tag v-else-if="scope.row.couponType=='2'">卖品优惠券</el-tag>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="sort" label="优惠券名称" width="150">
-                        <template slot-scope="scope">{{scope.row.name}}</template>
-                    </el-table-column>
-                    <el-table-column prop="sort" label="优惠券说明" width="150">
-                        <template slot-scope="scope">
-                            <el-tag v-if="scope.row.reduceType=='1'">{{scope.row.discountMoney}}元兑换卷</el-tag>
-                            <el-tag
-                                v-else-if="scope.row.reduceType=='2'"
-                            >满{{scope.row.achieveMoney}}元减{{scope.row.discountMoney}}元</el-tag>
-                        </template>
-                    </el-table-column>
-                </el-table>
-                <div class="pagination">
-                    <el-pagination
-                        background
-                        layout="total, prev, pager, next"
-                        :current-page="query.pageNo"
-                        :page-size="query.pageSize"
-                        :total="query.totalCount"
-                        @current-change="currentChange"
-                        @prev-click="prev"
-                        @next-click="next"
-                    ></el-pagination>
-                </div>
-            </div>
-            <div slot="footer" class="dialog-footer">
-                <el-button @click="drawer = false">取 消</el-button>
-                <el-button type="primary" @click="sureNext(id)">确 定</el-button>
-            </div>
         </el-dialog>
     </div>
 </template>
@@ -298,6 +197,7 @@ export default {
         return {
             oCinemaName: '',
             oName: '',
+            oEmployeeMobile: '',
             oOverDays: '',
             oImageUrl: '',
             oType: '',
@@ -349,6 +249,7 @@ export default {
             ],
             oForm: {
                 name: '',
+                employeeMobile: '',
                 cinemaName: '',
                 cinemaCode: '',
                 image_url: '',
@@ -393,6 +294,7 @@ export default {
                     if (data.data.code == 'success') {
                         this.dialogFormVisible = true;
                         this.oForm.name = '';
+                        this.oForm.employeeMobile = '';
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
@@ -418,6 +320,7 @@ export default {
             });
             var jsonArr = []; 
             jsonArr.push({ key: 'employeeName', value: this.oForm.name });
+            jsonArr.push({ key: 'employeeMobile', value: this.oForm.employeeMobile });
             jsonArr.push({ key: 'cinemaCode', value: this.cinemaCode });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
@@ -515,22 +418,15 @@ export default {
             jsonArr.push({ key: 'sign', value: sign });
             let params = ParamsAppend(jsonArr);
             https
-                .fetchPost('chatroomAwards/updateAwardsPage', params)
+                .fetchPost('employee/updatePage', params)
                 .then(data => {
                     loading.close();
                     console.log(data);
                     console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
-                        this.oCinemaName = JSON.parse(Decrypt(data.data.data)).cinemaName;
-                        this.oName = JSON.parse(Decrypt(data.data.data)).name;
-                        this.oSingleNumber = JSON.parse(Decrypt(data.data.data)).singleNumber;
-                        this.oGroupNumber = JSON.parse(Decrypt(data.data.data)).groupNumber;
-                        this.oType = JSON.parse(Decrypt(data.data.data)).type;
-                        this.oImageUrl = JSON.parse(Decrypt(data.data.data)).imageUrl;
-                        this.oOverDays = JSON.parse(Decrypt(data.data.data)).overDays;
-                        this.oLimitStatus = JSON.parse(Decrypt(data.data.data)).limitStatus;
+                        this.oName = JSON.parse(Decrypt(data.data.data)).employeeName;
                         this.oId = JSON.parse(Decrypt(data.data.data)).id;
-                        this.oSingleLimitNumber = JSON.parse(Decrypt(data.data.data)).monthLimitNumber;
+                        this.oEmployeeMobile = JSON.parse(Decrypt(data.data.data)).employeeMobile;
                         this.editVisible = true;
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
@@ -611,13 +507,8 @@ export default {
                 target: document.querySelector('.div1')
             });
             var jsonArr = [];
-            if (this.oLimitStatus == 2) {
-                jsonArr.push({ key: 'monthLimitNumber', value: this.oSingleLimitNumber });
-            }
-            jsonArr.push({ key: 'singleNumber', value: this.oSingleNumber });
-            jsonArr.push({ key: 'groupNumber', value: this.oGroupNumber });
-            jsonArr.push({ key: 'overDays', value: this.oOverDays });
-            jsonArr.push({ key: 'limitStatus', value: this.oLimitStatus });
+            jsonArr.push({ key: 'employeeName', value: this.oName });
+            jsonArr.push({ key: 'employeeMobile', value: this.oEmployeeMobile });
             jsonArr.push({ key: 'id', value: this.oId });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
@@ -625,7 +516,7 @@ export default {
             let params = ParamsAppend(jsonArr);
             this.editVisible = false;
             https
-                .fetchPost('chatroomAwards/updateAwards', params)
+                .fetchPost('employee/updateEmployee', params)
                 .then(data => {
                     loading.close();
                     // console.log(JSON.parse(Decrypt(data.data.data)));
