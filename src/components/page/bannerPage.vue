@@ -101,6 +101,10 @@
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.redirectType=='1'"
                         >跳转到文章</el-tag>
+                        <el-tag v-if="scope.row.redirectType=='2'"
+                        >跳转到电影</el-tag>
+                        <el-tag v-if="scope.row.redirectType=='3'"
+                        >跳转到金币商品</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column prop="sort" label="跳转的具体信息" width="130">
@@ -149,7 +153,7 @@
                     </el-select>
                 </el-form-item> -->
                 <el-form-item label="适用影院" :label-width="formLabelWidth">
-                    <el-select v-model="oForm.cinemaCode" placeholder="请选择影院">
+                    <el-select v-model="oForm.cinemaCode" placeholder="请选择影院" @change="changeCinema">
                         <el-option
                                 v-for="item in cinemaList"
                                 :key="item.cinemaCode"
@@ -326,7 +330,7 @@
                     </el-upload>
                 </el-form-item>
                 <el-form-item label="跳转类型" :label-width="formLabelWidth">
-                    <el-select v-model="form.tabType" placeholder="请选择跳转类型">
+                    <el-select v-model="oTabType" placeholder="请选择跳转类型">
                         <el-option
                                 v-for="item in tabType"
                                 :key="item.value"
@@ -358,6 +362,7 @@
         data() {
             return {
                 oBannerType:'',
+                oTabType: '',
                 type:{
                     type: ""
                 },
@@ -383,6 +388,7 @@
                     bannerLevel: '',
                     sort: '',
                     id:'',
+                    tabType: ''
                 },
                 idx: -1,
                 id: -1,
@@ -397,9 +403,11 @@
                     desc: '',
                     value:'',
                     statusValue:'',
+                    cinemaCode: ''
                 },
                 formLabelWidth: '120px',
                 selectValue:{},
+                cinemaList: [],
                 options: [{
                     value: '1',
                     label: '全部影院'
@@ -497,7 +505,8 @@
                         console.log(JSON.parse(Decrypt(data.data.data)));
                         this.businessOptiones = JSON.parse(Decrypt(data.data.data))
                         this.cinemaList =JSON.parse(Decrypt(data.data.data)).cinemaList;
-                        this.oForm.cinemaCode = this.cinemaList[0].cinemaCode;
+                        this.oForm.cinemaCode = JSON.parse(Decrypt(data.data.data)).cinemaList[0].cinemaCode;
+                        // this.oForm.cinemaCode = cinemaCode;
                         if(data.data.code == 'success'){
                             this.dialogFormVisible = true
                         }else if(data.data.code=='nologin'){
@@ -697,7 +706,7 @@
                                     break;
                                 }
                             }
-                            this.form.tabType = this.bannerType[tabIndex].value;
+                            this.oTabType = this.bannerType[tabIndex].value;
                             this.goType = JSON.parse(Decrypt(data.data.data)).banner.redirectGoal
                         }else if(data.data.code=='nologin'){
                             this.message=data.data.message
@@ -734,7 +743,7 @@
                     jsonArr.push({key:"endDate",value:this.changeEndTime});
                     jsonArr.push({key:"memo",value:this.form.memo});
                     jsonArr.push({key:"category",value:this.oBannerType});
-                    jsonArr.push({key:"redirectType",value:this.form.tabType});
+                    jsonArr.push({key:"redirectType",value:this.oTabType});
                     jsonArr.push({key:"redirectGoal",value:this.goType});
                     let sign =md5(preSign(jsonArr));
                     jsonArr.push({key:"sign",value:sign});
@@ -856,6 +865,9 @@
                 this.$alert(this.message, '错误信息', {
                     dangerouslyUseHTMLString: true
                 });
+            },
+            changeCinema(val) {
+                this.oForm.cinemaCode = val;
             },
             // 多选操作
             handleSelectionChange(val) {

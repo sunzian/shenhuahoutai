@@ -345,6 +345,7 @@
                         <template slot-scope="scope">
                             <span
                                 v-for="item in scope.row.couponList"
+                                :key="item"
                             >{{item.couponName}}x{{item.number}}&nbsp;&nbsp;&nbsp;&nbsp;</span>
                         </template>
                     </el-table-column>
@@ -769,7 +770,7 @@ export default {
             // }
             if (this.oStatus == '启用') {
                 jsonArr.push({ key: 'status', value: 1 });
-            } else if (this.oStatus == '不启用') {
+            } else if (this.oStatus == '未启用') {
                 jsonArr.push({ key: 'status', value: 2 });
             } else {
                 jsonArr.push({ key: 'status', value: this.oStatus });

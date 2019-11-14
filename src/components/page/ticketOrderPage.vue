@@ -67,7 +67,7 @@
                     value-format="yyyy-MM-dd HH:mm:ss"
                     format="yyyy-MM-dd HH:mm:ss"
                     default-time="06:00:00"
-                    placeholder="开始时间"
+                    placeholder="支付开始时间"
                 ></el-date-picker>至
                 <el-date-picker
                     style="width: 200px;"
@@ -75,11 +75,44 @@
                     type="datetime"
                     value-format="yyyy-MM-dd HH:mm:ss"
                     format="yyyy-MM-dd HH:mm:ss"
-                    placeholder="结束时间"
+                    placeholder="支付结束时间"
+                ></el-date-picker>
+                <el-date-picker
+                    style="width: 200px;"
+                    v-model="query.sessionStartDate"
+                    type="datetime"
+                    value-format="yyyy-MM-dd HH:mm:ss"
+                    format="yyyy-MM-dd HH:mm:ss"
+                    default-time="06:00:00"
+                    placeholder="场次开始时间"
+                ></el-date-picker>至
+                <el-date-picker
+                    style="width: 200px;"
+                    v-model="query.sessionEndDate"
+                    type="datetime"
+                    value-format="yyyy-MM-dd HH:mm:ss"
+                    format="yyyy-MM-dd HH:mm:ss"
+                    placeholder="场次结束时间"
                 ></el-date-picker>
                 <el-button type="primary" icon="el-icon-search" style="margin-top: 10px;" @click="Search">搜索</el-button>
             </div>
             <div class="handle-box">
+                总票数：
+                <el-input
+                    style="width: 150px"
+                    v-model="totalData.totalTicketNumber"
+                    :disabled="true"
+                    autocomplete="off"
+                    class="mr10"
+                ></el-input>
+                总原价：
+                <el-input
+                    style="width: 150px"
+                    v-model="totalData.totalOriginalPrice"
+                    :disabled="true"
+                    autocomplete="off"
+                    class="mr10"
+                ></el-input>
                 总实付价：
                 <el-input
                     style="width: 150px"
@@ -87,45 +120,43 @@
                     :disabled="true"
                     autocomplete="off"
                     class="mr10"
-                ></el-input>总优惠券金额：
+                ></el-input>
+                总优惠券金额：
                 <el-input
                     style="width: 150px"
                     v-model="totalData.totalCouponDiscount"
                     :disabled="true"
                     autocomplete="off"
                     class="mr10"
-                ></el-input>总原价：
+                ></el-input>
+                总活动优惠金额：
                 <el-input
                     style="width: 150px"
-                    v-model="totalData.totalOriginalPrice"
+                    v-model="totalData.totalActivityDiscount"
                     :disabled="true"
                     autocomplete="off"
                     class="mr10"
-                ></el-input>总平台代售费：
+                ></el-input>
+                总平台代售费：
                 <el-input
                     style="width: 150px"
                     v-model="totalData.totalPlatHandFee"
                     :disabled="true"
                     autocomplete="off"
                     class="mr10"
-                ></el-input>总回传金额：
+                ></el-input>
+                总回传金额：
                 <el-input
                     style="width: 150px"
                     v-model="totalData.totalSubmitPrice"
                     :disabled="true"
                     autocomplete="off"
                     class="mr10"
-                ></el-input>总票数：
+                ></el-input>
+                总上报金额：
                 <el-input
                     style="width: 150px"
-                    v-model="totalData.totalTicketNumber"
-                    :disabled="true"
-                    autocomplete="off"
-                    class="mr10"
-                ></el-input>总活动优惠金额：
-                <el-input
-                    style="width: 150px"
-                    v-model="totalData.totalActivityDiscount"
+                    v-model="totalData.totalReportPrice"
                     :disabled="true"
                     autocomplete="off"
                     class="mr10"
@@ -170,7 +201,7 @@
                 <el-table-column prop="memo" label="服务费">
                     <template slot-scope="scope">{{scope.row.totalServiceFee}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="平台手续费">
+                <el-table-column prop="memo" label="平台代售费">
                     <template slot-scope="scope">{{scope.row.totalPlatHandFee}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="活动优惠金额">
@@ -182,8 +213,11 @@
                 <el-table-column prop="memo" label="影票最低金额">
                     <template slot-scope="scope">{{scope.row.totalLowestPrice}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="售票系统回传金额">
+                <el-table-column prop="memo" label="回传金额">
                     <template slot-scope="scope">{{scope.row.totalSubmitPrice}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="上报金额">
+                    <template slot-scope="scope">{{scope.row.totalReportPrice}}</template>
                 </el-table-column>
                 <el-table-column label="支付方式" align="center">
                     <template slot-scope="scope">
@@ -319,6 +353,14 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
+                <el-form-item label="实付金额" :label-width="formLabelWidth">
+                    <el-input
+                        :disabled="true"
+                        style="width: 250px"
+                        v-model="form.totalActualPrice"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
                 <el-form-item label="服务费" :label-width="formLabelWidth">
                     <el-input
                         :disabled="true"
@@ -327,11 +369,19 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="实付金额" :label-width="formLabelWidth">
+                <el-form-item label="网络代售费" :label-width="formLabelWidth">
                     <el-input
                         :disabled="true"
                         style="width: 250px"
-                        v-model="form.totalActualPrice"
+                        v-model="form.totalPlatHandFee"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="影院补贴" :label-width="formLabelWidth">
+                    <el-input
+                        :disabled="true"
+                        style="width: 250px"
+                        v-model="form.totalCinemaAllowance"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
@@ -367,14 +417,6 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="网络代售费" :label-width="formLabelWidth">
-                    <el-input
-                        :disabled="true"
-                        style="width: 250px"
-                        v-model="form.totalPlatHandFee"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
                 <el-form-item label="最低价" :label-width="formLabelWidth">
                     <el-input
                         :disabled="true"
@@ -383,11 +425,19 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="影院补贴" :label-width="formLabelWidth">
+                <el-form-item label="回传金额" :label-width="formLabelWidth">
                     <el-input
                         :disabled="true"
                         style="width: 250px"
-                        v-model="form.totalCinemaAllowance"
+                        v-model="form.totalSubmitPrice"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="上报金额" :label-width="formLabelWidth">
+                    <el-input
+                        :disabled="true"
+                        style="width: 250px"
+                        v-model="form.totalReportPrice"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
@@ -643,6 +693,8 @@ export default {
                 let submitStatus = this.query.submitStatus;
                 let startDate = this.query.startDate;
                 let endDate = this.query.endDate;
+                let sessionStartDate = this.query.sessionStartDate;
+                let sessionEndDate = this.query.sessionEndDate;
                 if (!cinemaCode) {
                     cinemaCode = '';
                 }
@@ -667,6 +719,12 @@ export default {
                 if (!endDate) {
                     endDate = '';
                 }
+                if (!sessionStartDate) {
+                    sessionStartDate = '';
+                }
+                if (!sessionEndDate) {
+                    sessionEndDate = '';
+                }
                 let jsonArr = [];
                 jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
                 jsonArr.push({ key: 'orderNo', value: orderNo });
@@ -676,6 +734,8 @@ export default {
                 jsonArr.push({ key: 'submitStatus', value: submitStatus });
                 jsonArr.push({ key: 'startDate', value: startDate });
                 jsonArr.push({ key: 'endDate', value: endDate });
+                jsonArr.push({ key: 'startDate', value: sessionStartDate });
+                jsonArr.push({ key: 'endDate', value: sessionEndDate });
                 jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
                 jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
                 let sign = md5(preSign(jsonArr));
