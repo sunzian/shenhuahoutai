@@ -372,31 +372,31 @@ export default {
         return {
             oExceptWeekDay: [
                 {
-                    index:1,
+                    index:"1",
                     value:'星期一'
                 },
                 {
-                    index:2,
+                    index:"2",
                     value:'星期二'
                 },
                 {
-                    index:3,
+                    index:"3",
                     value:'星期三'
                 },
                 {
-                    index:4,
+                    index:"4",
                     value:'星期四'
                 },
                 {
-                    index:5,
+                    index:"5",
                     value:'星期五'
                 },
                 {
-                    index:6,
+                    index:"6",
                     value:'星期六'
                 },
                 {
-                    index:7,
+                    index:"7",
                     value:'星期日'
                 },
             ],
@@ -666,59 +666,70 @@ export default {
                     console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.editVisible = true;
-                        this.oMerchandiseName = JSON.parse(Decrypt(data.data.data)).merchandiseNames;
-                        this.oCinemaCode = JSON.parse(Decrypt(data.data.data)).cinemaCodes;
-                        this.oName = JSON.parse(Decrypt(data.data.data)).name;
-                        this.oStartDate = JSON.parse(Decrypt(data.data.data)).startDate;
-                        this.oSendNumber = JSON.parse(Decrypt(data.data.data)).sendNumber;
-                        this.oEndDate = JSON.parse(Decrypt(data.data.data)).endDate;
-                        if (JSON.parse(Decrypt(data.data.data)).validPayType == 0) {
+                        this.cinemaInfo = [];
+                        for (let i = 0; i < JSON.parse(Decrypt(data.data.data)).cinemaList.length; i++) {
+                            let cinemaList = {};
+                            cinemaList.cinemaCode = JSON.parse(Decrypt(data.data.data)).cinemaList[i].cinemaCode;
+                            cinemaList.cinemaName = JSON.parse(Decrypt(data.data.data)).cinemaList[i].cinemaName;
+                            this.cinemaInfo.push(cinemaList);
+                        }
+                        this.oMerchandiseName = JSON.parse(Decrypt(data.data.data)).coupon.merchandiseNames;
+                        this.oCinemaCode = JSON.parse(Decrypt(data.data.data)).coupon.cinemaCodes;
+                        this.oName = JSON.parse(Decrypt(data.data.data)).coupon.name;
+                        this.oStartDate = JSON.parse(Decrypt(data.data.data)).coupon.startDate;
+                        this.oSendNumber = JSON.parse(Decrypt(data.data.data)).coupon.sendNumber;
+                        this.oEndDate = JSON.parse(Decrypt(data.data.data)).coupon.endDate;
+                        if (JSON.parse(Decrypt(data.data.data)).coupon.validPayType == 0) {
                             this.oValidPayType = '0';
                         }
-                        if (JSON.parse(Decrypt(data.data.data)).validPayType == 1) {
+                        if (JSON.parse(Decrypt(data.data.data)).coupon.validPayType == 1) {
                             this.oValidPayType = '1';
                         }
-                        if (JSON.parse(Decrypt(data.data.data)).validPayType == 2) {
+                        if (JSON.parse(Decrypt(data.data.data)).coupon.validPayType == 2) {
                             this.oValidPayType = '2';
                         }
-                        this.oAchieveMoney = JSON.parse(Decrypt(data.data.data)).achieveMoney;
-                        if (JSON.parse(Decrypt(data.data.data)).reduceType == 1) {
+                        this.oAchieveMoney = JSON.parse(Decrypt(data.data.data)).coupon.achieveMoney;
+                        if (JSON.parse(Decrypt(data.data.data)).coupon.reduceType == 1) {
                             this.oReduceType = '1';
                         }
-                        if (JSON.parse(Decrypt(data.data.data)).reduceType == 2) {
+                        if (JSON.parse(Decrypt(data.data.data)).coupon.reduceType == 2) {
                             this.oReduceType = '2';
                         }
-                        if (JSON.parse(Decrypt(data.data.data)).selectMerchandiseType == 0) {
+                        if (JSON.parse(Decrypt(data.data.data)).coupon.selectMerchandiseType == 0) {
                             this.oSelectMerchandiseType = '0';
                         }
-                        if (JSON.parse(Decrypt(data.data.data)).selectMerchandiseType == 1) {
+                        if (JSON.parse(Decrypt(data.data.data)).coupon.selectMerchandiseType == 1) {
                             this.oSelectMerchandiseType = '1';
                         }
-                        if (JSON.parse(Decrypt(data.data.data)).selectMerchandiseType == 2) {
+                        if (JSON.parse(Decrypt(data.data.data)).coupon.selectMerchandiseType == 2) {
                             this.oSelectMerchandiseType = '2';
                         }
-                        this.oDiscountMoney = JSON.parse(Decrypt(data.data.data)).discountMoney;
-                        this.oCouponDesc = JSON.parse(Decrypt(data.data.data)).couponDesc;
-                        this.oCheckedDays = JSON.parse(Decrypt(data.data.data)).exceptWeekDay.split(",");
-                        this.oId = JSON.parse(Decrypt(data.data.data)).id;
+                        this.oDiscountMoney = JSON.parse(Decrypt(data.data.data)).coupon.discountMoney;
+                        this.oCouponDesc = JSON.parse(Decrypt(data.data.data)).coupon.couponDesc;
+                        this.oCheckedDays = JSON.parse(Decrypt(data.data.data)).coupon.exceptWeekDay.split(",");
+                        if(JSON.parse(Decrypt(data.data.data)).coupon.merchandiseCode){
+                            this.oMerchandiseCode = JSON.parse(Decrypt(data.data.data)).coupon.merchandiseCode.split(",");
+                        }
+                        this.oId = JSON.parse(Decrypt(data.data.data)).coupon.id;
                         for (let x in this.canUse) {
-                            if (this.canUse[x].value == JSON.parse(Decrypt(data.data.data)).activityTogether) {
+                            if (this.canUse[x].value == JSON.parse(Decrypt(data.data.data)).coupon.activityTogether) {
                                 this.oActivityTogether = this.canUse[x].value;
                                 break;
                             }
                         }
                         for (let x in this.canUse) {
-                            if (this.canUse[x].value == JSON.parse(Decrypt(data.data.data)).holidayValid) {
+                            if (this.canUse[x].value == JSON.parse(Decrypt(data.data.data)).coupon.holidayValid) {
                                 this.oHolidayValid = this.canUse[x].value;
                                 break;
                             }
                         }
                         for (let x in this.options) {
-                            if (this.options[x].value == JSON.parse(Decrypt(data.data.data)).status) {
+                            if (this.options[x].value == JSON.parse(Decrypt(data.data.data)).coupon.status) {
                                 this.oStatus = this.options[x].value;
                                 break;
                             }
                         }
+                        this.getAllGoods(this.oCinemaCode);
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
@@ -915,6 +926,8 @@ export default {
             });
         },
         selectCinema(val) {
+            console.log(val);
+            this.oMerchandiseCode=[];
             this.selectValue = val;
             this.getAllGoods(val);
         },
@@ -947,6 +960,8 @@ export default {
                             goodsList.merchandiseName = goods[i].merchandiseName;
                             this.goodsInfo.push(goodsList);
                         }
+                        // console.log(this.goodsInfo);
+                        // console.log(this.oExceptWeekDay);
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
