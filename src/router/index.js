@@ -90,6 +90,11 @@ export default new Router({
                     meta: { title: '卖品优惠券管理' }
                 },
                 {
+                    path: '/memberCardPage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/memberCardPage.vue'),
+                    meta: { title: '会员卡用户' }
+                },
+                {
                     path: '/employeePage',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/employePage.vue'),
                     meta: { title: '员工管理' }
