@@ -479,31 +479,31 @@ export default {
         return {
             oExceptWeekDay: [
                 {
-                    index:1,
+                    index:"1",
                     value:'星期一'
                 },
                 {
-                    index:2,
+                    index:"2",
                     value:'星期二'
                 },
                 {
-                    index:3,
+                    index:"3",
                     value:'星期三'
                 },
                 {
-                    index:4,
+                    index:"4",
                     value:'星期四'
                 },
                 {
-                    index:5,
+                    index:"5",
                     value:'星期五'
                 },
                 {
-                    index:6,
+                    index:"6",
                     value:'星期六'
                 },
                 {
-                    index:7,
+                    index:"7",
                     value:'星期日'
                 },
             ],
@@ -837,6 +837,18 @@ export default {
                     console.log(data);
                     console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
+                        if(JSON.parse(Decrypt(data.data.data)).coupon.filmCode&&JSON.parse(Decrypt(data.data.data)).coupon.filmNames){
+                            let exFilmCodeList=JSON.parse(Decrypt(data.data.data)).coupon.filmCode.split(',');
+                            let exFilmNameList=JSON.parse(Decrypt(data.data.data)).coupon.filmNames.split(',');
+                            this.filmInfo=[];
+                            for(let x in exFilmNameList){
+                                let json={};
+                                json.value=exFilmNameList[x];
+                                json.filmCode=exFilmCodeList[x];
+                                this.filmInfo.push(json)
+                            }
+                            console.log(this.filmInfo);
+                        }
                         let formats = JSON.parse(Decrypt(data.data.data)).formatList;
                         this.formatList = [];
                         for (let i = 0; i < formats.length; i++) {
@@ -848,11 +860,19 @@ export default {
                         this.editVisible = true;
                         this.oCinemaName = JSON.parse(Decrypt(data.data.data)).coupon.cinemaNames;
                         this.oScreenName = JSON.parse(Decrypt(data.data.data)).coupon.screenNames;
-                        // this.oFilmName = JSON.parse(Decrypt(data.data.data)).coupon.filmNames;
+                        this.oCinemaCode = JSON.parse(Decrypt(data.data.data)).coupon.cinemaCodes;
                         this.oFilmFormatName = JSON.parse(Decrypt(data.data.data)).coupon.filmFormatName;
                         this.oName = JSON.parse(Decrypt(data.data.data)).coupon.name;
                         this.oStartDate = JSON.parse(Decrypt(data.data.data)).coupon.startDate;
-                        this.oCheckedDays = JSON.parse(Decrypt(data.data.data)).coupon.exceptWeekDay.split(",");
+                        if(JSON.parse(Decrypt(data.data.data)).coupon.exceptWeekDay){
+                            this.oCheckedDays = JSON.parse(Decrypt(data.data.data)).coupon.exceptWeekDay.split(",");
+                        }
+                       if(JSON.parse(Decrypt(data.data.data)).coupon.screenCode){
+                           this.oScreenCode = JSON.parse(Decrypt(data.data.data)).coupon.screenCode.split(",");
+                       }
+                        if(JSON.parse(Decrypt(data.data.data)).coupon.filmFormatCode){
+                            this.oFilmFormatCode = JSON.parse(Decrypt(data.data.data)).coupon.filmFormatCode.split(",");
+                        }
                         this.oEndDate = JSON.parse(Decrypt(data.data.data)).coupon.endDate;
                         if (JSON.parse(Decrypt(data.data.data)).coupon.validPayType == 0) {
                             this.oValidPayType = '0';
@@ -862,6 +882,33 @@ export default {
                         }
                         if (JSON.parse(Decrypt(data.data.data)).coupon.validPayType == 2) {
                             this.oValidPayType = '2';
+                        }
+                        if (JSON.parse(Decrypt(data.data.data)).coupon.selectFilmType == 0) {
+                            this.oSelectFilmType = '0';
+                        }
+                        if (JSON.parse(Decrypt(data.data.data)).coupon.selectFilmType == 1) {
+                            this.oSelectFilmType = '1';
+                        }
+                        if (JSON.parse(Decrypt(data.data.data)).coupon.selectFilmType == 2) {
+                            this.oSelectFilmType = '2';
+                        }
+                        if (JSON.parse(Decrypt(data.data.data)).coupon.selectHallType == 0) {
+                            this.oSelectHallType = '0';
+                        }
+                        if (JSON.parse(Decrypt(data.data.data)).coupon.selectHallType == 1) {
+                            this.oSelectHallType = '1';
+                        }
+                        if (JSON.parse(Decrypt(data.data.data)).coupon.selectHallType == 2) {
+                            this.oSelectHallType = '2';
+                        }
+                        if (JSON.parse(Decrypt(data.data.data)).coupon.selectFilmFormatType == 0) {
+                            this.oSelectFilmFormatType = '0';
+                        }
+                        if (JSON.parse(Decrypt(data.data.data)).coupon.selectFilmFormatType == 1) {
+                            this.oSelectFilmFormatType = '1';
+                        }
+                        if (JSON.parse(Decrypt(data.data.data)).coupon.selectFilmFormatType == 2) {
+                            this.oSelectFilmFormatType = '2';
                         }
                         if (JSON.parse(Decrypt(data.data.data)).coupon.reduceType == 1) {
                             this.oReduceType = '1';
@@ -892,6 +939,7 @@ export default {
                                 break;
                             }
                         }
+                        this.getAllScreen(this.oCinemaCode);
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
@@ -1093,6 +1141,9 @@ export default {
         },
         selectCinema(val) {
             console.log(1);
+            this.oScreenCode=[];
+            this.filmInfo=[];
+            this.oFilmFormatCode=[];
             this.selectValue = val;
             this.getAllScreen(val);
         },
@@ -1235,6 +1286,8 @@ export default {
                 return;
             }
             this.filmInfo.push(this.selectFilm);
+            console.log(this.selectFilm);
+
         },
         deletFilm(index) {
             this.filmInfo.splice(index, 1);

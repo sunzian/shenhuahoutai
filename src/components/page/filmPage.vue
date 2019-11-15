@@ -102,12 +102,12 @@
                 </el-form-item>
                 <el-form-item label="上映时间" :label-width="formLabelWidth">
                     <el-date-picker
-                        v-model="oForm.publishDate"
-                        type="datetime"
-                        placeholder="请选择日期"
-                        value-format="yyyy-MM-dd HH:mm:ss"
-                        format="yyyy-MM-dd HH:mm:ss"
-                    ></el-date-picker>
+                            v-model="oForm.publishDate"
+                            type="date"
+                            value-format="yyyy-MM-dd"
+                            format="yyyy-MM-dd"
+                            placeholder="选择日期">
+                    </el-date-picker>
                 </el-form-item>
                 <el-form-item label="可选导演列表" :label-width="formLabelWidth">
                     <el-button type="primary" @click="getAllDirector">选择导演</el-button>
@@ -259,12 +259,12 @@
                 </el-form-item>
                 <el-form-item label="上映时间" :label-width="formLabelWidth">
                     <el-date-picker
-                        v-model="oPublishDate"
-                        type="datetime"
-                        placeholder="请选择日期"
-                        value-format="yyyy-MM-dd HH:mm:ss"
-                        format="yyyy-MM-dd HH:mm:ss"
-                    ></el-date-picker>
+                            v-model="oPublishDate"
+                            type="date"
+                            value-format="yyyy-MM-dd"
+                            format="yyyy-MM-dd"
+                            placeholder="选择日期">
+                    </el-date-picker>
                 </el-form-item>
                 <el-form-item label="可选导演列表" :label-width="formLabelWidth">
                     <el-button type="primary" @click="getAllDirector">选择导演</el-button>
@@ -546,6 +546,7 @@ export default {
     name: 'basetable',
     data() {
         return {
+            directorList1:[],
             oFilmName: '',
             oArea: '',
             oActorId: '',
@@ -595,6 +596,7 @@ export default {
             actor: '',
             directorList: [],
             actorList: [],
+            actorList1: [],
             directorArr: [],
             actorArr: [],
             directorTableData: [],
@@ -725,6 +727,10 @@ export default {
             if (this.stageImg.substring(1).length > 0) {
                 this.stageImg = this.stageImg.substring(1);
             }
+            // console.log(this.oForm.stagePhoto);
+            // console.log(this.stageImg);
+            // console.log(this.actor);
+            // console.log(this.director);
             var jsonArr = [];
             jsonArr.push({ key: 'filmCode', value: this.oForm.filmCode });
             jsonArr.push({ key: 'filmName', value: this.oForm.filmName });
@@ -755,6 +761,12 @@ export default {
                         if (data.data.code == 'success') {
                             this.dialogFormVisible = false;
                             this.$message.success(`新增成功`);
+                           this.directorList=[];
+                           this.actorList=[];
+                           this.oForm.stagePhoto=[];
+                            this.director='';
+                            this.actor='';
+                            this.stageImg='';
                             this.getMenu();
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
@@ -896,6 +908,9 @@ export default {
         },
         // 编辑操作
         exChanger() {
+            console.log(this.directorList);
+            console.log(this.actorList);
+            console.log(this.oStagePhoto);
             const loading = this.$loading({
                 lock: true,
                 text: 'Loading',
@@ -904,32 +919,38 @@ export default {
                 target: document.querySelector('.div1')
             });
             var jsonArr = [];
-            for (let i = 0; i < this.directorList.length; i++) {
-                this.director += ',' + this.directorList[i].id;
-            }
-            if (this.director.substring(1).length > 0) {
-                this.director = this.director.substring(1);
-            }
-            for (let i = 0; i < this.actorList.length; i++) {
-                this.actor += ',' + this.actorList[i].id;
-            }
-            if (this.actor.substring(1).length > 0) {
-                this.actor = this.actor.substring(1);
-            }
-            if (this.oStagePhoto.length == 0) {
-                for (let i = 0; i < this.oStagePhotoList.length; i++) {
-                    this.photoUrl += ',' + this.oStagePhotoList[i];
+            if(this.directorList&&this.directorList.length>0){
+                for (let i = 0; i < this.directorList.length; i++) {
+                    this.director += ',' + this.directorList[i].id;
                 }
-                if (this.photoUrl.substring(1).length > 0) {
-                    this.photoUrl = this.photoUrl.substring(1);
+                if (this.director.substring(1).length > 0) {
+                    this.director = this.director.substring(1);
                 }
-            } else {
-                for (let i = 0; i < this.oStagePhoto.length; i++) {
-                    this.photoUrl += ',' + this.oStagePhoto[i].url;
+            }
+            if(this.actorList&&this.actorList.length>0){
+                for (let i = 0; i < this.actorList.length; i++) {
+                    this.actor += ',' + this.actorList[i].id;
                 }
-                // if (this.photoUrl.substring(1).length > 0) {
-                //     this.photoUrl = this.photoUrl.substring(1);
-                // }
+                if (this.actor.substring(1).length > 0) {
+                    this.actor = this.actor.substring(1);
+                }
+            }
+            if(this.oStagePhoto&&this.oStagePhoto.length>0){
+                if (this.oStagePhoto.length == 0) {
+                    for (let i = 0; i < this.oStagePhotoList.length; i++) {
+                        this.photoUrl += ',' + this.oStagePhotoList[i];
+                    }
+                    if (this.photoUrl.substring(1).length > 0) {
+                        this.photoUrl = this.photoUrl.substring(1);
+                    }
+                } else {
+                    for (let i = 0; i < this.oStagePhoto.length; i++) {
+                        this.photoUrl += ',' + this.oStagePhoto[i].url;
+                    }
+                    if (this.photoUrl.substring(1).length > 0) {
+                        this.photoUrl = this.photoUrl.substring(1);
+                    }
+                }
             }
             jsonArr.push({ key: 'filmCode', value: this.oFilmCode });
             jsonArr.push({ key: 'filmName', value: this.oFilmName });
@@ -966,8 +987,13 @@ export default {
                     // console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.$message.success(`编辑成功`);
-                        this.$refs.upload.clearFiles();//清除已上传文件
+                        this.directorList=[];
+                        this.actorList=[];
+                        this.oStagePhotoList=[];
+                        this.director='';
+                        this.actor='';
                         this.photoUrl='';
+                        this.$refs.upload.clearFiles();//清除已上传文件
                         this.getMenu();
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
@@ -1219,6 +1245,10 @@ export default {
         },
         sureDirector() {
             console.log(this.directorList);
+            console.log(this.directorList1);
+            for(let x in this.directorList1){
+                this.directorList.push(this.directorList1[x])
+            }
             if (this.directorList.length == 0) {
                 this.message = '请选择导演';
                 this.open();
@@ -1227,6 +1257,9 @@ export default {
             this.allDirector = false;
         },
         sureActor() {
+            for(let x in this.actorList1){
+                this.actorList.push(this.actorList1[x])
+            }
             if (this.actorList.length == 0) {
                 this.message = '请选择演员';
                 this.open();
@@ -1258,13 +1291,14 @@ export default {
         },
         // 多选导演操作
         selectDirector(val) {
-            this.directorList = [];
-            this.directorList = val;
+            console.log(val);
+            // this.directorList = [];
+            this.directorList1 = val;
         },
         // 多选演员操作
         selectActor(val) {
-            this.actorList = [];
-            this.actorList = val;
+            // this.actorList = [];
+            this.actorList1 = val;
         },
         // 删除已选导演
         deletDirector(index) {

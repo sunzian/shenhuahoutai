@@ -525,7 +525,7 @@ export default {
                     payWay = '';
                 }
                 let jsonArr = [];
-                jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
+                jsonArr.push({ key: 'openCardCinemaName', value: cinemaCode });
                 jsonArr.push({ key: 'CardrNo', value: orderNo });
                 jsonArr.push({ key: 'userMobile', value: mobile });
                 jsonArr.push({ key: 'bindStatus', value: payWay });

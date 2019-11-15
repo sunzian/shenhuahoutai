@@ -905,6 +905,8 @@
                     screenName: '',
                     screenCode: [],
                     filmFormatCode:[],
+                    isFilmJoin:'0',
+                    isMerchandiseJoin:'0',
                     cardType:'1', //权益类型
                     selectFilmType: '0',//选择影片
                     selectMerchandiseType:'0',//选择商品
