@@ -583,59 +583,69 @@
                 <el-form-item label="星期几不可用：" :label-width="formLabelWidth">
                     <el-checkbox-group v-model="oCheckedDays" @change="selectDay">
                         <el-checkbox
-                                v-for="(day, index) in oForm.exceptWeekDay"
-                                :label="index+1"
-                                :key="day"
-                        >{{day}}</el-checkbox>
+                                v-for="item in oExceptWeekDay"
+                                :label="item.index"
+                                :key="item.index"
+                                :value="item.value"
+                        >{{item.value}}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
-                <!--<el-form-item label="是否和券共用" :label-width="formLabelWidth">-->
-                    <!--<el-select v-model="oForm.activityTogether" placeholder="请选择">-->
-                        <!--<el-option-->
-                                <!--v-for="item in canUse"-->
-                                <!--:key="item.value"-->
-                                <!--:label="item.label"-->
-                                <!--:value="item.value"-->
-                        <!--&gt;</el-option>-->
-                    <!--</el-select>-->
-                <!--</el-form-item>-->
-                <!--<el-form-item label="是否限制张数：" :label-width="formLabelWidth">-->
-                    <!--<el-select v-model="oForm.oCanNum" placeholder="请选择">-->
-                        <!--<el-option-->
-                                <!--v-for="item in canUse"-->
-                                <!--:key="item.value"-->
-                                <!--:label="item.label"-->
-                                <!--:value="item.value"-->
-                        <!--&gt;</el-option>-->
-                    <!--</el-select>-->
-                <!--</el-form-item>-->
-                <!--<el-form-item label="活动总张数：" v-if="oForm.oCanNum==1" :label-width="formLabelWidth">-->
-                    <!--<el-input style="width: 150px" v-model="oForm.oNum" autocomplete="off"></el-input>-->
-                <!--</el-form-item>-->
-                <!--<el-form-item label="是否限制个人张数：" :label-width="formLabelWidth">-->
-                    <!--<el-select v-model="oForm.oneCanNum" placeholder="请选择">-->
-                        <!--<el-option-->
-                                <!--v-for="item in canUse"-->
-                                <!--:key="item.value"-->
-                                <!--:label="item.label"-->
-                                <!--:value="item.value"-->
-                        <!--&gt;</el-option>-->
-                    <!--</el-select>-->
-                <!--</el-form-item>-->
-                <!--<el-form-item label="个人总张数：" v-if="oForm.oneCanNum==1" :label-width="formLabelWidth">-->
-                    <!--<el-input style="width: 150px" v-model="oForm.oneNum" autocomplete="off"></el-input>-->
-                <!--</el-form-item>-->
-                <!--<el-form-item label="使用须知：" :label-width="formLabelWidth">-->
-                    <!--<el-input-->
-                            <!--type="textarea"-->
-                            <!--:rows="2"-->
-                            <!--placeholder="请输入内容"-->
-                            <!--v-model="oForm.couponDesc"-->
-                    <!--&gt;</el-input>-->
-                <!--</el-form-item>-->
+                <el-form-item label="是否和券共用" :label-width="formLabelWidth">
+                    <el-select v-model="oIsCouponTogether" placeholder="请选择">
+                        <el-option
+                                v-for="item in canUse"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="是否限制张数：" :label-width="formLabelWidth">
+                    <el-select v-model="oIsLimitTotal" placeholder="请选择">
+                        <el-option
+                                v-for="item in canUse"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="活动总张数：" v-if="oIsLimitTotal==1" :label-width="formLabelWidth">
+                    <el-input style="width: 150px" v-model="oTotalNumber" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="是否限制个人张数：" :label-width="formLabelWidth">
+                    <el-select v-model="oIsLimitSingle" placeholder="请选择">
+                        <el-option
+                                v-for="item in canUse"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="限购时间：" v-if="oIsLimitSingle==1" :label-width="formLabelWidth">
+                    <el-radio-group v-model="oLimitSingleUnit">
+                        <el-radio label="年">年</el-radio>
+                        <el-radio label="月">月</el-radio>
+                        <el-radio label="周">周</el-radio>
+                        <el-radio label="日">日</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item label="个人总张数：" v-if="oIsLimitSingle==1" :label-width="formLabelWidth">
+                    <el-input style="width: 150px" v-model="oSingleNumber" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="使用须知：" :label-width="formLabelWidth">
+                    <el-input
+                            type="textarea"
+                            :rows="2"
+                            placeholder="请输入内容"
+                            v-model="oActivityDesc"
+                    ></el-input>
+                </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="editVisible = false">确 定</el-button>
+                <el-button @click="editVisible = false">取 消</el-button>
+                <el-button @click="exChanger">确 定</el-button>
             </span>
         </el-dialog>
     </div>
@@ -651,12 +661,44 @@
         name: 'basetable',
         data() {
             return {
+                oExceptWeekDay: [
+                    {
+                        index:"1",
+                        value:'星期一'
+                    },
+                    {
+                        index:"2",
+                        value:'星期二'
+                    },
+                    {
+                        index:"3",
+                        value:'星期三'
+                    },
+                    {
+                        index:"4",
+                        value:'星期四'
+                    },
+                    {
+                        index:"5",
+                        value:'星期五'
+                    },
+                    {
+                        index:"6",
+                        value:'星期六'
+                    },
+                    {
+                        index:"7",
+                        value:'星期日'
+                    },
+                ],
                 oCinemaCode:'',
                 oSelectHallType:'',
                 oSelectFilmFormatType:'',
+                oActivityDesc:'',
                 oStartDate:'',
                 oEndDate:'',
                 oSelectFilmType:'',
+                oLimitSingleUnit:'',
                 oScreenCode:[],
                 selectedSell:[],
                 oCheckedDays:[],
@@ -1062,9 +1104,15 @@
                             if (JSON.parse(Decrypt(data.data.data)).discountActivity.selectHallType == 2) {
                                 this.oSelectHallType = '2';
                             }
-                            this.oScreenCode = JSON.parse(Decrypt(data.data.data)).discountActivity.screenCode.split(",");
+                            if(JSON.parse(Decrypt(data.data.data)).discountActivity.screenCode){
+                                this.oScreenCode = JSON.parse(Decrypt(data.data.data)).discountActivity.screenCode.split(",");
+                            }
+                        if(JSON.parse(Decrypt(data.data.data)).discountActivity.filmFormatCode){
                             this.oFilmFormatCode = JSON.parse(Decrypt(data.data.data)).discountActivity.filmFormatCode.split(",");
-                            this.oCheckedDays = JSON.parse(Decrypt(data.data.data)).discountActivity.validWeekDay.split(",");
+                        }
+                           if(JSON.parse(Decrypt(data.data.data)).discountActivity.validWeekDay){
+                               this.oCheckedDays = JSON.parse(Decrypt(data.data.data)).discountActivity.validWeekDay.split(",");
+                           }
                             if (JSON.parse(Decrypt(data.data.data)).discountActivity.selectFilmFormatType == 0) {
                                 this.oSelectFilmFormatType = '0';
                             }
@@ -1100,6 +1148,18 @@
                             if (JSON.parse(Decrypt(data.data.data)).discountActivity.reduceType == 2) {
                                 this.oReduceType = '2';
                             }
+                            if (JSON.parse(Decrypt(data.data.data)).discountActivity.limitSingleUnit == '年') {
+                                this.oLimitSingleUnit = '年';
+                            }
+                            if (JSON.parse(Decrypt(data.data.data)).discountActivity.limitSingleUnit == '月') {
+                                this.oLimitSingleUnit = '月';
+                            }
+                            if (JSON.parse(Decrypt(data.data.data)).discountActivity.limitSingleUnit == '周') {
+                                this.oLimitSingleUnit = '周';
+                            }
+                            if (JSON.parse(Decrypt(data.data.data)).discountActivity.limitSingleUnit == '日') {
+                                this.oLimitSingleUnit = '日';
+                            }
                             this.oDiscountMoney = JSON.parse(Decrypt(data.data.data)).discountActivity.discountMoney;
                             for (let x in this.options) {
                                 if (this.options[x].value == JSON.parse(Decrypt(data.data.data)).discountActivity.status) {
@@ -1113,22 +1173,27 @@
                                     break;
                                 }
                             }
-                            // this.selectHallType =JSON.parse(Decrypt(data.data.data)).selectHallType;
-                            // this.selectFilmFormatType =JSON.parse(Decrypt(data.data.data)).selectFilmFormatType;
-                            // this.selectFilmType =JSON.parse(Decrypt(data.data.data)).selectFilmType;
-                            // this.oFilmFormatName = JSON.parse(Decrypt(data.data.data)).filmFormatName;
-                            // this.oFilmName = JSON.parse(Decrypt(data.data.data)).filmName;
-                            // this.oCreateDate = JSON.parse(Decrypt(data.data.data)).createDate;
-                            // // this.oAchieveMoney = JSON.parse(Decrypt(data.data.data)).achieveMoney;
-                            // this.oIsHolidayValid = JSON.parse(Decrypt(data.data.data)).isHolidayValid;
-                            // this.oValidWeekDay = JSON.parse(Decrypt(data.data.data)).validWeekDay;
-                            // this.oIsCouponTogether = JSON.parse(Decrypt(data.data.data)).isCouponTogether;
-                            // this.oCouponDesc = JSON.parse(Decrypt(data.data.data)).activityDesc
-                            // this.oIsLimitTotal = JSON.parse(Decrypt(data.data.data)).isLimitTotal
-                            // this.oTotalNumber = JSON.parse(Decrypt(data.data.data)).totalNumber
-                            // this.oTotalSurplus = JSON.parse(Decrypt(data.data.data)).totalSurplus
-                            // this.oIsLimitSingle = JSON.parse(Decrypt(data.data.data)).isLimitSingle
-                            // this.oSingleNumber = JSON.parse(Decrypt(data.data.data)).singleNumber
+                            for (let x in this.canUse) {
+                                if (this.canUse[x].value == JSON.parse(Decrypt(data.data.data)).discountActivity.isCouponTogether) {
+                                    this.oIsCouponTogether = this.canUse[x].value;
+                                    break;
+                                }
+                            }
+                            for (let x in this.canUse) {
+                                if (this.canUse[x].value == JSON.parse(Decrypt(data.data.data)).discountActivity.isCouponTogether) {
+                                    this.oIsLimitTotal = this.canUse[x].value;
+                                    break;
+                                }
+                            }
+                            for (let x in this.canUse) {
+                                if (this.canUse[x].value == JSON.parse(Decrypt(data.data.data)).discountActivity.isCouponTogether) {
+                                    this.oIsLimitSingle = this.canUse[x].value;
+                                    break;
+                                }
+                            }
+                            this.oTotalNumber = JSON.parse(Decrypt(data.data.data)).discountActivity.totalNumber;
+                            this.oSingleNumber = JSON.parse(Decrypt(data.data.data)).discountActivity.singleNumber;
+                            this.oActivityDesc = JSON.parse(Decrypt(data.data.data)).discountActivity.activityDesc;
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
                             this.open();
@@ -1153,29 +1218,48 @@
                     target: document.querySelector('.div1')
                 });
                 var jsonArr = [];
-                jsonArr.push({ key: 'filmCode', value: this.oFilmCode });
-                jsonArr.push({ key: 'filmName', value: this.oFilmName });
-                jsonArr.push({ key: 'version', value: this.oVersion });
-                jsonArr.push({ key: 'duration', value: this.oDuration });
-                jsonArr.push({ key: 'publishDate', value: this.oPublishDate });
-                jsonArr.push({ key: 'directorId', value: this.oDirectorId });
-                jsonArr.push({ key: 'castId', value: this.oCastId });
-                jsonArr.push({ key: 'introduction', value: this.oIntroduction });
-                jsonArr.push({ key: 'score', value: this.oScore });
-                jsonArr.push({ key: 'area', value: this.oArea });
-                jsonArr.push({ key: 'type', value: this.oType });
-                jsonArr.push({ key: 'language', value: this.oLanguage });
+                jsonArr.push({ key: 'name', value: this.oName });
+                jsonArr.push({ key: 'cinemaCode', value: this.oCinemaCode });
+                jsonArr.push({ key: 'selectHallType', value: this.oSelectHallType });
+                if(this.oForm.selectHallType!=0){
+                    jsonArr.push({ key: 'screenCode', value: this.oScreenCode.join(',') });
+                }
+                jsonArr.push({ key: 'selectFilmType', value: this.oSelectFilmType });
+                if(this.oForm.selectFilmType!=0){
+                    jsonArr.push({ key: 'filmCode', value: this.oFilmCode });
+                }
+                jsonArr.push({ key: 'startDate', value: this.oStartDate });
+                jsonArr.push({ key: 'endDate', value: this.oEndDate });
+                jsonArr.push({ key: 'reduceType', value: this.oReduceType });
+                jsonArr.push({ key: 'validPayType', value: this.oValidPayType });
+                jsonArr.push({ key: 'discountMoney', value: this.oDiscountMoney });
                 jsonArr.push({ key: 'status', value: this.oStatus });
-                jsonArr.push({ key: 'image', value: this.oImage });
-                jsonArr.push({ key: 'trailer', value: this.oTrailer });
-                jsonArr.push({ key: 'stagePhoto', value: this.oStagePhoto });
+                jsonArr.push({ key: 'isHolidayValid', value: this.oIsHolidayValid});
+                jsonArr.push({ key: 'validWeekDay', value: this.oCheckedDays });
+                jsonArr.push({ key: 'isCouponTogether', value: this.oIsCouponTogether });
+                jsonArr.push({ key: 'activityDesc', value: this.oActivityDesc });
+                jsonArr.push({ key: 'startTimeVal', value: this.startArr.join(',')});
+                jsonArr.push({ key: 'endTimeVal', value: this.endArr.join(',')});
+                jsonArr.push({ key: 'isLimitTotal', value: this.oIsLimitTotal });
+                if(this.oForm.oCanNum!=0){
+                    jsonArr.push({ key: 'totalNumber', value: this.oTotalNumber });
+                }
+                if(this.oForm.oneCanNum!=0){
+                    jsonArr.push({ key: 'singleNumber', value: this.oSingleNumber});
+                    jsonArr.push({ key: 'limitSingleUnit', value: this.oLimitSingleUnit });
+                }
+                jsonArr.push({ key: 'isLimitSingle', value: this.oIsLimitSingle});
+                jsonArr.push({ key: 'selectFilmFormatType', value: this.oSelectFilmFormatType});
+                if(this.oForm.selectMovieType!=0){
+                    jsonArr.push({ key: 'FilmFormatCode', value: this.oFilmFormatCode});
+                }
                 jsonArr.push({ key: 'id', value: this.oId });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
                 console.log(jsonArr);
                 let params = ParamsAppend(jsonArr);
                 this.editVisible = false;
-                https.fetchPost('/film/updateFilm', params).then(data => {
+                https.fetchPost('/filmDiscountActivity/updateActivityById', params).then(data => {
                         loading.close();
                         // console.log(JSON.parse(Decrypt(data.data.data)));
                         if (data.data.code == 'success') {
