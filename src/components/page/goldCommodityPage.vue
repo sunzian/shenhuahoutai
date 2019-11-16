@@ -70,9 +70,9 @@
                         </el-popover>
                     </template>
                 </el-table-column>
-                <el-table-column prop="memo" label="商品描述">
+                <!-- <el-table-column prop="memo" label="商品描述">
                     <template slot-scope="scope">{{scope.row.memo}}</template>
-                </el-table-column>
+                </el-table-column>-->
                 <el-table-column prop="sort" label="库存">
                     <template slot-scope="scope">{{scope.row.store}}</template>
                 </el-table-column>
@@ -107,9 +107,9 @@
                         <el-tag v-else-if="scope.row.commodityType=='2'">优惠券</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="sort" label="优惠券名称" width="130">
+                <!-- <el-table-column prop="sort" label="优惠券名称" width="130">
                     <template slot-scope="scope">{{scope.row.ticketNames}}</template>
-                </el-table-column>
+                </el-table-column>-->
                 <!-- <el-table-column prop="sort" label="是否指定日期可以兑换" width="160">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.assignType=='0'"
@@ -191,11 +191,7 @@
                 >
                     <el-input style="width: 250px" v-model="oForm.name" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item
-                    v-if="oForm.commodity_type==1"
-                    label="商品图片"
-                    :label-width="formLabelWidth"
-                >
+                <el-form-item label="商品图片" :label-width="formLabelWidth">
                     <el-upload
                         :before-upload="beforeUpload"
                         :data="type"
@@ -387,6 +383,14 @@
                 >
                     <el-input style="width: 250px" v-model="oForm.limit_number" autocomplete="off"></el-input>
                 </el-form-item>
+                <el-form-item label="排序" :label-width="formLabelWidth">
+                    <el-input
+                        style="width: 250px"
+                        type="textarea"
+                        v-model="oForm.sort"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="cancel">取 消</el-button>
@@ -413,11 +417,7 @@
                 >
                     <el-input style="width: 250px" v-model="form.name" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item
-                    v-if="form.commodityType==1"
-                    label="商品图片"
-                    :label-width="formLabelWidth"
-                >
+                <el-form-item label="商品图片" :label-width="formLabelWidth">
                     <el-popover placement="right" title trigger="hover">
                         <img :src="form.image_url" />
                         <img
@@ -512,7 +512,7 @@
                             :key="item.cinemaCode"
                             :value="item.cinemaName"
                         >{{item.cinemaName}}</el-checkbox>
-                    </el-checkbox-group> -->
+                    </el-checkbox-group>-->
                 </el-form-item>
                 <el-form-item label="是否今日大牌" :label-width="formLabelWidth">
                     <el-select v-model="oTopstatus" placeholder="请选择">
@@ -619,6 +619,12 @@
                 >
                     <el-input style="width: 250px" v-model="form.limitNumber" autocomplete="off"></el-input>
                 </el-form-item>
+                <el-form-item
+                    label="排序"
+                    :label-width="formLabelWidth"
+                >
+                    <el-input style="width: 250px" type='textarea' v-model="form.sort" autocomplete="off"></el-input>
+                </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false">取 消</el-button>
@@ -668,7 +674,8 @@ export default {
                 sort: '',
                 id: '',
                 cinemaCode: [],
-                cinemaCodes: ''
+                cinemaCodes: '',
+                sort: ''
             },
             idx: -1,
             id: -1,
@@ -682,7 +689,8 @@ export default {
                 resource: '',
                 desc: '',
                 value: '1',
-                commodity_type: '1'
+                commodity_type: '1',
+                sort: ''
             },
             formLabelWidth: '120px',
             selectValue: {},
@@ -976,6 +984,7 @@ export default {
                 jsonArr.push({ key: 'originalPrice', value: this.oForm.originalPrice });
                 jsonArr.push({ key: 'topStatus', value: this.oForm.topStatus });
                 jsonArr.push({ key: 'expireDay', value: this.oForm.expireDay });
+                jsonArr.push({ key: 'sort', value: this.oForm.sort });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
                 console.log(jsonArr);
@@ -1008,6 +1017,7 @@ export default {
                                 this.oForm.originalPrice = '';
                                 this.oForm.topStatus = '';
                                 this.oForm.expireDay = '';
+                                this.oForm.sort = '';
                                 this.dialogFormVisible = false;
                                 this.$message.success(`新增成功`);
                                 this.getMenu();
@@ -1148,6 +1158,7 @@ export default {
                             this.form.assignInfo = JSON.parse(Decrypt(data.data.data)).goldCommodity.assignInfo;
                             this.form.limitType = JSON.parse(Decrypt(data.data.data)).goldCommodity.limitType;
                             this.form.limitNumber = JSON.parse(Decrypt(data.data.data)).goldCommodity.limitNumber;
+                            this.form.sort = JSON.parse(Decrypt(data.data.data)).goldCommodity.sort;
                             this.oCities = JSON.parse(Decrypt(data.data.data)).cinemas;
                             //商品类型下拉选显示对应的选项
                             for (let x in this.commodityType) {
@@ -1224,11 +1235,11 @@ export default {
                 // console.log(this.from.sort.toString());
                 var jsonArr = [];
                 if (this.oCheckedCities.length == 0) {
-                    this.message='请选择影院！'
+                    this.message = '请选择影院！';
                     this.open();
-                    return
+                    return;
                 }
-                this.form.cinemaCode = this.oCheckedCities.join(",");
+                this.form.cinemaCode = this.oCheckedCities.join(',');
                 jsonArr.push({ key: 'id', value: this.form.id });
                 jsonArr.push({ key: 'name', value: this.form.name });
                 jsonArr.push({ key: 'imageUrl', value: this.form.image_url });
@@ -1250,6 +1261,7 @@ export default {
                 jsonArr.push({ key: 'originalPrice', value: this.form.originalPrice });
                 jsonArr.push({ key: 'expireDay', value: this.form.expireDay });
                 jsonArr.push({ key: 'topStatus', value: this.oTopstatus });
+                jsonArr.push({ key: 'sort', value: this.form.sort });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
                 console.log(jsonArr);

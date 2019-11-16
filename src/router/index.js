@@ -91,6 +91,21 @@ export default new Router({
                     meta: { title: '卖品优惠券管理' }
                 },
                 {
+                    path: '/memberCardPage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/memberCardPage.vue'),
+                    meta: { title: '会员卡用户' }
+                },
+                {
+                    path: '/cardConsumePage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/cardConsumePage.vue'),
+                    meta: { title: '会员卡消费记录' }
+                },
+                {
+                    path: '/userCouponPage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/userCouponPage.vue'),
+                    meta: { title: '用户优惠券列表' }
+                },
+                {
                     path: '/employeePage',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/employePage.vue'),
                     meta: { title: '员工管理' }
