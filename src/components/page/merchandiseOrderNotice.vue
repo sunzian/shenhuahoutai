@@ -8,6 +8,15 @@
             </el-breadcrumb>
         </div>
         <div class="container">
+            <audio
+                autoplay="autoplay"
+                id="audio"
+                controls="controls"
+                @click="play"
+                style="display:none"
+            >
+                <source src="../../assets/notify.mp3" />
+            </audio>
             <el-table
                 :data="tableData"
                 border
@@ -25,6 +34,12 @@
                 </el-table-column>
                 <el-table-column prop="memo" label="取货码">
                     <template slot-scope="scope">{{scope.row.printNo}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="取货状态">
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row.deliveryStatus=='0'">未取货</el-tag>
+                        <el-tag v-else-if="scope.row.deliveryStatus=='1'">已取货</el-tag>
+                    </template>
                 </el-table-column>
                 <el-table-column prop="memo" label="卖品内容">
                     <template slot-scope="scope">{{scope.row.merNames}}</template>
@@ -68,25 +83,20 @@
                 <el-table-column label="操作" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-button
+                            v-if="scope.row.deliveryStatus=='0'"
                             type="text"
                             icon="el-icon-setting"
                             @click="addChange(scope.$index, scope.row)"
                         >取货</el-button>
+                        <el-button
+                            v-if="scope.row.deliveryStatus=='1'"
+                            type="text"
+                            icon="el-icon-setting"
+                            style="color: gray"
+                        >已取货</el-button>
                     </template>
                 </el-table-column>
             </el-table>
-            <div class="pagination">
-                <el-pagination
-                    background
-                    layout="total, prev, pager, next"
-                    :current-page="query.pageNo"
-                    :page-size="query.pageSize"
-                    :total="query.totalCount"
-                    @current-change="currentChange"
-                    @prev-click="prev"
-                    @next-click="next"
-                ></el-pagination>
-            </div>
         </div>
     </div>
 </template>
@@ -103,6 +113,7 @@ export default {
         return {
             totalData: [],
             tableData: [],
+            maxId: 0,
             message: '', //弹出框消息
             query: {
                 pageNo: 1,
@@ -124,73 +135,99 @@ export default {
     },
     mounted() {
         this.getMenu();
+        // this.play();
+        setInterval(() => {
+            this.getMenu();
+        }, 30000);
     },
     methods: {
         addChange(index, row) {
-            //是否修改权限
-            const loading = this.$loading({
-                lock: true,
-                text: 'Loading',
-                spinner: 'el-icon-loading',
-                background: 'rgba(0, 0, 0, 0.7)',
-                target: document.querySelector('.div1')
-            });
-            setTimeout(() => {
-                this.idx = index;
-                this.form = row;
-                var jsonArr = [];
-                jsonArr.push({ key: 'id', value: row.id });
-                let sign = md5(preSign(jsonArr));
-                jsonArr.push({ key: 'sign', value: sign });
-                let params = ParamsAppend(jsonArr);
-                https
-                    .fetchPost('/merchandiseOrder/updateStatusById', params)
-                    .then(data => {
-                        loading.close();
-                        if (data.data.code == 'success') {
-                            this.message = '取货成功！';
-                            this.open();
-                        } else if (data.data.code == 'nologin') {
-                            this.message = data.data.message;
-                            this.open();
-                            this.$router.push('/login');
-                        } else {
-                            this.message = data.data.message;
-                            this.open();
-                        }
-                    })
-                    .catch(err => {
-                        loading.close();
-                        console.log(err);
+            if (row.deliveryStatus == '1') {
+                this.message = '已取货，无法重复取货';
+                this.open();
+                return;
+            }
+            this.$confirm('确认取货?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            })
+                .then(() => {
+                    const loading = this.$loading({
+                        lock: true,
+                        text: 'Loading',
+                        spinner: 'el-icon-loading',
+                        background: 'rgba(0, 0, 0, 0.7)',
+                        target: document.querySelector('.div1')
                     });
-            }, 500);
+                    setTimeout(() => {
+                        var jsonArr = [];
+                        jsonArr.push({ key: 'id', value: row.id });
+                        let sign = md5(preSign(jsonArr));
+                        jsonArr.push({ key: 'sign', value: sign });
+                        let params = ParamsAppend(jsonArr);
+                        https
+                            .fetchPost('/merchandiseOrder/updateStatusById', params)
+                            .then(data => {
+                                loading.close();
+                                if (data.data.code == 'success') {
+                                    this.message = '取货成功！';
+                                    this.open();
+                                    row.deliveryStatus = '1';
+                                } else if (data.data.code == 'nologin') {
+                                    this.message = data.data.message;
+                                    this.open();
+                                    this.$router.push('/login');
+                                } else {
+                                    this.message = data.data.message;
+                                    this.open();
+                                }
+                            })
+                            .catch(err => {
+                                loading.close();
+                                console.log(err);
+                            });
+                    }, 500);
+                })
+                .catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消取货'
+                    });
+                });
         },
         Search() {
             this.query.pageNo = 1;
             this.getMenu();
         },
         getMenu() {
-            //获取菜单栏
-            const loading = this.$loading({
-                lock: true,
-                text: 'Loading',
-                spinner: 'el-icon-loading',
-                background: 'rgba(0, 0, 0, 0.7)',
-                target: document.querySelector('.div1')
-            });
             let jsonArr = [];
-                jsonArr.push({ key: 'cinemaCode', value: this.cinemaCode });
-                let sign = md5(preSign(jsonArr));
-                jsonArr.push({ key: 'sign', value: sign });
-                var params = ParamsAppend(jsonArr);
+            jsonArr.push({ key: 'maxId', value: this.maxId });
+            jsonArr.push({ key: 'cinemaCode', value: this.cinemaCode });
+            let sign = md5(preSign(jsonArr));
+            jsonArr.push({ key: 'sign', value: sign });
+            var params = ParamsAppend(jsonArr);
             setTimeout(() => {
                 https
                     .fetchPost('/merchandiseOrder/merchandiseOrderNotice', params)
                     .then(data => {
-                        loading.close();
                         if (data.data.code == 'success') {
                             var oData = JSON.parse(Decrypt(data.data.data));
-                            this.tableData = oData;
+                            console.log(oData);
+                            let tableData = this.tableData;
+                            if (this.maxId > 0) {
+                                if (oData.length > 0) {
+                                    this.maxId = oData[0].id;
+                                    oData.push.apply(oData, tableData);
+                                    this.tableData = oData;
+                                    this.play();
+                                    this.message = '您有新的订单，请及时处理！';
+                                    this.open();
+                                }
+                            } else {
+                                this.tableData = oData;
+                                this.maxId = oData[0].id;
+                            }
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
                             this.open();
@@ -201,7 +238,6 @@ export default {
                         }
                     })
                     .catch(err => {
-                        loading.close();
                         console.log(err);
                     });
             }, 500);
@@ -217,6 +253,11 @@ export default {
             this.$alert(this.message, '信息提示', {
                 dangerouslyUseHTMLString: true
             });
+        },
+        // 语音播放
+        play() {
+            const audio = document.getElementById('audio');
+            audio.play();
         },
         // 多选操作
         handleSelectionChange(val) {
