@@ -3,7 +3,7 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
-                    <i class="el-icon-lx-cascades"></i> 会员卡消费记录
+                    <i class="el-icon-lx-cascades"></i> 金币转盘记录列表
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
@@ -18,69 +18,36 @@
                     ></el-option>
                 </el-select>
                 <el-input
-                    placeholder="会员卡号"
+                    placeholder="手机号码"
                     style="width: 150px"
-                    v-model="query.orderNo"
-                    autocomplete="off"
-                    class="mr10"
-                ></el-input>
-                <el-input
-                    placeholder="手机号"
-                    style="width: 150px"
-                    v-model="query.mobilePhone"
+                    v-model="query.userMobile"
                     autocomplete="off"
                     class="mr10"
                 ></el-input>
                 <el-select
                     clearable
-                    v-model="query.status"
-                    placeholder="交易状态"
+                    v-model="query.prizeType"
+                    placeholder="奖品类型"
                     class="handle-select mr10"
                 >
-                    <el-option key="1" label="成功" value="1"></el-option>
-                    <el-option key="2" label="失败" value="2"></el-option>
+                    <el-option key="1" label="优惠券" value="1"></el-option>
+                    <el-option key="2" label="实物" value="2"></el-option>
                 </el-select>
                 <el-select
                     clearable
-                    v-model="query.orderType"
-                    placeholder="订单类型"
+                    v-model="query.prizeStatus"
+                    placeholder="中奖状态"
                     class="handle-select mr10"
                 >
-                    <el-option key="1" label="购票" value="1"></el-option>
-                    <el-option key="2" label="卖品" value="2"></el-option>
+                    <el-option key="1" label="未中奖" value="0"></el-option>
+                    <el-option key="2" label="中奖" value="1"></el-option>
                 </el-select>
-                <el-date-picker
-                    style="width: 200px;"
-                    v-model="query.startDate"
-                    type="datetime"
-                    value-format="yyyy-MM-dd HH:mm:ss"
-                    format="yyyy-MM-dd HH:mm:ss"
-                    placeholder="开始时间"
-                ></el-date-picker>至
-                <el-date-picker
-                    style="width: 200px;"
-                    v-model="query.endDate"
-                    type="datetime"
-                    value-format="yyyy-MM-dd HH:mm:ss"
-                    format="yyyy-MM-dd HH:mm:ss"
-                    placeholder="结束时间"
-                ></el-date-picker>
                 <el-button
                     type="primary"
                     icon="el-icon-search"
                     style="margin-top: 10px;"
                     @click="Search"
                 >搜索</el-button>
-            </div>
-            <div class="handle-box">
-                总消费金额：
-                <el-input
-                    style="width: 150px"
-                    v-model="totalData.totalActualPrice"
-                    :disabled="true"
-                    autocomplete="off"
-                    class="mr10"
-                ></el-input>
             </div>
             <el-table
                 :data="tableData"
@@ -91,50 +58,32 @@
                 header-cell-class-name="table-header"
                 @selection-change="handleSelectionChange"
             >
-                <el-table-column prop="name" label="开卡影院">
+                <el-table-column prop="name" label="影院名称">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="消费影院">
-                    <template slot-scope="scope">{{scope.row.consumeCinemaName}}</template>
+                <el-table-column prop="memo" label="奖品名称">
+                    <template slot-scope="scope">{{scope.row.prizeName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="卡号">
-                    <template slot-scope="scope">{{scope.row.cardNo}}</template>
+                <el-table-column prop="memo" label="用户手机号">
+                    <template slot-scope="scope">{{scope.row.userMobile}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="手机号">
-                    <template slot-scope="scope">{{scope.row.mobilePhone}}</template>
+                <el-table-column prop="memo" label="消耗数值">
+                    <template slot-scope="scope">{{scope.row.reduceNumber}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="消费金额">
-                    <template slot-scope="scope">{{scope.row.consumeAmount}}</template>
-                </el-table-column>
-                <el-table-column prop="memo" label="消费明细">
-                    <template slot-scope="scope">{{scope.row.consumeDetail}}</template>
-                </el-table-column>
-                <el-table-column label="交易状态" align="center">
+                <el-table-column prop="memo" label="中奖状态">
                     <template slot-scope="scope">
-                        <el-tag v-if="scope.row.status=='1'">成功</el-tag>
-                        <el-tag v-else>失败</el-tag>
+                        <el-tag v-if="scope.row.prizeStatus=='0'">未中奖</el-tag>
+                        <el-tag v-else-if="scope.row.prizeStatus=='1'">中奖</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="memo" label="返回错误描述">
-                    <template slot-scope="scope">{{scope.row.errorMessage}}</template>
-                </el-table-column>
-                <el-table-column label="订单类型" align="center">
+                <el-table-column label="奖品类型" align="center">
                     <template slot-scope="scope">
-                        <el-tag v-if="scope.row.orderType=='1'">购票</el-tag>
-                        <el-tag v-else>卖品</el-tag>
+                        <el-tag v-if="scope.row.prizeType=='1'">优惠券</el-tag>
+                        <el-tag v-else-if="scope.row.prizeType=='2'">实物</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="memo" label="消费时间">
-                    <template slot-scope="scope">{{scope.row.consumeTime}}</template>
-                </el-table-column>
-                <el-table-column label="操作" align="center" fixed="right">
-                    <template slot-scope="scope">
-                        <el-button
-                            type="text"
-                            icon="el-icon-setting"
-                            @click="addChange(scope.$index, scope.row)"
-                        >详情</el-button>
-                    </template>
+                <el-table-column prop="memo" label="抽奖时间">
+                    <template slot-scope="scope">{{scope.row.createDate}}</template>
                 </el-table-column>
             </el-table>
             <div class="pagination">
@@ -153,7 +102,7 @@
         <!-- 详情弹出框 -->
         <el-dialog title="详情" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
-                <el-form-item label="开卡影院名称" :label-width="formLabelWidth">
+                <el-form-item label="影院名称" :label-width="formLabelWidth">
                     <el-input
                         :disabled="true"
                         style="width: 250px"
@@ -161,7 +110,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="消费影院名称" :label-width="formLabelWidth">
+                <el-form-item label="礼物名称" :label-width="formLabelWidth">
                     <el-input
                         :disabled="true"
                         style="width: 250px"
@@ -169,7 +118,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="卡号" :label-width="formLabelWidth">
+                <el-form-item label="礼物类型" :label-width="formLabelWidth">
                     <el-input
                         :disabled="true"
                         style="width: 250px"
@@ -177,7 +126,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="手机号" :label-width="formLabelWidth">
+                <el-form-item label="发放数量" :label-width="formLabelWidth">
                     <el-input
                         :disabled="true"
                         style="width: 250px"
@@ -185,7 +134,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="消费金额" :label-width="formLabelWidth">
+                <el-form-item label="发放人" :label-width="formLabelWidth">
                     <el-input
                         :disabled="true"
                         style="width: 250px"
@@ -193,43 +142,11 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="消费明细" :label-width="formLabelWidth">
+                <el-form-item label="发放时间" :label-width="formLabelWidth">
                     <el-input
                         :disabled="true"
                         style="width: 250px"
                         v-model="form.consumeDetail"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="交易状态" :label-width="formLabelWidth">
-                    <el-input
-                        :disabled="true"
-                        style="width: 250px"
-                        v-model="form.status"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="接口返回错误描述" :label-width="formLabelWidth">
-                    <el-input
-                        :disabled="true"
-                        style="width: 250px"
-                        v-model="form.errorMessage"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="订单类型" :label-width="formLabelWidth">
-                    <el-input
-                        :disabled="true"
-                        style="width: 250px"
-                        v-model="form.orderType"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="消费时间" :label-width="formLabelWidth">
-                    <el-input
-                        :disabled="true"
-                        style="width: 250px"
-                        v-model="form.consumeTime"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
@@ -357,59 +274,43 @@ export default {
             });
             setTimeout(() => {
                 let cinemaCode = this.query.cinemaCode;
-                let orderNo = this.query.orderNo;
-                let mobilePhone = this.query.mobilePhone;
-                let status = this.query.status;
-                let orderType = this.query.orderType;
-                let startDate = this.query.startDate;
-                let endDate = this.query.endDate;
+                let userMobile = this.query.userMobile;
+                let prizeType = this.query.prizeType;
+                let prizeStatus = this.query.prizeStatus;
                 if (!cinemaCode) {
                     cinemaCode = '';
                 }
-                if (!orderNo) {
-                    orderNo = '';
+                if (!userMobile) {
+                    userMobile = '';
                 }
-                if (!mobilePhone) {
-                    mobilePhone = '';
+                if (!prizeType) {
+                    prizeType = '';
                 }
-                if (!status) {
-                    status = '';
-                }
-                if (!orderType) {
-                    orderType = '';
-                }
-                if (!startDate) {
-                    startDate = '';
-                }
-                if (!endDate) {
-                    endDate = '';
+                if (!prizeStatus) {
+                    prizeStatus = '';
                 }
                 let jsonArr = [];
+                jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
                 jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
                 jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
-                jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
-                jsonArr.push({ key: 'cardNo', value: orderNo });
-                jsonArr.push({ key: 'mobilePhone', value: mobilePhone });
-                jsonArr.push({ key: 'status', value: status });
-                jsonArr.push({ key: 'orderType', value: orderType });
-                jsonArr.push({ key: 'startDate', value: startDate });
-                jsonArr.push({ key: 'endDate', value: endDate });
+                jsonArr.push({ key: 'userMobile', value: userMobile });
+                jsonArr.push({ key: 'prizeType', value: prizeType });
+                jsonArr.push({ key: 'prizeStatus', value: prizeStatus });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
                 var params = ParamsAppend(jsonArr);
                 https
-                    .fetchPost('/memberCardConsume/cardConsumePage', params)
+                    .fetchPost('/turplateDrawLog/page', params)
                     .then(data => {
                         loading.close();
                         if (data.data.code == 'success') {
                             var oData = JSON.parse(Decrypt(data.data.data));
                             console.log(oData);
-                            this.tableData = oData.memberCardConsume.data;
-                            this.totalData = oData.memberCardStatistics;
-                            this.query.pageSize = oData.memberCardConsume.pageSize;
-                            this.query.pageNo = oData.memberCardConsume.pageNo;
-                            this.query.totalCount = oData.memberCardConsume.totalCount;
-                            this.query.totalPage = oData.memberCardConsume.totalPage;
+                            this.tableData = oData.data;
+                            this.query.pageSize = oData.pageSize;
+                            this.query.pageNo = oData.pageNo;
+                            this.query.totalCount = oData.totalCount;
+                            this.query.totalPage = oData.totalPage;
                             this.getAllCinema();
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;

@@ -94,7 +94,12 @@
                     format="yyyy-MM-dd HH:mm:ss"
                     placeholder="场次结束时间"
                 ></el-date-picker>
-                <el-button type="primary" icon="el-icon-search" style="margin-top: 10px;" @click="Search">搜索</el-button>
+                <el-button
+                    type="primary"
+                    icon="el-icon-search"
+                    style="margin-top: 10px;"
+                    @click="Search"
+                >搜索</el-button>
             </div>
             <div class="handle-box">
                 总票数：
@@ -104,56 +109,49 @@
                     :disabled="true"
                     autocomplete="off"
                     class="mr10"
-                ></el-input>
-                总原价：
+                ></el-input>总原价：
                 <el-input
                     style="width: 150px"
                     v-model="totalData.totalOriginalPrice"
                     :disabled="true"
                     autocomplete="off"
                     class="mr10"
-                ></el-input>
-                总实付价：
+                ></el-input>总实付价：
                 <el-input
                     style="width: 150px"
                     v-model="totalData.totalActualPrice"
                     :disabled="true"
                     autocomplete="off"
                     class="mr10"
-                ></el-input>
-                总优惠券金额：
+                ></el-input>总优惠券金额：
                 <el-input
                     style="width: 150px"
                     v-model="totalData.totalCouponDiscount"
                     :disabled="true"
                     autocomplete="off"
                     class="mr10"
-                ></el-input>
-                总活动优惠金额：
+                ></el-input>总活动优惠金额：
                 <el-input
                     style="width: 150px"
                     v-model="totalData.totalActivityDiscount"
                     :disabled="true"
                     autocomplete="off"
                     class="mr10"
-                ></el-input>
-                总平台代售费：
+                ></el-input>总平台代售费：
                 <el-input
                     style="width: 150px"
                     v-model="totalData.totalPlatHandFee"
                     :disabled="true"
                     autocomplete="off"
                     class="mr10"
-                ></el-input>
-                总回传金额：
+                ></el-input>总回传金额：
                 <el-input
                     style="width: 150px"
                     v-model="totalData.totalSubmitPrice"
                     :disabled="true"
                     autocomplete="off"
                     class="mr10"
-                ></el-input>
-                总上报金额：
+                ></el-input>总上报金额：
                 <el-input
                     style="width: 150px"
                     v-model="totalData.totalReportPrice"
@@ -257,6 +255,13 @@
                 </el-table-column>
                 <el-table-column label="操作" align="center" fixed="right">
                     <template slot-scope="scope">
+                        <el-button
+                            type="text"
+                            icon="el-icon-delete"
+                            class="red"
+                            v-if="scope.row.payStatus=='1'"
+                            @click="refundTicket(scope.$index, scope.row)"
+                        >退款</el-button>
                         <el-button
                             type="text"
                             icon="el-icon-setting"
@@ -685,7 +690,7 @@ export default {
                 target: document.querySelector('.div1')
             });
             setTimeout(() => {
-                let cinemaCode = this.query.cinemaCode
+                let cinemaCode = this.query.cinemaCode;
                 let orderNo = this.query.orderNo;
                 let mobile = this.query.mobile;
                 let payWay = this.query.payWay;
@@ -771,6 +776,57 @@ export default {
                         console.log(err);
                     });
             }, 500);
+        },
+        // 退票
+        refundTicket(index, row) {
+            this.$confirm('此操作将退款, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            })
+                .then(() => {
+                    const loading = this.$loading({
+                        lock: true,
+                        text: 'Loading',
+                        spinner: 'el-icon-loading',
+                        background: 'rgba(0, 0, 0, 0.7)',
+                        target: document.querySelector('.div1')
+                    });
+                    setTimeout(() => {
+                        var jsonArr = [];
+                        jsonArr.push({ key: 'id', value: row.id });
+                        let sign = md5(preSign(jsonArr));
+                        jsonArr.push({ key: 'sign', value: sign });
+                        let params = ParamsAppend(jsonArr);
+                        https
+                            .fetchPost('/ticketOrder/refundTicketAmount', params)
+                            .then(data => {
+                                loading.close();
+                                if (data.data.code == 'success') {
+                                    this.message = '退款成功！';
+                                    this.open();
+                                    this.getMenu();
+                                } else if (data.data.code == 'nologin') {
+                                    this.message = data.data.message;
+                                    this.open();
+                                    this.$router.push('/login');
+                                } else {
+                                    this.message = data.data.message;
+                                    this.open();
+                                }
+                            })
+                            .catch(err => {
+                                loading.close();
+                                console.log(err);
+                            });
+                    }, 500);
+                })
+                .catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消退款'
+                    });
+                });
         },
         open() {
             //错误信息弹出框
