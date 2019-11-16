@@ -94,9 +94,9 @@
                         <el-tag v-else-if="scope.row.status=='3'">已过期</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="memo" label="支付交易号">
+                <!-- <el-table-column prop="memo" label="支付交易号">
                     <template slot-scope="scope">{{scope.row.tradeNo}}</template>
-                </el-table-column>
+                </el-table-column> -->
                 <el-table-column label="支付状态" align="center">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row. payStatus=='0'">未支付</el-tag>
@@ -107,7 +107,7 @@
                 <el-table-column prop="memo" label="支付时间">
                     <template slot-scope="scope">{{scope.row.payTime}}</template>
                 </el-table-column>
-                <el-table-column label="退款状态" align="center">
+                <!-- <el-table-column label="退款状态" align="center">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.refundStatus=='0'" type="danger">未退款</el-tag>
                         <el-tag v-else-if="scope.row.refundStatus=='1'" type="success">退款成功</el-tag>
@@ -122,7 +122,7 @@
                 </el-table-column>
                 <el-table-column prop="memo" label="退款金额">
                     <template slot-scope="scope">{{scope.row.refundPrice}}</template>
-                </el-table-column>
+                </el-table-column> -->
                 <el-table-column label="操作"  align="center"  fixed="right">
                     <template slot-scope="scope">
                         <el-button

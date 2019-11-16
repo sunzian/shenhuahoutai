@@ -3,7 +3,7 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
-                    <i class="el-icon-lx-cascades"></i> 会员卡消费记录
+                    <i class="el-icon-lx-cascades"></i> 优惠券发放记录
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
@@ -18,69 +18,27 @@
                     ></el-option>
                 </el-select>
                 <el-input
-                    placeholder="会员卡号"
+                    placeholder="发送人"
                     style="width: 150px"
-                    v-model="query.orderNo"
+                    v-model="query.sendUserName"
                     autocomplete="off"
                     class="mr10"
                 ></el-input>
-                <el-input
-                    placeholder="手机号"
-                    style="width: 150px"
-                    v-model="query.mobilePhone"
-                    autocomplete="off"
-                    class="mr10"
-                ></el-input>
-                <el-select
+                <!-- <el-select
                     clearable
-                    v-model="query.status"
-                    placeholder="交易状态"
+                    v-model="query.type"
+                    placeholder="礼物类型"
                     class="handle-select mr10"
                 >
-                    <el-option key="1" label="成功" value="1"></el-option>
-                    <el-option key="2" label="失败" value="2"></el-option>
-                </el-select>
-                <el-select
-                    clearable
-                    v-model="query.orderType"
-                    placeholder="订单类型"
-                    class="handle-select mr10"
-                >
-                    <el-option key="1" label="购票" value="1"></el-option>
-                    <el-option key="2" label="卖品" value="2"></el-option>
-                </el-select>
-                <el-date-picker
-                    style="width: 200px;"
-                    v-model="query.startDate"
-                    type="datetime"
-                    value-format="yyyy-MM-dd HH:mm:ss"
-                    format="yyyy-MM-dd HH:mm:ss"
-                    placeholder="开始时间"
-                ></el-date-picker>至
-                <el-date-picker
-                    style="width: 200px;"
-                    v-model="query.endDate"
-                    type="datetime"
-                    value-format="yyyy-MM-dd HH:mm:ss"
-                    format="yyyy-MM-dd HH:mm:ss"
-                    placeholder="结束时间"
-                ></el-date-picker>
+                    <el-option key="1" label="优惠券" value="1"></el-option>
+                    <el-option key="2" label="实物" value="2"></el-option>
+                </el-select> -->
                 <el-button
                     type="primary"
                     icon="el-icon-search"
                     style="margin-top: 10px;"
                     @click="Search"
                 >搜索</el-button>
-            </div>
-            <div class="handle-box">
-                总消费金额：
-                <el-input
-                    style="width: 150px"
-                    v-model="totalData.totalActualPrice"
-                    :disabled="true"
-                    autocomplete="off"
-                    class="mr10"
-                ></el-input>
             </div>
             <el-table
                 :data="tableData"
@@ -91,50 +49,26 @@
                 header-cell-class-name="table-header"
                 @selection-change="handleSelectionChange"
             >
-                <el-table-column prop="name" label="开卡影院">
+                <el-table-column prop="name" label="影院名称">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="消费影院">
-                    <template slot-scope="scope">{{scope.row.consumeCinemaName}}</template>
+                <el-table-column prop="memo" label="发送人">
+                    <template slot-scope="scope">{{scope.row.sendUserName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="卡号">
-                    <template slot-scope="scope">{{scope.row.cardNo}}</template>
-                </el-table-column>
-                <el-table-column prop="memo" label="手机号">
-                    <template slot-scope="scope">{{scope.row.mobilePhone}}</template>
-                </el-table-column>
-                <el-table-column prop="memo" label="消费金额">
-                    <template slot-scope="scope">{{scope.row.consumeAmount}}</template>
-                </el-table-column>
-                <el-table-column prop="memo" label="消费明细">
-                    <template slot-scope="scope">{{scope.row.consumeDetail}}</template>
-                </el-table-column>
-                <el-table-column label="交易状态" align="center">
+                <!-- <el-table-column prop="memo" label="客户类型">
                     <template slot-scope="scope">
-                        <el-tag v-if="scope.row.status=='1'">成功</el-tag>
-                        <el-tag v-else>失败</el-tag>
+                        <el-tag v-if="scope.row.customerType=='1'">优惠券</el-tag>
+                        <el-tag v-else-if="scope.row.customerType=='1'">实物</el-tag>
                     </template>
+                </el-table-column> -->
+                <el-table-column prop="memo" label="预计发放人数" align="center">
+                    <template slot-scope="scope">{{scope.row.customNumber}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="返回错误描述">
-                    <template slot-scope="scope">{{scope.row.errorMessage}}</template>
+                <el-table-column label="优惠券详细信息" align="center">
+                    <template slot-scope="scope">{{scope.row.couponDetail}}</template>
                 </el-table-column>
-                <el-table-column label="订单类型" align="center">
-                    <template slot-scope="scope">
-                        <el-tag v-if="scope.row.orderType=='1'">购票</el-tag>
-                        <el-tag v-else>卖品</el-tag>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="memo" label="消费时间">
-                    <template slot-scope="scope">{{scope.row.consumeTime}}</template>
-                </el-table-column>
-                <el-table-column label="操作" align="center" fixed="right">
-                    <template slot-scope="scope">
-                        <el-button
-                            type="text"
-                            icon="el-icon-setting"
-                            @click="addChange(scope.$index, scope.row)"
-                        >详情</el-button>
-                    </template>
+                <el-table-column label="发放时间" align="center">
+                    <template slot-scope="scope">{{scope.row.createDate}}</template>
                 </el-table-column>
             </el-table>
             <div class="pagination">
@@ -357,59 +291,34 @@ export default {
             });
             setTimeout(() => {
                 let cinemaCode = this.query.cinemaCode;
-                let orderNo = this.query.orderNo;
-                let mobilePhone = this.query.mobilePhone;
-                let status = this.query.status;
-                let orderType = this.query.orderType;
-                let startDate = this.query.startDate;
-                let endDate = this.query.endDate;
+                let sendUserName = this.query.sendUserName;
                 if (!cinemaCode) {
                     cinemaCode = '';
                 }
-                if (!orderNo) {
-                    orderNo = '';
-                }
-                if (!mobilePhone) {
-                    mobilePhone = '';
-                }
-                if (!status) {
-                    status = '';
-                }
-                if (!orderType) {
-                    orderType = '';
-                }
-                if (!startDate) {
-                    startDate = '';
-                }
-                if (!endDate) {
-                    endDate = '';
+                if (!sendUserName) {
+                    sendUserName = '';
                 }
                 let jsonArr = [];
-                jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
-                jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
                 jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
-                jsonArr.push({ key: 'cardNo', value: orderNo });
-                jsonArr.push({ key: 'mobilePhone', value: mobilePhone });
-                jsonArr.push({ key: 'status', value: status });
-                jsonArr.push({ key: 'orderType', value: orderType });
-                jsonArr.push({ key: 'startDate', value: startDate });
-                jsonArr.push({ key: 'endDate', value: endDate });
+                jsonArr.push({ key: 'sendUserName', value: sendUserName });
+                jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
+                jsonArr.push({ key: 'pageSize', value: this.query.pageSize }); 
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
+                console.log(jsonArr)
                 var params = ParamsAppend(jsonArr);
                 https
-                    .fetchPost('/memberCardConsume/cardConsumePage', params)
+                    .fetchPost('/batchSendCouponRecord/list', params)
                     .then(data => {
                         loading.close();
                         if (data.data.code == 'success') {
                             var oData = JSON.parse(Decrypt(data.data.data));
                             console.log(oData);
-                            this.tableData = oData.memberCardConsume.data;
-                            this.totalData = oData.memberCardStatistics;
-                            this.query.pageSize = oData.memberCardConsume.pageSize;
-                            this.query.pageNo = oData.memberCardConsume.pageNo;
-                            this.query.totalCount = oData.memberCardConsume.totalCount;
-                            this.query.totalPage = oData.memberCardConsume.totalPage;
+                            this.tableData = oData.data;
+                            this.query.pageSize = oData.pageSize;
+                            this.query.pageNo = oData.pageNo;
+                            this.query.totalCount = oData.totalCount;
+                            this.query.totalPage = oData.totalPage;
                             this.getAllCinema();
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;

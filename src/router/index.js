@@ -101,6 +101,36 @@ export default new Router({
                     meta: { title: '会员卡消费记录' }
                 },
                 {
+                    path: '/creditsExchangeRecordPage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/creditsExchangeRecordPage.vue'),
+                    meta: { title: '会员积分兑换金币记录' }
+                },
+                {
+                    path: '/chatroomUserGetRecord',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/chatroomUserGetRecord.vue'),
+                    meta: { title: '放映厅领取记录' }
+                },
+                {
+                    path: '/chatroomSendRecords',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/chatroomSendRecords.vue'),
+                    meta: { title: '放映厅发放记录' }
+                },
+                {
+                    path: '/turplateDrawLogPage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/turplateDrawLogPage.vue'),
+                    meta: { title: '金币转盘记录列表' }
+                },
+                {
+                    path: '/userBenefitCard',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/userBenefitCard.vue'),
+                    meta: { title: '权益卡用户列表' }
+                },
+                {
+                    path: '/batchSendCouponRecord',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/batchSendCouponRecord.vue'),
+                    meta: { title: '优惠券发放记录' }
+                },
+                {
                     path: '/userCouponPage',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/userCouponPage.vue'),
                     meta: { title: '用户优惠券列表' }

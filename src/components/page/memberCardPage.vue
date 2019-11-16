@@ -503,6 +503,8 @@ export default {
                 }
                 let jsonArr = [];
                 jsonArr.push({ key: 'openCardCinemaCode', value: cinemaCode });
+                jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
+                jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
                 jsonArr.push({ key: 'cardNo', value: orderNo });
                 jsonArr.push({ key: 'userMobile', value: mobile });
                 jsonArr.push({ key: 'bindStatus', value: payWay });

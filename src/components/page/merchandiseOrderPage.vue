@@ -194,6 +194,13 @@
                     <template slot-scope="scope">
                         <el-button
                             type="text"
+                            icon="el-icon-delete"
+                            class="red"
+                            v-if="scope.row.payStatus=='1'"
+                            @click="refundGoods(scope.$index, scope.row)"
+                        >退款</el-button>
+                        <el-button
+                            type="text"
                             icon="el-icon-setting"
                             @click="addChange(scope.$index, scope.row)"
                         >查看详情</el-button>
@@ -682,6 +689,57 @@ export default {
                         console.log(err);
                     });
             }, 500);
+        },
+        // 退货
+        refundGoods(index, row) {
+            this.$confirm('此操作将退款, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            })
+                .then(() => {
+                    const loading = this.$loading({
+                        lock: true,
+                        text: 'Loading',
+                        spinner: 'el-icon-loading',
+                        background: 'rgba(0, 0, 0, 0.7)',
+                        target: document.querySelector('.div1')
+                    });
+                    setTimeout(() => {
+                        var jsonArr = [];
+                        jsonArr.push({ key: 'id', value: row.id });
+                        let sign = md5(preSign(jsonArr));
+                        jsonArr.push({ key: 'sign', value: sign });
+                        let params = ParamsAppend(jsonArr);
+                        https
+                            .fetchPost('/merchandiseOrder/refundMerchandiseAmount', params)
+                            .then(data => {
+                                loading.close();
+                                if (data.data.code == 'success') {
+                                    this.message = '退款成功！';
+                                    this.open();
+                                    this.getMenu();
+                                } else if (data.data.code == 'nologin') {
+                                    this.message = data.data.message;
+                                    this.open();
+                                    this.$router.push('/login');
+                                } else {
+                                    this.message = data.data.message;
+                                    this.open();
+                                }
+                            })
+                            .catch(err => {
+                                loading.close();
+                                console.log(err);
+                            });
+                    }, 500);
+                })
+                .catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消退款'
+                    });
+                });
         },
         openOrderNotice() {
             let cinemaCode = this.order.cinemaCode;
