@@ -3,13 +3,13 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
-                    <i class="el-icon-lx-cascades"></i> 会员卡用户列表
+                    <i class="el-icon-lx-cascades"></i> 用户优惠券列表
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-select clearable v-model="query.cinemaCode" placeholder="请选择开卡影院" class="mr10">
+                <el-select clearable v-model="query.cinemaCode" placeholder="请选择优惠券所属影院" class="mr10">
                     <el-option
                         v-for="item in cinemaInfo"
                         :key="item.cinemaCode"
@@ -18,27 +18,44 @@
                     ></el-option>
                 </el-select>
                 <el-input
-                    placeholder="会员卡号"
+                    placeholder="用户名称"
+                    style="width: 150px"
+                    v-model="query.userName"
+                    autocomplete="off"
+                    class="mr10"
+                ></el-input>
+                <el-input
+                    placeholder="订单号"
                     style="width: 150px"
                     v-model="query.orderNo"
                     autocomplete="off"
                     class="mr10"
                 ></el-input>
-                <el-input
-                    placeholder="手机号"
-                    style="width: 150px"
-                    v-model="query.mobile"
-                    autocomplete="off"
-                    class="mr10"
-                ></el-input>
                 <el-select
                     clearable
-                    v-model="query.payWay"
-                    placeholder="绑卡状态"
+                    v-model="query.status"
+                    placeholder="使用状态"
                     class="handle-select mr10"
                 >
-                    <el-option key="1" label="绑定" value="1"></el-option>
-                    <el-option key="2" label="未绑定" value="2"></el-option>
+                    <el-option key="1" label="未使用" value="1"></el-option>
+                    <el-option key="2" label="已使用" value="2"></el-option>
+                    <el-option key="3" label="已过期" value="3"></el-option>
+                </el-select>
+                <el-select
+                    clearable
+                    v-model="query.getType"
+                    placeholder="获取状态"
+                    class="handle-select mr10"
+                >
+                    <el-option key="1" label="注册送券" value="1"></el-option>
+                    <el-option key="2" label="聊天室领取" value="2"></el-option>
+                    <el-option key="3" label="转盘抽奖" value="3"></el-option>
+                    <el-option key="4" label="连续签到7天之后领取" value="4"></el-option>
+                    <el-option key="5" label="金币商城兑换" value="5"></el-option>
+                    <el-option key="6" label="后台发放" value="6"></el-option>
+                    <el-option key="7" label="会员卡注册送券" value="7"></el-option>
+                    <el-option key="8" label="会员卡充值送券" value="8"></el-option>
+                    <el-option key="9" label="权益卡券包" value="9"></el-option>
                 </el-select>
                 <el-button
                     type="primary"
@@ -56,34 +73,48 @@
                 header-cell-class-name="table-header"
                 @selection-change="handleSelectionChange"
             >
-                <el-table-column prop="name" label="开卡影院">
-                    <template slot-scope="scope">{{scope.row.openCardCinemaName}}</template>
+                <el-table-column label="优惠券所属影院">
+                    <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
-                <el-table-column label="卡号">
-                    <template slot-scope="scope">{{scope.row.cardNo}}</template>
-                </el-table-column>
-                <el-table-column prop="memo" label="会员卡等级名称">
-                    <template slot-scope="scope">{{scope.row.levelName}}</template>
-                </el-table-column>
-                <el-table-column prop="memo" label="手机号">
-                    <template slot-scope="scope">{{scope.row.userMobile}}</template>
-                </el-table-column>
-                <el-table-column prop="memo" label="用户名">
+                <el-table-column prop="name" label="用户名称">
                     <template slot-scope="scope">{{scope.row.userName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="余额">
-                    <template slot-scope="scope">{{scope.row.balance}}</template>
+                <el-table-column prop="memo" label="优惠券名称">
+                    <template slot-scope="scope">{{scope.row.couponName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="积分">
-                    <template slot-scope="scope">{{scope.row.creditsAmount}}</template>
-                </el-table-column>
-                <el-table-column label="是否被绑定" align="center">
+                <el-table-column prop="memo" label="使用状态">
                     <template slot-scope="scope">
-                        <el-tag v-if="scope.row.bindStatus=='1'">绑定</el-tag>
-                        <el-tag v-else>未绑定</el-tag>
+                        <el-tag v-if="scope.row.status=='1'">未使用</el-tag>
+                        <el-tag v-else-if="scope.row.status=='2'">已使用</el-tag>
+                        <el-tag v-else-if="scope.row.status=='2'">已过期</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" align="center" fixed="right">
+                <el-table-column prop="memo" label="开始时间">
+                    <template slot-scope="scope">{{scope.row.startTime}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="结束时间">
+                    <template slot-scope="scope">{{scope.row.endTime}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="领取类型">
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row.getType=='1'">注册送券</el-tag>
+                        <el-tag v-else-if="scope.row.getType=='2'">聊天室领取</el-tag>
+                        <el-tag v-else-if="scope.row.getType=='3'">转盘抽奖</el-tag>
+                        <el-tag v-else-if="scope.row.getType=='4'">连续签到7天之后领取</el-tag>
+                        <el-tag v-else-if="scope.row.getType=='5'">金币商城兑换</el-tag>
+                        <el-tag v-else-if="scope.row.getType=='6'">后台发放</el-tag>
+                        <el-tag v-else-if="scope.row.getType=='7'">会员卡注册送券</el-tag>
+                        <el-tag v-else-if="scope.row.getType=='8'">会员卡充值送券</el-tag>
+                        <el-tag v-else-if="scope.row.getType=='9'">权益卡券包</el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="memo" label="使用时间">
+                    <template slot-scope="scope">{{scope.row.useTime}}</template>
+                </el-table-column>
+                <el-table-column label="使用订单号" align="center">
+                    <template slot-scope="scope">{{scope.row.orderNum}}</template>
+                </el-table-column>
+                <!-- <el-table-column label="操作" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-button
                             type="text"
@@ -91,7 +122,7 @@
                             @click="addChange(scope.$index, scope.row)"
                         >解绑</el-button>
                     </template>
-                </el-table-column>
+                </el-table-column> -->
             </el-table>
             <div class="pagination">
                 <el-pagination
@@ -487,31 +518,35 @@ export default {
             setTimeout(() => {
                 let cinemaCode = this.query.cinemaCode;
                 let orderNo = this.query.orderNo;
-                let mobile = this.query.mobile;
-                let payWay = this.query.payWay;
+                let userName = this.query.userName;
+                let status = this.query.status;
+                let getType = this.query.getType;
                 if (!cinemaCode) {
                     cinemaCode = '';
                 }
                 if (!orderNo) {
                     orderNo = '';
                 }
-                if (!mobile) {
-                    mobile = '';
+                if (!userName) {
+                    userName = '';
                 }
-                if (!payWay) {
-                    payWay = '';
+                if (!status) {
+                    status = '';
+                }
+                if (!getType) {
+                    getType = '';
                 }
                 let jsonArr = [];
-                jsonArr.push({ key: 'openCardCinemaCode', value: cinemaCode });
-                jsonArr.push({ key: 'cardNo', value: orderNo });
-                jsonArr.push({ key: 'userMobile', value: mobile });
-                jsonArr.push({ key: 'bindStatus', value: payWay });
+                jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
+                jsonArr.push({ key: 'cardNum', value: orderNo });
+                jsonArr.push({ key: 'userName', value: userName });
+                jsonArr.push({ key: 'status', value: status });
+                jsonArr.push({ key: 'getType', value: getType });
                 let sign = md5(preSign(jsonArr));
-                console.log(jsonArr);
                 jsonArr.push({ key: 'sign', value: sign });
                 var params = ParamsAppend(jsonArr);
                 https
-                    .fetchPost('/memberCard/memberCardPage', params)
+                    .fetchPost('/userCoupon/page', params)
                     .then(data => {
                         loading.close();
                         if (data.data.code == 'success') {
