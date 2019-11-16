@@ -306,7 +306,6 @@
                     ></el-date-picker>
                 </el-form-item>
                 <el-form-item label="状态：" :label-width="formLabelWidth">
-                    <el-input v-model="oStatus" ></el-input>
                     <el-select v-model="oStatus" placeholder="请选择">
                         <el-option
                             v-for="item in options"
@@ -888,7 +887,7 @@ export default {
             jsonArr.push({ key: 'ruleName', value: this.oRuleName });
             jsonArr.push({ key: 'startDate', value: this.oStartDate });
             jsonArr.push({ key: 'endDate', value: this.oEndDate });
-            jsonArr.push({ key: 'cardLevelCode', value: this.selectValue });
+            jsonArr.push({ key: 'cardLevelCode', value: this.oForm.levelCode});
             jsonArr.push({ key: 'rechargeAmount', value: this.oRechargeAmount });
             jsonArr.push({ key: 'ruleMemo', value: this.oRuleMemo });
             jsonArr.push({ key: 'id', value: this.oId });

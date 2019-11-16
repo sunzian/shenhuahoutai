@@ -99,7 +99,7 @@
                             :before-upload="beforeUpload"
                             :data="type"
                             class="upload-demo"
-                            ref="download"
+                            ref="upload"
                             drag
                             action="/api/upload/uploadImage"
                             :on-success="unSuccess"
@@ -118,8 +118,8 @@
                             style="width:250px"
                             v-model="oForm.startDate"
                             type="datetime"
-                            value-format="yyyy-MM-dd hh:mm:ss"
-                            format="yyyy-MM-dd hh:mm:ss"
+                            value-format="yyyy-MM-dd HH:mm:ss"
+                            format="yyyy-MM-dd HH:mm:ss"
                             placeholder="选择日期时间">
                     </el-date-picker>
                 </el-form-item>
@@ -128,8 +128,8 @@
                             style="width:250px"
                             v-model="oForm.endDate"
                             type="datetime"
-                            value-format="yyyy-MM-dd hh:mm:ss"
-                            format="yyyy-MM-dd hh:mm:ss"
+                            value-format="yyyy-MM-dd HH:mm:ss"
+                            format="yyyy-MM-dd HH:mm:ss"
                             placeholder="选择日期时间">
                     </el-date-picker>
                 </el-form-item>
@@ -232,6 +232,7 @@
                             :data="type"
                             class="upload-demo"
                             drag
+                            ref="download"
                             action="/api/upload/uploadImage"
                             :on-success="onSuccess"
                             multiple
@@ -320,8 +321,9 @@
                             :data="type"
                             class="upload-demo"
                             drag
+                            ref="onload"
                             action="/api/upload/uploadImage"
-                            :on-success="onSuccess"
+                            :on-success="snSuccess"
                             multiple
                     >
                         <i class="el-icon-upload"></i>
@@ -490,8 +492,8 @@
                             style="width:250px"
                             v-model="form.startDate"
                             type="datetime"
-                            value-format="yyyy-MM-dd hh:mm:ss"
-                            format="yyyy-MM-dd hh:mm:ss"
+                            value-format="yyyy-MM-dd HH:mm:ss"
+                            format="yyyy-MM-dd HH:mm:ss"
                             placeholder="选择日期时间">
                     </el-date-picker>
                 </el-form-item>
@@ -500,8 +502,8 @@
                             style="width:250px"
                             v-model="form.endDate"
                             type="datetime"
-                            value-format="yyyy-MM-dd hh:mm:ss"
-                            format="yyyy-MM-dd hh:mm:ss"
+                            value-format="yyyy-MM-dd HH:mm:ss"
+                            format="yyyy-MM-dd HH:mm:ss"
                             placeholder="选择日期时间">
                     </el-date-picker>
                 </el-form-item>
@@ -790,6 +792,7 @@
                                 this.showSell = true;
                                 this.addShow=false;
                                 this.$message.success(`新增成功`);
+                                this.$refs.upload.clearFiles();//清除已上传文件
                                 this.getMenu();
                             } else if (data.data.code == 'nologin') {
                                 this.message = data.data.message;
@@ -1025,6 +1028,18 @@
                 //上传文件 登录超时
                 // console.log(data);
                 this.form.image_url = data.data;
+                this.$refs.download.clearFiles();//清除已上传文件
+                if (data.code == 'nologin') {
+                    this.message = data.message;
+                    this.open();
+                    this.$router.push('/login');
+                }
+            },
+            snSuccess(data) {
+                //上传文件 登录超时
+                // console.log(data);
+                this.form.image_url = data.data;
+                this.$refs.onload.clearFiles();//清除已上传文件
                 if (data.code == 'nologin') {
                     this.message = data.message;
                     this.open();

@@ -462,9 +462,9 @@
                     <el-pagination
                         background
                         layout="total, prev, pager, next"
-                        :current-page="query.pageNo"
-                        :page-size="query.pageSize"
-                        :total="query.totalCount"
+                        :current-page="query.oPageNo"
+                        :page-size="query.oPageSize"
+                        :total="query.oTotalCount"
                         @current-change="oCurrentChange"
                         @prev-click="oPrev"
                         @next-click="oNext"
@@ -519,9 +519,9 @@
                     <el-pagination
                         background
                         layout="total, prev, pager, next"
-                        :current-page="query.pageNo"
-                        :page-size="query.pageSize"
-                        :total="query.totalCount"
+                        :current-page="query.aPageNo"
+                        :page-size="query.aPageSize"
+                        :total="query.aTotalCount"
                         @current-change="aCurrentChange"
                         @prev-click="aPrev"
                         @next-click="aNext"
@@ -582,7 +582,11 @@ export default {
             message: '', //弹出框消息
             query: {
                 pageNo: 1,
-                pageSize: 10
+                pageSize: 10,
+                oPageNo: 1,
+                oPageSize: 10,
+                aPageNo: 1,
+                aPageSize: 10,
             },
             tableData: [],
             multipleSelection: [],
@@ -1159,8 +1163,8 @@ export default {
                 directorName = '';
             }
             let jsonArr = [];
-            jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
-            jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
+            jsonArr.push({ key: 'pageNo', value: this.query.oPageNo });
+            jsonArr.push({ key: 'pageSize', value: this.query.oPageSize });
             jsonArr.push({ key: 'name', value: directorName });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
@@ -1174,10 +1178,10 @@ export default {
                         console.log(director);
                         this.allDirector = true;
                         this.directorTableData = director.data;
-                        this.query.pageSize = director.pageSize;
-                        this.query.pageNo = director.pageNo;
-                        this.query.totalCount = director.totalCount;
-                        this.query.totalPage = director.totalPage;
+                        this.query.oPageSize = director.pageSize;
+                        this.query.oPageNo = director.pageNo;
+                        this.query.oTotalCount = director.totalCount;
+                        this.query.oTotalPage = director.totalPage;
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
@@ -1193,7 +1197,7 @@ export default {
                 });
         },
         actorSearch() {
-            this.query.pageNo = 1;
+            this.query.aPageNo = 1;
             this.getAllActor();
         },
         // 获取所有演员
@@ -1210,8 +1214,8 @@ export default {
                 actorName = '';
             }
             let jsonArr = [];
-            jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
-            jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
+            jsonArr.push({ key: 'pageNo', value: this.query.aPageNo });
+            jsonArr.push({ key: 'pageSize', value: this.query.aPageSize });
             jsonArr.push({ key: 'name', value: actorName });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
@@ -1225,10 +1229,10 @@ export default {
                         console.log(actor);
                         this.allActor = true;
                         this.actorTableData = actor.data;
-                        this.query.pageSize = actor.pageSize;
-                        this.query.pageNo = actor.pageNo;
-                        this.query.totalCount = actor.totalCount;
-                        this.query.totalPage = actor.totalPage;
+                        this.query.aPageSize = actor.pageSize;
+                        this.query.aPageNo = actor.pageNo;
+                        this.query.aTotalCount = actor.totalCount;
+                        this.query.aTotalPage = actor.totalPage;
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
@@ -1350,32 +1354,32 @@ export default {
         },
         oCurrentChange(val) {
             //点击选择具体页数
-            this.query.pageNo = val;
+            this.query.oPageNo = val;
             this.getAllDirector();
         },
         oPrev() {
             //分页按钮上一页
-            this.query.pageNo--;
+            this.query.oPageNo--;
             this.getAllDirector();
         },
         oNext() {
             //分页按钮下一页
-            this.query.pageNo++;
+            this.query.oPageNo++;
             this.getAllDirector();
         },
         aCurrentChange(val) {
             //点击选择具体页数
-            this.query.pageNo = val;
+            this.query.aPageNo = val;
             this.getAllActor();
         },
         aPrev() {
             //分页按钮上一页
-            this.query.pageNo--;
+            this.query.aPageNo--;
             this.getAllActor();
         },
         aNext() {
             //分页按钮下一页
-            this.query.pageNo++;
+            this.query.aPageNo++;
             this.getAllActor();
         },
     }
