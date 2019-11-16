@@ -168,22 +168,22 @@
                     ></el-input>
                 </el-form-item>
                 <el-form-item prop="cinemaName" label="影院名称" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="oCinemaName" autocomplete="off"></el-input>
+                    <el-input style="width: 250px" :disabled="true" v-model="oCinemaName" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item prop="province" label="所在省份" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="oProvince" autocomplete="off"></el-input>
+                    <el-input style="width: 250px" :disabled="true" v-model="oProvince" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item prop="city" label="所在城市" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="oCity" autocomplete="off"></el-input>
+                    <el-input style="width: 250px" :disabled="true" v-model="oCity" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item prop="address" label="详细地址" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="oAddress" autocomplete="off"></el-input>
+                    <el-input style="width: 250px" :disabled="true" v-model="oAddress" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item prop="longitude" label="经度" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="oLongitude" autocomplete="off"></el-input>
+                    <el-input style="width: 250px" :disabled="true" v-model="oLongitude" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item prop="latitude" label="纬度" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="oLatitude" autocomplete="off"></el-input>
+                    <el-input style="width: 250px" :disabled="true" v-model="oLatitude" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="影院联系人姓名" :label-width="formLabelWidth">
                     <el-input style="width: 250px" maxlength="20" v-model="oConcatName" autocomplete="off"></el-input>
@@ -498,13 +498,13 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="小程序名称" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="oMiniAppName" autocomplete="off"></el-input>
+                    <el-input style="width: 250px" :disabled="true" v-model="oMiniAppName" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="小程序二维码" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="oMiniAppQRCode" autocomplete="off"></el-input>
+                    <el-input style="width: 250px" :disabled="true" v-model="oMiniAppQRCode" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item prop="miniAppId" label="小程序appId" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="oMiniAppId" autocomplete="off"></el-input>
+                    <el-input style="width: 250px" :disabled="true" v-model="oMiniAppId" autocomplete="off"></el-input>
                 </el-form-item>
                 <!--<el-form-item-->
                     <!--prop="miniAppSecret"-->
@@ -514,7 +514,7 @@
                     <!--<el-input style="width: 250px" v-model="oMiniAppSecret" autocomplete="off"></el-input>-->
                 <!--</el-form-item>-->
                 <el-form-item prop="miniMerchantNo" label="小程序支付商户号" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="oMiniMerchantNo" autocomplete="off"></el-input>
+                    <el-input style="width: 250px" :disabled="true" v-model="oMiniMerchantNo" autocomplete="off"></el-input>
                 </el-form-item>
                 <!--<el-form-item-->
                     <!--prop="miniMerchantSecret"-->
@@ -541,6 +541,7 @@
                 >
                     <el-input
                         style="width: 250px"
+                        :disabled="true"
                         v-model="oTicketingSystemAccount"
                         autocomplete="off"
                     ></el-input>

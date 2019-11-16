@@ -973,6 +973,9 @@ export default {
                 this.open();
                 return;
             }
+            if(!this.couponName){
+                this.couponName=''
+            }
             let jsonArr = [];
             jsonArr.push({ key: 'cinemaCodes', value: this.oForm.cinemaCode });
             jsonArr.push({ key: 'groupName', value: this.couponName });
@@ -988,6 +991,7 @@ export default {
                         var res = JSON.parse(Decrypt(data.data.data));
                         if (res.data.length == 0) {
                             this.message = '暂无券包';
+                            this.couponName='';
                             this.open();
                             return;
                         }
