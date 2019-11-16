@@ -220,15 +220,15 @@
                             v-model="oForm.startDate"
                             type="datetime"
                             placeholder="开始时间"
-                            value-format="yyyy-MM-dd hh:mm:ss"
-                            format="yyyy-MM-dd hh:mm:ss"
+                                value-format="yyyy-MM-dd HH:mm:ss"
+                            format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>至
                     <el-date-picker
                             v-model="oForm.endDate"
                             type="datetime"
                             placeholder="结束时间"
-                            value-format="yyyy-MM-dd hh:mm:ss"
-                            format="yyyy-MM-dd hh:mm:ss"
+                            value-format="yyyy-MM-dd HH:mm:ss"
+                            format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
                 </el-form-item>
                 <el-form-item label="支付类型：" :label-width="formLabelWidth" prop="date2">
@@ -501,15 +501,15 @@
                             v-model="oStartDate"
                             type="datetime"
                             placeholder="开始时间"
-                            value-format="yyyy-MM-dd hh:mm:ss"
-                            format="yyyy-MM-dd hh:mm:ss"
+                            value-format="yyyy-MM-dd HH:mm:ss"
+                            format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>至
                     <el-date-picker
                             v-model="oEndDate"
                             type="datetime"
                             placeholder="结束时间"
-                            value-format="yyyy-MM-dd hh:mm:ss"
-                            format="yyyy-MM-dd hh:mm:ss"
+                            value-format="yyyy-MM-dd HH:mm:ss"
+                            format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
                 </el-form-item>
                 <el-form-item label="支付类型：" :label-width="formLabelWidth" prop="date2">
@@ -1180,13 +1180,13 @@
                                 }
                             }
                             for (let x in this.canUse) {
-                                if (this.canUse[x].value == JSON.parse(Decrypt(data.data.data)).discountActivity.isCouponTogether) {
+                                if (this.canUse[x].value == JSON.parse(Decrypt(data.data.data)).discountActivity.isLimitTotal) {
                                     this.oIsLimitTotal = this.canUse[x].value;
                                     break;
                                 }
                             }
                             for (let x in this.canUse) {
-                                if (this.canUse[x].value == JSON.parse(Decrypt(data.data.data)).discountActivity.isCouponTogether) {
+                                if (this.canUse[x].value == JSON.parse(Decrypt(data.data.data)).discountActivity.isLimitSingle) {
                                     this.oIsLimitSingle = this.canUse[x].value;
                                     break;
                                 }
@@ -1221,11 +1221,11 @@
                 jsonArr.push({ key: 'name', value: this.oName });
                 jsonArr.push({ key: 'cinemaCode', value: this.oCinemaCode });
                 jsonArr.push({ key: 'selectHallType', value: this.oSelectHallType });
-                if(this.oForm.selectHallType!=0){
+                if(this.oSelectHallType!=0){
                     jsonArr.push({ key: 'screenCode', value: this.oScreenCode.join(',') });
                 }
                 jsonArr.push({ key: 'selectFilmType', value: this.oSelectFilmType });
-                if(this.oForm.selectFilmType!=0){
+                if(this.oSelectFilmType!=0){
                     jsonArr.push({ key: 'filmCode', value: this.oFilmCode });
                 }
                 jsonArr.push({ key: 'startDate', value: this.oStartDate });
@@ -1241,19 +1241,19 @@
                 jsonArr.push({ key: 'startTimeVal', value: this.startArr.join(',')});
                 jsonArr.push({ key: 'endTimeVal', value: this.endArr.join(',')});
                 jsonArr.push({ key: 'isLimitTotal', value: this.oIsLimitTotal });
-                if(this.oForm.oCanNum!=0){
+                if(this.oIsLimitTotal!=0){
                     jsonArr.push({ key: 'totalNumber', value: this.oTotalNumber });
                 }
-                if(this.oForm.oneCanNum!=0){
+                if(this.oIsLimitSingle!=0){
                     jsonArr.push({ key: 'singleNumber', value: this.oSingleNumber});
                     jsonArr.push({ key: 'limitSingleUnit', value: this.oLimitSingleUnit });
                 }
                 jsonArr.push({ key: 'isLimitSingle', value: this.oIsLimitSingle});
                 jsonArr.push({ key: 'selectFilmFormatType', value: this.oSelectFilmFormatType});
-                if(this.oForm.selectMovieType!=0){
+                if(this.oSelectMovieType!=0){
                     jsonArr.push({ key: 'FilmFormatCode', value: this.oFilmFormatCode});
                 }
-                jsonArr.push({ key: 'id', value: this.oId });
+                jsonArr.push({ key: 'id', value: this.form.id });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
                 console.log(jsonArr);

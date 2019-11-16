@@ -1126,6 +1126,14 @@
                         <el-radio label="2">按票收费</el-radio>
                     </el-radio-group>
                 </el-form-item>
+                <el-form-item v-if="oPaymentType==2" label="可售票数余额" :label-width="formLabelWidth">
+                    <el-input
+                            style="width: 250px"
+                            v-model="oRemainTicketsNumber"
+                            autocomplete="off"
+                            :disabled="true"
+                    ></el-input>
+                </el-form-item>
                 <el-form-item v-if="oPaymentType==1" label="到期时间" :label-width="formLabelWidth">
                     <el-date-picker
                             type="date"
@@ -1406,6 +1414,7 @@ export default {
             oBuyTicketHint: '',
             oGoldActivityMemo: '',
             oOpenSnackStatus: '',
+            oRemainTicketsNumber: '',
             oSnackDispatcherStatus: '',
             oRefundable: '',
             oSnackBeginTime: '',
@@ -1868,6 +1877,7 @@ export default {
                         this.oPaymentType = JSON.parse(Decrypt(data.data.data)).Cinema.paymentType;
                         this.oReportedType = JSON.parse(Decrypt(data.data.data)).Cinema.reportedType;
                         this.oBelongBusinessCode = JSON.parse(Decrypt(data.data.data)).Cinema.belongBusinessCode;
+                        this.oRemainTicketsNumber = JSON.parse(Decrypt(data.data.data)).Cinema.remainTicketsNumber;
                         for (let x in this.boolean) {
                             if (this.boolean[x].value == JSON.parse(Decrypt(data.data.data)).Cinema.memberCardCommonUseStatus) {
                                 this.oMemberCardCommonUseStatus = this.boolean[x].value;
