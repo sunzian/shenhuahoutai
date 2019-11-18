@@ -189,7 +189,7 @@
                         list-type="picture"
                     >
                         <el-button size="small" type="primary">点击上传</el-button>
-                        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过300kb</div>
+                        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过300kb 建议尺寸1500*150或按比例上传</div>
                     </el-upload>
                 </el-form-item>
                 <el-form-item label="每组发放数量：" :label-width="formLabelWidth" prop="number">
@@ -388,7 +388,7 @@ export default {
             message: '', //弹出框消息
             query: {
                 pageNo: 1,
-                pageSize: 10
+                pageSize: 15
             },
             restaurants: [],
             tableData: [],

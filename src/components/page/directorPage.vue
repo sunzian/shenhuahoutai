@@ -106,7 +106,7 @@
                             将文件拖到此处，或
                             <em>点击上传</em>
                         </div>
-                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb 建议70*100</div>
+                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过300kb 建议70*100</div>
                     </el-upload>
                     <el-popover placement="right" title trigger="hover">
                             <img :src="oForm.picture" />
@@ -158,7 +158,7 @@
                         list-type="picture"
                     >
                         <el-button size="small" type="primary">点击上传修改</el-button>
-                        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb 建议70*100</div>
+                        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过300kb 建议70*100</div>
                         </el-upload>
                 </el-form-item>
             </el-form>
@@ -192,7 +192,7 @@ export default {
             message: '', //弹出框消息
             query: {
                 pageNo: 1,
-                pageSize: 10
+                pageSize: 15
             },
             tableData: [],
             multipleSelection: [],
