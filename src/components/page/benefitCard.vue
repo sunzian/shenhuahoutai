@@ -26,12 +26,12 @@
                     ></el-option>
                 </el-select>
                 <el-input v-model="query.name" placeholder="权益卡名称" class="handle-input mr10"></el-input>
-                <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
+                <el-button style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
                 <el-button
                         type="primary"
                         @click="addPage"
                         icon="el-icon-circle-plus-outline"
-                        style="margin-left: 300px"
+                        style="float: right;margin-top: 10px"
                 >新增权益卡</el-button>
             </div>
             <el-table
@@ -524,14 +524,8 @@
         <el-dialog title="选择影片" :visible.sync="drawer">
             <div class="container">
                 <div class="handle-box">
-                    <el-input v-model="query.name" placeholder="角色名" class="handle-input mr10"></el-input>
-                    <el-select clearable v-model="query.status" placeholder="状态" class="handle-select mr10">
-                        <el-option key="1" label="审核中" value="1"></el-option>
-                        <el-option key="2" label="未审核" value="2"></el-option>
-                        <el-option key="3" label="通过" value="3"></el-option>
-                        <el-option key="4" label="审核失败" value="4"></el-option>
-                    </el-select>
-                    <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
+                    <el-input v-model="query.filmName" placeholder="影片名称" class="handle-input mr10"></el-input>
+                    <el-button type="primary" icon="el-icon-search" @click="openNext">搜索</el-button>
                 </div>
                 <el-table
                         :data="sellTableData"
@@ -565,9 +559,9 @@
                     <el-pagination
                             background
                             layout="total, prev, pager, next"
-                            :current-page="query.pageNo"
-                            :page-size="query.pageSize"
-                            :total="query.totalCount"
+                            :current-page="query.aPageNo"
+                            :page-size="query.aPageSize"
+                            :total="query.aTotalCount"
                             @current-change="aCurrentChange"
                             @prev-click='aPrev'
                             @next-click="aNext"
@@ -944,14 +938,8 @@
         <el-dialog title="选择卖品" :visible.sync="oDrawer">
             <div class="container">
                 <div class="handle-box">
-                    <el-input v-model="query.name" placeholder="角色名" class="handle-input mr10"></el-input>
-                    <el-select clearable v-model="query.status" placeholder="状态" class="handle-select mr10">
-                        <el-option key="1" label="审核中" value="1"></el-option>
-                        <el-option key="2" label="未审核" value="2"></el-option>
-                        <el-option key="3" label="通过" value="3"></el-option>
-                        <el-option key="4" label="审核失败" value="4"></el-option>
-                    </el-select>
-                    <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
+                    <el-input v-model="query.merName" placeholder="卖品名称" class="handle-input mr10"></el-input>
+                    <el-button type="primary" icon="el-icon-search" @click="selectSell">搜索</el-button>
                 </div>
                 <el-table
                         :data="oSellTableData"
@@ -985,12 +973,12 @@
                     <el-pagination
                             background
                             layout="total, prev, pager, next"
-                            :current-page="query.pageNo"
-                            :page-size="query.pageSize"
-                            :total="query.totalCount"
-                            @current-change="aCurrentChange"
-                            @prev-click='aPrev'
-                            @next-click="aNext"
+                            :current-page="query.oPageNo"
+                            :page-size="query.oPageSize"
+                            :total="query.oTotalCount"
+                            @current-change="oCurrentChange"
+                            @prev-click='oPrev'
+                            @next-click="oNext"
                     ></el-pagination>
                 </div>
             </div>
@@ -999,7 +987,7 @@
                 <el-button type="primary" @click="oSureNext">确 定</el-button>
             </div>
         </el-dialog>
-        <!-- 选择优惠券弹出窗 -->
+        <!-- 选择券包弹出窗 -->
         <el-dialog title="选择券包" :visible.sync="drawerCoupon">
             <div class="container">
                 <div class="handle-box">
@@ -1035,12 +1023,12 @@
                     <el-pagination
                             background
                             layout="total, prev, pager, next"
-                            :current-page="query.pageNo"
-                            :page-size="query.pageSize"
-                            :total="query.totalCount"
-                            @current-change="oCurrentChange"
-                            @prev-click="oPrev"
-                            @next-click="oNext"
+                            :current-page="query.bPageNo"
+                            :page-size="query.bPageSize"
+                            :total="query.bTotalCount"
+                            @current-change="bCurrentChange"
+                            @prev-click="bPrev"
+                            @next-click="bNext"
                     ></el-pagination>
                 </div>
             </div>
@@ -1165,7 +1153,13 @@
                 message: '', //弹出框消息
                 query: {
                     pageNo: 1,
-                    pageSize: 15
+                    pageSize: 15,
+                    aPageNo: 1,
+                    aPageSize: 15,
+                    oPageNo: 1,
+                    oPageSize: 15,
+                    bPageNo: 1,
+                    bPageSize: 15,
                 },
                 restaurants: [],
                 tableData: [],
@@ -1270,8 +1264,8 @@
                 jsonArr.push({ key: 'cinemaCodes', value: this.oForm.cinemaCode });
                 jsonArr.push({ key: 'groupName', value: this.groupName });
                 jsonArr.push({ key: 'status', value: 1 });
-                jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
-                jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
+                jsonArr.push({ key: 'pageNo', value: this.query.bPageNo });
+                jsonArr.push({ key: 'pageSize', value: this.query.bPageSize });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
                 var params = ParamsAppend(jsonArr);
@@ -1286,10 +1280,10 @@
                             return;
                         }
                         this.couponList = res.data;
-                        this.query.pageSize = res.pageSize;
-                        this.query.pageNo = res.pageNo;
-                        this.query.totalCount = res.totalCount;
-                        this.query.totalPage = res.totalPage;
+                        this.query.bPageSize = res.pageSize;
+                        this.query.bPageNo = res.pageNo;
+                        this.query.bTotalCount = res.totalCount;
+                        this.query.bTotalPage = res.totalPage;
                         this.drawerCoupon = true;
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
@@ -2118,17 +2112,32 @@
             },
             oCurrentChange(val) {
                 //点击选择具体页数
-                this.query.pageNo = val;
-                this.changeCoupon();
+                this.query.oPageNo = val;
+                this.selectSell();
             },
             oPrev() {
                 //分页按钮上一页
-                this.query.pageNo--;
-                this.changeCoupon();
+                this.query.oPageNo--;
+                this.selectSell();
             },
             oNext() {
                 //分页按钮下一页
-                this.query.pageNo++;
+                this.query.oPageNo++;
+                this.selectSell();
+            },
+            bCurrentChange(val) {
+                //点击选择具体页数
+                this.query.bPageNo = val;
+                this.changeCoupon();
+            },
+            bPrev() {
+                //分页按钮上一页
+                this.query.bPageNo--;
+                this.changeCoupon();
+            },
+            bNext() {
+                //分页按钮下一页
+                this.query.bPageNo++;
                 this.changeCoupon();
             },
             getCurrentRow(index){//影片弹出框index
@@ -2171,9 +2180,14 @@
                     target: document.querySelector('.div1')
                 });
                 setTimeout(() => {
+                    let filmName=this.query.filmName;
+                    if(!filmName){
+                        filmName=''
+                    }
                     let jsonArr = [];
-                    jsonArr.push({key:"pageNo",value:this.query.pageNo});
-                    jsonArr.push({key:"pageSize",value:this.query.pageSize});
+                    jsonArr.push({key:"filmName",value:filmName});
+                    jsonArr.push({key:"pageNo",value:this.query.aPageNo});
+                    jsonArr.push({key:"pageSize",value:this.query.aPageSize});
                     let sign =md5(preSign(jsonArr));
                     jsonArr.push({key:"sign",value:sign});
                     var params = ParamsAppend(jsonArr);
@@ -2187,10 +2201,10 @@
                             // console.log(this.query);
                             this.sellTableData = oData.data;
                             console.log(this.sellTableData);
-                            this.query.pageSize = oData.pageSize;
-                            this.query.pageNo = oData.pageNo;
-                            this.query.totalCount = oData.totalCount;
-                            this.query.totalPage = oData.totalPage
+                            this.query.aPageSize = oData.pageSize;
+                            this.query.aPageNo = oData.pageNo;
+                            this.query.aTotalCount = oData.totalCount;
+                            this.query.aTotalPage = oData.totalPage
                         }else if(data.data.code=='nologin'){
                             this.message=data.data.message
                             this.open()
@@ -2217,9 +2231,14 @@
                     target: document.querySelector('.div1')
                 });
                 setTimeout(() => {
+                    let merchandiseName=this.query.merName;
+                    if(!merchandiseName){
+                        merchandiseName=''
+                    }
                     let jsonArr = [];
-                    jsonArr.push({key:"pageNo",value:this.query.pageNo});
-                    jsonArr.push({key:"pageSize",value:this.query.pageSize});
+                    jsonArr.push({key:"merchandiseName",value:merchandiseName});
+                    jsonArr.push({key:"pageNo",value:this.query.oPageNo});
+                    jsonArr.push({key:"pageSize",value:this.query.oPageSize});
                     let sign =md5(preSign(jsonArr));
                     jsonArr.push({key:"sign",value:sign});
                     var params = ParamsAppend(jsonArr);
@@ -2227,21 +2246,21 @@
                         loading.close();
                         console.log(data);
                         if(data.data.code=='success') {
-                            this.oDrawer=true
+                            this.oDrawer=true;
                             var oData = JSON.parse(Decrypt(data.data.data));
                             console.log(oData);
                             // console.log(this.query);
                             this.oSellTableData = oData.data;
-                            this.query.pageSize = oData.pageSize;
-                            this.query.pageNo = oData.pageNo;
-                            this.query.totalCount = oData.totalCount;
-                            this.query.totalPage = oData.totalPage
+                            this.query.oPageSize = oData.pageSize;
+                            this.query.oPageNo = oData.pageNo;
+                            this.query.oTotalCount = oData.totalCount;
+                            this.query.oTotalPage = oData.totalPage
                         }else if(data.data.code=='nologin'){
-                            this.message=data.data.message
-                            this.open()
+                            this.message=data.data.message;
+                            this.open();
                             this.$router.push('/login');
                         }else{
-                            this.message=data.data.message
+                            this.message=data.data.message;
                             this.open()
                         }
 
@@ -2254,15 +2273,15 @@
             },
             //新增套餐选择卖品页面
             aCurrentChange(val){//点击选择具体页数
-                this.query.pageNo = val;
+                this.query.aPageNo = val;
                 this.openNext()
             },
             aPrev(){//分页按钮上一页
-                this.query.pageNo--;
+                this.query.aPageNo--;
                 this.openNext()
             },
             aNext(){//分页按钮下一页
-                this.query.pageNo++;
+                this.query.aPageNo++;
                 this.openNext()
             }
         }
@@ -2271,25 +2290,16 @@
 
 <style scoped>
     .handle-box {
+        width: 100%;
         margin-bottom: 20px;
-    }
-
-    .handle-select {
-        width: 120px;
-    }
-
-    .handle-input {
-        width: 300px;
-        display: inline-block;
+        font-size: 14px;
     }
     .table {
         width: 100%;
         font-size: 14px;
     }
-    .red {
-        color: #ff0000;
-    }
     .mr10 {
+        width: 16%;
         margin-right: 10px;
     }
 </style>

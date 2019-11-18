@@ -19,39 +19,36 @@
                 </el-select>
                 <el-input
                     placeholder="手机号"
-                    style="width: 150px"
                     v-model="query.mobile"
                     autocomplete="off"
                     class="mr10"
                 ></el-input>
                 <el-input
                     placeholder="用户昵称"
-                    style="width: 150px"
                     v-model="query.userName"
                     autocomplete="off"
                     class="mr10"
                 ></el-input>
                 <el-date-picker
-                    style="width: 200px;"
                     v-model="query.startDate"
                     type="datetime"
                     value-format="yyyy-MM-dd HH:mm:ss"
                     format="yyyy-MM-dd HH:mm:ss"
-                    placeholder="注册时间"
-                ></el-date-picker>至
+                    placeholder="注册时间（起）"
+                    class="mr10"
+                ></el-date-picker>
                 <el-date-picker
-                    style="width: 200px;"
                     v-model="query.endDate"
                     type="datetime"
                     value-format="yyyy-MM-dd HH:mm:ss"
                     format="yyyy-MM-dd HH:mm:ss"
-                    placeholder="注册时间"
+                    placeholder="注册时间（止）"
                     class="mr10"
                 ></el-date-picker>
                 <el-button
                     type="primary"
                     icon="el-icon-search"
-                    style="margin-top: 10px;"
+                    style="margin-top: 10px;width: 90px;"
                     @click="Search"
                 >搜索</el-button>
             </div>
@@ -64,7 +61,7 @@
                 header-cell-class-name="table-header"
                 @selection-change="handleSelectionChange"
             >
-                <el-table-column prop="name" label="图片">
+                <el-table-column prop="name" label="头像" width="90">
                     <template slot-scope="scope">
                         <el-popover placement="right" title trigger="hover">
                             <img style="width:400px" :src="scope.row.userHeadPic" />
@@ -77,10 +74,10 @@
                         </el-popover>
                     </template>
                 </el-table-column>
-                <el-table-column label="昵称">
+                <el-table-column label="昵称" width="110">
                     <template slot-scope="scope">{{scope.row.userName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="手机号">
+                <el-table-column prop="memo" label="手机号" width="110">
                     <template slot-scope="scope">{{scope.row.userMobile}}</template>
                 </el-table-column>
                 <!-- <el-table-column prop="memo" label="是否在小程序上注册">
@@ -92,46 +89,42 @@
                 <el-table-column prop="memo" label="注册影院">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="注册时间">
+                <el-table-column prop="memo" label="注册时间" width="160">
                     <template slot-scope="scope">{{scope.row.miniRegisterDate}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="最近登陆时间">
+                <el-table-column prop="memo" label="最近登陆时间" width="160">
                     <template slot-scope="scope">{{scope.row.loginDate}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="累计消费金额">
+                <el-table-column prop="memo" label="累计消费金额" width="110">
                     <template slot-scope="scope">{{scope.row.consumptionAmount}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="最近一次消费时间">
+                <el-table-column prop="memo" label="最近一次消费" width="160">
                     <template slot-scope="scope">{{scope.row.lastConsumeDate}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="剩余优惠券数量">
+                <el-table-column prop="memo" label="有效优惠券数量" width="130">
                     <template slot-scope="scope">{{scope.row.remainCoupons}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="用户金币数量">
+                <el-table-column prop="memo" label="金币数量" width="90">
                     <template slot-scope="scope">{{scope.row.goldNumber}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="游戏厅角色">
+                <el-table-column prop="memo" label="游戏厅角色" width="100">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.userRole=='1'" type="danger">普通用户</el-tag>
                         <el-tag v-else-if="scope.row.userRole=='2'" type="success">管理员</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="更改游戏厅角色" width="100" align="center" fixed="right">
-                    <template slot-scope="scope">
-                        <el-button
-                            type="text"
-                            icon="el-icon-edit"
-                            @click="changeRole(scope.$index, scope.row)"
-                        >更改</el-button>
-                    </template>
-                </el-table-column>
-                <el-table-column label="操作" align="center" fixed="right">
+                <el-table-column label="操作" align="center" fixed="right" width="100" >
                     <template slot-scope="scope">
                         <el-button
                             type="text"
                             icon="el-icon-setting"
                             @click="addChange(scope.$index, scope.row)"
                         >查看详情</el-button>
+                        <el-button
+                                type="text"
+                                icon="el-icon-edit"
+                                @click="changeRole(scope.$index, scope.row)"
+                        >更改角色</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -300,6 +293,7 @@ export default {
             pageTotal: 0,
             idx: -1,
             id: -1,
+            rowMess:'',
             formLabelWidth: '120px',
             businessInfoList: [],
             value: '',
@@ -364,7 +358,14 @@ export default {
             }, 500);
         },
         changeRole(index, row) {
-            this.$confirm('此操作将更改角色权限, 是否继续?', '提示', {
+            console.log(row.userRole);
+            if(row.userRole==1){
+                    this.rowMess='游戏厅管理员'
+            }
+            if(row.userRole==2){
+                this.rowMess='普通用户'
+            }
+            this.$confirm('此操作将用户角色更改为'+this.rowMess+', 是否继续?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
@@ -540,28 +541,18 @@ export default {
 </script>
 
 <style scoped>
-.handle-box {
-    margin-bottom: 20px;
-    font-size: 14px;
-}
-
-.handle-select {
-    width: 120px;
-}
-
-.handle-input {
-    width: 300px;
-    display: inline-block;
-}
-.table {
-    width: 100%;
-    font-size: 14px;
-}
-.red {
-    color: #ff0000;
-}
-.mr10 {
-    margin-right: 10px;
-}
+    .handle-box {
+        width: 100%;
+        margin-bottom: 20px;
+        font-size: 14px;
+    }
+    .table {
+        width: 100%;
+        font-size: 14px;
+    }
+    .mr10 {
+        width: 16%;
+        margin-right: 10px;
+    }
 </style>
 

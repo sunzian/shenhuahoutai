@@ -19,14 +19,12 @@
                 </el-select>
                 <el-input
                     placeholder="用户名称"
-                    style="width: 150px"
                     v-model="query.userName"
                     autocomplete="off"
                     class="mr10"
                 ></el-input>
                 <el-input
                     placeholder="订单号"
-                    style="width: 150px"
                     v-model="query.orderNo"
                     autocomplete="off"
                     class="mr10"
@@ -60,7 +58,7 @@
                 <el-button
                     type="primary"
                     icon="el-icon-search"
-                    style="margin-top: 10px;"
+                    style="margin-top: 10px;width: 90px;"
                     @click="Search"
                 >搜索</el-button>
             </div>
@@ -76,26 +74,26 @@
                 <el-table-column label="优惠券所属影院">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="用户名称">
+                <el-table-column prop="name" label="用户名称" width="100">
                     <template slot-scope="scope">{{scope.row.userName}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="优惠券名称">
                     <template slot-scope="scope">{{scope.row.couponName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="有效期开始时间">
+                <el-table-column prop="memo" label="有效期开始时间" width="160">
                     <template slot-scope="scope">{{scope.row.startTime}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="有效期结束时间">
+                <el-table-column prop="memo" label="有效期结束时间" width="160">
                     <template slot-scope="scope">{{scope.row.endTime}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="使用状态">
+                <el-table-column prop="memo" label="使用状态" width="100">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status=='1'">未使用</el-tag>
                         <el-tag v-else-if="scope.row.status=='2'">已使用</el-tag>
                         <el-tag v-else-if="scope.row.status=='2'">已过期</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="memo" label="领取类型">
+                <el-table-column prop="memo" label="领取类型" width="160">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.getType=='1'">注册送券</el-tag>
                         <el-tag v-else-if="scope.row.getType=='2'">聊天室领取</el-tag>
@@ -108,10 +106,10 @@
                         <el-tag v-else-if="scope.row.getType=='9'">权益卡券包</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="memo" label="使用时间">
+                <el-table-column prop="memo" label="使用时间" width="160">
                     <template slot-scope="scope">{{scope.row.useTime}}</template>
                 </el-table-column>
-                <el-table-column label="使用订单号" align="center">
+                <el-table-column label="使用订单号" align="center" width="190">
                     <template slot-scope="scope">{{scope.row.orderNum}}</template>
                 </el-table-column>
                 <!-- <el-table-column label="操作" align="center" fixed="right">
@@ -605,28 +603,18 @@ export default {
 </script>
 
 <style scoped>
-.handle-box {
-    margin-bottom: 20px;
-    font-size: 14px;
-}
-
-.handle-select {
-    width: 120px;
-}
-
-.handle-input {
-    width: 300px;
-    display: inline-block;
-}
-.table {
-    width: 100%;
-    font-size: 14px;
-}
-.red {
-    color: #ff0000;
-}
-.mr10 {
-    margin-right: 10px;
-}
+    .handle-box {
+        width: 100%;
+        margin-bottom: 20px;
+        font-size: 14px;
+    }
+    .table {
+        width: 100%;
+        font-size: 14px;
+    }
+    .mr10 {
+        width: 16%;
+        margin-right: 10px;
+    }
 </style>
 

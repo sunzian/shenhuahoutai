@@ -17,25 +17,25 @@
                     header-cell-class-name="table-header"
                     @selection-change="handleSelectionChange"
             >
-                <el-table-column prop="name" label="影院编码">
+                <el-table-column prop="name" label="影院编码" width="120">
                     <template slot-scope="scope">{{scope.row.cinemaCode}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="影院名称">
+                <el-table-column prop="name" label="影院名称" width="280">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="省份">
+                <el-table-column prop="memo" label="省份" width="120">
                     <template slot-scope="scope">{{scope.row.province}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="城市">
+                <el-table-column prop="sort" label="城市" width="120">
                     <template slot-scope="scope">{{scope.row.city}}</template>
-                </el-table-column>
-                <el-table-column prop="sort" label="详细地址">
-                    <template slot-scope="scope">{{scope.row.address}}</template>
                 </el-table-column>
                 <el-table-column prop="sort" label="联系方式" width="150">
                     <template slot-scope="scope">{{scope.row.serviceMobile}}</template>
                 </el-table-column>
-                <el-table-column label="操作" width="100" align="center" fixed="right">
+                <el-table-column prop="sort" label="详细地址">
+                    <template slot-scope="scope">{{scope.row.address}}</template>
+                </el-table-column>
+                <el-table-column label="操作" width="120" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-button
                                 type="text"
@@ -72,12 +72,12 @@
                     <el-option key="1" label="正常" value="1"></el-option>
                     <el-option key="2" label="禁用" value="2"></el-option>
                 </el-select>
-                <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
+                <el-button  style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
                 <el-button
                         type="primary"
                         @click="back"
                         icon="el-icon-circle-plus-outline"
-                        style="margin-left: 540px"
+                        style="float: right;"
                 >返回卡等级管理</el-button>
             </div>
             <el-table
@@ -108,13 +108,13 @@
                 <el-table-column prop="sort" label="会员卡会费" width="150">
                     <template slot-scope="scope">{{scope.row.memberFee}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="状态" width="150">
+                <el-table-column prop="sort" label="状态"  align="center" width="150">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status == 1" type="success">正常</el-tag>
                         <el-tag v-else-if="scope.row.status == 2" type="danger">禁用</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" width="100" align="center" fixed="right">
+                <el-table-column label="操作" width="180" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-button
                                 type="success"
@@ -766,26 +766,16 @@
 
 <style scoped>
     .handle-box {
+        width: 100%;
         margin-bottom: 20px;
-    }
-
-    .handle-select {
-        width: 120px;
-    }
-
-    .handle-input {
-        width: 300px;
-        display: inline-block;
+        font-size: 14px;
     }
     .table {
         width: 100%;
         font-size: 14px;
     }
-    .red {
-        color: #ff0000;
-    }
     .mr10 {
+        width: 16%;
         margin-right: 10px;
     }
 </style>
-

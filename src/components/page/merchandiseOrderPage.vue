@@ -87,28 +87,28 @@
                 >打开卖品通知</el-button>
             </div>
             <div class="handle-box">
-                总原价
+                总原价：
                 <el-input
                     style="width: 150px"
                     v-model="totalData.totalOriginalPrice"
                     :disabled="true"
                     autocomplete="off"
                     class="mr10"
-                ></el-input>总实付金额
+                ></el-input>总实付金额：
                 <el-input
                     style="width: 150px"
                     v-model="totalData.totalActualPrice"
                     :disabled="true"
                     autocomplete="off"
                     class="mr10"
-                ></el-input>总优惠券优惠金额
+                ></el-input>总优惠券优惠金额：
                 <el-input
                     style="width: 150px"
                     v-model="totalData.totalCouponDiscount"
                     :disabled="true"
                     autocomplete="off"
                     class="mr10"
-                ></el-input>总活动优惠金额
+                ></el-input>总活动优惠金额：
                 <el-input
                     style="width: 150px"
                     v-model="totalData.totalActivityDiscount"
@@ -131,9 +131,9 @@
                 <el-table-column label="订单号" width="135">
                     <template slot-scope="scope">{{scope.row.orderNo}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="用户名" width="75">
-                    <template slot-scope="scope">{{scope.row.userName}}</template>
-                </el-table-column>
+                <!--<el-table-column prop="memo" label="用户名" width="75">-->
+                    <!--<template slot-scope="scope">{{scope.row.userName}}</template>-->
+                <!--</el-table-column>-->
                 <el-table-column prop="memo" label="手机号码" width="110">
                     <template slot-scope="scope">{{scope.row.mobile}}</template>
                 </el-table-column>

@@ -14,12 +14,12 @@
                     <el-option key="1" label="启用" value="1"></el-option>
                     <el-option key="2" label="禁用" value="2"></el-option>
                 </el-select>
-                <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
+                <el-button style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
                 <el-button
                     type="primary"
                     @click="addPage"
                     icon="el-icon-circle-plus-outline"
-                    style="margin-left: 600px"
+                    style="float: right"
                 >添加</el-button>
             </div>
             <el-table
@@ -30,11 +30,11 @@
                 ref="multipleTable"
                 header-cell-class-name="table-header"
             >
+                <el-table-column prop="code" label="影院编码" width="140">
+                    <template slot-scope="scope">{{scope.row.cinemaCode}}</template>
+                </el-table-column>
                 <el-table-column prop="code" label="影院名称">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
-                </el-table-column>
-                <el-table-column prop="code" label="影院编码">
-                    <template slot-scope="scope">{{scope.row.cinemaCode}}</template>
                 </el-table-column>
                 <el-table-column prop="sort" label="会员卡名称">
                     <template slot-scope="scope">{{scope.row.cardLevelName}}</template>
@@ -42,10 +42,10 @@
                 <el-table-column prop="name" label="充值规则名称">
                     <template slot-scope="scope">{{scope.row.ruleName}}</template>
                 </el-table-column>
-                <el-table-column prop="number" label="充值金额">
+                <el-table-column prop="number" label="充值金额" width="100">
                     <template slot-scope="scope">{{scope.row.rechargeAmount}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="赠送类型" >
+                <el-table-column prop="sort" label="赠送类型" width="100" align="center" >
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.givenType=='1'"
                         >不赠送</el-tag>
@@ -57,13 +57,13 @@
                         >两者都送</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="number" label="赠送金额">
+                <el-table-column prop="number" label="赠送金额" width="100">
                     <template slot-scope="scope">{{scope.row.givenMoney}}</template>
                 </el-table-column>
-                <el-table-column prop="number" label="赠送券包">
+                <el-table-column prop="number" label="赠送券包" width="120" >
                     <template slot-scope="scope">{{scope.row.couponGroupName}}</template>
                 </el-table-column>
-                <el-table-column prop="booleans" label="状态">
+                <el-table-column prop="booleans" label="状态" width="100" align="center">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status == 1" type="success">正常</el-tag>
                         <el-tag v-if="scope.row.status == 2" type="danger">禁用</el-tag>
@@ -1214,27 +1214,18 @@ export default {
 </script>
 
 <style scoped>
-.handle-box {
-    margin-bottom: 20px;
-}
-
-.handle-select {
-    width: 120px;
-}
-
-.handle-input {
-    width: 300px;
-    display: inline-block;
-}
-.table {
-    width: 100%;
-    font-size: 14px;
-}
-.red {
-    color: #ff0000;
-}
-.mr10 {
-    margin-right: 10px;
-}
+    .handle-box {
+        width: 100%;
+        margin-bottom: 20px;
+        font-size: 14px;
+    }
+    .table {
+        width: 100%;
+        font-size: 14px;
+    }
+    .mr10 {
+        width: 16%;
+        margin-right: 10px;
+    }
 </style>
 
