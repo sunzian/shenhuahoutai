@@ -16,13 +16,12 @@
                         type="primary"
                         @click="thirdPrice"
                         icon="el-icon-circle-plus-outline"
-                        style="margin-left: 220px"
-                >批量修改</el-button>
+                >批量修改会员价</el-button>
                 <el-button
                     type="primary"
                     @click="addPage"
                     icon="el-icon-circle-plus-outline"
-                    style="margin-left: 55px"
+                    style="margin-left: 10px"
                 >重新获取排期</el-button>
             </div>
             <el-table
