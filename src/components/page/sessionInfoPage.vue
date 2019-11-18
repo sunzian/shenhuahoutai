@@ -9,20 +9,34 @@
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-input v-model="query.cinemaName" placeholder="影院名称" class="handle-input mr10"></el-input>
+                <el-select clearable v-model="query.cinemaCode" placeholder="请选择影院" class="mr10" @change="chooseCinema">
+                    <el-option
+                        v-for="item in cinemaInfo"
+                        :key="item.cinemaCode"
+                        :label="item.cinemaName"
+                        :value="item.cinemaCode"
+                    ></el-option>
+                </el-select>
+                <el-select clearable v-model="query.screenCode" placeholder="请选择影厅" class="mr10">
+                    <el-option
+                        v-for="item in screenInfo"
+                        :key="item.screenCode"
+                        :label="item.screenName"
+                        :value="item.screenCode"
+                    ></el-option>
+                </el-select>
                 <el-input v-model="query.filmName" placeholder="影片名称" class="handle-input mr10"></el-input>
                 <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
                 <el-button
                         type="primary"
                         @click="thirdPrice"
                         icon="el-icon-circle-plus-outline"
-                        style="margin-left: 220px"
-                >批量修改</el-button>
+                >批量修改会员价</el-button>
                 <el-button
                     type="primary"
                     @click="addPage"
                     icon="el-icon-circle-plus-outline"
-                    style="margin-left: 55px"
+                    style="margin-left: 10px"
                 >重新获取排期</el-button>
             </div>
             <el-table
@@ -276,6 +290,7 @@ export default {
                 }
             ],
             cinemaInfo: [],
+            screenInfo: [],
             selectIdList: [],
             selectCodeList: [],
             selectId:'',
@@ -622,21 +637,27 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            let cinemaName = this.query.cinemaName;
+            let cinemaCode = this.query.cinemaCode;
+            let screenCode = this.query.screenCode;
             let filmName = this.query.filmName;
-            if (!cinemaName) {
-                cinemaName = '';
+            if (!cinemaCode) {
+                cinemaCode = '';
+            }
+            if (!screenCode) {
+                screenCode = '';
             }
             if (!filmName) {
                 filmName = '';
             }
             let jsonArr = [];
-            jsonArr.push({ key: 'cinemaName', value: cinemaName });
+            jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
+            jsonArr.push({ key: 'screenCode', value: screenCode });
             jsonArr.push({ key: 'filmName', value: filmName });
             jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
             jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
+            console.log(jsonArr)
             var params = ParamsAppend(jsonArr);
             https
                 .fetchPost('/sessionInfo/sessionInfoPage', params)
@@ -644,12 +665,13 @@ export default {
                     loading.close();
                     if (data.data.code == 'success') {
                         var oData = JSON.parse(Decrypt(data.data.data));
-                        console.log(oData);
                         this.tableData = oData.data;
                         this.query.pageSize = oData.pageSize;
                         this.query.pageNo = oData.pageNo;
                         this.query.totalCount = oData.totalCount;
                         this.query.totalPage = oData.totalPage;
+                        this.getAllCinema();
+                        this.getAllScreen();
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
@@ -696,8 +718,40 @@ export default {
                 .then(data => {
                     if (data.data.code == 'success') {
                         var res = JSON.parse(Decrypt(data.data.data));
-                        console.log(res);
                         this.cinemaInfo = res;
+                    } else if (data.data.code == 'nologin') {
+                        this.message = data.data.message;
+                        this.open();
+                        this.$router.push('/login');
+                    } else {
+                        this.message = data.data.message;
+                        this.open();
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        },
+        chooseCinema(val) {
+            this.getAllScreen(val);
+        },
+
+        // 获取所有影厅
+        getAllScreen(val) {
+            if (!val) {
+                return
+            }
+            var jsonArr = [];
+            jsonArr.push({ key: 'cinemaCode', value: val });
+            let sign = md5(preSign(jsonArr));
+            jsonArr.push({ key: 'sign', value: sign });
+            let params = ParamsAppend(jsonArr);
+            https
+                .fetchPost('/screenInfo/getScreenByCinema',params)
+                .then(data => {
+                    if (data.data.code == 'success') {
+                        var res = JSON.parse(Decrypt(data.data.data));
+                        this.screenInfo = res;
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();

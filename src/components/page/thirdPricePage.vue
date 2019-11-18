@@ -9,14 +9,42 @@
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-input v-model="query.cinemaName" placeholder="影院名称" class="handle-input mr10"></el-input>
+                <el-select
+                    clearable
+                    v-model="query.cinemaCode"
+                    placeholder="请选择影院"
+                    class="mr10"
+                    @change="chooseCinema"
+                >
+                    <el-option
+                        v-for="item in cinemaInfo"
+                        :key="item.cinemaCode"
+                        :label="item.cinemaName"
+                        :value="item.cinemaCode"
+                    ></el-option>
+                </el-select>
+                <el-select clearable v-model="query.screenName" placeholder="请选择影厅" class="mr10">
+                    <el-option
+                        v-for="item in screenInfo"
+                        :key="item.screenCode"
+                        :label="item.screenName"
+                        :value="item.screenName"
+                    ></el-option>
+                </el-select>
+                <el-select clearable v-model="query.typeCode" placeholder="请选择平台" class="mr10">
+                    <el-option
+                        v-for="item in typeInfo"
+                        :key="item.id"
+                        :label="item.value"
+                        :value="item.id"
+                    ></el-option>
+                </el-select>
                 <el-input v-model="query.filmName" placeholder="影片名称" class="handle-input mr10"></el-input>
                 <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
                 <el-button
                     type="primary"
                     @click="thirdPrice"
                     icon="el-icon-circle-plus-outline"
-                    style="margin-left: 250px"
                 >批量修改</el-button>
                 <el-button
                     type="primary"
@@ -34,8 +62,7 @@
                 header-cell-class-name="table-header"
                 @selection-change="handleSelectionChange"
             >
-                <el-table-column type="selection" width="55">
-                </el-table-column>
+                <el-table-column type="selection" width="55"></el-table-column>
                 <el-table-column prop="code" label="影院名称">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
@@ -214,10 +241,10 @@
             <el-form ref="formOne" v-model="formOne">
                 <el-form-item label="第三方售价金额" :label-width="formLabelWidth">
                     <el-input
-                            style="width: 250px"
-                            min="1"
-                            v-model="manySettlePrice"
-                            autocomplete="off"
+                        style="width: 250px"
+                        min="1"
+                        v-model="manySettlePrice"
+                        autocomplete="off"
                     ></el-input>
                 </el-form-item>
             </el-form>
@@ -239,12 +266,12 @@ export default {
     name: 'basetable',
     data() {
         return {
-            manySettlePrice:'',
-            selectIdList:[],
-            selectCodeList:[],
-            selectId:'',
+            manySettlePrice: '',
+            selectIdList: [],
+            selectCodeList: [],
+            selectId: '',
             oCinemaName: '',
-            selectCodes:'',
+            selectCodes: '',
             oCinemaCode: '',
             oScreenName: '',
             oFilmCode: '',
@@ -269,13 +296,28 @@ export default {
                 }
             ],
             cinemaInfo: [],
+            screenInfo: [],
+            typeInfo: [
+                {
+                    value: '猫眼',
+                    id: 36
+                },
+                {
+                    value: '百度糯米',
+                    id: 46
+                },
+                {
+                    value: '淘票票',
+                    id: 49
+                }
+            ],
             form: [],
             formOne: [],
             tableData: [],
             multipleSelection: [],
             delList: [],
             editVisible: false,
-            drawer:false,
+            drawer: false,
             pageTotal: 0,
             idx: -1,
             id: -1,
@@ -302,10 +344,10 @@ export default {
     methods: {
         thirdPrice() {
             //获取批量修改按钮权限
-            if(this.multipleSelection.length==0){
+            if (this.multipleSelection.length == 0) {
                 this.message = '请先勾选需要修改的影片';
                 this.open();
-            }else {
+            } else {
                 const loading = this.$loading({
                     lock: true,
                     text: 'Loading',
@@ -319,13 +361,12 @@ export default {
                         loading.close();
                         // console.log(data);
                         if (data.data.code == 'success') {
-
-                            for(let x in this.multipleSelection){
-                                this.selectIdList.push(this.multipleSelection[x].id)
-                                this.selectCodeList.push(this.multipleSelection[x].cinemaCode)
+                            for (let x in this.multipleSelection) {
+                                this.selectIdList.push(this.multipleSelection[x].id);
+                                this.selectCodeList.push(this.multipleSelection[x].cinemaCode);
                             }
-                            this.selectId=this.selectIdList.join(',');
-                            this.selectCodes=this.selectCodeList.join(',');
+                            this.selectId = this.selectIdList.join(',');
+                            this.selectCodes = this.selectCodeList.join(',');
                             console.log(this.selectId);
                             console.log(this.selectCodes);
                             this.drawer = true;
@@ -344,7 +385,7 @@ export default {
                     });
             }
         },
-        sureThirdPrice(){
+        sureThirdPrice() {
             //提交确认批量修改
             const loading = this.$loading({
                 lock: true,
@@ -354,8 +395,8 @@ export default {
                 target: document.querySelector('.div1')
             });
             var jsonArr = [];
-            jsonArr.push({ key: 'id', value: this.selectId});
-            jsonArr.push({ key: 'cinemaCode', value: this.selectCodes});
+            jsonArr.push({ key: 'id', value: this.selectId });
+            jsonArr.push({ key: 'cinemaCode', value: this.selectCodes });
             jsonArr.push({ key: 'settlePrice', value: this.manySettlePrice });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
@@ -368,9 +409,9 @@ export default {
                         console.log(data);
                         if (data.data.code == 'success') {
                             this.$message.success(`修改成功`);
-                            this.selectIdList=[];
-                            this.selectId='';
-                            this.manySettlePrice='';
+                            this.selectIdList = [];
+                            this.selectId = '';
+                            this.manySettlePrice = '';
                             this.getMenu();
                             this.drawer = false;
                         } else if (data.data.code == 'nologin') {
@@ -612,16 +653,26 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            let cinemaName = this.query.cinemaName;
+            let cinemaCode = this.query.cinemaCode;
+            let screenName = this.query.screenName;
+            let typeCode = this.query.typeCode;
             let filmName = this.query.filmName;
-            if (!cinemaName) {
-                cinemaName = '';
+            if (!cinemaCode) {
+                cinemaCode = '';
+            }
+            if (!screenName) {
+                screenName = '';
+            }
+            if (!typeCode) {
+                typeCode = '';
             }
             if (!filmName) {
                 filmName = '';
             }
             let jsonArr = [];
-            jsonArr.push({ key: 'cinemaName', value: cinemaName });
+            jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
+            jsonArr.push({ key: 'screenName', value: screenName });
+            jsonArr.push({ key: 'dataType', value: typeCode });
             jsonArr.push({ key: 'filmName', value: filmName });
             jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
             jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
@@ -640,6 +691,7 @@ export default {
                         this.query.pageNo = oData.pageNo;
                         this.query.totalCount = oData.totalCount;
                         this.query.totalPage = oData.totalPage;
+                        this.getAllCinema();
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
@@ -732,8 +784,40 @@ export default {
                 .then(data => {
                     if (data.data.code == 'success') {
                         var res = JSON.parse(Decrypt(data.data.data));
-                        console.log(res);
                         this.cinemaInfo = res;
+                    } else if (data.data.code == 'nologin') {
+                        this.message = data.data.message;
+                        this.open();
+                        this.$router.push('/login');
+                    } else {
+                        this.message = data.data.message;
+                        this.open();
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        },
+        chooseCinema(val) {
+            this.getAllScreen(val);
+        },
+
+        // 获取所有影厅
+        getAllScreen(val) {
+            if (!val) {
+                return;
+            }
+            var jsonArr = [];
+            jsonArr.push({ key: 'cinemaCode', value: val });
+            let sign = md5(preSign(jsonArr));
+            jsonArr.push({ key: 'sign', value: sign });
+            let params = ParamsAppend(jsonArr);
+            https
+                .fetchPost('/screenInfo/getScreenByCinema', params)
+                .then(data => {
+                    if (data.data.code == 'success') {
+                        var res = JSON.parse(Decrypt(data.data.data));
+                        this.screenInfo = res;
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
