@@ -109,23 +109,26 @@
                 <el-table-column prop="memo" label="消费明细">
                     <template slot-scope="scope">{{scope.row.consumeDetail}}</template>
                 </el-table-column>
+                <el-table-column prop="memo" label="消费时间">
+                    <template slot-scope="scope">{{scope.row.consumeTime}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="消费结果">
+                    <template slot-scope="scope">
+                        <el-tag v-if="!scope.row.errorMessage">消费成功</el-tag>
+                        <el-tag v-else>{{scope.row.errorMessage}}</el-tag>
+                    </template>
+                </el-table-column>
                 <el-table-column label="交易状态" align="center">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status=='1'">成功</el-tag>
                         <el-tag v-else>失败</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="memo" label="返回错误描述">
-                    <template slot-scope="scope">{{scope.row.errorMessage}}</template>
-                </el-table-column>
                 <el-table-column label="订单类型" align="center">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.orderType=='1'">购票</el-tag>
                         <el-tag v-else>卖品</el-tag>
                     </template>
-                </el-table-column>
-                <el-table-column prop="memo" label="消费时间">
-                    <template slot-scope="scope">{{scope.row.consumeTime}}</template>
                 </el-table-column>
                 <el-table-column label="操作" align="center" fixed="right">
                     <template slot-scope="scope">

@@ -120,6 +120,9 @@
                 <el-table-column prop="memo" label="充值金额">
                     <template slot-scope="scope">{{scope.row.rechargeAmount}}</template>
                 </el-table-column>
+                <el-table-column prop="memo" label="充值时间">
+                    <template slot-scope="scope">{{scope.row.payTime}}</template>
+                </el-table-column>
                 <el-table-column prop="memo" label="支付状态">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.payStatus=='0'" type="danger">未支付</el-tag>
@@ -133,9 +136,6 @@
                         <el-tag v-if="scope.row.rechargeStatus=='1'" type="success">充值成功</el-tag>
                         <el-tag v-else-if="scope.row.rechargeStatus=='2'" type="danger">充值失败</el-tag>
                     </template>
-                </el-table-column>
-                <el-table-column prop="memo" label="充值时间">
-                    <template slot-scope="scope">{{scope.row.payTime}}</template>
                 </el-table-column>
                 <el-table-column label="操作" align="center" fixed="right">
                     <template slot-scope="scope">

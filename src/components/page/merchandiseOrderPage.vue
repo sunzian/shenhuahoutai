@@ -153,14 +153,17 @@
                 <el-table-column prop="memo" label="实付价">
                     <template slot-scope="scope">{{scope.row.totalActualPrice}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="活动优惠金额">
+                <el-table-column prop="memo" label="活动优惠">
                     <template slot-scope="scope">{{scope.row.totalActivityDiscount}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="优惠券优惠金额">
+                <el-table-column prop="memo" label="优惠券优惠">
                     <template slot-scope="scope">{{scope.row.totalCouponDiscount}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="优惠券名称">
                     <template slot-scope="scope">{{scope.row.userCouponName}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="支付时间">
+                    <template slot-scope="scope">{{scope.row.payTime}}</template>
                 </el-table-column>
                 <el-table-column label="支付方式" align="center">
                     <template slot-scope="scope">
@@ -174,9 +177,6 @@
                         <el-tag v-else-if="scope.row.payStatus=='2'">支付失败</el-tag>
                         <el-tag v-else-if="scope.row.payStatus=='3'">退款成功</el-tag>
                     </template>
-                </el-table-column>
-                <el-table-column prop="memo" label="支付时间">
-                    <template slot-scope="scope">{{scope.row.payTime}}</template>
                 </el-table-column>
                 <el-table-column label="下单状态" align="center">
                     <template slot-scope="scope">

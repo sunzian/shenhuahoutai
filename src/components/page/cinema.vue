@@ -51,16 +51,10 @@
                 <el-table-column prop="name" label="影院名称" fixed>
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
-                <el-table-column prop="time" label="开场前的购票时间限制">
-                    <template slot-scope="scope">{{scope.row.buyMinutesLimit}}</template>
-                </el-table-column>
-                <el-table-column prop="time" label="开场前的退票时间限制">
-                    <template slot-scope="scope">{{scope.row.refundMinutesLimit}}</template>
-                </el-table-column>
                 <el-table-column prop="number" label="退票手续费">
                     <template slot-scope="scope">{{scope.row.refundFee}}</template>
                 </el-table-column>
-                <el-table-column prop="number" label="第三方支付代售费（微信支付）">
+                <el-table-column prop="number" label="第三方支付代售费">
                     <template slot-scope="scope">{{scope.row.thirdPartyPayCommissionFee}}</template>
                 </el-table-column>
                 <el-table-column prop="number" label="会员卡支付代售费">
@@ -72,13 +66,13 @@
                         <el-tag v-else type="danger">未开通</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="booleans" label="是否小卖配送">
+                <el-table-column prop="booleans" label="是否卖品配送">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.snackDispatcherStatus == 1" type="success">是</el-tag>
                         <el-tag v-else type="danger">否</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="booleans" label="是否可退票">
+                <el-table-column prop="booleans" label="是否支持自主退票">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.refundable == 1" type="success">是</el-tag>
                         <el-tag v-else type="danger">否</el-tag>
@@ -114,7 +108,7 @@
                         <el-tag v-else type="info">优惠后价格上报</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="booleans" label="是否开通会员卡功能">
+                <el-table-column prop="booleans" label="开通会员卡">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.openMemberCardStatus == 1" type="success">开通</el-tag>
                         <el-tag v-else type="danger">未开通</el-tag>

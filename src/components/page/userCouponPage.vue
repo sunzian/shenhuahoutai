@@ -82,18 +82,18 @@
                 <el-table-column prop="memo" label="优惠券名称">
                     <template slot-scope="scope">{{scope.row.couponName}}</template>
                 </el-table-column>
+                <el-table-column prop="memo" label="有效期开始时间">
+                    <template slot-scope="scope">{{scope.row.startTime}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="有效期结束时间">
+                    <template slot-scope="scope">{{scope.row.endTime}}</template>
+                </el-table-column>
                 <el-table-column prop="memo" label="使用状态">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status=='1'">未使用</el-tag>
                         <el-tag v-else-if="scope.row.status=='2'">已使用</el-tag>
                         <el-tag v-else-if="scope.row.status=='2'">已过期</el-tag>
                     </template>
-                </el-table-column>
-                <el-table-column prop="memo" label="开始时间">
-                    <template slot-scope="scope">{{scope.row.startTime}}</template>
-                </el-table-column>
-                <el-table-column prop="memo" label="结束时间">
-                    <template slot-scope="scope">{{scope.row.endTime}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="领取类型">
                     <template slot-scope="scope">
