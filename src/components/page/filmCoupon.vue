@@ -38,9 +38,9 @@
                 <el-table-column label="卡券名称">
                     <template slot-scope="scope">{{scope.row.name}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="有效期">
+                <!-- <el-table-column prop="memo" label="有效期">
                     <template slot-scope="scope">{{scope.row.startDate}}至{{scope.row.endDate}}</template>
-                </el-table-column>
+                </el-table-column> -->
                 <!-- <el-table-column prop="sort" label="有效天数">
                     <template slot-scope="scope">{{scope.row.publishDate}}</template>
                 </el-table-column>-->
@@ -186,7 +186,7 @@
                         >删除</span>
                     </div>
                 </el-form-item>
-                <el-form-item label="有效期：" :label-width="formLabelWidth" prop="date1">
+                <!-- <el-form-item label="有效期：" :label-width="formLabelWidth" prop="date1">
                     <el-date-picker
                         v-model="oForm.startDate"
                         type="datetime"
@@ -201,7 +201,7 @@
                         value-format="yyyy-MM-dd HH:mm:ss"
                         format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item label="支付类型：" :label-width="formLabelWidth" prop="date2">
                     <el-radio-group v-model="oForm.validPayType">
                         <el-radio label="0">全部</el-radio>
@@ -366,7 +366,7 @@
                         >删除</span>
                     </div>
                 </el-form-item>
-                <el-form-item label="有效期：" :label-width="formLabelWidth" prop="date1">
+                <!-- <el-form-item label="有效期：" :label-width="formLabelWidth" prop="date1">
                     <el-date-picker
                             v-model="oStartDate"
                             type="datetime"
@@ -381,7 +381,7 @@
                             value-format="yyyy-MM-dd HH:mm:ss"
                             format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item label="支付类型：" :label-width="formLabelWidth" prop="date2">
                     <el-radio-group v-model="oValidPayType">
                         <el-radio label="0">全部</el-radio>
@@ -685,8 +685,8 @@ export default {
             jsonArr.push({ key: 'screenCode', value: this.selectScreenCode });
             jsonArr.push({ key: 'selectFilmType', value: this.oForm.selectFilmType });
             jsonArr.push({ key: 'filmCode', value: this.oForm.filmCode });
-            jsonArr.push({ key: 'startDate', value: this.oForm.startDate });
-            jsonArr.push({ key: 'endDate', value: this.oForm.endDate });
+            // jsonArr.push({ key: 'startDate', value: this.oForm.startDate });
+            // jsonArr.push({ key: 'endDate', value: this.oForm.endDate });
             jsonArr.push({ key: 'reduceType', value: this.oForm.reduceType });
             jsonArr.push({ key: 'validPayType', value: this.oForm.validPayType });
             // jsonArr.push({ key: 'achieveMoney', value: this.oForm.achieveMoney });
@@ -721,8 +721,8 @@ export default {
                             this.oForm.cinemaName = '';
                             this.oForm.merchandiseCode = [];
                             this.oForm.merchandiseName = '';
-                            this.oForm.startDate = '';
-                            this.oForm.endDate = '';
+                            // this.oForm.startDate = '';
+                            // this.oForm.endDate = '';
                             this.oForm.validPayType = '';
                             this.oForm.reduceType = '';
                             this.oForm.achieveMoney = '';
@@ -863,7 +863,7 @@ export default {
                         this.oCinemaCode = JSON.parse(Decrypt(data.data.data)).coupon.cinemaCodes;
                         this.oFilmFormatName = JSON.parse(Decrypt(data.data.data)).coupon.filmFormatName;
                         this.oName = JSON.parse(Decrypt(data.data.data)).coupon.name;
-                        this.oStartDate = JSON.parse(Decrypt(data.data.data)).coupon.startDate;
+                        // this.oStartDate = JSON.parse(Decrypt(data.data.data)).coupon.startDate;
                         if(JSON.parse(Decrypt(data.data.data)).coupon.exceptWeekDay){
                             this.oCheckedDays = JSON.parse(Decrypt(data.data.data)).coupon.exceptWeekDay.split(",");
                         }
@@ -873,7 +873,7 @@ export default {
                         if(JSON.parse(Decrypt(data.data.data)).coupon.filmFormatCode){
                             this.oFilmFormatCode = JSON.parse(Decrypt(data.data.data)).coupon.filmFormatCode.split(",");
                         }
-                        this.oEndDate = JSON.parse(Decrypt(data.data.data)).coupon.endDate;
+                        // this.oEndDate = JSON.parse(Decrypt(data.data.data)).coupon.endDate;
                         if (JSON.parse(Decrypt(data.data.data)).coupon.validPayType == 0) {
                             this.oValidPayType = '0';
                         }
@@ -976,8 +976,8 @@ export default {
             jsonArr.push({ key: 'selectHallType', value: this.oSelectHallType });
             jsonArr.push({ key: 'screenCode', value: this.oScreenCode.join(',') });
             jsonArr.push({ key: 'discountMoney', value: this.oDiscountMoney });
-            jsonArr.push({ key: 'startDate', value: this.oStartDate });
-            jsonArr.push({ key: 'endDate', value: this.oEndDate });
+            // jsonArr.push({ key: 'startDate', value: this.oStartDate });
+            // jsonArr.push({ key: 'endDate', value: this.oEndDate });
             jsonArr.push({ key: 'status', value: this.oStatus });
             jsonArr.push({ key: 'couponDesc', value: this.oCouponDesc });
             jsonArr.push({ key: 'holidayValid', value: this.oHolidayValid });
