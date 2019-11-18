@@ -135,11 +135,21 @@
                     <el-input style="width: 250px" v-model="oForm.name" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="分类图片" :label-width="formLabelWidth">
+                    <el-popover placement="right" title trigger="hover">
+                        <img style="width:400px" :src="form.imageUrl" />
+                        <img
+                            slot="reference"
+                            :src="form.imageUrl"
+                            :alt="form.imageUrl"
+                            style="max-height: 50px;max-width: 130px"
+                        />
+                    </el-popover>
                     <el-upload
                         :before-upload="beforeUpload"
                         :data="type"
                         class="upload-demo"
                         drag
+                        ref="download"
                         action="/api/upload/uploadImage"
                         :on-success="onSuccess"
                         multiple
@@ -173,6 +183,7 @@
                         :data="type"
                         class="upload-demo"
                         drag
+                        ref="upload"
                         action="/api/upload/uploadImage"
                         :on-success="unSuccess"
                         multiple
@@ -645,7 +656,12 @@ export default {
         },
         onSuccess(data) {
             //上传文件 登录超时
-            // console.log(data);
+            if (data.status == '-1') {
+                this.message = data.message;
+                this.open();
+                this.$refs.download.clearFiles();
+                return;
+            }
             this.oForm.image_url = data.data;
             if (data.code == 'nologin') {
                 this.message = data.message;
@@ -655,7 +671,12 @@ export default {
         },
         unSuccess(data) {
             //修改上传文件 登录超时
-            // console.log(data);
+            if (data.status == '-1') {
+                this.message = data.message;
+                this.open();
+                this.$refs.upload.clearFiles();
+                return;
+            }
             this.form.image_url = data.data;
             if (data.code == 'nologin') {
                 this.message = data.message;

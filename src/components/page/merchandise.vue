@@ -155,11 +155,21 @@
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="商品图片" :label-width="formLabelWidth">
+                    <el-popover placement="right" title trigger="hover">
+                        <img style="width:400px" :src="form.imageUrl" />
+                        <img
+                            slot="reference"
+                            :src="form.imageUrl"
+                            :alt="form.imageUrl"
+                            style="max-height: 50px;max-width: 130px"
+                        />
+                    </el-popover>
                     <el-upload
                         :before-upload="beforeUpload"
                         :data="type"
                         class="upload-demo"
                         drag
+                        ref="upload"
                         action="/api/upload/uploadImage"
                         :on-success="unSuccess"
                         multiple
@@ -169,7 +179,7 @@
                             将文件拖到此处，或
                             <em>点击上传</em>
                         </div>
-                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
+                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过300kb</div>
                     </el-upload>
                 </el-form-item>
                 <el-form-item label="商品描述" :label-width="formLabelWidth">
@@ -677,7 +687,12 @@ export default {
         },
         unSuccess(data) {
             //修改上传文件 登录超时
-            // console.log(data);
+            if (data.status == '-1') {
+                this.message = data.message;
+                this.open();
+                this.$refs.upload.clearFiles();
+                return;
+            }
             this.form.image_url = data.data;
             if (data.code == 'nologin') {
                 this.message = data.message;

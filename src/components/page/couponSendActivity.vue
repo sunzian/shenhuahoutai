@@ -122,7 +122,7 @@
                             class="upload-demo"
                             drag
                             action="/api/upload/uploadImage"
-                            :on-success="unSuccess"
+                            :on-success="onSuccess"
                             multiple
                     >
                         <i class="el-icon-upload"></i>
@@ -130,7 +130,7 @@
                             将文件拖到此处，或
                             <em>点击上传</em>
                         </div>
-                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
+                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过300kb</div>
                     </el-upload>
                 </el-form-item>
                 <el-form-item label="选择影院：" :label-width="formLabelWidth">
@@ -240,10 +240,19 @@
                 <el-input style="width: 250px" min="1" v-model="form.name" autocomplete="off"></el-input>
             </el-form-item>
                 <el-form-item label="活动图片：" :label-width="formLabelWidth">
+                    <el-popover placement="right" title trigger="hover">
+                        <img style="width: 400px" :src="oActivityImageUrl" />
+                        <img
+                            slot="reference"
+                            :src="oActivityImageUrl"
+                            :alt="oActivityImageUrl"
+                            style="max-height: 50px;max-width: 130px"
+                        />
+                    </el-popover>
                     <el-upload
                             :before-upload="beforeUpload"
                             :data="imgType"
-                            ref="download"
+                            ref="upload"
                             class="upload-demo"
                             drag
                             action="/api/upload/uploadImage"
@@ -255,7 +264,7 @@
                             将文件拖到此处，或
                             <em>点击上传</em>
                         </div>
-                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
+                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过300kb</div>
                     </el-upload>
                 </el-form-item>
             <el-form-item label="选择影院：" :label-width="formLabelWidth">
@@ -514,11 +523,25 @@
                 //上传之前
                 this.imgType.type = EncryptReplace('activity');
             },
-            unSuccess(data) {
+            onSuccess(data) {
                 if (data.status == '-1') {
                 this.message = data.message;
                 this.open();
                 this.$refs.download.clearFiles();
+                return;
+            }
+                this.oActivityImageUrl = data.data;
+                if (data.code == 'nologin') {
+                    this.message = data.message;
+                    this.open();
+                    this.$router.push('/login');
+                }
+            },
+            unSuccess(data) {
+                if (data.status == '-1') {
+                this.message = data.message;
+                this.open();
+                this.$refs.upload.clearFiles();
                 return;
             }
                 this.oActivityImageUrl = data.data;
@@ -554,6 +577,9 @@
                             }
                             this.couponId = '';
                             this.groupName = '';
+                            if (this.$refs.download) {
+                                this.$refs.download.clearFiles();//清除已上传文件
+                            }
                             this.dialogFormVisible = true;
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
@@ -707,8 +733,8 @@
                         if (data.data.code == 'success') {
                             console.log(JSON.parse(Decrypt(data.data.data)));
                             this.editVisible = true;
-                            this.couponId=JSON.parse(Decrypt(data.data.data)).couponGroupId
-                            // console.log(this.couponId);
+                            this.couponId=JSON.parse(Decrypt(data.data.data)).couponGroupId;
+                            this.oActivityImageUrl=JSON.parse(Decrypt(data.data.data)).activityImageUrl;
                             //获取券包
                             let jsonArr=[]
                             jsonArr.push({ key: 'cinemaCodes', value: this.form.cinemaCode });
@@ -811,7 +837,7 @@
                         console.log(data);
                         // console.log(JSON.parse(Decrypt(data.data.data)));
                         if (data.data.code == 'success') {
-                            this.$refs.download.clearFiles();//清除已上传文件
+                            this.$refs.upload.clearFiles();//清除已上传文件
                             this.$message.success(`编辑成功`);
                             this.getMenu();
                         } else if (data.data.code == 'nologin') {

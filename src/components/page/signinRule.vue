@@ -61,7 +61,7 @@
                     ></el-input>
                 </el-form-item>
                 <el-form-item v-if="oContinuousDays==1" label="签到规则" :label-width="formLabelWidth">
-                <el-input style="width: 250px" v-model="oSignTips" autocomplete="off"></el-input>
+                <el-input style="width: 250px;height: 200px;" type="textarea" v-model="oSignTips" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item v-if="oContinuousDays==7" label="是否设置连续7天额外奖励" :label-width="formLabelWidth">
                     <el-radio-group v-model="oExtraFlag">

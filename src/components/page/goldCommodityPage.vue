@@ -433,6 +433,7 @@
                         class="upload-demo"
                         drag
                         action="/api/upload/uploadImage"
+                        ref="download"
                         :on-success="unSuccess"
                         multiple
                     >
@@ -441,7 +442,7 @@
                             将文件拖到此处，或
                             <em>点击上传</em>
                         </div>
-                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
+                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过300kb</div>
                     </el-upload>
                 </el-form-item>
                 <el-form-item label="兑换须知" :label-width="formLabelWidth">
@@ -1145,6 +1146,9 @@ export default {
                             this.form.image_url = JSON.parse(Decrypt(data.data.data)).goldCommodity.imageUrl;
                             this.form.memo = JSON.parse(Decrypt(data.data.data)).goldCommodity.memo;
                             this.form.store = JSON.parse(Decrypt(data.data.data)).goldCommodity.store;
+                            this.form.expireDay = JSON.parse(Decrypt(data.data.data)).goldCommodity.expireDay;
+                            this.form.originalPrice = JSON.parse(Decrypt(data.data.data)).goldCommodity.originalPrice;
+                            this.form.details = JSON.parse(Decrypt(data.data.data)).goldCommodity.details;
                             this.form.alredyChangedNumber = JSON.parse(Decrypt(data.data.data)).goldCommodity.alredyChangedNumber;
                             this.form.gold = JSON.parse(Decrypt(data.data.data)).goldCommodity.gold;
                             this.form.money = JSON.parse(Decrypt(data.data.data)).goldCommodity.money;
@@ -1275,6 +1279,7 @@ export default {
                         // console.log(JSON.parse(Decrypt(data.data.data)));
                         if (data.data.code == 'success') {
                             this.$message.success(`编辑成功`);
+                            this.$refs.download.clearFiles();
                             this.getMenu();
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
@@ -1366,7 +1371,12 @@ export default {
         },
         onSuccess(data) {
             //上传文件 登录超时
-            // console.log(data);
+            if (data.status == '-1') {
+                this.message = data.message;
+                this.open();
+                this.$refs.upload.clearFiles();
+                return;
+            }
             this.oForm.image_url = data.data;
             if (data.code == 'nologin') {
                 this.message = data.message;
@@ -1376,7 +1386,12 @@ export default {
         },
         unSuccess(data) {
             //修改上传文件 登录超时
-            // console.log(data);
+            if (data.status == '-1') {
+                this.message = data.message;
+                this.open();
+                this.$refs.download.clearFiles();
+                return;
+            }
             this.form.image_url = data.data;
             if (data.code == 'nologin') {
                 this.message = data.message;
