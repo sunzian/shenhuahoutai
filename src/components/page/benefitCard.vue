@@ -1000,10 +1000,10 @@
             </div>
         </el-dialog>
         <!-- 选择优惠券弹出窗 -->
-        <el-dialog title="选择优惠券" :visible.sync="drawerCoupon">
+        <el-dialog title="选择券包" :visible.sync="drawerCoupon">
             <div class="container">
                 <div class="handle-box">
-                    <el-input v-model="couponName" placeholder="券包名称" class="handle-input mr10"></el-input>
+                    <el-input v-model="groupName" placeholder="券包名称" class="handle-input mr10"></el-input>
                     <el-button type="primary" icon="el-icon-search" @click="changeCoupon">搜索</el-button>
                 </div>
                 <el-table
@@ -1038,9 +1038,9 @@
                             :current-page="query.pageNo"
                             :page-size="query.pageSize"
                             :total="query.totalCount"
-                            @current-change="currentChange"
-                            @prev-click="prev"
-                            @next-click="next"
+                            @current-change="oCurrentChange"
+                            @prev-click="oPrev"
+                            @next-click="oNext"
                     ></el-pagination>
                 </div>
             </div>
@@ -1263,9 +1263,15 @@
             },
             // 更换券包
             changeCoupon() {
+                if(!this.groupName){
+                    this.groupName=''
+                }
                 let jsonArr = [];
                 jsonArr.push({ key: 'cinemaCodes', value: this.oForm.cinemaCode });
+                jsonArr.push({ key: 'groupName', value: this.groupName });
                 jsonArr.push({ key: 'status', value: 1 });
+                jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
+                jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
                 var params = ParamsAppend(jsonArr);
@@ -1280,6 +1286,10 @@
                             return;
                         }
                         this.couponList = res.data;
+                        this.query.pageSize = res.pageSize;
+                        this.query.pageNo = res.pageNo;
+                        this.query.totalCount = res.totalCount;
+                        this.query.totalPage = res.totalPage;
                         this.drawerCoupon = true;
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
@@ -2105,6 +2115,21 @@
                 //分页按钮下一页
                 this.query.pageNo++;
                 this.getMenu();
+            },
+            oCurrentChange(val) {
+                //点击选择具体页数
+                this.query.pageNo = val;
+                this.changeCoupon();
+            },
+            oPrev() {
+                //分页按钮上一页
+                this.query.pageNo--;
+                this.changeCoupon();
+            },
+            oNext() {
+                //分页按钮下一页
+                this.query.pageNo++;
+                this.changeCoupon();
             },
             getCurrentRow(index){//影片弹出框index
                 this.sellIndex=index
