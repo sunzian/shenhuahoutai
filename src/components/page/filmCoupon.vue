@@ -9,7 +9,14 @@
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-input v-model="query.name" placeholder="选择影院" class="handle-input mr10"></el-input>
+                <el-select clearable v-model="query.cinemaCode" placeholder="请选择影院" class="mr10">
+                    <el-option
+                        v-for="item in cinemaData"
+                        :key="item.cinemaCode"
+                        :label="item.cinemaName"
+                        :value="item.cinemaCode"
+                    ></el-option>
+                </el-select>
                 <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
                 <el-button
                     type="primary"
@@ -599,6 +606,7 @@ export default {
             selectFilm: {},
             selectFormatCode: {},
             cinemaInfo: [],
+            cinemaData: [],
             screenInfo: [],
             filmInfo: [],
             value: '',
@@ -1083,20 +1091,17 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            let name = this.query.name;
-            let status = this.query.status;
-            if (!name) {
-                name = '';
-            }
-            if (!status) {
-                status = '';
+            let cinemaCode = this.query.cinemaCode;
+            if (!cinemaCode) {
+                cinemaCode = '';
             }
             let jsonArr = [];
+            jsonArr.push({ key: 'cinemaCodes', value: cinemaCode });
             jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
             jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
-            // jsonArr.push({ key: 'filmName', value: name });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
+            console.log(jsonArr)
             var params = ParamsAppend(jsonArr);
             https.fetchPost('/filmCoupon/filmCouponPage', params).then(data => {
                     loading.close();
@@ -1119,6 +1124,7 @@ export default {
                         this.query.pageNo = oData.pageResult.pageNo;
                         this.query.totalCount = oData.pageResult.totalCount;
                         this.query.totalPage = oData.pageResult.totalPage;
+                        this.getAllCinema();
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
@@ -1156,6 +1162,28 @@ export default {
         selectDay(val) {
             // console.log(val)
             this.checkedDays = val.join(',');
+        },
+        // 获取所有影院
+        getAllCinema() {
+            https
+                .fetchPost('/cinema/getAllCinema')
+                .then(data => {
+                    if (data.data.code == 'success') {
+                        var res = JSON.parse(Decrypt(data.data.data));
+                        console.log(res)
+                        this.cinemaData = res;
+                    } else if (data.data.code == 'nologin') {
+                        this.message = data.data.message;
+                        this.open();
+                        this.$router.push('/login');
+                    } else {
+                        this.message = data.data.message;
+                        this.open();
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                });
         },
         // 获取所选影院影厅
         getAllScreen(value) {
