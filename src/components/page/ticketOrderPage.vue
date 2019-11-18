@@ -102,58 +102,58 @@
                 >搜索</el-button>
             </div>
             <div class="handle-box">
-                总票数：
+                票数：
                 <el-input
-                    style="width: 150px"
+                    style="width: 100px"
                     v-model="totalData.totalTicketNumber"
                     :disabled="true"
                     autocomplete="off"
                     class="mr10"
-                ></el-input>总原价：
+                ></el-input>原价：
                 <el-input
-                    style="width: 150px"
+                    style="width: 100px"
                     v-model="totalData.totalOriginalPrice"
                     :disabled="true"
                     autocomplete="off"
                     class="mr10"
-                ></el-input>总实付价：
+                ></el-input>总实付：
                 <el-input
-                    style="width: 150px"
+                    style="width: 100px"
                     v-model="totalData.totalActualPrice"
                     :disabled="true"
                     autocomplete="off"
                     class="mr10"
-                ></el-input>总优惠券金额：
+                ></el-input>优惠券金额：
                 <el-input
-                    style="width: 150px"
+                    style="width: 100px"
                     v-model="totalData.totalCouponDiscount"
                     :disabled="true"
                     autocomplete="off"
                     class="mr10"
-                ></el-input>总活动优惠金额：
+                ></el-input>活动优惠：
                 <el-input
-                    style="width: 150px"
+                    style="width: 100px"
                     v-model="totalData.totalActivityDiscount"
                     :disabled="true"
                     autocomplete="off"
                     class="mr10"
-                ></el-input>总平台代售费：
+                ></el-input>平台代售费：
                 <el-input
-                    style="width: 150px"
+                    style="width: 100px"
                     v-model="totalData.totalPlatHandFee"
                     :disabled="true"
                     autocomplete="off"
                     class="mr10"
-                ></el-input>总回传金额：
+                ></el-input>回传金额：
                 <el-input
-                    style="width: 150px"
+                    style="width: 100px"
                     v-model="totalData.totalSubmitPrice"
                     :disabled="true"
                     autocomplete="off"
                     class="mr10"
-                ></el-input>总上报金额：
+                ></el-input>上报金额：
                 <el-input
-                    style="width: 150px"
+                    style="width: 100px"
                     v-model="totalData.totalReportPrice"
                     :disabled="true"
                     autocomplete="off"
@@ -190,10 +190,10 @@
                 <el-table-column prop="memo" label="座位">
                     <template slot-scope="scope">{{scope.row.seatName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="影票原价">
+                <el-table-column prop="memo" label="原价">
                     <template slot-scope="scope">{{scope.row.totalOriginalPrice}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="影票实付价">
+                <el-table-column prop="memo" label="实付价">
                     <template slot-scope="scope">{{scope.row.totalActualPrice}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="服务费">
@@ -202,13 +202,13 @@
                 <el-table-column prop="memo" label="平台代售费">
                     <template slot-scope="scope">{{scope.row.totalPlatHandFee}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="活动优惠金额">
+                <el-table-column prop="memo" label="活动优惠">
                     <template slot-scope="scope">{{scope.row.totalActivityDiscount}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="优惠券优惠金额">
+                <el-table-column prop="memo" label="优惠券优惠">
                     <template slot-scope="scope">{{scope.row.totalCouponDiscount}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="影票最低金额">
+                <el-table-column prop="memo" label="影票最低票价">
                     <template slot-scope="scope">{{scope.row.totalLowestPrice}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="回传金额">
@@ -216,6 +216,9 @@
                 </el-table-column>
                 <el-table-column prop="memo" label="上报金额">
                     <template slot-scope="scope">{{scope.row.totalReportPrice}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="支付时间">
+                    <template slot-scope="scope">{{scope.row.payTime}}</template>
                 </el-table-column>
                 <el-table-column label="支付方式" align="center">
                     <template slot-scope="scope">
@@ -230,9 +233,6 @@
                         <el-tag v-else-if="scope.row.payStatus=='2'" type="danger">支付失败</el-tag>
                         <el-tag v-else-if="scope.row.payStatus=='3'" type="success">退款成功</el-tag>
                     </template>
-                </el-table-column>
-                <el-table-column prop="memo" label="支付时间">
-                    <template slot-scope="scope">{{scope.row.payTime}}</template>
                 </el-table-column>
                 <el-table-column label="下单状态" align="center">
                     <template slot-scope="scope">

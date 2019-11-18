@@ -84,8 +84,11 @@
                 <el-table-column prop="memo" label="支付金币数量">
                     <template slot-scope="scope">{{scope.row.gold}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="支付rmb数量">
+                <el-table-column prop="memo" label="支付金额">
                     <template slot-scope="scope">{{scope.row.money}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="支付时间">
+                    <template slot-scope="scope">{{scope.row.payTime}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="领取状态">
                     <template slot-scope="scope">
@@ -103,9 +106,6 @@
                         <el-tag v-else-if="scope.row. payStatus=='1'">支付成功</el-tag>
                         <el-tag v-else-if="scope.row. payStatus=='2'">支付失败</el-tag>
                     </template>
-                </el-table-column>
-                <el-table-column prop="memo" label="支付时间">
-                    <template slot-scope="scope">{{scope.row.payTime}}</template>
                 </el-table-column>
                 <!-- <el-table-column label="退款状态" align="center">
                     <template slot-scope="scope">
