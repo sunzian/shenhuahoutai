@@ -9,8 +9,8 @@
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-input placeholder="订单号" style="width: 150px" v-model="query.orderNo" autocomplete="off"></el-input>
-                <el-input placeholder="手机号" style="width: 150px" v-model="query.mobile" autocomplete="off"></el-input>
+                <el-input placeholder="订单号" class="mr10" v-model="query.orderNo" autocomplete="off"></el-input>
+                <el-input placeholder="手机号" class="mr10" v-model="query.mobile" autocomplete="off"></el-input>
                 <el-select clearable v-model="query.changeType" placeholder="兑换方式" class="handle-select mr10">
                     <el-option key="1" label="纯金币兑换" value="1"></el-option>
                     <el-option key="2" label="纯RMB兑换" value="2"></el-option>
@@ -32,22 +32,22 @@
                     <el-option key="2" label="退款失败" value="2"></el-option>
                 </el-select>
                 <el-date-picker
-                        style="width: 200px;"
+                        class="mr10"
                         v-model="query.startDate"
                         type="datetime"
                         value-format="yyyy-MM-dd HH:mm:ss"
                         format="yyyy-MM-dd HH:mm:ss"
-                        placeholder="开始时间">
-                </el-date-picker>至
+                        placeholder="开始时间（起）">
+                </el-date-picker>
                 <el-date-picker
-                        style="width: 200px;"
+                        class="mr10"
                         v-model="query.endDate"
                         type="datetime"
                         value-format="yyyy-MM-dd HH:mm:ss"
                         format="yyyy-MM-dd HH:mm:ss"
-                        placeholder="结束时间">
+                        placeholder="结束时间（止）">
                 </el-date-picker>
-                <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
+                <el-button  style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
             </div>
             <div class="handle-box">
                 总支付金币<el-input style="width: 150px" v-model="totalData.totalGold" :disabled="true"  autocomplete="off"></el-input>
@@ -435,26 +435,16 @@
 
 <style scoped>
     .handle-box {
+        width: 100%;
         margin-bottom: 20px;
         font-size: 14px;
-    }
-
-    .handle-select {
-        width: 120px;
-    }
-
-    .handle-input {
-        width: 300px;
-        display: inline-block;
     }
     .table {
         width: 100%;
         font-size: 14px;
     }
-    .red {
-        color: #ff0000;
-    }
     .mr10 {
+        width: 16%;
         margin-right: 10px;
     }
 </style>
