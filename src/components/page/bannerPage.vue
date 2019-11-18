@@ -488,44 +488,44 @@ export default {
             bannerType: [
                 {
                     value: '1',
-                    label: '卖品首页'
+                    label: '卖品首页 建议大小750*360'
                 },
                 {
                     value: '2',
-                    label: '积分商城首页'
+                    label: '积分商城首页 建议大小710*300'
                 },
                 {
                     value: '3',
-                    label: '个人中心首页'
+                    label: '个人中心首页 建议大小750*360'
                 },
                 {
                     value: '4',
-                    label: '支付成功页'
+                    label: '支付成功页 建议大小670*160'
                 },
                 {
                     value: '5',
-                    label: '放映厅首页'
+                    label: '放映厅首页 建议大小750*360'
                 },
                 {
                     value: '6',
-                    label: '首页广告弹窗'
+                    label: '首页广告弹窗 建议大小520*690'
                 },
                 {
                     value: '7',
-                    label: '今日大牌'
+                    label: '今日大牌 建议大小670*200'
                 },
                 {
                     value: '8',
-                    label: '签到送积分'
+                    label: '签到送积分 建议大小670*200'
                 },
                 {
                     value: '9',
-                    label: '分享得金币'
+                    label: '分享得金币 建议大小670*200'
                 },
-                {
-                    value: '10',
-                    label: '积分换金币'
-                }
+                // {
+                //     value: '10',
+                //     label: '积分换金币'
+                // }
             ],
             tabType: [
                 {
