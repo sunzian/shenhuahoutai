@@ -169,7 +169,7 @@
                         :label-width="formLabelWidth"
                         v-if="selectedSell.length>0&&oForm.selectFilmType==1"
                 >
-                    <div v-for="(item, index) in selectedSell" style="margin-bottom: 5px">
+                    <div v-for="(item, index) in selectedSell" style="margin-bottom: 5px" :key="index">
                         <el-input
                                 style="width: 250px"
                                 v-model="item.merchandiseName"
@@ -246,7 +246,7 @@
                         label="所选时间段："
                         :label-width="formLabelWidth"
                         v-if="dateInfo.length>0">
-                    <div v-for="(item, index) in dateInfo">
+                    <div v-for="(item, index) in dateInfo" :key="index">
                         {{item}}
                         <span
                                 style="color:red;cursor: pointer;"
@@ -419,7 +419,7 @@
                         :label-width="formLabelWidth"
                         v-if="selectedSell.length>0&&oSelectMerchandiseType==1"
                 >
-                    <div v-for="(item, index) in selectedSell" style="margin-bottom: 5px">
+                    <div v-for="(item, index) in selectedSell" style="margin-bottom: 5px" :key="index">
                         <el-input
                                 style="width: 250px"
                                 v-model="item.merchandiseName"
@@ -655,7 +655,7 @@
                 message: '', //弹出框消息
                 query: {
                     pageNo: 1,
-                    pageSize: 10
+                    pageSize: 15
                 },
                 restaurants: [],
                 merSelect:[],

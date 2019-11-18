@@ -179,7 +179,7 @@
                             将文件拖到此处，或
                             <em>点击上传</em>
                         </div>
-                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过300kb</div>
+                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过300kb 建议尺寸300*240或按比例上传</div>
                     </el-upload>
                 </el-form-item>
                 <el-form-item label="商品描述" :label-width="formLabelWidth">
@@ -260,7 +260,7 @@ export default {
             message: '', //弹出框消息
             query: {
                 pageNo: 1,
-                pageSize: 10
+                pageSize: 15
             },
             tableData: [],
             oTableData: [],
@@ -490,7 +490,7 @@ export default {
                 jsonArr.push({ key: 'sign', value: sign });
                 var params = ParamsAppend(jsonArr);
                 https
-                    .fetchPost('/cinema//myCinemaPage', params)
+                    .fetchPost('/cinema/myCinemaPage', params)
                     .then(data => {
                         loading.close();
                         console.log(data);

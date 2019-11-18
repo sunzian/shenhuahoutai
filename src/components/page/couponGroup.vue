@@ -118,7 +118,7 @@
                     :label-width="formLabelWidth"
                     v-if="couponInfo.length>0"
                 >
-                    <div v-for="(item, index) in couponInfo">
+                    <div v-for="(item, index) in couponInfo" :key="index">
                         {{item.value}}
                         &nbsp;&nbsp;&nbsp;&nbsp;
                         数量：{{item.number}}
@@ -157,7 +157,7 @@
                     <el-input style="width: 75px" v-model="oGroupName" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="券包优惠券：" :label-width="formLabelWidth">
-                    <div v-for="(item, index) in couponList">
+                    <div v-for="(item, index) in couponList" :key="index">
                         <div v-if="item.number > 0">
                             优惠券名称：&nbsp;&nbsp;
                             <span>{{item.couponName}}</span>&nbsp;&nbsp;&nbsp;&nbsp;
@@ -200,7 +200,7 @@ export default {
             message: '', //弹出框消息
             query: {
                 pageNo: 1,
-                pageSize: 10
+                pageSize: 15
             },
             restaurants: [],
             tableData: [],

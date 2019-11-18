@@ -136,11 +136,11 @@
                 </el-form-item>
                 <el-form-item label="分类图片" :label-width="formLabelWidth">
                     <el-popover placement="right" title trigger="hover">
-                        <img style="width:400px" :src="form.imageUrl" />
+                        <img style="width: 400px" :src="oForm.image_url" />
                         <img
                             slot="reference"
-                            :src="form.imageUrl"
-                            :alt="form.imageUrl"
+                            :src="oForm.image_url"
+                            :alt="oForm.image_url"
                             style="max-height: 50px;max-width: 130px"
                         />
                     </el-popover>
@@ -159,7 +159,7 @@
                             将文件拖到此处，或
                             <em>点击上传</em>
                         </div>
-                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
+                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过300kb 建议尺寸120*120或按比例上传</div>
                     </el-upload>
                 </el-form-item>
                 <el-form-item label="排序" :label-width="formLabelWidth">
@@ -178,6 +178,15 @@
                     <el-input style="width: 250px" v-model="form.typeName" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="分类图片" :label-width="formLabelWidth">
+                    <el-popover placement="right" title trigger="hover">
+                        <img style="width: 400px" :src="form.imageUrl" />
+                        <img
+                            slot="reference"
+                            :src="form.imageUrl"
+                            :alt="form.imageUrl"
+                            style="max-height: 50px;max-width: 130px"
+                        />
+                    </el-popover>
                     <el-upload
                         :before-upload="beforeUpload"
                         :data="type"
@@ -193,7 +202,7 @@
                             将文件拖到此处，或
                             <em>点击上传</em>
                         </div>
-                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
+                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过300kb 建议尺寸120*120或按比例上传</div>
                     </el-upload>
                 </el-form-item>
                 <el-form-item label="展示顺序" :label-width="formLabelWidth">
@@ -227,7 +236,7 @@ export default {
             message: '', //弹出框消息
             query: {
                 pageNo: 1,
-                pageSize: 10
+                pageSize: 15
             },
             oForm: {
                 name: '',
@@ -291,6 +300,9 @@ export default {
                         console.log(data);
                         if (data.data.code == 'success') {
                             this.oForm = [];
+                            if (this.$refs.download) {
+                                this.$refs.download.clearFiles();
+                            }
                             this.dialogFormVisible = true;
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
@@ -336,6 +348,7 @@ export default {
                             if (data.data.code == 'success') {
                                 this.dialogFormVisible = false;
                                 this.$message.success(`新增成功`);
+                                this.$refs.download.clearFiles();
                                 this.oForm.name = '';
                                 this.oForm.value = '';
                                 this.oForm.memo = '';
@@ -523,7 +536,7 @@ export default {
                 jsonArr.push({ key: 'sign', value: sign });
                 var params = ParamsAppend(jsonArr);
                 https
-                    .fetchPost('/cinema//myCinemaPage', params)
+                    .fetchPost('/cinema/myCinemaPage', params)
                     .then(data => {
                         loading.close();
                         console.log(data);

@@ -117,7 +117,7 @@
                     :label-width="formLabelWidth"
                     v-if="directorList.length>0"
                 >
-                    <div v-for="(item, index) in directorList">
+                    <div v-for="(item, index) in directorList" :key="index">
                         <el-popover
                                 placement="right"
                                 title=""
@@ -136,7 +136,7 @@
                     <el-button type="primary" @click="getAllActor">选择演员</el-button>
                 </el-form-item>
                 <el-form-item label="已选演员" :label-width="formLabelWidth" v-if="actorList.length>0">
-                    <div v-for="(item, index) in actorList">
+                    <div v-for="(item, index) in actorList" :key="index">
                         <el-popover
                                 placement="right"
                                 title=""
@@ -188,7 +188,7 @@
                         list-type="picture"
                     >
                         <el-button size="small" type="primary">点击上传</el-button>
-                        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+                        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过300kb 建议尺寸140*195或按比例上传</div>
                     </el-upload>
                 </el-form-item>
                 <el-form-item label="影片剧照" :label-width="formLabelWidth">
@@ -270,7 +270,7 @@
                     <el-button type="primary" @click="getAllDirector">选择导演</el-button>
                 </el-form-item>
                 <el-form-item label="已选导演" :label-width="formLabelWidth">
-                    <div v-for="(item, index) in directorList">
+                    <div v-for="(item, index) in directorList" :key="index">
                         <el-popover
                                 placement="right"
                                 title=""
@@ -289,7 +289,7 @@
                     <el-button type="primary" @click="getAllActor">选择演员</el-button>
                 </el-form-item>
                 <el-form-item label="已选演员" :label-width="formLabelWidth">
-                    <div v-for="(item, index) in actorList">
+                    <div v-for="(item, index) in actorList" :key="index">
                         <el-popover
                                 placement="right"
                                 title=""
@@ -351,11 +351,11 @@
                         list-type="picture"
                     >
                         <el-button size="small" type="primary">点击上传修改</el-button>
-                        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+                        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过300kb 建议尺寸140*195或按比例上传</div>
                     </el-upload>
                 </el-form-item>
                 <el-form-item label="影片剧照" :label-width="formLabelWidth">
-                    <el-popover placement="right" title trigger="hover" v-for="item in oStagePhotoList">
+                    <el-popover placement="right" title trigger="hover" v-for="item in oStagePhotoList" :key="item">
                         <img style="width: 400px" :src="item" />
                         <img
                             slot="reference"
@@ -582,11 +582,11 @@ export default {
             message: '', //弹出框消息
             query: {
                 pageNo: 1,
-                pageSize: 10,
+                pageSize: 15,
                 oPageNo: 1,
-                oPageSize: 10,
+                opageSize: 15,
                 aPageNo: 1,
-                aPageSize: 10,
+                apageSize: 15,
             },
             tableData: [],
             multipleSelection: [],
