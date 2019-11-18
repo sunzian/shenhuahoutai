@@ -208,7 +208,7 @@
                         class="upload-demo"
                         drag
                         :limit="1"
-                        ref="upload"
+                        ref="download"
                         action="/api/upload/uploadImage"
                         :on-success="onSuccess"
                         multiple
@@ -221,7 +221,7 @@
                         <div
                             class="el-upload__tip"
                             slot="tip"
-                        >只能上传jpg/png文件，且不超过500kb 建议尺寸750*360或按比例上传</div>
+                        >只能上传jpg/png文件，且不超过300kb 建议尺寸750*360或按比例上传</div>
                     </el-upload>
                 </el-form-item>
                 <el-form-item label="文章类型" :label-width="formLabelWidth" prop="cinemaName">
@@ -245,7 +245,7 @@
                         class="load-demo"
                         drag
                         :limit="8"
-                        ref="download"
+                        ref="downContentLoad"
                         action="/api/upload/uploadImage"
                         :on-success="onContentSuccess"
                         multiple
@@ -258,7 +258,7 @@
                         <div
                             class="el-upload__tip"
                             slot="tip"
-                        >只能上传jpg/png文件，且不超过500kb 建议尺寸750*360或按比例上传</div>
+                        >只能上传jpg/png文件，且不超过300kb 建议尺寸750*360或按比例上传</div>
                     </el-upload>
                 </el-form-item>
                 <el-form-item label="上线状态" :label-width="formLabelWidth">
@@ -330,7 +330,7 @@
                         <div
                             class="el-upload__tip"
                             slot="tip"
-                        >只能上传jpg/png文件，且不超过500kb 建议尺寸750*360或按比例上传</div>
+                        >只能上传jpg/png文件，且不超过300kb 建议尺寸750*360或按比例上传</div>
                     </el-upload>
                 </el-form-item>
                 <el-form-item label="文章类型" :label-width="formLabelWidth" prop="cinemaName">
@@ -363,7 +363,7 @@
                         class="upload-demo"
                         drag
                         :limit="8"
-                        ref="upload"
+                        ref="upContentLoad"
                         action="/api/upload/uploadImage"
                         :on-success="unContentSuccess"
                         multiple
@@ -376,7 +376,7 @@
                         <div
                             class="el-upload__tip"
                             slot="tip"
-                        >只能上传jpg/png文件，且不超过500kb 建议尺寸750*360或按比例上传</div>
+                        >只能上传jpg/png文件，且不超过300kb 建议尺寸750*360或按比例上传</div>
                     </el-upload>
                 </el-form-item>
                 <el-form-item label="上线状态" :label-width="formLabelWidth">
@@ -587,12 +587,11 @@ export default {
                         loading.close();
                         // this.cinemaInfo = JSON.parse(Decrypt(data.data.data)).cinemaList;
                         if (data.data.code == 'success') {
-                            
                             if (this.$refs.download) {
                                 this.$refs.download.clearFiles();
                             }
-                            if (this.$refs.upload) {
-                                this.$refs.upload.clearFiles();
+                            if (this.$refs.downContentLoad) {
+                                this.$refs.downContentLoad.clearFiles();
                             }
                             this.dialogFormVisible = true;
                         } else if (data.data.code == 'nologin') {
@@ -647,7 +646,8 @@ export default {
                                 this.dialogFormVisible = false;
                                 this.$message.success(`新增成功`);
                                 this.oForm.cinemaCode = '';
-                                this.$refs.upload.clearFiles();
+                                this.$refs.download.clearFiles();
+                                this.$refs.downContentLoad.clearFiles();
                                 this.oForm.content = '';
                                 this.oForm.imageContent = '';
                                 this.oForm.title = '';
@@ -822,7 +822,8 @@ export default {
                         loading.close();
                         console.log(data);
                         if (data.data.code == 'success') {
-                            // this.$refs.download.clearFiles(); //清除已上传文件
+                            this.$refs.upContentLoad.clearFiles();
+                            this.$refs.upload.clearFiles(); //清除已上传文件
                             this.$message.success(`编辑成功`);
                             this.show();
                         } else if (data.data.code == 'nologin') {
@@ -846,6 +847,12 @@ export default {
         },
         onSuccess(data) {
             //上传文件 登录超时
+            if (data.status == '-1') {
+                this.message = data.message;
+                this.open();
+                this.$refs.download.clearFiles();
+                return;
+            }
             this.oForm.imageUrl = data.data;
             if (data.code == 'nologin') {
                 this.message = data.message;
@@ -854,6 +861,12 @@ export default {
             }
         },
         onContentSuccess(data) {
+            if (data.status == '-1') {
+                this.message = data.message;
+                this.open();
+                this.$refs.downContentLoad.clearFiles();
+                return;
+            }
             this.oForm.imageContent = data.data;
             if (data.code == 'nologin') {
                 this.message = data.message;
@@ -862,6 +875,12 @@ export default {
             }
         },
         unContentSuccess(data) {
+            if (data.status == '-1') {
+                this.message = data.message;
+                this.open();
+                this.$refs.upContentLoad.clearFiles();
+                return;
+            }
             this.oImageContent = data.data;
             if (data.code == 'nologin') {
                 this.message = data.message;
@@ -871,6 +890,12 @@ export default {
         },
         unSuccess(data) {
             //上传文件 登录超时
+            if (data.status == '-1') {
+                this.message = data.message;
+                this.open();
+                this.$refs.upload.clearFiles();
+                return;
+            }
             this.oImageUrl = data.data;
             if (data.code == 'nologin') {
                 this.message = data.message;

@@ -515,6 +515,12 @@
                 this.imgType.type = EncryptReplace('activity');
             },
             unSuccess(data) {
+                if (data.status == '-1') {
+                this.message = data.message;
+                this.open();
+                this.$refs.download.clearFiles();
+                return;
+            }
                 this.oActivityImageUrl = data.data;
                 if (data.code == 'nologin') {
                     this.message = data.message;
