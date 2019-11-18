@@ -164,6 +164,7 @@
                             :data="type"
                             class="upload-demo"
                             drag
+                            ref="download"
                             action="/api/upload/uploadImage"
                             :on-success="unSuccess"
                             multiple
@@ -173,7 +174,7 @@
                             将文件拖到此处，或
                             <em>点击上传</em>
                         </div>
-                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb 建议670*420</div>
+                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过300kb 建议670*420</div>
                     </el-upload>
                 </el-form-item>
                 <el-form-item label="工本费" :label-width="formLabelWidth">
@@ -297,6 +298,7 @@
                     // console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.$message.success(`修改成功`);
+                        this.$refs.download.clearFiles();//清除已上传文件
                         this.show();
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
@@ -700,19 +702,13 @@
                 //上传之前
                 this.type.type = EncryptReplace('card');
             },
-            onSuccess(data) {
-                //上传文件 登录超时
-                // console.log(data);
-                this.form.image_url = data.data;
-                if (data.code == 'nologin') {
-                    this.message = data.message;
-                    this.open();
-                    this.$router.push('/login');
-                }
-            },
             unSuccess(data) {
-                //修改上传文件 登录超时
-                // console.log(data);
+                if (data.status == '-1') {
+                    this.message=data.message;
+                    this.open();
+                    this.$refs.download.clearFiles();
+                    return
+                }
                 this.form.image_url = data.data;
                 if (data.code == 'nologin') {
                     this.message = data.message;

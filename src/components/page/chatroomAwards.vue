@@ -183,12 +183,13 @@
                         :before-upload="beforeUpload"
                         :data="type"
                         :limit="1"
+                        ref="download"
                         :on-success="onSuccess"
                         :file-list="fileList"
                         list-type="picture"
                     >
                         <el-button size="small" type="primary">点击上传</el-button>
-                        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+                        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过300kb</div>
                     </el-upload>
                 </el-form-item>
                 <el-form-item label="每组发放数量：" :label-width="formLabelWidth" prop="number">
@@ -505,6 +506,7 @@ export default {
                         console.log(data);
                         if (data.data.code == 'success') {
                             this.dialogFormVisible = false;
+                            this.$refs.download.clearFiles();
                             this.$message.success(`新增成功`);
                             this.show(this.cinemaCode);
                         } else if (data.data.code == 'nologin') {
@@ -949,7 +951,12 @@ export default {
         },
         onSuccess(data) {
             //上传文件 登录超时
-            console.log(data);
+            if (data.status == '-1') {
+                this.message = data.message;
+                this.open();
+                this.$refs.download.clearFiles();
+                return;
+            }
             this.oForm.image_url = data.data;
             if (data.code == 'nologin') {
                 this.message = data.message;
