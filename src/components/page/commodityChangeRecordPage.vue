@@ -9,8 +9,8 @@
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-input placeholder="订单号" style="width: 150px" v-model="query.orderNo" autocomplete="off"></el-input>
-                <el-input placeholder="手机号" style="width: 150px" v-model="query.mobile" autocomplete="off"></el-input>
+                <el-input placeholder="订单号" class="mr10" v-model="query.orderNo" autocomplete="off"></el-input>
+                <el-input placeholder="手机号" class="mr10" v-model="query.mobile" autocomplete="off"></el-input>
                 <el-select clearable v-model="query.changeType" placeholder="兑换方式" class="handle-select mr10">
                     <el-option key="1" label="纯金币兑换" value="1"></el-option>
                     <el-option key="2" label="纯RMB兑换" value="2"></el-option>
@@ -32,27 +32,27 @@
                     <el-option key="2" label="退款失败" value="2"></el-option>
                 </el-select>
                 <el-date-picker
-                        style="width: 200px;"
+                        class="mr10"
                         v-model="query.startDate"
                         type="datetime"
                         value-format="yyyy-MM-dd HH:mm:ss"
                         format="yyyy-MM-dd HH:mm:ss"
-                        placeholder="开始时间">
-                </el-date-picker>至
+                        placeholder="开始时间（起）">
+                </el-date-picker>
                 <el-date-picker
-                        style="width: 200px;"
+                        class="mr10"
                         v-model="query.endDate"
                         type="datetime"
                         value-format="yyyy-MM-dd HH:mm:ss"
                         format="yyyy-MM-dd HH:mm:ss"
-                        placeholder="结束时间">
+                        placeholder="结束时间（止）">
                 </el-date-picker>
-                <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
+                <el-button  style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
             </div>
             <div class="handle-box">
-                总支付金币<el-input style="width: 150px" v-model="totalData.totalGold" :disabled="true"  autocomplete="off"></el-input>
-                总支付金额<el-input style="width: 150px" v-model="totalData.totalMoney" :disabled="true"  autocomplete="off"></el-input>
-                总退款金额<el-input style="width: 150px" v-model="totalData.totalRefundPrice" :disabled="true" autocomplete="off"></el-input>
+                总支付金币：<el-input style="width: 150px" v-model="totalData.totalGold" :disabled="true"  autocomplete="off"></el-input>
+                总支付金额：<el-input style="width: 150px" v-model="totalData.totalMoney" :disabled="true"  autocomplete="off"></el-input>
+                总退款金额：<el-input style="width: 150px" v-model="totalData.totalRefundPrice" :disabled="true" autocomplete="off"></el-input>
             </div>
             <el-table
                     :data="tableData"
@@ -65,32 +65,32 @@
                 <el-table-column prop="name" label="兑换影院名称">
                     <template slot-scope="scope">{{scope.row.exchangeCinemaName}}</template>
                 </el-table-column>
-                <el-table-column label="订单号">
+                <el-table-column label="订单号" width="190">
                     <template slot-scope="scope">{{scope.row.orderNo}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="手机号码">
+                <el-table-column prop="memo" label="手机号码" width="120">
                     <template slot-scope="scope">{{scope.row.mobile}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="商品名称">
                     <template slot-scope="scope">{{scope.row.commodityName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="兑换方式">
+                <el-table-column prop="memo" label="兑换方式" width="130">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.changeType=='1'">纯金币兑换</el-tag>
                         <el-tag v-else-if="scope.row.changeType=='2'">纯RMB兑换</el-tag>
                         <el-tag v-else-if="scope.row.changeType=='3'">金币加RMB兑换</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="memo" label="支付金币数量">
+                <el-table-column prop="memo" label="支付金币数量" width="110">
                     <template slot-scope="scope">{{scope.row.gold}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="支付金额">
+                <el-table-column prop="memo" label="支付金额" width="90">
                     <template slot-scope="scope">{{scope.row.money}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="支付时间">
+                <el-table-column prop="memo" label="支付时间" width="150">
                     <template slot-scope="scope">{{scope.row.payTime}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="领取状态">
+                <el-table-column prop="memo" label="领取状态" width="90">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status=='1'">未领取</el-tag>
                         <el-tag v-else-if="scope.row.status=='2'">已领取</el-tag>
@@ -100,7 +100,7 @@
                 <!-- <el-table-column prop="memo" label="支付交易号">
                     <template slot-scope="scope">{{scope.row.tradeNo}}</template>
                 </el-table-column> -->
-                <el-table-column label="支付状态" align="center">
+                <el-table-column label="支付状态" align="center" width="100">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row. payStatus=='0'">未支付</el-tag>
                         <el-tag v-else-if="scope.row. payStatus=='1'">支付成功</el-tag>
@@ -123,7 +123,7 @@
                 <el-table-column prop="memo" label="退款金额">
                     <template slot-scope="scope">{{scope.row.refundPrice}}</template>
                 </el-table-column> -->
-                <el-table-column label="操作"  align="center"  fixed="right">
+                <el-table-column label="操作"  align="center"  fixed="right" width="100">
                     <template slot-scope="scope">
                         <el-button
                                 type="text"
@@ -226,7 +226,7 @@
                 message:'',//弹出框消息
                 query: {
                     pageNo:1,
-                    pageSize:10
+                    pageSize:15
                 },
                 editVisible: false,
                 pageTotal: 0,
@@ -435,26 +435,16 @@
 
 <style scoped>
     .handle-box {
+        width: 100%;
         margin-bottom: 20px;
         font-size: 14px;
-    }
-
-    .handle-select {
-        width: 120px;
-    }
-
-    .handle-input {
-        width: 300px;
-        display: inline-block;
     }
     .table {
         width: 100%;
         font-size: 14px;
     }
-    .red {
-        color: #ff0000;
-    }
     .mr10 {
+        width: 16%;
         margin-right: 10px;
     }
 </style>

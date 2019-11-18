@@ -87,28 +87,28 @@
                 >打开卖品通知</el-button>
             </div>
             <div class="handle-box">
-                总原价
+                总原价：
                 <el-input
                     style="width: 150px"
                     v-model="totalData.totalOriginalPrice"
                     :disabled="true"
                     autocomplete="off"
                     class="mr10"
-                ></el-input>总实付金额
+                ></el-input>总实付金额：
                 <el-input
                     style="width: 150px"
                     v-model="totalData.totalActualPrice"
                     :disabled="true"
                     autocomplete="off"
                     class="mr10"
-                ></el-input>总优惠券优惠金额
+                ></el-input>总优惠券优惠金额：
                 <el-input
                     style="width: 150px"
                     v-model="totalData.totalCouponDiscount"
                     :disabled="true"
                     autocomplete="off"
                     class="mr10"
-                ></el-input>总活动优惠金额
+                ></el-input>总活动优惠金额：
                 <el-input
                     style="width: 150px"
                     v-model="totalData.totalActivityDiscount"
@@ -131,9 +131,9 @@
                 <el-table-column label="订单号" width="135">
                     <template slot-scope="scope">{{scope.row.orderNo}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="用户名" width="75">
-                    <template slot-scope="scope">{{scope.row.userName}}</template>
-                </el-table-column>
+                <!--<el-table-column prop="memo" label="用户名" width="75">-->
+                    <!--<template slot-scope="scope">{{scope.row.userName}}</template>-->
+                <!--</el-table-column>-->
                 <el-table-column prop="memo" label="手机号码" width="110">
                     <template slot-scope="scope">{{scope.row.mobile}}</template>
                 </el-table-column>
@@ -143,31 +143,31 @@
                 <el-table-column prop="memo" label="卖品内容" width="110">
                     <template slot-scope="scope">{{scope.row.merNames}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="原价">
+                <el-table-column prop="memo" label="原价" width="60">
                     <template slot-scope="scope">{{scope.row.totalOriginalPrice}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="实付价">
+                <el-table-column prop="memo" label="实付价" width="70">
                     <template slot-scope="scope">{{scope.row.totalActualPrice}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="活动优惠">
+                <el-table-column prop="memo" label="活动优惠" width="80">
                     <template slot-scope="scope">{{scope.row.totalActivityDiscount}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="优惠券优惠">
+                <el-table-column prop="memo" label="优惠券优惠" width="100">
                     <template slot-scope="scope">{{scope.row.totalCouponDiscount}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="优惠券名称">
+                <el-table-column prop="memo" label="优惠券名称" width="100">
                     <template slot-scope="scope">{{scope.row.userCouponName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="支付时间">
+                <el-table-column prop="memo" label="支付时间" width="100">
                     <template slot-scope="scope">{{scope.row.payTime}}</template>
                 </el-table-column>
-                <el-table-column label="支付方式" align="center">
+                <el-table-column label="支付方式" align="center" width="80">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.payWay=='0'">微信</el-tag>
                         <el-tag v-else-if="scope.row.payWay=='1'">会员卡</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="支付状态" align="center">
+                <el-table-column label="支付状态" align="center" >
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.payStatus=='1'">支付成功</el-tag>
                         <el-tag v-else-if="scope.row.payStatus=='2'">支付失败</el-tag>
@@ -199,7 +199,7 @@
                             type="text"
                             icon="el-icon-setting"
                             @click="addChange(scope.$index, scope.row)"
-                        >查看详情</el-button>
+                        >查看</el-button>
                     </template>
                 </el-table-column>
             </el-table>

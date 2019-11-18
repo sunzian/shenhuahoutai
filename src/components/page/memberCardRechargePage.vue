@@ -19,14 +19,12 @@
                 </el-select>
                 <el-input
                     placeholder="手机号"
-                    style="width: 150px"
                     v-model="query.mobile"
                     autocomplete="off"
                     class="mr10"
                 ></el-input>
                 <el-input
                     placeholder="会员卡号"
-                    style="width: 150px"
                     v-model="query.cardNo"
                     autocomplete="off"
                     class="mr10"
@@ -51,25 +49,25 @@
                     <el-option key="2" label="充值失败" value="2"></el-option>
                 </el-select>
                 <el-date-picker
-                    style="width: 200px;"
                     v-model="query.startDate"
                     type="datetime"
+                    class="mr10"
                     value-format="yyyy-MM-dd HH:mm:ss"
                     format="yyyy-MM-dd HH:mm:ss"
-                    placeholder="开始时间"
-                ></el-date-picker>至
+                    placeholder="开始时间（起）"
+                ></el-date-picker>
                 <el-date-picker
-                    style="width: 200px;"
                     v-model="query.endDate"
                     type="datetime"
+                    class="mr10"
                     value-format="yyyy-MM-dd HH:mm:ss"
                     format="yyyy-MM-dd HH:mm:ss"
-                    placeholder="结束时间"
+                    placeholder="结束时间（止）"
                 ></el-date-picker>
                 <el-button
                     type="primary"
                     icon="el-icon-search"
-                    style="margin-top: 10px;"
+                    style="margin-top: 10px;width: 90px;"
                     @click="Search"
                 >搜索</el-button>
             </div>
@@ -105,25 +103,25 @@
                 <el-table-column label="充值影院">
                     <template slot-scope="scope">{{scope.row.rechargeCinemaName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="卡号">
+                <el-table-column prop="memo" label="卡号" width="130">
                     <template slot-scope="scope">{{scope.row.cardNo}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="手机号">
+                <el-table-column prop="memo" label="手机号" width="130">
                     <template slot-scope="scope">{{scope.row.mobilePhone}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="支付金额">
+                <el-table-column prop="memo" label="支付金额" width="90">
                     <template slot-scope="scope">{{scope.row.payAmount}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="赠送金额">
+                <el-table-column prop="memo" label="赠送金额" width="90">
                     <template slot-scope="scope">{{scope.row.givenMoney}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="充值金额">
+                <el-table-column prop="memo" label="充值金额" width="90">
                     <template slot-scope="scope">{{scope.row.rechargeAmount}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="充值时间">
+                <el-table-column prop="memo" label="充值时间" width="160">
                     <template slot-scope="scope">{{scope.row.payTime}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="支付状态">
+                <el-table-column prop="memo" label="支付状态" width="90">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.payStatus=='0'" type="danger">未支付</el-tag>
                         <el-tag v-else-if="scope.row.payStatus=='1'" type="success">支付成功</el-tag>
@@ -131,13 +129,13 @@
                         <el-tag v-else-if="scope.row.payStatus=='3'" type="success">退款成功</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="memo" label="充值状态">
+                <el-table-column prop="memo" label="充值状态" width="90">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.rechargeStatus=='1'" type="success">充值成功</el-tag>
                         <el-tag v-else-if="scope.row.rechargeStatus=='2'" type="danger">充值失败</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" align="center" fixed="right">
+                <el-table-column label="操作" align="center" fixed="right" width="100">
                     <template slot-scope="scope">
                         <el-button
                             type="text"
@@ -581,26 +579,16 @@ export default {
 
 <style scoped>
 .handle-box {
+    width: 100%;
     margin-bottom: 20px;
     font-size: 14px;
-}
-
-.handle-select {
-    width: 120px;
-}
-
-.handle-input {
-    width: 300px;
-    display: inline-block;
 }
 .table {
     width: 100%;
     font-size: 14px;
 }
-.red {
-    color: #ff0000;
-}
 .mr10 {
+    width: 16%;
     margin-right: 10px;
 }
 </style>

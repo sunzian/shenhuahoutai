@@ -54,11 +54,13 @@
                     placeholder="订单状态"
                     class="handle-select mr10"
                 >
-                    <el-option key="0" label="未下单" value="0"></el-option>
-                    <el-option key="1" label="下单失败" value="1"></el-option>
-                    <el-option key="2" label="未取票" value="2"></el-option>
-                    <el-option key="3" label="已取票" value="3"></el-option>
-                    <el-option key="4" label="已退票" value="4"></el-option>
+                    <el-option key="4" label="未取票" value="4"></el-option>
+                    <el-option key="5" label="已取票" value="5"></el-option>
+                    <el-option key="6" label="已退票" value="6"></el-option>
+                    <el-option key="0" label="锁座失败" value="0"></el-option>
+                    <el-option key="1" label="已锁座" value="1"></el-option>
+                    <el-option key="2" label="已提交" value="2"></el-option>
+                    <el-option key="3" label="下单失败" value="3"></el-option>
                 </el-select>
                 <el-date-picker
                     v-model="query.startDate"
@@ -237,11 +239,13 @@
                 </el-table-column>
                 <el-table-column label="订单状态" align="center">
                     <template slot-scope="scope">
-                        <el-tag v-if="scope.row.submitStatus=='0'" type="danger">未下单</el-tag>
-                        <el-tag v-else-if="scope.row.submitStatus=='1'" type="success">下单失败</el-tag>
-                        <el-tag v-else-if="scope.row.submitStatus=='2'" type="danger">未取票</el-tag>
-                        <el-tag v-else-if="scope.row.submitStatus=='3'" type="danger">已取票</el-tag>
-                        <el-tag v-else-if="scope.row.submitStatus=='4'" type="danger">已退票</el-tag>
+                        <el-tag v-if="scope.row.submitStatus=='0'" type="danger">锁座失败</el-tag>
+                        <el-tag v-else-if="scope.row.submitStatus=='1'" type="success">已锁座</el-tag>
+                        <el-tag v-else-if="scope.row.submitStatus=='2'" type="danger">已提交</el-tag>
+                        <el-tag v-else-if="scope.row.submitStatus=='3'" type="danger">下单失败</el-tag>
+                        <el-tag v-else-if="scope.row.submitStatus=='4'" type="danger">未取票</el-tag>
+                        <el-tag v-else-if="scope.row.submitStatus=='5'" type="danger">已取票</el-tag>
+                        <el-tag v-else-if="scope.row.submitStatus=='6'" type="danger">已退票</el-tag>
                     </template>
                 </el-table-column>
                 <!--<el-table-column label="取票状态" align="center">-->

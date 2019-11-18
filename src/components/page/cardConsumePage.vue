@@ -19,14 +19,12 @@
                 </el-select>
                 <el-input
                     placeholder="会员卡号"
-                    style="width: 150px"
                     v-model="query.orderNo"
                     autocomplete="off"
                     class="mr10"
                 ></el-input>
                 <el-input
                     placeholder="手机号"
-                    style="width: 150px"
                     v-model="query.mobilePhone"
                     autocomplete="off"
                     class="mr10"
@@ -50,25 +48,25 @@
                     <el-option key="2" label="卖品" value="2"></el-option>
                 </el-select>
                 <el-date-picker
-                    style="width: 200px;"
                     v-model="query.startDate"
                     type="datetime"
                     value-format="yyyy-MM-dd HH:mm:ss"
                     format="yyyy-MM-dd HH:mm:ss"
-                    placeholder="开始时间"
-                ></el-date-picker>至
+                    placeholder="开始时间（起）"
+                    class="mr10"
+                ></el-date-picker>
                 <el-date-picker
-                    style="width: 200px;"
                     v-model="query.endDate"
                     type="datetime"
                     value-format="yyyy-MM-dd HH:mm:ss"
                     format="yyyy-MM-dd HH:mm:ss"
-                    placeholder="结束时间"
+                    placeholder="结束时间（止）"
+                    class="mr10"
                 ></el-date-picker>
                 <el-button
                     type="primary"
                     icon="el-icon-search"
-                    style="margin-top: 10px;"
+                    style="margin-top: 10px;width: 90px;"
                     @click="Search"
                 >搜索</el-button>
             </div>
@@ -97,40 +95,40 @@
                 <el-table-column prop="memo" label="消费影院">
                     <template slot-scope="scope">{{scope.row.consumeCinemaName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="卡号">
-                    <template slot-scope="scope">{{scope.row.cardNo}}</template>
-                </el-table-column>
-                <el-table-column prop="memo" label="手机号">
-                    <template slot-scope="scope">{{scope.row.mobilePhone}}</template>
-                </el-table-column>
-                <el-table-column prop="memo" label="消费金额">
-                    <template slot-scope="scope">{{scope.row.consumeAmount}}</template>
-                </el-table-column>
                 <el-table-column prop="memo" label="消费明细">
                     <template slot-scope="scope">{{scope.row.consumeDetail}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="消费时间">
+                <el-table-column prop="memo" label="卡号" width="110">
+                    <template slot-scope="scope">{{scope.row.cardNo}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="手机号" width="110">
+                    <template slot-scope="scope">{{scope.row.mobilePhone}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="消费金额" width="80">
+                    <template slot-scope="scope">{{scope.row.consumeAmount}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="消费时间" width="160">
                     <template slot-scope="scope">{{scope.row.consumeTime}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="消费结果">
-                    <template slot-scope="scope">
-                        <el-tag v-if="!scope.row.errorMessage">消费成功</el-tag>
-                        <el-tag v-else>{{scope.row.errorMessage}}</el-tag>
-                    </template>
-                </el-table-column>
-                <el-table-column label="交易状态" align="center">
+                <!--<el-table-column prop="memo" label="消费结果" width="305">-->
+                    <!--<template slot-scope="scope">-->
+                        <!--<el-tag v-if="!scope.row.errorMessage">消费成功</el-tag>-->
+                        <!--<el-tag v-else>{{scope.row.errorMessage}}</el-tag>-->
+                    <!--</template>-->
+                <!--</el-table-column>-->
+                <el-table-column label="交易状态" align="center" width="90">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status=='1'">成功</el-tag>
                         <el-tag v-else>失败</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="订单类型" align="center">
+                <el-table-column label="订单类型" align="center" width="90">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.orderType=='1'">购票</el-tag>
                         <el-tag v-else>卖品</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" align="center" fixed="right">
+                <el-table-column label="操作" align="center" fixed="right" width="90">
                     <template slot-scope="scope">
                         <el-button
                             type="text"
@@ -212,10 +210,11 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="接口返回错误描述" :label-width="formLabelWidth">
+                <el-form-item label="接口调用结果" :label-width="formLabelWidth">
                     <el-input
                         :disabled="true"
                         style="width: 250px"
+                        type="textarea"
                         v-model="form.errorMessage"
                         autocomplete="off"
                     ></el-input>
@@ -459,28 +458,18 @@ export default {
 </script>
 
 <style scoped>
-.handle-box {
-    margin-bottom: 20px;
-    font-size: 14px;
-}
-
-.handle-select {
-    width: 120px;
-}
-
-.handle-input {
-    width: 300px;
-    display: inline-block;
-}
-.table {
-    width: 100%;
-    font-size: 14px;
-}
-.red {
-    color: #ff0000;
-}
-.mr10 {
-    margin-right: 10px;
-}
+    .handle-box {
+        width: 100%;
+        margin-bottom: 20px;
+        font-size: 14px;
+    }
+    .table {
+        width: 100%;
+        font-size: 14px;
+    }
+    .mr10 {
+        width: 16%;
+        margin-right: 10px;
+    }
 </style>
 

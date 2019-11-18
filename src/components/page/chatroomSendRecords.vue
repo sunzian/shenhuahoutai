@@ -19,7 +19,6 @@
                 </el-select>
                 <el-input
                     placeholder="礼物名称"
-                    style="width: 150px"
                     v-model="query.name"
                     autocomplete="off"
                     class="mr10"
@@ -36,7 +35,7 @@
                 <el-button
                     type="primary"
                     icon="el-icon-search"
-                    style="margin-top: 10px;"
+                    style="margin-top: 10px;width: 90px;"
                     @click="Search"
                 >搜索</el-button>
             </div>
@@ -57,8 +56,8 @@
                 </el-table-column>
                 <el-table-column label="礼物类型" align="center">
                     <template slot-scope="scope">
-                        <el-tag v-if="scope.row.type=='1'">优惠券</el-tag>
-                        <el-tag v-else-if="scope.row.type=='2'">实物</el-tag>
+                        <el-tag v-if="scope.row.giftType=='1'">优惠券</el-tag>
+                        <el-tag v-else-if="scope.row.giftType=='2'">实物</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column prop="memo" label="发放数量">
@@ -337,28 +336,18 @@ export default {
 </script>
 
 <style scoped>
-.handle-box {
-    margin-bottom: 20px;
-    font-size: 14px;
-}
-
-.handle-select {
-    width: 120px;
-}
-
-.handle-input {
-    width: 300px;
-    display: inline-block;
-}
-.table {
-    width: 100%;
-    font-size: 14px;
-}
-.red {
-    color: #ff0000;
-}
-.mr10 {
-    margin-right: 10px;
-}
+    .handle-box {
+        width: 100%;
+        margin-bottom: 20px;
+        font-size: 14px;
+    }
+    .table {
+        width: 100%;
+        font-size: 14px;
+    }
+    .mr10 {
+        width: 16%;
+        margin-right: 10px;
+    }
 </style>
 

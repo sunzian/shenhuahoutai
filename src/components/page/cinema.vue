@@ -11,30 +11,30 @@
             <div class="handle-box">
                 <el-input style="width: 200px;" v-model="query.cinemaName" placeholder="影院名称" class="handle-input mr10"></el-input>
                 <el-date-picker
-                        style="width: 200px;"
                         v-model="query.startDate"
                         type="date"
+                        class="mr10"
                         value-format="yyyy-MM-dd"
                         format="yyyy-MM-dd"
-                        placeholder="开始时间">
-                </el-date-picker>至
+                        placeholder="开始时间（起）">
+                </el-date-picker>
                 <el-date-picker
-                        style="width: 200px;"
                         v-model="query.endDate"
                         type="date"
+                        class="mr10"
                         value-format="yyyy-MM-dd"
                         format="yyyy-MM-dd"
-                        placeholder="结束时间">
+                        placeholder="结束时间（止）">
                 </el-date-picker>
-                <el-select  style="width: 200px;" clearable v-model="query.paymentType" placeholder="费用支付类型" class="handle-select mr10">
+                <el-select clearable v-model="query.paymentType" placeholder="费用支付类型" class="handle-select mr10">
                     <el-option key="1" label="包年" value="1"></el-option>
                     <el-option key="2" label="按票收费" value="2"></el-option>
                 </el-select>
-                <el-select  style="width: 200px;" clearable v-model="query.reportedType" placeholder="票价上报方式" class="handle-select mr10">
+                <el-select clearable v-model="query.reportedType" placeholder="票价上报方式" class="handle-select mr10">
                     <el-option key="1" label="标准价格上报" value="1"></el-option>
                     <el-option key="2" label="优惠后价格上报" value="2"></el-option>
                 </el-select>
-                <el-button style="margin-left: 60px" type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
+                <el-button style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
             </div>
             <el-table
                 :data="tableData"
@@ -45,87 +45,87 @@
                 header-cell-class-name="table-header"
                 @selection-change="handleSelectionChange"
             >
-                <el-table-column prop="code" label="影院编码" fixed>
+                <el-table-column prop="code" label="影院编码" fixed  width="140">
                     <template slot-scope="scope">{{scope.row.cinemaCode}}</template>
                 </el-table-column>
                 <el-table-column prop="name" label="影院名称" fixed>
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
-                <el-table-column prop="number" label="退票手续费">
-                    <template slot-scope="scope">{{scope.row.refundFee}}</template>
-                </el-table-column>
-                <el-table-column prop="number" label="第三方支付代售费">
-                    <template slot-scope="scope">{{scope.row.thirdPartyPayCommissionFee}}</template>
-                </el-table-column>
-                <el-table-column prop="number" label="会员卡支付代售费">
-                    <template slot-scope="scope">{{scope.row.memberCardPayCommissionFee}}</template>
-                </el-table-column>
-                <el-table-column prop="booleans" label="是否开通套餐">
-                    <template slot-scope="scope">
-                        <el-tag v-if="scope.row.openSnackStatus == 1" type="success">已开通</el-tag>
-                        <el-tag v-else type="danger">未开通</el-tag>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="booleans" label="是否卖品配送">
-                    <template slot-scope="scope">
-                        <el-tag v-if="scope.row.snackDispatcherStatus == 1" type="success">是</el-tag>
-                        <el-tag v-else type="danger">否</el-tag>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="booleans" label="是否支持自主退票">
+                <el-table-column prop="booleans" label="是否支持自主退票" align="center">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.refundable == 1" type="success">是</el-tag>
                         <el-tag v-else type="danger">否</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="number" label="剩余票数">
-                    <template slot-scope="scope">{{scope.row.remainTicketsNumber}}</template>
+                <el-table-column prop="number" label="退票手续费" width="140">
+                    <template slot-scope="scope">{{scope.row.refundFee}}</template>
                 </el-table-column>
-                <el-table-column prop="string" label="短信平台类型">
-                    <template slot-scope="scope">
-                        <el-tag v-if="scope.row.messagePlatformType == 1" type="info">专信云</el-tag>
-                        <el-tag v-else type="info">三体</el-tag>
-                    </template>
+                <el-table-column prop="number" label="第三方支付代售费" width="160">
+                    <template slot-scope="scope">{{scope.row.thirdPartyPayCommissionFee}}</template>
                 </el-table-column>
-                <el-table-column prop="booleans" label="是否开通服务">
+                <el-table-column prop="number" label="会员卡支付代售费" width="160">
+                    <template slot-scope="scope">{{scope.row.memberCardPayCommissionFee}}</template>
+                </el-table-column>
+                <!--<el-table-column prop="booleans" label="是否开通套餐">-->
+                    <!--<template slot-scope="scope">-->
+                        <!--<el-tag v-if="scope.row.openSnackStatus == 1" type="success">已开通</el-tag>-->
+                        <!--<el-tag v-else type="danger">未开通</el-tag>-->
+                    <!--</template>-->
+                <!--</el-table-column>-->
+                <el-table-column prop="booleans" label="是否支持卖品送餐" width="140" align="center">
                     <template slot-scope="scope">
-                        <el-tag v-if="scope.row.openStatus == 1" type="success">是</el-tag>
+                        <el-tag v-if="scope.row.snackDispatcherStatus == 1" type="success">是</el-tag>
                         <el-tag v-else type="danger">否</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="time" label="到期时间">
-                    <template slot-scope="scope">{{scope.row.expireDate}}</template>
+                <!--<el-table-column prop="string" label="短信平台">-->
+                    <!--<template slot-scope="scope">-->
+                        <!--<el-tag v-if="scope.row.messagePlatformType == 1" type="info">专信云</el-tag>-->
+                        <!--<el-tag v-else type="info">三体</el-tag>-->
+                    <!--</template>-->
+                <!--</el-table-column>-->
+                <!--<el-table-column prop="booleans" label="是否开通服务">-->
+                    <!--<template slot-scope="scope">-->
+                        <!--<el-tag v-if="scope.row.openStatus == 1" type="success">是</el-tag>-->
+                        <!--<el-tag v-else type="danger">否</el-tag>-->
+                    <!--</template>-->
+                <!--</el-table-column>-->
+                <!--<el-table-column prop="string" label="费用支付类型">-->
+                    <!--<template slot-scope="scope">-->
+                        <!--<el-tag v-if="scope.row.paymentType == 1" type="info">包年</el-tag>-->
+                        <!--<el-tag v-else type="info">按票收费</el-tag>-->
+                    <!--</template>-->
+                <!--</el-table-column>-->
+                <el-table-column prop="number" label="剩余票数" width="90">
+                        <template v-if="scope.row.paymentType == 2" slot-scope="scope">{{scope.row.remainTicketsNumber}}</template>
                 </el-table-column>
-                <el-table-column prop="string" label="费用支付类型">
-                    <template slot-scope="scope">
-                        <el-tag v-if="scope.row.paymentType == 1" type="info">包年</el-tag>
-                        <el-tag v-else type="info">按票收费</el-tag>
-                    </template>
+                <el-table-column prop="time" label="到期时间" width="150">
+                        <template v-if="scope.row.paymentType == 1" slot-scope="scope">{{scope.row.expireDate}}</template>
                 </el-table-column>
-                <el-table-column prop="string" label="票价上报方式">
-                    <template slot-scope="scope">
-                        <el-tag v-if="scope.row.reportedType == 1" type="info">标准价格上报</el-tag>
-                        <el-tag v-else type="info">优惠后价格上报</el-tag>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="booleans" label="开通会员卡">
-                    <template slot-scope="scope">
-                        <el-tag v-if="scope.row.openMemberCardStatus == 1" type="success">开通</el-tag>
-                        <el-tag v-else type="danger">未开通</el-tag>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="booleans" label="会员卡是否门店通用">
-                    <template slot-scope="scope">
-                        <el-tag v-if="scope.row.memberCardCommonUseStatus == 1" type="success">是</el-tag>
-                        <el-tag v-else type="danger">否</el-tag>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="booleans" label="会员卡支付是否可用优惠券">
-                    <template slot-scope="scope">
-                        <el-tag v-if="scope.row.ticketsForMemberCardPayStatus == 1" type="success">是</el-tag>
-                        <el-tag v-else type="danger">否</el-tag>
-                    </template>
-                </el-table-column>
+                <!--<el-table-column prop="string" label="票价上报方式">-->
+                    <!--<template slot-scope="scope">-->
+                        <!--<el-tag v-if="scope.row.reportedType == 1" type="info">标准价格上报</el-tag>-->
+                        <!--<el-tag v-else type="info">优惠后价格上报</el-tag>-->
+                    <!--</template>-->
+                <!--</el-table-column>-->
+                <!--<el-table-column prop="booleans" label="是否开通会员卡">-->
+                    <!--<template slot-scope="scope">-->
+                        <!--<el-tag v-if="scope.row.openMemberCardStatus == 1" type="success">开通</el-tag>-->
+                        <!--<el-tag v-else type="danger">未开通</el-tag>-->
+                    <!--</template>-->
+                <!--</el-table-column>-->
+                <!--<el-table-column prop="booleans" label="会员卡是否门店通用">-->
+                    <!--<template slot-scope="scope">-->
+                        <!--<el-tag v-if="scope.row.memberCardCommonUseStatus == 1" type="success">是</el-tag>-->
+                        <!--<el-tag v-else type="danger">否</el-tag>-->
+                    <!--</template>-->
+                <!--</el-table-column>-->
+                <!--<el-table-column prop="booleans" label="会员卡支付是否可用优惠券">-->
+                    <!--<template slot-scope="scope">-->
+                        <!--<el-tag v-if="scope.row.ticketsForMemberCardPayStatus == 1" type="success">是</el-tag>-->
+                        <!--<el-tag v-else type="danger">否</el-tag>-->
+                    <!--</template>-->
+                <!--</el-table-column>-->
                 <el-table-column label="操作" width="100" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-button
@@ -1118,27 +1118,18 @@ input[type='number'] {
 </style>
 
 <style scoped>
-.handle-box {
-    margin-bottom: 20px;
-}
-
-.handle-select {
-    width: 120px;
-}
-
-.handle-input {
-    width: 300px;
-    display: inline-block;
-}
-.table {
-    width: 100%;
-    font-size: 14px;
-}
-.red {
-    color: #ff0000;
-}
-.mr10 {
-    margin-right: 10px;
-}
+    .handle-box {
+        width: 100%;
+        margin-bottom: 20px;
+        font-size: 14px;
+    }
+    .table {
+        width: 100%;
+        font-size: 14px;
+    }
+    .mr10 {
+        width: 16%;
+        margin-right: 10px;
+    }
 </style>
 

@@ -19,14 +19,12 @@
                 </el-select>
                 <el-input
                     placeholder="会员卡号"
-                    style="width: 150px"
                     v-model="query.orderNo"
                     autocomplete="off"
                     class="mr10"
                 ></el-input>
                 <el-input
                     placeholder="手机号"
-                    style="width: 150px"
                     v-model="query.mobile"
                     autocomplete="off"
                     class="mr10"
@@ -43,7 +41,7 @@
                 <el-button
                     type="primary"
                     icon="el-icon-search"
-                    style="margin-top: 10px;"
+                    style="margin-top: 10px;width: 90px;"
                     @click="Search"
                 >搜索</el-button>
             </div>
@@ -59,31 +57,31 @@
                 <el-table-column prop="name" label="开卡影院">
                     <template slot-scope="scope">{{scope.row.openCardCinemaName}}</template>
                 </el-table-column>
-                <el-table-column label="卡号">
+                <el-table-column label="卡号" width="200">
                     <template slot-scope="scope">{{scope.row.cardNo}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="会员卡等级名称">
+                <el-table-column prop="memo" label="会员卡等级名称" width="190">
                     <template slot-scope="scope">{{scope.row.levelName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="手机号">
-                    <template slot-scope="scope">{{scope.row.userMobile}}</template>
-                </el-table-column>
-                <el-table-column prop="memo" label="用户名">
+                <el-table-column prop="memo" label="用户名" width="190">
                     <template slot-scope="scope">{{scope.row.userName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="余额">
+                <el-table-column prop="memo" label="手机号" width="190">
+                    <template slot-scope="scope">{{scope.row.userMobile}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="余额" width="120">
                     <template slot-scope="scope">{{scope.row.balance}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="积分">
+                <el-table-column prop="memo" label="积分" width="120">
                     <template slot-scope="scope">{{scope.row.creditsAmount}}</template>
                 </el-table-column>
-                <el-table-column label="是否被绑定" align="center">
+                <el-table-column label="是否被绑定" align="center" width="100">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.bindStatus=='1'">绑定</el-tag>
                         <el-tag v-else>未绑定</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" align="center" fixed="right">
+                <el-table-column label="操作" align="center" fixed="right" width="100">
                     <template slot-scope="scope">
                         <el-button
                             type="text"
@@ -570,28 +568,18 @@ export default {
 </script>
 
 <style scoped>
-.handle-box {
-    margin-bottom: 20px;
-    font-size: 14px;
-}
-
-.handle-select {
-    width: 120px;
-}
-
-.handle-input {
-    width: 300px;
-    display: inline-block;
-}
-.table {
-    width: 100%;
-    font-size: 14px;
-}
-.red {
-    color: #ff0000;
-}
-.mr10 {
-    margin-right: 10px;
-}
+    .handle-box {
+        width: 100%;
+        margin-bottom: 20px;
+        font-size: 14px;
+    }
+    .table {
+        width: 100%;
+        font-size: 14px;
+    }
+    .mr10 {
+        width: 16%;
+        margin-right: 10px;
+    }
 </style>
 
