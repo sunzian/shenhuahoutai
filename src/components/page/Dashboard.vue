@@ -157,6 +157,12 @@
                                 :value="item.value">
                         </el-option>
                     </el-select>
+                    <div style="float: right;width: 400px;margin-right: 425px">
+                        <div style="float: left;width: 50px;height: 15px;background: white;border-right: 2px solid black;">近一周</div>
+                        <div style="float: left;width: 50px;height: 15px;background: white;border-right: 2px solid black;">近一月</div>
+                        <div style="float: left;width: 50px;height: 15px;background: white;border-right: 2px solid black;">近三月</div>
+                        <div style="float: left;width: 50px;height: 15px;background: white;">近半年</div>
+                    </div>
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
@@ -167,28 +173,11 @@
         </el-col>
         <el-col :span="10" style="margin-left: 100px">
             <el-card shadow="hover" class="mgb20" style="height:352px;">
-                <div style="float: left;"><b>昨日</b></div>
-                <div style="float: right"><b>平台排名</b>&nbsp;<b style="color: red">2</b></div>
-                <div class="clear"></div>
-                <div style="background: #EFEDED;width: 45%;float: left;text-align: center;margin-top: 30px;height: 90px">
-                    <div class="grid-num">99999</div>
-                    <div>票房收入</div>
+                <div>
+                    <span>消费次数</span><span>顾客数量</span><span>占比</span>
                 </div>
-                <div style="background: #D3D1D1;width: 45%;float: left;text-align: center;margin-top: 30px;height: 90px">
-                    <div class="grid-num">3999</div>
-                    <div>人次</div>
-                </div>
-                <div style="background: #FCE3E3;width: 30%;float: left;text-align: center;margin-top: 30px;height: 90px">
-                    <div class="grid-num">99999</div>
-                    <div>卖品收入</div>
-                </div>
-                <div style="background: #D9E4E9;width: 30%;float: left;text-align: center;margin-top: 30px;height: 90px">
-                    <div class="grid-num">99999</div>
-                    <div>会员卡收入</div>
-                </div>
-                <div style="background: #CFDEC6;width: 30%;float: left;text-align: center;margin-top: 30px;height: 90px">
-                    <div class="grid-num">99999</div>
-                    <div>服务费收入</div>
+                <div>
+                    <span>1次</span><span>13509</span><span>54%</span>
                 </div>
             </el-card>
         </el-col>
@@ -197,7 +186,8 @@
 
 <script>
     import echarts from 'echarts'
-    import bus from '../common/bus';
+    import { Decrypt, Encrypt, preSign, EncryptReplace, ParamsAppend } from '@/aes/utils';
+    import https from '../../https';
     export default {
         name: 'dashboard',
         data() {
@@ -225,9 +215,39 @@
         mounted () {
             this.$nextTick(function() {
                 this.drawPie('main')
-            })
+            });
+            this.getMenu();
         },
         methods: {
+            getMenu() {
+                //获取菜单栏
+                const loading = this.$loading({
+                    lock: true,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)',
+                    target: document.querySelector('.div1')
+                });
+                https.fetchPost('/dataStatistics/getUserStatistics','').then(data => {
+                    loading.close();
+                    console.log(data);
+                    if (data.data.code == 'success') {
+                        var oData = JSON.parse(Decrypt(data.data.data));
+                        console.log(oData);
+                    } else if (data.data.code == 'nologin') {
+                        this.message = data.data.message;
+                        this.open();
+                        this.$router.push('/login');
+                    } else {
+                        this.message = data.data.message;
+                        this.open();
+                    }
+                })
+                    .catch(err => {
+                        loading.close();
+                        console.log(err);
+                    });
+            },
             drawPie(id){
                 this.charts = echarts.init(document.getElementById(id))
                 this.charts.setOption({
