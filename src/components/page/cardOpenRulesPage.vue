@@ -786,7 +786,7 @@ export default {
             jsonArr.push({ key: 'endDate', value: this.oEndDate });
             jsonArr.push({ key: 'rechargeAmount', value: '0' });
             jsonArr.push({ key: 'ruleMemo', value: this.oRuleMemo });
-            jsonArr.push({ key: 'cardLevelCode', value: this.oCardLevelCode });
+            jsonArr.push({ key: 'cardLevelCode', value: this.oForm.levelCode });
             jsonArr.push({ key: 'cardLevelName', value: this.oCardLevelName });
             jsonArr.push({ key: 'id', value: this.oId });
             let sign = md5(preSign(jsonArr));
@@ -840,6 +840,7 @@ export default {
                     this.oForm.levelCode = this.cardList[i].levelCode;
                 }
             }
+            console.log(this.oForm.levelCode)
         },
         getMenu() {
             //获取菜单栏
