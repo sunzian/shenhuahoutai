@@ -19,14 +19,12 @@
                 </el-select>
                 <el-input
                     placeholder="订单号"
-                    style="width: 150px"
                     v-model="query.orderNo"
                     autocomplete="off"
                     class="mr10"
                 ></el-input>
                 <el-input
                     placeholder="手机号"
-                    style="width: 150px"
                     v-model="query.mobile"
                     autocomplete="off"
                     class="mr10"
@@ -53,52 +51,55 @@
                 <el-select
                     clearable
                     v-model="query.submitStatus"
-                    placeholder="下单状态"
+                    placeholder="订单状态"
                     class="handle-select mr10"
                 >
                     <el-option key="0" label="未下单" value="0"></el-option>
-                    <el-option key="1" label="下单成功" value="1"></el-option>
-                    <el-option key="2" label="下单失败" value="2"></el-option>
+                    <el-option key="1" label="下单失败" value="1"></el-option>
+                    <el-option key="2" label="未取票" value="2"></el-option>
+                    <el-option key="3" label="已取票" value="3"></el-option>
+                    <el-option key="4" label="已退票" value="4"></el-option>
                 </el-select>
                 <el-date-picker
-                    style="width: 200px;"
                     v-model="query.startDate"
                     type="datetime"
+                    class="mr10"
                     value-format="yyyy-MM-dd HH:mm:ss"
                     format="yyyy-MM-dd HH:mm:ss"
                     default-time="06:00:00"
-                    placeholder="支付开始时间"
-                ></el-date-picker>至
-                <el-date-picker
-                    style="width: 200px;"
-                    v-model="query.endDate"
-                    type="datetime"
-                    value-format="yyyy-MM-dd HH:mm:ss"
-                    format="yyyy-MM-dd HH:mm:ss"
-                    placeholder="支付结束时间"
+                    placeholder="支付开始时间（起）"
                 ></el-date-picker>
                 <el-date-picker
-                    style="width: 200px;"
+                    v-model="query.endDate"
+                    type="datetime"
+                    class="mr10"
+                    value-format="yyyy-MM-dd HH:mm:ss"
+                    format="yyyy-MM-dd HH:mm:ss"
+                    placeholder="支付结束时间（止）"
+                ></el-date-picker>
+                <el-date-picker
                     v-model="query.sessionStartDate"
                     type="datetime"
+                    class="mr10"
                     value-format="yyyy-MM-dd HH:mm:ss"
                     format="yyyy-MM-dd HH:mm:ss"
                     default-time="06:00:00"
-                    placeholder="场次开始时间"
-                ></el-date-picker>至
+                    placeholder="场次开始时间（起）"
+                ></el-date-picker>
                 <el-date-picker
-                    style="width: 200px;"
                     v-model="query.sessionEndDate"
                     type="datetime"
+                    class="mr10"
                     value-format="yyyy-MM-dd HH:mm:ss"
                     format="yyyy-MM-dd HH:mm:ss"
-                    placeholder="场次结束时间"
+                    placeholder="场次结束时间（止）"
                 ></el-date-picker>
                 <el-button
                     type="primary"
                     icon="el-icon-search"
-                    style="margin-top: 10px;"
+                    style="margin-top: 10px;width: 90px;"
                     @click="Search"
+                    class="mr10"
                 >搜索</el-button>
             </div>
             <div class="handle-box">
@@ -169,58 +170,58 @@
                 header-cell-class-name="table-header"
                 @selection-change="handleSelectionChange"
             >
-                <el-table-column prop="name" label="影院编码">
+                <el-table-column prop="name" label="影院编码" width="85">
                     <template slot-scope="scope">{{scope.row.cinemaCode}}</template>
                 </el-table-column>
-                <el-table-column label="订单号">
+                <el-table-column label="订单号" width="100">
                     <template slot-scope="scope">{{scope.row.orderNo}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="手机号码">
-                    <template slot-scope="scope">{{scope.row.mobile}}</template>
-                </el-table-column>
-                <el-table-column prop="memo" label="场次时间">
+                <el-table-column prop="memo" label="场次时间" width="100">
                     <template slot-scope="scope">{{scope.row.sessionTime}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="影片名称">
+                <el-table-column prop="memo" label="影片名称" width="100">
                     <template slot-scope="scope">{{scope.row.filmName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="票数">
+                <el-table-column prop="memo" label="手机号码" width="110">
+                    <template slot-scope="scope">{{scope.row.mobile}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="票数" width="50">
                     <template slot-scope="scope">{{scope.row.number}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="座位">
+                <el-table-column prop="memo" label="座位" width="80">
                     <template slot-scope="scope">{{scope.row.seatName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="原价">
+                <el-table-column prop="memo" label="原价" width="60">
                     <template slot-scope="scope">{{scope.row.totalOriginalPrice}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="实付价">
+                <el-table-column prop="memo" label="实付价" width="70">
                     <template slot-scope="scope">{{scope.row.totalActualPrice}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="服务费">
+                <el-table-column prop="memo" label="服务费" width="70">
                     <template slot-scope="scope">{{scope.row.totalServiceFee}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="平台代售费">
+                <el-table-column prop="memo" label="平台代售费" width="100">
                     <template slot-scope="scope">{{scope.row.totalPlatHandFee}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="活动优惠">
+                <el-table-column prop="memo" label="活动优惠" width="80">
                     <template slot-scope="scope">{{scope.row.totalActivityDiscount}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="优惠券优惠">
+                <el-table-column prop="memo" label="优惠券优惠" width="100">
                     <template slot-scope="scope">{{scope.row.totalCouponDiscount}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="影票最低票价">
+                <el-table-column prop="memo" label="最低票价" width="80">
                     <template slot-scope="scope">{{scope.row.totalLowestPrice}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="回传金额">
+                <el-table-column prop="memo" label="回传金额" width="80">
                     <template slot-scope="scope">{{scope.row.totalSubmitPrice}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="上报金额">
+                <el-table-column prop="memo" label="上报金额" width="80">
                     <template slot-scope="scope">{{scope.row.totalReportPrice}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="支付时间">
+                <el-table-column prop="memo" label="支付时间" width="100">
                     <template slot-scope="scope">{{scope.row.payTime}}</template>
                 </el-table-column>
-                <el-table-column label="支付方式" align="center">
+                <el-table-column label="支付方式" align="center" width="80">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row. payWay=='0'">微信</el-tag>
                         <el-tag v-else-if="scope.row. payWay=='1'">会员卡</el-tag>
@@ -234,25 +235,27 @@
                         <el-tag v-else-if="scope.row.payStatus=='3'" type="success">退款成功</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="下单状态" align="center">
+                <el-table-column label="订单状态" align="center">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.submitStatus=='0'" type="danger">未下单</el-tag>
-                        <el-tag v-else-if="scope.row.submitStatus=='1'" type="success">下单成功</el-tag>
-                        <el-tag v-else-if="scope.row.submitStatus=='2'" type="danger">下单失败</el-tag>
+                        <el-tag v-else-if="scope.row.submitStatus=='1'" type="success">下单失败</el-tag>
+                        <el-tag v-else-if="scope.row.submitStatus=='2'" type="danger">未取票</el-tag>
+                        <el-tag v-else-if="scope.row.submitStatus=='3'" type="danger">已取票</el-tag>
+                        <el-tag v-else-if="scope.row.submitStatus=='4'" type="danger">已退票</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="取票状态" align="center">
-                    <template slot-scope="scope">
-                        <el-tag v-if="scope.row.printStatus=='0'" type="danger">未取票</el-tag>
-                        <el-tag v-else-if="scope.row.printStatus=='1'" type="success">已取票</el-tag>
-                    </template>
-                </el-table-column>
-                <el-table-column label="退票状态" align="center">
-                    <template slot-scope="scope">
-                        <el-tag v-if="scope.row.cancelStatus=='1'" type="success">已退票</el-tag>
-                        <el-tag v-else type="danger">未退票</el-tag>
-                    </template>
-                </el-table-column>
+                <!--<el-table-column label="取票状态" align="center">-->
+                    <!--<template slot-scope="scope">-->
+                        <!--<el-tag v-if="scope.row.printStatus=='0'" type="danger">未取票</el-tag>-->
+                        <!--<el-tag v-else-if="scope.row.printStatus=='1'" type="success">已取票</el-tag>-->
+                    <!--</template>-->
+                <!--</el-table-column>-->
+                <!--<el-table-column label="退票状态" align="center">-->
+                    <!--<template slot-scope="scope">-->
+                        <!--<el-tag v-if="scope.row.cancelStatus=='1'" type="success">已退票</el-tag>-->
+                        <!--<el-tag v-else type="danger">未退票</el-tag>-->
+                    <!--</template>-->
+                <!--</el-table-column>-->
                 <el-table-column label="操作" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-button
@@ -266,7 +269,7 @@
                             type="text"
                             icon="el-icon-setting"
                             @click="addChange(scope.$index, scope.row)"
-                        >查看详情</el-button>
+                        >查看</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -859,17 +862,9 @@ export default {
 
 <style scoped>
 .handle-box {
+    width: 100%;
     margin-bottom: 20px;
     font-size: 14px;
-}
-
-.handle-select {
-    width: 120px;
-}
-
-.handle-input {
-    width: 300px;
-    display: inline-block;
 }
 .table {
     width: 100%;
@@ -879,6 +874,7 @@ export default {
     color: #ff0000;
 }
 .mr10 {
+    width: 16%;
     margin-right: 10px;
 }
 </style>

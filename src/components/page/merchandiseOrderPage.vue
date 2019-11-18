@@ -19,21 +19,18 @@
                 </el-select>
                 <el-input
                     placeholder="订单号"
-                    style="width: 150px"
                     v-model="query.orderNo"
                     autocomplete="off"
                     class="mr10"
                 ></el-input>
                 <el-input
                     placeholder="手机号"
-                    style="width: 150px"
                     v-model="query.mobile"
                     autocomplete="off"
                     class="mr10"
                 ></el-input>
                 <el-input
                     placeholder="取货码"
-                    style="width: 150px"
                     v-model="query.printNo"
                     autocomplete="off"
                     class="mr10"
@@ -67,27 +64,26 @@
                     <el-option key="1" label="下单成功" value="1"></el-option>
                 </el-select>
                 <el-date-picker
-                    style="width: 200px;"
                     v-model="query.startDate"
                     type="datetime"
                     value-format="yyyy-MM-dd HH:mm:ss"
                     format="yyyy-MM-dd HH:mm:ss"
-                    placeholder="开始时间"
-                ></el-date-picker>至
+                    class="mr10"
+                    placeholder="开始时间（起）"
+                ></el-date-picker>
                 <el-date-picker
-                    style="width: 200px; margin-top: 10px"
                     v-model="query.endDate"
                     type="datetime"
                     value-format="yyyy-MM-dd HH:mm:ss"
                     format="yyyy-MM-dd HH:mm:ss"
-                    placeholder="结束时间"
+                    placeholder="结束时间（止）"
                     class="mr10"
                 ></el-date-picker>
-                <el-button type="primary" class="mr10" icon="el-icon-search" @click="Search">搜索</el-button>
+                <el-button type="primary" style="margin-top: 10px;width: 90px;" icon="el-icon-search" @click="Search">搜索</el-button>
                 <el-button
                     type="primary"
                     @click="showCinema = true"
-                    style="margin-left:500px;"
+                    style="margin-top: 10px;width: 150px;"
                 >打开卖品通知</el-button>
             </div>
             <div class="handle-box">
@@ -129,22 +125,22 @@
                 header-cell-class-name="table-header"
                 @selection-change="handleSelectionChange"
             >
-                <el-table-column prop="name" label="影院编码">
+                <el-table-column prop="name" label="影院编码" width="85">
                     <template slot-scope="scope">{{scope.row.cinemaCode}}</template>
                 </el-table-column>
-                <el-table-column label="订单号">
+                <el-table-column label="订单号" width="135">
                     <template slot-scope="scope">{{scope.row.orderNo}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="用户名">
+                <el-table-column prop="memo" label="用户名" width="75">
                     <template slot-scope="scope">{{scope.row.userName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="手机号码">
+                <el-table-column prop="memo" label="手机号码" width="110">
                     <template slot-scope="scope">{{scope.row.mobile}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="取货码">
+                <el-table-column prop="memo" label="取货码" width="85">
                     <template slot-scope="scope">{{scope.row.printNo}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="卖品内容">
+                <el-table-column prop="memo" label="卖品内容" width="110">
                     <template slot-scope="scope">{{scope.row.merNames}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="原价">
@@ -779,17 +775,9 @@ export default {
 
 <style scoped>
 .handle-box {
+    width: 100%;
     margin-bottom: 20px;
     font-size: 14px;
-}
-
-.handle-select {
-    width: 120px;
-}
-
-.handle-input {
-    width: 300px;
-    display: inline-block;
 }
 .table {
     width: 100%;
@@ -799,6 +787,7 @@ export default {
     color: #ff0000;
 }
 .mr10 {
+    width: 16%;
     margin-right: 10px;
 }
 </style>
