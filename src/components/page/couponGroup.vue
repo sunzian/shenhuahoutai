@@ -9,7 +9,19 @@
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-input v-model="query.name" placeholder="选择影院" class="handle-input mr10"></el-input>
+                <el-select
+                    clearable
+                    v-model="query.cinemaCode"
+                    placeholder="请选择影院"
+                    class="handle-input mr10"
+                >
+                    <el-option
+                        v-for="item in cinemaData"
+                        :key="item.cinemaCode"
+                        :label="item.cinemaName"
+                        :value="item.cinemaCode"
+                    ></el-option>
+                </el-select>
                 <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
                 <el-button
                     type="primary"
@@ -149,7 +161,8 @@
         </el-dialog>
         <!-- 编辑弹出框 -->
         <el-dialog title="详情" :visible.sync="editVisible">
-            <el-form ref="form" :model="form"> ,
+            <el-form ref="form" :model="form">
+                ,
                 <el-form-item label="适用影院名称：" :label-width="formLabelWidth">
                     <span>{{oCinemaName}}</span>
                 </el-form-item>
@@ -251,6 +264,7 @@ export default {
             selectScreenCode: {},
             selectGroup: {},
             cinemaInfo: [],
+            cinemaData: [],
             screenInfo: [],
             couponInfo: [],
             couponList: [],
@@ -285,7 +299,7 @@ export default {
                             cinemaInfo.cinemaName = oData[i].cinemaName;
                             this.cinemaInfo.push(cinemaInfo);
                         }
-                        console.log(this.cinemaInfo)
+                        console.log(this.cinemaInfo);
                         this.oForm.cinemaCode = this.cinemaInfo[0].cinemaCode;
                         this.selectValue = this.cinemaInfo[0].cinemaCode;
                         this.dialogFormVisible = true;
@@ -559,20 +573,17 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            let name = this.query.name;
-            let status = this.query.status;
-            if (!name) {
-                name = '';
-            }
-            if (!status) {
-                status = '';
+            let cinemaCode = this.query.cinemaCode;
+            if (!cinemaCode) {
+                cinemaCode = '';
             }
             let jsonArr = [];
             jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
             jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
-            // jsonArr.push({ key: 'filmName', value: name });
+            jsonArr.push({ key: 'cinemaCodes', value: cinemaCode });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
+            console.log(jsonArr)
             var params = ParamsAppend(jsonArr);
             https
                 .fetchPost('couponGroup/couponGroupPage', params)
@@ -586,6 +597,7 @@ export default {
                         this.query.pageNo = oData.pageNo;
                         this.query.totalCount = oData.totalCount;
                         this.query.totalPage = oData.totalPage;
+                        this.getAllCinema();
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
@@ -613,6 +625,28 @@ export default {
         selectDay(val) {
             // console.log(val)
             this.checkedDays = val.join(',');
+        },
+        // 获取所有影院
+        getAllCinema() {
+            https
+                .fetchPost('/cinema/getAllCinema')
+                .then(data => {
+                    if (data.data.code == 'success') {
+                        var res = JSON.parse(Decrypt(data.data.data));
+                        console.log(res);
+                        this.cinemaData = res;
+                    } else if (data.data.code == 'nologin') {
+                        this.message = data.data.message;
+                        this.open();
+                        this.$router.push('/login');
+                    } else {
+                        this.message = data.data.message;
+                        this.open();
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                });
         },
         // 获取所选影院影厅
         getAllScreen(value) {
@@ -701,23 +735,23 @@ export default {
         addCoupon() {
             this.selectGroup = {};
             if (this.oForm.couponName == '') {
-                return
+                return;
             }
             if (this.oForm.number == '') {
-                return
+                return;
             }
             if (this.restaurants.length == 0) {
                 this.message = '暂无优惠券可选';
                 this.open();
-                return
+                return;
             }
-            for (let i = 0;i < this.restaurants.length; i ++) {
+            for (let i = 0; i < this.restaurants.length; i++) {
                 if (this.oForm.couponName == this.restaurants[i].value) {
-                    this.selectGroup = this.restaurants[i]
+                    this.selectGroup = this.restaurants[i];
                 }
             }
             if (!this.selectGroup.value) {
-                return
+                return;
             }
             this.selectGroup.number = this.oForm.number;
             // 筛选重复优惠券
@@ -748,7 +782,7 @@ export default {
             this.couponList[index].number = 0;
         },
         handleSelect(item) {
-            console.log(item)
+            console.log(item);
             this.selectGroup = {};
             this.selectGroup = item;
         },

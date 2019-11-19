@@ -9,7 +9,19 @@
         </div>
         <div class="container" v-if="showSell">
             <div class="handle-box">
-                <el-input v-model="query.cinemaName" placeholder="影院名称" class="handle-input mr10"></el-input>
+                <el-select
+                    clearable
+                    v-model="query.cinemaCode"
+                    placeholder="请选择影院"
+                    class="handle-input mr10"
+                >
+                    <el-option
+                        v-for="item in cinemaData"
+                        :key="item.cinemaCode"
+                        :label="item.cinemaName"
+                        :value="item.cinemaCode"
+                    ></el-option>
+                </el-select>
                 <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
             </div>
             <el-table
@@ -157,7 +169,12 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item v-if="oForm.type==2" label="礼品名称：" :label-width="formLabelWidth" prop="cinemaName">
+                <el-form-item
+                    v-if="oForm.type==2"
+                    label="礼品名称："
+                    :label-width="formLabelWidth"
+                    prop="cinemaName"
+                >
                     <el-input style="width: 150px" v-model="oForm.name" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="优惠券名称：" :label-width="formLabelWidth" v-if="oForm.type == 1">
@@ -189,7 +206,10 @@
                         list-type="picture"
                     >
                         <el-button size="small" type="primary">点击上传</el-button>
-                        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过300kb 建议尺寸1500*150或按比例上传</div>
+                        <div
+                            slot="tip"
+                            class="el-upload__tip"
+                        >只能上传jpg/png文件，且不超过300kb 建议尺寸1500*150或按比例上传</div>
                     </el-upload>
                 </el-form-item>
                 <el-form-item label="每组发放数量：" :label-width="formLabelWidth" prop="number">
@@ -380,7 +400,7 @@ export default {
             oLimitStatus: '',
             oSingleLimitNumber: '',
             drawer: false,
-            showSell:true,//卖品信息页面是否展示开关
+            showSell: true, //卖品信息页面是否展示开关
             type: {
                 type: ''
             },
@@ -437,13 +457,14 @@ export default {
             selectScreenCode: {},
             selectGroup: {},
             cinemaInfo: [],
+            cinemaData: [],
             couponInfo: {},
             value: [],
             couponName: ''
         };
     },
     created() {
-        this.showSell=true
+        this.showSell = true;
     },
     mounted() {
         this.getMenu();
@@ -573,26 +594,29 @@ export default {
                     });
                 });
         },
-        addChange(index, row){//是否修改权限
-                const loading = this.$loading({
-                    lock: true,
-                    text: 'Loading',
-                    spinner: 'el-icon-loading',
-                    background: 'rgba(0, 0, 0, 0.7)',
-                    target: document.querySelector('.div1')
-                });
-                this.idx = index;
-                this.form = row;
-                var jsonArr = [];
-                jsonArr.push({key:"id",value:row.id});
-                let sign =md5(preSign(jsonArr));
-                jsonArr.push({key:"sign",value:sign});
-                let params = ParamsAppend(jsonArr);
-                https.fetchPost('chatroomAwards/updateAwardsPage',params).then((data) => {
+        addChange(index, row) {
+            //是否修改权限
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
+            this.idx = index;
+            this.form = row;
+            var jsonArr = [];
+            jsonArr.push({ key: 'id', value: row.id });
+            let sign = md5(preSign(jsonArr));
+            jsonArr.push({ key: 'sign', value: sign });
+            let params = ParamsAppend(jsonArr);
+            https
+                .fetchPost('chatroomAwards/updateAwardsPage', params)
+                .then(data => {
                     loading.close();
                     console.log(data);
                     console.log(JSON.parse(Decrypt(data.data.data)));
-                    if(data.data.code=='success'){
+                    if (data.data.code == 'success') {
                         this.oCinemaName = JSON.parse(Decrypt(data.data.data)).cinemaName;
                         this.oName = JSON.parse(Decrypt(data.data.data)).name;
                         this.oSingleNumber = JSON.parse(Decrypt(data.data.data)).singleNumber;
@@ -604,22 +628,22 @@ export default {
                         this.oId = JSON.parse(Decrypt(data.data.data)).id;
                         this.oSingleLimitNumber = JSON.parse(Decrypt(data.data.data)).monthLimitNumber;
                         this.editVisible = true;
-                    }else if(data.data.code=='nologin'){
-                        this.message=data.data.message
-                        this.open()
+                    } else if (data.data.code == 'nologin') {
+                        this.message = data.data.message;
+                        this.open();
                         this.$router.push('/login');
-                    }else{
-                        this.message=data.data.message
-                        this.open()
+                    } else {
+                        this.message = data.data.message;
+                        this.open();
                     }
-                }).catch(err=>{
+                })
+                .catch(err => {
                     loading.close();
-                    console.log(err)
-                    }
-                )
-            },
+                    console.log(err);
+                });
+        },
         show(row) {
-            this.showSell=false
+            this.showSell = false;
             //是否拥有权限
             const loading = this.$loading({
                 lock: true,
@@ -629,12 +653,12 @@ export default {
                 target: document.querySelector('.div1')
             });
             if (row.cinemaCode) {
-                this.cinemaCode = row.cinemaCode
+                this.cinemaCode = row.cinemaCode;
             }
             var jsonArr = [];
-            jsonArr.push({key:"pageNo",value:this.query.pageNo});
-            jsonArr.push({key:"pageSize",value:this.query.pageSize});
-            jsonArr.push({key:"cinemaCode",value:this.cinemaCode});
+            jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
+            jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
+            jsonArr.push({ key: 'cinemaCode', value: this.cinemaCode });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             let params = ParamsAppend(jsonArr);
@@ -674,7 +698,7 @@ export default {
                 target: document.querySelector('.div1')
             });
             var jsonArr = [];
-            if(this.oLimitStatus == 2) {
+            if (this.oLimitStatus == 2) {
                 jsonArr.push({ key: 'monthLimitNumber', value: this.oSingleLimitNumber });
             }
             jsonArr.push({ key: 'singleNumber', value: this.oSingleNumber });
@@ -768,15 +792,14 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            let cinemaName = this.query.cinemaName;
-            if (!cinemaName) {
-                cinemaName = '';
+            let cinemaCode = this.query.cinemaCode;
+            if (!cinemaCode) {
+                cinemaCode = '';
             }
             let jsonArr = [];
-            jsonArr.push({ key: 'cinemaName', value: cinemaName });
+            jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
             jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
             jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
-            jsonArr.push({ key: 'cinemaCode', value: name });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             var params = ParamsAppend(jsonArr);
@@ -792,6 +815,7 @@ export default {
                         this.query.pageNo = oData.pageNo;
                         this.query.totalCount = oData.totalCount;
                         this.query.totalPage = oData.totalPage;
+                        this.getAllCinema();
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
@@ -807,7 +831,7 @@ export default {
                 });
         },
         back() {
-            this.showSell=true
+            this.showSell = true;
             this.getMenu();
         },
         open() {
@@ -838,6 +862,7 @@ export default {
                     loading.close();
                     if (data.data.code == 'success') {
                         let cinemas = JSON.parse(Decrypt(data.data.data));
+                        this.cinemaData = cinemas;
                         for (let i = 0; i < cinemas.length; i++) {
                             let cinemaInfo = {};
                             cinemaInfo.label = cinemas[i].cinemaName;

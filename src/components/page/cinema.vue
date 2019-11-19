@@ -9,7 +9,19 @@
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-input style="width: 200px;" v-model="query.cinemaName" placeholder="影院名称" class="handle-input mr10"></el-input>
+                <el-select
+                    clearable
+                    v-model="query.cinemaCode"
+                    placeholder="请选择影院"
+                    class="handle-input mr10"
+                >
+                    <el-option
+                        v-for="item in cinemaInfo"
+                        :key="item.cinemaCode"
+                        :label="item.cinemaName"
+                        :value="item.cinemaCode"
+                    ></el-option>
+                </el-select>
                 <el-date-picker
                         v-model="query.startDate"
                         type="date"
@@ -674,6 +686,7 @@ export default {
             tableData: [],
             multipleSelection: [],
             delList: [],
+            cinemaInfo: [],
             editVisible: false,
             pageTotal: 0,
             idx: -1,
@@ -1008,13 +1021,13 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            let cinemaName = this.query.cinemaName;
+            let cinemaCode = this.query.cinemaCode;
             let startDate = this.query.startDate;
             let endDate = this.query.endDate;
             let reportedType = this.query.reportedType;
             let paymentType = this.query.paymentType;
-            if (!cinemaName) {
-                cinemaName = '';
+            if (!cinemaCode) {
+                cinemaCode = '';
             }
             if (!startDate) {
                 startDate = '';
@@ -1029,7 +1042,7 @@ export default {
                 paymentType = '';
             }
             let jsonArr = [];
-            jsonArr.push({ key: 'cinemaName', value: cinemaName });
+            jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
             jsonArr.push({ key: 'startDate', value: startDate });
             jsonArr.push({ key: 'endDate', value: endDate });
             jsonArr.push({ key: 'reportedType', value: reportedType });
@@ -1045,12 +1058,12 @@ export default {
                     loading.close();
                     if (data.data.code == 'success') {
                         var oData = JSON.parse(Decrypt(data.data.data));
-                        console.log(oData);
                         this.tableData = oData.data;
                         this.query.pageSize = oData.pageSize;
                         this.query.pageNo = oData.pageNo;
                         this.query.totalCount = oData.totalCount;
                         this.query.totalPage = oData.totalPage;
+                        this.getAllCinema();
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
@@ -1062,6 +1075,26 @@ export default {
                 })
                 .catch(err => {
                     loading.close();
+                    console.log(err);
+                });
+        },
+        getAllCinema() {
+            https
+                .fetchPost('/cinema/getAllCinema')
+                .then(data => {
+                    if (data.data.code == 'success') {
+                        var res = JSON.parse(Decrypt(data.data.data));
+                        this.cinemaInfo = res;
+                    } else if (data.data.code == 'nologin') {
+                        this.message = data.data.message;
+                        this.open();
+                        this.$router.push('/login');
+                    } else {
+                        this.message = data.data.message;
+                        this.open();
+                    }
+                })
+                .catch(err => {
                     console.log(err);
                 });
         },

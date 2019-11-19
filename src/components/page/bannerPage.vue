@@ -9,7 +9,19 @@
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-input v-model="query.cinemaName" placeholder="影院名称" class="handle-input mr10"></el-input>
+                <el-select
+                    clearable
+                    v-model="query.cinemaCode"
+                    placeholder="请选择影院"
+                    class="handle-input mr10"
+                >
+                    <el-option
+                        v-for="item in cinemaInfo"
+                        :key="item.cinemaCode"
+                        :label="item.cinemaName"
+                        :value="item.cinemaCode"
+                    ></el-option>
+                </el-select>
                 <el-select
                     clearable
                     v-model="query.status"
@@ -248,10 +260,7 @@
                             将文件拖到此处，或
                             <em>点击上传</em>
                         </div>
-                        <div
-                            class="el-upload__tip"
-                            slot="tip"
-                        >只能上传jpg/png文件，且不超过300kb 建议尺寸750*360或按比例上传</div>
+                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过300kb</div>
                     </el-upload>
                 </el-form-item>
                 <el-form-item label="跳转类型" :label-width="formLabelWidth">
@@ -375,10 +384,7 @@
                             将文件拖到此处，或
                             <em>点击上传</em>
                         </div>
-                        <div
-                            class="el-upload__tip"
-                            slot="tip"
-                        >只能上传jpg/png文件，且不超过300kb 建议尺寸750*360或按比例上传</div>
+                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过300kb</div>
                     </el-upload>
                 </el-form-item>
                 <el-form-item label="跳转类型" :label-width="formLabelWidth">
@@ -463,7 +469,7 @@ export default {
             },
             formLabelWidth: '120px',
             selectValue: {},
-            cinemaList: [],
+            cinemaInfo: [],
             options: [
                 {
                     value: '1',
@@ -488,40 +494,40 @@ export default {
             bannerType: [
                 {
                     value: '1',
-                    label: '卖品首页 建议大小750*360'
+                    label: '卖品首页 建议尺寸750*360'
                 },
                 {
                     value: '2',
-                    label: '积分商城首页 建议大小710*300'
+                    label: '积分商城首页 建议尺寸710*360'
                 },
                 {
                     value: '3',
-                    label: '个人中心首页 建议大小750*360'
+                    label: '个人中心首页 建议尺寸750*320'
                 },
                 {
                     value: '4',
-                    label: '支付成功页 建议大小670*160'
+                    label: '支付成功页 建议尺寸670*160'
                 },
                 {
                     value: '5',
-                    label: '放映厅首页 建议大小750*360'
+                    label: '放映厅首页 建议尺寸750*360'
                 },
                 {
                     value: '6',
-                    label: '首页广告弹窗 建议大小520*690'
+                    label: '首页广告弹窗 建议尺寸520*690'
                 },
                 {
                     value: '7',
-                    label: '今日大牌 建议大小670*200'
+                    label: '今日大牌 建议尺寸670*200'
                 },
                 {
                     value: '8',
-                    label: '签到送积分 建议大小670*200'
+                    label: '签到送积分 建议尺寸670*200'
                 },
                 {
                     value: '9',
-                    label: '分享得金币 建议大小670*200'
-                },
+                    label: '分享得金币 建议尺寸670*200'
+                }
                 // {
                 //     value: '10',
                 //     label: '积分换金币'
@@ -902,7 +908,7 @@ export default {
             setTimeout(() => {
                 let status = this.query.status;
                 let bannerLevel = this.query.bannerLevel;
-                let cinemaName = this.query.cinemaName;
+                let cinemaCode = this.query.cinemaCode;
                 let category = this.query.category;
                 if (!status) {
                     status = '';
@@ -910,8 +916,8 @@ export default {
                 if (!bannerLevel) {
                     bannerLevel = '';
                 }
-                if (!cinemaName) {
-                    cinemaName = '';
+                if (!cinemaCode) {
+                    cinemaCode = '';
                 }
                 if (!category) {
                     category = '';
@@ -919,7 +925,7 @@ export default {
                 let jsonArr = [];
                 jsonArr.push({ key: 'status', value: status });
                 jsonArr.push({ key: 'bannerLevel', value: bannerLevel });
-                jsonArr.push({ key: 'cinemaName', value: cinemaName });
+                jsonArr.push({ key: 'cinemaCodes', value: cinemaCode });
                 jsonArr.push({ key: 'category', value: category });
                 jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
                 jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
@@ -938,6 +944,7 @@ export default {
                             this.query.pageNo = oData.pageNo;
                             this.query.totalCount = oData.totalCount;
                             this.query.totalPage = oData.totalPage;
+                            this.getAllCinema();
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
                             this.open();
@@ -961,6 +968,28 @@ export default {
         },
         changeCinema(val) {
             this.oForm.cinemaCode = val;
+        },
+        // 获取所有影院
+        getAllCinema() {
+            https
+                .fetchPost('/cinema/getAllCinema')
+                .then(data => {
+                    if (data.data.code == 'success') {
+                        var res = JSON.parse(Decrypt(data.data.data));
+                        console.log(res);
+                        this.cinemaInfo = res;
+                    } else if (data.data.code == 'nologin') {
+                        this.message = data.data.message;
+                        this.open();
+                        this.$router.push('/login');
+                    } else {
+                        this.message = data.data.message;
+                        this.open();
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                });
         },
         // 多选操作
         handleSelectionChange(val) {
