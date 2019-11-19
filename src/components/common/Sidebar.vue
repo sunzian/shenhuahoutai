@@ -14,7 +14,7 @@
                 <template v-if="item.submenuList" >
                     <el-submenu :index="item.id+''" :key="item.id">
                         <template slot="title">
-                            <i class="el-icon-location"></i>
+                            <i :class=" item.menuIcon "></i>
                             <span slot="title">{{ item.menuName }}</span>
                         </template>
                         <template v-for="subItem in item.submenuList" >

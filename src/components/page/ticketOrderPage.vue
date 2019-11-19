@@ -217,9 +217,9 @@
                 <el-table-column prop="memo" label="回传金额" width="80">
                     <template slot-scope="scope">{{scope.row.totalSubmitPrice}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="上报金额" width="80">
-                    <template slot-scope="scope">{{scope.row.totalReportPrice}}</template>
-                </el-table-column>
+                <!--<el-table-column prop="memo" label="上报金额" width="80">-->
+                    <!--<template slot-scope="scope">{{scope.row.totalReportPrice}}</template>-->
+                <!--</el-table-column>-->
                 <el-table-column prop="memo" label="支付时间" width="100">
                     <template slot-scope="scope">{{scope.row.payTime}}</template>
                 </el-table-column>
