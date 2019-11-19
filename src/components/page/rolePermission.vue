@@ -9,12 +9,12 @@
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-input placeholder="名称" style="width: 150px" v-model="query.name" autocomplete="off"></el-input>
+                <el-input class="mr10" placeholder="名称" v-model="query.name" autocomplete="off"></el-input>
                 <el-select clearable v-model="query.status" placeholder="状态" class="handle-select mr10">
                     <el-option key="1" label="正常" value="1"></el-option>
                     <el-option key="2" label="禁用" value="2"></el-option>
                 </el-select>
-                <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
+                <el-button style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
             </div>
             <el-table
                     :data="tableData"
@@ -24,7 +24,7 @@
                     header-cell-class-name="table-header"
                     @selection-change="handleSelectionChange"
             >
-                <el-table-column prop="name" label="角色名">
+                <el-table-column prop="name" label="角色名" width="110">
                     <template slot-scope="scope">{{scope.row.roleName}}</template>
                 </el-table-column>
                 <el-table-column label="创建时间">
@@ -33,10 +33,10 @@
                 <el-table-column prop="memo" label="描述">
                     <template slot-scope="scope">{{scope.row.memo}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="排序">
+                <el-table-column prop="sort" label="排序" width="110">
                     <template slot-scope="scope">{{scope.row.sort}}</template>
                 </el-table-column>
-                <el-table-column label="状态" align="center">
+                <el-table-column label="状态" align="center" width="110">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status=='1'" type='success'
                         >正常</el-tag>
@@ -399,25 +399,16 @@
 
 <style scoped>
     .handle-box {
+        width: 100%;
         margin-bottom: 20px;
-    }
-
-    .handle-select {
-        width: 120px;
-    }
-
-    .handle-input {
-        width: 300px;
-        display: inline-block;
+        font-size: 14px;
     }
     .table {
         width: 100%;
         font-size: 14px;
     }
-    .red {
-        color: #ff0000;
-    }
     .mr10 {
+        width: 16%;
         margin-right: 10px;
     }
 </style>

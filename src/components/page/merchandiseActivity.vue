@@ -26,12 +26,12 @@
                     ></el-option>
                 </el-select>
                 <el-input v-model="query.name" placeholder="活动名称" class="handle-input mr10"></el-input>
-                <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
+                <el-button style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
                 <el-button
                         type="primary"
                         @click="addPage"
                         icon="el-icon-circle-plus-outline"
-                        style="margin-left: 315px"
+                        style="float: right;margin-top: 10px"
                 >新增活动</el-button>
             </div>
             <el-table
@@ -42,10 +42,10 @@
                     ref="multipleTable"
                     header-cell-class-name="table-header"
             >
-                <el-table-column prop="name" label="适用影院">
+                <el-table-column prop="name" label="适用影院" width="140">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="适用商品">
+                <el-table-column prop="name" label="适用商品" width="100">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.selectMerchandiseType == 0">全部商品</el-tag>
                         <el-tag v-else-if="scope.row.selectMerchandiseType == 1" >{{scope.row.merchandiseName}}</el-tag>
@@ -64,7 +64,7 @@
                         <el-tag v-else-if="scope.row.isLimitTotal == 1" >{{scope.row.totalNumber}}，剩余{{scope.row.totalSurplus}}</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="sort" label="个人限购">
+                <el-table-column prop="sort" label="个人限购" width="90">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.isLimitSingle == 0">不限购</el-tag>
                         <el-tag v-else-if="scope.row.isLimitSingle == 1" >{{scope.row.singleNumber}}</el-tag>
@@ -76,16 +76,16 @@
                         <el-tag v-else-if="scope.row.reduceType == 2" >满减金额</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="sort" label="金额">
+                <el-table-column prop="sort" label="金额" width="90">
                     <template slot-scope="scope">{{scope.row.discountMoney}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="状态">
+                <el-table-column prop="sort" label="状态" width="90">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status == 1" type="success">启用</el-tag>
                         <el-tag v-else type="danger">未启用</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" width="180" align="center" fixed="right">
+                <el-table-column label="操作" width="220" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-button
                                 type="success"
@@ -1436,25 +1436,16 @@
 
 <style scoped>
     .handle-box {
+        width: 100%;
         margin-bottom: 20px;
-    }
-
-    .handle-select {
-        width: 120px;
-    }
-
-    .handle-input {
-        width: 300px;
-        display: inline-block;
+        font-size: 14px;
     }
     .table {
         width: 100%;
         font-size: 14px;
     }
-    .red {
-        color: #ff0000;
-    }
     .mr10 {
+        width: 16%;
         margin-right: 10px;
     }
 </style>

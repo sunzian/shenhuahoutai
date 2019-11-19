@@ -9,21 +9,6 @@
         </div>
         <!--影院信息展示页面-->
         <div class="container" v-if="showSell">
-            <div class="handle-box">
-                <el-input v-model="query.name" placeholder="角色名" class="handle-input mr10"></el-input>
-                <el-select
-                    clearable
-                    v-model="query.status"
-                    placeholder="状态"
-                    class="handle-select mr10"
-                >
-                    <el-option key="1" label="审核中" value="1"></el-option>
-                    <el-option key="2" label="未审核" value="2"></el-option>
-                    <el-option key="3" label="通过" value="3"></el-option>
-                    <el-option key="4" label="审核失败" value="4"></el-option>
-                </el-select>
-                <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
-            </div>
             <el-table
                 :data="tableData"
                 border
@@ -164,13 +149,13 @@
                 header-cell-class-name="table-header"
                 @selection-change="handleSelectionChange"
             >
-                <el-table-column prop="name" label="奖品等级">
+                <el-table-column prop="name" label="奖品等级" width="100">
                     <template slot-scope="scope">{{scope.row.prizeLevel}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="奖品名称">
                     <template slot-scope="scope">{{scope.row.prizeName}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="奖品图片">
+                <el-table-column prop="sort" label="奖品图片" width="100">
                     <template slot-scope="scope">
                         <el-popover placement="right" title trigger="hover">
                             <img style="width: 400px" :src="scope.row.prizePicture" />
@@ -186,13 +171,13 @@
                 <el-table-column prop="sort" label="奖品总数量">
                     <template slot-scope="scope">{{scope.row.prizeNumber}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="奖品概率">
+                <el-table-column prop="sort" label="奖品概率" width="100">
                     <template slot-scope="scope">{{scope.row.percent}}</template>
                 </el-table-column>
                 <el-table-column prop="sort" label="已中奖数量">
                     <template slot-scope="scope">{{scope.row.hasTheNumber}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="奖品类型">
+                <el-table-column prop="sort" label="奖品类型" width="100">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.prizeType=='1'">优惠券</el-tag>
                         <el-tag v-else-if="scope.row.prizeType=='2'">实物</el-tag>
@@ -201,7 +186,7 @@
                 <el-table-column prop="sort" label="优惠券名称">
                     <template slot-scope="scope">{{scope.row.couponName}}</template>
                 </el-table-column>
-                <el-table-column label="操作" width="100" align="center" fixed="right">
+                <el-table-column label="操作" width="160" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-button
                             type="text"
@@ -230,7 +215,7 @@
         <el-dialog title="新增" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
                 <el-form-item label="奖品等级" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="form.prizeLevel" autocomplete="off"></el-input>
+                    <el-input style="width: 250px" type="number" @blur="match" v-model="form.prizeLevel" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="奖品名称" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="form.prizeName" autocomplete="off"></el-input>
@@ -299,7 +284,7 @@
         <el-dialog title="编辑" :visible.sync="showModify">
             <el-form ref="form" :model="pForm">
                 <el-form-item label="奖品等级" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="pForm.prizeLevel" autocomplete="off"></el-input>
+                    <el-input style="width: 250px" type="number" @blur="oMatch" v-model="pForm.prizeLevel" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="奖品名称" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="pForm.prizeName" autocomplete="off"></el-input>
@@ -525,13 +510,13 @@
                 header-cell-class-name="table-header"
                 @selection-change="handleSelectionChange"
             >
-                <el-table-column prop="name" label="奖品等级">
+                <el-table-column prop="name" label="奖品等级" width="100">
                     <template slot-scope="scope">{{scope.row.prizeLevel}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="奖品名称">
                     <template slot-scope="scope">{{scope.row.prizeName}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="奖品图片">
+                <el-table-column prop="sort" label="奖品图片" width="100">
                     <template slot-scope="scope">
                         <el-popover placement="right" title trigger="hover">
                             <img style="width: 400px" :src="scope.row.prizePicture" />
@@ -547,13 +532,13 @@
                 <el-table-column prop="sort" label="奖品总数量">
                     <template slot-scope="scope">{{scope.row.prizeNumber}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="奖品概率">
+                <el-table-column prop="sort" label="奖品概率" width="100">
                     <template slot-scope="scope">{{scope.row.percent}}</template>
                 </el-table-column>
                 <el-table-column prop="sort" label="已中奖数量">
                     <template slot-scope="scope">{{scope.row.hasTheNumber}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="奖品类型">
+                <el-table-column prop="sort" label="奖品类型" width="100">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.prizeType=='1'">优惠券</el-tag>
                         <el-tag v-else-if="scope.row.prizeType=='2'">实物</el-tag>
@@ -562,7 +547,7 @@
                 <el-table-column prop="sort" label="优惠券名称">
                     <template slot-scope="scope">{{scope.row.couponName}}</template>
                 </el-table-column>
-                <el-table-column label="操作" width="100" align="center" fixed="right">
+                <el-table-column label="操作" width="160" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-button
                             type="text"
@@ -679,6 +664,18 @@ export default {
         this.getMenu();
     },
     methods: {
+        match(){
+            if(this.form.prizeLevel<1||this.form.prizeLevel>7){
+                this.message = '请输入1-7的数字';
+                this.open();
+            }
+        },
+        oMatch(){
+            if(this.pForm.prizeLevel<1||this.pForm.prizeLevel>7){
+                this.message = '请输入1-7的数字';
+                this.open();
+            }
+        },
         beforeUpload() {
             //上传之前
             this.type.type = EncryptReplace('activity');
@@ -1122,6 +1119,17 @@ export default {
     }
 };
 </script>
+
+<style>
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+    }
+
+    input[type='number'] {
+        -moz-appearance: textfield;
+    }
+</style>
 
 <style scoped>
 .handle-box {

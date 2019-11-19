@@ -22,7 +22,7 @@
                         :value="item.cinemaCode"
                     ></el-option>
                 </el-select>
-                <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
+                <el-button style="margin-top: 10px;width: 90px;"  type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
             </div>
             <el-table
                 :data="tableData"
@@ -32,16 +32,16 @@
                 ref="multipleTable"
                 header-cell-class-name="table-header"
             >
-                <el-table-column prop="name" label="影院编码">
+                <el-table-column prop="name" label="影院编码" width="110">
                     <template slot-scope="scope">{{scope.row.cinemaCode}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="影院名称">
+                <el-table-column prop="name" label="影院名称" width="200">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="省份">
+                <el-table-column prop="memo" label="省份" width="110">
                     <template slot-scope="scope">{{scope.row.province}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="城市">
+                <el-table-column prop="sort" label="城市" width="110">
                     <template slot-scope="scope">{{scope.row.city}}</template>
                 </el-table-column>
                 <el-table-column prop="sort" label="详细地址">
@@ -50,7 +50,7 @@
                 <el-table-column prop="sort" label="联系方式" width="150">
                     <template slot-scope="scope">{{scope.row.serviceMobile}}</template>
                 </el-table-column>
-                <el-table-column label="操作" width="180" align="center">
+                <el-table-column label="操作" width="140" align="center">
                     <template slot-scope="scope">
                         <el-button
                             type="text"
@@ -103,49 +103,49 @@
                     <el-option key="2" label="未启用" value="2"></el-option>
                 </el-select>
                 <el-date-picker
-                    style="width: 200px;"
                     v-model="query.minStartDate"
                     type="datetime"
-                    value-format="yyyy-MM-dd hh:mm:ss"
-                    format="yyyy-MM-dd hh:mm:ss"
-                    placeholder="开始时间"
-                ></el-date-picker>至
+                    class="mr10"
+                    value-format="yyyy-MM-dd HH:mm:ss"
+                    format="yyyy-MM-dd HH:mm:ss"
+                    placeholder="开始时间（起）"
+                ></el-date-picker>
                 <el-date-picker
-                    style="width: 200px;"
                     v-model="query.maxStartDate"
                     type="datetime"
-                    value-format="yyyy-MM-dd hh:mm:ss"
-                    format="yyyy-MM-dd hh:mm:ss"
-                    placeholder="开始时间"
+                    class="mr10"
+                    value-format="yyyy-MM-dd HH:mm:ss"
+                    format="yyyy-MM-dd HH:mm:ss"
+                    placeholder="开始时间（止）"
                 ></el-date-picker>
                 <el-date-picker
-                    style="width: 200px;margin-left:10px;"
                     v-model="query.minEndDate"
                     type="datetime"
-                    value-format="yyyy-MM-dd hh:mm:ss"
-                    format="yyyy-MM-dd hh:mm:ss"
-                    placeholder="结束时间"
-                ></el-date-picker>至
+                    class="mr10"
+                    value-format="yyyy-MM-dd HH:mm:ss"
+                    format="yyyy-MM-dd HH:mm:ss"
+                    placeholder="结束时间（起）"
+                ></el-date-picker>
                 <el-date-picker
-                    style="width: 200px;"
                     v-model="query.maxEndDate"
                     type="datetime"
-                    value-format="yyyy-MM-dd hh:mm:ss"
-                    format="yyyy-MM-dd hh:mm:ss"
-                    placeholder="结束时间"
+                    class="mr10"
+                    value-format="yyyy-MM-dd HH:mm:ss"
+                    format="yyyy-MM-dd HH:mm:ss"
+                    placeholder="结束时间（止）"
                 ></el-date-picker>
-                <el-button type="primary" icon="el-icon-search" @click="searchEmployee">搜索</el-button>
+                <el-button style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="searchEmployee">搜索</el-button>
                 <el-button
                     type="primary"
                     @click="back"
                     icon="el-icon-circle-plus-outline"
-                    style="margin-top: 10px"
+                    style="float: right;margin-top: 10px"
                 >返回影院列表</el-button>
                 <el-button
                     type="primary"
                     @click="addPage"
                     icon="el-icon-circle-plus-outline"
-                    style="margin-left: 25px"
+                    style="float: right;margin-right: 10px;margin-top: 10px"
                 >新增</el-button>
             </div>
             <el-table
@@ -156,7 +156,7 @@
                 ref="multipleTable"
                 header-cell-class-name="table-header"
             >
-                <el-table-column prop="name" label="影厅类型">
+                <el-table-column prop="name" label="影厅类型" width="120" >
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.screenType == 1" type="success">全部影厅</el-tag>
                         <el-tag v-else type="success">部分影厅</el-tag>
@@ -168,37 +168,37 @@
                         slot-scope="scope"
                     >{{scope.row.screenNames}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="影片类型">
+                <el-table-column prop="name" label="影片类型" width="120">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.filmType == 1" type="success">全部影片</el-tag>
                         <el-tag v-else type="success">部分影片</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="name" label="影片名称">
+                <el-table-column prop="name" label="影片名称" width="180">
                     <template
                         v-if="scope.row.filmType == 2"
                         slot-scope="scope"
                     >{{scope.row.filmNames}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="开始日期">
+                <el-table-column prop="memo" label="开始日期" width="160" >
                     <template slot-scope="scope">{{scope.row.startDate}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="结束日期">
+                <el-table-column prop="sort" label="结束日期" width="160" >
                     <template slot-scope="scope">{{scope.row.endDate}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="是否启用" width="150">
+                <el-table-column prop="sort" label="是否启用" width="100">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status == 1" type="success">启用</el-tag>
                         <el-tag v-else type="danger">未启用</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="sort" label="第三方支付代售费" width="150">
+                <el-table-column prop="sort" label="第三方支付代售费" width="140">
                     <template slot-scope="scope">{{scope.row.thirdServiceFee}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="会员卡支付代售费" width="150">
+                <el-table-column prop="sort" label="会员卡支付代售费" width="140">
                     <template slot-scope="scope">{{scope.row.memberServiceFee}}</template>
                 </el-table-column>
-                <el-table-column label="操作" width="180" align="center">
+                <el-table-column label="操作" width="160" align="center">
                     <template slot-scope="scope">
                         <el-button
                             type="text"
@@ -489,7 +489,7 @@
                             >&nbsp;</el-radio>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="name" label="图片" style="width:200">
+                    <el-table-column prop="name" label="图片">
                         <template slot-scope="scope">
                             <el-popover placement="right" title trigger="hover">
                                 <img style="width:400px" :src="scope.row.image" />
@@ -1449,26 +1449,17 @@ export default {
 </script>
 
 <style scoped>
-.handle-box {
-    margin-bottom: 20px;
-}
-
-.handle-select {
-    width: 120px;
-}
-
-.handle-input {
-    width: 300px;
-    display: inline-block;
-}
-.table {
-    width: 100%;
-    font-size: 14px;
-}
-.red {
-    color: #ff0000;
-}
-.mr10 {
-    margin-right: 10px;
-}
+    .handle-box {
+        width: 100%;
+        margin-bottom: 20px;
+        font-size: 14px;
+    }
+    .table {
+        width: 100%;
+        font-size: 14px;
+    }
+    .mr10 {
+        width: 16%;
+        margin-right: 10px;
+    }
 </style>

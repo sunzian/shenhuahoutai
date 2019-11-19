@@ -19,28 +19,24 @@
                 </el-select>
                 <el-input
                     placeholder="用户名"
-                    style="width: 150px"
                     v-model="query.userName"
                     autocomplete="off"
                     class="mr10"
                 ></el-input>
                 <el-input
                     placeholder="手机号"
-                    style="width: 150px"
                     v-model="query.phone"
                     autocomplete="off"
                     class="mr10"
                 ></el-input>
                 <el-input
                     placeholder="权益卡名称"
-                    style="width: 150px"
                     v-model="query.benefitName"
                     autocomplete="off"
                     class="mr10"
                 ></el-input>
                 <el-input
                     placeholder="订单号"
-                    style="width: 150px"
                     v-model="query.orderNumber"
                     autocomplete="off"
                     class="mr10"
@@ -69,7 +65,7 @@
                 <el-button
                     type="primary"
                     icon="el-icon-search"
-                    style="margin-top: 10px;"
+                    style="margin-top: 10px;width: 90px;"
                     @click="Search"
                 >搜索</el-button>
             </div>
@@ -376,7 +372,7 @@ export default {
                 jsonArr.push({ key: 'benefitName', value: benefitName });
                 jsonArr.push({ key: 'phone', value: phone });
                 jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
-                jsonArr.push({ key: 'pageSize', value: this.query.pageSize }); 
+                jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
                 console.log(jsonArr)
@@ -439,28 +435,18 @@ export default {
 </script>
 
 <style scoped>
-.handle-box {
-    margin-bottom: 20px;
-    font-size: 14px;
-}
-
-.handle-select {
-    width: 120px;
-}
-
-.handle-input {
-    width: 300px;
-    display: inline-block;
-}
-.table {
-    width: 100%;
-    font-size: 14px;
-}
-.red {
-    color: #ff0000;
-}
-.mr10 {
-    margin-right: 10px;
-}
+    .handle-box {
+        width: 100%;
+        margin-bottom: 20px;
+        font-size: 14px;
+    }
+    .table {
+        width: 100%;
+        font-size: 14px;
+    }
+    .mr10 {
+        width: 16%;
+        margin-right: 10px;
+    }
 </style>
 

@@ -22,7 +22,7 @@
                         :value="item.cinemaCode"
                     ></el-option>
                 </el-select>
-                <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
+                <el-button style="margin-top: 10px;width: 90px;"  type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
             </div>
             <el-table
                 :data="tableData"
@@ -32,16 +32,16 @@
                 ref="multipleTable"
                 header-cell-class-name="table-header"
             >
-                <el-table-column prop="name" label="影院编码">
+                <el-table-column prop="name" label="影院编码" width="110">
                     <template slot-scope="scope">{{scope.row.cinemaCode}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="影院名称">
+                <el-table-column prop="name" label="影院名称" width="200">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="省份">
+                <el-table-column prop="memo" label="省份" width="110">
                     <template slot-scope="scope">{{scope.row.province}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="城市">
+                <el-table-column prop="sort" label="城市" width="110">
                     <template slot-scope="scope">{{scope.row.city}}</template>
                 </el-table-column>
                 <el-table-column prop="sort" label="详细地址">
@@ -79,13 +79,13 @@
                     type="primary"
                     @click="back"
                     icon="el-icon-circle-plus-outline"
-                    style="margin-left: 700px"
+                    style="float: right"
                 >返回影院列表</el-button>
                 <el-button
                     type="primary"
                     @click="addPage"
                     icon="el-icon-circle-plus-outline"
-                    style="margin-left: 25px"
+                    style="float: right;margin-right: 10px"
                 >新增奖品</el-button>
             </div>
             <el-table
@@ -96,10 +96,10 @@
                 ref="multipleTable"
                 header-cell-class-name="table-header"
             >
-                <el-table-column prop="name" label="影院">
+                <el-table-column prop="name" label="影院" width="160">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
-                <el-table-column label="礼物图片">
+                <el-table-column label="礼物图片" width="140">
                     <template slot-scope="scope">
                         <el-popover placement="right" title trigger="hover">
                             <img style="width:400px" :src="scope.row.imageUrl" />
@@ -115,19 +115,19 @@
                 <el-table-column prop="memo" label="名称">
                     <template slot-scope="scope">{{scope.row.name}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="奖品类型">
+                <el-table-column prop="sort" label="奖品类型" width="140">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.type=='1'">优惠券</el-tag>
                         <el-tag v-else-if="scope.row.type=='2'">实物</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="sort" label="房间最大发送组数">
+                <el-table-column prop="sort" label="房间最大发送组数" width="140">
                     <template slot-scope="scope">{{scope.row.groupNumber}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="每组数量">
+                <el-table-column prop="sort" label="每组数量" width="140">
                     <template slot-scope="scope">{{scope.row.singleNumber}}</template>
                 </el-table-column>
-                <el-table-column label="操作" width="180" align="center">
+                <el-table-column label="操作" width="140" align="center">
                     <template slot-scope="scope">
                         <el-button
                             type="text"
@@ -1023,26 +1023,17 @@ export default {
 </script>
 
 <style scoped>
-.handle-box {
-    margin-bottom: 20px;
-}
-
-.handle-select {
-    width: 120px;
-}
-
-.handle-input {
-    width: 300px;
-    display: inline-block;
-}
-.table {
-    width: 100%;
-    font-size: 14px;
-}
-.red {
-    color: #ff0000;
-}
-.mr10 {
-    margin-right: 10px;
-}
+    .handle-box {
+        width: 100%;
+        margin-bottom: 20px;
+        font-size: 14px;
+    }
+    .table {
+        width: 100%;
+        font-size: 14px;
+    }
+    .mr10 {
+        width: 16%;
+        margin-right: 10px;
+    }
 </style>

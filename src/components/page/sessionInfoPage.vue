@@ -26,17 +26,18 @@
                     ></el-option>
                 </el-select>
                 <el-input v-model="query.filmName" placeholder="影片名称" class="handle-input mr10"></el-input>
-                <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
+                <el-button style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
                 <el-button
                         type="primary"
                         @click="thirdPrice"
+                        style="float: right;margin-top: 10px"
                         icon="el-icon-circle-plus-outline"
                 >批量修改会员价</el-button>
                 <el-button
                     type="primary"
                     @click="addPage"
                     icon="el-icon-circle-plus-outline"
-                    style="margin-left: 10px"
+                    style="float: right;margin-top: 10px"
                 >重新获取排期</el-button>
             </div>
             <el-table
@@ -50,40 +51,40 @@
             >
                 <el-table-column type="selection" width="55">
                 </el-table-column>
-                <el-table-column prop="code" label="影院名称" fixed>
+                <el-table-column prop="code" label="影院名称" width="160" fixed>
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="影片名称" fixed>
+                <el-table-column prop="name" label="影片名称" width="140" fixed>
                     <template slot-scope="scope">{{scope.row.filmName}}</template>
                 </el-table-column>
-                <el-table-column prop="time" label="影厅名称">
+                <el-table-column prop="time" label="影厅名称" width="140">
                     <template slot-scope="scope">{{scope.row.screenName}}</template>
                 </el-table-column>
-                <el-table-column prop="time" label="放映时间">
+                <el-table-column prop="time" label="放映时间" width="160">
                     <template slot-scope="scope">{{scope.row.sessionTime}}</template>
                 </el-table-column>
-                <el-table-column prop="number" label="时长（分钟）" width="130">
+                <el-table-column prop="number" label="时长（分钟）" width="110">
                     <template slot-scope="scope">{{scope.row.duration}}</template>
                 </el-table-column>
-                <el-table-column prop="number" label="语言">
+                <el-table-column prop="number" label="语言" width="80">
                     <template slot-scope="scope">{{scope.row.language}}</template>
                 </el-table-column>
-                <el-table-column prop="number" label="标准价">
+                <el-table-column prop="number" label="标准价" width="80">
                     <template slot-scope="scope">{{scope.row.standardPrice}}</template>
                 </el-table-column>
-                <el-table-column prop="booleans" label="结算价">
+                <el-table-column prop="booleans" label="结算价" width="80">
                     <template slot-scope="scope">{{scope.row.settlePrice}}</template>
                 </el-table-column>
-                <el-table-column prop="booleans" label="最低价">
+                <el-table-column prop="booleans" label="最低价" width="80">
                     <template slot-scope="scope">{{scope.row.lowestPrice}}</template>
                 </el-table-column>
-                <el-table-column prop="number" label="会员价">
+                <el-table-column prop="number" label="会员价" width="80">
                     <template slot-scope="scope">{{scope.row.memberPrice}}</template>
                 </el-table-column>
-                <el-table-column prop="time" label="增值服务费" width="130">
+                <el-table-column prop="time" label="增值服务费" width="110">
                     <template slot-scope="scope">{{scope.row.ticketFee}}</template>
                 </el-table-column>
-                <el-table-column prop="time" label="影院补贴">
+                <el-table-column prop="time" label="影院补贴" width="100">
                     <template slot-scope="scope">{{scope.row.cinemaAllowance}}</template>
                 </el-table-column>
                 <el-table-column prop="time" label="第三方支付代售费" width="150">
@@ -770,27 +771,18 @@ export default {
 </script>
 
 <style scoped>
-.handle-box {
-    margin-bottom: 20px;
-}
-
-.handle-select {
-    width: 120px;
-}
-
-.handle-input {
-    width: 300px;
-    display: inline-block;
-}
-.table {
-    width: 100%;
-    font-size: 14px;
-}
-.red {
-    color: #ff0000;
-}
-.mr10 {
-    margin-right: 10px;
-}
+    .handle-box {
+        width: 100%;
+        margin-bottom: 20px;
+        font-size: 14px;
+    }
+    .table {
+        width: 100%;
+        font-size: 14px;
+    }
+    .mr10 {
+        width: 16%;
+        margin-right: 10px;
+    }
 </style>
 

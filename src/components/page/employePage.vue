@@ -10,7 +10,7 @@
         <div class="container" v-if="showSell">
             <div class="handle-box">
                 <el-input v-model="query.name" placeholder="选择影院" class="handle-input mr10"></el-input>
-                <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
+                <el-button style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
             </div>
             <el-table
                 :data="tableData"
@@ -20,16 +20,16 @@
                 ref="multipleTable"
                 header-cell-class-name="table-header"
             >
-                <el-table-column prop="name" label="影院编码">
+                <el-table-column prop="name" label="影院编码" width="110">
                     <template slot-scope="scope">{{scope.row.cinemaCode}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="影院名称">
+                <el-table-column prop="name" label="影院名称" width="200">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="省份">
+                <el-table-column prop="memo" label="省份" width="110">
                     <template slot-scope="scope">{{scope.row.province}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="城市">
+                <el-table-column prop="sort" label="城市" width="110">
                     <template slot-scope="scope">{{scope.row.city}}</template>
                 </el-table-column>
                 <el-table-column prop="sort" label="详细地址">
@@ -65,18 +65,18 @@
             <div class="handle-box">
                 <el-input v-model="query.name" placeholder="输入员工姓名" class="handle-input mr10"></el-input>
                 <el-input v-model="query.code" placeholder="输入员工编码" class="handle-input mr10"></el-input>
-                <el-button type="primary" icon="el-icon-search" @click="searchEmployee">搜索</el-button>
+                <el-button style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="searchEmployee">搜索</el-button>
                 <el-button
                     type="primary"
                     @click="back"
                     icon="el-icon-circle-plus-outline"
-                    style="margin-left: 200px"
+                    style="float: right;margin-top: 10px"
                 >返回影院列表</el-button>
                 <el-button
                     type="primary"
                     @click="addPage"
                     icon="el-icon-circle-plus-outline"
-                    style="margin-left: 25px"
+                    style="float: right;margin-top: 10px"
                 >新增员工</el-button>
             </div>
             <el-table
@@ -318,7 +318,7 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            var jsonArr = []; 
+            var jsonArr = [];
             jsonArr.push({ key: 'employeeName', value: this.oForm.name });
             jsonArr.push({ key: 'employeeMobile', value: this.oForm.employeeMobile });
             jsonArr.push({ key: 'cinemaCode', value: this.cinemaCode });
@@ -864,26 +864,17 @@ export default {
 </script>
 
 <style scoped>
-.handle-box {
-    margin-bottom: 20px;
-}
-
-.handle-select {
-    width: 120px;
-}
-
-.handle-input {
-    width: 300px;
-    display: inline-block;
-}
-.table {
-    width: 100%;
-    font-size: 14px;
-}
-.red {
-    color: #ff0000;
-}
-.mr10 {
-    margin-right: 10px;
-}
+    .handle-box {
+        width: 100%;
+        margin-bottom: 20px;
+        font-size: 14px;
+    }
+    .table {
+        width: 100%;
+        font-size: 14px;
+    }
+    .mr10 {
+        width: 16%;
+        margin-right: 10px;
+    }
 </style>

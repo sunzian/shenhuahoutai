@@ -38,7 +38,7 @@
                     </template>
                 </el-table-column>
             </el-table>
-            <span slot="footer" class="dialog-footer" style="margin-left: 1040px">
+            <span slot="footer" class="dialog-footer" style="float:right;margin-top: -10px">
                 <el-button style="float: right;margin-top: 10px;" type="primary" @click="exAddChanger">确 定</el-button>
             </span>
         </div>

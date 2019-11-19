@@ -17,7 +17,7 @@
                 </el-form-item>
             </el-form>
             <div style="float: right" slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="addPage">确 定</el-button>
+                <el-button style="float: right;margin-top: -10px" type="primary" @click="addPage">确 定</el-button>
             </div>
         </div>
     </div>

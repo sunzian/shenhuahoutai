@@ -57,12 +57,12 @@
                     <el-option key="9" label="分享得金币" value="9"></el-option>
                     <el-option key="10" label="积分换金币" value="10"></el-option>
                 </el-select>
-                <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
+                <el-button style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
                 <el-button
                     type="primary"
                     @click="addPage"
                     icon="el-icon-circle-plus-outline"
-                    style="margin-left: 340px"
+                    style="float: right;margin-top: 10px"
                 >新增</el-button>
             </div>
             <el-table
@@ -81,13 +81,13 @@
                         >部分影院</el-tag>
                     </template>
                 </el-table-column>-->
-                <el-table-column label="适用影院" width="130">
+                <el-table-column label="适用影院" width="220">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
                 <!-- <el-table-column prop="memo" label="适用影院编码" width="130">
                     <template slot-scope="scope">{{scope.row.cinemaCodes}}</template>
                 </el-table-column>-->
-                <el-table-column prop="sort" label="是否显示">
+                <el-table-column prop="sort" label="是否显示" width="130">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status=='1'">显示</el-tag>
                         <el-tag v-else-if="scope.row.status=='2'">不显示</el-tag>
@@ -98,9 +98,6 @@
                 </el-table-column>
                 <el-table-column prop="sort" label="结束时间" width="160px">
                     <template slot-scope="scope">{{scope.row.endDate}}</template>
-                </el-table-column>
-                <el-table-column prop="sort" label="备注">
-                    <template slot-scope="scope">{{scope.row.memo}}</template>
                 </el-table-column>
                 <el-table-column prop="sort" label="轮播图类别" width="120px">
                     <template slot-scope="scope">
@@ -139,7 +136,10 @@
                 <el-table-column prop="sort" label="跳转的具体信息" width="130">
                     <template slot-scope="scope">{{scope.row.redirectGoal}}</template>
                 </el-table-column>
-                <el-table-column label="操作" width="100" align="center" fixed="right">
+                <el-table-column prop="sort" label="备注">
+                    <template slot-scope="scope">{{scope.row.memo}}</template>
+                </el-table-column>
+                <el-table-column label="操作" width="180" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-button
                             type="text"
@@ -1015,27 +1015,18 @@ export default {
 </script>
 
 <style scoped>
-.handle-box {
-    margin-bottom: 20px;
-}
-
-.handle-select {
-    width: 120px;
-}
-
-.handle-input {
-    width: 300px;
-    display: inline-block;
-}
-.table {
-    width: 100%;
-    font-size: 14px;
-}
-.red {
-    color: #ff0000;
-}
-.mr10 {
-    margin-right: 10px;
-}
+    .handle-box {
+        width: 100%;
+        margin-bottom: 20px;
+        font-size: 14px;
+    }
+    .table {
+        width: 100%;
+        font-size: 14px;
+    }
+    .mr10 {
+        width: 16%;
+        margin-right: 10px;
+    }
 </style>
 

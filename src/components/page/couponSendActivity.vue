@@ -22,12 +22,12 @@
                         :value="item.cinemaCode"
                     ></el-option>
                 </el-select>
-                <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
+                <el-button style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
                 <el-button
                     type="primary"
                     @click="addPage"
                     icon="el-icon-circle-plus-outline"
-                    style="margin-left: 730px"
+                    style="float: right;margin-top: 10px"
                 >添加</el-button>
             </div>
             <el-table
@@ -38,13 +38,13 @@
                 ref="multipleTable"
                 header-cell-class-name="table-header"
             >
-                <el-table-column prop="code" label="影院名称">
+                <el-table-column prop="code" label="影院名称" width="190">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
                 <el-table-column prop="code" label="活动名称">
                     <template slot-scope="scope">{{scope.row.name}}</template>
                 </el-table-column>
-                <el-table-column prop="code" label="送券活动类型">
+                <el-table-column prop="code" label="送券活动类型" width="110">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.type=='1'">注册送券</el-tag>
                         <!--<el-tag v-else-if="scope.row.type=='2'"-->
@@ -53,10 +53,10 @@
                         <!--&gt;生日送券</el-tag>-->
                     </template>
                 </el-table-column>
-                <el-table-column prop="sort" label="活动开始时间">
+                <el-table-column prop="sort" label="活动开始时间" width="160">
                     <template slot-scope="scope">{{scope.row.startDate}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="活动结束时间">
+                <el-table-column prop="name" label="活动结束时间" width="160">
                     <template slot-scope="scope">{{scope.row.endDate}}</template>
                 </el-table-column>
                 <el-table-column prop="sort" label="开启状态">
@@ -65,7 +65,7 @@
                         <el-tag v-else-if="scope.row.status=='1'">启用</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="number" label="是否限制总数">
+                <el-table-column prop="number" label="是否限制总数" width="110">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.isLimitTotal=='0'">不限制</el-tag>
                         <el-tag v-else-if="scope.row.isLimitTotal=='1'">限制</el-tag>
@@ -80,13 +80,13 @@
                 <el-table-column prop="booleans" label="活动描述">
                     <template slot-scope="scope">{{scope.row.activityDesc}}</template>
                 </el-table-column>
-                <el-table-column prop="booleans" label="领取后多少天失效">
+                <el-table-column prop="booleans" label="领取后多少天失效" width="140">
                     <template slot-scope="scope">{{scope.row.validDay}}</template>
                 </el-table-column>
                 <el-table-column prop="booleans" label="券包名称">
                     <template slot-scope="scope">{{scope.row.couponGroupName}}</template>
                 </el-table-column>
-                <el-table-column label="操作" width="100" align="center" fixed="right">
+                <el-table-column label="操作" width="140" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-button
                             type="text"
@@ -1135,27 +1135,18 @@ export default {
 </script>
 
 <style scoped>
-.handle-box {
-    margin-bottom: 20px;
-}
-
-.handle-select {
-    width: 120px;
-}
-
-.handle-input {
-    width: 300px;
-    display: inline-block;
-}
-.table {
-    width: 100%;
-    font-size: 14px;
-}
-.red {
-    color: #ff0000;
-}
-.mr10 {
-    margin-right: 10px;
-}
+    .handle-box {
+        width: 100%;
+        margin-bottom: 20px;
+        font-size: 14px;
+    }
+    .table {
+        width: 100%;
+        font-size: 14px;
+    }
+    .mr10 {
+        width: 16%;
+        margin-right: 10px;
+    }
 </style>
 

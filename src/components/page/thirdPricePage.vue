@@ -40,17 +40,18 @@
                     ></el-option>
                 </el-select>
                 <el-input v-model="query.filmName" placeholder="影片名称" class="handle-input mr10"></el-input>
-                <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
+                <el-button style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
                 <el-button
                     type="primary"
                     @click="thirdPrice"
+                    style="float: right;margin-top: 10px"
                     icon="el-icon-circle-plus-outline"
                 >批量修改</el-button>
                 <el-button
                     type="primary"
                     @click="updatePage"
                     icon="el-icon-circle-plus-outline"
-                    style="margin-left: 14px"
+                    style="float: right;margin-top: 10px"
                 >同步第三方价格</el-button>
             </div>
             <el-table
@@ -72,16 +73,16 @@
                 <el-table-column prop="name" label="影片名称">
                     <template slot-scope="scope">{{scope.row.filmName}}</template>
                 </el-table-column>
-                <el-table-column prop="number" label="平台名称">
+                <el-table-column prop="number" label="平台名称" width="110">
                     <template slot-scope="scope">{{scope.row.typeName}}</template>
                 </el-table-column>
                 <el-table-column prop="time" label="放映时间">
                     <template slot-scope="scope">{{scope.row.showTime}}</template>
                 </el-table-column>
-                <el-table-column prop="number" label="第三方售价">
+                <el-table-column prop="number" label="第三方售价" width="140">
                     <template slot-scope="scope">{{scope.row.settlePrice}}</template>
                 </el-table-column>
-                <el-table-column label="操作" width="100" align="center" fixed="right">
+                <el-table-column label="操作" width="140" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-button
                             type="text"
@@ -836,27 +837,18 @@ export default {
 </script>
 
 <style scoped>
-.handle-box {
-    margin-bottom: 20px;
-}
-
-.handle-select {
-    width: 120px;
-}
-
-.handle-input {
-    width: 300px;
-    display: inline-block;
-}
-.table {
-    width: 100%;
-    font-size: 14px;
-}
-.red {
-    color: #ff0000;
-}
-.mr10 {
-    margin-right: 10px;
-}
+    .handle-box {
+        width: 100%;
+        margin-bottom: 20px;
+        font-size: 14px;
+    }
+    .table {
+        width: 100%;
+        font-size: 14px;
+    }
+    .mr10 {
+        width: 16%;
+        margin-right: 10px;
+    }
 </style>
 

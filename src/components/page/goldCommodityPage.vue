@@ -50,12 +50,12 @@
                     <el-option key="1" label="实物" value="1"></el-option>
                     <el-option key="2" label="优惠券" value="2"></el-option>
                 </el-select>
-                <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
+                <el-button style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
                 <el-button
                     type="primary"
                     @click="addPage"
                     icon="el-icon-circle-plus-outline"
-                    style="margin-left: 340px"
+                    style="float: right;margin-top: 10px"
                 >新增</el-button>
             </div>
             <el-table
@@ -69,7 +69,7 @@
                 <el-table-column prop="name" label="商品名称">
                     <template slot-scope="scope">{{scope.row.name}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="商品图片" width="200px">
+                <el-table-column prop="sort" label="商品图片" width="90">
                     <template slot-scope="scope">
                         <el-popover placement="right" title trigger="hover">
                             <img style="width:400px" :src="scope.row.imageUrl" />
@@ -85,35 +85,35 @@
                 <!-- <el-table-column prop="memo" label="商品描述">
                     <template slot-scope="scope">{{scope.row.memo}}</template>
                 </el-table-column>-->
-                <el-table-column prop="sort" label="库存">
+                <el-table-column prop="sort" label="库存" width="70">
                     <template slot-scope="scope">{{scope.row.store}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="兑换方式">
+                <el-table-column prop="sort" label="兑换方式" width="130">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.changeType=='1'">纯金币兑换</el-tag>
                         <el-tag v-else-if="scope.row.changeType=='2'">纯RMB兑换</el-tag>
-                        <el-tag v-else-if="scope.row.changeType=='3'">金币 + RMB 兑换</el-tag>
+                        <el-tag v-else-if="scope.row.changeType=='3'">金币+RMB 兑换</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="sort" label="所需金币数量">
+                <el-table-column prop="sort" label="所需金币数量" width="110">
                     <template slot-scope="scope">{{scope.row.gold}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="所需RMB" width="110">
+                <el-table-column prop="sort" label="所需RMB" width="90">
                     <template slot-scope="scope">{{scope.row.money}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="允许兑换的门店" width="150">
+                <el-table-column prop="sort" label="允许兑换的门店" width="170">
                     <template slot-scope="scope">{{scope.row.cinemaNames}}</template>
                 </el-table-column>
-                <el-table-column label="上架状态" align="center">
+                <el-table-column label="上架状态" align="center" width="90">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status=='1'" type="success">上架</el-tag>
                         <el-tag v-else type="danger">未上架</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="sort" label="排序">
+                <el-table-column prop="sort" label="排序" width="90">
                     <template slot-scope="scope">{{scope.row.sort}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="商品类型">
+                <el-table-column prop="sort" label="商品类型" width="90">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.commodityType=='1'">实物</el-tag>
                         <el-tag v-else-if="scope.row.commodityType=='2'">优惠券</el-tag>
@@ -154,7 +154,7 @@
                 <!-- <el-table-column prop="sort" label="对应上方的限制兑换数量" width="160">
                     <template slot-scope="scope">{{scope.row.limitNumber}}</template>
                 </el-table-column>-->
-                <el-table-column label="操作" width="100" align="center" fixed="right">
+                <el-table-column label="操作" width="140" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-button
                             type="text"
@@ -1464,26 +1464,17 @@ export default {
 </script>
 
 <style scoped>
-.handle-box {
-    margin-bottom: 20px;
-}
-
-.handle-select {
-    width: 120px;
-}
-
-.handle-input {
-    width: 300px;
-    display: inline-block;
-}
-.table {
-    width: 100%;
-    font-size: 14px;
-}
-.red {
-    color: #ff0000;
-}
-.mr10 {
-    margin-right: 10px;
-}
+    .handle-box {
+        width: 100%;
+        margin-bottom: 20px;
+        font-size: 14px;
+    }
+    .table {
+        width: 100%;
+        font-size: 14px;
+    }
+    .mr10 {
+        width: 16%;
+        margin-right: 10px;
+    }
 </style>

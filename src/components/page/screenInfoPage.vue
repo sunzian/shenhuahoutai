@@ -25,14 +25,14 @@
                         :value="item.screenCode"
                     ></el-option>
                 </el-select>
-                <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
+                <el-button style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
                 <el-button
                     type="primary"
                     @click="addPage"
                     icon="el-icon-circle-plus-outline"
-                    style="margin-left: 210px"
+                    style="float: right;margin-top: 10px"
                 >重新获取影厅</el-button>
-                <el-button type="primary" icon="el-icon-circle-plus-outline" style="margin-left: 15px" @click="getScreenSeat">获取选中影厅座位</el-button>
+                <el-button type="primary" icon="el-icon-circle-plus-outline" style="float: right;margin-top: 10px" @click="getScreenSeat">获取选中影厅座位</el-button>
             </div>
             <el-table
                 :data="tableData"
@@ -45,22 +45,22 @@
             >
 				<el-table-column type="selection" width="55">
                 </el-table-column>
-                <el-table-column prop="name" label="影院名称">
+                <el-table-column prop="name" label="影院名称" width="190">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="影院编码">
+                <el-table-column prop="name" label="影院编码" width="130">
                     <template slot-scope="scope">{{scope.row.cinemaCode}}</template>
                 </el-table-column>
-                <el-table-column label="影厅编号">
+                <el-table-column label="影厅编号" width="150">
                     <template slot-scope="scope">{{scope.row.screenCode}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="影厅名称">
                     <template slot-scope="scope">{{scope.row.screenName}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="座位数">
+                <el-table-column prop="sort" label="座位数" width="90">
                     <template slot-scope="scope">{{scope.row.seatCount}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="影厅类型">
+                <el-table-column prop="sort" label="影厅类型" width="110">
                     <template slot-scope="scope">{{scope.row.screenType}}</template>
                 </el-table-column>
                 <el-table-column label="操作" width="180" align="center">
@@ -603,26 +603,17 @@ export default {
 </script>
 
 <style scoped>
-.handle-box {
-    margin-bottom: 20px;
-}
-
-.handle-select {
-    width: 120px;
-}
-
-.handle-input {
-    width: 300px;
-    display: inline-block;
-}
-.table {
-    width: 100%;
-    font-size: 14px;
-}
-.red {
-    color: #ff0000;
-}
-.mr10 {
-    margin-right: 10px;
-}
+    .handle-box {
+        width: 100%;
+        margin-bottom: 20px;
+        font-size: 14px;
+    }
+    .table {
+        width: 100%;
+        font-size: 14px;
+    }
+    .mr10 {
+        width: 16%;
+        margin-right: 10px;
+    }
 </style>

@@ -22,7 +22,7 @@
                         :value="item.value"
                     ></el-option>
                 </el-select>
-                <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
+                <el-button style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
             </div>
             <el-table
                 :data="tableData"
@@ -32,16 +32,16 @@
                 ref="multipleTable"
                 header-cell-class-name="table-header"
             >
-                <el-table-column prop="name" label="影院编码">
+                <el-table-column prop="name" label="影院编码" width="140">
                     <template slot-scope="scope">{{scope.row.cinemaCode}}</template>
                 </el-table-column>
                 <el-table-column prop="name" label="影院名称">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="省份">
+                <el-table-column prop="memo" label="省份" width="140">
                     <template slot-scope="scope">{{scope.row.province}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="城市">
+                <el-table-column prop="sort" label="城市" width="140">
                     <template slot-scope="scope">{{scope.row.city}}</template>
                 </el-table-column>
                 <el-table-column prop="sort" label="详细地址">
@@ -94,18 +94,18 @@
                     <el-option key="1" label="纯文本" value="1"></el-option>
                     <el-option key="2" label="图文" value="2"></el-option>
                 </el-select>
-                <el-button type="primary" icon="el-icon-search" @click="searchNotice">搜索</el-button>
+                <el-button  style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="searchNotice">搜索</el-button>
                 <el-button
                     type="primary"
                     @click="back"
                     icon="el-icon-circle-plus-outline"
-                    style="margin-left: 10px"
+                    style="float: right;margin-top: 10px"
                 >返回影院列表</el-button>
                 <el-button
                     type="primary"
                     @click="addPage"
                     icon="el-icon-circle-plus-outline"
-                    style="margin-left: 150px"
+                    style="float: right;margin-top: 10px"
                 >新增</el-button>
             </div>
             <el-table
@@ -116,10 +116,13 @@
                 header-cell-class-name="table-header"
                 @selection-change="handleSelectionChange"
             >
-                <el-table-column prop="name" label="标题" width="130">
+                <el-table-column prop="name" label="标题">
                     <template slot-scope="scope">{{scope.row.title}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="封面图片" width="200px">
+                <el-table-column prop="sort" label="发布时间">
+                    <template slot-scope="scope">{{scope.row.publishDate}}</template>
+                </el-table-column>
+                <el-table-column prop="sort" label="封面图片" width="200">
                     <template slot-scope="scope">
                         <el-popover placement="right" title trigger="hover">
                             <img style="width: 400px" :src="scope.row.imageUrl" />
@@ -138,19 +141,16 @@
                         <el-tag v-if="scope.row.type=='2'">图文</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="sort" label="上线状态">
+                <el-table-column prop="sort" label="上线状态" width="130">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status=='1'">未上线</el-tag>
                         <el-tag v-else-if="scope.row.status=='2'">上线</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="sort" label="发布时间" width="160px">
-                    <template slot-scope="scope">{{scope.row.publishDate}}</template>
-                </el-table-column>
-                <el-table-column prop="sort" label="点击量" width="160px">
+                <el-table-column prop="sort" label="点击量" width="160">
                     <template slot-scope="scope">{{scope.row.viewNum}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="点赞数量">
+                <el-table-column prop="sort" label="点赞数量" width="130">
                     <template slot-scope="scope">{{scope.row.upvoteNum}}</template>
                 </el-table-column>
                 <el-table-column label="操作" width="180" align="center">
@@ -1095,27 +1095,18 @@ export default {
 </script>
 
 <style scoped>
-.handle-box {
-    margin-bottom: 20px;
-}
-
-.handle-select {
-    width: 120px;
-}
-
-.handle-input {
-    width: 300px;
-    display: inline-block;
-}
-.table {
-    width: 100%;
-    font-size: 14px;
-}
-.red {
-    color: #ff0000;
-}
-.mr10 {
-    margin-right: 10px;
-}
+    .handle-box {
+        width: 100%;
+        margin-bottom: 20px;
+        font-size: 14px;
+    }
+    .table {
+        width: 100%;
+        font-size: 14px;
+    }
+    .mr10 {
+        width: 16%;
+        margin-right: 10px;
+    }
 </style>
 

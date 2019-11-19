@@ -17,16 +17,16 @@
                 header-cell-class-name="table-header"
                 @selection-change="handleSelectionChange"
             >
-                <el-table-column prop="name" label="影院编码">
+                <el-table-column prop="name" label="影院编码" width="110">
                     <template slot-scope="scope">{{scope.row.cinemaCode}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="影院名称">
+                <el-table-column prop="name" label="影院名称" width="200">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="省份">
+                <el-table-column prop="memo" label="省份" width="110">
                     <template slot-scope="scope">{{scope.row.province}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="城市">
+                <el-table-column prop="sort" label="城市" width="110">
                     <template slot-scope="scope">{{scope.row.city}}</template>
                 </el-table-column>
                 <el-table-column prop="sort" label="详细地址">
@@ -35,7 +35,7 @@
                 <el-table-column prop="sort" label="联系方式" width="150">
                     <template slot-scope="scope">{{scope.row.serviceMobile}}</template>
                 </el-table-column>
-                <el-table-column label="操作" width="100" align="center" fixed="right">
+                <el-table-column label="操作" width="160" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-button
                             type="text"
@@ -67,12 +67,12 @@
                     <el-option key="1" label="上架" value="1"></el-option>
                     <el-option key="2" label="下架" value="2"></el-option>
                 </el-select>
-                <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
+                <el-button style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
                 <el-button
                     type="primary"
                     @click="back"
                     icon="el-icon-circle-plus-outline"
-                    style="margin-left: 680px"
+                    style="float: right;margin-top: 10px"
                 >返回卖品列表</el-button>
             </div>
             <el-table
@@ -758,28 +758,20 @@ export default {
         -moz-appearance: textfield;
     }
 </style>
+
 <style scoped>
-.handle-box {
-    margin-bottom: 20px;
-}
-
-.handle-select {
-    width: 120px;
-}
-
-.handle-input {
-    width: 300px;
-    display: inline-block;
-}
-.table {
-    width: 100%;
-    font-size: 14px;
-}
-.red {
-    color: #ff0000;
-}
-.mr10 {
-    margin-right: 10px;
-}
+    .handle-box {
+        width: 100%;
+        margin-bottom: 20px;
+        font-size: 14px;
+    }
+    .table {
+        width: 100%;
+        font-size: 14px;
+    }
+    .mr10 {
+        width: 16%;
+        margin-right: 10px;
+    }
 </style>
 
