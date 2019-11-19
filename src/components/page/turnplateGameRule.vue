@@ -472,7 +472,7 @@
                             将文件拖到此处，或
                             <em>点击上传</em>
                         </div>
-                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过300kb 建议尺寸120*120或按比例上传</div>
+                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过300kb 建议尺寸375*600或按比例上传</div>
                     </el-upload>
                 </el-form-item>
                 <el-form-item label="活动开始时间" :label-width="formLabelWidth">
