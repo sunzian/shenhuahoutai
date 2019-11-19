@@ -235,6 +235,24 @@
                 <el-form-item label="购票提示" :label-width="formLabelWidth">
                     <el-input style="width: 250px" type="textarea" v-model="oBuyTicketHint" maxlength="20" autocomplete="off"></el-input>
                 </el-form-item>
+                <el-form-item label="权益卡协议" :label-width="formLabelWidth">
+                    <el-input
+                            style="width: 250px"
+                            type="textarea"
+                            v-model="oEquityCardAgreement"
+                            autocomplete="off"
+                            maxlength="200"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="金币活动描述 " :label-width="formLabelWidth">
+                    <el-input
+                            style="width: 250px"
+                            type="textarea"
+                            v-model="oGoldActivityMemo"
+                            autocomplete="off"
+                            maxlength="200"
+                    ></el-input>
+                </el-form-item>
                 <el-form-item label="充值活动描述" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oRechargeMemo" maxlength="20" autocomplete="off"></el-input>
                 </el-form-item>
@@ -630,6 +648,8 @@ export default {
             oConcatMobile: '',
             oServiceMobile: '',
             oScreenCount: '',
+            oEquityCardAgreement: '',
+            oGoldActivityMemo: '',
             oTicketSystemCode: '',
             oBuyMinutesLimit: '',
             oRechargeMemo: '',
@@ -798,6 +818,8 @@ export default {
                         this.oBuyTicketHint = JSON.parse(Decrypt(data.data.data)).Cinema.buyTicketHint;
                         this.oSnackBeginTime = JSON.parse(Decrypt(data.data.data)).Cinema.snackBeginTime;
                         this.oSnackEndTime = JSON.parse(Decrypt(data.data.data)).Cinema.snackEndTime;
+                        this.oEquityCardAgreement = JSON.parse(Decrypt(data.data.data)).Cinema.equityCardAgreement;
+                        this.oGoldActivityMemo = JSON.parse(Decrypt(data.data.data)).Cinema.goldActivityMemo;
                         // this.oMessagePlatformType = JSON.parse(Decrypt(data.data.data)).Cinema.messagePlatformType;
                         // this.oMessagePlatformAccount = JSON.parse(Decrypt(data.data.data)).CinemaMessagePlatFormInfo.messagePlatformAccount;
                         // this.oMessagePlatformPassword = JSON.parse(Decrypt(data.data.data)).CinemaMessagePlatFormInfo.messagePlatformPassword;
@@ -940,6 +962,8 @@ export default {
             jsonArr.push({ key: 'refundable', value: this.oRefundable });
             jsonArr.push({ key: 'snackBeginTime', value: this.oSnackBeginTime });
             jsonArr.push({ key: 'snackEndTime', value: this.oSnackEndTime });
+            jsonArr.push({ key: 'equityCardAgreement', value: this.oEquityCardAgreement });
+            jsonArr.push({ key: 'goldActivityMemo', value: this.oGoldActivityMemo });
             // jsonArr.push({ key: 'messagePlatformType', value: this.oMessagePlatformType });
             // let messageInfos = [];
             // if (this.oMessageType1) {

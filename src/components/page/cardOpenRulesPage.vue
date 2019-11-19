@@ -43,10 +43,10 @@
                 <el-table-column prop="code" label="影院名称">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="会员卡名称">
+                <el-table-column prop="sort" label="会员卡名称" width="120">
                     <template slot-scope="scope">{{scope.row.cardLevelName}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="开卡规则名称">
+                <el-table-column prop="name" label="开卡规则名称" width="120">
                     <template slot-scope="scope">{{scope.row.ruleName}}</template>
                 </el-table-column>
                 <el-table-column prop="number" label="充值金额" width="100">
@@ -232,7 +232,6 @@
                 <el-form-item label="影院名称：" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        min="1"
                         disabled
                         v-model="oCinemaName"
                         autocomplete="off"
@@ -242,8 +241,8 @@
                     <el-select v-model="oCardLevelName" placeholder="请选择" @change="getCardInfo">
                         <el-option
                                 v-for="info in cardList"
-                                :key="info.levelCode"
-                                :value="info.levelName"
+                                :key="info.levelName"
+                                :value="info.levelCode"
                                 :label="info.levelName"
                         ></el-option>
                     </el-select>
@@ -538,8 +537,8 @@ export default {
             jsonArr.push({ key: 'cinemaCode', value: this.oForm.cinemaCode });
             jsonArr.push({ key: 'ruleName', value: this.oForm.ruleName });
             jsonArr.push({ key: 'rechargeAmount', value: '0' });
-            jsonArr.push({ key: 'cardLevelCode', value: this.oForm.levelCode });
-            jsonArr.push({ key: 'cardLevelName', value: this.oForm.levelName });
+            jsonArr.push({ key: 'cardLevelCode', value: this.oForm.levelName });
+            // jsonArr.push({ key: 'cardLevelName', value: this.oForm.levelName });
             jsonArr.push({ key: 'givenType', value: this.oForm.givenType });
             jsonArr.push({ key: 'ruleMemo', value: this.oForm.ruleMemo });
             jsonArr.push({ key: 'startDate', value: this.oForm.startDate });
@@ -647,13 +646,18 @@ export default {
                     if (data.data.code == 'success') {
                         console.log(JSON.parse(Decrypt(data.data.data)));
                         // JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.cinemaCode
-                        this.oForm.cinemaCode=JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.cinemaCode
-                        this.getAllCinemaCard()
+                        // this.oForm.cinemaCode=JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.cinemaCode
+                        // this.getAllCinemaCard();
                         this.editVisible = true;
+                        this.cardList=JSON.parse(Decrypt(data.data.data)).cardLevelList;
                         this.oCinemaName = JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.cinemaName;
                         this.oCinemaCode = JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.cinemaCode;
-                        this.oCardLevelName = JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.cardLevelName;
-                        this.oCardLevelCode = JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.cardLevelCode;
+                        for (let x in JSON.parse(Decrypt(data.data.data)).cardLevelList) {
+                            if (JSON.parse(Decrypt(data.data.data)).cardLevelList[x].levelCode == JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.cardLevelCode) {
+                                this.oCardLevelName = JSON.parse(Decrypt(data.data.data)).cardLevelList[x].levelCode;
+                                break;
+                            }
+                        }
                         this.oRuleName = JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.ruleName;
                         this.oRechargeAmount = JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.rechargeAmount;
                         this.groupName = JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.couponGroupName;
@@ -789,12 +793,13 @@ export default {
                 jsonArr.push({ key: 'givenCouponGroupId', value: this.couponId });
             }
             jsonArr.push({ key: 'ruleName', value: this.oRuleName });
+            jsonArr.push({ key: 'cinemaCode', value: this.oCinemaCode });
             jsonArr.push({ key: 'startDate', value: this.oStartDate });
             jsonArr.push({ key: 'endDate', value: this.oEndDate });
             jsonArr.push({ key: 'rechargeAmount', value: '0' });
             jsonArr.push({ key: 'ruleMemo', value: this.oRuleMemo });
-            jsonArr.push({ key: 'cardLevelCode', value: this.oForm.levelCode });
-            jsonArr.push({ key: 'cardLevelName', value: this.oCardLevelName });
+            jsonArr.push({ key: 'cardLevelCode', value: this.oCardLevelName });
+            // jsonArr.push({ key: 'cardLevelName', value: this.oCardLevelName });
             jsonArr.push({ key: 'id', value: this.oId });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
@@ -840,7 +845,6 @@ export default {
         getCardInfo(e) {
             console.log(e);
             this.oForm.levelName = e;
-            // this.oForm.cardLevelCode = e;
             // 获取所选会员卡名称
             for (let i = 0; i < this.cardList.length; i++) {
                 if (this.cardList[i].levelName == e) {
