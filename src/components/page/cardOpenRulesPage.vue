@@ -9,7 +9,14 @@
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-input v-model="query.cinemaName" placeholder="影院名称" class="handle-input mr10"></el-input>
+                <el-select clearable v-model="query.cinemaCode" placeholder="请选择影院" class="handle-input mr10">
+                    <el-option
+                        v-for="item in cinemaInfo"
+                        :key="item.cinemaCode"
+                        :label="item.cinemaName"
+                        :value="item.cinemaCode"
+                    ></el-option>
+                </el-select>
                 <el-select clearable v-model="query.status" placeholder="状态" class="handle-select mr10">
                     <el-option key="1" label="启用" value="1"></el-option>
                     <el-option key="2" label="禁用" value="2"></el-option>
@@ -851,21 +858,22 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            let cinemaName = this.query.cinemaName;
+            let cinemaCode = this.query.cinemaCode;
             let status = this.query.status;
-            if (!cinemaName) {
-                cinemaName = '';
+            if (!cinemaCode) {
+                cinemaCode = '';
             }
             if (!status) {
                 status = '';
             }
             let jsonArr = [];
-            jsonArr.push({ key: 'cinemaName', value: cinemaName });
+            jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
             jsonArr.push({ key: 'status', value: status });
             jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
             jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
+            console.log(jsonArr)
             var params = ParamsAppend(jsonArr);
             https
                 .fetchPost('/openCardRule/openPage', params)
@@ -879,6 +887,7 @@ export default {
                         this.query.pageNo = oData.pageNo;
                         this.query.totalCount = oData.totalCount;
                         this.query.totalPage = oData.totalPage;
+                        this.getAllCinema();
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();

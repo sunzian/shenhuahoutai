@@ -42,7 +42,7 @@
                                 icon="el-icon-setting"
                                 @click="UserPassword(scope.$index, scope.row)"
                         >获取卡等级</el-button>
-                        <el-button type="text" icon="el-icon-edit" @click="show(scope.row)">编辑</el-button>
+                        <el-button type="text" icon="el-icon-view" @click="show(scope.row)">查看</el-button>
                     </template>
                 </el-table-column>
             </el-table>

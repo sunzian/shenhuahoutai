@@ -9,8 +9,22 @@
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-input v-model="query.cinemaName" placeholder="影院名称" class="handle-input mr10"></el-input>
-                <el-input v-model="query.screenName" placeholder="影厅名称" class="handle-input mr10"></el-input>
+                <el-select clearable v-model="query.cinemaCode" placeholder="请选择影院" class="mr10" @change="chooseCinema">
+                    <el-option
+                        v-for="item in cinemaInfo"
+                        :key="item.cinemaCode"
+                        :label="item.cinemaName"
+                        :value="item.cinemaCode"
+                    ></el-option>
+                </el-select>
+                <el-select clearable v-model="query.screenCode" placeholder="请选择影厅" class="mr10">
+                    <el-option
+                        v-for="item in screenInfo"
+                        :key="item.screenCode"
+                        :label="item.screenName"
+                        :value="item.screenCode"
+                    ></el-option>
+                </el-select>
                 <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
                 <el-button
                     type="primary"
@@ -180,6 +194,7 @@ export default {
             formLabelWidth: '120px',
             selectValue: {},
             cinemaInfo: [],
+            screenInfo: [],
             value: ''
         };
     },
@@ -373,8 +388,6 @@ export default {
                 .fetchPost('/role/modifyRole', params)
                 .then(data => {
                     loading.close();
-                    // console.log(data);
-                    // console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.$message.success(`编辑成功`);
                         this.getMenu();
@@ -405,17 +418,17 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            let cinemaName = this.query.cinemaName;
-            let screenName = this.query.screenName;
-            if (!cinemaName) {
-                cinemaName = '';
+            let cinemaCode = this.query.cinemaCode;
+            let screenCode = this.query.screenCode;
+            if (!cinemaCode) {
+                cinemaCode = '';
             }
-            if (!screenName) {
-                screenName = '';
+            if (!screenCode) {
+                screenCode = '';
             }
             let jsonArr = [];
-            jsonArr.push({ key: 'cinemaName', value: cinemaName});
-            jsonArr.push({ key: 'screenName', value: screenName });
+            jsonArr.push({ key: 'cinemaCode', value: cinemaCode});
+            jsonArr.push({ key: 'screenCode', value: screenCode });
             jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
             jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
             let sign = md5(preSign(jsonArr));
@@ -435,6 +448,8 @@ export default {
                         this.query.pageNo = oData.pageNo;
                         this.query.totalCount = oData.totalCount;
                         this.query.totalPage = oData.totalPage;
+                        this.getAllCinema();
+                        this.getAllScreen();
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
@@ -458,6 +473,39 @@ export default {
                         var res = JSON.parse(Decrypt(data.data.data));
                         console.log(res);
                         this.cinemaInfo = res;
+                    } else if (data.data.code == 'nologin') {
+                        this.message = data.data.message;
+                        this.open();
+                        this.$router.push('/login');
+                    } else {
+                        this.message = data.data.message;
+                        this.open();
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        },
+        chooseCinema(val) {
+            this.getAllScreen(val);
+        },
+
+        // 获取所有影厅
+        getAllScreen(val) {
+            if (!val) {
+                return
+            }
+            var jsonArr = [];
+            jsonArr.push({ key: 'cinemaCode', value: val });
+            let sign = md5(preSign(jsonArr));
+            jsonArr.push({ key: 'sign', value: sign });
+            let params = ParamsAppend(jsonArr);
+            https
+                .fetchPost('/screenInfo/getScreenByCinema',params)
+                .then(data => {
+                    if (data.data.code == 'success') {
+                        var res = JSON.parse(Decrypt(data.data.data));
+                        this.screenInfo = res;
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();

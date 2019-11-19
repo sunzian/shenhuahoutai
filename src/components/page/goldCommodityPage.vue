@@ -9,7 +9,19 @@
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-input v-model="query.cinemaNames" placeholder="门店名称" class="handle-input mr10"></el-input>
+                <el-select
+                    clearable
+                    v-model="query.cinemaCode"
+                    placeholder="请选择影院"
+                    class="handle-input mr10"
+                >
+                    <el-option
+                        v-for="item in cinemaInfo"
+                        :key="item.cinemaCode"
+                        :label="item.cinemaName"
+                        :value="item.cinemaCode"
+                    ></el-option>
+                </el-select>
                 <el-select
                     clearable
                     v-model="query.status"
@@ -802,7 +814,8 @@ export default {
             state: '',
             timeout: null,
             selectFilm: {},
-            filmInfo: []
+            filmInfo: [],
+            cinemaInfo: []
         };
     },
     components: { quillEditor },
@@ -1310,12 +1323,12 @@ export default {
                 target: document.querySelector('.div1')
             });
             setTimeout(() => {
-                let cinemaNames = this.query.cinemaNames;
+                let cinemaCodes = this.query.cinemaCode;
                 let status = this.query.status;
                 let changeType = this.query.changeType;
                 let commodityType = this.query.commodityType;
-                if (!cinemaNames) {
-                    cinemaNames = '';
+                if (!cinemaCodes) {
+                    cinemaCodes = '';
                 }
                 if (!status) {
                     status = '';
@@ -1327,7 +1340,7 @@ export default {
                     commodityType = '';
                 }
                 let jsonArr = [];
-                jsonArr.push({ key: 'cinemaNames', value: cinemaNames });
+                jsonArr.push({ key: 'cinemaCodes', value: cinemaCodes });
                 jsonArr.push({ key: 'status', value: status });
                 jsonArr.push({ key: 'changeType', value: changeType });
                 jsonArr.push({ key: 'commodityType', value: commodityType });
@@ -1340,16 +1353,14 @@ export default {
                     .fetchPost('/goldCommodity/goldCommodityPage', params)
                     .then(data => {
                         loading.close();
-                        // console.log(data);
                         if (data.data.code == 'success') {
                             var oData = JSON.parse(Decrypt(data.data.data));
-                            console.log(oData);
-                            // console.log(this.query);
                             this.tableData = oData.data;
                             this.query.pageSize = oData.pageSize;
                             this.query.pageNo = oData.pageNo;
                             this.query.totalCount = oData.totalCount;
                             this.query.totalPage = oData.totalPage;
+                            this.getAllCinema();
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
                             this.open();
@@ -1364,6 +1375,27 @@ export default {
                         console.log(err);
                     });
             }, 500);
+        },
+        // 获取所有影院
+        getAllCinema() {
+            https
+                .fetchPost('/cinema/getAllCinema')
+                .then(data => {
+                    if (data.data.code == 'success') {
+                        var res = JSON.parse(Decrypt(data.data.data));
+                        this.cinemaInfo = res;
+                    } else if (data.data.code == 'nologin') {
+                        this.message = data.data.message;
+                        this.open();
+                        this.$router.push('/login');
+                    } else {
+                        this.message = data.data.message;
+                        this.open();
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                });
         },
         beforeUpload() {
             //上传之前

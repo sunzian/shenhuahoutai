@@ -9,7 +9,19 @@
         </div>
         <div class="container" v-if="showSell">
             <div class="handle-box">
-                <el-input v-model="query.name" placeholder="选择影院" class="handle-input mr10"></el-input>
+                <el-select
+                    clearable
+                    v-model="query.cinemaCode"
+                    placeholder="请选择影院"
+                    class="handle-input mr10"
+                >
+                    <el-option
+                        v-for="item in cinemaData"
+                        :key="item.cinemaCode"
+                        :label="item.cinemaName"
+                        :value="item.cinemaCode"
+                    ></el-option>
+                </el-select>
                 <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
             </div>
             <el-table
@@ -151,7 +163,10 @@
                     </template>
                 </el-table-column>
                 <el-table-column prop="name" label="影厅名称">
-                    <template  v-if="scope.row.screenType == 2" slot-scope="scope">{{scope.row.screenNames}}</template>
+                    <template
+                        v-if="scope.row.screenType == 2"
+                        slot-scope="scope"
+                    >{{scope.row.screenNames}}</template>
                 </el-table-column>
                 <el-table-column prop="name" label="影片类型">
                     <template slot-scope="scope">
@@ -160,7 +175,10 @@
                     </template>
                 </el-table-column>
                 <el-table-column prop="name" label="影片名称">
-                    <template v-if="scope.row.filmType == 2" slot-scope="scope">{{scope.row.filmNames}}</template>
+                    <template
+                        v-if="scope.row.filmType == 2"
+                        slot-scope="scope"
+                    >{{scope.row.filmNames}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="开始日期">
                     <template slot-scope="scope">{{scope.row.startDate}}</template>
@@ -598,6 +616,7 @@ export default {
             selectGroup: {},
             screenInfo: [],
             cinemaInfo: [],
+            cinemaData: [],
             couponInfo: {},
             value: [],
             couponName: ''
@@ -626,7 +645,7 @@ export default {
                     if (data.data.code == 'success') {
                         this.dialogFormVisible = true;
                         this.getAllScreen();
-                        this.date=[];
+                        this.date = [];
                         this.selectedSell = [];
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
@@ -982,10 +1001,10 @@ export default {
                         for (let a = 0; a < this.selectScreenCode.length; a++) {
                             screenCodes.push(this.selectScreenCode[a]);
                             for (let j = 0; j < this.screenInfo.length; j++) {
-                            if (this.screenInfo[j].screenCode == this.selectScreenCode[a]) {
-                                screenNames.push(this.screenInfo[j].screenName);
+                                if (this.screenInfo[j].screenCode == this.selectScreenCode[a]) {
+                                    screenNames.push(this.screenInfo[j].screenName);
+                                }
                             }
-                        }
                         }
                         this.oScreenCodes = screenCodes.join(',');
                         this.oScreenNames = screenNames.join(',');
@@ -1154,18 +1173,14 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            let name = this.query.name;
-            let status = this.query.status;
-            if (!name) {
-                name = '';
-            }
-            if (!status) {
-                status = '';
+            let cinemaCode = this.query.cinemaCode;
+            if (!cinemaCode) {
+                cinemaCode = '';
             }
             let jsonArr = [];
             jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
             jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
-            jsonArr.push({ key: 'cinemaCode', value: name });
+            jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             var params = ParamsAppend(jsonArr);
@@ -1227,6 +1242,7 @@ export default {
                     loading.close();
                     if (data.data.code == 'success') {
                         let cinemas = JSON.parse(Decrypt(data.data.data));
+                        this.cinemaData = cinemas;
                         for (let i = 0; i < cinemas.length; i++) {
                             let cinemaInfo = {};
                             cinemaInfo.label = cinemas[i].cinemaName;
