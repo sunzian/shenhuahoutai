@@ -498,7 +498,7 @@ export default {
                 },
                 {
                     value: '2',
-                    label: '积分商城首页 建议尺寸710*360'
+                    label: '积分商城首页 建议尺寸750*360'
                 },
                 {
                     value: '3',
