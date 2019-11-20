@@ -393,7 +393,6 @@ export default {
             oOverDays: '',
             oImageUrl: '',
             oType: '',
-            oName: '',
             oSingleNumber: '',
             oGroupNumber: '',
             oId: '',
@@ -529,6 +528,7 @@ export default {
                             this.dialogFormVisible = false;
                             this.$refs.download.clearFiles();
                             this.$message.success(`新增成功`);
+                            this.couponInfo={};
                             this.show(this.cinemaCode);
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;

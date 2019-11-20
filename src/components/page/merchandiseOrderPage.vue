@@ -131,9 +131,9 @@
                 <el-table-column label="订单号" width="135">
                     <template slot-scope="scope">{{scope.row.orderNo}}</template>
                 </el-table-column>
-                <!--<el-table-column prop="memo" label="用户名" width="75">-->
-                    <!--<template slot-scope="scope">{{scope.row.userName}}</template>-->
-                <!--</el-table-column>-->
+                <el-table-column prop="memo" label="送货地址" width="90">
+                    <template slot-scope="scope">{{scope.row.deliveryAddress}}</template>
+                </el-table-column>
                 <el-table-column prop="memo" label="手机号码" width="110">
                     <template slot-scope="scope">{{scope.row.mobile}}</template>
                 </el-table-column>
@@ -200,6 +200,18 @@
                             icon="el-icon-setting"
                             @click="addChange(scope.$index, scope.row)"
                         >查看</el-button>
+                        <el-button
+                                type="text"
+                                icon="el-icon-setting"
+                                @click="updateStatus(scope.$index, scope.row)"
+                                v-if="scope.row.deliveryType==0&&scope.row.deliveryStatus==0&&scope.row.payStatus==1&&scope.row.submitStatus==1"
+                        >取货</el-button>
+                        <el-button
+                                type="text"
+                                icon="el-icon-setting"
+                                @click="updateStatus(scope.$index, scope.row)"
+                                v-if="scope.row.deliveryType==1&&scope.row.deliveryStatus==0&&scope.row.payStatus==1&&scope.row.submitStatus==1"
+                        >确认送达</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -484,6 +496,46 @@ export default {
         this.getMenu();
     },
     methods: {
+        updateStatus(index, row){
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
+            setTimeout(() => {
+                this.idx = index;
+                this.form = row;
+                var jsonArr = [];
+                jsonArr.push({ key: 'id', value: row.id });
+                let sign = md5(preSign(jsonArr));
+                jsonArr.push({ key: 'sign', value: sign });
+                let params = ParamsAppend(jsonArr);
+                https
+                    .fetchPost('/merchandiseOrder/updateStatusById', params)
+                    .then(data => {
+                        loading.close();
+                        console.log(data);
+                        // console.log(JSON.parse(Decrypt(data.data.data)));
+                        if (data.data.code == 'success') {
+                            this.$message.success(`成功`);
+                            this.getMenu()
+                        } else if (data.data.code == 'nologin') {
+                            this.message = data.data.message;
+                            this.open();
+                            this.$router.push('/login');
+                        } else {
+                            this.message = data.data.message;
+                            this.open();
+                        }
+                    })
+                    .catch(err => {
+                        loading.close();
+                        console.log(err);
+                    });
+            }, 500);
+        },
         addChange(index, row) {
             //是否修改权限
             const loading = this.$loading({

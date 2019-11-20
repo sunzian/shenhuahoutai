@@ -878,7 +878,7 @@ export default {
         },
         sureNext() {
             if(this.sellIndex>=0){
-                this.selectedSell=[]
+                this.selectedSell=[];
                 this.selectedSell.push(this.sellTableData[this.sellIndex]);
             }
             console.log(this.selectedSell);

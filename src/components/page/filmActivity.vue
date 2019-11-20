@@ -211,7 +211,7 @@
                         </el-input>
                         <span
                                 style="color:red;cursor: pointer;"
-                                @click="deleteSell()"
+                                @click="deleteSell(index)"
                         >删除</span>
                     </div>
                 </el-form-item>
@@ -492,7 +492,7 @@
                         </el-input>
                         <span
                                 style="color:red;cursor: pointer;"
-                                @click="deleteSell()"
+                                @click="deleteSell(index)"
                         >删除</span>
                     </div>
                 </el-form-item>
@@ -850,6 +850,7 @@
                         if (data.data.code == 'success') {
                             this.selectedSell=[];
                             this.oForm.code = this.cinemaInfo[0].cinemaCode;
+                            this.getAllScreen( this.oForm.code);
                             console.log(JSON.parse(Decrypt(data.data.data)));
                             let formats = JSON.parse(Decrypt(data.data.data)).formatList;
                             this.formatList = [];
@@ -1057,11 +1058,21 @@
                 https.fetchPost('/filmDiscountActivity/getTimesById', params).then(data => { //查询可用时间段
                     loading.close();
                     console.log(data);
-                    // if(JSON.parse(Decrypt(data.data.data))){
-                    //     this.dateInfo=JSON.parse(Decrypt(data.data.data))
-                    // }
-                    // console.log(this.dateInfo);
-
+                    console.log(JSON.parse(Decrypt(data.data.data)));
+                    this.dateInfo=[];
+                    for(let x in JSON.parse(Decrypt(data.data.data))){
+                        let jsonarr=[];
+                        jsonarr.push(JSON.parse(Decrypt(data.data.data))[x].startTime);
+                        jsonarr.push(JSON.parse(Decrypt(data.data.data))[x].endTime);
+                        this.dateInfo.push(jsonarr)
+                    }
+                    for(let x in this.dateInfo){
+                        this.startArr.push(this.dateInfo[x][0])
+                        this.endArr.push(this.dateInfo[x][1]);
+                    }
+                    console.log(this.startArr.join(','));
+                    console.log(this.endArr.join(','));
+                    console.log(this.dateInfo);
                 }).catch(err => {
                     loading.close();
                     console.log(err);
@@ -1074,7 +1085,7 @@
                             this.editVisible = true;
                             if(JSON.parse(Decrypt(data.data.data)).discountActivity.filmCode&&JSON.parse(Decrypt(data.data.data)).discountActivity.filmName){
                                 let exFilmCodeList=JSON.parse(Decrypt(data.data.data)).discountActivity.filmCode.split(',');
-                                let exFilmNameList=JSON.parse(Decrypt(data.data.data)).discountActivity.filmName.split(',');
+                                let exFilmNameList=JSON.parse(Decrypt(data.data.data)).discountActivity.filmName.split('|');
                                 this.selectedSell=[];
                                 for(let x in exFilmNameList){
                                     let json={};
@@ -1217,6 +1228,11 @@
                     background: 'rgba(0, 0, 0, 0.7)',
                     target: document.querySelector('.div1')
                 });
+                console.log(this.selectedSell);
+                let filmCodeList=[];
+                for(let x in this.selectedSell){
+                    filmCodeList.push(this.selectedSell[x].filmCode)
+                }
                 var jsonArr = [];
                 jsonArr.push({ key: 'name', value: this.oName });
                 jsonArr.push({ key: 'cinemaCode', value: this.oCinemaCode });
@@ -1226,7 +1242,7 @@
                 }
                 jsonArr.push({ key: 'selectFilmType', value: this.oSelectFilmType });
                 if(this.oSelectFilmType!=0){
-                    jsonArr.push({ key: 'filmCode', value: this.oFilmCode });
+                    jsonArr.push({ key: 'filmCode', value: filmCodeList.join(',')});
                 }
                 jsonArr.push({ key: 'startDate', value: this.oStartDate });
                 jsonArr.push({ key: 'endDate', value: this.oEndDate });

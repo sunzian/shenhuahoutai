@@ -90,7 +90,7 @@
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status=='1'">未使用</el-tag>
                         <el-tag v-else-if="scope.row.status=='2'">已使用</el-tag>
-                        <el-tag v-else-if="scope.row.status=='2'">已过期</el-tag>
+                        <el-tag v-else-if="scope.row.status=='3'">已过期</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column prop="memo" label="领取类型" width="160">

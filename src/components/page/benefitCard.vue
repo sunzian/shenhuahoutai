@@ -251,7 +251,7 @@
                         </el-input>
                         <span
                                 style="color:red;cursor: pointer;"
-                                @click="deleteSell()"
+                                @click="deleteSell(index)"
                         >删除</span>
                     </div>
                 </el-form-item>
@@ -348,7 +348,7 @@
                         </el-input>
                         <span
                                 style="color:red;cursor: pointer;"
-                                @click="oDeleteSell()"
+                                @click="oDeleteSell(index)"
                         >删除</span>
                     </div>
                 </el-form-item>
@@ -664,7 +664,7 @@
                         </el-input>
                         <span
                                 style="color:red;cursor: pointer;"
-                                @click="deleteSell()"
+                                @click="deleteSell(index)"
                         >删除</span>
                     </div>
                 </el-form-item>
@@ -761,7 +761,7 @@
                         </el-input>
                         <span
                                 style="color:red;cursor: pointer;"
-                                @click="oDeleteSell()"
+                                @click="oDeleteSell(index)"
                         >删除</span>
                     </div>
                 </el-form-item>
@@ -1583,10 +1583,20 @@
                 https.fetchPost('/benefitCard/getTimesById', params).then(data => { //查询可用时间段
                     loading.close();
                     console.log(data);
-                    if(JSON.parse(Decrypt(data.data.data))){
-                        this.canTimeList=JSON.parse(Decrypt(data.data.data))
+                    this.dateInfo=[];
+                    for(let x in JSON.parse(Decrypt(data.data.data))){
+                        let jsonarr=[];
+                        jsonarr.push(JSON.parse(Decrypt(data.data.data))[x].startTime);
+                        jsonarr.push(JSON.parse(Decrypt(data.data.data))[x].endTime);
+                        this.dateInfo.push(jsonarr)
                     }
-                    console.log(this.canTimeList);
+                    for(let x in this.dateInfo){
+                        this.startArr.push(this.dateInfo[x][0])
+                        this.endArr.push(this.dateInfo[x][1]);
+                    }
+                    console.log(this.startArr.join(','));
+                    console.log(this.endArr.join(','));
+                    console.log(this.dateInfo);
 
                 }).catch(err => {
                     loading.close();
@@ -1601,7 +1611,7 @@
                         //电影
                         if(JSON.parse(Decrypt(data.data.data)).benefitCard.filmCode&&JSON.parse(Decrypt(data.data.data)).benefitCard.filmName){
                             let exFilmCodeList=JSON.parse(Decrypt(data.data.data)).benefitCard.filmCode.split(',');
-                            let exFilmNameList=JSON.parse(Decrypt(data.data.data)).benefitCard.filmName.split(',');
+                            let exFilmNameList=JSON.parse(Decrypt(data.data.data)).benefitCard.filmName.split('|');
                             this.selectedSell=[];
                             for(let x in exFilmNameList){
                                 let json={};
@@ -1614,7 +1624,7 @@
                         //卖品
                         if(JSON.parse(Decrypt(data.data.data)).benefitCard.merchandiseCode&&JSON.parse(Decrypt(data.data.data)).benefitCard.merchandiseName){
                             let exFilmCodeList=JSON.parse(Decrypt(data.data.data)).benefitCard.merchandiseCode.split(',');
-                            let exFilmNameList=JSON.parse(Decrypt(data.data.data)).benefitCard.merchandiseName.split(',');
+                            let exFilmNameList=JSON.parse(Decrypt(data.data.data)).benefitCard.merchandiseName.split('|');
                             this.oSelectedSell=[];
                             for(let x in exFilmNameList){
                                 let json={};
@@ -1827,6 +1837,14 @@
                     background: 'rgba(0, 0, 0, 0.7)',
                     target: document.querySelector('.div1')
                 });
+                let filmCodeList=[];
+                for(let x in this.selectedSell){
+                    filmCodeList.push(this.selectedSell[x].filmCode)
+                }
+                let merchandiseCodeList=[];
+                for(let x in this.oSelectedSell){
+                    merchandiseCodeList.push(this.oSelectedSell[x].merchandiseCode)
+                }
                 var jsonArr = [];
                 jsonArr.push({ key: 'name', value: this.oName });
                 jsonArr.push({ key: 'cinemaCode', value: this.oCinemaCode });
@@ -1864,7 +1882,7 @@
                             jsonArr.push({ key: 'filmFormatCode', value: this.oFilmFormatCode});
                         }
                         if(this.oSelectFilmType!=0){
-                            jsonArr.push({ key: 'filmCode', value: this.oFilmCode});
+                            jsonArr.push({ key: 'filmCode', value: filmCodeList.join(',')});
                         }
                         if(this.oIsLimitFilm!=0){
                             jsonArr.push({ key: 'numberFilm', value: this.oNumberFilm});
@@ -1878,7 +1896,7 @@
                         jsonArr.push({ key: 'selectMerchandiseType', value: this.oSelectMerchandiseType});
                         jsonArr.push({ key: 'isLimitMerchandise', value: this.oIsLimitMerchandise});
                         if(this.oSelectMerchandiseType!=0){
-                            jsonArr.push({ key: 'merchandiseCode', value: this.oMerchandiseCode});
+                            jsonArr.push({ key: 'merchandiseCode', value: merchandiseCodeList.join(',')});
                         }
                         if(this.oReduceTypeMerchandise==2){
                             jsonArr.push({ key: 'achieveMoneyMerchandise', value: this.oAchieveMoneyMerchandise});

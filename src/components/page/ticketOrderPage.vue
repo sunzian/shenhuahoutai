@@ -50,7 +50,7 @@
                 </el-select>
                 <el-select
                     clearable
-                    v-model="query.submitStatus"
+                    v-model="query.orderStatus"
                     placeholder="订单状态"
                     class="handle-select mr10"
                 >
@@ -175,6 +175,12 @@
                 <el-table-column prop="name" label="影院编码" width="85">
                     <template slot-scope="scope">{{scope.row.cinemaCode}}</template>
                 </el-table-column>
+                <el-table-column prop="name" label="开卡影院" width="85">
+                    <template slot-scope="scope">{{scope.row.openCardCinemaName}}</template>
+                </el-table-column>
+                <el-table-column prop="name" label="绑卡影院" width="85">
+                    <template slot-scope="scope">{{scope.row.bindCardCinemaName}}</template>
+                </el-table-column>
                 <el-table-column label="订单号" width="100">
                     <template slot-scope="scope">{{scope.row.orderNo}}</template>
                 </el-table-column>
@@ -239,13 +245,13 @@
                 </el-table-column>
                 <el-table-column label="订单状态" align="center">
                     <template slot-scope="scope">
-                        <el-tag v-if="scope.row.submitStatus=='0'" type="danger">锁座失败</el-tag>
-                        <el-tag v-else-if="scope.row.submitStatus=='1'" type="success">已锁座</el-tag>
-                        <el-tag v-else-if="scope.row.submitStatus=='2'" type="danger">已提交</el-tag>
-                        <el-tag v-else-if="scope.row.submitStatus=='3'" type="danger">下单失败</el-tag>
-                        <el-tag v-else-if="scope.row.submitStatus=='4'" type="danger">未取票</el-tag>
-                        <el-tag v-else-if="scope.row.submitStatus=='5'" type="danger">已取票</el-tag>
-                        <el-tag v-else-if="scope.row.submitStatus=='6'" type="danger">已退票</el-tag>
+                        <el-tag v-if="scope.row.orderStatus=='0'" type="danger">锁座失败</el-tag>
+                        <el-tag v-else-if="scope.row.orderStatus=='1'" type="success">已锁座</el-tag>
+                        <el-tag v-else-if="scope.row.orderStatus=='2'" type="danger">已提交</el-tag>
+                        <el-tag v-else-if="scope.row.orderStatus=='3'" type="danger">下单失败</el-tag>
+                        <el-tag v-else-if="scope.row.orderStatus=='4'" type="danger">未取票</el-tag>
+                        <el-tag v-else-if="scope.row.orderStatus=='5'" type="danger">已取票</el-tag>
+                        <el-tag v-else-if="scope.row.orderStatus=='6'" type="danger">已退票</el-tag>
                     </template>
                 </el-table-column>
                 <!--<el-table-column label="取票状态" align="center">-->
@@ -481,7 +487,7 @@
                     <el-input
                         :disabled="true"
                         style="width: 250px"
-                        v-model="form.submitStatus"
+                        v-model="form.orderStatus"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
@@ -629,13 +635,22 @@ export default {
                             } else if (JSON.parse(Decrypt(data.data.data)).cancelStatus == 1) {
                                 this.form.cancelStatus = '已退票';
                             }
-                            if (JSON.parse(Decrypt(data.data.data)).submitStatus == 0) {
-                                this.form.submitStatus = '未下单';
-                            } else if (JSON.parse(Decrypt(data.data.data)).submitStatus == 1) {
-                                this.form.submitStatus = '下单成功';
-                            } else if (JSON.parse(Decrypt(data.data.data)).submitStatus == 2) {
-                                this.form.submitStatus = '下单失败';
+                            if (JSON.parse(Decrypt(data.data.data)).orderStatus == 0) {
+                                this.form.orderStatus = '锁座失败';
+                            } else if (JSON.parse(Decrypt(data.data.data)).orderStatus == 1) {
+                                this.form.orderStatus = '已锁座';
+                            } else if (JSON.parse(Decrypt(data.data.data)).orderStatus == 2) {
+                                this.form.orderStatus = '已提交';
+                            }else if (JSON.parse(Decrypt(data.data.data)).orderStatus == 3) {
+                                this.form.orderStatus = '下单失败';
+                            }else if (JSON.parse(Decrypt(data.data.data)).orderStatus == 4) {
+                                this.form.orderStatus = '未取票';
+                            }else if (JSON.parse(Decrypt(data.data.data)).orderStatus == 5) {
+                                this.form.orderStatus = '已取票';
+                            }else if (JSON.parse(Decrypt(data.data.data)).orderStatus == 6) {
+                                this.form.orderStatus = '已退票';
                             }
+
                             if (JSON.parse(Decrypt(data.data.data)).activityType == 1) {
                                 this.form.activityType = '特惠';
                             } else if (JSON.parse(Decrypt(data.data.data)).activityType == 2) {
@@ -702,7 +717,7 @@ export default {
                 let mobile = this.query.mobile;
                 let payWay = this.query.payWay;
                 let payStatus = this.query.payStatus;
-                let submitStatus = this.query.submitStatus;
+                let orderStatus = this.query.orderStatus;
                 let startDate = this.query.startDate;
                 let endDate = this.query.endDate;
                 let sessionStartDate = this.query.sessionStartDate;
@@ -722,8 +737,8 @@ export default {
                 if (!payStatus) {
                     payStatus = '';
                 }
-                if (!submitStatus) {
-                    submitStatus = '';
+                if (!orderStatus) {
+                    orderStatus = '';
                 }
                 if (!startDate) {
                     startDate = '';
@@ -743,16 +758,17 @@ export default {
                 jsonArr.push({ key: 'mobile', value: mobile });
                 jsonArr.push({ key: 'payWay', value: payWay });
                 jsonArr.push({ key: 'payStatus', value: payStatus });
-                jsonArr.push({ key: 'submitStatus', value: submitStatus });
+                jsonArr.push({ key: 'orderStatus', value: orderStatus });
                 jsonArr.push({ key: 'startDate', value: startDate });
                 jsonArr.push({ key: 'endDate', value: endDate });
-                jsonArr.push({ key: 'startDate', value: sessionStartDate });
-                jsonArr.push({ key: 'endDate', value: sessionEndDate });
+                jsonArr.push({ key: 'sessionStartDate', value: sessionStartDate });
+                jsonArr.push({ key: 'sessionEndDate', value: sessionEndDate });
                 jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
                 jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
                 var params = ParamsAppend(jsonArr);
+                console.log(jsonArr);
                 https
                     .fetchPost('/ticketOrder/ticketOrderPage', params)
                     .then(data => {

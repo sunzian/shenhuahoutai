@@ -636,6 +636,7 @@ export default {
                     console.log(data);
                     if (data.data.code == 'success') {
                         this.dialogFormVisible = true;
+                        this.getAllScreen(this.oForm.cinemaCode);
                         console.log(JSON.parse(Decrypt(data.data.data)));
                         let formats = JSON.parse(Decrypt(data.data.data)).formatList;
                         this.formatList = [];

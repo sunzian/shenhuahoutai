@@ -131,6 +131,7 @@
                         <el-tag v-if="scope.row.redirectType=='1'">跳转到文章</el-tag>
                         <el-tag v-if="scope.row.redirectType=='2'">跳转到电影</el-tag>
                         <el-tag v-if="scope.row.redirectType=='3'">跳转到金币商品</el-tag>
+                        <el-tag v-if="scope.row.redirectType=='4'">不跳转</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column prop="sort" label="跳转的具体信息" width="130">
@@ -545,6 +546,10 @@ export default {
                 {
                     value: '3',
                     label: '跳转到金币商品'
+                },
+                {
+                    value: '4',
+                    label: '不跳转'
                 }
             ],
             value: '',

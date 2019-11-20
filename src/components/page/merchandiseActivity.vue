@@ -181,7 +181,7 @@
                         </el-input>
                         <span
                                 style="color:red;cursor: pointer;"
-                                @click="deleteSell()"
+                                @click="deleteSell(index)"
                         >删除</span>
                     </div>
                 </el-form-item>
@@ -431,7 +431,7 @@
                         </el-input>
                         <span
                                 style="color:red;cursor: pointer;"
-                                @click="deleteSell()"
+                                @click="deleteSell(index)"
                         >删除</span>
                     </div>
                 </el-form-item>
@@ -876,7 +876,7 @@
                             this.oForm.filmCode = '';
                             this.oForm.startDate = '';
                             this.oForm.endDate = '';
-                            this.oForm.validPayType = '';
+                            this.oForm.validPayType = '0';
                             this.oForm.reduceType = '';
                             this.oForm.achieveMoney = '';
                             this.oForm.discountMoney = '';
@@ -973,10 +973,20 @@
                 https.fetchPost('/filmDiscountActivity/getTimesById', params).then(data => { //查询可用时间段
                     loading.close();
                     console.log(data);
-                    if(JSON.parse(Decrypt(data.data.data))){
-                        this.canTimeList=JSON.parse(Decrypt(data.data.data))
+                    this.dateInfo=[];
+                    for(let x in JSON.parse(Decrypt(data.data.data))){
+                        let jsonarr=[];
+                        jsonarr.push(JSON.parse(Decrypt(data.data.data))[x].startTime);
+                        jsonarr.push(JSON.parse(Decrypt(data.data.data))[x].endTime);
+                        this.dateInfo.push(jsonarr)
                     }
-                    console.log(this.canTimeList);
+                    for(let x in this.dateInfo){
+                        this.startArr.push(this.dateInfo[x][0])
+                        this.endArr.push(this.dateInfo[x][1]);
+                    }
+                    console.log(this.startArr.join(','));
+                    console.log(this.endArr.join(','));
+                    console.log(this.dateInfo);
 
                 }).catch(err => {
                     loading.close();
@@ -1009,7 +1019,7 @@
                         }
                         if(JSON.parse(Decrypt(data.data.data)).merchandiseCode&&JSON.parse(Decrypt(data.data.data)).merchandiseName){
                             let exFilmCodeList=JSON.parse(Decrypt(data.data.data)).merchandiseCode.split(',');
-                            let exFilmNameList=JSON.parse(Decrypt(data.data.data)).merchandiseName.split(',');
+                            let exFilmNameList=JSON.parse(Decrypt(data.data.data)).merchandiseName.split('|');
                             this.selectedSell=[];
                             for(let x in exFilmNameList){
                                 let json={};
@@ -1101,12 +1111,17 @@
                     background: 'rgba(0, 0, 0, 0.7)',
                     target: document.querySelector('.div1')
                 });
+
+                let merchandiseCodeList=[];
+                for(let x in this.selectedSell){
+                    merchandiseCodeList.push(this.selectedSell[x].merchandiseCode)
+                }
                 var jsonArr = [];
                 jsonArr.push({ key: 'name', value: this.oName });
                 jsonArr.push({ key: 'cinemaCode', value: this.oCinemaCode });
                 jsonArr.push({ key: 'selectMerchandiseType', value: this.oSelectMerchandiseType });
                 if(this.oSelectFilmType!=0){
-                    jsonArr.push({ key: 'merchandiseCode', value: this.selectedSell.join(',') });
+                    jsonArr.push({ key: 'merchandiseCode', value: merchandiseCodeList.join(',') });
                 }
                 jsonArr.push({ key: 'startDate', value: this.oStartDate });
                 jsonArr.push({ key: 'endDate', value: this.oEndDate });

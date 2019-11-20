@@ -133,39 +133,10 @@
                         数量：{{item.num}}
                         <span
                                 style="color:red;cursor: pointer;"
-                                @click="deleteSell()"
+                                @click="deleteSell(index)"
                         >删除</span>
                     </div>
                 </el-form-item>
-                <!--<el-form-item label="搜索优惠券：" :label-width="formLabelWidth" prop="couponName">-->
-                    <!--<el-col>-->
-                        <!--<el-autocomplete-->
-                            <!--class="inline-input"-->
-                            <!--v-model="oForm.couponName"-->
-                            <!--:fetch-suggestions="querySearch"-->
-                            <!--placeholder="请输入内容"-->
-                            <!--:trigger-on-focus="false"-->
-                            <!--@select="handleSelect"-->
-                        <!--&gt;</el-autocomplete>优惠券数量：-->
-                        <!--<el-input style="width: 50px" v-model="oForm.number" autocomplete="off"></el-input>-->
-                        <!--<span style="color:blue;cursor: pointer;" @click="addCoupon">添加</span>-->
-                    <!--</el-col>-->
-                <!--</el-form-item>-->
-                <!--<el-form-item-->
-                    <!--label="所选优惠券："-->
-                    <!--:label-width="formLabelWidth"-->
-                    <!--v-if="couponInfo.length>0"-->
-                <!--&gt;-->
-                    <!--<div v-for="(item, index) in couponInfo" :key="index">-->
-                        <!--{{item.value}}-->
-                        <!--&nbsp;&nbsp;&nbsp;&nbsp;-->
-                        <!--数量：{{item.number}}-->
-                        <!--<span-->
-                            <!--style="color:red;cursor: pointer;"-->
-                            <!--@click="deletCoupon(index)"-->
-                        <!--&gt;删除</span>-->
-                    <!--</div>-->
-                <!--</el-form-item>-->
                 <el-form-item label="开启状态：" :label-width="formLabelWidth">
                     <el-select v-model="oForm.status" placeholder="请选择">
                         <el-option
@@ -193,20 +164,32 @@
                     <span>{{oCinemaName}}</span>
                 </el-form-item>
                 <el-form-item label="券包名称：" :label-width="formLabelWidth">
-                    <el-input style="width: 75px" v-model="oGroupName" autocomplete="off"></el-input>
+                    <el-input style="width: 215px" v-model="oGroupName" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="券包优惠券：" :label-width="formLabelWidth">
-                    <div v-for="(item, index) in couponList" :key="index">
-                        <div v-if="item.number > 0">
-                            优惠券名称：&nbsp;&nbsp;
-                            <span>{{item.couponName}}</span>&nbsp;&nbsp;&nbsp;&nbsp;
-                            优惠券数量：&nbsp;&nbsp;
-                            <el-input style="width: 75px" v-model="item.number" autocomplete="off"></el-input>
-                            <span
+                <el-form-item label="选择优惠券" :label-width="formLabelWidth">
+                    <el-button type="primary" @click="openNext">点击选择</el-button>
+                </el-form-item>
+                <el-form-item
+                        label="所选优惠券"
+                        :label-width="formLabelWidth"
+                        v-if="selectedSell.length>0"
+                >
+                    <div v-for="(item, index) in selectedSell" style="margin-bottom: 5px" :key="index">
+                        <el-input
+                                style="width: 250px"
+                                v-model="item.name"
+                                autocomplete="off"
+                                :value="item.id"
+                                :disabled="true"
+                                :change="one(item.id)"
+                        >
+                        </el-input>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        数量：{{item.num}}
+                        <span
                                 style="color:red;cursor: pointer;"
-                                @click="changeCoupon(index,item.id)"
-                            >删除</span>
-                        </div>
+                                @click="deleteSell(index)"
+                        >删除</span>
                     </div>
                 </el-form-item>
                 <el-form-item label="使用须知：" :label-width="formLabelWidth">
@@ -243,7 +226,7 @@
                     </el-table-column>
                     <el-table-column prop="sort" label="优惠券数量">
                         <template slot-scope="scope">
-                            <el-input v-model="scope.row.num"></el-input>
+                            <el-input placeholder="输入数量" v-model="scope.row.num"></el-input>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -343,7 +326,6 @@ export default {
             cinemaInfo: [],
             cinemaData: [],
             screenInfo: [],
-            couponInfo: [],
             couponList: [],
             selectedSell: [],
             value: '',
@@ -356,6 +338,7 @@ export default {
     },
     methods: {
         deleteSell(index) {
+            console.log(index);
             this.selectedSell.splice(index, 1);
         },
         one(a){//获取影片绑定的value值
@@ -397,7 +380,7 @@ export default {
                 let sign =md5(preSign(jsonArr));
                 jsonArr.push({key:"sign",value:sign});
                 var params = ParamsAppend(jsonArr);
-                https.fetchPost('merchandiseCoupon/merchandiseCouponPage',params).then((data) => {
+                https.fetchPost('/merchandiseCoupon/getCouponByCinemaCode',params).then((data) => {
                     loading.close();
                     console.log(data);
                     if(data.data.code=='success') {
@@ -459,7 +442,6 @@ export default {
                         this.oForm.cinemaCode = [];
                         this.selectValue = '';
                         this.selectGroup = {};
-                        this.couponInfo = [];
                         this.oForm.cinemaName = '';
                         this.oForm.status = '';
                         this.oForm.number = '';
@@ -600,8 +582,22 @@ export default {
                     console.log(data);
                     if (data.data.code == 'success') {
                         this.editVisible = true;
-                        this.couponList = JSON.parse(Decrypt(data.data.data)).couponGroup.couponList;
+                        console.log(JSON.parse(Decrypt(data.data.data)));
+                        //优惠券
+                        if(JSON.parse(Decrypt(data.data.data)).couponGroup.couponList){
+                            this.selectedSell=[];
+                            for(let x in JSON.parse(Decrypt(data.data.data)).couponGroup.couponList){
+                                let json={};
+                                json.id=JSON.parse(Decrypt(data.data.data)).couponGroup.couponList[x].couponId;
+                                json.name=JSON.parse(Decrypt(data.data.data)).couponGroup.couponList[x].couponName;
+                                json.num=JSON.parse(Decrypt(data.data.data)).couponGroup.couponList[x].number;
+                                this.selectedSell.push(json)
+                            }
+                            console.log(this.selectedSell);
+                        }
+                        // this.couponList = JSON.parse(Decrypt(data.data.data)).couponGroup.couponList;
                         this.oCinemaName = JSON.parse(Decrypt(data.data.data)).couponGroup.cinemaName;
+                        this.oForm.cinemaCode = JSON.parse(Decrypt(data.data.data)).couponGroup.cinemaCodes;
                         this.oGroupName = JSON.parse(Decrypt(data.data.data)).couponGroup.groupName;
                         this.oMemo = JSON.parse(Decrypt(data.data.data)).couponGroup.memo;
                         this.oId = JSON.parse(Decrypt(data.data.data)).couponGroup.id;
@@ -631,8 +627,8 @@ export default {
             });
             var jsonArr = [];
             let coupon = [];
-            for (let i = 0; i < this.couponList.length; i++) {
-                coupon.push(this.couponList[i].id + '=' + this.couponList[i].number);
+            for (let i = 0; i < this.selectedSell.length; i++) {
+                coupon.push(this.selectedSell[i].id + '=' + this.selectedSell[i].num);
             }
             let newCoupon = coupon.join(',');
             jsonArr.push({ key: 'groupName', value: this.oGroupName });
@@ -651,6 +647,8 @@ export default {
                     // console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.$message.success(`编辑成功`);
+                        this.selectedSell=[];
+                        this.oForm.cinemaCode='';
                         this.getMenu();
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
@@ -773,6 +771,7 @@ export default {
         selectCinema(val) {
             console.log(val);
             this.selectValue = val;
+            this.selectedSell = [];
         },
         selectDay(val) {
             // console.log(val)
@@ -837,36 +836,6 @@ export default {
                     console.log(err);
                 });
         },
-        // 获取优惠券
-        querySearch(queryString, cb) {
-            let jsonArr = [];
-            jsonArr.push({ key: 'couponName', value: queryString });
-            let sign = md5(preSign(jsonArr));
-            jsonArr.push({ key: 'sign', value: sign });
-            var params = ParamsAppend(jsonArr);
-            https
-                .fetchPost('merchandiseCoupon/getCouponByName', params)
-                .then(data => {
-                    if (data.data.code == 'success') {
-                        let couponName = JSON.parse(Decrypt(data.data.data));
-                        this.restaurants = couponName;
-                        var restaurants = this.restaurants;
-                        var results = restaurants;
-                        // 调用 callback 返回建议列表的数据
-                        cb(results);
-                    } else if (data.data.code == 'nologin') {
-                        this.message = data.data.message;
-                        this.open();
-                        this.$router.push('/login');
-                    } else {
-                        this.message = data.data.message;
-                        this.open();
-                    }
-                })
-                .catch(err => {
-                    console.log(err);
-                });
-        },
         // 取消按钮操作
         cancel() {
             this.$confirm('该操作将清空页面数据, 是否继续?', '提示', {
@@ -883,60 +852,6 @@ export default {
                         message: '已取消'
                     });
                 });
-        },
-        addCoupon() {
-            this.selectGroup = {};
-            if (this.oForm.couponName == '') {
-                return;
-            }
-            if (this.oForm.number == '') {
-                return;
-            }
-            if (this.restaurants.length == 0) {
-                this.message = '暂无优惠券可选';
-                this.open();
-                return;
-            }
-            for (let i = 0; i < this.restaurants.length; i++) {
-                if (this.oForm.couponName == this.restaurants[i].value) {
-                    this.selectGroup = this.restaurants[i];
-                }
-            }
-            if (!this.selectGroup.value) {
-                return;
-            }
-            this.selectGroup.number = this.oForm.number;
-            // 筛选重复优惠券
-            var result = this.couponInfo.some(item => {
-                if (item.value == this.selectGroup.value) {
-                    return true;
-                }
-            });
-            if (result) {
-                return;
-            }
-            this.couponInfo.push(this.selectGroup);
-        },
-        deletCoupon(index) {
-            this.couponInfo.splice(index, 1);
-        },
-        // 改变优惠券数量
-        changeCoupon(index, couponId) {
-            let number = [];
-            for (let i = 0; i < this.couponList.length; i++) {
-                if (this.couponList[i].number == 0) {
-                    number.push(this.couponList[i]);
-                }
-            }
-            if (number.length - this.couponList.length > -2) {
-                return;
-            }
-            this.couponList[index].number = 0;
-        },
-        handleSelect(item) {
-            console.log(item);
-            this.selectGroup = {};
-            this.selectGroup = item;
         },
         // 多选操作
         handleSelectionChange(val) {
