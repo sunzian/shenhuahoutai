@@ -2164,7 +2164,6 @@
             },
             oSureNext() {
                 if(this.oSellIndex>=0){
-                    // this.selectedSell=[]
                     this.oSelectedSell.push(this.oSellTableData[this.oSellIndex]);
                 }
                 console.log(this.oSelectedSell);
