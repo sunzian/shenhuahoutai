@@ -191,9 +191,10 @@
                 <el-form-item label="优惠描述：" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        min="1"
+                        type="textarea"
+                        :maxlength="10"
                         v-model="oForm.ruleMemo"
-                        placeholder="建议长度不超过15字"
+                        placeholder="建议长度不超过10字"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
@@ -252,7 +253,7 @@
                     </el-checkbox-group>
                 </el-form-item>
                 <el-form-item label="充值规则名称：" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" min="1" v-model="oRuleName" autocomplete="off"></el-input>
+                    <el-input style="width: 250px" v-model="oRuleName" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="充值金额(起充金额)：" :label-width="formLabelWidth">
                     <el-input
@@ -294,7 +295,7 @@
                     <el-button type="primary" @click="changeCoupon">更换券包</el-button>
                 </el-form-item>
                 <el-form-item label="优惠描述：" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" min="1" v-model="oRuleMemo" autocomplete="off"></el-input>
+                    <el-input style="width: 250px" type="textarea" :maxlength="10" v-model="oRuleMemo" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="有效期：" :label-width="formLabelWidth" prop="date1">
                     <el-date-picker

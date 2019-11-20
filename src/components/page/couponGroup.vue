@@ -111,35 +111,61 @@
                         >{{item.cinemaName}}</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item label="搜索优惠券：" :label-width="formLabelWidth" prop="couponName">
-                    <el-col>
-                        <el-autocomplete
-                            class="inline-input"
-                            v-model="oForm.couponName"
-                            :fetch-suggestions="querySearch"
-                            placeholder="请输入内容"
-                            :trigger-on-focus="false"
-                            @select="handleSelect"
-                        ></el-autocomplete>优惠券数量：
-                        <el-input style="width: 50px" v-model="oForm.number" autocomplete="off"></el-input>
-                        <span style="color:blue;cursor: pointer;" @click="addCoupon">添加</span>
-                    </el-col>
+                <el-form-item label="选择优惠券" :label-width="formLabelWidth">
+                    <el-button type="primary" @click="openNext">点击选择</el-button>
                 </el-form-item>
                 <el-form-item
-                    label="所选优惠券："
-                    :label-width="formLabelWidth"
-                    v-if="couponInfo.length>0"
+                        label="所选优惠券"
+                        :label-width="formLabelWidth"
+                        v-if="selectedSell.length>0"
                 >
-                    <div v-for="(item, index) in couponInfo" :key="index">
-                        {{item.value}}
+                    <div v-for="(item, index) in selectedSell" style="margin-bottom: 5px" :key="index">
+                        <el-input
+                                style="width: 250px"
+                                v-model="item.name"
+                                autocomplete="off"
+                                :value="item.id"
+                                :disabled="true"
+                                :change="one(item.id)"
+                        >
+                        </el-input>
                         &nbsp;&nbsp;&nbsp;&nbsp;
-                        数量：{{item.number}}
+                        数量：{{item.num}}
                         <span
-                            style="color:red;cursor: pointer;"
-                            @click="deletCoupon(index)"
+                                style="color:red;cursor: pointer;"
+                                @click="deleteSell()"
                         >删除</span>
                     </div>
                 </el-form-item>
+                <!--<el-form-item label="搜索优惠券：" :label-width="formLabelWidth" prop="couponName">-->
+                    <!--<el-col>-->
+                        <!--<el-autocomplete-->
+                            <!--class="inline-input"-->
+                            <!--v-model="oForm.couponName"-->
+                            <!--:fetch-suggestions="querySearch"-->
+                            <!--placeholder="请输入内容"-->
+                            <!--:trigger-on-focus="false"-->
+                            <!--@select="handleSelect"-->
+                        <!--&gt;</el-autocomplete>优惠券数量：-->
+                        <!--<el-input style="width: 50px" v-model="oForm.number" autocomplete="off"></el-input>-->
+                        <!--<span style="color:blue;cursor: pointer;" @click="addCoupon">添加</span>-->
+                    <!--</el-col>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item-->
+                    <!--label="所选优惠券："-->
+                    <!--:label-width="formLabelWidth"-->
+                    <!--v-if="couponInfo.length>0"-->
+                <!--&gt;-->
+                    <!--<div v-for="(item, index) in couponInfo" :key="index">-->
+                        <!--{{item.value}}-->
+                        <!--&nbsp;&nbsp;&nbsp;&nbsp;-->
+                        <!--数量：{{item.number}}-->
+                        <!--<span-->
+                            <!--style="color:red;cursor: pointer;"-->
+                            <!--@click="deletCoupon(index)"-->
+                        <!--&gt;删除</span>-->
+                    <!--</div>-->
+                <!--</el-form-item>-->
                 <el-form-item label="开启状态：" :label-width="formLabelWidth">
                     <el-select v-model="oForm.status" placeholder="请选择">
                         <el-option
@@ -192,6 +218,53 @@
                 <el-button type="primary" @click="exChanger">确 定</el-button>
             </span>
         </el-dialog>
+        <!--新增优惠券弹出框-->
+        <el-dialog title="选择优惠券" :visible.sync="drawer">
+            <div class="container">
+                <div class="handle-box">
+                    <el-input v-model="query.name" placeholder="优惠券名称" class="handle-input mr10"></el-input>
+                    <el-button type="primary" icon="el-icon-search" @click="openNext">搜索</el-button>
+                </div>
+                <el-table
+                        :data="sellTableData"
+                        border
+                        class="table"
+                        ref="multipleTable"
+                        header-cell-class-name="table-header"
+                        @selection-change="handleSelectionChange"
+                >
+                    <el-table-column label="操作" width="100" align="center">
+                        <template slot-scope="scope">
+                            <el-radio v-model="id" :label="scope.$index" @change.native="getCurrentRow(scope.$index)">&nbsp;</el-radio>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="sort" label="优惠券名称">
+                        <template slot-scope="scope">{{scope.row.name}}</template>
+                    </el-table-column>
+                    <el-table-column prop="sort" label="优惠券数量">
+                        <template slot-scope="scope">
+                            <el-input v-model="scope.row.num"></el-input>
+                        </template>
+                    </el-table-column>
+                </el-table>
+                <div class="pagination">
+                    <el-pagination
+                            background
+                            layout="total, prev, pager, next"
+                            :current-page="query.aPageNo"
+                            :page-size="query.aPageSize"
+                            :total="query.aTotalCount"
+                            @current-change="aCurrentChange"
+                            @prev-click='aPrev'
+                            @next-click="aNext"
+                    ></el-pagination>
+                </div>
+            </div>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="drawer = false">取 消</el-button>
+                <el-button type="primary" @click="sureNext">确 定</el-button>
+            </div>
+        </el-dialog>
     </div>
 </template>
 
@@ -213,13 +286,17 @@ export default {
             message: '', //弹出框消息
             query: {
                 pageNo: 1,
-                pageSize: 15
+                pageSize: 15,
+                aPageNo: 1,
+                aPageSize: 15
             },
             restaurants: [],
             tableData: [],
             multipleSelection: [],
+            sellTableData: [],
             delList: [],
             editVisible: false,
+            drawer: false,
             pageTotal: 0,
             form: {},
             selectScreen: '', // 选中的影厅
@@ -268,7 +345,9 @@ export default {
             screenInfo: [],
             couponInfo: [],
             couponList: [],
-            value: ''
+            selectedSell: [],
+            value: '',
+            sellIndex: ''
         };
     },
     created() {},
@@ -276,6 +355,78 @@ export default {
         this.getMenu();
     },
     methods: {
+        deleteSell(index) {
+            this.selectedSell.splice(index, 1);
+        },
+        one(a){//获取影片绑定的value值
+            console.log(a);
+            this.ticketIds =a
+        },
+        sureNext() {
+            if(this.sellIndex>=0){
+                // this.selectedSell=[]
+                this.selectedSell.push(this.sellTableData[this.sellIndex]);
+            }
+            console.log(this.selectedSell);
+            this.drawer = false;
+        },
+        getCurrentRow(index){//优惠券弹出框index
+            this.sellIndex=index;
+        },
+        openNext() {
+            //获取优惠券列表
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
+            setTimeout(() => {
+                let name=this.query.name;
+                if(!name){
+                    name=''
+                }
+                let jsonArr = [];
+                jsonArr.push({key:"name",value:name});
+                jsonArr.push({key:"cinemaCode",value:this.oForm.cinemaCode});
+                jsonArr.push({key:"simpleType",value:'1'});
+                jsonArr.push({key:"status",value:'1'});
+                jsonArr.push({key:"pageNo",value:this.query.aPageNo});
+                jsonArr.push({key:"pageSize",value:this.query.aPageSize});
+                let sign =md5(preSign(jsonArr));
+                jsonArr.push({key:"sign",value:sign});
+                var params = ParamsAppend(jsonArr);
+                https.fetchPost('merchandiseCoupon/merchandiseCouponPage',params).then((data) => {
+                    loading.close();
+                    console.log(data);
+                    if(data.data.code=='success') {
+                        this.drawer=true;
+                        var oData = JSON.parse(Decrypt(data.data.data));
+                        console.log(oData);
+                        // console.log(this.query);
+                        this.sellTableData = oData.pageResult.data;
+                        console.log(this.sellTableData);
+                        this.query.aPageSize = oData.pageResult.pageSize;
+                        this.query.aPageNo = oData.pageResult.pageNo;
+                        this.query.aTotalCount = oData.pageResult.totalCount;
+                        this.query.aTotalPage = oData.pageResult.totalPage
+                    }else if(data.data.code=='nologin'){
+                        this.message=data.data.message;
+                        this.open();
+                        this.$router.push('/login');
+                    }else{
+                        this.message=data.data.message;
+                        this.open()
+                    }
+
+                }).catch(err=>{
+                        loading.close();
+                        console.log(err)
+                    }
+                )
+            }, 500);
+        },
         addPage() {
             //获取新增按钮权限
             const loading = this.$loading({
@@ -329,17 +480,17 @@ export default {
         },
         addRole() {
             //新增按钮操作
-            // const loading = this.$loading({
-            //     lock: true,
-            //     text: 'Loading',
-            //     spinner: 'el-icon-loading',
-            //     background: 'rgba(0, 0, 0, 0.7)',
-            //     target: document.querySelector('.div1')
-            // });
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
             var jsonArr = [];
             let coupon = [];
-            for (let i = 0; i < this.couponInfo.length; i++) {
-                coupon.push(this.couponInfo[i].address + '=' + this.couponInfo[i].number);
+            for (let i = 0; i < this.selectedSell.length; i++) {
+                coupon.push(this.selectedSell[i].id + '=' + this.selectedSell[i].num);
             }
             let newCoupon = coupon.join(',');
             jsonArr.push({ key: 'groupName', value: this.oForm.name });
@@ -356,10 +507,12 @@ export default {
                     .fetchPost('couponGroup/addCouponGroup', params)
                     .then(data => {
                         //新增
+                        loading.close();
                         console.log(data);
                         if (data.data.code == 'success') {
                             this.dialogFormVisible = false;
                             this.$message.success(`新增成功`);
+                            this.selectedSell=[];
                             this.getMenu();
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
@@ -374,7 +527,6 @@ export default {
                         console.log(err);
                     });
             }
-            // loading.close();
         },
         delChange(index, row) {
             //删除数据
@@ -804,6 +956,19 @@ export default {
             //分页按钮下一页
             this.query.pageNo++;
             this.getMenu();
+        },
+        //新增优惠券页面
+        aCurrentChange(val){//点击选择具体页数
+            this.query.aPageNo = val;
+            this.openNext()
+        },
+        aPrev(){//分页按钮上一页
+            this.query.aPageNo--;
+            this.openNext()
+        },
+        aNext(){//分页按钮下一页
+            this.query.aPageNo++;
+            this.openNext()
         }
     }
 };

@@ -667,12 +667,14 @@ export default {
         match(){
             if(this.form.prizeLevel<1||this.form.prizeLevel>7){
                 this.message = '请输入1-7的数字';
+                this.form.prizeLevel='';
                 this.open();
             }
         },
         oMatch(){
             if(this.pForm.prizeLevel<1||this.pForm.prizeLevel>7){
                 this.message = '请输入1-7的数字';
+                this.pForm.prizeLevel='';
                 this.open();
             }
         },

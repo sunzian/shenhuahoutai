@@ -322,6 +322,15 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
+                <el-form-item label="权益卡协议" :label-width="formLabelWidth">
+                    <el-input
+                            style="width: 250px"
+                            type="textarea"
+                            v-model="oForm.equityCardAgreement"
+                            autocomplete="off"
+                            maxlength="200"
+                    ></el-input>
+                </el-form-item>
                 <el-form-item label="购票提示" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
@@ -888,6 +897,15 @@
                         maxlength="200"
                     ></el-input>
                 </el-form-item>
+                <el-form-item label="权益卡协议" :label-width="formLabelWidth">
+                    <el-input
+                            style="width: 250px"
+                            type="textarea"
+                            v-model="oEquityCardAgreement"
+                            autocomplete="off"
+                            maxlength="200"
+                    ></el-input>
+                </el-form-item>
                 <el-form-item label="购票提示" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
@@ -1405,6 +1423,7 @@ export default {
             oScreenCount: '',
             oTicketSystemCode: '',
             oComparePriceCode: '',
+            oEquityCardAgreement: '',
             oBuyMinutesLimit: '',
             oRefundMinutesLimit: '',
             oRefundFee: '',
@@ -1681,6 +1700,7 @@ export default {
             jsonArr.push({ key: 'videoStatus', value: this.oForm.videoStatus });
             jsonArr.push({ key: 'miniAppName', value: this.oForm.miniAppName });
             jsonArr.push({ key: 'miniAppQRCode', value: this.oForm.miniAppQRCode });
+            jsonArr.push({ key: 'equityCardAgreement', value: this.oForm.equityCardAgreement });
             console.log(preSign(jsonArr));
             let sign = md5(preSign(jsonArr));
             console.log(sign);
@@ -1878,6 +1898,7 @@ export default {
                         this.oReportedType = JSON.parse(Decrypt(data.data.data)).Cinema.reportedType;
                         this.oBelongBusinessCode = JSON.parse(Decrypt(data.data.data)).Cinema.belongBusinessCode;
                         this.oRemainTicketsNumber = JSON.parse(Decrypt(data.data.data)).Cinema.remainTicketsNumber;
+                        this.oEquityCardAgreement = JSON.parse(Decrypt(data.data.data)).Cinema.equityCardAgreement;
                         for (let x in this.boolean) {
                             if (this.boolean[x].value == JSON.parse(Decrypt(data.data.data)).Cinema.memberCardCommonUseStatus) {
                                 this.oMemberCardCommonUseStatus = this.boolean[x].value;
@@ -2042,6 +2063,7 @@ export default {
             jsonArr.push({ key: 'snackBeginTime', value: this.oSnackBeginTime });
             jsonArr.push({ key: 'snackEndTime', value: this.oSnackEndTime });
             jsonArr.push({ key: 'messagePlatformType', value: this.oMessagePlatformType });
+            jsonArr.push({ key: 'equityCardAgreement', value: this.oEquityCardAgreement });
             let messageInfos = [];
             if (this.oMessageType1) {
                 messageInfos.push({ 'messageType':  1 , 'content': this.oMessageType1 });

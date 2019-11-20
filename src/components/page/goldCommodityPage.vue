@@ -223,6 +223,16 @@
                         <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过300kb 建议尺寸200*200或按比例上传</div>
                     </el-upload>
                 </el-form-item>
+                <el-form-item label="允许兑换的门店" :label-width="formLabelWidth">
+                    <el-checkbox-group v-model="checkedCities" :max="1" @change="getCinemaCode">
+                        <el-checkbox
+                                v-for="city in cities"
+                                :label="city.cinemaCode"
+                                :key="city.cinemaCode"
+                                :value="city.cinemaCode"
+                        >{{city.cinemaName}}</el-checkbox>
+                    </el-checkbox-group>
+                </el-form-item>
                 <el-form-item label="兑换须知" :label-width="formLabelWidth">
                     <el-input
                         style="width: 360px"
@@ -276,16 +286,6 @@
                 >
                     <el-input style="width: 250px" v-model="oForm.money" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="允许兑换的门店" :label-width="formLabelWidth">
-                    <el-checkbox-group v-model="checkedCities" :max="1">
-                        <el-checkbox
-                            v-for="city in cities"
-                            :label="city.cinemaCode"
-                            :key="city.cinemaCode"
-                            :value="city.cinemaCode"
-                        >{{city.cinemaName}}</el-checkbox>
-                    </el-checkbox-group>
-                </el-form-item>
                 <el-form-item label="是否今日大牌" :label-width="formLabelWidth">
                     <el-select v-model="oForm.topStatus" placeholder="请选择">
                         <el-option
@@ -306,31 +306,27 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item
-                    v-if="oForm.commodity_type==2"
-                    label="选择优惠券"
-                    :label-width="formLabelWidth"
-                >
-                    <el-autocomplete
-                        class="inline-input"
-                        v-model="oForm.filmName"
-                        :fetch-suggestions="querySearch"
-                        placeholder="请输入内容"
-                        :trigger-on-focus="false"
-                        @select="handleSelect"
-                    ></el-autocomplete>
-                    <span style="color:blue;cursor:pointer;" @click="addFilm">添加</span>
+                <el-form-item v-if="oForm.commodity_type==2" label="选择优惠券" :label-width="formLabelWidth">
+                    <el-button type="primary" @click="openNext">点击选择</el-button>
                 </el-form-item>
                 <el-form-item
-                    label="所选优惠券："
-                    :label-width="formLabelWidth"
-                    v-if="filmInfo.length>0 && oForm.selectFilmType != 0"
+                        label="所选优惠券"
+                        :label-width="formLabelWidth"
+                        v-if="oForm.commodity_type==2&&selectedSell.length>0"
                 >
-                    <div v-for="(item, index) in filmInfo" :key="index">
-                        {{item.value}}
+                    <div v-for="(item, index) in selectedSell" style="margin-bottom: 5px" :key="index">
+                        <el-input
+                                style="width: 250px"
+                                v-model="item.name"
+                                autocomplete="off"
+                                :value="item.id"
+                                :disabled="true"
+                                :change="one(item.id)"
+                        >
+                        </el-input>
                         <span
-                            style="color:red;cursor: pointer;"
-                            @click="deletFilm(index)"
+                                style="color:red;cursor: pointer;"
+                                @click="deleteSell()"
                         >删除</span>
                     </div>
                 </el-form-item>
@@ -547,31 +543,27 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item
-                    v-if="form.commodityType==2"
-                    label="选择优惠券"
-                    :label-width="formLabelWidth"
-                >
-                    <el-autocomplete
-                        class="inline-input"
-                        v-model="form.filmName"
-                        :fetch-suggestions="querySearch"
-                        placeholder="请输入内容"
-                        :trigger-on-focus="false"
-                        @select="handleSelect"
-                    ></el-autocomplete>
-                    <span style="color:blue;cursor:pointer;" @click="addFilm2">添加</span>
+                <el-form-item v-if="form.commodityType==2" label="选择优惠券" :label-width="formLabelWidth">
+                    <el-button type="primary" @click="openNext">点击选择</el-button>
                 </el-form-item>
                 <el-form-item
-                    label="所选优惠券："
-                    :label-width="formLabelWidth"
-                    v-if="filmInfo.length>0 && form.selectFilmType != 0"
+                        label="所选优惠券"
+                        :label-width="formLabelWidth"
+                        v-if="form.commodityType==2&&selectedSell.length>0"
                 >
-                    <div v-for="(item, index) in filmInfo" :key="index">
-                        {{item.value}}
+                    <div v-for="(item, index) in selectedSell" style="margin-bottom: 5px" :key="index">
+                        <el-input
+                                style="width: 250px"
+                                v-model="item.name"
+                                autocomplete="off"
+                                :value="item.id"
+                                :disabled="true"
+                                :change="one(item.id)"
+                        >
+                        </el-input>
                         <span
-                            style="color:red;cursor: pointer;"
-                            @click="deletFilm(index)"
+                                style="color:red;cursor: pointer;"
+                                @click="deleteSell()"
                         >删除</span>
                     </div>
                 </el-form-item>
@@ -644,6 +636,48 @@
                 <el-button type="primary" @click="exChanger">确 定</el-button>
             </span>
         </el-dialog>
+        <!--新增优惠券弹出框-->
+        <el-dialog title="选择优惠券" :visible.sync="drawer">
+            <div class="container">
+                <div class="handle-box">
+                    <el-input v-model="query.name" placeholder="优惠券名称" class="handle-input mr10"></el-input>
+                    <el-button type="primary" icon="el-icon-search" @click="openNext">搜索</el-button>
+                </div>
+                <el-table
+                        :data="sellTableData"
+                        border
+                        class="table"
+                        ref="multipleTable"
+                        header-cell-class-name="table-header"
+                        @selection-change="handleSelectionChange"
+                >
+                    <el-table-column label="操作" width="100" align="center">
+                        <template slot-scope="scope">
+                            <el-radio v-model="id" :label="scope.$index" @change.native="getCurrentRow(scope.$index)">&nbsp;</el-radio>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="sort" label="优惠券名称">
+                        <template slot-scope="scope">{{scope.row.name}}</template>
+                    </el-table-column>
+                </el-table>
+                <div class="pagination">
+                    <el-pagination
+                            background
+                            layout="total, prev, pager, next"
+                            :current-page="query.aPageNo"
+                            :page-size="query.aPageSize"
+                            :total="query.aTotalCount"
+                            @current-change="aCurrentChange"
+                            @prev-click='aPrev'
+                            @next-click="aNext"
+                    ></el-pagination>
+                </div>
+            </div>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="drawer = false">取 消</el-button>
+                <el-button type="primary" @click="sureNext">确 定</el-button>
+            </div>
+        </el-dialog>
     </div>
 </template>
 
@@ -671,7 +705,9 @@ export default {
             message: '', //弹出框消息
             query: {
                 pageNo: 1,
-                pageSize: 15
+                pageSize: 15,
+                aPageNo: 1,
+                aPageSize: 15
             },
             tableData: [],
             multipleSelection: [],
@@ -688,7 +724,6 @@ export default {
                 id: '',
                 cinemaCode: [],
                 cinemaCodes: '',
-                sort: ''
             },
             idx: -1,
             id: -1,
@@ -703,7 +738,6 @@ export default {
                 desc: '',
                 value: '1',
                 commodity_type: '1',
-                sort: ''
             },
             formLabelWidth: '120px',
             selectValue: {},
@@ -812,10 +846,15 @@ export default {
             value: '',
             restaurants: [],
             state: '',
+            sellIndex: '',
             timeout: null,
             selectFilm: {},
             filmInfo: [],
-            cinemaInfo: []
+            cinemaInfo: [],
+            sellTableData: [],
+            selectedSell: [],
+            drawer: false,//选择优惠券弹出框,
+            ticketIds:'',
         };
     },
     components: { quillEditor },
@@ -824,100 +863,83 @@ export default {
         this.getMenu();
     },
     methods: {
+        deleteSell(index) {
+            this.selectedSell.splice(index, 1);
+        },
+        one(a){//获取影片绑定的value值
+            console.log(a);
+            this.ticketIds =a
+        },
+        getCinemaCode(){
+            console.log(this.checkedCities[0]);
+        },
+        getCurrentRow(index){//优惠券弹出框index
+            this.sellIndex=index;
+        },
+        sureNext() {
+            if(this.sellIndex>=0){
+                this.selectedSell=[]
+                this.selectedSell.push(this.sellTableData[this.sellIndex]);
+            }
+            console.log(this.selectedSell);
+            this.drawer = false;
+        },
+        openNext() {
+            //获取优惠券列表
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
+            setTimeout(() => {
+                let name=this.query.name;
+                if(!name){
+                    name=''
+                }
+                let jsonArr = [];
+                jsonArr.push({key:"name",value:name});
+                jsonArr.push({key:"cinemaCode",value:this.checkedCities[0]});
+                jsonArr.push({key:"simpleType",value:'1'});
+                jsonArr.push({key:"status",value:'1'});
+                jsonArr.push({key:"pageNo",value:this.query.aPageNo});
+                jsonArr.push({key:"pageSize",value:this.query.aPageSize});
+                let sign =md5(preSign(jsonArr));
+                jsonArr.push({key:"sign",value:sign});
+                var params = ParamsAppend(jsonArr);
+                https.fetchPost('merchandiseCoupon/merchandiseCouponPage',params).then((data) => {
+                    loading.close();
+                    console.log(data);
+                    if(data.data.code=='success') {
+                        this.drawer=true
+                        var oData = JSON.parse(Decrypt(data.data.data));
+                        console.log(oData);
+                        // console.log(this.query);
+                        this.sellTableData = oData.pageResult.data;
+                        console.log(this.sellTableData);
+                        this.query.aPageSize = oData.pageResult.pageSize;
+                        this.query.aPageNo = oData.pageResult.pageNo;
+                        this.query.aTotalCount = oData.pageResult.totalCount;
+                        this.query.aTotalPage = oData.pageResult.totalPage
+                    }else if(data.data.code=='nologin'){
+                        this.message=data.data.message
+                        this.open()
+                        this.$router.push('/login');
+                    }else{
+                        this.message=data.data.message
+                        this.open()
+                    }
+
+                }).catch(err=>{
+                        loading.close();
+                        console.log(err)
+                    }
+                )
+            }, 500);
+        },
         change() {
             console.log(this.form.changeType);
-        },
-        querySearch(queryString, cb) {
-            let jsonArr = [];
-            jsonArr.push({ key: 'couponName', value: queryString });
-            let sign = md5(preSign(jsonArr));
-            jsonArr.push({ key: 'sign', value: sign });
-            var params = ParamsAppend(jsonArr);
-            https
-                .fetchPost('merchandiseCoupon/getCouponByName', params)
-                .then(data => {
-                    if (data.data.code == 'success') {
-                        let films = JSON.parse(Decrypt(data.data.data));
-                        this.restaurants = films;
-                        var restaurants = this.restaurants;
-                        var results = restaurants;
-                        // 调用 callback 返回建议列表的数据
-                        cb(results);
-                    } else if (data.data.code == 'nologin') {
-                        this.message = data.data.message;
-                        this.open();
-                        this.$router.push('/login');
-                    } else {
-                        this.message = data.data.message;
-                        this.open();
-                    }
-                })
-                .catch(err => {
-                    console.log(err);
-                });
-        },
-        handleSelect(item) {
-            this.selectFilm = {};
-            this.selectFilm = item;
-        },
-        addFilm() {
-            this.selectFilm = {};
-            if (this.oForm.filmName == '') {
-                return;
-            }
-            if (this.restaurants.length == 0) {
-                this.message = '暂无优惠券可选';
-                this.open();
-                return;
-            }
-            for (let i = 0; i < this.restaurants.length; i++) {
-                if (this.oForm.filmName == this.restaurants[i].value) {
-                    this.selectFilm = this.restaurants[i];
-                }
-            }
-            if (!this.selectFilm.value) {
-                return;
-            }
-            var result = this.filmInfo.some(item => {
-                if (item.value == this.selectFilm.value) {
-                    return true;
-                }
-            });
-            if (result) {
-                return;
-            }
-            this.filmInfo.push(this.selectFilm);
-        },
-        addFilm2() {
-            this.selectFilm = {};
-            if (!this.form.filmName) {
-                return;
-            }
-            if (this.restaurants.length == 0) {
-                this.message = '暂无优惠券可选';
-                this.open();
-                return;
-            }
-            for (let i = 0; i < this.restaurants.length; i++) {
-                if (this.form.filmName == this.restaurants[i].value) {
-                    this.selectFilm = this.restaurants[i];
-                }
-            }
-            if (!this.selectFilm.value) {
-                return;
-            }
-            var result = this.filmInfo.some(item => {
-                if (item.value == this.selectFilm.value) {
-                    return true;
-                }
-            });
-            if (result) {
-                return;
-            }
-            this.filmInfo.push(this.selectFilm);
-        },
-        deletFilm(index) {
-            this.filmInfo.splice(index, 1);
         },
         addPage() {
             //获取新增按钮权限
@@ -989,7 +1011,7 @@ export default {
                 jsonArr.push({ key: 'cinemaCodes', value: this.checkedCities });
                 jsonArr.push({ key: 'status', value: this.oForm.status });
                 jsonArr.push({ key: 'commodityType', value: this.oForm.commodity_type });
-                jsonArr.push({ key: 'ticketIds', value: this.oForm.ticket_ids });
+                jsonArr.push({ key: 'ticketIds', value: this.ticketIds });
                 jsonArr.push({ key: 'assignType', value: this.oForm.assign_type });
                 jsonArr.push({ key: 'assignInfo', value: this.oForm.assign_info });
                 jsonArr.push({ key: 'limitType', value: this.oForm.limit_type });
@@ -1015,6 +1037,7 @@ export default {
                                 this.oForm.name = '';
                                 this.oForm.image_url = '';
                                 this.oForm.memo = '';
+                                this.selectedSell = [];
                                 this.oForm.store = '';
                                 this.oForm.change_type = '';
                                 this.oForm.gold = '';
@@ -1022,7 +1045,7 @@ export default {
                                 this.oForm.checkedCities = '';
                                 this.oForm.status = '';
                                 this.oForm.commodity_type = '';
-                                this.oForm.ticket_ids = '';
+                                this.oForm.ticketIds = '';
                                 this.oForm.assign_type = '';
                                 this.oForm.assign_info = '';
                                 this.oForm.limit_type = '';
@@ -1155,6 +1178,17 @@ export default {
                         console.log(JSON.parse(Decrypt(data.data.data)));
                         if (data.data.code == 'success') {
                             this.editVisible = true;
+                            //优惠券
+                            if(JSON.parse(Decrypt(data.data.data)).goldCommodity.ticketIds&&JSON.parse(Decrypt(data.data.data)).goldCommodity.name){
+                                let id=JSON.parse(Decrypt(data.data.data)).goldCommodity.ticketIds;
+                                let name=JSON.parse(Decrypt(data.data.data)).goldCommodity.name;
+                                this.selectedSell=[];
+                                    let json={};
+                                    json.id=id;
+                                    json.name=name;
+                                    this.selectedSell.push(json)
+                                console.log(this.selectedSell);
+                            }
                             this.form.name = JSON.parse(Decrypt(data.data.data)).goldCommodity.name;
                             this.form.image_url = JSON.parse(Decrypt(data.data.data)).goldCommodity.imageUrl;
                             this.form.memo = JSON.parse(Decrypt(data.data.data)).goldCommodity.memo;
@@ -1170,7 +1204,7 @@ export default {
                             this.form.status = JSON.parse(Decrypt(data.data.data)).goldCommodity.status;
                             this.form.commodityType = JSON.parse(Decrypt(data.data.data)).goldCommodity.commodityType;
                             this.oTopstatus = JSON.parse(Decrypt(data.data.data)).goldCommodity.topStatus;
-                            this.form.ticketIds = JSON.parse(Decrypt(data.data.data)).goldCommodity.ticketIds;
+                            this.ticketIds = JSON.parse(Decrypt(data.data.data)).goldCommodity.ticketIds;
                             this.form.assignType = JSON.parse(Decrypt(data.data.data)).goldCommodity.assignType;
                             this.form.assignInfo = JSON.parse(Decrypt(data.data.data)).goldCommodity.assignInfo;
                             this.form.limitType = JSON.parse(Decrypt(data.data.data)).goldCommodity.limitType;
@@ -1269,7 +1303,7 @@ export default {
                 jsonArr.push({ key: 'cinemaCodes', value: this.form.cinemaCode });
                 jsonArr.push({ key: 'status', value: this.form.status });
                 jsonArr.push({ key: 'commodityType', value: this.form.commodityType });
-                jsonArr.push({ key: 'ticketIds', value: this.form.ticketIds });
+                jsonArr.push({ key: 'ticketIds', value: this.ticketIds });
                 jsonArr.push({ key: 'assignType', value: this.form.assignType });
                 jsonArr.push({ key: 'assignInfo', value: this.form.assignInfo });
                 jsonArr.push({ key: 'limitType', value: this.form.limitType });
@@ -1293,6 +1327,7 @@ export default {
                         if (data.data.code == 'success') {
                             this.$message.success(`编辑成功`);
                             this.$refs.download.clearFiles();
+                            this.selectedSell=[];
                             this.getMenu();
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
@@ -1458,6 +1493,19 @@ export default {
             //分页按钮下一页
             this.query.pageNo++;
             this.getMenu();
+        },
+        //新增优惠券页面
+        aCurrentChange(val){//点击选择具体页数
+            this.query.aPageNo = val;
+            this.openNext()
+        },
+        aPrev(){//分页按钮上一页
+            this.query.aPageNo--;
+            this.openNext()
+        },
+        aNext(){//分页按钮下一页
+            this.query.aPageNo++;
+            this.openNext()
         }
     }
 };
