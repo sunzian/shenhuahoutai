@@ -1334,11 +1334,9 @@
                 });
                 https.fetchPost('/benefitCard/addPage', '').then(data => {
                     loading.close();
-                    console.log(data);
                     if (data.data.code == 'success') {
                         this.selectedSell=[];
                         this.oForm.code = this.cinemaInfo[0].cinemaCode;
-                        console.log(JSON.parse(Decrypt(data.data.data)));
                         let formats = JSON.parse(Decrypt(data.data.data)).formatList;
                         this.formatList = [];
                         for (let i = 0; i < formats.length; i++) {
