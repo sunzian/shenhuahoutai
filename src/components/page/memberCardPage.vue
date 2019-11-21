@@ -60,20 +60,23 @@
                 <el-table-column label="卡号" width="200">
                     <template slot-scope="scope">{{scope.row.cardNo}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="会员卡等级名称" width="190">
+                <el-table-column prop="memo" label="会员卡等级" width="150">
                     <template slot-scope="scope">{{scope.row.levelName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="用户名" width="190">
+                <el-table-column prop="memo" label="用户名" width="140">
                     <template slot-scope="scope">{{scope.row.userName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="手机号" width="190">
+                <el-table-column prop="memo" label="开卡手机号" width="150">
                     <template slot-scope="scope">{{scope.row.userMobile}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="余额" width="120">
+                <el-table-column prop="memo" label="最近余额" width="120">
                     <template slot-scope="scope">{{scope.row.balance}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="积分" width="120">
+                <el-table-column prop="memo" label="最近积分" width="120">
                     <template slot-scope="scope">{{scope.row.creditsAmount}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="绑定手机号码" width="140">
+                    <template slot-scope="scope">{{scope.row.bindUserMobile}}</template>
                 </el-table-column>
                 <el-table-column label="是否被绑定" align="center" width="100">
                     <template slot-scope="scope">
@@ -81,12 +84,13 @@
                         <el-tag v-else>未绑定</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" align="center" fixed="right" width="100">
+                <el-table-column label="操作" align="center" fixed="right" width="120">
                     <template slot-scope="scope">
                         <el-button
                             type="text"
                             icon="el-icon-setting"
                             @click="addChange(scope.$index, scope.row)"
+                            v-if="scope.row.bindStatus=='1'"
                         >解绑</el-button>
                     </template>
                 </el-table-column>

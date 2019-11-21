@@ -81,6 +81,12 @@
                 ></el-date-picker>
                 <el-button type="primary" style="margin-top: 10px;width: 90px;" icon="el-icon-search" @click="Search">搜索</el-button>
                 <el-button
+                        type="primary"
+                        @click="derive"
+                        icon="el-icon-circle-plus-outline"
+                        style="float: right;margin-top: 10px"
+                >导出</el-button>
+                <el-button
                     type="primary"
                     @click="showCinema = true"
                     style="margin-top: 10px;width: 150px;"
@@ -131,9 +137,6 @@
                 <el-table-column label="订单号" width="135">
                     <template slot-scope="scope">{{scope.row.orderNo}}</template>
                 </el-table-column>
-                <!--<el-table-column prop="memo" label="用户名" width="75">-->
-                    <!--<template slot-scope="scope">{{scope.row.userName}}</template>-->
-                <!--</el-table-column>-->
                 <el-table-column prop="memo" label="手机号码" width="110">
                     <template slot-scope="scope">{{scope.row.mobile}}</template>
                 </el-table-column>
@@ -186,6 +189,9 @@
                         <el-tag v-else-if="scope.row.deliveryType=='1'">送至影厅</el-tag>
                     </template>
                 </el-table-column>
+                <el-table-column prop="memo" label="送货地址" width="90">
+                    <template slot-scope="scope">{{scope.row.deliveryAddress}}</template>
+                </el-table-column>
                 <el-table-column label="操作" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-button
@@ -200,6 +206,18 @@
                             icon="el-icon-setting"
                             @click="addChange(scope.$index, scope.row)"
                         >查看</el-button>
+                        <el-button
+                                type="text"
+                                icon="el-icon-setting"
+                                @click="updateStatus(scope.$index, scope.row)"
+                                v-if="scope.row.deliveryType==0&&scope.row.deliveryStatus==0&&scope.row.payStatus==1&&scope.row.submitStatus==1"
+                        >取货</el-button>
+                        <el-button
+                                type="text"
+                                icon="el-icon-setting"
+                                @click="updateStatus(scope.$index, scope.row)"
+                                v-if="scope.row.deliveryType==1&&scope.row.deliveryStatus==0&&scope.row.payStatus==1&&scope.row.submitStatus==1"
+                        >确认送达</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -484,6 +502,46 @@ export default {
         this.getMenu();
     },
     methods: {
+        updateStatus(index, row){
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
+            setTimeout(() => {
+                this.idx = index;
+                this.form = row;
+                var jsonArr = [];
+                jsonArr.push({ key: 'id', value: row.id });
+                let sign = md5(preSign(jsonArr));
+                jsonArr.push({ key: 'sign', value: sign });
+                let params = ParamsAppend(jsonArr);
+                https
+                    .fetchPost('/merchandiseOrder/updateStatusById', params)
+                    .then(data => {
+                        loading.close();
+                        console.log(data);
+                        // console.log(JSON.parse(Decrypt(data.data.data)));
+                        if (data.data.code == 'success') {
+                            this.$message.success(`成功`);
+                            this.getMenu()
+                        } else if (data.data.code == 'nologin') {
+                            this.message = data.data.message;
+                            this.open();
+                            this.$router.push('/login');
+                        } else {
+                            this.message = data.data.message;
+                            this.open();
+                        }
+                    })
+                    .catch(err => {
+                        loading.close();
+                        console.log(err);
+                    });
+            }, 500);
+        },
         addChange(index, row) {
             //是否修改权限
             const loading = this.$loading({
@@ -593,6 +651,71 @@ export default {
                 .catch(err => {
                     console.log(err);
                 });
+        },
+        derive(){
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
+            setTimeout(() => {
+                let cinemaCode = this.query.cinemaCode;
+                let orderNo = this.query.orderNo;
+                let mobile = this.query.mobile;
+                let payWay = this.query.payWay;
+                let payStatus = this.query.payStatus;
+                let startDate = this.query.startDate;
+                let endDate = this.query.endDate;
+                let printNo = this.query.printNo;
+                if (!cinemaCode) {
+                    cinemaCode = '';
+                }
+                if (!orderNo) {
+                    orderNo = '';
+                }
+                if (!mobile) {
+                    mobile = '';
+                }
+                if (!printNo) {
+                    printNo = '';
+                }
+                if (!payWay) {
+                    payWay = '';
+                }
+                if (!payStatus) {
+                    payStatus = '';
+                }
+                if (!startDate) {
+                    startDate = '';
+                }
+                if (!endDate) {
+                    endDate = '';
+                }
+                let jsonArr = [];
+                jsonArr.push({ key: 'tableName', value: "merchandise_order" });
+                jsonArr.push({ key: 'exportKeysJson', value: "['id','cinemaCode','orderNo','userName','mobile','merNames','totalOriginalPrice','totalActivityDiscount','totalCouponDiscount','totalActualPrice','chPayStatus','chPayWay','payTime','chSubmitStatus','submitTime','chDeliveryType']"});
+                jsonArr.push({ key: 'exportTitlesJson', value:"['ID','影院编码','订单号','用户','手机号','卖品内容','总原价','活动优惠金额','优惠券优惠金额','实付金额','支付状态','支付方式','支付时间','下单状态','下单时间','取货方式']" });
+                jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
+                jsonArr.push({ key: 'orderNo', value: orderNo });
+                jsonArr.push({ key: 'mobile', value: mobile });
+                jsonArr.push({ key: 'payWay', value: payWay });
+                jsonArr.push({ key: 'printNo', value: printNo });
+                jsonArr.push({ key: 'payStatus', value: payStatus });
+                jsonArr.push({ key: 'startDate', value: startDate });
+                jsonArr.push({ key: 'endDate', value: endDate });
+                var params = ParamsAppend(jsonArr);
+                console.log(jsonArr);
+                let myObj = {
+                    method: 'get',
+                    url: '/exportExcel/merchandiseOrder',
+                    fileName: '卖品订单统计',
+                    params: params
+                };
+                https.exportMethod(myObj);
+                loading.close();
+            }, 1500);
         },
         getMenu() {
             //获取菜单栏

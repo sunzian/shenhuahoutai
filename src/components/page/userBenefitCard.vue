@@ -81,10 +81,10 @@
                 <el-table-column prop="name" label="影院名称">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="用户">
+                <el-table-column prop="memo" label="用户" width="100">
                     <template slot-scope="scope">{{scope.row.userName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="手机号">
+                <el-table-column prop="memo" label="手机号" width="140">
                     <template slot-scope="scope">{{scope.row.phone}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="权益卡名称">
@@ -93,20 +93,20 @@
                 <el-table-column prop="memo" label="订单号">
                     <template slot-scope="scope">{{scope.row.orderNumber}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="开始时间">
+                <el-table-column prop="memo" label="生效时间" width="160">
                     <template slot-scope="scope">{{scope.row.startDate}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="结束时间">
+                <el-table-column prop="memo" label="过期时间" width="160">
                     <template slot-scope="scope">{{scope.row.endDate}}</template>
                 </el-table-column>
-                <el-table-column label="支付状态" align="center">
+                <el-table-column label="支付状态" align="center" width="100">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.payStatus=='0'">未支付</el-tag>
                         <el-tag v-else-if="scope.row.payStatus=='1'">已支付</el-tag>
                         <el-tag v-else-if="scope.row.payStatus=='2'">支付失败</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="权益卡状态" align="center">
+                <el-table-column label="权益卡状态" align="center" width="100">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.benefitStatus=='0'">失效</el-tag>
                         <el-tag v-else-if="scope.row.benefitStatus=='1'">正常</el-tag>

@@ -25,20 +25,11 @@
                 <el-select
                     clearable
                     v-model="query.status"
-                    placeholder="状态"
+                    placeholder="是否显示"
                     class="handle-select mr10"
                 >
                     <el-option key="1" label="显示" value="1"></el-option>
                     <el-option key="2" label="不显示" value="2"></el-option>
-                </el-select>
-                <el-select
-                    clearable
-                    v-model="query.bannerLevel"
-                    placeholder="轮播图级别"
-                    class="handle-select mr10"
-                >
-                    <el-option key="1" label="全部影院" value="1"></el-option>
-                    <el-option key="2" label="部分影院" value="2"></el-option>
                 </el-select>
                 <el-select
                     clearable
@@ -81,25 +72,25 @@
                         >部分影院</el-tag>
                     </template>
                 </el-table-column>-->
-                <el-table-column label="适用影院" width="220">
+                <el-table-column label="适用影院" width="300">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
                 <!-- <el-table-column prop="memo" label="适用影院编码" width="130">
                     <template slot-scope="scope">{{scope.row.cinemaCodes}}</template>
                 </el-table-column>-->
-                <el-table-column prop="sort" label="是否显示" width="130">
+                <el-table-column prop="sort" label="是否显示" width="120">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status=='1'">显示</el-tag>
                         <el-tag v-else-if="scope.row.status=='2'">不显示</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="sort" label="开始时间" width="160px">
+                <el-table-column prop="sort" label="开始时间" width="220">
                     <template slot-scope="scope">{{scope.row.startDate}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="结束时间" width="160px">
+                <el-table-column prop="sort" label="结束时间" width="220">
                     <template slot-scope="scope">{{scope.row.endDate}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="轮播图类别" width="120px">
+                <el-table-column prop="sort" label="轮播图类别" width="180">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.category=='1'">卖品首页</el-tag>
                         <el-tag v-if="scope.row.category=='2'">积分商城首页</el-tag>
@@ -113,7 +104,7 @@
                         <el-tag v-if="scope.row.category=='10'">积分换金币</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="sort" label="图片地址" width="200px">
+                <el-table-column prop="sort" label="图片地址" width="220">
                     <template slot-scope="scope">
                         <el-popover placement="right" title trigger="hover">
                             <img style="width: 400px" :src="scope.row.imageUrl" />
@@ -126,19 +117,20 @@
                         </el-popover>
                     </template>
                 </el-table-column>
-                <el-table-column prop="sort" label="跳转类型" width="120px">
+                <el-table-column prop="sort" label="跳转类型" width="160">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.redirectType=='1'">跳转到文章</el-tag>
                         <el-tag v-if="scope.row.redirectType=='2'">跳转到电影</el-tag>
                         <el-tag v-if="scope.row.redirectType=='3'">跳转到金币商品</el-tag>
+                        <el-tag v-if="scope.row.redirectType=='4'">不跳转</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="sort" label="跳转的具体信息" width="130">
-                    <template slot-scope="scope">{{scope.row.redirectGoal}}</template>
-                </el-table-column>
-                <el-table-column prop="sort" label="备注">
-                    <template slot-scope="scope">{{scope.row.memo}}</template>
-                </el-table-column>
+                <!--<el-table-column prop="sort" label="跳转的具体信息" width="130">-->
+                    <!--<template slot-scope="scope">{{scope.row.redirectGoal}}</template>-->
+                <!--</el-table-column>-->
+                <!--<el-table-column prop="sort" label="备注">-->
+                    <!--<template slot-scope="scope">{{scope.row.memo}}</template>-->
+                <!--</el-table-column>-->
                 <el-table-column label="操作" width="180" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-button
@@ -545,6 +537,10 @@ export default {
                 {
                     value: '3',
                     label: '跳转到金币商品'
+                },
+                {
+                    value: '4',
+                    label: '不跳转'
                 }
             ],
             value: '',
@@ -907,14 +903,10 @@ export default {
             });
             setTimeout(() => {
                 let status = this.query.status;
-                let bannerLevel = this.query.bannerLevel;
                 let cinemaCode = this.query.cinemaCode;
                 let category = this.query.category;
                 if (!status) {
                     status = '';
-                }
-                if (!bannerLevel) {
-                    bannerLevel = '';
                 }
                 if (!cinemaCode) {
                     cinemaCode = '';
@@ -924,7 +916,6 @@ export default {
                 }
                 let jsonArr = [];
                 jsonArr.push({ key: 'status', value: status });
-                jsonArr.push({ key: 'bannerLevel', value: bannerLevel });
                 jsonArr.push({ key: 'cinemaCodes', value: cinemaCode });
                 jsonArr.push({ key: 'category', value: category });
                 jsonArr.push({ key: 'pageNo', value: this.query.pageNo });

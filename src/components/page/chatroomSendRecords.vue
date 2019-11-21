@@ -54,13 +54,13 @@
                 <el-table-column prop="memo" label="礼物名称">
                     <template slot-scope="scope">{{scope.row.name}}</template>
                 </el-table-column>
-                <el-table-column label="礼物类型" align="center">
+                <el-table-column label="礼物类型" align="center" width="130">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.giftType=='1'">优惠券</el-tag>
                         <el-tag v-else-if="scope.row.giftType=='2'">实物</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="memo" label="发放数量">
+                <el-table-column prop="memo" label="发放数量" width="130">
                     <template slot-scope="scope">{{scope.row.number}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="发放人">

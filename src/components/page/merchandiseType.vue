@@ -20,7 +20,7 @@
                 <el-table-column prop="name" label="影院编码" width="110">
                     <template slot-scope="scope">{{scope.row.cinemaCode}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="影院名称" width="200">
+                <el-table-column prop="name" label="影院名称" width="280">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="省份" width="110">
@@ -93,12 +93,13 @@
                         </el-popover>
                     </template>
                 </el-table-column>
-                <el-table-column prop="sort" label="展示顺序" width="150">
-                    <template slot-scope="scope">{{scope.row.showSeqNo}}</template>
-                </el-table-column>
-                <el-table-column prop="sort" label="分类" width="150">
+                <el-table-column prop="sort" label="分类名称">
                     <template slot-scope="scope">{{scope.row.typeName}}</template>
                 </el-table-column>
+                <el-table-column prop="sort" label="展示顺序">
+                    <template slot-scope="scope">{{scope.row.showSeqNo}}</template>
+                </el-table-column>
+
                 <el-table-column label="操作" width="160" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-button
@@ -371,44 +372,56 @@ export default {
         },
         delChange(index, row) {
             //删除数据
-            const loading = this.$loading({
-                lock: true,
-                text: 'Loading',
-                spinner: 'el-icon-loading',
-                background: 'rgba(0, 0, 0, 0.7)',
-                target: document.querySelector('.div1')
-            });
-            setTimeout(() => {
-                this.idx = index;
-                this.form = row;
-                let jsonArr = [];
-                jsonArr.push({ key: 'id', value: row.id });
-                let sign = md5(preSign(jsonArr));
-                jsonArr.push({ key: 'sign', value: sign });
-                let params = ParamsAppend(jsonArr);
-                https
-                    .fetchPost('/merchandiseType/deleteMerchandiseType', params)
-                    .then(data => {
-                        loading.close();
-                        // console.log(data);
-                        // console.log(JSON.parse(Decrypt(data.data.data)));
-                        if (data.data.code == 'success') {
-                            this.$message.error(`删除成功`);
-                            this.refresh();
-                        } else if (data.data.code == 'nologin') {
-                            this.message = data.data.message;
-                            this.open();
-                            this.$router.push('/login');
-                        } else {
-                            this.message = data.data.message;
-                            this.open();
-                        }
-                    })
-                    .catch(err => {
-                        loading.close();
-                        console.log(err);
+            this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            })
+                .then(() => {
+                    const loading = this.$loading({
+                        lock: true,
+                        text: 'Loading',
+                        spinner: 'el-icon-loading',
+                        background: 'rgba(0, 0, 0, 0.7)',
+                        target: document.querySelector('.div1')
                     });
-            }, 500);
+                    setTimeout(() => {
+                        this.idx = index;
+                        this.form = row;
+                        let jsonArr = [];
+                        jsonArr.push({ key: 'id', value: row.id });
+                        let sign = md5(preSign(jsonArr));
+                        jsonArr.push({ key: 'sign', value: sign });
+                        let params = ParamsAppend(jsonArr);
+                        https
+                            .fetchPost('/merchandiseType/deleteMerchandiseType', params)
+                            .then(data => {
+                                loading.close();
+                                // console.log(data);
+                                // console.log(JSON.parse(Decrypt(data.data.data)));
+                                if (data.data.code == 'success') {
+                                    this.$message.error(`删除成功`);
+                                    this.refresh();
+                                } else if (data.data.code == 'nologin') {
+                                    this.message = data.data.message;
+                                    this.open();
+                                    this.$router.push('/login');
+                                } else {
+                                    this.message = data.data.message;
+                                    this.open();
+                                }
+                            })
+                            .catch(err => {
+                                loading.close();
+                                console.log(err);
+                            });
+                    }, 500);
+                }) .catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消删除'
+                });
+            });
         },
         addChange(index, row) {
             //是否修改权限

@@ -63,10 +63,10 @@
                 <el-table-column prop="memo" label="奖品名称">
                     <template slot-scope="scope">{{scope.row.prizeName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="用户手机号">
+                <el-table-column prop="memo" label="用户手机号" width="160">
                     <template slot-scope="scope">{{scope.row.userMobile}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="消耗数值" width="100">
+                <el-table-column prop="memo" label="消耗金币" width="100">
                     <template slot-scope="scope">{{scope.row.reduceNumber}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="中奖状态" width="100">

@@ -43,16 +43,16 @@
                 <el-table-column prop="code" label="影院名称">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
+                <el-table-column prop="name" label="开卡规则名称" width="160">
+                    <template slot-scope="scope">{{scope.row.ruleName}}</template>
+                </el-table-column>
                 <el-table-column prop="sort" label="会员卡名称" width="120">
                     <template slot-scope="scope">{{scope.row.cardLevelName}}</template>
-                </el-table-column>
-                <el-table-column prop="name" label="开卡规则名称" width="120">
-                    <template slot-scope="scope">{{scope.row.ruleName}}</template>
                 </el-table-column>
                 <el-table-column prop="number" label="充值金额" width="100">
                     <template slot-scope="scope">{{scope.row.rechargeAmount}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" align="center" label="赠送类型" width="140" >
+                <el-table-column prop="sort" align="center" label="赠送类型" width="100" >
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.givenType=='1'"
                         >不赠送</el-tag>
@@ -64,13 +64,13 @@
                         >两者都送</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="number" label="赠送金额" width="120">
+                <el-table-column prop="number" label="赠送金额" width="100">
                     <template slot-scope="scope">{{scope.row.givenMoney}}</template>
                 </el-table-column>
                 <el-table-column prop="number" label="赠送券包">
                     <template slot-scope="scope">{{scope.row.couponGroupName}}</template>
                 </el-table-column>
-                <el-table-column prop="booleans" align="center" label="状态" width="120">
+                <el-table-column prop="booleans" align="center" label="状态" width="100">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status == 1" type="success">启用</el-tag>
                         <el-tag v-else-if="scope.row.status == 2" type="danger">未启用</el-tag>

@@ -39,15 +39,6 @@
                     <el-option key="2" label="支付失败" value="2"></el-option>
                     <el-option key="3" label="退款成功" value="3"></el-option>
                 </el-select>
-                <el-select
-                    clearable
-                    v-model="query.rechargeStatus"
-                    placeholder="充值状态"
-                    class="handle-select mr10"
-                >
-                    <el-option key="1" label="充值成功" value="1"></el-option>
-                    <el-option key="2" label="充值失败" value="2"></el-option>
-                </el-select>
                 <el-date-picker
                     v-model="query.startDate"
                     type="datetime"
@@ -64,12 +55,27 @@
                     format="yyyy-MM-dd HH:mm:ss"
                     placeholder="结束时间（止）"
                 ></el-date-picker>
+                <el-select
+                        clearable
+                        v-model="query.rechargeStatus"
+                        placeholder="充值状态"
+                        class="handle-select mr10"
+                >
+                    <el-option key="1" label="充值成功" value="1"></el-option>
+                    <el-option key="2" label="充值失败" value="2"></el-option>
+                </el-select>
                 <el-button
                     type="primary"
                     icon="el-icon-search"
                     style="margin-top: 10px;width: 90px;"
                     @click="Search"
                 >搜索</el-button>
+                <el-button
+                        type="primary"
+                        @click="derive"
+                        icon="el-icon-circle-plus-outline"
+                        style="float: right;margin-top: 10px"
+                >导出</el-button>
             </div>
             <div class="handle-box">
                 总实付金额：
@@ -348,6 +354,81 @@ export default {
         this.getMenu();
     },
     methods: {
+        derive(){
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
+            setTimeout(() => {
+                let cinemaCode = this.query.cinemaCode;
+                let cinemaName = this.query.cinemaName;
+                let rechargeCinemaName = this.query.rechargeCinemaName;
+                let cardNo = this.query.cardNo;
+                let mobilePhone = this.query.mobilePhone;
+                let startDate = this.query.startDate;
+                let endDate = this.query.endDate;
+                let userName = this.query.userName;
+                let payStatus = this.query.payStatus;
+                let rechargeStatus = this.query.rechargeStatus;
+                if (!cinemaName) {
+                    cinemaName = '';
+                }
+                if (!cinemaCode) {
+                    cinemaCode = '';
+                }
+                if (!rechargeCinemaName) {
+                    rechargeCinemaName = '';
+                }
+                if (!cardNo) {
+                    cardNo = '';
+                }
+                if (!mobilePhone) {
+                    mobilePhone = '';
+                }
+                if (!userName) {
+                    userName = '';
+                }
+                if (!payStatus) {
+                    payStatus = '';
+                }
+                if (!startDate) {
+                    startDate = '';
+                }
+                if (!endDate) {
+                    endDate = '';
+                }
+                if (!rechargeStatus) {
+                    rechargeStatus = '';
+                }
+                let jsonArr = [];
+                jsonArr.push({ key: 'tableName', value: "member_card_recharge" });
+                jsonArr.push({ key: 'exportKeysJson', value: "['id','cinemaCode','cinemaName','rechargeCinemaCode','rechargeCinemaName','cardNo','userName','mobilePhone','rechargeAmount','balance','chRechargeStatus','payTime']"});
+                jsonArr.push({ key: 'exportTitlesJson', value:"['ID','开卡影院编码','开卡影院名称','充值影院编码','充值影院名称','卡号','用户','手机号','充值金额','余额','充值状态','充值时间']" });
+                jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
+                jsonArr.push({ key: 'cardNo', value: cardNo });
+                jsonArr.push({ key: 'mobilePhone', value: mobilePhone });
+                jsonArr.push({ key: 'rechargeCinemaName', value: rechargeCinemaName });
+                jsonArr.push({ key: 'cinemaName', value: cinemaName });
+                jsonArr.push({ key: 'userName', value: userName });
+                jsonArr.push({ key: 'rechargeStatus', value: rechargeStatus });
+                jsonArr.push({ key: 'payStatus', value: payStatus });
+                jsonArr.push({ key: 'startDate', value: startDate });
+                jsonArr.push({ key: 'endDate', value: endDate });
+                var params = ParamsAppend(jsonArr);
+                console.log(jsonArr);
+                let myObj = {
+                    method: 'get',
+                    url: '/exportExcel/memberCardRecharge',
+                    fileName: '会员卡充值订单统计',
+                    params: params
+                };
+                https.exportMethod(myObj);
+                loading.close();
+            }, 1500);
+        },
         addChange(index, row) {
             //是否修改权限
             const loading = this.$loading({

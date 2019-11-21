@@ -35,7 +35,7 @@
                 <el-table-column prop="name" label="影院编码" width="110">
                     <template slot-scope="scope">{{scope.row.cinemaCode}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="影院名称" width="200">
+                <el-table-column prop="name" label="影院名称" width="280">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="省份" width="110">
@@ -156,49 +156,49 @@
                 ref="multipleTable"
                 header-cell-class-name="table-header"
             >
-                <el-table-column prop="name" label="影厅类型" width="120" >
+                <el-table-column prop="name" label="影厅类型" width="160" >
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.screenType == 1" type="success">全部影厅</el-tag>
                         <el-tag v-else type="success">部分影厅</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="name" label="影厅名称">
-                    <template
-                        v-if="scope.row.screenType == 2"
-                        slot-scope="scope"
-                    >{{scope.row.screenNames}}</template>
-                </el-table-column>
-                <el-table-column prop="name" label="影片类型" width="120">
+                <!--<el-table-column prop="name" label="影厅名称">-->
+                    <!--<template-->
+                        <!--v-if="scope.row.screenType == 2"-->
+                        <!--slot-scope="scope"-->
+                    <!--&gt;{{scope.row.screenNames}}</template>-->
+                <!--</el-table-column>-->
+                <el-table-column prop="name" label="影片类型" width="160">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.filmType == 1" type="success">全部影片</el-tag>
                         <el-tag v-else type="success">部分影片</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="name" label="影片名称" width="180">
-                    <template
-                        v-if="scope.row.filmType == 2"
-                        slot-scope="scope"
-                    >{{scope.row.filmNames}}</template>
-                </el-table-column>
-                <el-table-column prop="memo" label="开始日期" width="160" >
+                <!--<el-table-column prop="name" label="影片名称" width="180">-->
+                    <!--<template-->
+                        <!--v-if="scope.row.filmType == 2"-->
+                        <!--slot-scope="scope"-->
+                    <!--&gt;{{scope.row.filmNames}}</template>-->
+                <!--</el-table-column>-->
+                <el-table-column prop="memo" label="开始日期" width="200" >
                     <template slot-scope="scope">{{scope.row.startDate}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="结束日期" width="160" >
+                <el-table-column prop="sort" label="结束日期" width="200" >
                     <template slot-scope="scope">{{scope.row.endDate}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="是否启用" width="100">
+                <el-table-column prop="sort" label="是否启用" width="160">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status == 1" type="success">启用</el-tag>
                         <el-tag v-else type="danger">未启用</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="sort" label="第三方支付代售费" width="140">
+                <el-table-column prop="sort" label="第三方支付代售费" width="180">
                     <template slot-scope="scope">{{scope.row.thirdServiceFee}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="会员卡支付代售费" width="140">
+                <el-table-column prop="sort" label="会员卡支付代售费" width="180">
                     <template slot-scope="scope">{{scope.row.memberServiceFee}}</template>
                 </el-table-column>
-                <el-table-column label="操作" width="160" align="center">
+                <el-table-column label="操作" width="200" align="center">
                     <template slot-scope="scope">
                         <el-button
                             type="text"

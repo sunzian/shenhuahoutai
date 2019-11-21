@@ -16,15 +16,15 @@
                     <el-option key="2" label="纯RMB兑换" value="2"></el-option>
                     <el-option key="3" label="金币加RMB兑换" value="3"></el-option>
                 </el-select>
-                <el-select clearable v-model="query.status" placeholder="领取状态" class="handle-select mr10">
-                    <el-option key="1" label="未领取" value="1"></el-option>
-                    <el-option key="2" label="已领取" value="2"></el-option>
+                <el-select clearable v-model="query.status" placeholder="核销状态" class="handle-select mr10">
+                    <el-option key="1" label="未核销" value="1"></el-option>
+                    <el-option key="2" label="已核销" value="2"></el-option>
                     <el-option key="3" label="已过期" value="3"></el-option>
                 </el-select>
-                <el-select clearable v-model="query.payStatus" placeholder="支付状态" class="handle-select mr10">
-                    <el-option key="0" label="未支付" value="0"></el-option>
-                    <el-option key="1" label="支付成功" value="1"></el-option>
-                    <el-option key="2" label="支付失败" value="2"></el-option>
+                <el-select clearable v-model="query.payStatus" placeholder="兑换状态" class="handle-select mr10">
+                    <el-option key="0" label="待支付" value="0"></el-option>
+                    <el-option key="1" label="兑换成功" value="1"></el-option>
+                    <el-option key="2" label="兑换失败" value="2"></el-option>
                 </el-select>
                 <el-select clearable v-model="query.refundStatus" placeholder="退款状态" class="handle-select mr10">
                     <el-option key="0" label="未退款" value="0"></el-option>
@@ -37,7 +37,7 @@
                         type="datetime"
                         value-format="yyyy-MM-dd HH:mm:ss"
                         format="yyyy-MM-dd HH:mm:ss"
-                        placeholder="开始时间（起）">
+                        placeholder="兑换开始时间（起）">
                 </el-date-picker>
                 <el-date-picker
                         class="mr10"
@@ -45,9 +45,15 @@
                         type="datetime"
                         value-format="yyyy-MM-dd HH:mm:ss"
                         format="yyyy-MM-dd HH:mm:ss"
-                        placeholder="结束时间（止）">
+                        placeholder="兑换结束时间（止）">
                 </el-date-picker>
                 <el-button  style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
+                <el-button
+                        type="primary"
+                        @click="derive"
+                        icon="el-icon-circle-plus-outline"
+                        style="float: right;margin-top: 10px"
+                >导出</el-button>
             </div>
             <div class="handle-box">
                 总支付金币：<el-input style="width: 150px" v-model="totalData.totalGold" :disabled="true"  autocomplete="off"></el-input>
@@ -81,30 +87,31 @@
                         <el-tag v-else-if="scope.row.changeType=='3'">金币加RMB兑换</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="memo" label="支付金币数量" width="110">
+                <el-table-column prop="memo" label="消耗金币" width="90">
                     <template slot-scope="scope">{{scope.row.gold}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="支付金额" width="90">
                     <template slot-scope="scope">{{scope.row.money}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="支付时间" width="150">
+                <el-table-column prop="memo" label="兑换时间" width="150">
                     <template slot-scope="scope">{{scope.row.payTime}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="领取状态" width="90">
-                    <template slot-scope="scope">
-                        <el-tag v-if="scope.row.status=='1'">未领取</el-tag>
-                        <el-tag v-else-if="scope.row.status=='2'">已领取</el-tag>
-                        <el-tag v-else-if="scope.row.status=='3'">已过期</el-tag>
-                    </template>
-                </el-table-column>
+
                 <!-- <el-table-column prop="memo" label="支付交易号">
                     <template slot-scope="scope">{{scope.row.tradeNo}}</template>
                 </el-table-column> -->
-                <el-table-column label="支付状态" align="center" width="100">
+                <el-table-column label="兑换状态" align="center" width="100">
                     <template slot-scope="scope">
-                        <el-tag v-if="scope.row. payStatus=='0'">未支付</el-tag>
-                        <el-tag v-else-if="scope.row. payStatus=='1'">支付成功</el-tag>
-                        <el-tag v-else-if="scope.row. payStatus=='2'">支付失败</el-tag>
+                        <el-tag v-if="scope.row. payStatus=='0'">待支付</el-tag>
+                        <el-tag v-else-if="scope.row. payStatus=='1'">兑换成功</el-tag>
+                        <el-tag v-else-if="scope.row. payStatus=='2'">兑换失败</el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="memo" label="核销状态" width="90">
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row.status=='1'">未核销</el-tag>
+                        <el-tag v-else-if="scope.row.status=='2'">已核销</el-tag>
+                        <el-tag v-else-if="scope.row.status=='3'">已过期</el-tag>
                     </template>
                 </el-table-column>
                 <!-- <el-table-column label="退款状态" align="center">
@@ -243,6 +250,76 @@
             this.getMenu();
         },
         methods: {
+            derive(){
+                const loading = this.$loading({
+                    lock: true,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)',
+                    target: document.querySelector('.div1')
+                });
+                setTimeout(() => {
+                    let cinemaCode = this.query.cinemaCode;
+                    let orderNo = this.query.orderNo;
+                    let mobile = this.query.mobile;
+                    let status = this.query.status;
+                    let payStatus = this.query.payStatus;
+                    let startDate = this.query.startDate;
+                    let endDate = this.query.endDate;
+                    let refundStatus = this.query.refundStatus;
+                    let changeType = this.query.changeType;
+                    if (!changeType) {
+                        changeType = '';
+                    }
+                    if (!cinemaCode) {
+                        cinemaCode = '';
+                    }
+                    if (!orderNo) {
+                        orderNo = '';
+                    }
+                    if (!mobile) {
+                        mobile = '';
+                    }
+                    if (!refundStatus) {
+                        refundStatus = '';
+                    }
+                    if (!status) {
+                        status = '';
+                    }
+                    if (!payStatus) {
+                        payStatus = '';
+                    }
+                    if (!startDate) {
+                        startDate = '';
+                    }
+                    if (!endDate) {
+                        endDate = '';
+                    }
+                    let jsonArr = [];
+                    jsonArr.push({ key: 'tableName', value: "commodity_change_record" });
+                    jsonArr.push({ key: 'exportKeysJson', value: "['id','cinemaCode','orderNo','chPayStatus','mobile','chChangeType','gold','money','chStatus']"});
+                    jsonArr.push({ key: 'exportTitlesJson', value:"['ID','影院编码','订单号','支付状态','手机号','兑换方式','支付金币数量','支付金额','领取状态']" });
+                    jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
+                    jsonArr.push({ key: 'orderNo', value: orderNo });
+                    jsonArr.push({ key: 'mobile', value: mobile });
+                    jsonArr.push({ key: 'refundStatus', value: refundStatus });
+                    jsonArr.push({ key: 'status', value: status });
+                    jsonArr.push({ key: 'changeType', value: changeType });
+                    jsonArr.push({ key: 'payStatus', value: payStatus });
+                    jsonArr.push({ key: 'startDate', value: startDate });
+                    jsonArr.push({ key: 'endDate', value: endDate });
+                    var params = ParamsAppend(jsonArr);
+                    console.log(jsonArr);
+                    let myObj = {
+                        method: 'get',
+                        url: '/exportExcel/commodityChangeRecord',
+                        fileName: '金币商城订单统计',
+                        params: params
+                    };
+                    https.exportMethod(myObj);
+                    loading.close();
+                }, 1500);
+            },
             addChange(index, row) {
                 //是否修改权限
                 const loading = this.$loading({

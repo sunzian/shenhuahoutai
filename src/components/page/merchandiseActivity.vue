@@ -42,16 +42,16 @@
                     ref="multipleTable"
                     header-cell-class-name="table-header"
             >
-                <el-table-column prop="name" label="适用影院" width="140">
+                <el-table-column prop="name" label="适用影院" width="200">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="适用商品" width="100">
-                    <template slot-scope="scope">
-                        <el-tag v-if="scope.row.selectMerchandiseType == 0">全部商品</el-tag>
-                        <el-tag v-else-if="scope.row.selectMerchandiseType == 1" >{{scope.row.merchandiseName}}</el-tag>
-                        <el-tag v-else-if="scope.row.selectMerchandiseType == 2" >除{{scope.row.merchandiseName}}外所有商品</el-tag>
-                    </template>
-                </el-table-column>
+                <!--<el-table-column prop="name" label="适用商品" width="100">-->
+                    <!--<template slot-scope="scope">-->
+                        <!--<el-tag v-if="scope.row.selectMerchandiseType == 0">全部商品</el-tag>-->
+                        <!--<el-tag v-else-if="scope.row.selectMerchandiseType == 1" >{{scope.row.merchandiseName}}</el-tag>-->
+                        <!--<el-tag v-else-if="scope.row.selectMerchandiseType == 2" >除{{scope.row.merchandiseName}}外所有商品</el-tag>-->
+                    <!--</template>-->
+                <!--</el-table-column>-->
                 <el-table-column label="活动名称">
                     <template slot-scope="scope">{{scope.row.name}}</template>
                 </el-table-column>
@@ -61,7 +61,7 @@
                 <el-table-column prop="sort" label="限购总数" width="130">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.isLimitTotal == 0">不限购</el-tag>
-                        <el-tag v-else-if="scope.row.isLimitTotal == 1" >{{scope.row.totalNumber}}，剩余{{scope.row.totalSurplus}}</el-tag>
+                        <el-tag v-else-if="scope.row.isLimitTotal == 1" >{{scope.row.totalNumber}}/{{scope.row.totalSurplus}}</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column prop="sort" label="个人限购" width="90">
@@ -76,7 +76,7 @@
                         <el-tag v-else-if="scope.row.reduceType == 2" >满减金额</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="sort" label="金额" width="90">
+                <el-table-column prop="sort" label="金额" width="60">
                     <template slot-scope="scope">{{scope.row.discountMoney}}</template>
                 </el-table-column>
                 <el-table-column prop="sort" label="状态" width="90">
@@ -181,7 +181,7 @@
                         </el-input>
                         <span
                                 style="color:red;cursor: pointer;"
-                                @click="deleteSell()"
+                                @click="deleteSell(index)"
                         >删除</span>
                     </div>
                 </el-form-item>
@@ -431,7 +431,7 @@
                         </el-input>
                         <span
                                 style="color:red;cursor: pointer;"
-                                @click="deleteSell()"
+                                @click="deleteSell(index)"
                         >删除</span>
                     </div>
                 </el-form-item>
@@ -631,7 +631,6 @@
                 oScreenName: '',
                 oFilmFormatName:'',
                 selectFilmFormatType:'',
-                selectHallType:'',
                 selectFilmType:'',
                 oFilmName: '',
                 oName: '',
@@ -693,8 +692,6 @@
                     screenCode: [],
                     formatCode:[],
                     selectFilmType: '0',//选择影片
-                    selectHallType: '0',//选择影厅
-                    selectMovieType:'0',//选择制式
                     code:[],//选择影院
                     filmCode: '',
                     filmName: '',
@@ -703,12 +700,17 @@
                     startDate: '',
                     endDate: '',
                     validPayType: '0',
+                    activityTogether: '0',
+                    oCanNum: '0',
+                    oneCanNum: '0',
+                    limitSingleUnit: '年',
                     achieveMoney: '',
                     discountMoney: '',
                     reduceType: '1',
+                    holidayValid: '1',
                     couponDesc: '',
                     id: '',
-                    status: ''
+                    status: '0'
                 },
                 formLabelWidth: '120px',
                 selectValue: {},
@@ -818,9 +820,6 @@
                 for (let i = 0; i < this.filmInfo.length; i++) {
                     filmeCodes.push(this.filmInfo[i].filmCode);
                 }
-                if (this.oForm.selectHallType == 0) {
-                    this.selectScreenCode = '';
-                }
                 if (this.oForm.reduceType == 1) {
                     this.oForm.achieveMoney = '';
                 }
@@ -870,29 +869,28 @@
                             this.merSelect=[];
                             this.oForm.name = '';
                             this.selectValue = [];
-                            this.oForm.selectHallType = '0';
                             this.selectScreenCode = '';
                             this.oForm.selectFilmType = '0';
                             this.oForm.filmCode = '';
                             this.oForm.startDate = '';
                             this.oForm.endDate = '';
-                            this.oForm.validPayType = '';
-                            this.oForm.reduceType = '';
+                            this.oForm.validPayType = '0';
+                            this.oForm.reduceType = '1';
                             this.oForm.achieveMoney = '';
                             this.oForm.discountMoney = '';
-                            this.oForm.holidayValid = '';
+                            this.oForm.holidayValid = '1';
                             this.oForm.checkedDays = [];
-                            this.oForm.status = '';
-                            this.oForm.activityTogether = '';
+                            this.oForm.status = '0';
+                            this.oForm.activityTogether = '0';
                             this.oForm.sendNumber = '';
                             this.oForm.couponDesc = '';
-                            this.oForm.oCanNum = '';
+                            this.oForm.oCanNum = '0';
                             this.oForm.oNum = '';
-                            this.oForm.oneCanNum = '';
+                            this.oForm.oneCanNum = '0';
                             this.oForm.oneNum = '';
-                            this.oForm.selectMovieType = '0';
                             this.oForm.formatCode = '';
                             this.oForm.code = '';
+                            this.oForm.limitSingleUnit = '年';
                             this.getMenu();
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
@@ -973,10 +971,20 @@
                 https.fetchPost('/filmDiscountActivity/getTimesById', params).then(data => { //查询可用时间段
                     loading.close();
                     console.log(data);
-                    if(JSON.parse(Decrypt(data.data.data))){
-                        this.canTimeList=JSON.parse(Decrypt(data.data.data))
+                    this.dateInfo=[];
+                    for(let x in JSON.parse(Decrypt(data.data.data))){
+                        let jsonarr=[];
+                        jsonarr.push(JSON.parse(Decrypt(data.data.data))[x].startTime);
+                        jsonarr.push(JSON.parse(Decrypt(data.data.data))[x].endTime);
+                        this.dateInfo.push(jsonarr)
                     }
-                    console.log(this.canTimeList);
+                    for(let x in this.dateInfo){
+                        this.startArr.push(this.dateInfo[x][0])
+                        this.endArr.push(this.dateInfo[x][1]);
+                    }
+                    console.log(this.startArr.join(','));
+                    console.log(this.endArr.join(','));
+                    console.log(this.dateInfo);
 
                 }).catch(err => {
                     loading.close();
@@ -1009,7 +1017,7 @@
                         }
                         if(JSON.parse(Decrypt(data.data.data)).merchandiseCode&&JSON.parse(Decrypt(data.data.data)).merchandiseName){
                             let exFilmCodeList=JSON.parse(Decrypt(data.data.data)).merchandiseCode.split(',');
-                            let exFilmNameList=JSON.parse(Decrypt(data.data.data)).merchandiseName.split(',');
+                            let exFilmNameList=JSON.parse(Decrypt(data.data.data)).merchandiseName.split('|');
                             this.selectedSell=[];
                             for(let x in exFilmNameList){
                                 let json={};
@@ -1101,12 +1109,17 @@
                     background: 'rgba(0, 0, 0, 0.7)',
                     target: document.querySelector('.div1')
                 });
+
+                let merchandiseCodeList=[];
+                for(let x in this.selectedSell){
+                    merchandiseCodeList.push(this.selectedSell[x].merchandiseCode)
+                }
                 var jsonArr = [];
                 jsonArr.push({ key: 'name', value: this.oName });
                 jsonArr.push({ key: 'cinemaCode', value: this.oCinemaCode });
                 jsonArr.push({ key: 'selectMerchandiseType', value: this.oSelectMerchandiseType });
                 if(this.oSelectFilmType!=0){
-                    jsonArr.push({ key: 'merchandiseCode', value: this.selectedSell.join(',') });
+                    jsonArr.push({ key: 'merchandiseCode', value: merchandiseCodeList.join(',') });
                 }
                 jsonArr.push({ key: 'startDate', value: this.oStartDate });
                 jsonArr.push({ key: 'endDate', value: this.oEndDate });

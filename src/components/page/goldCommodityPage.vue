@@ -66,6 +66,9 @@
                 header-cell-class-name="table-header"
                 @selection-change="handleSelectionChange"
             >
+                <el-table-column prop="sort" label="允许兑换的门店" width="240">
+                    <template slot-scope="scope">{{scope.row.cinemaNames}}</template>
+                </el-table-column>
                 <el-table-column prop="name" label="商品名称">
                     <template slot-scope="scope">{{scope.row.name}}</template>
                 </el-table-column>
@@ -100,9 +103,6 @@
                 </el-table-column>
                 <el-table-column prop="sort" label="所需RMB" width="90">
                     <template slot-scope="scope">{{scope.row.money}}</template>
-                </el-table-column>
-                <el-table-column prop="sort" label="允许兑换的门店" width="170">
-                    <template slot-scope="scope">{{scope.row.cinemaNames}}</template>
                 </el-table-column>
                 <el-table-column label="上架状态" align="center" width="90">
                     <template slot-scope="scope">
@@ -878,7 +878,7 @@ export default {
         },
         sureNext() {
             if(this.sellIndex>=0){
-                this.selectedSell=[]
+                this.selectedSell=[];
                 this.selectedSell.push(this.sellTableData[this.sellIndex]);
             }
             console.log(this.selectedSell);

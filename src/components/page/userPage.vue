@@ -31,25 +31,22 @@
                 header-cell-class-name="table-header"
                 @selection-change="handleSelectionChange"
             >
-                <el-table-column prop="name" label="用户名" width="80">
+                <el-table-column prop="name" label="用户名" width="140">
                     <template slot-scope="scope">{{scope.row.userName}}</template>
                 </el-table-column>
-                <el-table-column label="创建时间" width="160">
-                    <template slot-scope="scope">{{scope.row.createDate}}</template>
-                </el-table-column>
-                <el-table-column prop="memo" label="描述">
-                    <template slot-scope="scope">{{scope.row.memo}}</template>
-                </el-table-column>
-                <el-table-column prop="memo" label="真实姓名" width="100">
+                <el-table-column prop="memo" label="真实姓名" width="140">
                     <template slot-scope="scope">{{scope.row.realName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="呼叫号码" width="130">
+                <el-table-column prop="memo" label="描述" width="180">
+                    <template slot-scope="scope">{{scope.row.memo}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="联系方式" width="130">
                     <template slot-scope="scope">{{scope.row.callNumber}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="影院公司名" width="130">
                     <template slot-scope="scope">{{scope.row.businessCode}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="影院编码">
+                <el-table-column prop="memo" label="影院编码" width="110">
                     <template slot-scope="scope">{{scope.row.cinemaCodes}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="登陆时间" width="160">
@@ -58,7 +55,10 @@
                 <el-table-column prop="memo" label="登录IP" width="130">
                     <template slot-scope="scope">{{scope.row.loginIp}}</template>
                 </el-table-column>
-                <el-table-column label="状态" align="center" width="100">
+                <el-table-column label="创建时间" width="160">
+                    <template slot-scope="scope">{{scope.row.createDate}}</template>
+                </el-table-column>
+                <el-table-column label="状态" align="center" width="90">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status=='1'" type="success">正常</el-tag>
                         <el-tag v-else-if="scope.row.status=='2'" type="danger">禁用</el-tag>

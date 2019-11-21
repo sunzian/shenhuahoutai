@@ -9,14 +9,6 @@
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-select clearable v-model="query.reduceType" placeholder="优惠方式" class="handle-select mr10">
-                    <el-option key="1" label="特惠活动" value="1"></el-option>
-                    <el-option key="2" label="立减活动" value="2"></el-option>
-                </el-select>
-                <el-select clearable v-model="query.status" placeholder="状态" class="handle-select mr10">
-                    <el-option key="1" label="启用" value="1"></el-option>
-                    <el-option key="2" label="未启用" value="0"></el-option>
-                </el-select>
                 <el-select clearable v-model="query.cinemaCode" placeholder="影院" class="handle-select mr10">
                     <el-option
                             v-for="item in cinemaInfo"
@@ -26,6 +18,14 @@
                     ></el-option>
                 </el-select>
                 <el-input v-model="query.name" placeholder="活动名称" class="handle-input mr10"></el-input>
+                <el-select clearable v-model="query.reduceType" placeholder="优惠方式" class="handle-select mr10">
+                    <el-option key="1" label="特惠活动" value="1"></el-option>
+                    <el-option key="2" label="立减活动" value="2"></el-option>
+                </el-select>
+                <el-select clearable v-model="query.status" placeholder="状态" class="handle-select mr10">
+                    <el-option key="1" label="启用" value="1"></el-option>
+                    <el-option key="2" label="未启用" value="0"></el-option>
+                </el-select>
                 <el-button style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
                 <el-button
                         type="primary"
@@ -42,8 +42,11 @@
                     ref="multipleTable"
                     header-cell-class-name="table-header"
             >
-                <el-table-column prop="name" label="适用影院">
+                <el-table-column prop="name" label="适用影院" width="160">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
+                </el-table-column>
+                <el-table-column label="活动名称" width="160">
+                    <template slot-scope="scope">{{scope.row.name}}</template>
                 </el-table-column>
                 <el-table-column prop="name" label="适用影厅">
                     <template slot-scope="scope">
@@ -66,32 +69,29 @@
                         <el-tag v-else-if="scope.row.selectFilmType == 2" >除{{scope.row.filmName}}外所有影片</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="活动名称">
-                    <template slot-scope="scope">{{scope.row.name}}</template>
-                </el-table-column>
-                <el-table-column prop="memo" label="有效期" width="320">
-                    <template slot-scope="scope">{{scope.row.startDate}}至{{scope.row.endDate}}</template>
-                </el-table-column>
                 <el-table-column prop="sort" label="限购总数" width="130">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.isLimitTotal == 0">不限购</el-tag>
-                        <el-tag v-else-if="scope.row.isLimitTotal == 1" >{{scope.row.totalNumber}}，剩余{{scope.row.totalSurplus}}</el-tag>
+                        <el-tag v-else-if="scope.row.isLimitTotal == 1" >{{scope.row.totalNumber}}/{{scope.row.totalSurplus}}</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="sort" label="个人限购" width="100">
+                <el-table-column prop="sort" label="个人限购" width="90">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.isLimitSingle == 0">不限购</el-tag>
                         <el-tag v-else-if="scope.row.isLimitSingle == 1" >{{scope.row.singleNumber}}</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="sort" label="优惠方式" width="100">
+                <el-table-column prop="sort" label="优惠方式" width="90">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.reduceType == 1">特惠价格</el-tag>
                         <el-tag v-else-if="scope.row.reduceType == 2" >立减金额</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="sort" label="金额" width="100">
+                <el-table-column prop="sort" label="金额" width="60">
                     <template slot-scope="scope">{{scope.row.discountMoney}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="有效期" width="170">
+                    <template slot-scope="scope">{{scope.row.startDate}}至{{scope.row.endDate}}</template>
                 </el-table-column>
                 <el-table-column prop="sort" label="状态" width="100">
                     <template slot-scope="scope">
@@ -99,7 +99,7 @@
                         <el-tag v-else type="danger">未启用</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" width="240" align="center" fixed="right">
+                <el-table-column label="操作" width="200" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-button
                                 type="success"
@@ -211,7 +211,7 @@
                         </el-input>
                         <span
                                 style="color:red;cursor: pointer;"
-                                @click="deleteSell()"
+                                @click="deleteSell(index)"
                         >删除</span>
                     </div>
                 </el-form-item>
@@ -492,7 +492,7 @@
                         </el-input>
                         <span
                                 style="color:red;cursor: pointer;"
-                                @click="deleteSell()"
+                                @click="deleteSell(index)"
                         >删除</span>
                     </div>
                 </el-form-item>
@@ -782,12 +782,17 @@
                     startDate: '',
                     endDate: '',
                     validPayType: '0',
+                    holidayValid: '1',
+                    activityTogether: '0',
+                    oCanNum: '0',
+                    oneCanNum: '0',
+                    limitSingleUnit: '年',
                     achieveMoney: '',
                     discountMoney: '',
                     reduceType: '1',
                     couponDesc: '',
                     id: '',
-                    status: ''
+                    status: '0'
                 },
                 formLabelWidth: '120px',
                 selectValue: {},
@@ -850,6 +855,7 @@
                         if (data.data.code == 'success') {
                             this.selectedSell=[];
                             this.oForm.code = this.cinemaInfo[0].cinemaCode;
+                            this.getAllScreen( this.oForm.code);
                             console.log(JSON.parse(Decrypt(data.data.data)));
                             let formats = JSON.parse(Decrypt(data.data.data)).formatList;
                             this.formatList = [];
@@ -947,33 +953,34 @@
                             if (data.data.code == 'success') {
                                 this.dialogFormVisible = false;
                                 this.$message.success(`新增成功`);
+                                this.oForm.selectFilmType='0';
+                                this.oForm.selectHallType='0';
+                                this.oForm.selectMovieType='0';
+                                this.oForm.validPayType='0';
+                                this.oForm.holidayValid='1';
+                                this.oForm.activityTogether='0';
+                                this.oForm.oCanNum='0';
+                                this.oForm.oneCanNum='0';
+                                this.oForm.limitSingleUnit='年';
+                                this.oForm.reduceType='1';
+                                this.oForm.status='0';
                                 this.value1='';
                                 this.dateInfo=[];
                                 this.oForm.name = '';
                                 this.selectValue = [];
-                                this.oForm.selectHallType = '0';
                                 this.selectScreenCode = '';
-                                this.oForm.selectFilmType = '0';
                                 this.oForm.filmCode = '';
                                 this.oForm.startDate = '';
                                 this.oForm.endDate = '';
-                                this.oForm.validPayType = '';
-                                this.oForm.reduceType = '';
                                 this.oForm.achieveMoney = '';
                                 this.oForm.discountMoney = '';
-                                this.oForm.holidayValid = '';
                                 this.oForm.checkedDays = [];
                                 this.startArr = [];
                                 this.endArr = [];
-                                this.oForm.status = '';
-                                this.oForm.activityTogether = '';
                                 this.oForm.sendNumber = '';
                                 this.oForm.couponDesc = '';
-                                this.oForm.oCanNum = '';
                                 this.oForm.oNum = '';
-                                this.oForm.oneCanNum = '';
                                 this.oForm.oneNum = '';
-                                this.oForm.selectMovieType = '0';
                                 this.oForm.code = '';
                                 this.oForm.formatCode = [];
                                 this.oForm.screenCode = [];
@@ -1057,11 +1064,21 @@
                 https.fetchPost('/filmDiscountActivity/getTimesById', params).then(data => { //查询可用时间段
                     loading.close();
                     console.log(data);
-                    // if(JSON.parse(Decrypt(data.data.data))){
-                    //     this.dateInfo=JSON.parse(Decrypt(data.data.data))
-                    // }
-                    // console.log(this.dateInfo);
-
+                    console.log(JSON.parse(Decrypt(data.data.data)));
+                    this.dateInfo=[];
+                    for(let x in JSON.parse(Decrypt(data.data.data))){
+                        let jsonarr=[];
+                        jsonarr.push(JSON.parse(Decrypt(data.data.data))[x].startTime);
+                        jsonarr.push(JSON.parse(Decrypt(data.data.data))[x].endTime);
+                        this.dateInfo.push(jsonarr)
+                    }
+                    for(let x in this.dateInfo){
+                        this.startArr.push(this.dateInfo[x][0])
+                        this.endArr.push(this.dateInfo[x][1]);
+                    }
+                    console.log(this.startArr.join(','));
+                    console.log(this.endArr.join(','));
+                    console.log(this.dateInfo);
                 }).catch(err => {
                     loading.close();
                     console.log(err);
@@ -1074,7 +1091,7 @@
                             this.editVisible = true;
                             if(JSON.parse(Decrypt(data.data.data)).discountActivity.filmCode&&JSON.parse(Decrypt(data.data.data)).discountActivity.filmName){
                                 let exFilmCodeList=JSON.parse(Decrypt(data.data.data)).discountActivity.filmCode.split(',');
-                                let exFilmNameList=JSON.parse(Decrypt(data.data.data)).discountActivity.filmName.split(',');
+                                let exFilmNameList=JSON.parse(Decrypt(data.data.data)).discountActivity.filmName.split('|');
                                 this.selectedSell=[];
                                 for(let x in exFilmNameList){
                                     let json={};
@@ -1217,6 +1234,11 @@
                     background: 'rgba(0, 0, 0, 0.7)',
                     target: document.querySelector('.div1')
                 });
+                console.log(this.selectedSell);
+                let filmCodeList=[];
+                for(let x in this.selectedSell){
+                    filmCodeList.push(this.selectedSell[x].filmCode)
+                }
                 var jsonArr = [];
                 jsonArr.push({ key: 'name', value: this.oName });
                 jsonArr.push({ key: 'cinemaCode', value: this.oCinemaCode });
@@ -1226,7 +1248,7 @@
                 }
                 jsonArr.push({ key: 'selectFilmType', value: this.oSelectFilmType });
                 if(this.oSelectFilmType!=0){
-                    jsonArr.push({ key: 'filmCode', value: this.oFilmCode });
+                    jsonArr.push({ key: 'filmCode', value: filmCodeList.join(',')});
                 }
                 jsonArr.push({ key: 'startDate', value: this.oStartDate });
                 jsonArr.push({ key: 'endDate', value: this.oEndDate });
