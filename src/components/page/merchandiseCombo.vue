@@ -20,7 +20,7 @@
                 <el-table-column prop="name" label="影院编码" width="110">
                     <template slot-scope="scope">{{scope.row.cinemaCode}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="影院名称" width="200">
+                <el-table-column prop="name" label="影院名称" width="280">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="省份" width="110">
@@ -102,23 +102,23 @@
                         </el-popover>
                     </template>
                 </el-table-column>
-                <el-table-column prop="sort" label="套餐名字" width="150">
+                <el-table-column prop="sort" label="套餐名字">
                     <template slot-scope="scope">{{scope.row.comboName}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="套餐价格" width="150">
+                <el-table-column prop="sort" label="套餐价格">
                     <template slot-scope="scope">{{scope.row.originalPrice}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="展示顺序" width="150">
+                <el-table-column prop="sort" label="展示顺序">
                     <template slot-scope="scope">{{scope.row.showSeqNo}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="套餐类型" width="150">
+                <el-table-column prop="sort" label="套餐类型">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.comboType=='1'">单人套餐</el-tag>
                         <el-tag v-else-if="scope.row.comboType=='2'">双人套餐</el-tag>
                         <el-tag v-else-if="scope.row.comboType=='3'">多人套餐</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="sort" label="状态" width="150">
+                <el-table-column prop="sort" label="状态">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status=='1'">上架</el-tag>
                         <el-tag v-else-if="scope.row.status=='2'">下架</el-tag>

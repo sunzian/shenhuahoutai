@@ -9,18 +9,18 @@
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-select
-                    clearable
-                    v-model="query.cinemaCode"
-                    placeholder="请选择影院"
-                    class="handle-input mr10"
-                >
+                <el-select clearable v-model="query.cinemaCode" placeholder="请选择影院" class="handle-input mr10">
                     <el-option
                         v-for="item in cinemaData"
                         :key="item.cinemaCode"
                         :label="item.cinemaName"
                         :value="item.cinemaCode"
                     ></el-option>
+                </el-select>
+                <el-input placeholder="券包名称" class="mr10" v-model="query.groupName" autocomplete="off"></el-input>
+                <el-select clearable v-model="query.status" placeholder="状态" class="handle-select mr10">
+                    <el-option key="1" label="启用" value="1"></el-option>
+                    <el-option key="2" label="未启用" value="2"></el-option>
                 </el-select>
                 <el-button style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
                 <el-button
@@ -724,10 +724,20 @@ export default {
                 target: document.querySelector('.div1')
             });
             let cinemaCode = this.query.cinemaCode;
+            let groupName = this.query.groupName;
+            let status = this.query.status;
+            if (!groupName) {
+                groupName = '';
+            }
             if (!cinemaCode) {
                 cinemaCode = '';
             }
+            if (!status) {
+                status = '';
+            }
             let jsonArr = [];
+            jsonArr.push({ key: 'groupName', value: groupName });
+            jsonArr.push({ key: 'status', value: status });
             jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
             jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
             jsonArr.push({ key: 'cinemaCodes', value: cinemaCode });

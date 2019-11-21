@@ -38,15 +38,6 @@
                     <el-option key="1" label="成功" value="1"></el-option>
                     <el-option key="2" label="失败" value="2"></el-option>
                 </el-select>
-                <el-select
-                    clearable
-                    v-model="query.orderType"
-                    placeholder="订单类型"
-                    class="handle-select mr10"
-                >
-                    <el-option key="1" label="购票" value="1"></el-option>
-                    <el-option key="2" label="卖品" value="2"></el-option>
-                </el-select>
                 <el-date-picker
                     v-model="query.startDate"
                     type="datetime"
@@ -63,12 +54,27 @@
                     placeholder="结束时间（止）"
                     class="mr10"
                 ></el-date-picker>
+                <el-select
+                        clearable
+                        v-model="query.orderType"
+                        placeholder="订单类型"
+                        class="handle-select mr10"
+                >
+                    <el-option key="1" label="购票" value="1"></el-option>
+                    <el-option key="2" label="卖品" value="2"></el-option>
+                </el-select>
                 <el-button
                     type="primary"
                     icon="el-icon-search"
                     style="margin-top: 10px;width: 90px;"
                     @click="Search"
                 >搜索</el-button>
+                <el-button
+                        type="primary"
+                        @click="derive"
+                        icon="el-icon-circle-plus-outline"
+                        style="float: right;margin-top: 10px"
+                >导出</el-button>
             </div>
             <div class="handle-box">
                 总消费金额：
@@ -116,16 +122,16 @@
                         <!--<el-tag v-else>{{scope.row.errorMessage}}</el-tag>-->
                     <!--</template>-->
                 <!--</el-table-column>-->
-                <el-table-column label="交易状态" align="center" width="90">
-                    <template slot-scope="scope">
-                        <el-tag v-if="scope.row.status=='1'">成功</el-tag>
-                        <el-tag v-else>失败</el-tag>
-                    </template>
-                </el-table-column>
                 <el-table-column label="订单类型" align="center" width="90">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.orderType=='1'">购票</el-tag>
                         <el-tag v-else>卖品</el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column label="交易状态" align="center" width="90">
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row.status=='1'">成功</el-tag>
+                        <el-tag v-else>失败</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column label="操作" align="center" fixed="right" width="90">
@@ -276,6 +282,61 @@ export default {
         this.getMenu();
     },
     methods: {
+        derive(){
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
+            setTimeout(() => {
+                let cinemaCode = this.query.cinemaCode;
+                let orderType = this.query.orderType;
+                let cardNo = this.query.cardNo;
+                let mobilePhone = this.query.mobilePhone;
+                let startDate = this.query.startDate;
+                let endDate = this.query.endDate;
+                if (!orderType) {
+                    orderType = '';
+                }
+                if (!cinemaCode) {
+                    cinemaCode = '';
+                }
+                if (!cardNo) {
+                    cardNo = '';
+                }
+                if (!mobilePhone) {
+                    mobilePhone = '';
+                }
+                if (!startDate) {
+                    startDate = '';
+                }
+                if (!endDate) {
+                    endDate = '';
+                }
+                let jsonArr = [];
+                jsonArr.push({ key: 'tableName', value: "member_card_consume" });
+                jsonArr.push({ key: 'exportKeysJson', value: "['id','cinemaCode','cinemaName','consumeCinemaCode','consumeCinemaName','cardNo','userName','mobilePhone','consumeAmount','consumeDetail','chStatus','orderCode','chOrderType','consumeTime']"});
+                jsonArr.push({ key: 'exportTitlesJson', value:"['ID','开卡影院编码','开卡影院名称','消费影院编码','消费影院名称','卡号','用户','手机号','消费金额','消费明细','支付状态','订单号','订单类型','消费时间']" });
+                jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
+                jsonArr.push({ key: 'cardNo', value: cardNo });
+                jsonArr.push({ key: 'mobilePhone', value: mobilePhone });
+                jsonArr.push({ key: 'orderType', value: orderType });
+                jsonArr.push({ key: 'startDate', value: startDate });
+                jsonArr.push({ key: 'endDate', value: endDate });
+                var params = ParamsAppend(jsonArr);
+                console.log(jsonArr);
+                let myObj = {
+                    method: 'get',
+                    url: '/exportExcel/memberCardConsume',
+                    fileName: '会员卡消费记录订单统计',
+                    params: params
+                };
+                https.exportMethod(myObj);
+                loading.close();
+            }, 1500);
+        },
         addChange(index, row) {
             const loading = this.$loading({
                 lock: true,

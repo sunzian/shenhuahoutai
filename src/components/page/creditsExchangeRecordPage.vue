@@ -3,7 +3,7 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
-                    <i class="el-icon-lx-cascades"></i> 会员卡消费记录
+                    <i class="el-icon-lx-cascades"></i> 会员积分兑换金币记录
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
@@ -60,35 +60,35 @@
                 header-cell-class-name="table-header"
                 @selection-change="handleSelectionChange"
             >
-                <el-table-column prop="name" label="兑换影院" width="170">
+                <el-table-column prop="name" label="兑换影院" width="260">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="用户名" width="90">
+                <el-table-column prop="memo" label="用户名" width="140">
                     <template slot-scope="scope">{{scope.row.userName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="手机号">
+                <el-table-column prop="memo" label="手机号" width="160">
                     <template slot-scope="scope">{{scope.row.mobile}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="卡号">
+                <el-table-column prop="memo" label="卡号" width="160">
                     <template slot-scope="scope">{{scope.row.cardNo}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="订单号">
                     <template slot-scope="scope">{{scope.row.orderNo}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="使用积分" width="90">
+                <el-table-column prop="memo" label="消耗积分" width="90">
                     <template slot-scope="scope">{{scope.row.useCredits}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="兑换金币" width="90">
+                <el-table-column prop="memo" label="获得金币" width="90">
                     <template slot-scope="scope">{{scope.row.exchangeGoldNumber}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="兑换时间" width="160">
+                    <template slot-scope="scope">{{scope.row.exchangeDate}}</template>
                 </el-table-column>
                 <el-table-column label="兑换状态" align="center" width="110">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status=='1'">未成功</el-tag>
                         <el-tag v-else>兑换成功</el-tag>
                     </template>
-                </el-table-column>
-                <el-table-column prop="memo" label="支付时间" width="160">
-                    <template slot-scope="scope">{{scope.row.exchangeDate}}</template>
                 </el-table-column>
             </el-table>
             <div class="pagination">

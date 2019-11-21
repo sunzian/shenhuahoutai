@@ -95,6 +95,9 @@
                 <el-table-column prop="memo" label="最近登陆时间" width="160">
                     <template slot-scope="scope">{{scope.row.loginDate}}</template>
                 </el-table-column>
+                <el-table-column prop="memo" label="金币数量" width="90">
+                    <template slot-scope="scope">{{scope.row.goldNumber}}</template>
+                </el-table-column>
                 <el-table-column prop="memo" label="累计消费金额" width="110">
                     <template slot-scope="scope">{{scope.row.consumptionAmount}}</template>
                 </el-table-column>
@@ -103,9 +106,6 @@
                 </el-table-column>
                 <el-table-column prop="memo" label="有效优惠券数量" width="130">
                     <template slot-scope="scope">{{scope.row.remainCoupons}}</template>
-                </el-table-column>
-                <el-table-column prop="memo" label="金币数量" width="90">
-                    <template slot-scope="scope">{{scope.row.goldNumber}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="游戏厅角色" width="100">
                     <template slot-scope="scope">

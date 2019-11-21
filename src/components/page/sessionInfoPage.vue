@@ -51,10 +51,10 @@
             >
                 <el-table-column type="selection" width="55">
                 </el-table-column>
-                <el-table-column prop="code" label="影院名称" width="160" fixed>
+                <el-table-column prop="code" label="影院名称" width="200" fixed>
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="影片名称" width="140" fixed>
+                <el-table-column prop="name" label="影片名称" width="200" fixed>
                     <template slot-scope="scope">{{scope.row.filmName}}</template>
                 </el-table-column>
                 <el-table-column prop="time" label="影厅名称" width="140">
@@ -63,28 +63,28 @@
                 <el-table-column prop="time" label="放映时间" width="160">
                     <template slot-scope="scope">{{scope.row.sessionTime}}</template>
                 </el-table-column>
-                <el-table-column prop="number" label="时长（分钟）" width="110">
+                <el-table-column prop="number" label="时长/分钟" width="110">
                     <template slot-scope="scope">{{scope.row.duration}}</template>
                 </el-table-column>
-                <el-table-column prop="number" label="语言" width="80">
+                <el-table-column prop="number" label="语言" width="70">
                     <template slot-scope="scope">{{scope.row.language}}</template>
                 </el-table-column>
-                <el-table-column prop="number" label="标准价" width="80">
+                <el-table-column prop="number" label="标准价" width="70">
                     <template slot-scope="scope">{{scope.row.standardPrice}}</template>
                 </el-table-column>
-                <el-table-column prop="booleans" label="结算价" width="80">
+                <el-table-column prop="booleans" label="结算价" width="70">
                     <template slot-scope="scope">{{scope.row.settlePrice}}</template>
                 </el-table-column>
-                <el-table-column prop="booleans" label="最低价" width="80">
+                <el-table-column prop="booleans" label="最低价" width="70">
                     <template slot-scope="scope">{{scope.row.lowestPrice}}</template>
                 </el-table-column>
-                <el-table-column prop="number" label="会员价" width="80">
+                <el-table-column prop="number" label="会员价" width="70">
                     <template slot-scope="scope">{{scope.row.memberPrice}}</template>
                 </el-table-column>
-                <el-table-column prop="time" label="增值服务费" width="110">
+                <el-table-column prop="time" label="增值服务费" width="100">
                     <template slot-scope="scope">{{scope.row.ticketFee}}</template>
                 </el-table-column>
-                <el-table-column prop="time" label="影院补贴" width="100">
+                <el-table-column prop="time" label="影院补贴" width="90">
                     <template slot-scope="scope">{{scope.row.cinemaAllowance}}</template>
                 </el-table-column>
                 <el-table-column prop="time" label="第三方支付代售费" width="150">

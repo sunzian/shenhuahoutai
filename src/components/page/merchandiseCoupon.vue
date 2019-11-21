@@ -36,18 +36,19 @@
                 <el-table-column prop="name" label="适用影院">
                     <template slot-scope="scope">{{scope.row.cinemaNames}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="适用卖品">
-                    <template slot-scope="scope">{{scope.row.merchandiseNames}}</template>
+                <!--<el-table-column prop="name" label="适用卖品">-->
+                    <!--<template slot-scope="scope">{{scope.row.merchandiseNames}}</template>-->
+                <!--</el-table-column>-->
+                <el-table-column label="优惠券名称">
+                    <template slot-scope="scope">{{scope.row.name}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="卡券类型">
+                <el-table-column prop="name" label="优惠券类型" width="120">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.reduceType == 1" type="success">兑换券</el-tag>
                         <el-tag v-else type="danger">代金券</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="卡券名称">
-                    <template slot-scope="scope">{{scope.row.name}}</template>
-                </el-table-column>
+
                 <!-- <el-table-column prop="memo" label="有效期">
                     <template slot-scope="scope">{{scope.row.startDate}}至{{scope.row.endDate}}</template>
                 </el-table-column> -->
@@ -57,25 +58,25 @@
                 <el-table-column prop="sort" label="满多少可用" width="110">
                     <template slot-scope="scope">{{scope.row.achieveMoney}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="优惠金额" width="110">
+                <el-table-column prop="sort" label="优惠金额" width="100">
                     <template slot-scope="scope">{{scope.row.discountMoney}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="可发放" width="110">
+                <el-table-column prop="sort" label="可发放" width="80">
                     <template slot-scope="scope">{{scope.row.sendNumber}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="已发放" width="110">
+                <el-table-column prop="sort" label="已发放" width="80">
                     <template slot-scope="scope">{{scope.row.acquireNumber}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="已使用" width="110">
+                <el-table-column prop="sort" label="已使用" width="80">
                     <template slot-scope="scope">{{scope.row.usedNumber}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="状态" width="110">
+                <el-table-column prop="sort" label="状态" width="90">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status == 1" type="success">启用</el-tag>
                         <el-tag v-else type="danger">未启用</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" width="240" align="center">
+                <el-table-column label="操作" width="200" align="center">
                     <template slot-scope="scope">
                         <el-button
                             type="success"

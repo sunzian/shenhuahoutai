@@ -42,13 +42,13 @@
                     ref="multipleTable"
                     header-cell-class-name="table-header"
             >
-                <el-table-column prop="name" label="权益卡名称" width="130">
+                <el-table-column prop="name" label="权益卡名称" width="150">
                     <template slot-scope="scope">{{scope.row.name}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="适用影院" width="130">
+                <el-table-column prop="name" label="适用影院" width="200">
                 <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="权益卡类型" width="130">
+                <el-table-column prop="name" label="权益卡类型" width="110">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.cardType == 1">优惠活动</el-tag>
                         <el-tag v-else-if="scope.row.cardType == 2" >赠送券包{{scope.row.groupName}}</el-tag>
@@ -60,6 +60,16 @@
                         <el-tag v-else-if="scope.row.isFilmJoin == 1&&scope.row.reduceTypeFilm==1" >特惠{{scope.row.discountMoneyFilm}}元</el-tag>
                         <el-tag v-else-if="scope.row.isFilmJoin == 1&&scope.row.reduceTypeFilm==2" >立减{{scope.row.discountMoneyFilm}}元</el-tag>
                         <el-tag v-else-if="scope.row.isFilmJoin == 1&&scope.row.reduceTypeFilm==3" >打折{{scope.row.discountMoneyFilm}}%</el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="name" label="卖品优惠" width="130">
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row.isMerchandiseJoin == 0">不参与</el-tag>
+                        <el-tag v-else-if="scope.row.isMerchandiseJoin == 1&&scope.row.reduceTypeMerchandise==1" >特惠{{scope.row.discountMoneyMerchandise}}元</el-tag>
+                        <el-tag v-else-if="scope.row.isMerchandiseJoin == 1&&scope.row.reduceTypeMerchandise==2" >
+                            满{{scope.row.achieveMoneyMerchandise}}元减{{scope.row.discountMoneyMerchandise}}元
+                        </el-tag>
+                        <el-tag v-else-if="scope.row.isMerchandiseJoin == 1&&scope.row.reduceTypeMerchandise==3" >打折{{scope.row.discountMoneyMerchandise}}%</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column prop="name" label="适用影厅" width="130">
@@ -76,36 +86,26 @@
                         <el-tag v-else-if="scope.row.selectFilmFormatType == 2" >除{{scope.row.filmFormatName}}外所有制式</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="name" label="适用影片">
-                    <template slot-scope="scope">
-                        <el-tag v-if="scope.row.selectFilmType == 0">全部影片</el-tag>
-                        <el-tag v-else-if="scope.row.selectFilmType == 1" >{{scope.row.filmName}}</el-tag>
-                        <el-tag v-else-if="scope.row.selectFilmType == 2" >除{{scope.row.filmName}}外所有影片</el-tag>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="name" label="影票每日限量" width="160">
-                    <template slot-scope="scope">
-                        <el-tag v-if="scope.row.isLimitFilm == 0">不限量</el-tag>
-                        <el-tag v-else-if="scope.row.isLimitFilm == 1" >限量{{scope.row.numberFilm}}张</el-tag>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="name" label="卖品优惠" width="130">
-                    <template slot-scope="scope">
-                        <el-tag v-if="scope.row.isMerchandiseJoin == 0">不参与</el-tag>
-                        <el-tag v-else-if="scope.row.isMerchandiseJoin == 1&&scope.row.reduceTypeMerchandise==1" >特惠{{scope.row.discountMoneyMerchandise}}元</el-tag>
-                        <el-tag v-else-if="scope.row.isMerchandiseJoin == 1&&scope.row.reduceTypeMerchandise==2" >
-                            满{{scope.row.achieveMoneyMerchandise}}元减{{scope.row.discountMoneyMerchandise}}元
-                        </el-tag>
-                        <el-tag v-else-if="scope.row.isMerchandiseJoin == 1&&scope.row.reduceTypeMerchandise==3" >打折{{scope.row.discountMoneyMerchandise}}%</el-tag>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="name" label="适用卖品">
-                    <template slot-scope="scope">
-                        <el-tag v-if="scope.row.selectMerchandiseType == 0">全部商品</el-tag>
-                        <el-tag v-else-if="scope.row.selectMerchandiseType == 1" >{{scope.row.merchandiseName}}</el-tag>
-                        <el-tag v-else-if="scope.row.selectMerchandiseType == 2" >除{{scope.row.merchandiseName}}外所有商品</el-tag>
-                    </template>
-                </el-table-column>
+                <!--<el-table-column prop="name" label="适用影片">-->
+                    <!--<template slot-scope="scope">-->
+                        <!--<el-tag v-if="scope.row.selectFilmType == 0">全部影片</el-tag>-->
+                        <!--<el-tag v-else-if="scope.row.selectFilmType == 1" >{{scope.row.filmName}}</el-tag>-->
+                        <!--<el-tag v-else-if="scope.row.selectFilmType == 2" >除{{scope.row.filmName}}外所有影片</el-tag>-->
+                    <!--</template>-->
+                <!--</el-table-column>-->
+                <!--<el-table-column prop="name" label="影票每日限量" width="160">-->
+                    <!--<template slot-scope="scope">-->
+                        <!--<el-tag v-if="scope.row.isLimitFilm == 0">不限量</el-tag>-->
+                        <!--<el-tag v-else-if="scope.row.isLimitFilm == 1" >限量{{scope.row.numberFilm}}张</el-tag>-->
+                    <!--</template>-->
+                <!--</el-table-column>-->
+                <!--<el-table-column prop="name" label="适用卖品">-->
+                    <!--<template slot-scope="scope">-->
+                        <!--<el-tag v-if="scope.row.selectMerchandiseType == 0">全部商品</el-tag>-->
+                        <!--<el-tag v-else-if="scope.row.selectMerchandiseType == 1" >{{scope.row.merchandiseName}}</el-tag>-->
+                        <!--<el-tag v-else-if="scope.row.selectMerchandiseType == 2" >除{{scope.row.merchandiseName}}外所有商品</el-tag>-->
+                    <!--</template>-->
+                <!--</el-table-column>-->
                 <el-table-column prop="memo" label="有效期" width="70">
                     <template slot-scope="scope">{{scope.row.number}}{{scope.row.unit}}</template>
                 </el-table-column>
@@ -262,14 +262,14 @@
                         <el-radio label="3">折扣</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item label="固定金额：" :label-width="formLabelWidth" v-if="oForm.reduceTypeFilm == 1&&oForm.cardType==1">
+                <el-form-item label="固定金额：" :label-width="formLabelWidth" v-if="oForm.reduceTypeFilm == 1&&oForm.cardType==1&&oForm.isFilmJoin==1">
                     <el-input style="width: 150px" v-model="oForm.discountMoneyFilm" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="立减金额：" :label-width="formLabelWidth" v-if="oForm.reduceTypeFilm == 2&&oForm.cardType==1">
+                <el-form-item label="立减金额：" :label-width="formLabelWidth" v-if="oForm.reduceTypeFilm == 2&&oForm.cardType==1&&oForm.isFilmJoin==1">
                     减
                     <el-input style="width: 150px" v-model="oForm.discountMoneyFilm" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="折扣：" :label-width="formLabelWidth" v-if="oForm.reduceTypeFilm == 3&&oForm.cardType==1">
+                <el-form-item label="折扣：" :label-width="formLabelWidth" v-if="oForm.reduceTypeFilm == 3&&oForm.cardType==1&&oForm.isFilmJoin==1">
                     <el-input style="width: 150px" v-model="oForm.discountMoneyFilm" autocomplete="off"></el-input>%
                 </el-form-item>
                 <el-form-item v-if="oForm.isFilmJoin==1&&oForm.cardType==1"  label="是否限量：" :label-width="formLabelWidth">
@@ -309,16 +309,16 @@
                         <el-radio label="3">折扣</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item label="固定金额：" :label-width="formLabelWidth" v-if="oForm.reduceTypeMerchandise == 1&&oForm.cardType==1">
+                <el-form-item label="固定金额：" :label-width="formLabelWidth" v-if="oForm.reduceTypeMerchandise == 1&&oForm.cardType==1&&oForm.isMerchandiseJoin==1">
                     <el-input style="width: 150px" v-model="oForm.discountMoneyMerchandise" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="立减金额：" :label-width="formLabelWidth" v-if="oForm.reduceTypeMerchandise == 2&&oForm.cardType==1">
+                <el-form-item label="立减金额：" :label-width="formLabelWidth" v-if="oForm.reduceTypeMerchandise == 2&&oForm.cardType==1&&oForm.isMerchandiseJoin==1">
                     满
                     <el-input style="width: 150px" v-model="oForm.achieveMoneyMerchandise" autocomplete="off"></el-input>
                     减
                     <el-input style="width: 150px" v-model="oForm.discountMoneyMerchandise" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="折扣：" :label-width="formLabelWidth" v-if="oForm.reduceTypeMerchandise == 3&&oForm.cardType==1">
+                <el-form-item label="折扣：" :label-width="formLabelWidth" v-if="oForm.reduceTypeMerchandise == 3&&oForm.cardType==1&&oForm.isMerchandiseJoin==1">
                     <el-input style="width: 150px" v-model="oForm.discountMoneyMerchandise" autocomplete="off"></el-input>%
                 </el-form-item>
                 <el-form-item v-if="oForm.isMerchandiseJoin==1&&oForm.cardType==1"  label="选择商品：" :label-width="formLabelWidth" prop="filmName">
@@ -675,7 +675,7 @@
                         <el-radio label="3">折扣</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item label="固定金额：" :label-width="formLabelWidth" v-if="oReduceTypeFilm == 1&&oCardType==1">
+                <el-form-item label="固定金额：" :label-width="formLabelWidth" v-if="oReduceTypeFilm == 1&&oCardType==1&&oIsFilmJoin==1">
                     <el-input style="width: 150px" v-model="oDiscountMoneyFilm" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="立减金额：" :label-width="formLabelWidth" v-if="oReduceTypeFilm == 2&&oCardType==1">
@@ -1214,9 +1214,18 @@
                     achieveMoney: '',
                     discountMoney: '',
                     reduceType: '1',
+                    reduceTypeFilm: '1',
+                    isHolidayValid: '1',
+                    reduceTypeMerchandise: '1',
+                    isLimitFilm: '0',
+                    isCouponTogether: '0',
+                    limitFilmUnit: '年',
+                    limitMerchandiseUnit: '年',
+                    unit: '年',
                     couponDesc: '',
                     id: '',
-                    status: ''
+                    status: '0',
+                    isRecommend: '0',
                 },
                 formLabelWidth: '120px',
                 selectValue: {},
@@ -1477,32 +1486,37 @@
                             this.oForm.cardType='1';
                             this.oForm.startDate='';
                             this.oForm.endDate='';
-                            this.oForm.status='';
+                            this.oForm.status='0';
                             this.oForm.benefitDesc='';
-                            this.oForm.unit='';
+                            this.oForm.unit='年';
                             this.oForm.number='';
                             this.oForm.expense='';
-                            this.oForm.isFilmJoin='';
-                            this.oForm.isMerchandiseJoin='';
-                            this.oForm.isHolidayValid='';
+                            this.oForm.isFilmJoin='0';
+                            this.oForm.isMerchandiseJoin='0';
+                            this.oForm.isHolidayValid='1';
                             this.oForm.validWeekDay='';
-                            this.oForm.validPayType='1';
+                            this.oForm.validPayType='0';
                             this.oForm.isCouponTogether='';
-                            this.oForm.reduceTypeFilm='';
+                            this.oForm.reduceTypeFilm='1';
                             this.oForm.discountMoneyFilm='';
-                            this.oForm.selectHallType='';
-                            this.oForm.selectFilmFormatType='';
-                            this.oForm.selectFilmType='';
-                            this.oForm.isLimitFilm='';
+                            this.oForm.selectHallType='0';
+                            this.oForm.benefitType='0';
+                            this.oForm.reduceType='1';
+                            this.oForm.selectFilmFormatType='0';
+                            this.oForm.selectFilmType='0';
+                            this.oForm.isLimitFilm='0';
                             this.oForm.filmCode='';
                             this.oForm.numberFilm='';
-                            this.oForm.reduceTypeMerchandise='';
+                            this.oForm.reduceTypeMerchandise='1';
                             this.oForm.discountMoneyMerchandise='';
-                            this.oForm.selectMerchandiseType='';
+                            this.oForm.selectMerchandiseType='0';
+                            this.oForm.isRecommend='0';
                             this.oForm.isLimitMerchandise='';
                             this.oForm.merchandiseCode='';
                             this.oForm.achieveMoneyMerchandise='';
                             this.oForm.numberMerchandise='';
+                            this.oForm.limitFilmUnit='年';
+                            this.oForm.limitMerchandiseUnit='年';
                             this.getMenu();
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;

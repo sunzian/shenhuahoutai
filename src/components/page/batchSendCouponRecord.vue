@@ -48,10 +48,10 @@
                 header-cell-class-name="table-header"
                 @selection-change="handleSelectionChange"
             >
-                <el-table-column prop="name" label="影院名称">
+                <el-table-column prop="name" label="影院名称" width="300">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="发送人">
+                <el-table-column prop="memo" label="发送人" width="110">
                     <template slot-scope="scope">{{scope.row.sendUserName}}</template>
                 </el-table-column>
                 <!-- <el-table-column prop="memo" label="客户类型">
@@ -60,14 +60,14 @@
                         <el-tag v-else-if="scope.row.customerType=='1'">实物</el-tag>
                     </template>
                 </el-table-column> -->
-                <el-table-column prop="memo" label="预计发放人数" align="center">
+                <el-table-column prop="memo" label="发放人数" align="center" width="120">
                     <template slot-scope="scope">{{scope.row.customNumber}}</template>
+                </el-table-column>
+                <el-table-column label="发放时间" align="center" width="170">
+                    <template slot-scope="scope">{{scope.row.createDate}}</template>
                 </el-table-column>
                 <el-table-column label="优惠券详细信息" align="center">
                     <template slot-scope="scope">{{scope.row.couponDetail}}</template>
-                </el-table-column>
-                <el-table-column label="发放时间" align="center">
-                    <template slot-scope="scope">{{scope.row.createDate}}</template>
                 </el-table-column>
             </el-table>
             <div class="pagination">

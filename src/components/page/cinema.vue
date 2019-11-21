@@ -63,7 +63,7 @@
                 <el-table-column prop="name" label="影院名称" fixed>
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
-                <el-table-column prop="booleans" label="是否支持自主退票" align="center">
+                <el-table-column prop="booleans" label="是否支持自主退票" align="center" width="160">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.refundable == 1" type="success">是</el-tag>
                         <el-tag v-else type="danger">否</el-tag>

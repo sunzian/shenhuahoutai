@@ -24,7 +24,7 @@
                     header-cell-class-name="table-header"
                     @selection-change="handleSelectionChange"
             >
-                <el-table-column prop="name" label="角色名" width="110">
+                <el-table-column prop="name" label="角色名" width="150">
                     <template slot-scope="scope">{{scope.row.roleName}}</template>
                 </el-table-column>
                 <el-table-column label="创建时间">

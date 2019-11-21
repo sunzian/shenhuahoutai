@@ -71,20 +71,26 @@
                 header-cell-class-name="table-header"
                 @selection-change="handleSelectionChange"
             >
-                <el-table-column label="优惠券所属影院">
+                <el-table-column label="优惠券所属影院" width="190">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
                 <el-table-column prop="name" label="用户名称" width="100">
                     <template slot-scope="scope">{{scope.row.userName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="优惠券名称">
+                <el-table-column prop="memo" label="优惠券名称" width="260">
                     <template slot-scope="scope">{{scope.row.couponName}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="领取时间" width="160">
+                    <template slot-scope="scope">{{scope.row.createDate}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="有效期开始时间" width="160">
                     <template slot-scope="scope">{{scope.row.startTime}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="有效期结束时间" width="160">
                     <template slot-scope="scope">{{scope.row.endTime}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="使用时间" width="160">
+                    <template slot-scope="scope">{{scope.row.useTime}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="使用状态" width="100">
                     <template slot-scope="scope">
@@ -106,10 +112,7 @@
                         <el-tag v-else-if="scope.row.getType=='9'">权益卡券包</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="memo" label="使用时间" width="160">
-                    <template slot-scope="scope">{{scope.row.useTime}}</template>
-                </el-table-column>
-                <el-table-column label="使用订单号" align="center" width="190">
+                <el-table-column label="使用订单号" align="center" width="260">
                     <template slot-scope="scope">{{scope.row.orderNum}}</template>
                 </el-table-column>
                 <!-- <el-table-column label="操作" align="center" fixed="right">

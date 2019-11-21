@@ -44,6 +44,9 @@
                 <el-table-column prop="code" label="活动名称">
                     <template slot-scope="scope">{{scope.row.name}}</template>
                 </el-table-column>
+                <el-table-column prop="booleans" label="券包名称" width="140">
+                    <template slot-scope="scope">{{scope.row.couponGroupName}}</template>
+                </el-table-column>
                 <el-table-column prop="code" label="送券活动类型" width="110">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.type=='1'">注册送券</el-tag>
@@ -59,7 +62,7 @@
                 <el-table-column prop="name" label="活动结束时间" width="160">
                     <template slot-scope="scope">{{scope.row.endDate}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="开启状态">
+                <el-table-column prop="sort" label="开启状态" width="100">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status=='0'">未启用</el-tag>
                         <el-tag v-else-if="scope.row.status=='1'">启用</el-tag>
@@ -71,20 +74,17 @@
                         <el-tag v-else-if="scope.row.isLimitTotal=='1'">限制</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="number" label="限购总数">
+                <el-table-column prop="number" label="限购总数" width="100">
                     <template slot-scope="scope">{{scope.row.totalNumber}}</template>
                 </el-table-column>
-                <el-table-column prop="number" label="剩余总数">
+                <el-table-column prop="number" label="剩余总数" width="100">
                     <template slot-scope="scope">{{scope.row.totalSurplus}}</template>
                 </el-table-column>
-                <el-table-column prop="booleans" label="活动描述">
-                    <template slot-scope="scope">{{scope.row.activityDesc}}</template>
-                </el-table-column>
-                <el-table-column prop="booleans" label="领取后多少天失效" width="140">
+                <!--<el-table-column prop="booleans" label="活动描述">-->
+                    <!--<template slot-scope="scope">{{scope.row.activityDesc}}</template>-->
+                <!--</el-table-column>-->
+                <el-table-column prop="booleans" label="券有效天数" width="110">
                     <template slot-scope="scope">{{scope.row.validDay}}</template>
-                </el-table-column>
-                <el-table-column prop="booleans" label="券包名称">
-                    <template slot-scope="scope">{{scope.row.couponGroupName}}</template>
                 </el-table-column>
                 <el-table-column label="操作" width="140" align="center" fixed="right">
                     <template slot-scope="scope">

@@ -37,19 +37,19 @@
                 ref="multipleTable"
                 header-cell-class-name="table-header"
             >
-                <el-table-column prop="code" label="影院编码" width="140">
+                <el-table-column prop="code" label="影院编码" width="100">
                     <template slot-scope="scope">{{scope.row.cinemaCode}}</template>
                 </el-table-column>
-                <el-table-column prop="code" label="影院名称">
+                <el-table-column prop="code" label="影院名称" width="200">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
                 <el-table-column prop="sort" label="会员卡名称">
                     <template slot-scope="scope">{{scope.row.cardLevelName}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="充值规则名称">
+                <el-table-column prop="name" label="充值规则名称" width="210">
                     <template slot-scope="scope">{{scope.row.ruleName}}</template>
                 </el-table-column>
-                <el-table-column prop="number" label="充值金额" width="100">
+                <el-table-column prop="number" label="充值金额" width="80">
                     <template slot-scope="scope">{{scope.row.rechargeAmount}}</template>
                 </el-table-column>
                 <el-table-column prop="sort" label="赠送类型" width="100" align="center" >
@@ -64,13 +64,13 @@
                         >两者都送</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="number" label="赠送金额" width="100">
+                <el-table-column prop="number" label="赠送金额" width="80">
                     <template slot-scope="scope">{{scope.row.givenMoney}}</template>
                 </el-table-column>
                 <el-table-column prop="number" label="赠送券包" width="120" >
                     <template slot-scope="scope">{{scope.row.couponGroupName}}</template>
                 </el-table-column>
-                <el-table-column prop="booleans" label="状态" width="100" align="center">
+                <el-table-column prop="booleans" label="状态" width="90" align="center">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status == 1" type="success">正常</el-tag>
                         <el-tag v-if="scope.row.status == 2" type="danger">禁用</el-tag>

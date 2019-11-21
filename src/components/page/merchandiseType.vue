@@ -20,7 +20,7 @@
                 <el-table-column prop="name" label="影院编码" width="110">
                     <template slot-scope="scope">{{scope.row.cinemaCode}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="影院名称" width="200">
+                <el-table-column prop="name" label="影院名称" width="280">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="省份" width="110">
@@ -93,12 +93,13 @@
                         </el-popover>
                     </template>
                 </el-table-column>
-                <el-table-column prop="sort" label="展示顺序" width="150">
-                    <template slot-scope="scope">{{scope.row.showSeqNo}}</template>
-                </el-table-column>
-                <el-table-column prop="sort" label="分类" width="150">
+                <el-table-column prop="sort" label="分类名称">
                     <template slot-scope="scope">{{scope.row.typeName}}</template>
                 </el-table-column>
+                <el-table-column prop="sort" label="展示顺序">
+                    <template slot-scope="scope">{{scope.row.showSeqNo}}</template>
+                </el-table-column>
+
                 <el-table-column label="操作" width="160" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-button

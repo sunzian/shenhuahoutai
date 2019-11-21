@@ -17,6 +17,15 @@
                         :value="item.cinemaCode"
                     ></el-option>
                 </el-select>
+                <el-input placeholder="优惠券名称" class="mr10" v-model="query.name" autocomplete="off"></el-input>
+                <el-select clearable v-model="query.reduceType" placeholder="优惠券类型" class="handle-select mr10">
+                    <el-option key="1" label="兑换券" value="1"></el-option>
+                    <el-option key="2" label="代金券" value="2"></el-option>
+                </el-select>
+                <el-select clearable v-model="query.status" placeholder="状态" class="handle-select mr10">
+                    <el-option key="0" label="未启用" value="0"></el-option>
+                    <el-option key="1" label="启用" value="1"></el-option>
+                </el-select>
                 <el-button style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
                 <el-button
                     type="primary"
@@ -36,15 +45,16 @@
                 <el-table-column prop="name" label="适用影院">
                     <template slot-scope="scope">{{scope.row.cinemaNames}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="卡券类型">
+                <el-table-column label="优惠券名称">
+                    <template slot-scope="scope">{{scope.row.name}}</template>
+                </el-table-column>
+                <el-table-column prop="name" label="优惠券类型" width="120">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.reduceType == 1" type="success">兑换券</el-tag>
                         <el-tag v-else type="danger">代金券</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="卡券名称">
-                    <template slot-scope="scope">{{scope.row.name}}</template>
-                </el-table-column>
+
                 <!-- <el-table-column prop="memo" label="有效期">
                     <template slot-scope="scope">{{scope.row.startDate}}至{{scope.row.endDate}}</template>
                 </el-table-column> -->
@@ -54,25 +64,25 @@
                 <el-table-column prop="sort" label="满多少可用" width="110">
                     <template slot-scope="scope">{{scope.row.achieveMoney}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="优惠金额" width="110">
+                <el-table-column prop="sort" label="优惠金额" width="100">
                     <template slot-scope="scope">{{scope.row.discountMoney}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="可发放" width="110">
+                <el-table-column prop="sort" label="可发放" width="80">
                     <template slot-scope="scope">{{scope.row.sendNumber}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="已发放" width="110">
+                <el-table-column prop="sort" label="已发放" width="80">
                     <template slot-scope="scope">{{scope.row.acquireNumber}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="已使用" width="110">
+                <el-table-column prop="sort" label="已使用" width="80">
                     <template slot-scope="scope">{{scope.row.usedNumber}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="状态" width="110">
+                <el-table-column prop="sort" label="状态" width="90">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status == 1" type="success">启用</el-tag>
                         <el-tag v-else type="danger">未启用</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" width="240" align="center">
+                <el-table-column label="操作" width="200" align="center">
                     <template slot-scope="scope">
                         <el-button
                             type="success"
@@ -1093,10 +1103,25 @@ export default {
                 target: document.querySelector('.div1')
             });
             let cinemaCode = this.query.cinemaCode;
+            let reduceType = this.query.reduceType;
+            let name = this.query.name;
+            let status = this.query.status;
             if (!cinemaCode) {
                 cinemaCode = '';
             }
+            if (!reduceType) {
+                reduceType = '';
+            }
+            if (!name) {
+                name = '';
+            }
+            if (!status) {
+                status = '';
+            }
             let jsonArr = [];
+            jsonArr.push({ key: 'reduceType', value: reduceType });
+            jsonArr.push({ key: 'name', value: name });
+            jsonArr.push({ key: 'status', value: status });
             jsonArr.push({ key: 'cinemaCodes', value: cinemaCode });
             jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
             jsonArr.push({ key: 'pageSize', value: this.query.pageSize });

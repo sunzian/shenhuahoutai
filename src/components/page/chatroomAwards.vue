@@ -35,7 +35,7 @@
                 <el-table-column prop="name" label="影院编码" width="110">
                     <template slot-scope="scope">{{scope.row.cinemaCode}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="影院名称" width="200">
+                <el-table-column prop="name" label="影院名称" width="280">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="省份" width="110">
@@ -96,7 +96,7 @@
                 ref="multipleTable"
                 header-cell-class-name="table-header"
             >
-                <el-table-column prop="name" label="影院" width="160">
+                <el-table-column prop="name" label="影院" width="280">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
                 <el-table-column label="礼物图片" width="140">

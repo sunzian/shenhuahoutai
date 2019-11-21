@@ -56,7 +56,7 @@
                             type="text"
                             icon="el-icon-circle-plus-outline"
                             @click="show(scope.row)"
-                        >查看影院详情</el-button>
+                        >查看文章列表</el-button>
                     </template>
                 </el-table-column>
             </el-table>

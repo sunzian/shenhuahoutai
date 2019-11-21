@@ -45,11 +45,11 @@
             >
 				<el-table-column type="selection" width="55">
                 </el-table-column>
-                <el-table-column prop="name" label="影院名称" width="190">
-                    <template slot-scope="scope">{{scope.row.cinemaName}}</template>
-                </el-table-column>
                 <el-table-column prop="name" label="影院编码" width="130">
                     <template slot-scope="scope">{{scope.row.cinemaCode}}</template>
+                </el-table-column>
+                <el-table-column prop="name" label="影院名称" width="260">
+                    <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
                 <el-table-column label="影厅编号" width="150">
                     <template slot-scope="scope">{{scope.row.screenCode}}</template>

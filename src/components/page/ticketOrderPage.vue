@@ -103,6 +103,12 @@
                     @click="Search"
                     class="mr10"
                 >搜索</el-button>
+                <el-button
+                        type="primary"
+                        @click="derive"
+                        icon="el-icon-circle-plus-outline"
+                        style="float: right;margin-top: 10px"
+                >导出</el-button>
             </div>
             <div class="handle-box">
                 票数：
@@ -175,12 +181,6 @@
                 <el-table-column prop="name" label="影院编码" width="85">
                     <template slot-scope="scope">{{scope.row.cinemaCode}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="开卡影院" width="85">
-                    <template slot-scope="scope">{{scope.row.openCardCinemaName}}</template>
-                </el-table-column>
-                <el-table-column prop="name" label="绑卡影院" width="85">
-                    <template slot-scope="scope">{{scope.row.bindCardCinemaName}}</template>
-                </el-table-column>
                 <el-table-column label="订单号" width="100">
                     <template slot-scope="scope">{{scope.row.orderNo}}</template>
                 </el-table-column>
@@ -202,8 +202,14 @@
                 <el-table-column prop="memo" label="原价" width="60">
                     <template slot-scope="scope">{{scope.row.totalOriginalPrice}}</template>
                 </el-table-column>
+                <el-table-column prop="memo" label="最低票价" width="80">
+                    <template slot-scope="scope">{{scope.row.totalLowestPrice}}</template>
+                </el-table-column>
                 <el-table-column prop="memo" label="实付价" width="70">
                     <template slot-scope="scope">{{scope.row.totalActualPrice}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="回传金额" width="80">
+                    <template slot-scope="scope">{{scope.row.totalSubmitPrice}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="服务费" width="70">
                     <template slot-scope="scope">{{scope.row.totalServiceFee}}</template>
@@ -216,12 +222,6 @@
                 </el-table-column>
                 <el-table-column prop="memo" label="优惠券优惠" width="100">
                     <template slot-scope="scope">{{scope.row.totalCouponDiscount}}</template>
-                </el-table-column>
-                <el-table-column prop="memo" label="最低票价" width="80">
-                    <template slot-scope="scope">{{scope.row.totalLowestPrice}}</template>
-                </el-table-column>
-                <el-table-column prop="memo" label="回传金额" width="80">
-                    <template slot-scope="scope">{{scope.row.totalSubmitPrice}}</template>
                 </el-table-column>
                 <!--<el-table-column prop="memo" label="上报金额" width="80">-->
                     <!--<template slot-scope="scope">{{scope.row.totalReportPrice}}</template>-->
@@ -253,6 +253,12 @@
                         <el-tag v-else-if="scope.row.orderStatus=='5'" type="danger">已取票</el-tag>
                         <el-tag v-else-if="scope.row.orderStatus=='6'" type="danger">已退票</el-tag>
                     </template>
+                </el-table-column>
+                <el-table-column prop="name" label="开卡影院" width="185">
+                    <template slot-scope="scope">{{scope.row.openCardCinemaName}}</template>
+                </el-table-column>
+                <el-table-column prop="name" label="消费影院" width="185">
+                    <template slot-scope="scope">{{scope.row.bindCardCinemaName}}</template>
                 </el-table-column>
                 <!--<el-table-column label="取票状态" align="center">-->
                     <!--<template slot-scope="scope">-->
@@ -329,6 +335,22 @@
                         style="width: 250px"
                         v-model="form.cinemaCode"
                         autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="开卡影院" :label-width="formLabelWidth">
+                    <el-input
+                            :disabled="true"
+                            style="width: 250px"
+                            v-model="form.openCardCinemaName"
+                            autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="绑卡影院" :label-width="formLabelWidth">
+                    <el-input
+                            :disabled="true"
+                            style="width: 250px"
+                            v-model="form.bindCardCinemaName"
+                            autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="影片名称" :label-width="formLabelWidth">
@@ -557,7 +579,6 @@
 </template>
 
 <script>
-import { fetchData } from '../../api/index';
 import { Decrypt, Encrypt, preSign, EncryptReplace, ParamsAppend } from '@/aes/utils';
 import md5 from 'js-md5';
 import axios from 'axios';
@@ -681,6 +702,81 @@ export default {
         Search() {
             this.query.pageNo = 1;
             this.getMenu();
+        },
+        derive(){
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
+            setTimeout(() => {
+                let cinemaCode = this.query.cinemaCode;
+                let orderNo = this.query.orderNo;
+                let mobile = this.query.mobile;
+                let payWay = this.query.payWay;
+                let payStatus = this.query.payStatus;
+                let orderStatus = this.query.orderStatus;
+                let startDate = this.query.startDate;
+                let endDate = this.query.endDate;
+                let sessionStartDate = this.query.sessionStartDate;
+                let sessionEndDate = this.query.sessionEndDate;
+                if (!cinemaCode) {
+                    cinemaCode = '';
+                }
+                if (!orderNo) {
+                    orderNo = '';
+                }
+                if (!mobile) {
+                    mobile = '';
+                }
+                if (!payWay) {
+                    payWay = '';
+                }
+                if (!payStatus) {
+                    payStatus = '';
+                }
+                if (!orderStatus) {
+                    orderStatus = '';
+                }
+                if (!startDate) {
+                    startDate = '';
+                }
+                if (!endDate) {
+                    endDate = '';
+                }
+                if (!sessionStartDate) {
+                    sessionStartDate = '';
+                }
+                if (!sessionEndDate) {
+                    sessionEndDate = '';
+                }
+                let jsonArr = [];
+                jsonArr.push({ key: 'tableName', value: "ticket_order" });
+                jsonArr.push({ key: 'exportKeysJson', value: "[\"id\",\"cinemaCode\",\"orderNo\",\"sessionTime\",\"mobile\",\"filmName\",\"seatName\",\"number\",\"totalOriginalPrice\",\"totalPrice\",\"totalServiceFee\",\"totalPlatHandFee\",\"totalActivityDiscount\",\"totalCouponDiscount\",\"totalActualPrice\",\"totalReportPrice\",\"totalSubmitPrice\",\"chPayStatus\",\"chPayWay\",\"payTime\",\"chOrderStatus\",\"submitTime\"]"});
+                jsonArr.push({ key: 'exportTitlesJson', value:"[\"ID\",\"影院编码\",\"订单号\",\"场次时间\",\"手机号\",\"影片名称\",\"座位\",\"数量\",\"总原价\",\"原票价\",\"服务费\",\"代售费\",\"活动优惠金额\",\"优惠券优惠金额\",\"实付金额\",\"上报金额\",\"回传金额\",\"支付状态\",\"支付方式\",\"支付时间\",\"订单状态\",\"下单时间\"]" });
+                jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
+                jsonArr.push({ key: 'orderNo', value: orderNo });
+                jsonArr.push({ key: 'mobile', value: mobile });
+                jsonArr.push({ key: 'payWay', value: payWay });
+                jsonArr.push({ key: 'payStatus', value: payStatus });
+                jsonArr.push({ key: 'orderStatus', value: orderStatus });
+                jsonArr.push({ key: 'startDate', value: startDate });
+                jsonArr.push({ key: 'endDate', value: endDate });
+                jsonArr.push({ key: 'sessionStartDate', value: sessionStartDate });
+                jsonArr.push({ key: 'sessionEndDate', value: sessionEndDate });
+                var params = ParamsAppend(jsonArr);
+                console.log(jsonArr);
+                let myObj = {
+                    method: 'get',
+                    url: '/exportExcel/ticketOrder',
+                    fileName: '影票订单统计',
+                    params: params
+                };
+                https.exportMethod(myObj);
+                loading.close();
+            }, 1500);
         },
         getAllCinema() {
             https
