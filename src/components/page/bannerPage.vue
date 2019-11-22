@@ -240,14 +240,14 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <!--<el-form-item label="选择优惠券" :label-width="formLabelWidth">-->
-                    <!--<el-button type="primary" @click="openNext">点击选择</el-button>-->
-                <!--</el-form-item>-->
-                <el-form-item label="跳转的具体类型" :label-width="formLabelWidth">
+                <el-form-item v-if="oForm.tabType==1||oForm.tabType==2||oForm.tabType==3" label="选择跳转类型" :label-width="formLabelWidth">
+                    <el-button type="primary" @click="openNext">点击选择</el-button>
+                </el-form-item>
+                <el-form-item v-if="oForm.tabType==1||oForm.tabType==2||oForm.tabType==3" label="跳转的具体类型" :label-width="formLabelWidth">
                     <el-input
                         style="width: 150px"
-                        maxlength="9"
                         v-model.number="oForm.goType"
+                        :disabled="true"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
@@ -260,16 +260,6 @@
         <!-- 编辑弹出框 -->
         <el-dialog title="编辑" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
-                <!-- <el-form-item label="轮播图级别" :label-width="formLabelWidth">
-                    <el-select v-model="form.bannerLevel" placeholder="请选择级别">
-                        <el-option
-                                v-for="item in options"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value">
-                        </el-option>
-                    </el-select>
-                </el-form-item>-->
                 <el-form-item label="适用影院" :label-width="formLabelWidth">
                     <el-select v-model="form.cinemaCodes" placeholder="请选择影院">
                         <el-option
@@ -367,10 +357,13 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="跳转的具体类型" :label-width="formLabelWidth">
+                <el-form-item v-if="oTabType==1||oTabType==2||oTabType==3" label="选择跳转类型" :label-width="formLabelWidth">
+                    <el-button type="primary" @click="openNext1">点击选择</el-button>
+                </el-form-item>
+                <el-form-item v-if="oTabType==1||oTabType==2||oTabType==3"  label="跳转的具体类型" :label-width="formLabelWidth">
                     <el-input
                         style="width: 150px"
-                        maxlength="9"
+                        :disabled="true"
                         v-model="goType"
                         autocomplete="off"
                     ></el-input>
@@ -380,6 +373,161 @@
                 <el-button @click="editVisible = false">取 消</el-button>
                 <el-button type="primary" @click="exChanger">确 定</el-button>
             </span>
+        </el-dialog>
+        <!--新增金币商品弹出框-->
+        <el-dialog title="选择跳转类型" :visible.sync="drawer">
+            <div class="container">
+                <div class="handle-box">
+                    <el-input v-model="query.name" placeholder="商品名称" class="handle-input mr10"></el-input>
+                    <el-button type="primary" icon="el-icon-search" @click="openNext">搜索</el-button>
+                </div>
+                <el-table
+                        :data="goldData"
+                        border
+                        class="table"
+                        ref="multipleTable"
+                        header-cell-class-name="table-header"
+                        @selection-change="handleSelectionChange"
+                >
+                    <el-table-column label="操作" width="100" align="center">
+                        <template slot-scope="scope">
+                            <el-radio v-model="id" :label="scope.$index" @change.native="getCurrentRow(scope.$index)">&nbsp;</el-radio>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="sort" label="金币商品名称">
+                        <template slot-scope="scope">{{scope.row.name}}</template>
+                    </el-table-column>
+                    <el-table-column prop="sort" label="商品图片">
+                        <template slot-scope="scope">
+                            <el-popover placement="right" title trigger="hover">
+                                <img style="width: 400px" :src="scope.row.imageUrl" />
+                                <img
+                                        slot="reference"
+                                        :src="scope.row.imageUrl"
+                                        :alt="scope.row.imageUrl"
+                                        style="max-height: 50px;max-width: 130px"
+                                />
+                            </el-popover>
+                        </template>
+                    </el-table-column>
+                </el-table>
+                <div class="pagination">
+                    <el-pagination
+                            background
+                            layout="total, prev, pager, next"
+                            :current-page="query.aPageNo"
+                            :page-size="query.aPageSize"
+                            :total="query.aTotalCount"
+                            @current-change="aCurrentChange"
+                            @prev-click='aPrev'
+                            @next-click="aNext"
+                    ></el-pagination>
+                </div>
+            </div>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="drawer = false">取 消</el-button>
+                <el-button type="primary" @click="sureNext">确 定</el-button>
+            </div>
+        </el-dialog>
+        <!--新增文章弹出框-->
+        <el-dialog title="选择跳转类型" :visible.sync="drawer1">
+            <div class="container">
+                <div class="handle-box">
+                    <el-input v-model="query.name" placeholder="标题" class="handle-input mr10"></el-input>
+                    <el-button type="primary" icon="el-icon-search" @click="openNext">搜索</el-button>
+                </div>
+                <el-table
+                        :data="goldData"
+                        border
+                        class="table"
+                        ref="multipleTable"
+                        header-cell-class-name="table-header"
+                        @selection-change="handleSelectionChange"
+                >
+                    <el-table-column label="操作" width="100" align="center">
+                        <template slot-scope="scope">
+                            <el-radio v-model="id" :label="scope.$index" @change.native="getCurrentRow(scope.$index)">&nbsp;</el-radio>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="sort" label="文章标题">
+                        <template slot-scope="scope">{{scope.row.title}}</template>
+                    </el-table-column>
+                    <el-table-column prop="sort" label="文章图片">
+                        <template slot-scope="scope">
+                            <el-popover placement="right" title trigger="hover">
+                                <img style="width: 400px" :src="scope.row.imageUrl" />
+                                <img
+                                        slot="reference"
+                                        :src="scope.row.imageUrl"
+                                        :alt="scope.row.imageUrl"
+                                        style="max-height: 50px;max-width: 130px"
+                                />
+                            </el-popover>
+                        </template>
+                    </el-table-column>
+                </el-table>
+                <div class="pagination">
+                    <el-pagination
+                            background
+                            layout="total, prev, pager, next"
+                            :current-page="query.aPageNo"
+                            :page-size="query.aPageSize"
+                            :total="query.aTotalCount"
+                            @current-change="aCurrentChange"
+                            @prev-click='aPrev'
+                            @next-click="aNext"
+                    ></el-pagination>
+                </div>
+            </div>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="drawer = false">取 消</el-button>
+                <el-button type="primary" @click="sureNext">确 定</el-button>
+            </div>
+        </el-dialog>
+        <!--新增电影弹出框-->
+        <el-dialog title="选择跳转类型" :visible.sync="drawer2">
+            <div class="container">
+                <div class="handle-box">
+                    <el-input v-model="query.name" placeholder="影片名称" class="handle-input mr10"></el-input>
+                    <el-button type="primary" icon="el-icon-search" @click="openNext">搜索</el-button>
+                </div>
+                <el-table
+                        :data="goldData"
+                        border
+                        class="table"
+                        ref="multipleTable"
+                        header-cell-class-name="table-header"
+                        @selection-change="handleSelectionChange"
+                >
+                    <el-table-column label="操作" width="100" align="center">
+                        <template slot-scope="scope">
+                            <el-radio v-model="id" :label="scope.$index" @change.native="getCurrentRow(scope.$index)">&nbsp;</el-radio>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="sort" label="电影名称">
+                        <template slot-scope="scope">{{scope.row.filmName}}</template>
+                    </el-table-column>
+                    <el-table-column prop="sort" label="电影制式">
+                            <template slot-scope="scope">{{scope.row.dimensional}}</template>
+                    </el-table-column>
+                </el-table>
+                <div class="pagination">
+                    <el-pagination
+                            background
+                            layout="total, prev, pager, next"
+                            :current-page="query.aPageNo"
+                            :page-size="query.aPageSize"
+                            :total="query.aTotalCount"
+                            @current-change="aCurrentChange"
+                            @prev-click='aPrev'
+                            @next-click="aNext"
+                    ></el-pagination>
+                </div>
+            </div>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="drawer = false">取 消</el-button>
+                <el-button type="primary" @click="sureNext">确 定</el-button>
+            </div>
         </el-dialog>
     </div>
 </template>
@@ -408,13 +556,18 @@ export default {
             message: '', //弹出框消息
             query: {
                 pageNo: 1,
-                pageSize: 15
+                pageSize: 15,
+                aPageNo: 1,
+                aPageSize: 15
             },
             tableData: [],
             multipleSelection: [],
             delList: [],
             cinemaList: [], //适用影院编码
             editVisible: false,
+            drawer: false,
+            drawer1: false,
+            drawer2: false,
             pageTotal: 0,
             form: {
                 bannerLevel: '',
@@ -486,10 +639,6 @@ export default {
                     value: '6',
                     label: '首页广告弹窗 建议尺寸520*690'
                 },
-                // {
-                //     value: '7',
-                //     label: '今日大牌 建议尺寸670*200'
-                // },
                 {
                     value: '8',
                     label: '签到送积分 建议尺寸670*200'
@@ -498,10 +647,6 @@ export default {
                     value: '9',
                     label: '分享得金币 建议尺寸670*200'
                 }
-                // {
-                //     value: '10',
-                //     label: '积分换金币'
-                // }
             ],
             tabType: [
                 {
@@ -522,7 +667,10 @@ export default {
                 }
             ],
             value: '',
-            goType: ''
+            goType: '',
+            goldData: [],
+            selectedSell: [],
+            sellIndex: '',
         };
     },
     created() {},
@@ -530,6 +678,330 @@ export default {
         this.getMenu();
     },
     methods: {
+        getCurrentRow(index){//优惠券弹出框index
+            this.sellIndex=index;
+        },
+        sureNext() {//新增
+            if(this.oForm.tabType==1){
+                this.oForm.goType=this.goldData[this.sellIndex].title;
+                this.oForm.redirectGoal=this.goldData[this.sellIndex].id;
+                this.drawer1 = false;
+            }
+            if(this.oForm.tabType==2){
+                this.oForm.goType=this.goldData[this.sellIndex].filmName;
+                this.oForm.redirectGoal=this.goldData[this.sellIndex].filmCode;
+                this.drawer2 = false;
+            }
+            if(this.oForm.tabType==3){
+                this.oForm.goType=this.goldData[this.sellIndex].name;
+                this.oForm.redirectGoal=this.goldData[this.sellIndex].id;
+                this.drawer = false;
+            }
+            //修改
+            if(this.oTabType==1){
+                this.goType=this.goldData[this.sellIndex].title;
+                this.form.redirectGoal=this.goldData[this.sellIndex].id;
+                this.drawer1 = false;
+            }
+            if(this.oTabType==2){
+                this.goType=this.goldData[this.sellIndex].filmName;
+                this.form.redirectGoal=this.goldData[this.sellIndex].filmCode;
+                this.drawer2 = false;
+            }
+            if(this.oTabType==3){
+                this.goType=this.goldData[this.sellIndex].name;
+                this.form.redirectGoal=this.goldData[this.sellIndex].id;
+                this.drawer = false;
+            }
+        },
+        openNext() {//新增
+            //获取优惠券列表
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
+            setTimeout(() => {
+                //跳转到文章
+                if(this.oForm.tabType==1){
+                    let title=this.query.title;
+                    if(!title){
+                        title=''
+                    }
+                    let jsonArr = [];
+                    jsonArr.push({key:"title",value:title});
+                    jsonArr.push({key:"cinemaCode",value:this.oForm.cinemaCode});
+                    jsonArr.push({key:"pageNo",value:this.query.aPageNo});
+                    jsonArr.push({key:"pageSize",value:this.query.aPageSize});
+                    let sign =md5(preSign(jsonArr));
+                    jsonArr.push({key:"sign",value:sign});
+                    console.log(jsonArr);
+                    var params = ParamsAppend(jsonArr);
+                    https.fetchPost('/noticeOfActivity/getOnlineStatusByCinemaCode',params).then((data) => {
+                        loading.close();
+                        console.log(data);
+                        if(data.data.code=='success') {
+                            this.drawer1=true;
+                            var oData = JSON.parse(Decrypt(data.data.data));
+                            console.log(oData);
+                            console.log(this.query);
+                            this.goldData = oData.data;
+                            console.log(this.sellTableData);
+                            this.query.aPageSize = oData.pageSize;
+                            this.query.aPageNo = oData.pageNo;
+                            this.query.aTotalCount = oData.totalCount;
+                            this.query.aTotalPage = oData.totalPage
+                        }else if(data.data.code=='nologin'){
+                            this.message=data.data.message;
+                            this.open();
+                            this.$router.push('/login');
+                        }else{
+                            this.message=data.data.message;
+                            this.open()
+                        }
+
+                    }).catch(err=>{
+                            loading.close();
+                            console.log(err)
+                        }
+                    )
+                }
+                //跳转到电影
+                if(this.oForm.tabType==2){
+                    let filmName=this.query.filmName;
+                    if(!filmName){
+                        filmName=''
+                    }
+                    let jsonArr = [];
+                    jsonArr.push({key:"filmName",value:filmName});
+                    jsonArr.push({key:"cinemaCode",value:this.oForm.cinemaCode});
+                    jsonArr.push({key:"pageNo",value:this.query.aPageNo});
+                    jsonArr.push({key:"pageSize",value:this.query.aPageSize});
+                    let sign =md5(preSign(jsonArr));
+                    jsonArr.push({key:"sign",value:sign});
+                    console.log(jsonArr);
+                    var params = ParamsAppend(jsonArr);
+                    https.fetchPost('/film/getByCinemaCode',params).then((data) => {
+                        loading.close();
+                        console.log(data);
+                        if(data.data.code=='success') {
+                            this.drawer2=true;
+                            var oData = JSON.parse(Decrypt(data.data.data));
+                            console.log(oData);
+                            console.log(this.query);
+                            this.goldData = oData.data;
+                            console.log(this.sellTableData);
+                            this.query.aPageSize = oData.pageSize;
+                            this.query.aPageNo = oData.pageNo;
+                            this.query.aTotalCount = oData.totalCount;
+                            this.query.aTotalPage = oData.totalPage
+                        }else if(data.data.code=='nologin'){
+                            this.message=data.data.message;
+                            this.open();
+                            this.$router.push('/login');
+                        }else{
+                            this.message=data.data.message;
+                            this.open()
+                        }
+
+                    }).catch(err=>{
+                            loading.close();
+                            console.log(err)
+                        }
+                    )
+                }
+                //跳转到金币商品
+                if(this.oForm.tabType==3){
+                    let name=this.query.name;
+                    if(!name){
+                        name=''
+                    }
+                    let jsonArr = [];
+                    jsonArr.push({key:"name",value:name});
+                    jsonArr.push({key:"cinemaCode",value:this.oForm.cinemaCode});
+                    jsonArr.push({key:"pageNo",value:this.query.aPageNo});
+                    jsonArr.push({key:"pageSize",value:this.query.aPageSize});
+                    let sign =md5(preSign(jsonArr));
+                    jsonArr.push({key:"sign",value:sign});
+                    console.log(jsonArr);
+                    var params = ParamsAppend(jsonArr);
+                    https.fetchPost('/goldCommodity/getByCinemaPage',params).then((data) => {
+                        loading.close();
+                        console.log(data);
+                        if(data.data.code=='success') {
+                            this.drawer=true;
+                            var oData = JSON.parse(Decrypt(data.data.data));
+                            console.log(oData);
+                            console.log(this.query);
+                            this.goldData = oData.data;
+                            console.log(this.sellTableData);
+                            this.query.aPageSize = oData.pageSize;
+                            this.query.aPageNo = oData.pageNo;
+                            this.query.aTotalCount = oData.totalCount;
+                            this.query.aTotalPage = oData.totalPage
+                        }else if(data.data.code=='nologin'){
+                            this.message=data.data.message;
+                            this.open();
+                            this.$router.push('/login');
+                        }else{
+                            this.message=data.data.message;
+                            this.open()
+                        }
+
+                    }).catch(err=>{
+                            loading.close();
+                            console.log(err)
+                        }
+                    )
+                }
+            }, 500);
+        },
+        openNext1() {//修改
+            //获取优惠券列表
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
+            setTimeout(() => {
+                //跳转到文章
+                if(this.oTabType==1){
+                    let title=this.query.title;
+                    if(!title){
+                        title=''
+                    }
+                    let jsonArr = [];
+                    jsonArr.push({key:"title",value:title});
+                    jsonArr.push({key:"cinemaCode",value:this.form.cinemaCodes});
+                    jsonArr.push({key:"pageNo",value:this.query.aPageNo});
+                    jsonArr.push({key:"pageSize",value:this.query.aPageSize});
+                    let sign =md5(preSign(jsonArr));
+                    jsonArr.push({key:"sign",value:sign});
+                    console.log(jsonArr);
+                    var params = ParamsAppend(jsonArr);
+                    https.fetchPost('/noticeOfActivity/getOnlineStatusByCinemaCode',params).then((data) => {
+                        loading.close();
+                        console.log(data);
+                        if(data.data.code=='success') {
+                            this.drawer1=true;
+                            var oData = JSON.parse(Decrypt(data.data.data));
+                            console.log(oData);
+                            console.log(this.query);
+                            this.goldData = oData.data;
+                            console.log(this.sellTableData);
+                            this.query.aPageSize = oData.pageSize;
+                            this.query.aPageNo = oData.pageNo;
+                            this.query.aTotalCount = oData.totalCount;
+                            this.query.aTotalPage = oData.totalPage
+                        }else if(data.data.code=='nologin'){
+                            this.message=data.data.message;
+                            this.open();
+                            this.$router.push('/login');
+                        }else{
+                            this.message=data.data.message;
+                            this.open()
+                        }
+
+                    }).catch(err=>{
+                            loading.close();
+                            console.log(err)
+                        }
+                    )
+                }
+                //跳转到电影
+                if(this.oTabType==2){
+                    let filmName=this.query.filmName;
+                    if(!filmName){
+                        filmName=''
+                    }
+                    let jsonArr = [];
+                    jsonArr.push({key:"filmName",value:filmName});
+                    jsonArr.push({key:"cinemaCode",value:this.form.cinemaCodes});
+                    jsonArr.push({key:"pageNo",value:this.query.aPageNo});
+                    jsonArr.push({key:"pageSize",value:this.query.aPageSize});
+                    let sign =md5(preSign(jsonArr));
+                    jsonArr.push({key:"sign",value:sign});
+                    console.log(jsonArr);
+                    var params = ParamsAppend(jsonArr);
+                    https.fetchPost('/film/getByCinemaCode',params).then((data) => {
+                        loading.close();
+                        console.log(data);
+                        if(data.data.code=='success') {
+                            this.drawer2=true;
+                            var oData = JSON.parse(Decrypt(data.data.data));
+                            console.log(oData);
+                            console.log(this.query);
+                            this.goldData = oData.data;
+                            console.log(this.sellTableData);
+                            this.query.aPageSize = oData.pageSize;
+                            this.query.aPageNo = oData.pageNo;
+                            this.query.aTotalCount = oData.totalCount;
+                            this.query.aTotalPage = oData.totalPage
+                        }else if(data.data.code=='nologin'){
+                            this.message=data.data.message;
+                            this.open();
+                            this.$router.push('/login');
+                        }else{
+                            this.message=data.data.message;
+                            this.open()
+                        }
+
+                    }).catch(err=>{
+                            loading.close();
+                            console.log(err)
+                        }
+                    )
+                }
+                //跳转到金币商品
+                if(this.oTabType==3){
+                    let name=this.query.name;
+                    if(!name){
+                        name=''
+                    }
+                    let jsonArr = [];
+                    jsonArr.push({key:"name",value:name});
+                    jsonArr.push({key:"cinemaCode",value:this.form.cinemaCodes});
+                    jsonArr.push({key:"pageNo",value:this.query.aPageNo});
+                    jsonArr.push({key:"pageSize",value:this.query.aPageSize});
+                    let sign =md5(preSign(jsonArr));
+                    jsonArr.push({key:"sign",value:sign});
+                    console.log(jsonArr);
+                    var params = ParamsAppend(jsonArr);
+                    https.fetchPost('/goldCommodity/getByCinemaPage',params).then((data) => {
+                        loading.close();
+                        console.log(data);
+                        if(data.data.code=='success') {
+                            this.drawer=true;
+                            var oData = JSON.parse(Decrypt(data.data.data));
+                            console.log(oData);
+                            console.log(this.query);
+                            this.goldData = oData.data;
+                            console.log(this.sellTableData);
+                            this.query.aPageSize = oData.pageSize;
+                            this.query.aPageNo = oData.pageNo;
+                            this.query.aTotalCount = oData.totalCount;
+                            this.query.aTotalPage = oData.totalPage
+                        }else if(data.data.code=='nologin'){
+                            this.message=data.data.message;
+                            this.open();
+                            this.$router.push('/login');
+                        }else{
+                            this.message=data.data.message;
+                            this.open()
+                        }
+
+                    }).catch(err=>{
+                            loading.close();
+                            console.log(err)
+                        }
+                    )
+                }
+            }, 500);
+        },
         addPage() {
             //获取新增按钮权限
             const loading = this.$loading({
@@ -764,7 +1236,8 @@ export default {
                                 }
                             }
                             this.oTabType = this.bannerType[tabIndex].value;
-                            this.goType = JSON.parse(Decrypt(data.data.data)).banner.redirectGoal;
+                            this.goType = JSON.parse(Decrypt(data.data.data)).banner.redirectGoalName;
+                            this.form.redirectGoal = JSON.parse(Decrypt(data.data.data)).banner.redirectGoal;
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
                             this.open();
@@ -801,7 +1274,7 @@ export default {
                 jsonArr.push({ key: 'memo', value: this.form.memo });
                 jsonArr.push({ key: 'category', value: this.oBannerType });
                 jsonArr.push({ key: 'redirectType', value: this.oTabType });
-                jsonArr.push({ key: 'redirectGoal', value: this.goType });
+                jsonArr.push({ key: 'redirectGoal', value: this.form.redirectGoal });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
                 console.log(jsonArr);
@@ -978,6 +1451,18 @@ export default {
             //分页按钮下一页
             this.query.pageNo++;
             this.getMenu();
+        },
+        aCurrentChange(val){//点击选择具体页数
+            this.query.aPageNo = val;
+            this.openNext()
+        },
+        aPrev(){//分页按钮上一页
+            this.query.aPageNo--;
+            this.openNext()
+        },
+        aNext(){//分页按钮下一页
+            this.query.aPageNo++;
+            this.openNext()
         }
     }
 };
