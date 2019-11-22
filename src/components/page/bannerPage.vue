@@ -30,6 +30,7 @@
                 >
                     <el-option key="1" label="显示" value="1"></el-option>
                     <el-option key="2" label="不显示" value="2"></el-option>
+                    <el-option key="3" label="过期" value="3"></el-option>
                 </el-select>
                 <el-select
                     clearable
@@ -64,24 +65,14 @@
                 header-cell-class-name="table-header"
                 @selection-change="handleSelectionChange"
             >
-                <!-- <el-table-column prop="name" label="轮播图级别" width="130">
-                    <template slot-scope="scope">
-                        <el-tag v-if="scope.row.bannerLevel=='1'"
-                        >全部影院</el-tag>
-                        <el-tag v-else-if="scope.row.bannerLevel=='2'"
-                        >部分影院</el-tag>
-                    </template>
-                </el-table-column>-->
                 <el-table-column label="适用影院" width="300">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
-                <!-- <el-table-column prop="memo" label="适用影院编码" width="130">
-                    <template slot-scope="scope">{{scope.row.cinemaCodes}}</template>
-                </el-table-column>-->
                 <el-table-column prop="sort" label="是否显示" width="120">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status=='1'">显示</el-tag>
                         <el-tag v-else-if="scope.row.status=='2'">不显示</el-tag>
+                        <el-tag v-else-if="scope.row.status=='3'">过期</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column prop="sort" label="开始时间" width="220">
@@ -125,12 +116,6 @@
                         <el-tag v-if="scope.row.redirectType=='4'">不跳转</el-tag>
                     </template>
                 </el-table-column>
-                <!--<el-table-column prop="sort" label="跳转的具体信息" width="130">-->
-                    <!--<template slot-scope="scope">{{scope.row.redirectGoal}}</template>-->
-                <!--</el-table-column>-->
-                <!--<el-table-column prop="sort" label="备注">-->
-                    <!--<template slot-scope="scope">{{scope.row.memo}}</template>-->
-                <!--</el-table-column>-->
                 <el-table-column label="操作" width="180" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-button
@@ -163,16 +148,6 @@
         <!--新增弹出框-->
         <el-dialog title="新增轮播图" :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
-                <!-- <el-form-item label="轮播图级别" :label-width="formLabelWidth">
-                    <el-select v-model="oForm.value" placeholder="请选择级别">
-                        <el-option
-                                v-for="item in options"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value">
-                        </el-option>
-                    </el-select>
-                </el-form-item>-->
                 <el-form-item label="适用影院" :label-width="formLabelWidth">
                     <el-select
                         v-model="oForm.cinemaCode"
@@ -265,6 +240,9 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
+                <!--<el-form-item label="选择优惠券" :label-width="formLabelWidth">-->
+                    <!--<el-button type="primary" @click="openNext">点击选择</el-button>-->
+                <!--</el-form-item>-->
                 <el-form-item label="跳转的具体类型" :label-width="formLabelWidth">
                     <el-input
                         style="width: 150px"

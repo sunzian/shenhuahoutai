@@ -33,9 +33,9 @@
                 <el-table-column prop="memo" label="描述">
                     <template slot-scope="scope">{{scope.row.memo}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="排序" width="110">
-                    <template slot-scope="scope">{{scope.row.sort}}</template>
-                </el-table-column>
+                <!--<el-table-column prop="sort" label="排序" width="110">-->
+                    <!--<template slot-scope="scope">{{scope.row.sort}}</template>-->
+                <!--</el-table-column>-->
                 <el-table-column label="状态" align="center" width="110">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status=='1'" type='success'

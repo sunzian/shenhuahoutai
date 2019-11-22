@@ -10,7 +10,7 @@
         <div class="container">
             <div class="handle-box">
                 <el-input v-model="query.cinemaName" placeholder="影院名称" class="handle-input mr10"></el-input>
-                <el-select clearable v-model="query.belongBusinessCode" placeholder="关联商家">
+                <el-select class="mr10" clearable v-model="query.belongBusinessCode" placeholder="关联商家">
                     <el-option
                             v-for="info in businessInfo"
                             :key="info.businessCode"
@@ -37,27 +37,27 @@
                     <el-option key="128" label="vista" value="128"></el-option>
                 </el-select>
                 <el-date-picker
-                        style="width: 200px;"
                         v-model="query.startDate"
                         type="date"
+                        class="mr10"
                         value-format="yyyy-MM-dd"
                         format="yyyy-MM-dd"
-                        placeholder="开始时间">
-                </el-date-picker>至
+                        placeholder="开始时间（起）">
+                </el-date-picker>
                 <el-date-picker
-                        style="width: 200px;"
                         v-model="query.endDate"
                         type="date"
+                        class="mr10"
                         value-format="yyyy-MM-dd"
                         format="yyyy-MM-dd"
-                        placeholder="结束时间">
+                        placeholder="结束时间（止）">
                 </el-date-picker>
-                <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
+                <el-button style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
                 <el-button
                     type="primary"
                     @click="addPage"
                     icon="el-icon-circle-plus-outline"
-                    style="margin-left: 730px"
+                    style="float: right;margin-top: 10px"
                 >新增</el-button>
             </div>
             <el-table
@@ -741,6 +741,12 @@
                             autocomplete="off"
                     ></el-input>
                 </el-form-item>
+                <el-form-item label="售票系统类型版本(目前辰星系统)：" :label-width="formLabelWidth" prop="cinemaName">
+                <el-radio-group v-model="oForm.ticketingSystemTypeVersion">
+                <el-radio label="1">1.0</el-radio>
+                <el-radio label="2">2.0</el-radio>
+                </el-radio-group>
+                </el-form-item>
                 <el-form-item prop="ticketingSystemAccount" label="售票系统账号" :label-width="formLabelWidth">
                     <el-input
                         style="width: 150px"
@@ -1325,6 +1331,12 @@
                             autocomplete="off"
                     ></el-input>
                 </el-form-item>
+                <el-form-item label="售票系统类型版本(目前辰星系统)：" :label-width="formLabelWidth" prop="cinemaName">
+                <el-radio-group v-model="oTicketingSystemTypeVersion">
+                <el-radio label="1">1.0</el-radio>
+                <el-radio label="2">2.0</el-radio>
+                </el-radio-group>
+                </el-form-item>
                 <el-form-item prop="ticketingSystemAccount" label="售票系统账号" :label-width="formLabelWidth">
                     <el-input
                         style="width: 150px"
@@ -1435,6 +1447,7 @@ export default {
             oConcatName: '',
             oConcatMobile: '',
             oServiceMobile: '',
+            oTicketingSystemTypeVersion: '',
             oScreenCount: '',
             oTicketSystemCode: '',
             oComparePriceCode: '',
@@ -1704,6 +1717,7 @@ export default {
             jsonArr.push({ key: 'miniMerchantSecret', value: this.oForm.miniMerchantSecret });
             jsonArr.push({ key: 'miniRefundCertificateUrl', value: this.oForm.miniRefundCertificateUrl });
             jsonArr.push({ key: 'ticketingSystemType', value: this.oForm.ticketingSystemType });
+            jsonArr.push({ key: 'ticketingSystemTypeVersion', value: this.oForm.ticketingSystemTypeVersion });
             jsonArr.push({ key: 'ticketingSystemAccount', value: this.oForm.ticketingSystemAccount });
             jsonArr.push({ key: 'ticketingSystemPassword', value: this.oForm.ticketingSystemPassword });
             jsonArr.push({ key: 'miniAppId', value: this.oForm.miniAppId });
@@ -1776,6 +1790,7 @@ export default {
                             this.oForm.miniMerchantSecret = '';
                             this.oForm.miniRefundCertificateUrl = '';
                             this.oForm.ticketingSystemType = '';
+                            this.oForm.ticketingSystemTypeVersion = '';
                             this.oForm.ticketingSystemAccount = '';
                             this.oForm.ticketingSystemPassword = '';
                             this.oForm.miniAppId = '';
@@ -2013,6 +2028,12 @@ export default {
                             this.oMessagePlatformPassword = JSON.parse(Decrypt(data.data.data)).CinemaMessagePlatFormInfo.messagePlatformPassword;
                             this.oMessagePlatformSignId = JSON.parse(Decrypt(data.data.data)).CinemaMessagePlatFormInfo.messagePlatformSignId;
                         }
+                        if (JSON.parse(Decrypt(data.data.data)).Cinema.ticketingSystemTypeVersion == 1) {
+                            this.oTicketingSystemTypeVersion = '1';
+                        }
+                        if (JSON.parse(Decrypt(data.data.data)).Cinema.ticketingSystemTypeVersion == 2) {
+                            this.oTicketingSystemTypeVersion = '2';
+                        }
                         this.oMiniAppSecret = JSON.parse(Decrypt(data.data.data)).Cinema.miniAppSecret;
                         this.oMiniMerchantNo = JSON.parse(Decrypt(data.data.data)).Cinema.miniMerchantNo;
                         this.oMiniMerchantSecret = JSON.parse(Decrypt(data.data.data)).Cinema.miniMerchantSecret;
@@ -2079,6 +2100,7 @@ export default {
             jsonArr.push({ key: 'snackEndTime', value: this.oSnackEndTime });
             jsonArr.push({ key: 'messagePlatformType', value: this.oMessagePlatformType });
             jsonArr.push({ key: 'equityCardAgreement', value: this.oEquityCardAgreement });
+            jsonArr.push({ key: 'ticketingSystemTypeVersion', value: this.oTicketingSystemTypeVersion });
             let messageInfos = [];
             if (this.oMessageType1) {
                 messageInfos.push({ 'messageType':  1 , 'content': this.oMessageType1 });
@@ -2338,27 +2360,18 @@ export default {
 </style>
 
 <style scoped>
-.handle-box {
-    margin-bottom: 20px;
-}
-
-.handle-select {
-    width: 120px;
-}
-
-.handle-input {
-    width: 300px;
-    display: inline-block;
-}
-.table {
-    width: 100%;
-    font-size: 14px;
-}
-.red {
-    color: #ff0000;
-}
-.mr10 {
-    margin-right: 10px;
-}
+    .handle-box {
+        width: 100%;
+        margin-bottom: 20px;
+        font-size: 14px;
+    }
+    .table {
+        width: 100%;
+        font-size: 14px;
+    }
+    .mr10 {
+        width: 16%;
+        margin-right: 10px;
+    }
 </style>
 

@@ -61,7 +61,7 @@
                 <el-table-column prop="sort" label="优惠金额" width="100">
                     <template slot-scope="scope">{{scope.row.discountMoney}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="可发放" width="80">
+                <el-table-column prop="sort" label="总库存" width="80">
                     <template slot-scope="scope">{{scope.row.sendNumber}}</template>
                 </el-table-column>
                 <el-table-column prop="sort" label="已发放" width="80">
@@ -148,22 +148,6 @@
                         >{{item.merchandiseName}}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
-                <!-- <el-form-item label="有效期：" :label-width="formLabelWidth">
-                    <el-date-picker
-                        v-model="oForm.startDate"
-                        type="datetime"
-                        placeholder="开始时间"
-                        value-format="yyyy-MM-dd HH:mm:ss"
-                        format="yyyy-MM-dd HH:mm:ss"
-                    ></el-date-picker>至
-                    <el-date-picker
-                        v-model="oForm.endDate"
-                        type="datetime"
-                        placeholder="结束时间"
-                        value-format="yyyy-MM-dd HH:mm:ss"
-                        format="yyyy-MM-dd HH:mm:ss"
-                    ></el-date-picker>
-                </el-form-item> -->
                 <el-form-item label="支付类型：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.validPayType">
                         <el-radio label="0">全部</el-radio>
@@ -475,13 +459,16 @@ export default {
                 exceptWeekDay: ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日'],
                 startDate: '',
                 endDate: '',
-                validPayType: '',
+                validPayType: '0',
                 achieveMoney: '',
                 discountMoney: '',
-                reduceType: '',
+                selectMerchandiseType: '0',
+                reduceType: '1',
+                holidayValid: '1',
+                activityTogether: '1',
                 couponDesc: '',
                 id: '',
-                status: ''
+                status: '0'
             },
             formLabelWidth: '120px',
             selectValue: {},
@@ -577,16 +564,15 @@ export default {
                             this.oForm.cinemaName = '';
                             this.oForm.merchandiseCode = [];
                             this.oForm.merchandiseName = '';
-                            // this.oForm.startDate = '';
-                            // this.oForm.endDate = '';
-                            this.oForm.validPayType = '';
-                            this.oForm.reduceType = '';
+                            this.oForm.selectMerchandiseType = '0';
+                            this.oForm.validPayType = '0';
+                            this.oForm.reduceType = '1';
                             this.oForm.achieveMoney = '';
                             this.oForm.discountMoney = '';
-                            this.oForm.holidayValid = '';
+                            this.oForm.holidayValid = '1';
                             this.oForm.checkedDays = [];
-                            this.oForm.status = '';
-                            this.oForm.activityTogether = '';
+                            this.oForm.status = '0';
+                            this.oForm.activityTogether = '1';
                             this.oForm.sendNumber = '';
                             this.oForm.couponDesc = '';
                             this.getMenu();
@@ -900,7 +886,6 @@ export default {
                     if (data.data.code == 'success') {
                         var oData = JSON.parse(Decrypt(data.data.data));
                         console.log(oData);
-                        // console.log(oData.pageResult);
                         this.cinemaInfo = [];
                         for (let i = 0; i < oData.cinemaList.length; i++) {
                             let cinemaList = {};
@@ -908,6 +893,8 @@ export default {
                             cinemaList.cinemaName = oData.cinemaList[i].cinemaName;
                             this.cinemaInfo.push(cinemaList);
                         }
+                        this.oForm.cinemaCode = this.cinemaInfo[0].cinemaCode;
+                        this.selectValue = this.cinemaInfo[0].cinemaCode;
                         this.tableData = oData.pageResult.data;
                         this.query.pageSize = oData.pageResult.pageSize;
                         this.query.pageNo = oData.pageResult.pageNo;

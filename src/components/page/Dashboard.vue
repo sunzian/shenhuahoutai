@@ -12,7 +12,7 @@
         <el-col :span="11" style="margin-left: 1.7%;margin-top: 0.8%">
                 <el-card shadow="hover" class="mgb20" style="height:352px;">
                     <div style="float: left;"><b>昨日</b></div>
-                    <div style="float: right"><b>平台排名</b>&nbsp;<b class="red">2</b></div>
+                    <!--<div style="float: right"><b>平台排名</b>&nbsp;<b class="red">2</b></div>-->
                     <div class="clear"></div>
                     <div style="background: #EFEDED;width: 45%;float: left;text-align: center;margin-top: 1.7%;height: 110px;line-height: 45px;margin-left: 4.5%">
                         <div class="grid-num blue" style="margin-top: 4%">{{aForm.totalFilmIncome}}</div>
@@ -39,7 +39,7 @@
         <el-col :span="11" style="margin-left: 5%;margin-top: 0.8%">
                 <el-card shadow="hover" class="mgb20" style="height:352px;">
                     <div style="float: left;"><b>累积</b></div>
-                    <div style="float: right"><b>平台排名</b>&nbsp;<b class="red">2</b></div>
+                    <!--<div style="float: right"><b>平台排名</b>&nbsp;<b class="red">2</b></div>-->
                     <div class="clear"></div>
                     <div style="width: 45%;float: left;text-align: center;margin-top:  1.7%;height: 110px;line-height: 45px;margin-left:  4.5%">
                         <div class="grid-num blue" style="margin-top: 4%">{{oForm.totalFilmIncome}}</div>

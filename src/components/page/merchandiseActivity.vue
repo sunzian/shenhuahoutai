@@ -870,6 +870,7 @@
                             this.oForm.name = '';
                             this.selectValue = [];
                             this.selectScreenCode = '';
+                            this.value1 = '';
                             this.oForm.selectFilmType = '0';
                             this.oForm.filmCode = '';
                             this.oForm.startDate = '';
@@ -880,6 +881,9 @@
                             this.oForm.discountMoney = '';
                             this.oForm.holidayValid = '1';
                             this.oForm.checkedDays = [];
+                            this.dateInfo=[];
+                            this.startArr=[];
+                            this.endArr=[];
                             this.oForm.status = '0';
                             this.oForm.activityTogether = '0';
                             this.oForm.sendNumber = '';

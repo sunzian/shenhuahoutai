@@ -164,10 +164,10 @@
         <el-dialog :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
                 <el-form-item label="权益卡名称：" :label-width="formLabelWidth" prop="name">
-                    <el-input style="width: 150px" v-model="oForm.name" autocomplete="off"></el-input>
+                    <el-input style="width: 150px" v-model="oForm.name" maxlength="15" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="权益卡简短描述：" :label-width="formLabelWidth" prop="name">
-                    <el-input style="width: 150px" v-model="oForm.simpleDesc" autocomplete="off"></el-input>
+                    <el-input style="width: 150px" v-model="oForm.simpleDesc" maxlength="16" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="选择影院：" :label-width="formLabelWidth" prop="cinemaName">
                     <el-radio-group v-model="oForm.cinemaCode" @change="selectCinema">
@@ -192,7 +192,7 @@
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item v-if="oForm.isFilmJoin==1&&oForm.cardType==1" label="影票优惠简短描述：" :label-width="formLabelWidth" prop="screenName">
-                  <el-input v-model="oForm.filmSimpleDesc"></el-input>
+                  <el-input v-model="oForm.filmSimpleDesc" maxlength="70" type="textarea"></el-input>
                 </el-form-item>
                 <el-form-item v-if="oForm.isFilmJoin==1&&oForm.cardType==1" label="选择影厅：" :label-width="formLabelWidth" prop="screenName">
                     <el-radio-group v-model="oForm.selectHallType">
@@ -300,7 +300,7 @@
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item v-if="oForm.isMerchandiseJoin==1&&oForm.cardType==1" label="卖品优惠简短描述：" :label-width="formLabelWidth" prop="screenName">
-                    <el-input v-model="oForm.merchandiseSimpleDesc"></el-input>
+                    <el-input v-model="oForm.merchandiseSimpleDesc" maxlength="70" type="textarea"></el-input>
                 </el-form-item>
                 <el-form-item v-if="oForm.isMerchandiseJoin==1&&oForm.cardType==1"  label="优惠方式：" :label-width="formLabelWidth" prop="reduceType">
                     <el-radio-group v-model="oForm.reduceTypeMerchandise">
@@ -383,7 +383,7 @@
                     <el-button type="primary" @click="changeCoupon">选择券包</el-button>
                 </el-form-item>
                 <el-form-item
-                        v-if="couponId"
+                        v-if="couponId&&oForm.cardType==2"
                         label="所选券包："
                         :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="groupName" autocomplete="off" disabled></el-input>&nbsp;&nbsp;&nbsp;&nbsp;
@@ -577,10 +577,10 @@
         <el-dialog title="修改" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
                 <el-form-item label="权益卡名称：" :label-width="formLabelWidth" prop="name">
-                    <el-input style="width: 150px" v-model="oName" autocomplete="off"></el-input>
+                    <el-input style="width: 150px" v-model="oName" maxlength="15" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="权益卡简短描述：" :label-width="formLabelWidth" prop="name">
-                    <el-input style="width: 150px" v-model="oSimpleDesc" autocomplete="off"></el-input>
+                    <el-input style="width: 150px" v-model="oSimpleDesc" maxlength="16" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="选择影院：" :label-width="formLabelWidth" prop="cinemaName">
                     <el-radio-group v-model="oCinemaCode" @change="selectCinema">
@@ -605,7 +605,7 @@
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item v-if="oIsFilmJoin==1&&oCardType==1" label="影票优惠简短描述：" :label-width="formLabelWidth" prop="screenName">
-                    <el-input v-model="oFilmSimpleDesc"></el-input>
+                    <el-input v-model="oFilmSimpleDesc"  maxlength="70" type="textarea"></el-input>
                 </el-form-item>
                 <el-form-item v-if="oIsFilmJoin==1&&oCardType==1" label="选择影厅：" :label-width="formLabelWidth" prop="screenName">
                     <el-radio-group v-model="oSelectHallType">
@@ -713,7 +713,7 @@
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item v-if="oIsMerchandiseJoin==1&&oCardType==1" label="卖品优惠简短描述：" :label-width="formLabelWidth" prop="screenName">
-                    <el-input v-model="oMerchandiseSimpleDesc"></el-input>
+                    <el-input v-model="oMerchandiseSimpleDesc" maxlength="70" type="textarea"></el-input>
                 </el-form-item>
                 <el-form-item v-if="oIsMerchandiseJoin==1&&oCardType==1"  label="优惠方式：" :label-width="formLabelWidth" prop="reduceType">
                     <el-radio-group v-model="oReduceTypeMerchandise">
@@ -796,7 +796,7 @@
                     <el-button type="primary" @click="changeCoupon">选择券包</el-button>
                 </el-form-item>
                 <el-form-item
-                        v-if="couponId"
+                        v-if="couponId&&oCardType==2"
                         label="所选券包："
                         :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="groupName" autocomplete="off" disabled></el-input>&nbsp;&nbsp;&nbsp;&nbsp;
@@ -991,7 +991,7 @@
         <el-dialog title="选择券包" :visible.sync="drawerCoupon">
             <div class="container">
                 <div class="handle-box">
-                    <el-input v-model="groupName" placeholder="券包名称" class="handle-input mr10"></el-input>
+                    <el-input v-model="query.groupName" placeholder="券包名称" class="handle-input mr10"></el-input>
                     <el-button type="primary" icon="el-icon-search" @click="changeCoupon">搜索</el-button>
                 </div>
                 <el-table
@@ -1266,12 +1266,13 @@
             },
             // 更换券包
             changeCoupon() {
-                if(!this.groupName){
-                    this.groupName=''
+                let groupName=this.query.groupName
+                if(!groupName){
+                    groupName=''
                 }
                 let jsonArr = [];
                 jsonArr.push({ key: 'cinemaCodes', value: this.oForm.cinemaCode });
-                jsonArr.push({ key: 'groupName', value: this.groupName });
+                jsonArr.push({ key: 'groupName', value: groupName});
                 jsonArr.push({ key: 'status', value: 1 });
                 jsonArr.push({ key: 'pageNo', value: this.query.bPageNo });
                 jsonArr.push({ key: 'pageSize', value: this.query.bPageSize });
