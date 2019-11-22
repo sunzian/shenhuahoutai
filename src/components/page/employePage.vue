@@ -105,7 +105,7 @@
                 <el-table-column prop="sort" label="推荐充值总金额">
                     <template slot-scope="scope">{{scope.row.rechargeMoney}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="二维码" width="150">
+                <el-table-column prop="sort" label="二维码（右键另存为）" align="center" width="200">
                     <template slot-scope="scope">
                         <el-popover placement="right" title trigger="hover" v-if="scope.row.qrCode">
                             <img style="width:400px" :src="scope.row.qrCode" />
