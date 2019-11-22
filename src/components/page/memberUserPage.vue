@@ -60,7 +60,7 @@
                 ref="multipleTable"
                 header-cell-class-name="table-header"
                 @selection-change="handleSelectionChange"
-            >
+                >
                 <el-table-column prop="name" label="头像" width="90">
                     <template slot-scope="scope">
                         <el-popover placement="right" title trigger="hover">

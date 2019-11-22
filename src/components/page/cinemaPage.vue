@@ -75,7 +75,7 @@
                 <el-table-column prop="name" label="影院名称" fixed>
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
-                <el-table-column prop="time" label="开场前的购票时间限制">
+                <!-- <el-table-column prop="time" label="开场前的购票时间限制">
                     <template slot-scope="scope">{{scope.row.buyMinutesLimit}}</template>
                 </el-table-column>
                 <el-table-column prop="time" label="开场前的退票时间限制">
@@ -107,13 +107,25 @@
                         <el-tag v-if="scope.row.refundable == 1" type="success">是</el-tag>
                         <el-tag v-else type="danger">否</el-tag>
                     </template>
+                </el-table-column> -->
+                <el-table-column prop="string" label="售票系统">
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row.ticketingSystemType == 1" type="info">辰星</el-tag>
+                        <el-tag v-else-if="scope.row.ticketingSystemType == 2" type="info">电影1905</el-tag>
+                        <el-tag v-else-if="scope.row.ticketingSystemType == 4" type="info">满天星</el-tag>
+                        <el-tag v-else-if="scope.row.ticketingSystemType == 8" type="info">粤科</el-tag>
+                        <el-tag v-else-if="scope.row.ticketingSystemType == 16" type="info">云智</el-tag>
+                        <el-tag v-else-if="scope.row.ticketingSystemType == 32" type="info">火烈鸟</el-tag>
+                        <el-tag v-else-if="scope.row.ticketingSystemType == 64" type="info">鼎星</el-tag>
+                        <el-tag v-else-if="scope.row.ticketingSystemType == 128" type="info">vista</el-tag>
+                    </template>
                 </el-table-column>
-                <el-table-column prop="string" label="短信平台类型">
+                <!-- <el-table-column prop="string" label="短信平台类型">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.messagePlatformType == 1" type="info">专信云</el-tag>
                         <el-tag v-else type="info">三体</el-tag>
                     </template>
-                </el-table-column>
+                </el-table-column> -->
                 <el-table-column prop="booleans" label="是否开通服务">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.openStatus == 1" type="success">是</el-tag>
@@ -122,6 +134,9 @@
                 </el-table-column>
                 <el-table-column prop="time" label="到期时间">
                     <template slot-scope="scope">{{scope.row.expireDate}}</template>
+                </el-table-column>
+                <el-table-column prop="time" label="剩余张数">
+                    <template slot-scope="scope">{{scope.row.remainTicketsNumber}}</template>
                 </el-table-column>
                 <el-table-column prop="string" label="费用支付类型">
                     <template slot-scope="scope">
@@ -135,7 +150,7 @@
                         <el-tag v-else type="info">优惠后价格上报</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="booleans" label="是否开通会员卡功能">
+                <!-- <el-table-column prop="booleans" label="是否开通会员卡功能">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.openMemberCardStatus == 1" type="success">开通</el-tag>
                         <el-tag v-else type="danger">未开通</el-tag>
@@ -152,7 +167,7 @@
                         <el-tag v-if="scope.row.ticketsForMemberCardPayStatus == 1" type="success">是</el-tag>
                         <el-tag v-else type="danger">否</el-tag>
                     </template>
-                </el-table-column>
+                </el-table-column> -->
                 <el-table-column label="操作" width="100" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-button
@@ -2242,6 +2257,7 @@ export default {
                     loading.close();
                     if (data.data.code == 'success') {
                         var oData = JSON.parse(Decrypt(data.data.data));
+                        console.log(oData)
                         this.tableData = oData.data;
                         this.query.pageSize = oData.pageSize;
                         this.query.pageNo = oData.pageNo;

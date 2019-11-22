@@ -126,6 +126,11 @@ export default new Router({
                     meta: { title: '权益卡用户列表' }
                 },
                 {
+                    path: '/sendCouponPage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/sendCouponPage.vue'),
+                    meta: { title: '优惠券发放' }
+                },
+                {
                     path: '/batchSendCouponRecord',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/batchSendCouponRecord.vue'),
                     meta: { title: '优惠券发放记录' }
