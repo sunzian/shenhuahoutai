@@ -526,7 +526,9 @@ export default {
                         console.log(data);
                         if (data.data.code == 'success') {
                             this.dialogFormVisible = false;
-                            this.$refs.download.clearFiles();
+                            if(this.oForm.type==2){
+                                this.$refs.download.clearFiles();
+                            }
                             this.$message.success(`新增成功`);
                             this.couponInfo={};
                             this.show(this.cinemaCode);

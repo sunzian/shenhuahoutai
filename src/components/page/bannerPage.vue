@@ -30,6 +30,7 @@
                 >
                     <el-option key="1" label="显示" value="1"></el-option>
                     <el-option key="2" label="不显示" value="2"></el-option>
+                    <el-option key="3" label="过期" value="3"></el-option>
                 </el-select>
                 <el-select
                     clearable
@@ -82,6 +83,7 @@
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status=='1'">显示</el-tag>
                         <el-tag v-else-if="scope.row.status=='2'">不显示</el-tag>
+                        <el-tag v-else-if="scope.row.status=='3'">过期</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column prop="sort" label="开始时间" width="220">

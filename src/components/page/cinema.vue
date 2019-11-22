@@ -582,6 +582,12 @@
                         <!--autocomplete="off"-->
                     <!--&gt;</el-input>-->
                 <!--</el-form-item>-->
+                <!--<el-form-item label="售票系统类型版本(目前辰星系统)：" :label-width="formLabelWidth" prop="cinemaName">-->
+                    <!--<el-radio-group v-model="oTicketingSystemTypeVersion">-->
+                        <!--<el-radio label="1">1.0</el-radio>-->
+                        <!--<el-radio label="2">2.0</el-radio>-->
+                    <!--</el-radio-group>-->
+                <!--</el-form-item>-->
                 <el-form-item prop="verificationCode" label="影院奖品核销码" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oVerificationCode" autocomplete="off"></el-input>
                 </el-form-item>
@@ -634,6 +640,7 @@ export default {
             oInterfaceAddress: '',
             oTicketingSystemType: '',
             oBelongBusinessCode: '',
+            oTicketingSystemTypeVersion: '',
             oMiniAppName: '',
             oMiniAppQRCode: '',
             oVideoStatus: '',
@@ -888,6 +895,12 @@ export default {
                                 this.oMessageType6 = JSON.parse(Decrypt(data.data.data)).MessageInfo[i].content
                             }
                         }
+                        if (JSON.parse(Decrypt(data.data.data)).Cinema.ticketingSystemTypeVersion == 1) {
+                            this.oTicketingSystemTypeVersion = '1';
+                        }
+                        if (JSON.parse(Decrypt(data.data.data)).Cinema.ticketingSystemTypeVersion == 2) {
+                            this.oTicketingSystemTypeVersion = '2';
+                        }
                         for (let x in this.boolean) {
                             if (this.boolean[x].value == JSON.parse(Decrypt(data.data.data)).Cinema.videoStatus) {
                                 this.oVideoStatus = this.boolean[x].value;
@@ -964,6 +977,7 @@ export default {
             jsonArr.push({ key: 'snackEndTime', value: this.oSnackEndTime });
             jsonArr.push({ key: 'equityCardAgreement', value: this.oEquityCardAgreement });
             jsonArr.push({ key: 'goldActivityMemo', value: this.oGoldActivityMemo });
+            jsonArr.push({ key: 'ticketingSystemTypeVersion', value: this.oTicketingSystemTypeVersion });
             // jsonArr.push({ key: 'messagePlatformType', value: this.oMessagePlatformType });
             // let messageInfos = [];
             // if (this.oMessageType1) {

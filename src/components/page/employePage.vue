@@ -152,10 +152,36 @@
         <el-dialog :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
                 <el-form-item label="员工名称：" :label-width="formLabelWidth" prop="cinemaName">
-                    <el-input style="width: 150px" v-model="oForm.name" autocomplete="off"></el-input>
+                    <el-input style="width: 150px" v-model="oForm.name" maxlength="10" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="员工手机号码：" :label-width="formLabelWidth" prop="cinemaName">
-                    <el-input style="width: 150px" v-model="oForm.employeeMobile" autocomplete="off"></el-input>
+                    <el-input style="width: 150px" v-model="oForm.employeeMobile" maxlength="18" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="推荐客户充值时是否赠送客户券包：" :label-width="formLabelWidth" prop="cinemaName">
+                    <el-radio-group v-model="oForm.couponGroupStatus">
+                        <el-radio label="1">赠送</el-radio>
+                        <el-radio label="2">不赠送</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item
+                        v-if="oForm.couponGroupStatus==1"
+                        label="设置券包："
+                        :label-width="formLabelWidth">
+                    <el-button type="primary" @click="changeCoupon">选择券包</el-button>
+                </el-form-item>
+                <el-form-item
+                        v-if="couponId&&oForm.couponGroupStatus==1"
+                        label="所选券包："
+                        :label-width="formLabelWidth">
+                    <el-input style="width: 150px" v-model="groupName" autocomplete="off" disabled></el-input>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <span
+                            v-if="groupName"
+                            style="color:red;cursor: pointer;"
+                            @click="deletCoupon"
+                    >删除</span>
+                </el-form-item>
+                <el-form-item v-if="groupName&&oForm.couponGroupStatus==1" label="领取后几天过期：" :label-width="formLabelWidth" prop="cinemaName">
+                    <el-input style="width: 150px" v-model="oForm.overDays" autocomplete="off"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -170,17 +196,94 @@
                     <el-input
                         style="width: 150px"
                         v-model="oName"
+                        maxlength="10"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="员工手机号码：" :label-width="formLabelWidth">
-                    <el-input style="width: 150px" v-model="oEmployeeMobile" autocomplete="off"></el-input>
+                    <el-input style="width: 150px" v-model="oEmployeeMobile" maxlength="18" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="推荐客户充值时是否赠送客户券包：" :label-width="formLabelWidth" prop="cinemaName">
+                    <el-radio-group v-model="oCouponGroupStatus">
+                        <el-radio label="1">赠送</el-radio>
+                        <el-radio label="2">不赠送</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item
+                        v-if="oCouponGroupStatus==1"
+                        label="设置券包："
+                        :label-width="formLabelWidth">
+                    <el-button type="primary" @click="changeCoupon">选择券包</el-button>
+                </el-form-item>
+                <el-form-item
+                        v-if="couponId&&oCouponGroupStatus==1"
+                        label="所选券包："
+                        :label-width="formLabelWidth">
+                    <el-input style="width: 150px" v-model="groupName" autocomplete="off" disabled></el-input>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <span
+                            v-if="groupName"
+                            style="color:red;cursor: pointer;"
+                            @click="deletCoupon"
+                    >删除</span>
+                </el-form-item>
+                <el-form-item v-if="groupName&&oCouponGroupStatus==1" label="领取后几天过期：" :label-width="formLabelWidth" prop="cinemaName">
+                    <el-input style="width: 150px" v-model="oOverDays" autocomplete="off"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false">取 消</el-button>
                 <el-button type="primary" @click="exChanger">确 定</el-button>
             </span>
+        </el-dialog>
+        <!-- 选择券包弹出窗 -->
+        <el-dialog title="选择券包" :visible.sync="drawerCoupon">
+            <div class="container">
+                <div class="handle-box">
+                    <el-input v-model="query.groupName" placeholder="券包名称" class="handle-input mr10"></el-input>
+                    <el-button type="primary" icon="el-icon-search" @click="changeCoupon">搜索</el-button>
+                </div>
+                <el-table
+                        :data="couponList"
+                        border
+                        class="table"
+                        ref="multipleTable"
+                        header-cell-class-name="table-header"
+                        @selection-change="handleSelectionChange"
+                >
+                    <el-table-column label="操作" width="100" align="center">
+                        <template slot-scope="scope">
+                            <el-radio v-model="couponId" :label="scope.row.id">&nbsp;</el-radio>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="sort" label="券包名称" width="150">
+                        <template slot-scope="scope">{{scope.row.groupName}}</template>
+                    </el-table-column>
+                    <el-table-column prop="sort" label="优惠券详情">
+                        <template slot-scope="scope">
+                            <span
+                                    v-for="item in scope.row.couponList"
+                                    :key="item"
+                            >{{item.couponName}}x{{item.number}}&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        </template>
+                    </el-table-column>
+                </el-table>
+                <div class="pagination">
+                    <el-pagination
+                            background
+                            layout="total, prev, pager, next"
+                            :current-page="query.bPageNo"
+                            :page-size="query.bPageSize"
+                            :total="query.bTotalCount"
+                            @current-change="bCurrentChange"
+                            @prev-click="bPrev"
+                            @next-click="bNext"
+                    ></el-pagination>
+                </div>
+            </div>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="drawerCoupon = false">取 消</el-button>
+                <el-button type="primary" @click="sureAdd(couponId)">确 定</el-button>
+            </div>
         </el-dialog>
     </div>
 </template>
@@ -198,10 +301,10 @@ export default {
             oCinemaName: '',
             oName: '',
             oEmployeeMobile: '',
+            oCouponGroupStatus: '',
             oOverDays: '',
             oImageUrl: '',
             oType: '',
-            oName: '',
             oSingleNumber: '',
             oGroupNumber: '',
             oId: '',
@@ -216,17 +319,21 @@ export default {
             message: '', //弹出框消息
             query: {
                 pageNo: 1,
-                pageSize: 15
+                pageSize: 15,
+                bPageNo: 1,
+                bPageSize: 15,
             },
             restaurants: [],
             tableData: [],
             multipleSelection: [],
+            couponList: [],
             delList: [],
             editVisible: false,
             pageTotal: 0,
             form: {},
             id: '',
             dialogFormVisible: false,
+            drawerCoupon: false,
             options: [
                 {
                     value: '1',
@@ -258,6 +365,7 @@ export default {
                 limitStatus: '',
                 groupNumber: '',
                 singleLimitNumber: '',
+                couponGroupStatus: '2',
                 type: ''
             },
             sellTableData: [],
@@ -268,7 +376,9 @@ export default {
             cinemaInfo: [],
             couponInfo: {},
             value: [],
-            couponName: ''
+            couponName: '',
+            groupName: '',
+            couponId:'',
         };
     },
     created() {
@@ -278,6 +388,63 @@ export default {
         this.getMenu();
     },
     methods: {
+        deletCoupon() {
+            this.groupName = '';
+            this.couponId = '';
+        },
+        sureAdd(id) {
+            this.couponId = id;
+            for (let i = 0; i < this.couponList.length; i++) {
+                if (this.couponList[i].id == this.couponId) {
+                    this.groupName = this.couponList[i].groupName;
+                }
+            }
+            this.drawerCoupon = false;
+        },
+        // 更换券包
+        changeCoupon() {
+            let groupName=this.query.groupName
+            if(!groupName){
+                groupName=''
+            }
+            let jsonArr = [];
+            jsonArr.push({ key: 'cinemaCodes', value: this.cinemaCode });
+            jsonArr.push({ key: 'groupName', value: groupName });
+            jsonArr.push({ key: 'status', value: 1 });
+            jsonArr.push({ key: 'pageNo', value: this.query.bPageNo });
+            jsonArr.push({ key: 'pageSize', value: this.query.bPageSize });
+            let sign = md5(preSign(jsonArr));
+            jsonArr.push({ key: 'sign', value: sign });
+            var params = ParamsAppend(jsonArr);
+            console.log(jsonArr);
+            https.fetchPost('/couponGroup/couponGroupPage', params).then(data => {
+                if (data.data.code == 'success') {
+                    var res = JSON.parse(Decrypt(data.data.data));
+                    console.log(res);
+                    if (res.data.length == 0) {
+                        this.message = '暂无券包';
+                        this.open();
+                        return;
+                    }
+                    this.couponList = res.data;
+                    this.query.bPageSize = res.pageSize;
+                    this.query.bPageNo = res.pageNo;
+                    this.query.bTotalCount = res.totalCount;
+                    this.query.bTotalPage = res.totalPage;
+                    this.drawerCoupon = true;
+                } else if (data.data.code == 'nologin') {
+                    this.message = data.data.message;
+                    this.open();
+                    this.$router.push('/login');
+                } else {
+                    this.message = data.data.message;
+                    this.open();
+                }
+            })
+                .catch(err => {
+                    console.log(err);
+                });
+        },
         addPage() {
             //获取新增按钮权限
             const loading = this.$loading({
@@ -322,6 +489,9 @@ export default {
             jsonArr.push({ key: 'employeeName', value: this.oForm.name });
             jsonArr.push({ key: 'employeeMobile', value: this.oForm.employeeMobile });
             jsonArr.push({ key: 'cinemaCode', value: this.cinemaCode });
+            jsonArr.push({ key: 'couponGroupStatus', value: this.oForm.couponGroupStatus });
+            jsonArr.push({ key: 'couponGroupId', value: this.couponId });
+            jsonArr.push({ key: 'overDays', value: this.oForm.overDays });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             console.log(jsonArr);
@@ -336,6 +506,10 @@ export default {
                         if (data.data.code == 'success') {
                             this.dialogFormVisible = false;
                             this.$message.success(`新增成功`);
+                            this.oForm.couponGroupStatus='2';
+                            this.couponId='';
+                            this.oForm.overDays='';
+                            this.groupName='';
                             this.show();
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
@@ -427,6 +601,16 @@ export default {
                         this.oName = JSON.parse(Decrypt(data.data.data)).employeeName;
                         this.oId = JSON.parse(Decrypt(data.data.data)).id;
                         this.oEmployeeMobile = JSON.parse(Decrypt(data.data.data)).employeeMobile;
+                        this.groupName = JSON.parse(Decrypt(data.data.data)).couponGroupName;
+                        this.couponId = JSON.parse(Decrypt(data.data.data)).couponGroupId;
+                        this.oCouponGroupStatus = JSON.parse(Decrypt(data.data.data)).couponGroupStatus;
+                        if(JSON.parse(Decrypt(data.data.data)).couponGroupStatus==1){
+                            this.oCouponGroupStatus= '1'
+                        }
+                        if(JSON.parse(Decrypt(data.data.data)).couponGroupStatus==2){
+                            this.oCouponGroupStatus= '2'
+                        }
+                        this.oOverDays = JSON.parse(Decrypt(data.data.data)).overDays;
                         this.editVisible = true;
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
@@ -509,6 +693,9 @@ export default {
             var jsonArr = [];
             jsonArr.push({ key: 'employeeName', value: this.oName });
             jsonArr.push({ key: 'employeeMobile', value: this.oEmployeeMobile });
+            jsonArr.push({ key: 'couponGroupStatus', value: this.oCouponGroupStatus });
+            jsonArr.push({ key: 'couponGroupId', value: this.couponId });
+            jsonArr.push({ key: 'overDays', value: this.oOverDays });
             jsonArr.push({ key: 'id', value: this.oId });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
@@ -522,6 +709,8 @@ export default {
                     // console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.$message.success(`编辑成功`);
+                        this.couponId='';
+                        this.groupName='';
                         this.show();
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
@@ -809,9 +998,6 @@ export default {
             }
             this.drawer = false;
         },
-        deletCoupon() {
-            this.couponInfo = {};
-        },
         handleSelect(item) {
             this.selectGroup = {};
             this.selectGroup = item;
@@ -858,7 +1044,22 @@ export default {
             //分页按钮下一页
             this.query.pageNo++;
             this.getMenu();
-        }
+        },
+        bCurrentChange(val) {
+            //点击选择具体页数
+            this.query.bPageNo = val;
+            this.changeCoupon();
+        },
+        bPrev() {
+            //分页按钮上一页
+            this.query.bPageNo--;
+            this.changeCoupon();
+        },
+        bNext() {
+            //分页按钮下一页
+            this.query.bPageNo++;
+            this.changeCoupon();
+        },
     }
 };
 </script>

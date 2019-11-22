@@ -67,7 +67,7 @@
                 <el-table-column prop="sort" label="优惠金额" width="100">
                     <template slot-scope="scope">{{scope.row.discountMoney}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="可发放" width="80">
+                <el-table-column prop="sort" label="总库存" width="80">
                     <template slot-scope="scope">{{scope.row.sendNumber}}</template>
                 </el-table-column>
                 <el-table-column prop="sort" label="已发放" width="80">
@@ -177,29 +177,28 @@
                         <el-radio label="1">部分影片</el-radio>
                         <el-radio label="2">排除影片</el-radio>
                     </el-radio-group>
-                    <el-col :span="12" v-if="oForm.selectFilmType != 0">
-                        搜索影片：
-                        <el-autocomplete
-                            class="inline-input"
-                            v-model="oForm.filmName"
-                            :fetch-suggestions="querySearch"
-                            placeholder="请输入内容"
-                            :trigger-on-focus="false"
-                            @select="handleSelect"
-                        ></el-autocomplete>
-                        <span style="color:blue;cursor: pointer;" @click="addFilm">添加</span>
-                    </el-col>
+                </el-form-item>
+                <el-form-item v-if="oForm.selectFilmType != 0" label="选择影片" :label-width="formLabelWidth">
+                    <el-button type="primary" @click="openNext">点击选择</el-button>
                 </el-form-item>
                 <el-form-item
-                    label="所选影片："
-                    :label-width="formLabelWidth"
-                    v-if="filmInfo.length>0 && oForm.selectFilmType != 0"
+                        label="所选影片"
+                        :label-width="formLabelWidth"
+                        v-if="selectedSell.length>0"
                 >
-                    <div v-for="(item, index) in filmInfo" :key="index">
-                        {{item.value}}
+                    <div v-for="(item, index) in selectedSell" style="margin-bottom: 5px" :key="index">
+                        <el-input
+                                style="width: 250px"
+                                v-model="item.filmName"
+                                autocomplete="off"
+                                :value="item.filmCode"
+                                :disabled="true"
+                                :change="one(item.filmCode)"
+                        >
+                        </el-input>
                         <span
-                            style="color:red;cursor: pointer;"
-                            @click="deletFilm(index)"
+                                style="color:red;cursor: pointer;"
+                                @click="deleteSell(index)"
                         >删除</span>
                     </div>
                 </el-form-item>
@@ -357,29 +356,28 @@
                         <el-radio label="1">部分影片</el-radio>
                         <el-radio label="2">排除影片</el-radio>
                     </el-radio-group>
-                    <el-col :span="12" v-if="oSelectFilmType != 0">
-                        搜索影片：
-                        <el-autocomplete
-                                class="inline-input"
-                                v-model="oFilmName"
-                                :fetch-suggestions="querySearch"
-                                placeholder="请输入内容"
-                                :trigger-on-focus="false"
-                                @select="handleSelect"
-                        ></el-autocomplete>
-                        <span style="color:blue;cursor: pointer;" @click="exAddFilm">添加</span>
-                    </el-col>
+                </el-form-item>
+                <el-form-item v-if="oSelectFilmType != 0" label="选择影片" :label-width="formLabelWidth">
+                    <el-button type="primary" @click="openNext">点击选择</el-button>
                 </el-form-item>
                 <el-form-item
-                        label="所选影片："
+                        label="所选影片"
                         :label-width="formLabelWidth"
-                        v-if="filmInfo.length>0 && oSelectFilmType != 0"
+                        v-if="selectedSell.length>0"
                 >
-                    <div v-for="(item, index) in filmInfo" :key="index">
-                        {{item.value}}
+                    <div v-for="(item, index) in selectedSell" style="margin-bottom: 5px" :key="index">
+                        <el-input
+                                style="width: 250px"
+                                v-model="item.filmName"
+                                autocomplete="off"
+                                :value="item.filmCode"
+                                :disabled="true"
+                                :change="one(item.filmCode)"
+                        >
+                        </el-input>
                         <span
                                 style="color:red;cursor: pointer;"
-                                @click="deletFilm(index)"
+                                @click="deleteSell(index)"
                         >删除</span>
                     </div>
                 </el-form-item>
@@ -481,6 +479,59 @@
                 <el-button @click="exChanger">确 定</el-button>
             </span>
         </el-dialog>
+        <!--新增抽屉弹出框-->
+        <el-dialog title="选择影片" :visible.sync="drawer">
+            <div class="container">
+                <div class="handle-box">
+                    <el-input v-model="query.filmName" placeholder="影片名称" class="handle-input mr10"></el-input>
+                    <el-button type="primary" icon="el-icon-search" @click="SearchFilm">搜索</el-button>
+                </div>
+                <el-table
+                        :data="sellTableData"
+                        border
+                        class="table"
+                        ref="multipleTable"
+                        header-cell-class-name="table-header"
+                        @selection-change="handleSelectionChange"
+                >
+                    <el-table-column label="操作" width="100" align="center">
+                        <template slot-scope="scope">
+                            <el-radio v-model="id" :label="scope.$index" @change.native="getCurrentRow(scope.$index)">&nbsp;</el-radio>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="name" label="图片">
+                        <template slot-scope="scope">
+                            <el-popover
+                                    placement="right"
+                                    title=""
+                                    trigger="hover">
+                                <img style="width:400px" :src="scope.row.image"/>
+                                <img slot="reference" :src="scope.row.image" :alt="scope.row.image" style="max-height: 50px;max-width: 130px">
+                            </el-popover>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="sort" label="影片名称" width="150">
+                        <template slot-scope="scope">{{scope.row.filmName}}</template>
+                    </el-table-column>
+                </el-table>
+                <div class="pagination">
+                    <el-pagination
+                            background
+                            layout="total, prev, pager, next"
+                            :current-page="query.pageNo"
+                            :page-size="query.pageSize"
+                            :total="query.totalCount"
+                            @current-change="aCurrentChange"
+                            @prev-click='aPrev'
+                            @next-click="aNext"
+                    ></el-pagination>
+                </div>
+            </div>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="drawer = false">取 消</el-button>
+                <el-button type="primary" @click="sureNext">确 定</el-button>
+            </div>
+        </el-dialog>
     </div>
 </template>
 
@@ -530,6 +581,7 @@ export default {
             oFilmFormatCode:[],
             oSelectFilmFormatType:'',
             oCheckedDays:[],
+            sellTableData:[],
             oCinemaName: '',
             oSelectFilmType: '',
             oScreenName: '',
@@ -558,6 +610,7 @@ export default {
             formatList:[],//电影制式列表
             delList: [],
             editVisible: false,
+            drawer: false,
             pageTotal: 0,
             form: {
 
@@ -621,6 +674,8 @@ export default {
             filmInfo: [],
             value: '',
             selectFilmCode:[],
+            selectedSell:[],
+            sellIndex:'',
         };
     },
     created() {
@@ -630,6 +685,80 @@ export default {
         this.getMenu();
     },
     methods: {
+        one(a){//获取卖品绑定的value值
+            // console.log(a);
+            this.oForm.filmCode =a
+        },
+        deleteSell(index) {
+            this.selectedSell.splice(index, 1);
+        },
+        getCurrentRow(index){
+            this.sellIndex=index
+        },
+        sureNext() {
+            if(this.sellIndex>=0){
+                // this.selectedSell=[]
+                this.selectedSell.push(this.sellTableData[this.sellIndex]);
+            }
+            this.drawer = false;
+            console.log(this.sellIndex);
+            console.log(this.sellTableData);
+            console.log(this.selectedSell);
+        },
+        SearchFilm() {
+            this.query.pageNo = 1;
+            this.openNext();
+        },
+        openNext() {
+            //获取影片列表
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
+            setTimeout(() => {
+                let filmName=this.query.filmName;
+                if(!filmName){
+                    filmName=''
+                }
+                let jsonArr = [];
+                jsonArr.push({key:"filmName",value:filmName});
+                jsonArr.push({key:"pageNo",value:this.query.pageNo});
+                jsonArr.push({key:"pageSize",value:this.query.pageSize});
+                let sign =md5(preSign(jsonArr));
+                jsonArr.push({key:"sign",value:sign});
+                var params = ParamsAppend(jsonArr);
+                https.fetchPost('film/filmPage',params).then((data) => {
+                    loading.close();
+                    console.log(data);
+                    if(data.data.code=='success') {
+                        this.drawer=true
+                        var oData = JSON.parse(Decrypt(data.data.data));
+                        console.log(oData);
+                        // console.log(this.query);
+                        this.sellTableData = oData.data;
+                        this.query.pageSize = oData.pageSize;
+                        this.query.pageNo = oData.pageNo;
+                        this.query.totalCount = oData.totalCount;
+                        this.query.totalPage = oData.totalPage
+                    }else if(data.data.code=='nologin'){
+                        this.message=data.data.message
+                        this.open()
+                        this.$router.push('/login');
+                    }else{
+                        this.message=data.data.message
+                        this.open()
+                    }
+
+                }).catch(err=>{
+                        loading.close();
+                        console.log(err)
+                    }
+                )
+            }, 500);
+        },
         addPage() {
             //获取新增按钮权限
             const loading = this.$loading({
@@ -684,8 +813,8 @@ export default {
                 this.oForm.cinemaCode = this.cinemaInfo[0].cinemaCode;
             }
             let filmeCodes = [];
-            for (let i = 0; i < this.filmInfo.length; i++) {
-                filmeCodes.push(this.filmInfo[i].filmCode);
+            for (let i = 0; i < this.selectedSell.length; i++) {
+                filmeCodes.push(this.selectedSell[i].filmCode);
             }
             this.oForm.filmCode = filmeCodes.join(',');
             if (this.oForm.selectFilmType == 0) {
@@ -748,7 +877,9 @@ export default {
                             this.oForm.discountMoney = '';
                             this.oForm.holidayValid = '';
                             this.oForm.checkedDays = [];
+                            this.selectedSell = [];
                             this.oForm.status = '';
+                            this.oForm.filmCode = '';
                             this.oForm.activityTogether = '';
                             this.oForm.sendNumber = '';
                             this.oForm.couponDesc = '';
@@ -859,14 +990,14 @@ export default {
                         if(JSON.parse(Decrypt(data.data.data)).coupon.filmCode&&JSON.parse(Decrypt(data.data.data)).coupon.filmNames){
                             let exFilmCodeList=JSON.parse(Decrypt(data.data.data)).coupon.filmCode.split(',');
                             let exFilmNameList=JSON.parse(Decrypt(data.data.data)).coupon.filmNames.split(',');
-                            this.filmInfo=[];
+                            this.selectedSell=[];
                             for(let x in exFilmNameList){
                                 let json={};
-                                json.value=exFilmNameList[x];
+                                json.filmName=exFilmNameList[x];
                                 json.filmCode=exFilmCodeList[x];
-                                this.filmInfo.push(json)
+                                this.selectedSell.push(json)
                             }
-                            console.log(this.filmInfo);
+                            console.log(this.selectedSell);
                         }
                         let formats = JSON.parse(Decrypt(data.data.data)).formatList;
                         this.formatList = [];
@@ -985,11 +1116,16 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
+            console.log(this.selectedSell);
+            let filmCodeList=[];
+            for(let x in this.selectedSell){
+                filmCodeList.push(this.selectedSell[x].filmCode)
+            }
             var jsonArr = [];
             jsonArr.push({ key: 'name', value: this.oName });
             jsonArr.push({ key: 'cinemaCodes', value: this.oCinemaCode });
             jsonArr.push({ key: 'selectFilmFormatType', value: this.oSelectFilmFormatType });
-            jsonArr.push({ key: 'filmCode', value: this.selectFilmCode.join(',') });
+            jsonArr.push({ key: 'filmCode', value: filmCodeList.join(',') });
             jsonArr.push({ key: 'selectFilmType', value: this.oSelectFilmType });
             jsonArr.push({ key: 'filmFormatCode', value: this.oFilmFormatCode.join(',') });
             jsonArr.push({ key: 'selectHallType', value: this.oSelectHallType });
@@ -1248,104 +1384,6 @@ export default {
                     console.log(err);
                 });
         },
-        // 获取影片
-        querySearch(queryString, cb) {
-            let jsonArr = [];
-            jsonArr.push({ key: 'filmName', value: queryString });
-            let sign = md5(preSign(jsonArr));
-            jsonArr.push({ key: 'sign', value: sign });
-            var params = ParamsAppend(jsonArr);
-            https
-                .fetchPost('filmCoupon/getFilmByFilmName', params)
-                .then(data => {
-                    if (data.data.code == 'success') {
-                        let films = JSON.parse(Decrypt(data.data.data));
-                        this.restaurants = films;
-                        var restaurants = this.restaurants;
-                        var results = restaurants;
-                        // 调用 callback 返回建议列表的数据
-                        cb(results);
-                    } else if (data.data.code == 'nologin') {
-                        this.message = data.data.message;
-                        this.open();
-                        this.$router.push('/login');
-                    } else {
-                        this.message = data.data.message;
-                        this.open();
-                    }
-                })
-                .catch(err => {
-                    console.log(err);
-                });
-        },
-        handleSelect(item) {
-            this.selectFilm = {};
-            this.selectFilm = item;
-        },
-        // 添加所选影片
-        addFilm() {
-            this.selectFilm = {};
-            if (this.oForm.filmName == '') {
-                return
-            }
-            if (this.restaurants.length == 0) {
-                this.message = '暂无匹配影片';
-                this.open();
-                return
-            }
-            for (var i = 0;i < this.restaurants.length; i ++) {
-                if (this.oForm.filmName == this.restaurants[i].value) {
-                    this.selectFilm = this.restaurants[i]
-                }
-            }
-            if (!this.selectFilm.value) {
-                return
-            }
-            // 筛选重复影片
-            var result = this.filmInfo.some(item => {
-                if (item.value == this.selectFilm.value) {
-                    return true;
-                }
-            });
-            if (result) {
-                return;
-            }
-            this.filmInfo.push(this.selectFilm);
-        },
-        exAddFilm() {
-            this.selectFilm = {};
-            if (this.oFilmName == '') {
-                return
-            }
-            if (this.restaurants.length == 0) {
-                this.message = '暂无匹配影片';
-                this.open();
-                return
-            }
-            for (var i = 0;i < this.restaurants.length; i ++) {
-                if (this.oFilmName == this.restaurants[i].value) {
-                    this.selectFilm = this.restaurants[i]
-                }
-            }
-            if (!this.selectFilm.value) {
-                return
-            }
-            // 筛选重复影片
-            var result = this.filmInfo.some(item => {
-                if (item.value == this.selectFilm.value) {
-                    return true;
-                }
-            });
-            if (result) {
-                return;
-            }
-            this.filmInfo.push(this.selectFilm);
-            console.log(this.selectFilm);
-
-        },
-        deletFilm(index) {
-            this.filmInfo.splice(index, 1);
-        },
         selectFormat(val) {
             console.log(val);
             this.selectFormatCode = val.join(',');
@@ -1369,6 +1407,18 @@ export default {
             //分页按钮下一页
             this.query.pageNo++;
             this.getMenu();
+        },
+        aCurrentChange(val){//点击选择具体页数
+            this.query.pageNo = val;
+            this.openNext()
+        },
+        aPrev(){//分页按钮上一页
+            this.query.pageNo--;
+            this.openNext()
+        },
+        aNext(){//分页按钮下一页
+            this.query.pageNo++;
+            this.openNext()
         }
     }
 };

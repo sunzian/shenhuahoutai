@@ -135,7 +135,7 @@
                     <template slot-scope="scope">{{scope.row.cinemaCode}}</template>
                 </el-table-column>
                 <el-table-column label="订单号" width="135">
-                    <template slot-scope="scope">{{scope.row.orderNo}}</template>
+                    <template slot-scope="scope">{{scope.row.submitOrderCode}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="手机号码" width="110">
                     <template slot-scope="scope">{{scope.row.mobile}}</template>

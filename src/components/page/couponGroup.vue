@@ -20,7 +20,7 @@
                 <el-input placeholder="券包名称" class="mr10" v-model="query.groupName" autocomplete="off"></el-input>
                 <el-select clearable v-model="query.status" placeholder="状态" class="handle-select mr10">
                     <el-option key="1" label="启用" value="1"></el-option>
-                    <el-option key="2" label="未启用" value="2"></el-option>
+                    <el-option key="0" label="未启用" value="0"></el-option>
                 </el-select>
                 <el-button style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
                 <el-button

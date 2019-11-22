@@ -123,7 +123,7 @@
                         <el-option
                             v-for="info in cardList"
                             :key="info.levelCode"
-                            :value="info.levelName"
+                            :value="info.levelCode"
                             :label="info.levelName"
                         ></el-option>
                     </el-select>

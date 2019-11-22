@@ -726,6 +726,12 @@
                             autocomplete="off"
                     ></el-input>
                 </el-form-item>
+                <el-form-item label="售票系统类型版本(目前辰星系统)：" :label-width="formLabelWidth" prop="cinemaName">
+                <el-radio-group v-model="oForm.ticketingSystemTypeVersion">
+                <el-radio label="1">1.0</el-radio>
+                <el-radio label="2">2.0</el-radio>
+                </el-radio-group>
+                </el-form-item>
                 <el-form-item prop="ticketingSystemAccount" label="售票系统账号" :label-width="formLabelWidth">
                     <el-input
                         style="width: 150px"
@@ -1310,6 +1316,12 @@
                             autocomplete="off"
                     ></el-input>
                 </el-form-item>
+                <el-form-item label="售票系统类型版本(目前辰星系统)：" :label-width="formLabelWidth" prop="cinemaName">
+                <el-radio-group v-model="oTicketingSystemTypeVersion">
+                <el-radio label="1">1.0</el-radio>
+                <el-radio label="2">2.0</el-radio>
+                </el-radio-group>
+                </el-form-item>
                 <el-form-item prop="ticketingSystemAccount" label="售票系统账号" :label-width="formLabelWidth">
                     <el-input
                         style="width: 150px"
@@ -1420,6 +1432,7 @@ export default {
             oConcatName: '',
             oConcatMobile: '',
             oServiceMobile: '',
+            oTicketingSystemTypeVersion: '',
             oScreenCount: '',
             oTicketSystemCode: '',
             oComparePriceCode: '',
@@ -1689,6 +1702,7 @@ export default {
             jsonArr.push({ key: 'miniMerchantSecret', value: this.oForm.miniMerchantSecret });
             jsonArr.push({ key: 'miniRefundCertificateUrl', value: this.oForm.miniRefundCertificateUrl });
             jsonArr.push({ key: 'ticketingSystemType', value: this.oForm.ticketingSystemType });
+            jsonArr.push({ key: 'ticketingSystemTypeVersion', value: this.oForm.ticketingSystemTypeVersion });
             jsonArr.push({ key: 'ticketingSystemAccount', value: this.oForm.ticketingSystemAccount });
             jsonArr.push({ key: 'ticketingSystemPassword', value: this.oForm.ticketingSystemPassword });
             jsonArr.push({ key: 'miniAppId', value: this.oForm.miniAppId });
@@ -1761,6 +1775,7 @@ export default {
                             this.oForm.miniMerchantSecret = '';
                             this.oForm.miniRefundCertificateUrl = '';
                             this.oForm.ticketingSystemType = '';
+                            this.oForm.ticketingSystemTypeVersion = '';
                             this.oForm.ticketingSystemAccount = '';
                             this.oForm.ticketingSystemPassword = '';
                             this.oForm.miniAppId = '';
@@ -1998,6 +2013,12 @@ export default {
                             this.oMessagePlatformPassword = JSON.parse(Decrypt(data.data.data)).CinemaMessagePlatFormInfo.messagePlatformPassword;
                             this.oMessagePlatformSignId = JSON.parse(Decrypt(data.data.data)).CinemaMessagePlatFormInfo.messagePlatformSignId;
                         }
+                        if (JSON.parse(Decrypt(data.data.data)).Cinema.ticketingSystemTypeVersion == 1) {
+                            this.oTicketingSystemTypeVersion = '1';
+                        }
+                        if (JSON.parse(Decrypt(data.data.data)).Cinema.ticketingSystemTypeVersion == 2) {
+                            this.oTicketingSystemTypeVersion = '2';
+                        }
                         this.oMiniAppSecret = JSON.parse(Decrypt(data.data.data)).Cinema.miniAppSecret;
                         this.oMiniMerchantNo = JSON.parse(Decrypt(data.data.data)).Cinema.miniMerchantNo;
                         this.oMiniMerchantSecret = JSON.parse(Decrypt(data.data.data)).Cinema.miniMerchantSecret;
@@ -2064,6 +2085,7 @@ export default {
             jsonArr.push({ key: 'snackEndTime', value: this.oSnackEndTime });
             jsonArr.push({ key: 'messagePlatformType', value: this.oMessagePlatformType });
             jsonArr.push({ key: 'equityCardAgreement', value: this.oEquityCardAgreement });
+            jsonArr.push({ key: 'ticketingSystemTypeVersion', value: this.oTicketingSystemTypeVersion });
             let messageInfos = [];
             if (this.oMessageType1) {
                 messageInfos.push({ 'messageType':  1 , 'content': this.oMessageType1 });

@@ -182,7 +182,7 @@
                     <template slot-scope="scope">{{scope.row.cinemaCode}}</template>
                 </el-table-column>
                 <el-table-column label="订单号" width="100">
-                    <template slot-scope="scope">{{scope.row.orderNo}}</template>
+                    <template slot-scope="scope">{{scope.row.submitOrderCode}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="场次时间" width="100">
                     <template slot-scope="scope">{{scope.row.sessionTime}}</template>
