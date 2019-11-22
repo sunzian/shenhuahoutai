@@ -32,7 +32,7 @@
                         @click="thirdPrice"
                         style="float: right;margin-top: 10px"
                         icon="el-icon-circle-plus-outline"
-                >批量修改会员价</el-button>
+                >批量修改展示会员价</el-button>
                 <el-button
                     type="primary"
                     @click="addPage"

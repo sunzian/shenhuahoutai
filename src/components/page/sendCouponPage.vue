@@ -17,7 +17,7 @@
                 :close-on-click-modal="false"
                 :show-close="false"
                 :close-on-press-escape="false"
-            >
+                >
                 <template>
                     <el-radio-group v-model="sendType">
                         <el-radio :label="1">筛选用户发放</el-radio>
@@ -30,6 +30,7 @@
             </el-dialog>
         </div>
         <div class="container" v-if="sendType == 1">
+            <el-button @click="chooseOtherType">选择其他方式发放</el-button>
             <div class="handle-box" style="margin-bottom: 0;">
                 <el-select
                     v-model="query.cinemaCode"
@@ -231,6 +232,7 @@
             </div>
         </div>
         <div class="container" v-if="sendType == 2">
+            <el-button @click="chooseOtherType">选择其他方式发放</el-button>
             <!--excel发送条件弹出框-->
             <div style="margin-left:50%;transform:translate(-50%)">
                 <el-form :model="excelCouponForm">
@@ -303,7 +305,6 @@
                             autocomplete="off"
                         ></el-input>天
                     </el-form-item>
-
                     <el-form-item label="选择优惠券：" :label-width="formLabelWidth" prop="screenName">
                         <el-button @click="getAllCoupon">选择优惠券</el-button>
                     </el-form-item>
@@ -345,7 +346,7 @@
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer" style="display: flex;justify-content: space-around;">
-                    <el-button @click="cancel">取 消</el-button>
+                    <!-- <el-button @click="cancel">取 消</el-button> -->
                     <el-button type="primary" @click="excelSendCoupon()">确 定</el-button>
                 </div>
             </div>
@@ -417,7 +418,7 @@
             </div>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false">取 消</el-button>
-                <el-button type="primary" @click="editVisible = false">确 定</el-button>
+                <el-button type="primary" @click="sureCoupon">确 定</el-button>
             </div>
         </el-dialog>
         <!-- 影片弹出框 -->
@@ -442,15 +443,6 @@
                     :row-key="getFilmId"
                 >
                     <el-table-column type="selection" :reserve-selection="true" width="55"></el-table-column>
-                    <!-- <el-table-column label="操作" width="100" align="center">
-                        <template slot-scope="scope">
-                            <el-radio
-                                v-model="id"
-                                :label="scope.row.filmId"
-                                @change.native="getCurrentRow(scope.row.filmId)"
-                            >&nbsp;</el-radio>
-                        </template>
-                    </el-table-column>-->
                     <el-table-column prop="sort" label="影片名称">
                         <template slot-scope="scope">{{scope.row.filmName}}</template>
                     </el-table-column>
@@ -476,7 +468,7 @@
             </div>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="seenFilmList = false">取 消</el-button>
-                <el-button type="primary" @click="seenFilmList = false">确 定</el-button>
+                <el-button type="primary" @click="sureFilm">确 定</el-button>
             </div>
         </el-dialog>
         <!--筛选用户发送条件弹出框-->
@@ -544,7 +536,7 @@
                         ></el-input>&nbsp;&nbsp;&nbsp;&nbsp;
                         数量：
                         <el-input
-                            style="width: 250px"
+                            style="width: 150px"
                             v-model="item.count"
                             autocomplete="off"
                             :value="item.count"
@@ -585,6 +577,8 @@ export default {
             seenFilmData: [],
             filmList: [],
             couponList: [],
+            selectCouponList: [],
+            selectFilmList: [],
             dialogVisible: true,
             showType: true,
             seenFilmList: false,
@@ -689,6 +683,10 @@ export default {
         }
     },
     methods: {
+        chooseOtherType() {
+            this.showType = true;
+            this.dialogVisible = true;
+        },
         // 获取所有的优惠券
         getAllCoupon() {
             if (!this.query.cinemaCode) {
@@ -714,7 +712,6 @@ export default {
                     .then(data => {
                         if (data.data.code == 'success') {
                             var res = JSON.parse(Decrypt(data.data.data));
-                            console.log(res);
                             this.couponInfo = res.pageResult.data;
                             this.query.couponPageSize = res.pageResult.pageSize;
                             this.query.couponPageNo = res.pageResult.pageNo;
@@ -1198,15 +1195,26 @@ export default {
 
         // 多选操作
         changeSelectFilm(val) {
-            this.filmList = val;
+            this.selectFilmList = val;
+        },
+
+        sureFilm() {
+            let filmList = [];
+            this.filmList = filmList.concat(this.selectFilmList)
+            this.seenFilmList = false
         },
 
         changeSelectCounpon(val) {
-            this.couponList = val;
-            for (let i = 0; i < this.couponList.length; i++) {
-                this.couponList[i].count = 1;
+            this.selectCouponList = val;
+            for (let i = 0; i < this.selectCouponList.length; i++) {
+                this.selectCouponList[i].count = 1;
             }
-            console.log(this.couponList);
+        },
+
+        sureCoupon() {
+            let couponList = [];
+            this.couponList = couponList.concat(this.selectCouponList)
+            this.editVisible = false
         },
 
         getFilmId(row) {
