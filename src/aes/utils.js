@@ -63,6 +63,7 @@ export function preSign(jsonArr) {
     // let precodeStr = jsonArr.sort((a, b) => a.key < b.key? -1: 1).reduce((all, u) => all + (u.value==undefined?"":u.value), '').replace(/^\s+|\s+$/g,"") + SIGN_KEY;
     // console.log(precodeStr);
     // return precodeStr;
+    // console.log(jsonArr)
     let preCodeArr = jsonArr.sort((a, b) => a.key < b.key? -1: 1);
     let preCodeStr='';
     preCodeArr.forEach(item=>{
