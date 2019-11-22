@@ -188,6 +188,9 @@
                         @click="deletCoupon"
                     >删除</span>
                 </el-form-item>
+                <el-form-item v-if="oForm.givenType == 3 || oForm.givenType == 4" label="优惠券领取后过期天数：" :label-width="formLabelWidth">
+                    <el-input style="width: 250px" v-model.trim="oForm.overDays" autocomplete="off"></el-input>
+                </el-form-item>
                 <el-form-item label="优惠描述：" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
@@ -293,6 +296,9 @@
                         disabled
                     ></el-input>
                     <el-button type="primary" @click="changeCoupon">更换券包</el-button>
+                </el-form-item>
+                <el-form-item v-if="oGivenType == 3 || oGivenType == 4 || oGivenType == '赠送券包' || oGivenType == '两者都送'" label="优惠券领取后过期天数：" :label-width="formLabelWidth">
+                    <el-input style="width: 250px" min="1" v-model.trim="oOverDays" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="优惠描述：" :label-width="formLabelWidth">
                     <el-input style="width: 250px" type="textarea" :maxlength="10" v-model="oRuleMemo" autocomplete="off"></el-input>
@@ -455,6 +461,7 @@ export default {
             oEndDate: '',
             oStatus: '', // 启用状态
             oId: '',
+            oOverDays: '',
             groupName: '',
             drawer: false,
             exDrawer: false,
@@ -610,6 +617,7 @@ export default {
             // jsonArr.push({ key: 'cardLevelName', value: this.oForm.levelName });
             jsonArr.push({ key: 'givenType', value: this.oForm.givenType });
             jsonArr.push({ key: 'ruleMemo', value: this.oForm.ruleMemo });
+            jsonArr.push({ key: 'overDays', value: this.oForm.overDays });
             jsonArr.push({ key: 'startDate', value: this.oForm.startDate });
             jsonArr.push({ key: 'endDate', value: this.oForm.endDate });
             jsonArr.push({ key: 'status', value: this.oForm.status });
@@ -757,6 +765,7 @@ export default {
                         this.oRuleName = JSON.parse(Decrypt(data.data.data)).rechargeCardRules.ruleName;
                         this.oRechargeAmount = JSON.parse(Decrypt(data.data.data)).rechargeCardRules.rechargeAmount;
                         this.groupName = JSON.parse(Decrypt(data.data.data)).rechargeCardRules.couponGroupName;
+                        this.oOverDays = JSON.parse(Decrypt(data.data.data)).rechargeCardRules.overDays;
                         this.couponId = JSON.parse(Decrypt(data.data.data)).rechargeCardRules.givenCouponGroupId;
                         this.oForm.levelCode = JSON.parse(Decrypt(data.data.data)).rechargeCardRules.cardLevelCode.split(",");
                         if (JSON.parse(Decrypt(data.data.data)).rechargeCardRules.givenMoney) {
@@ -898,6 +907,7 @@ export default {
             jsonArr.push({ key: 'cardLevelCode', value: this.oForm.levelCode});
             jsonArr.push({ key: 'rechargeAmount', value: this.oRechargeAmount });
             jsonArr.push({ key: 'ruleMemo', value: this.oRuleMemo });
+            jsonArr.push({ key: 'overDays', value: this.oOverDays });
             jsonArr.push({ key: 'id', value: this.oId });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });

@@ -11,8 +11,8 @@
             <div class="handle-box">
                 <el-input v-model="query.userName" placeholder="用户名" class="handle-input mr10"></el-input>
                 <el-input v-model="query.businessName" placeholder="影院公司名" class="handle-input mr10"></el-input>
-                <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
-                <el-button type="primary"  @click="addPage" icon="el-icon-circle-plus-outline"  style="margin-left: 910px">新增</el-button>
+                <el-button style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
+                <el-button type="primary"  @click="addPage" icon="el-icon-circle-plus-outline"  style="float: right;margin-top: 10px">新增</el-button>
             </div>
             <el-table
                     :data="tableData"
@@ -22,7 +22,7 @@
                     header-cell-class-name="table-header"
                     @selection-change="handleSelectionChange"
             >
-                <el-table-column prop="name" label="用户名">
+                <el-table-column prop="name" label="用户名" width="120">
                     <template slot-scope="scope">{{scope.row.userName}}</template>
                 </el-table-column>
                 <el-table-column label="创建时间">
@@ -34,7 +34,7 @@
                 <el-table-column prop="memo" label="真实姓名">
                     <template slot-scope="scope">{{scope.row.realName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="呼叫号码">
+                <el-table-column prop="memo" label="呼叫号码" width="130">
                     <template slot-scope="scope">{{scope.row.callNumber}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="影院公司名">
@@ -49,7 +49,7 @@
                 <!-- <el-table-column prop="memo" label="登录IP">
                 <template slot-scope="scope">{{scope.row.loginIp}}</template>
                 </el-table-column> -->
-                <el-table-column label="状态" align="center">
+                <el-table-column label="状态" align="center" width="90">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status=='1'" type='success'
                         >通过</el-tag>
@@ -57,7 +57,7 @@
                         >禁用</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" width="140" align="center" fixed="right">
+                <el-table-column label="操作" width="120" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-button
                                 type="text"
@@ -609,25 +609,16 @@
 
 <style scoped>
     .handle-box {
+        width: 100%;
         margin-bottom: 20px;
-    }
-
-    .handle-select {
-        width: 120px;
-    }
-
-    .handle-input {
-        width: 300px;
-        display: inline-block;
+        font-size: 14px;
     }
     .table {
         width: 100%;
         font-size: 14px;
     }
-    .red {
-        color: #ff0000;
-    }
     .mr10 {
+        width: 16%;
         margin-right: 10px;
     }
 </style>

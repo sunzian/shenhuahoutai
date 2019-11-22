@@ -10,12 +10,12 @@
         <div class="container">
             <div class="handle-box">
                 <el-input v-model="query.name" placeholder="影院名称" class="handle-input mr10"></el-input>
-                <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
+                <el-button style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
                 <el-button
                         type="primary"
                         @click="addPage"
                         icon="el-icon-circle-plus-outline"
-                        style="margin-left: 650px"
+                        style="float: right;margin-top: 10px"
                 >充值购票张数</el-button>
             </div>
             <el-table
@@ -26,13 +26,13 @@
                     ref="multipleTable"
                     header-cell-class-name="table-header"
             >
-                <el-table-column prop="code" label="影院编码">
+                <el-table-column prop="code" label="影院编码" width="150">
                     <template slot-scope="scope">{{scope.row.cinemaCode}}</template>
                 </el-table-column>
                 <el-table-column prop="code" label="影院名称">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
-                <el-table-column prop="code" label="交易方式">
+                <el-table-column prop="code" label="交易方式" width="150">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.tradeType=='1'"
                         >主动充值</el-tag>
@@ -48,7 +48,7 @@
                 <el-table-column prop="name" label="订单号">
                     <template slot-scope="scope">{{scope.row.orderCode}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="充值张数">
+                <el-table-column prop="name" label="充值张数" width="120">
                     <template slot-scope="scope">{{scope.row.tradeTicketNum}}</template>
                 </el-table-column>
                 <el-table-column prop="sort" label="交易时间" >
@@ -409,25 +409,16 @@
 
 <style scoped>
     .handle-box {
+        width: 100%;
         margin-bottom: 20px;
-    }
-
-    .handle-select {
-        width: 120px;
-    }
-
-    .handle-input {
-        width: 300px;
-        display: inline-block;
+        font-size: 14px;
     }
     .table {
         width: 100%;
         font-size: 14px;
     }
-    .red {
-        color: #ff0000;
-    }
     .mr10 {
+        width: 16%;
         margin-right: 10px;
     }
 </style>

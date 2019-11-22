@@ -202,22 +202,6 @@
                         >删除</span>
                     </div>
                 </el-form-item>
-                <!-- <el-form-item label="有效期：" :label-width="formLabelWidth" prop="date1">
-                    <el-date-picker
-                        v-model="oForm.startDate"
-                        type="datetime"
-                        placeholder="开始时间"
-                        value-format="yyyy-MM-dd HH:mm:ss"
-                        format="yyyy-MM-dd HH:mm:ss"
-                    ></el-date-picker>至
-                    <el-date-picker
-                        v-model="oForm.endDate"
-                        type="datetime"
-                        placeholder="结束时间"
-                        value-format="yyyy-MM-dd HH:mm:ss"
-                        format="yyyy-MM-dd HH:mm:ss"
-                    ></el-date-picker>
-                </el-form-item> -->
                 <el-form-item label="支付类型：" :label-width="formLabelWidth" prop="date2">
                     <el-radio-group v-model="oForm.validPayType">
                         <el-radio label="0">全部</el-radio>
@@ -659,9 +643,11 @@ export default {
                 achieveMoney: '',
                 discountMoney: '',
                 reduceType: '1',
+                activityTogether: '1',
+                holidayValid: '1',
                 couponDesc: '',
                 id: '',
-                status: ''
+                status: '0'
             },
             formLabelWidth: '120px',
             selectValue: {},
@@ -871,16 +857,16 @@ export default {
                             this.oForm.merchandiseName = '';
                             // this.oForm.startDate = '';
                             // this.oForm.endDate = '';
-                            this.oForm.validPayType = '';
-                            this.oForm.reduceType = '';
+                            this.oForm.validPayType = '0';
+                            this.oForm.reduceType = '1';
                             this.oForm.achieveMoney = '';
                             this.oForm.discountMoney = '';
-                            this.oForm.holidayValid = '';
+                            this.oForm.holidayValid = '1';
                             this.oForm.checkedDays = [];
                             this.selectedSell = [];
-                            this.oForm.status = '';
+                            this.oForm.status = '0';
                             this.oForm.filmCode = '';
-                            this.oForm.activityTogether = '';
+                            this.oForm.activityTogether = '1';
                             this.oForm.sendNumber = '';
                             this.oForm.couponDesc = '';
                             this.$message.success(`新增成功`);
@@ -1263,7 +1249,7 @@ export default {
             jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
-            console.log(jsonArr)
+            console.log(jsonArr);
             var params = ParamsAppend(jsonArr);
             https.fetchPost('/filmCoupon/filmCouponPage', params).then(data => {
                     loading.close();

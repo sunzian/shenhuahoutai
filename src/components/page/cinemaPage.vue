@@ -10,7 +10,7 @@
         <div class="container">
             <div class="handle-box">
                 <el-input v-model="query.cinemaName" placeholder="影院名称" class="handle-input mr10"></el-input>
-                <el-select clearable v-model="query.belongBusinessCode" placeholder="关联商家">
+                <el-select class="mr10" clearable v-model="query.belongBusinessCode" placeholder="关联商家">
                     <el-option
                             v-for="info in businessInfo"
                             :key="info.businessCode"
@@ -37,27 +37,27 @@
                     <el-option key="128" label="vista" value="128"></el-option>
                 </el-select>
                 <el-date-picker
-                        style="width: 200px;"
                         v-model="query.startDate"
                         type="date"
+                        class="mr10"
                         value-format="yyyy-MM-dd"
                         format="yyyy-MM-dd"
-                        placeholder="开始时间">
-                </el-date-picker>至
+                        placeholder="开始时间（起）">
+                </el-date-picker>
                 <el-date-picker
-                        style="width: 200px;"
                         v-model="query.endDate"
                         type="date"
+                        class="mr10"
                         value-format="yyyy-MM-dd"
                         format="yyyy-MM-dd"
-                        placeholder="结束时间">
+                        placeholder="结束时间（止）">
                 </el-date-picker>
-                <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
+                <el-button style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
                 <el-button
                     type="primary"
                     @click="addPage"
                     icon="el-icon-circle-plus-outline"
-                    style="margin-left: 730px"
+                    style="float: right;margin-top: 10px"
                 >新增</el-button>
             </div>
             <el-table
@@ -2360,27 +2360,18 @@ export default {
 </style>
 
 <style scoped>
-.handle-box {
-    margin-bottom: 20px;
-}
-
-.handle-select {
-    width: 120px;
-}
-
-.handle-input {
-    width: 300px;
-    display: inline-block;
-}
-.table {
-    width: 100%;
-    font-size: 14px;
-}
-.red {
-    color: #ff0000;
-}
-.mr10 {
-    margin-right: 10px;
-}
+    .handle-box {
+        width: 100%;
+        margin-bottom: 20px;
+        font-size: 14px;
+    }
+    .table {
+        width: 100%;
+        font-size: 14px;
+    }
+    .mr10 {
+        width: 16%;
+        margin-right: 10px;
+    }
 </style>
 

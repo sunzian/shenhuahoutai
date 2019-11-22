@@ -157,7 +157,7 @@
                 <el-form-item label="员工手机号码：" :label-width="formLabelWidth" prop="cinemaName">
                     <el-input style="width: 150px" v-model="oForm.employeeMobile" maxlength="18" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="推荐客户充值时是否赠送客户券包：" :label-width="formLabelWidth" prop="cinemaName">
+                <el-form-item label="推荐充值送券：" :label-width="formLabelWidth" prop="cinemaName">
                     <el-radio-group v-model="oForm.couponGroupStatus">
                         <el-radio label="1">赠送</el-radio>
                         <el-radio label="2">不赠送</el-radio>
@@ -203,7 +203,7 @@
                 <el-form-item label="员工手机号码：" :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oEmployeeMobile" maxlength="18" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="推荐客户充值时是否赠送客户券包：" :label-width="formLabelWidth" prop="cinemaName">
+                <el-form-item label="推荐充值送券：" :label-width="formLabelWidth" prop="cinemaName">
                     <el-radio-group v-model="oCouponGroupStatus">
                         <el-radio label="1">赠送</el-radio>
                         <el-radio label="2">不赠送</el-radio>
