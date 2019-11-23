@@ -62,6 +62,23 @@
                     <el-option key="1" label="已支付" value="1"></el-option>
                     <el-option key="2" label="支付失败" value="2"></el-option>
                 </el-select>
+                <el-date-picker
+                        v-model="query.startTime"
+                        type="datetime"
+                        class="mr10"
+                        value-format="yyyy-MM-dd HH:mm:ss"
+                        format="yyyy-MM-dd HH:mm:ss"
+                        default-time="06:00:00"
+                        placeholder="有效期开始时间（起）"
+                ></el-date-picker>
+                <el-date-picker
+                        v-model="query.endTime"
+                        type="datetime"
+                        class="mr10"
+                        value-format="yyyy-MM-dd HH:mm:ss"
+                        format="yyyy-MM-dd HH:mm:ss"
+                        placeholder="有效期结束时间（止）"
+                ></el-date-picker>
                 <el-button
                     type="primary"
                     icon="el-icon-search"
@@ -342,6 +359,8 @@ export default {
                 let orderNumber = this.query.orderNumber;
                 let benefitName = this.query.benefitName;
                 let phone = this.query.phone;
+                let startTime = this.query.startTime;
+                let endTime = this.query.endTime;
                 if (!cinemaCode) {
                     cinemaCode = '';
                 }
@@ -363,7 +382,15 @@ export default {
                 if (!phone) {
                     phone = '';
                 }
+                if (!startTime) {
+                    startTime = '';
+                }
+                if (!endTime) {
+                    endTime = '';
+                }
                 let jsonArr = [];
+                jsonArr.push({ key: 'startTime', value: startTime });
+                jsonArr.push({ key: 'endTime', value: endTime });
                 jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
                 jsonArr.push({ key: 'userName', value: userName });
                 jsonArr.push({ key: 'benefitStatus', value: benefitStatus });

@@ -69,14 +69,14 @@
                     value-format="yyyy-MM-dd HH:mm:ss"
                     format="yyyy-MM-dd HH:mm:ss"
                     class="mr10"
-                    placeholder="开始时间（起）"
+                    placeholder="支付开始时间（起）"
                 ></el-date-picker>
                 <el-date-picker
                     v-model="query.endDate"
                     type="datetime"
                     value-format="yyyy-MM-dd HH:mm:ss"
                     format="yyyy-MM-dd HH:mm:ss"
-                    placeholder="结束时间（止）"
+                    placeholder="支付结束时间（止）"
                     class="mr10"
                 ></el-date-picker>
                 <el-button type="primary" style="margin-top: 10px;width: 90px;" icon="el-icon-search" @click="Search">搜索</el-button>

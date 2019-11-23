@@ -3,13 +3,13 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
-                    <i class="el-icon-lx-cascades"></i> 影城管理
+                    <i class="el-icon-lx-cascades"></i> 影管管理
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-input v-model="query.name" placeholder="商家名称" class="handle-input mr10"></el-input>
+                <el-input v-model="query.name" placeholder="影管名称" class="handle-input mr10"></el-input>
                 <el-button style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
                 <el-button
                     type="primary"
@@ -26,13 +26,13 @@
                 header-cell-class-name="table-header"
                 @selection-change="handleSelectionChange"
             >
-                <el-table-column prop="name" label="商家名称">
+                <el-table-column prop="name" label="影管名称">
                     <template slot-scope="scope">{{scope.row.businessName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="商家描述">
+                <el-table-column prop="memo" label="影管描述">
                     <template slot-scope="scope">{{scope.row.businessMemo}}</template>
                 </el-table-column>
-                <el-table-column prop="logo" label="商家logo">
+                <el-table-column prop="logo" label="影管logo">
                     <template slot-scope="scope">
                         <el-popover
                                 placement="right"
@@ -43,7 +43,7 @@
                         </el-popover>
                     </template>
                 </el-table-column>
-                <el-table-column prop="phone" label="商家电话">
+                <el-table-column prop="phone" label="联系人信息">
                     <template slot-scope="scope">{{scope.row.businessMobile}}</template>
                 </el-table-column>
                 <!--<el-table-column prop="year" label="金币过期年数">-->

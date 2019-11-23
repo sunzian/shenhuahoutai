@@ -75,6 +75,7 @@
         </div>
         <div class="container" v-if="!showSell">
             <div class="handle-box">
+                <el-input placeholder="服务费规则名称" class="mr10" v-model="query.serviceFeeName" autocomplete="off"></el-input>
                 <el-select
                     clearable
                     v-model="query.screenType"
@@ -156,7 +157,10 @@
                 ref="multipleTable"
                 header-cell-class-name="table-header"
             >
-                <el-table-column prop="name" label="影厅类型" width="160" >
+                <el-table-column prop="name" label="服务费规则名称">
+                    <template slot-scope="scope">{{scope.row.serviceFeeName}}</template>
+                </el-table-column>
+                <el-table-column prop="name" label="影厅类型" width="120" >
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.screenType == 1" type="success">全部影厅</el-tag>
                         <el-tag v-else type="success">部分影厅</el-tag>
@@ -168,7 +172,7 @@
                         <!--slot-scope="scope"-->
                     <!--&gt;{{scope.row.screenNames}}</template>-->
                 <!--</el-table-column>-->
-                <el-table-column prop="name" label="影片类型" width="160">
+                <el-table-column prop="name" label="影片类型" width="120">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.filmType == 1" type="success">全部影片</el-tag>
                         <el-tag v-else type="success">部分影片</el-tag>
@@ -180,25 +184,25 @@
                         <!--slot-scope="scope"-->
                     <!--&gt;{{scope.row.filmNames}}</template>-->
                 <!--</el-table-column>-->
-                <el-table-column prop="memo" label="开始日期" width="200" >
+                <el-table-column prop="memo" label="开始日期" width="160" >
                     <template slot-scope="scope">{{scope.row.startDate}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="结束日期" width="200" >
+                <el-table-column prop="sort" label="结束日期" width="160" >
                     <template slot-scope="scope">{{scope.row.endDate}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="是否启用" width="160">
+                <el-table-column prop="sort" label="是否启用" width="100">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status == 1" type="success">启用</el-tag>
                         <el-tag v-else type="danger">未启用</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="sort" label="第三方支付代售费" width="180">
+                <el-table-column prop="sort" label="第三方支付代售费" width="140">
                     <template slot-scope="scope">{{scope.row.thirdServiceFee}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="会员卡支付代售费" width="180">
+                <el-table-column prop="sort" label="会员卡支付代售费" width="140">
                     <template slot-scope="scope">{{scope.row.memberServiceFee}}</template>
                 </el-table-column>
-                <el-table-column label="操作" width="200" align="center">
+                <el-table-column label="操作" width="110" align="center">
                     <template slot-scope="scope">
                         <el-button
                             type="text"
@@ -230,6 +234,13 @@
         <!--新增弹出框-->
         <el-dialog :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
+                <el-form-item label="服务费规则名称：" :label-width="formLabelWidth" prop="cinemaName">
+                    <el-input
+                            style="width: 150px"
+                            v-model="oForm.serviceFeeName"
+                            autocomplete="off"
+                    ></el-input>
+                </el-form-item>
                 <el-form-item label="选择影厅：" :label-width="formLabelWidth" prop="screenName">
                     <el-radio-group v-model="oForm.selectHallType">
                         <el-radio label="1">全部影厅</el-radio>
@@ -355,6 +366,13 @@
         <!-- 编辑弹出框 -->
         <el-dialog title="详情" :visible.sync="editVisible">
             <el-form :model="form">
+                <el-form-item label="服务费规则名称：" :label-width="formLabelWidth" prop="cinemaName">
+                    <el-input
+                            style="width: 150px"
+                            v-model="oServiceFeeName"
+                            autocomplete="off"
+                    ></el-input>
+                </el-form-item>
                 <el-form-item label="选择影厅：" :label-width="formLabelWidth" prop="screenName">
                     <el-radio-group v-model="oScreenType">
                         <el-radio :label="1">全部影厅</el-radio>
@@ -549,6 +567,7 @@ export default {
             oScreenType: '',
             oScreenNames: '',
             oScreenCodes: '',
+            oServiceFeeName: '',
             oScreenCode: [],
             oScreenName: [],
             oFilmCode: [],
@@ -671,6 +690,7 @@ export default {
                 target: document.querySelector('.div1')
             });
             var jsonArr = [];
+            jsonArr.push({ key: 'serviceFeeName', value: this.oForm.serviceFeeName });
             if (this.oForm.selectHallType == 2) {
                 let screenCodes = [];
                 let screenNames = [];
@@ -734,6 +754,7 @@ export default {
                             this.oForm.screenNames = '';
                             this.oForm.filmCodes = '';
                             this.oForm.filmNames = '';
+                            this.oForm.serviceFeeName = '';
                             this.oForm.startDate = '';
                             this.oForm.endDate = '';
                             this.oForm.startSection = '';
@@ -847,8 +868,13 @@ export default {
                         this.oScreenType = JSON.parse(Decrypt(data.data.data)).screenType;
                         this.oScreenNames = JSON.parse(Decrypt(data.data.data)).screenNames;
                         this.oScreenCodes = JSON.parse(Decrypt(data.data.data)).screenCodes;
-                        this.oScreenCode = this.oScreenCodes.split(',');
-                        this.oScreenName = this.oScreenNames.split(',');
+                        this.oServiceFeeName = JSON.parse(Decrypt(data.data.data)).serviceFeeName;
+                        if(JSON.parse(Decrypt(data.data.data)).screenCodes){
+                            this.oScreenCode = this.oScreenCodes.split(',');
+                        }
+                        if(JSON.parse(Decrypt(data.data.data)).screenNames){
+                            this.oScreenName = this.oScreenNames.split(',');
+                        }
                         let selectScreenCode = [];
                         for (let i = 0; i < this.oScreenCode.length; i++) {
                             selectScreenCode.push({ screenCode: this.oScreenCode[i], screenName: this.oScreenName[i] });
@@ -910,7 +936,11 @@ export default {
             let maxStartDate = this.query.maxStartDate;
             let maxEndDate = this.query.maxEndDate;
             let status = this.query.status;
+            let serviceFeeName = this.query.serviceFeeName;
             let cinemaCode = '';
+            if (!serviceFeeName) {
+                serviceFeeName = '';
+            }
             if (!filmType) {
                 filmType = '';
             }
@@ -940,6 +970,7 @@ export default {
             }
             var jsonArr = [];
             jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
+            jsonArr.push({ key: 'serviceFeeName', value: this.query.serviceFeeName });
             jsonArr.push({ key: 'screenType', value: screenType });
             jsonArr.push({ key: 'minStartDate', value: minStartDate });
             jsonArr.push({ key: 'minEndDate', value: minEndDate });
@@ -959,6 +990,7 @@ export default {
                     if (data.data.code == 'success') {
                         this.showSell = false;
                         var oData = JSON.parse(Decrypt(data.data.data));
+                        console.log(oData);
                         this.tableData = oData.data;
                         this.query.pageSize = oData.pageSize;
                         this.query.pageNo = oData.pageNo;
@@ -1058,6 +1090,7 @@ export default {
             jsonArr.push({ key: 'memberServiceFee', value: this.oMemberServiceFee });
             jsonArr.push({ key: 'thirdServiceFee', value: this.oThirdServiceFee });
             jsonArr.push({ key: 'cinemaCode', value: this.oCinemaCode });
+            jsonArr.push({ key: 'serviceFeeName', value: this.oServiceFeeName });
             jsonArr.push({ key: 'id', value: this.oId });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });

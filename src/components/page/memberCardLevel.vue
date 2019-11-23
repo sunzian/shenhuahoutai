@@ -108,6 +108,9 @@
                 <el-table-column prop="sort" label="会员卡会费" width="150">
                     <template slot-scope="scope">{{scope.row.memberFee}}</template>
                 </el-table-column>
+                <el-table-column prop="name" label="默认卡号">
+                    <template slot-scope="scope">{{scope.row.cardNo}}</template>
+                </el-table-column>
                 <el-table-column prop="sort" label="状态"  align="center" width="150">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status == 1" type="success">正常</el-tag>
@@ -191,6 +194,13 @@
                             v-model="form.settlePrice"
                             autocomplete="off"
                             :disabled="true"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="默认卡号（只用于查询会员价）" :label-width="formLabelWidth">
+                    <el-input
+                            style="width: 250px"
+                            v-model="form.cardNo"
+                            autocomplete="off"
                     ></el-input>
                 </el-form-item>
             </el-form>
@@ -397,6 +407,7 @@
                                 this.form.imageUrl = JSON.parse(Decrypt(data.data.data)).cardPicture;
                                 this.form.standardPrice = JSON.parse(Decrypt(data.data.data)).cardCostFee;
                                 this.form.settlePrice = JSON.parse(Decrypt(data.data.data)).memberFee;
+                                this.form.cardNo = JSON.parse(Decrypt(data.data.data)).cardNo;
                             } else if (data.data.code == 'nologin') {
                                 this.message = data.data.message;
                                 this.open();
@@ -428,6 +439,7 @@
                     var jsonArr = [];
                     jsonArr.push({ key: 'id', value: this.form.id });
                     jsonArr.push({ key: 'cardPicture', value: this.form.image_url });
+                    jsonArr.push({ key: 'cardNo', value: this.form.cardNo });
                     jsonArr.push({ key: 'openRuleCode', value: '' });
                     jsonArr.push({ key: 'rechargeRuleCode', value: ''});
                     let sign = md5(preSign(jsonArr));
@@ -449,6 +461,7 @@
                                 this.$router.push('/login');
                             } else {
                                 this.message = data.data.message;
+                                this.form.cardNo='';
                                 this.open();
                             }
                         })

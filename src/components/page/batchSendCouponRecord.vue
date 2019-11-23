@@ -23,6 +23,23 @@
                     autocomplete="off"
                     class="mr10"
                 ></el-input>
+                <el-date-picker
+                        v-model="query.startDate"
+                        type="datetime"
+                        class="mr10"
+                        value-format="yyyy-MM-dd HH:mm:ss"
+                        format="yyyy-MM-dd HH:mm:ss"
+                        default-time="06:00:00"
+                        placeholder="发放开始时间（起）"
+                ></el-date-picker>
+                <el-date-picker
+                        v-model="query.endDate"
+                        type="datetime"
+                        class="mr10"
+                        value-format="yyyy-MM-dd HH:mm:ss"
+                        format="yyyy-MM-dd HH:mm:ss"
+                        placeholder="发放结束时间（止）"
+                ></el-date-picker>
                 <!-- <el-select
                     clearable
                     v-model="query.type"
@@ -291,20 +308,30 @@ export default {
             setTimeout(() => {
                 let cinemaCode = this.query.cinemaCode;
                 let sendUserName = this.query.sendUserName;
+                let startDate = this.query.startDate;
+                let endDate = this.query.endDate;
                 if (!cinemaCode) {
                     cinemaCode = '';
                 }
                 if (!sendUserName) {
                     sendUserName = '';
                 }
+                if (!startDate) {
+                    startDate = '';
+                }
+                if (!endDate) {
+                    endDate = '';
+                }
                 let jsonArr = [];
                 jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
                 jsonArr.push({ key: 'sendUserName', value: sendUserName });
+                jsonArr.push({ key: 'startDate', value: startDate });
+                jsonArr.push({ key: 'endDate', value: endDate });
                 jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
                 jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
-                console.log(jsonArr)
+                console.log(jsonArr);
                 var params = ParamsAppend(jsonArr);
                 https
                     .fetchPost('/batchSendCouponRecord/list', params)

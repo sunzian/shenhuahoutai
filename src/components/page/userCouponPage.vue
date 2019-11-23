@@ -24,6 +24,12 @@
                     class="mr10"
                 ></el-input>
                 <el-input
+                        placeholder="优惠券名称"
+                        v-model="query.couponName"
+                        autocomplete="off"
+                        class="mr10"
+                ></el-input>
+                <el-input
                     placeholder="订单号"
                     v-model="query.orderNo"
                     autocomplete="off"
@@ -42,7 +48,7 @@
                 <el-select
                     clearable
                     v-model="query.getType"
-                    placeholder="获取状态"
+                    placeholder="领取类型"
                     class="handle-select mr10"
                 >
                     <el-option key="1" label="注册送券" value="1"></el-option>
@@ -522,8 +528,12 @@ export default {
                 let userName = this.query.userName;
                 let status = this.query.status;
                 let getType = this.query.getType;
+                let couponName = this.query.couponName;
                 if (!cinemaCode) {
                     cinemaCode = '';
+                }
+                if (!couponName) {
+                    couponName = '';
                 }
                 if (!orderNo) {
                     orderNo = '';
@@ -542,6 +552,7 @@ export default {
                 jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
                 jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
                 jsonArr.push({ key: 'cardNum', value: orderNo });
+                jsonArr.push({ key: 'couponName', value: couponName });
                 jsonArr.push({ key: 'userName', value: userName });
                 jsonArr.push({ key: 'status', value: status });
                 jsonArr.push({ key: 'getType', value: getType });

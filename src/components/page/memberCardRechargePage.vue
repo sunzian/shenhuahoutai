@@ -45,7 +45,7 @@
                     class="mr10"
                     value-format="yyyy-MM-dd HH:mm:ss"
                     format="yyyy-MM-dd HH:mm:ss"
-                    placeholder="开始时间（起）"
+                    placeholder="充值开始时间（起）"
                 ></el-date-picker>
                 <el-date-picker
                     v-model="query.endDate"
@@ -53,7 +53,7 @@
                     class="mr10"
                     value-format="yyyy-MM-dd HH:mm:ss"
                     format="yyyy-MM-dd HH:mm:ss"
-                    placeholder="结束时间（止）"
+                    placeholder="充值结束时间（止）"
                 ></el-date-picker>
                 <el-select
                         clearable

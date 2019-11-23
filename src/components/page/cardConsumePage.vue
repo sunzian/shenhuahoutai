@@ -43,7 +43,7 @@
                     type="datetime"
                     value-format="yyyy-MM-dd HH:mm:ss"
                     format="yyyy-MM-dd HH:mm:ss"
-                    placeholder="开始时间（起）"
+                    placeholder="消费开始时间（起）"
                     class="mr10"
                 ></el-date-picker>
                 <el-date-picker
@@ -51,7 +51,7 @@
                     type="datetime"
                     value-format="yyyy-MM-dd HH:mm:ss"
                     format="yyyy-MM-dd HH:mm:ss"
-                    placeholder="结束时间（止）"
+                    placeholder="消费结束时间（止）"
                     class="mr10"
                 ></el-date-picker>
                 <el-select

@@ -239,7 +239,6 @@
                 <el-form-item label="影院名称：" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        min="1"
                         disabled
                         v-model="oCinemaName"
                         autocomplete="off"
@@ -902,6 +901,7 @@ export default {
                 jsonArr.push({ key: 'givenCouponGroupId', value: this.couponId });
             }
             jsonArr.push({ key: 'ruleName', value: this.oRuleName });
+            jsonArr.push({ key: 'cinemaCode', value: this.oCinemaCode });
             jsonArr.push({ key: 'startDate', value: this.oStartDate });
             jsonArr.push({ key: 'endDate', value: this.oEndDate });
             jsonArr.push({ key: 'cardLevelCode', value: this.oForm.levelCode});

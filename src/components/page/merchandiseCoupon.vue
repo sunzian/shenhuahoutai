@@ -17,6 +17,15 @@
                         :value="item.cinemaCode"
                     ></el-option>
                 </el-select>
+                <el-input placeholder="优惠券名称" class="mr10" v-model="query.name" autocomplete="off"></el-input>
+                <el-select clearable v-model="query.reduceType" placeholder="优惠券类型" class="handle-select mr10">
+                    <el-option key="1" label="兑换券" value="1"></el-option>
+                    <el-option key="2" label="代金券" value="2"></el-option>
+                </el-select>
+                <el-select clearable v-model="query.status" placeholder="状态" class="handle-select mr10">
+                    <el-option key="0" label="未启用" value="0"></el-option>
+                    <el-option key="1" label="启用" value="1"></el-option>
+                </el-select>
                 <el-button style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
                 <el-button
                     type="primary"
@@ -868,16 +877,31 @@ export default {
                 target: document.querySelector('.div1')
             });
             let cinemaCode = this.query.cinemaCode;
+            let reduceType = this.query.reduceType;
+            let name = this.query.name;
+            let status = this.query.status;
             if (!cinemaCode) {
                 cinemaCode = '';
             }
+            if (!reduceType) {
+                reduceType = '';
+            }
+            if (!name) {
+                name = '';
+            }
+            if (!status) {
+                status = '';
+            }
             let jsonArr = [];
+            jsonArr.push({ key: 'reduceType', value: reduceType });
+            jsonArr.push({ key: 'name', value: name });
+            jsonArr.push({ key: 'status', value: status });
             jsonArr.push({ key: 'cinemaCodes', value: cinemaCode });
             jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
             jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
-            console.log(jsonArr)
+            console.log(jsonArr);
             var params = ParamsAppend(jsonArr);
             https
                 .fetchPost('merchandiseCoupon/merchandiseCouponPage', params)

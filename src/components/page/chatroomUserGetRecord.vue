@@ -32,6 +32,24 @@
                     <el-option key="1" label="优惠券" value="1"></el-option>
                     <el-option key="2" label="实物" value="2"></el-option>
                 </el-select>
+                <el-input placeholder="用户名称" class="mr10" v-model="query.userName" autocomplete="off"></el-input>
+                <el-date-picker
+                        v-model="query.startDate"
+                        type="datetime"
+                        class="mr10"
+                        value-format="yyyy-MM-dd HH:mm:ss"
+                        format="yyyy-MM-dd HH:mm:ss"
+                        default-time="06:00:00"
+                        placeholder="领取开始时间（起）"
+                ></el-date-picker>
+                <el-date-picker
+                        v-model="query.endDate"
+                        type="datetime"
+                        class="mr10"
+                        value-format="yyyy-MM-dd HH:mm:ss"
+                        format="yyyy-MM-dd HH:mm:ss"
+                        placeholder="领取结束时间（止）"
+                ></el-date-picker>
                 <el-button
                     type="primary"
                     icon="el-icon-search"
@@ -289,8 +307,14 @@ export default {
                 let cinemaCode = this.query.cinemaCode;
                 let name = this.query.name;
                 let type = this.query.type;
+                let startDate = this.query.startDate;
+                let endDate = this.query.endDate;
+                let userName = this.query.userName;
                 if (!cinemaCode) {
                     cinemaCode = '';
+                }
+                if (!userName) {
+                    userName = '';
                 }
                 if (!name) {
                     name = '';
@@ -298,15 +322,24 @@ export default {
                 if (!type) {
                     type = '';
                 }
+                if (!startDate) {
+                    startDate = '';
+                }
+                if (!endDate) {
+                    endDate = '';
+                }
                 let jsonArr = [];
                 jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
-                jsonArr.push({ key: 'giftName', value: name });
+                jsonArr.push({ key: 'userName', value: userName });
+                jsonArr.push({ key: 'name', value: name });
                 jsonArr.push({ key: 'giftType', value: type });
+                jsonArr.push({ key: 'startDate', value: startDate });
+                jsonArr.push({ key: 'endDate', value: endDate });
                 jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
                 jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
-                console.log(jsonArr)
+                console.log(jsonArr);
                 var params = ParamsAppend(jsonArr);
                 https
                     .fetchPost('/chatroomUserGetRecord/list', params)
