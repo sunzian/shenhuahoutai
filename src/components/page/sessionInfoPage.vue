@@ -9,7 +9,13 @@
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-select clearable v-model="query.cinemaCode" placeholder="请选择影院" class="mr10" @change="chooseCinema">
+                <el-select
+                    clearable
+                    v-model="query.cinemaCode"
+                    placeholder="请选择影院"
+                    class="mr10"
+                    @change="chooseCinema"
+                >
                     <el-option
                         v-for="item in cinemaInfo"
                         :key="item.cinemaCode"
@@ -26,12 +32,23 @@
                     ></el-option>
                 </el-select>
                 <el-input v-model="query.filmName" placeholder="影片名称" class="handle-input mr10"></el-input>
-                <el-button style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
                 <el-button
-                        type="primary"
-                        @click="thirdPrice"
-                        style="float: right;margin-top: 10px"
-                        icon="el-icon-circle-plus-outline"
+                    style="margin-top: 10px;width: 90px;"
+                    type="primary"
+                    icon="el-icon-search"
+                    @click="Search"
+                >搜索</el-button>
+                <el-button
+                    type="primary"
+                    @click="showPoster"
+                    style="float: right;margin-top: 10px"
+                    icon="el-icon-circle-plus-outline"
+                >生成影讯</el-button>
+                <el-button
+                    type="primary"
+                    @click="thirdPrice"
+                    style="float: right;margin-top: 10px"
+                    icon="el-icon-circle-plus-outline"
                 >批量修改展示会员价</el-button>
                 <el-button
                     type="primary"
@@ -49,8 +66,7 @@
                 header-cell-class-name="table-header"
                 @selection-change="handleSelectionChange"
             >
-                <el-table-column type="selection" width="55">
-                </el-table-column>
+                <el-table-column type="selection" width="55"></el-table-column>
                 <el-table-column prop="code" label="影院名称" width="200" fixed>
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
@@ -94,13 +110,13 @@
                     <template slot-scope="scope">{{scope.row.memberCardPayCommissionFee}}</template>
                 </el-table-column>
                 <!--<el-table-column label="操作" width="100" align="center" fixed="right">-->
-                    <!--<template slot-scope="scope">-->
-                        <!--<el-button-->
-                            <!--type="text"-->
-                            <!--icon="el-icon-edit"-->
-                            <!--@click="addChange(scope.$index, scope.row)"-->
-                        <!--&gt;价格设置</el-button>-->
-                    <!--</template>-->
+                <!--<template slot-scope="scope">-->
+                <!--<el-button-->
+                <!--type="text"-->
+                <!--icon="el-icon-edit"-->
+                <!--@click="addChange(scope.$index, scope.row)"-->
+                <!--&gt;价格设置</el-button>-->
+                <!--</template>-->
                 <!--</el-table-column>-->
             </el-table>
             <div class="pagination">
@@ -193,7 +209,13 @@
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="增值服务费" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" min="1" v-model="oTicketFee" disabled autocomplete="off"></el-input>
+                    <el-input
+                        style="width: 250px"
+                        min="1"
+                        v-model="oTicketFee"
+                        disabled
+                        autocomplete="off"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item label="第三方支付代售费" :label-width="formLabelWidth">
                     <el-input
@@ -222,10 +244,10 @@
             <el-form ref="formOne" v-model="formOne">
                 <el-form-item label="会员价" :label-width="formLabelWidth">
                     <el-input
-                            style="width: 250px"
-                            min="1"
-                            v-model="manySettlePrice"
-                            autocomplete="off"
+                        style="width: 250px"
+                        min="1"
+                        v-model="manySettlePrice"
+                        autocomplete="off"
                     ></el-input>
                 </el-form-item>
             </el-form>
@@ -234,10 +256,67 @@
                 <el-button type="primary" @click="sureThirdPrice">确 定</el-button>
             </span>
         </el-dialog>
+        <!--影讯弹出框-->
+        <el-dialog title="生成影讯" :visible.sync="poster">
+            <el-form :model="oForm">
+                <el-form-item label="影院名称" :label-width="formLabelWidth">
+                    <el-select v-model="posterForm.cinemaCode" placeholder="请选择">
+                        <el-option
+                            v-for="info in cinemaInfo"
+                            :key="info.cinemaCode"
+                            :value="info.cinemaCode"
+                            :label="info.cinemaName"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="时间" :label-width="formLabelWidth">
+                    <el-date-picker
+                        v-model="posterForm.date"
+                        type="date"
+                        value-format="yyyy-MM-dd"
+                        format="yyyy-MM-dd"
+                        placeholder="选择日期时间"
+                    ></el-date-picker>
+                </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="poster = false">取 消</el-button>
+                <el-button type="primary" @click="createPoster">确 定</el-button>
+            </span>
+        </el-dialog>
+        <el-dialog
+            :show-close="false"
+            :close-on-press-escape="false"
+            :visible.sync="showPosterImg"
+            custom-class="posterClass"
+        >
+            <div id="posterHtml">
+                <div class="poster-head">
+                    <h1>今日影讯</h1>
+                    <div>{{posterForm.date}}</div>
+                    <div>{{posterContent.cinemaName}}</div>
+                    <div>{{posterContent.address}}</div>
+                    <div>{{posterContent.serviceMobile}}</div>
+                </div>
+                <div v-for="(item, index) in posterContent.filmList" :key="index" class="poster-session">
+                    <img :src="item.image" />
+                    <div>{{item.filmName}}{{item.dimensional}}</div>
+                    <div>{{item.duration}}分钟{{item.area}}{{item.language}}</div>
+                    <div>{{item.actor}}</div>
+                    <div v-for="(session, index) in item.sessionList" :key="index">
+                        <div>{{session.sessionTime}}</div>
+                        <div>{{session.sessDimensional}}{{session.sessLanguage}}</div>
+                        <div>{{session.screenName}}</div>
+                    </div>
+                </div>
+            </div>
+        </el-dialog>
     </div>
 </template>
 
 <script>
+import html2canvas from 'html2canvas';
+import { vueCanvasPoster } from 'vue-canvas-poster';
 import { fetchData } from '../../api/index';
 import { Decrypt, Encrypt, preSign, EncryptReplace, ParamsAppend } from '@/aes/utils';
 import md5 from 'js-md5';
@@ -247,9 +326,13 @@ export default {
     name: 'basetable',
     data() {
         return {
-            formOne:[],
-            manySettlePrice:'',
-            drawer:false,
+            posterContent: '', // 文案内容
+            posterImg: '', // 最终生成的海报图片
+            formOne: [],
+            manySettlePrice: '',
+            drawer: false,
+            poster: false,
+            showPosterImg: false,
             oCinemaName: '',
             oCinemaCode: '',
             oScreenCode: '',
@@ -294,8 +377,8 @@ export default {
             screenInfo: [],
             selectIdList: [],
             selectCodeList: [],
-            selectId:'',
-            selectCodes:'',
+            selectId: '',
+            selectCodes: '',
             form: [],
             tableData: [],
             multipleSelection: [],
@@ -311,11 +394,18 @@ export default {
                 startDate: '',
                 endDate: ''
             },
+            posterForm: {
+                cinemaCode: '',
+                date: ''
+            },
             formLabelWidth: '160px',
             selectValue: {},
             selectCode: {},
             value: ''
         };
+    },
+    components: {
+        vueCanvasPoster
     },
     created() {},
     mounted() {
@@ -324,10 +414,10 @@ export default {
     methods: {
         thirdPrice() {
             //获取批量修改按钮权限
-            if(this.multipleSelection.length==0){
+            if (this.multipleSelection.length == 0) {
                 this.message = '请先勾选需要修改的影片';
                 this.open();
-            }else {
+            } else {
                 const loading = this.$loading({
                     lock: true,
                     text: 'Loading',
@@ -342,12 +432,12 @@ export default {
                         console.log(data);
                         if (data.data.code == 'success') {
                             console.log(this.multipleSelection);
-                            for(let x in this.multipleSelection){
-                                this.selectIdList.push(this.multipleSelection[x].id)
-                                this.selectCodeList.push(this.multipleSelection[x].cinemaCode)
+                            for (let x in this.multipleSelection) {
+                                this.selectIdList.push(this.multipleSelection[x].id);
+                                this.selectCodeList.push(this.multipleSelection[x].cinemaCode);
                             }
-                            this.selectId=this.selectIdList.join(',');
-                            this.selectCodes=this.selectCodeList.join(',');
+                            this.selectId = this.selectIdList.join(',');
+                            this.selectCodes = this.selectCodeList.join(',');
                             console.log(this.selectId);
                             console.log(this.selectCodes);
                             this.drawer = true;
@@ -366,7 +456,7 @@ export default {
                     });
             }
         },
-        sureThirdPrice(){
+        sureThirdPrice() {
             //提交确认批量修改
             const loading = this.$loading({
                 lock: true,
@@ -376,8 +466,8 @@ export default {
                 target: document.querySelector('.div1')
             });
             var jsonArr = [];
-            jsonArr.push({ key: 'id', value: this.selectId});
-            jsonArr.push({ key: 'cinemaCode', value: this.selectCodes});
+            jsonArr.push({ key: 'id', value: this.selectId });
+            jsonArr.push({ key: 'cinemaCode', value: this.selectCodes });
             jsonArr.push({ key: 'memberPrice', value: this.manySettlePrice });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
@@ -390,10 +480,10 @@ export default {
                         console.log(data);
                         if (data.data.code == 'success') {
                             this.$message.success(`修改成功`);
-                            this.selectIdList=[];
-                            this.selectId='';
-                            this.selectCodes='';
-                            this.manySettlePrice='';
+                            this.selectIdList = [];
+                            this.selectId = '';
+                            this.selectCodes = '';
+                            this.manySettlePrice = '';
                             this.getMenu();
                             this.drawer = false;
                         } else if (data.data.code == 'nologin') {
@@ -538,52 +628,6 @@ export default {
                     console.log(err);
                 });
         },
-        // addChange(index, row) {
-        //     //是否拥有修改权限
-        //     const loading = this.$loading({
-        //         lock: true,
-        //         text: 'Loading',
-        //         spinner: 'el-icon-loading',
-        //         background: 'rgba(0, 0, 0, 0.7)',
-        //         target: document.querySelector('.div1')
-        //     });
-        //     this.idx = index;
-        //     this.form = row;
-        //     var jsonArr = [];
-        //     jsonArr.push({ key: 'id', value: row.id });
-        //     let sign = md5(preSign(jsonArr));
-        //     jsonArr.push({ key: 'sign', value: sign });
-        //     let params = ParamsAppend(jsonArr);
-        //     https
-        //         .fetchPost('/sessionInfo/getSessionInfoById', params)
-        //         .then(data => {
-        //             loading.close();
-        //             console.log(data)
-        //             console.log(JSON.parse(Decrypt(data.data.data)));
-        //             if (data.data.code == 'success') {
-        //                 this.editVisible = true;
-        //                 this.oCinemaName = JSON.parse(Decrypt(data.data.data)).cinemaName;
-        //                 this.oFilmName = JSON.parse(Decrypt(data.data.data)).filmName;
-        //                 this.oSessionTime = JSON.parse(Decrypt(data.data.data)).sessionTime;
-        //                 this.oStandardPrice = JSON.parse(Decrypt(data.data.data)).standardPrice;
-        //                 this.oTicketFee = JSON.parse(Decrypt(data.data.data)).ticketFee;
-        //                 this.oThirdPartyPayCommissionFee = JSON.parse(Decrypt(data.data.data)).thirdPartyPayCommissionFee;
-        //                 this.oMemberCardPayCommissionFee = JSON.parse(Decrypt(data.data.data)).memberCardPayCommissionFee;
-        //                 this.oId = JSON.parse(Decrypt(data.data.data)).id;
-        //             } else if (data.data.code == 'nologin') {
-        //                 this.message = data.data.message;
-        //                 this.open();
-        //                 this.$router.push('/login');
-        //             } else {
-        //                 this.message = data.data.message;
-        //                 this.open();
-        //             }
-        //         })
-        //         .catch(err => {
-        //             loading.close();
-        //             console.log(err);
-        //         });
-        // },
         // 编辑操作
         exChanger() {
             const loading = this.$loading({
@@ -658,7 +702,7 @@ export default {
             jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
-            console.log(jsonArr)
+            console.log(jsonArr);
             var params = ParamsAppend(jsonArr);
             https
                 .fetchPost('/sessionInfo/sessionInfoPage', params)
@@ -740,7 +784,7 @@ export default {
         // 获取所有影厅
         getAllScreen(val) {
             if (!val) {
-                return
+                return;
             }
             var jsonArr = [];
             jsonArr.push({ key: 'cinemaCode', value: val });
@@ -748,7 +792,7 @@ export default {
             jsonArr.push({ key: 'sign', value: sign });
             let params = ParamsAppend(jsonArr);
             https
-                .fetchPost('/screenInfo/getScreenByCinema',params)
+                .fetchPost('/screenInfo/getScreenByCinema', params)
                 .then(data => {
                     if (data.data.code == 'success') {
                         var res = JSON.parse(Decrypt(data.data.data));
@@ -765,24 +809,102 @@ export default {
                 .catch(err => {
                     console.log(err);
                 });
+        },
+
+        showPoster() {
+            this.poster = true;
+        },
+
+        // 生成影讯
+        createPoster() {
+            if (this.posterForm.cinemaCode == '') {
+                this.message = '请选择影院！';
+                this.open();
+                return;
+            }
+            if (this.posterForm.date == '') {
+                this.message = '请选择日期！';
+                this.open();
+                return;
+            }
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
+            let jsonArr = [];
+            jsonArr.push({ key: 'cinemaCode', value: this.posterForm.cinemaCode });
+            jsonArr.push({ key: 'date', value: this.posterForm.date });
+            let sign = md5(preSign(jsonArr));
+            jsonArr.push({ key: 'sign', value: sign });
+            var params = ParamsAppend(jsonArr);
+            https
+                .fetchPost('/sessionInfo/getFilmNews', params)
+                .then(data => {
+                    loading.close();
+                    if (data.data.code == 'success') {
+                        this.posterContent = JSON.parse(Decrypt(data.data.data));
+                        console.log(this.posterContent);
+                        this.showPosterImg = true;
+                        // const vm = this;
+                        // const domObj = document.getElementById('posterHtml');
+                        // html2canvas(domObj, {
+                        //     useCORS: true,
+                        //     allowTaint: false,
+                        //     logging: false,
+                        //     letterRendering: true,
+                        //     onclone(doc) {
+                        //         let e = doc.querySelector('#posterHtml');
+                        //         e.style.display = 'block';
+                        //     }
+                        // }).then(function(canvas) {
+                        //     // 在微信里,可长按保存或转发
+                        //     vm.posterImg = canvas.toDataURL('image/png');
+                        // });
+                    } else if (data.data.code == 'nologin') {
+                        this.message = data.data.message;
+                        this.open();
+                        this.$router.push('/login');
+                    } else {
+                        this.message = data.data.message;
+                        this.open();
+                    }
+                })
+                .catch(err => {
+                    loading.close();
+                    console.log(err);
+                });
         }
     }
 };
 </script>
 
 <style scoped>
-    .handle-box {
-        width: 100%;
-        margin-bottom: 20px;
-        font-size: 14px;
-    }
-    .table {
-        width: 100%;
-        font-size: 14px;
-    }
-    .mr10 {
-        width: 16%;
-        margin-right: 10px;
-    }
+.handle-box {
+    width: 100%;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+.table {
+    width: 100%;
+    font-size: 14px;
+}
+.mr10 {
+    width: 16%;
+    margin-right: 10px;
+}
+.el-dialog__wrapper .posterClass {
+    background: rgba(0,159,255,1);
+}
+#posterHtml {
+    
+    position: relative;
+}
+.post-head {
+    font-size: 60px;
+    position: relative;
+}
 </style>
 
