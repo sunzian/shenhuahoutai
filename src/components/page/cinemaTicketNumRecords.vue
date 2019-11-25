@@ -52,17 +52,54 @@
                         >退票返回</el-tag>
                     </template>
                 </el-table-column>
+                <el-table-column prop="code" label="支付方式" width="150">
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row.paymentType=='1'"
+                        >按票收费</el-tag>
+                        <el-tag v-else-if="scope.row.paymentType=='2'"
+                        >包年</el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="sort" label="售票系统">
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row.tradeType=='1'"
+                        >辰星</el-tag>
+                        <el-tag v-else-if="scope.row.tradeType=='2'"
+                        >电影1905</el-tag>
+                        <el-tag v-else-if="scope.row.tradeType=='4'"
+                        >满天星</el-tag>
+                        <el-tag v-if="scope.row.tradeType=='8'"
+                        >粤科</el-tag>
+                        <el-tag v-else-if="scope.row.tradeType=='16'"
+                        >云智</el-tag>
+                        <el-tag v-else-if="scope.row.tradeType=='32'"
+                        >火烈鸟</el-tag>
+                        <el-tag v-else-if="scope.row.tradeType=='64'"
+                        >鼎星</el-tag>
+                        <el-tag v-else-if="scope.row.tradeType=='128'"
+                        >vista</el-tag>
+                    </template>
+                </el-table-column>
                 <el-table-column prop="sort" label="交易明细">
                     <template slot-scope="scope">{{scope.row.tradeDetail}}</template>
                 </el-table-column>
                 <el-table-column prop="name" label="订单号">
                     <template slot-scope="scope">{{scope.row.orderCode}}</template>
                 </el-table-column>
+                <el-table-column prop="name" label="影院出票总量" width="120">
+                    <template slot-scope="scope">{{scope.row.totalSaleTicketNumber}}</template>
+                </el-table-column>
                 <el-table-column prop="name" label="充值张数" width="120">
                     <template slot-scope="scope">{{scope.row.tradeTicketNum}}</template>
                 </el-table-column>
+                <el-table-column prop="name" label="剩余张数" width="120">
+                    <template slot-scope="scope">{{scope.row.remainTicketsNumber}}</template>
+                </el-table-column>
                 <el-table-column prop="sort" label="交易时间" >
                     <template slot-scope="scope">{{scope.row.tradeTime}}</template>
+                </el-table-column>
+                <el-table-column prop="sort" label="到期时间" >
+                    <template slot-scope="scope">{{scope.row.expireDate}}</template>
                 </el-table-column>
             </el-table>
             <div class="pagination">
