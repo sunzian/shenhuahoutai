@@ -9,7 +9,12 @@
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-select clearable v-model="query.cinemaCode" placeholder="请选择影院" class="handle-input mr10">
+                <el-select
+                    clearable
+                    v-model="query.cinemaCode"
+                    placeholder="请选择影院"
+                    class="handle-input mr10"
+                >
                     <el-option
                         v-for="item in cinemaInfo"
                         :key="item.cinemaCode"
@@ -17,11 +22,21 @@
                         :value="item.cinemaCode"
                     ></el-option>
                 </el-select>
-                <el-select clearable v-model="query.status" placeholder="状态" class="handle-select mr10">
+                <el-select
+                    clearable
+                    v-model="query.status"
+                    placeholder="状态"
+                    class="handle-select mr10"
+                >
                     <el-option key="1" label="启用" value="1"></el-option>
                     <el-option key="2" label="禁用" value="2"></el-option>
                 </el-select>
-                <el-button style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
+                <el-button
+                    style="margin-top: 10px;width: 90px;"
+                    type="primary"
+                    icon="el-icon-search"
+                    @click="Search"
+                >搜索</el-button>
                 <el-button
                     type="primary"
                     @click="addPage"
@@ -52,16 +67,12 @@
                 <el-table-column prop="number" label="充值金额" width="100">
                     <template slot-scope="scope">{{scope.row.rechargeAmount}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" align="center" label="赠送类型" width="100" >
+                <el-table-column prop="sort" align="center" label="赠送类型" width="100">
                     <template slot-scope="scope">
-                        <el-tag v-if="scope.row.givenType=='1'"
-                        >不赠送</el-tag>
-                        <el-tag v-else-if="scope.row.givenType=='2'"
-                        >赠送金额</el-tag>
-                        <el-tag v-else-if="scope.row.givenType=='3'"
-                        >赠送券包</el-tag>
-                        <el-tag v-else-if="scope.row.givenType=='4'"
-                        >两者都送</el-tag>
+                        <el-tag v-if="scope.row.givenType=='1'">不赠送</el-tag>
+                        <el-tag v-else-if="scope.row.givenType=='2'">赠送金额</el-tag>
+                        <el-tag v-else-if="scope.row.givenType=='3'">赠送券包</el-tag>
+                        <el-tag v-else-if="scope.row.givenType=='4'">两者都送</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column prop="number" label="赠送金额" width="100">
@@ -165,7 +176,11 @@
                         @click="deletCoupon"
                     >删除</span>
                 </el-form-item>
-                <el-form-item v-if="oForm.givenType == 3" label="优惠券领取后过期天数：" :label-width="formLabelWidth">
+                <el-form-item
+                    v-if="oForm.givenType == 3"
+                    label="优惠券领取后过期天数："
+                    :label-width="formLabelWidth"
+                >
                     <el-input style="width: 250px" v-model.trim="oForm.overDays" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="优惠描述：" :label-width="formLabelWidth">
@@ -223,15 +238,20 @@
                 <el-form-item label="会员卡名称：" :label-width="formLabelWidth">
                     <el-select v-model="oCardLevelName" placeholder="请选择" @change="getCardInfo">
                         <el-option
-                                v-for="info in cardList"
-                                :key="info.levelName"
-                                :value="info.levelCode"
-                                :label="info.levelName"
+                            v-for="info in cardList"
+                            :key="info.levelName"
+                            :value="info.levelCode"
+                            :label="info.levelName"
                         ></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="开卡规则名称：" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" min="1" v-model.trim="oRuleName" autocomplete="off"></el-input>
+                    <el-input
+                        style="width: 250px"
+                        min="1"
+                        v-model.trim="oRuleName"
+                        autocomplete="off"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item label="赠送类型：" :label-width="formLabelWidth">
                     <el-select v-model="oGivenType" placeholder="请选择">
@@ -257,11 +277,25 @@
                     ></el-input>
                     <el-button type="primary" @click="changeCoupon">更换券包</el-button>
                 </el-form-item>
-                <el-form-item v-if="oGivenType == 3 || oGivenType == '赠送券包'" label="优惠券领取后过期天数：" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" min="1" v-model.trim="oOverDays" autocomplete="off"></el-input>
+                <el-form-item
+                    v-if="oGivenType == 3 || oGivenType == '赠送券包'"
+                    label="优惠券领取后过期天数："
+                    :label-width="formLabelWidth"
+                >
+                    <el-input
+                        style="width: 250px"
+                        min="1"
+                        v-model.trim="oOverDays"
+                        autocomplete="off"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item label="优惠描述：" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" min="1" v-model.trim="oRuleMemo" autocomplete="off"></el-input>
+                    <el-input
+                        style="width: 250px"
+                        min="1"
+                        v-model.trim="oRuleMemo"
+                        autocomplete="off"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item label="有效期：" :label-width="formLabelWidth" prop="date1">
                     <el-date-picker
@@ -359,7 +393,7 @@ export default {
     data() {
         return {
             oCinemaName: '',
-            oCardLevelCode:'',
+            oCardLevelCode: '',
             oCardLevelName: '',
             oRuleName: '', // 规则名称
             oRechargeAmount: '', // 充值金额
@@ -398,7 +432,7 @@ export default {
                 {
                     value: '3',
                     label: '赠送券包'
-                },
+                }
             ],
             cinemaInfo: [],
             cardList: [],
@@ -449,10 +483,12 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            https.fetchPost('/openCardRule/addPage', '').then(data => {
-                this.cardList=[];
-                loading.close();
-                this.cinemaInfo = JSON.parse(Decrypt(data.data.data));
+            https
+                .fetchPost('/openCardRule/addPage', '')
+                .then(data => {
+                    this.cardList = [];
+                    loading.close();
+                    this.cinemaInfo = JSON.parse(Decrypt(data.data.data));
                     if (data.data.code == 'success') {
                         for (let key in this.oForm) {
                             this.oForm[key] = '';
@@ -602,7 +638,9 @@ export default {
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             let params = ParamsAppend(jsonArr);
-            https.fetchPost('/openCardRule/modifyPage', params).then(data => {
+            https
+                .fetchPost('/openCardRule/modifyPage', params)
+                .then(data => {
                     loading.close();
                     console.log(data);
                     if (data.data.code == 'success') {
@@ -611,11 +649,14 @@ export default {
                         // this.oForm.cinemaCode=JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.cinemaCode
                         // this.getAllCinemaCard();
                         this.editVisible = true;
-                        this.cardList=JSON.parse(Decrypt(data.data.data)).cardLevelList;
+                        this.cardList = JSON.parse(Decrypt(data.data.data)).cardLevelList;
                         this.oCinemaName = JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.cinemaName;
                         this.oCinemaCode = JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.cinemaCode;
                         for (let x in JSON.parse(Decrypt(data.data.data)).cardLevelList) {
-                            if (JSON.parse(Decrypt(data.data.data)).cardLevelList[x].levelCode == JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.cardLevelCode) {
+                            if (
+                                JSON.parse(Decrypt(data.data.data)).cardLevelList[x].levelCode ==
+                                JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.cardLevelCode
+                            ) {
                                 this.oCardLevelName = JSON.parse(Decrypt(data.data.data)).cardLevelList[x].levelCode;
                                 break;
                             }
@@ -683,7 +724,7 @@ export default {
                 this.couponId = '';
                 this.groupName = '';
                 if (this.oGivenMoney == '') {
-                    alert("请输入赠送金额")
+                    alert('请输入赠送金额');
                     loading.close();
                     return;
                 }
@@ -691,19 +732,19 @@ export default {
                 jsonArr.push({ key: 'givenType', value: 3 });
                 this.oGivenMoney = '';
                 if (this.couponId == '' || !this.couponId) {
-                    alert("请选择券包")
+                    alert('请选择券包');
                     loading.close();
                     return;
                 }
             } else if (this.oGivenType == '两者都送') {
                 jsonArr.push({ key: 'givenType', value: 4 });
                 if (this.oGivenMoney == '') {
-                    alert("请输入赠送金额")
+                    alert('请输入赠送金额');
                     loading.close();
                     return;
                 }
                 if (this.couponId == '' || !this.couponId) {
-                    alert("请选择券包")
+                    alert('请选择券包');
                     loading.close();
                     return;
                 }
@@ -716,7 +757,7 @@ export default {
             }
             if (this.oGivenType == 3) {
                 if (this.couponId == '' || !this.couponId) {
-                    alert("请选择券包");
+                    alert('请选择券包');
                     loading.close();
                     return;
                 }
@@ -823,7 +864,7 @@ export default {
             jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
-            console.log(jsonArr)
+            console.log(jsonArr);
             var params = ParamsAppend(jsonArr);
             https
                 .fetchPost('/openCardRule/openPage', params)
@@ -908,7 +949,9 @@ export default {
         },
         // 获取所有影院
         getAllCinema() {
-            https.fetchPost('/cinema/getAllCinema').then(data => {
+            https
+                .fetchPost('/cinema/getAllCinema')
+                .then(data => {
                     if (data.data.code == 'success') {
                         var res = JSON.parse(Decrypt(data.data.data));
                         console.log(res);
@@ -933,8 +976,8 @@ export default {
                 this.open();
                 return;
             }
-            if(!this.couponName){
-                this.couponName=''
+            if (!this.couponName) {
+                this.couponName = '';
             }
             let jsonArr = [];
             jsonArr.push({ key: 'cinemaCodes', value: this.oForm.cinemaCode });
@@ -951,7 +994,7 @@ export default {
                         var res = JSON.parse(Decrypt(data.data.data));
                         if (res.data.length == 0) {
                             this.message = '暂无券包';
-                            this.couponName='';
+                            this.couponName = '';
                             this.open();
                             return;
                         }
@@ -1024,7 +1067,9 @@ export default {
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             var params = ParamsAppend(jsonArr);
-            https.fetchPost('/rechargeCardRule/listCardLevel', params).then(data => {
+            https
+                .fetchPost('/rechargeCardRule/listCardLevel', params)
+                .then(data => {
                     if (data.data.code == 'success') {
                         var res = JSON.parse(Decrypt(data.data.data));
                         console.log(res);
@@ -1047,18 +1092,18 @@ export default {
 </script>
 
 <style scoped>
-    .handle-box {
-        width: 100%;
-        margin-bottom: 20px;
-        font-size: 14px;
-    }
-    .table {
-        width: 100%;
-        font-size: 14px;
-    }
-    .mr10 {
-        width: 16%;
-        margin-right: 10px;
-    }
+.handle-box {
+    width: 100%;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+.table {
+    width: 100%;
+    font-size: 14px;
+}
+.mr10 {
+    width: 16%;
+    margin-right: 10px;
+}
 </style>
 

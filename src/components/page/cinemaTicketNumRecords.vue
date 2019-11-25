@@ -9,7 +9,17 @@
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-input v-model="query.name" placeholder="影院名称" class="handle-input mr10"></el-input>
+                <el-input v-model="query.cinemaName" placeholder="影院名称" class="handle-input mr10"></el-input>
+                <el-select
+                    clearable
+                    v-model="query.tradeType"
+                    placeholder="请选择交易方式"
+                    class="handle-input mr10"
+                >
+                    <el-option key="1" label="主动充值" value="1"></el-option>
+                    <el-option key="2" label="购票扣除" value="2"></el-option>
+                    <el-option key="3" label="退票返回" value="3"></el-option>
+                </el-select>
                 <el-button style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
                 <el-button
                         type="primary"
@@ -177,6 +187,7 @@
         created() {},
         mounted() {
             this.getMenu();
+            this.getAllCinema();
         },
         methods: {
             addPage() {
@@ -291,16 +302,17 @@
                     background: 'rgba(0, 0, 0, 0.7)',
                     target: document.querySelector('.div1')
                 });
-                let name = this.query.name;
-                let status = this.query.status;
-                if (!name) {
-                    name = '';
+                let cinemaName = this.query.cinemaName;
+                let tradeType = this.query.tradeType;
+                if (!cinemaName) {
+                    cinemaName = '';
                 }
-                if (!status) {
-                    status = '';
+                if (!tradeType) {
+                    tradeType = '';
                 }
                 let jsonArr = [];
-                // jsonArr.push({ key: 'cinemaName', value: name });
+                jsonArr.push({ key: 'cinemaName', value: cinemaName });
+                jsonArr.push({ key: 'tradeType', value: tradeType });
                 jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
                 jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
                 let sign = md5(preSign(jsonArr));

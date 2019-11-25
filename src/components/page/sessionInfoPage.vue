@@ -38,12 +38,18 @@
                     icon="el-icon-search"
                     @click="Search"
                 >搜索</el-button>
-                <el-button
+                <!-- <el-button
                     type="primary"
                     @click="showPoster"
                     style="float: right;margin-top: 10px"
                     icon="el-icon-circle-plus-outline"
-                >生成影讯</el-button>
+                >生成影讯</el-button>-->
+                <el-button
+                    type="primary"
+                    @click="updatePrice"
+                    style="float: right;margin-top: 10px"
+                    icon="el-icon-circle-plus-outline"
+                >刷新小程序会员价</el-button>
                 <el-button
                     type="primary"
                     @click="thirdPrice"
@@ -109,15 +115,6 @@
                 <el-table-column prop="time" label="会员卡支付代售费" width="150">
                     <template slot-scope="scope">{{scope.row.memberCardPayCommissionFee}}</template>
                 </el-table-column>
-                <!--<el-table-column label="操作" width="100" align="center" fixed="right">-->
-                <!--<template slot-scope="scope">-->
-                <!--<el-button-->
-                <!--type="text"-->
-                <!--icon="el-icon-edit"-->
-                <!--@click="addChange(scope.$index, scope.row)"-->
-                <!--&gt;价格设置</el-button>-->
-                <!--</template>-->
-                <!--</el-table-column>-->
             </el-table>
             <div class="pagination">
                 <el-pagination
@@ -257,7 +254,7 @@
             </span>
         </el-dialog>
         <!--影讯弹出框-->
-        <el-dialog title="生成影讯" :visible.sync="poster">
+        <!-- <el-dialog title="生成影讯" :visible.sync="poster">
             <el-form :model="oForm">
                 <el-form-item label="影院名称" :label-width="formLabelWidth">
                     <el-select v-model="posterForm.cinemaCode" placeholder="请选择">
@@ -289,8 +286,8 @@
             :close-on-press-escape="false"
             :visible.sync="showPosterImg"
             custom-class="posterClass"
-        >
-            <div id="posterHtml">
+            >
+            <div id="posterHtml" ref="posterInfo">
                 <div class="poster-head">
                     <h1>今日影讯</h1>
                     <div>{{posterForm.date}}</div>
@@ -310,7 +307,10 @@
                     </div>
                 </div>
             </div>
-        </el-dialog>
+            <span slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="downLoad">下载</el-button>
+            </span>
+        </el-dialog>-->
     </div>
 </template>
 
@@ -456,6 +456,59 @@ export default {
                     });
             }
         },
+        updatePrice() {
+            if (!this.query.cinemaCode) {
+                this.message = '请选择影院！';
+                this.open();
+                return;
+            }
+            this.$confirm('该操作将花费较长时间, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            })
+                .then(() => {
+                    const loading = this.$loading({
+                        lock: true,
+                        text: 'Loading',
+                        spinner: 'el-icon-loading',
+                        background: 'rgba(0, 0, 0, 0.7)',
+                        target: document.querySelector('.div1')
+                    });
+                    var jsonArr = [];
+                    jsonArr.push({ key: 'cinemaCode', value: this.query.cinemaCode });
+                    let sign = md5(preSign(jsonArr));
+                    jsonArr.push({ key: 'sign', value: sign });
+                    let params = ParamsAppend(jsonArr);
+                    https
+                        .fetchPost('/sessionInfo/updateMemberPrice', params)
+                        .then(data => {
+                            loading.close();
+                            if (data.data.code == 'success') {
+                                this.$message.success(`刷新成功`);
+                                this.getMenu();
+                            } else if (data.data.code == 'nologin') {
+                                this.message = data.data.message;
+                                this.open();
+                                this.$router.push('/login');
+                            } else {
+                                this.message = data.data.message;
+                                this.open();
+                            }
+                        })
+                        .catch(err => {
+                            loading.close();
+                            console.log(err);
+                        });
+                })
+                .catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消'
+                    });
+                });
+        },
+
         sureThirdPrice() {
             //提交确认批量修改
             const loading = this.$loading({
@@ -733,7 +786,7 @@ export default {
         },
         open() {
             //错误信息弹出框
-            this.$alert(this.message, '错误信息', {
+            this.$alert(this.message, '返回信息', {
                 dangerouslyUseHTMLString: true
             });
         },
@@ -848,21 +901,6 @@ export default {
                         this.posterContent = JSON.parse(Decrypt(data.data.data));
                         console.log(this.posterContent);
                         this.showPosterImg = true;
-                        // const vm = this;
-                        // const domObj = document.getElementById('posterHtml');
-                        // html2canvas(domObj, {
-                        //     useCORS: true,
-                        //     allowTaint: false,
-                        //     logging: false,
-                        //     letterRendering: true,
-                        //     onclone(doc) {
-                        //         let e = doc.querySelector('#posterHtml');
-                        //         e.style.display = 'block';
-                        //     }
-                        // }).then(function(canvas) {
-                        //     // 在微信里,可长按保存或转发
-                        //     vm.posterImg = canvas.toDataURL('image/png');
-                        // });
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
@@ -876,6 +914,24 @@ export default {
                     loading.close();
                     console.log(err);
                 });
+        },
+
+        downLoad() {
+            const vm = this;
+            const domObj = document.getElementById('posterHtml');
+            html2canvas(domObj, {
+                useCORS: true,
+                allowTaint: false,
+                logging: false,
+                letterRendering: true,
+                onclone(doc) {
+                    let e = doc.querySelector('#posterHtml');
+                    e.style.display = 'block';
+                }
+            }).then(function(canvas) {
+                // 在微信里,可长按保存或转发
+                vm.posterImg = canvas.toDataURL('image/png');
+            });
         }
     }
 };
@@ -896,10 +952,9 @@ export default {
     margin-right: 10px;
 }
 .el-dialog__wrapper .posterClass {
-    background: rgba(0,159,255,1);
+    background: rgba(0, 159, 255, 1);
 }
 #posterHtml {
-    
     position: relative;
 }
 .post-head {
