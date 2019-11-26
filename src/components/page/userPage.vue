@@ -153,7 +153,7 @@
                     </el-checkbox-group>
                 </el-form-item>
                 <el-form-item :required="true" label="角色" :label-width="formLabelWidth">
-                    <el-select v-model="selectList.id">
+                    <el-select v-model="selectList.id" @change="openNext">
                         <el-option
                             v-for="item in selectList"
                             :key="item.id"
@@ -163,30 +163,21 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item :required="true" label="设置权限" :label-width="formLabelWidth">
-                    <el-button type="primary" @click="openNext">点击修改</el-button>
+                    <el-tree
+                            ref="tree"
+                            :data="data"
+                            show-checkbox
+                            node-key="id"
+                            :default-expanded-keys="expandedKeys"
+                            :default-checked-keys="checkedKeys"
+                            :props="defaultProps"
+                    ></el-tree>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取 消</el-button>
                 <el-button type="primary" @click="getCheckedKeys">确 定</el-button>
             </div>
-        </el-dialog>
-        <!--新的新增抽屉弹出框-->
-        <el-dialog title="请选择权限" :visible.sync="drawer">
-            <el-tree
-                    ref="tree"
-                    :data="data"
-                    show-checkbox
-                    node-key="id"
-                    :default-expanded-keys="expandedKeys"
-                    :default-checked-keys="checkedKeys"
-                    :props="defaultProps"
-            ></el-tree>
-            <el-button
-                    @click="sureNext"
-                    type="primary"
-                    style="margin-top: 50px;margin-left: 100px"
-            >确 定</el-button>
         </el-dialog>
         <!-- 编辑弹出框 -->
         <el-dialog title="编辑" :visible.sync="editVisible">
@@ -249,30 +240,21 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item :required="true" label="设置权限" :label-width="formLabelWidth">
-                    <el-button type="primary" @click="changerNext">点击修改</el-button>
+                    <el-tree
+                            ref="tree_"
+                            :data="data"
+                            show-checkbox
+                            node-key="id"
+                            :default-expanded-keys="expandedKeys"
+                            :default-checked-keys="checkedKeys"
+                            :props="defaultProps"
+                    ></el-tree>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false">取 消</el-button>
                 <el-button type="primary" @click="exChanger">确 定</el-button>
             </span>
-        </el-dialog>
-        <!-- 新的编辑抽屉弹出框 -->
-        <el-dialog title="请选择权限" :visible.sync="drawered">
-            <el-tree
-                    ref="tree_"
-                    :data="data"
-                    show-checkbox
-                    node-key="id"
-                    :default-expanded-keys="expandedKeys"
-                    :default-checked-keys="checkedKeys"
-                    :props="defaultProps"
-            ></el-tree>
-            <el-button
-                    @click="sureNext"
-                    type="primary"
-                    style="margin-top: 50px;margin-left: 100px"
-            >确 定</el-button>
         </el-dialog>
         <!-- 修改密码弹出框 -->
         <el-dialog title="修改密码" :visible.sync="passShow">
@@ -326,7 +308,6 @@
                 newPass:'',//新密码
                 surePass:'',//确认密码
                 passShow:false,//修改密码页面
-                drawered:false,//编辑抽屉弹出框
                 drawer: false,//新增抽屉弹出框
                 checkAll: false,
                 checkedCities: [],
@@ -363,7 +344,7 @@
                 oForm: {
                     userName: '',
                     userPass: '',
-                    value: '',
+                    value: '1',
                     realName: '',
                     callNumber: '',
                     memo: '',
@@ -476,15 +457,13 @@
                 }
             }, 500);
         },
-        changerNext() {
-            this.drawered = true;
-        },
-        sureNext() {
-            this.drawer = false;
-            this.drawered = false;
-        },
         openNext() {
             //获取数级权限列表
+            if(!this.selectList.id){
+                this.message = '请先选择角色！';
+                this.open();
+                return;
+            }
             if (this.selectList.id) {
                 const loading = this.$loading({
                     lock: true,
@@ -510,7 +489,7 @@
                                 this.expandedKeys = JSON.parse(Decrypt(data.data.data)).openPermissionIds;
                                 this.checkedKeys = JSON.parse(Decrypt(data.data.data)).exitPermissionIds;
                                 console.log(JSON.parse(Decrypt(data.data.data)));
-                                this.drawer = true;
+                                // this.drawer = true;
                             } else if (data.data.code == 'nologin') {
                                 this.message = data.data.message;
                                 this.open();
@@ -546,7 +525,6 @@
                         loading.close();
                         // console.log(data);
                         if (data.data.code == 'success') {
-                            this.oForm = [];
                             this.dialogFormVisible = true;
                             // console.log(JSON.parse(JSON.stringify(JSON.parse(Decrypt(data.data.data)).permissionList).replace(/submenuList/g,'children').replace(/menuName/g,'label')));
                             console.log(JSON.parse(Decrypt(data.data.data)));
@@ -565,49 +543,55 @@
                     )
                 }, 500);
             },
-            getCheckedKeys() {//新增数据操作
-                const loading = this.$loading({
+        getCheckedKeys() {//新增数据操作
+            const loading = this.$loading({
                     lock: true,
                     text: 'Loading',
                     spinner: 'el-icon-loading',
                     background: 'rgba(0, 0, 0, 0.7)',
                     target: document.querySelector('.div1')
                 });
-                setTimeout(() => {
-                    var jsonArr = [];
-                    jsonArr.push({key:"userName",value:this.oForm.userName});
-                    jsonArr.push({key:"userPass",value:this.oForm.userPass});
-                    jsonArr.push({key:"status",value:this.oForm.value});
-                    jsonArr.push({key:"memo",value:this.oForm.memo});
-                    jsonArr.push({key:"realName",value:this.oForm.realName});
-                    jsonArr.push({key:"callNumber",value:this.oForm.callNumber});
-                    jsonArr.push({key:"roleIds",value:this.selectList.id});
-                    jsonArr.push({key:"cinemaCodes",value:this.checkedCities});
-                    jsonArr.push({key:"menuIds",value:this.$refs.tree.getCheckedKeys().concat(this.$refs.tree.getHalfCheckedKeys())});
-                    let sign =md5(preSign(jsonArr));
-                    jsonArr.push({key:"sign",value:sign});
-                    let params = ParamsAppend(jsonArr);
-                    if(this.dialogFormVisible == true){
-                        https.fetchPost('/user/addUser',params).then((data) => {//新增
-                                loading.close();
-                            console.log(data);
-                            if (data.data.code == 'success') {
-                                this.dialogFormVisible = false;
-                                this.getMenu();
-                            } else if (data.data.code == 'nologin') {
-                                this.message = data.data.message;
-                                this.open();
-                                this.$router.push('/login');
-                            } else {
-                                this.message = data.data.message;
-                                this.open();
-                            }
+            if(!this.oForm.userName||!this.oForm.userPass||!this.oForm.realName||!this.oForm.callNumber||!this.checkedCities
+                ||!this.selectList.id){
+                this.message = '必填项不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            var jsonArr = [];
+            jsonArr.push({key:"userName",value:this.oForm.userName});
+            jsonArr.push({key:"userPass",value:this.oForm.userPass});
+            jsonArr.push({key:"status",value:this.oForm.value});
+            jsonArr.push({key:"memo",value:this.oForm.memo});
+            jsonArr.push({key:"realName",value:this.oForm.realName});
+            jsonArr.push({key:"callNumber",value:this.oForm.callNumber});
+            jsonArr.push({key:"roleIds",value:this.selectList.id});
+            jsonArr.push({key:"cinemaCodes",value:this.checkedCities});
+            jsonArr.push({key:"menuIds",value:this.$refs.tree.getCheckedKeys().concat(this.$refs.tree.getHalfCheckedKeys())});
+            let sign =md5(preSign(jsonArr));
+            jsonArr.push({key:"sign",value:sign});
+            let params = ParamsAppend(jsonArr);
+            if(this.dialogFormVisible == true){
+                https.fetchPost('/user/addUser',params).then((data) => {//新增
+                        loading.close();
+                        console.log(data);
+                        if (data.data.code == 'success') {
+                            this.dialogFormVisible = false;
+                            this.oForm.value='1';
+                            this.getMenu();
+                        } else if (data.data.code == 'nologin') {
+                            this.message = data.data.message;
+                            this.open();
+                            this.$router.push('/login');
+                        } else {
+                            this.message = data.data.message;
+                            this.open();
                         }
-                        )
                     }
-                }, 500);
+                )
+            }
             },
-            delChange(index, row){//删除数据
+        delChange(index, row){//删除数据
                 this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
@@ -717,7 +701,7 @@
                 }, 500);
             },
             // 修改操作
-            exChanger() {
+        exChanger() {
                 // console.log(this.$refs.tree_.getCheckedKeys().concat(this.$refs.tree_.getHalfCheckedKeys()));
                 const loading = this.$loading({
                     lock: true,
@@ -726,7 +710,12 @@
                     background: 'rgba(0, 0, 0, 0.7)',
                     target: document.querySelector('.div1')
                 });
-                setTimeout(() => {
+            if(!this.userName||!this.form.realName||!this.form.callNumber||!this.oCheckedCities){
+                this.message = '必填项不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
                     var jsonArr = [];
                     jsonArr.push({key:"id",value:this.form.id});
                     jsonArr.push({key:"userName",value:this.userName});
@@ -762,7 +751,6 @@
                         console.log(err)
                         }
                     )
-                }, 500);
             },
             Search(){
                 this.query.pageNo=1
