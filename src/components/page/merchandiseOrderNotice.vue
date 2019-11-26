@@ -83,17 +83,17 @@
                 <el-table-column label="操作" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-button
-                            v-if="scope.row.deliveryStatus=='0'"
+                            v-if="scope.row.deliveryType=='0'&&scope.row.deliveryStatus=='0'"
                             type="text"
                             icon="el-icon-setting"
                             @click="addChange(scope.$index, scope.row)"
                         >取货</el-button>
                         <el-button
-                            v-if="scope.row.deliveryStatus=='1'"
+                            v-if="scope.row.deliveryType=='1'&&scope.row.deliveryStatus=='0'"
                             type="text"
                             icon="el-icon-setting"
                             style="color: gray"
-                        >已取货</el-button>
+                        >确认送达</el-button>
                     </template>
                 </el-table-column>
             </el-table>

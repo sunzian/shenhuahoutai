@@ -38,12 +38,12 @@
                     icon="el-icon-search"
                     @click="Search"
                 >搜索</el-button>
-                <!-- <el-button
+                <el-button
                     type="primary"
                     @click="showPoster"
                     style="float: right;margin-top: 10px"
                     icon="el-icon-circle-plus-outline"
-                >生成影讯</el-button>-->
+                >生成影讯</el-button>
                 <el-button
                     type="primary"
                     @click="updatePrice"
@@ -254,7 +254,7 @@
             </span>
         </el-dialog>
         <!--影讯弹出框-->
-        <!-- <el-dialog title="生成影讯" :visible.sync="poster">
+        <el-dialog title="生成影讯" :visible.sync="poster">
             <el-form :model="oForm">
                 <el-form-item label="影院名称" :label-width="formLabelWidth">
                     <el-select v-model="posterForm.cinemaCode" placeholder="请选择">
@@ -282,35 +282,46 @@
             </span>
         </el-dialog>
         <el-dialog
-            :show-close="false"
             :close-on-press-escape="false"
             :visible.sync="showPosterImg"
-            custom-class="posterClass"
+            :close-on-click-modal="false"
             >
-            <div id="posterHtml" ref="posterInfo">
-                <div class="poster-head">
-                    <h1>今日影讯</h1>
-                    <div>{{posterForm.date}}</div>
-                    <div>{{posterContent.cinemaName}}</div>
-                    <div>{{posterContent.address}}</div>
-                    <div>{{posterContent.serviceMobile}}</div>
+            <div id="posterHtml" ref="posterHtml">
+                <div style="background: rgba(0, 159, 255, 1);">
+                    <div class="poster-head">
+                        <div style="font-size: 30px;margin-bottom: 25px;font-weight:bold;letter-spacing: 8px;">今日影讯</div>
+                        <div class="poster-date">{{posterForm.date}}</div>
+                        <div class="poster-name">{{posterContent.cinemaName}}</div>
+                        <div class="poster-address">{{posterContent.address}}</div>
+                        <div class="poster-mobile">{{posterContent.serviceMobile}}</div>
+                    </div>
+                    <div v-for="(item, index) in posterContent.filmList" :key="index" class="poster-session">
+                        <img :src="'data:image/png;base64,'+item.image" class="poster-img" />
+                        <span class="poster-filmName">{{item.filmName}}
+                            <span style="display: inline;border:1px solid pink;color: pink;font-size: 9px;">{{item.dimensional}}</span>
+                        </span>
+                        <span class="poster-area">{{item.duration}}分钟，{{item.area}}，{{item.language}}</span>
+                        <span class="poster-actor">{{item.actor}}</span>
+                        <span class="poster-sessionList">
+                            <span class="poster-sessionInfo" v-for="(session, index) in item.sessionList" :key="index">
+                                <span style="font-size: 20px;font-weight:bold;color:rgba(51,51,51,1);">{{session.sessionTime}}</span>
+                                <span>{{session.sessDimensional}}&nbsp;{{session.sessLanguage}}</span>
+                                <span style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">{{session.screenName}}</span>
+                            </span>
+                        </span>
+                    </div>
+                    <div style="text-align: center;">以上影讯如有变动，请以当日影院公布为准</div>
                 </div>
-                <div v-for="(item, index) in posterContent.filmList" :key="index" class="poster-session">
-                    <img :src="item.image" />
-                    <div>{{item.filmName}}{{item.dimensional}}</div>
-                    <div>{{item.duration}}分钟{{item.area}}{{item.language}}</div>
-                    <div>{{item.actor}}</div>
-                    <div v-for="(session, index) in item.sessionList" :key="index">
-                        <div>{{session.sessionTime}}</div>
-                        <div>{{session.sessDimensional}}{{session.sessLanguage}}</div>
-                        <div>{{session.screenName}}</div>
+                <div class="poster-foot">
+                    <img :src="'data:image/png;base64,'+posterContent.miniAppQRCode" class="poster-qrcode" />
+                    <div style="display: flex;flex-direction: column;justify-content: space-around;">
+                        <span style="color:rgba(77,77,77,1);font-size: 13px;">票比三家，省钱到家</span>
+                        <div class="poster-btn">会员充值巨划算</div>
                     </div>
                 </div>
             </div>
-            <span slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="downLoad">下载</el-button>
-            </span>
-        </el-dialog>-->
+            <el-button @click="downLoad('posterHtml','影讯')">生成影讯</el-button>
+        </el-dialog>
     </div>
 </template>
 
@@ -916,28 +927,51 @@ export default {
                 });
         },
 
-        downLoad() {
-            const vm = this;
-            const domObj = document.getElementById('posterHtml');
-            html2canvas(domObj, {
-                useCORS: true,
-                allowTaint: false,
-                logging: false,
-                letterRendering: true,
-                onclone(doc) {
-                    let e = doc.querySelector('#posterHtml');
-                    e.style.display = 'block';
-                }
-            }).then(function(canvas) {
-                // 在微信里,可长按保存或转发
-                vm.posterImg = canvas.toDataURL('image/png');
+        /* 第一个参数为需要保存的div的id名  
+           第二个参数为保存图片的名称 */
+        downLoad(divText, imgText) {
+            let canvasID = this.$refs[divText];
+            let that = this;
+            let a = document.createElement('a');
+            html2canvas(canvasID).then(canvas => {
+                let dom = document.body.appendChild(canvas);
+                dom.style.display = 'none';
+                a.style.display = 'none';
+                document.body.removeChild(dom);
+                let blob = that.dataURLToBlob(dom.toDataURL('image/png'));
+                a.setAttribute('href', URL.createObjectURL(blob));
+                //这块是保存图片操作  可以设置保存的图片的信息
+                a.setAttribute('download', imgText + '.png');
+                document.body.appendChild(a);
+                a.click();
+                URL.revokeObjectURL(blob);
+                document.body.removeChild(a);
             });
-        }
+        },
+
+        //图片转换格式的方法
+       dataURLToBlob(dataurl) {
+            let arr = dataurl.split(',');
+            let mime = arr[0].match(/:(.*?);/)[1];
+            let bstr = atob(arr[1]);
+            let n = bstr.length;
+            let u8arr = new Uint8Array(n);
+            while (n--) {
+                u8arr[n] = bstr.charCodeAt(n);
+            }
+            return new Blob([u8arr], { type: mime });
+        },
     }
 };
 </script>
 
 <style scoped>
+.posterClass .el-dialog__header {
+    padding: 0;
+}
+.posterClass .el-dialog__body {
+    padding: 0;
+}
 .handle-box {
     width: 100%;
     margin-bottom: 20px;
@@ -951,15 +985,107 @@ export default {
     width: 16%;
     margin-right: 10px;
 }
-.el-dialog__wrapper .posterClass {
-    background: rgba(0, 159, 255, 1);
-}
 #posterHtml {
     position: relative;
+    /* width: 750px; */
 }
-.post-head {
-    font-size: 60px;
+.poster-head {
     position: relative;
+    padding-left: 20px;
+}
+.poster-date {
+    position: absolute;
+    top: 10%;
+    left: 60%;
+    font-size: 18px;
+}
+.poster-name {
+    font-size: 18px;
+    margin-bottom: 15px;
+    font-weight:bold;
+    letter-spacing: 2px;
+}
+.poster-address {
+    font-size: 16px;
+    margin-bottom: 15px;
+}
+.poster-mobile {
+    font-size: 16px;
+    margin-bottom: 25px;
+}
+.poster-session {
+    position: relative;
+    left: 20px;
+    width: 90%;
+    box-shadow:0px 7px 16px 0px rgba(3,143,228,0.45);
+    border-radius:20px;
+    padding: 20px;
+    margin-bottom: 60px;
+    background: rgba(255,255,255,1);
+}
+.poster-img {
+    width: 200px;
+    height: 280px;
+    position: relative;
+    top: 30px;
+}
+.poster-filmName {
+    font-size: 16px;
+    position: absolute;
+    left: 241px;
+    top: 60px;
+}
+.poster-area {
+    color:rgba(136,136,136,1);
+    font-size: 11px;
+    position: absolute;
+    left: 241px;
+    top: 100px;
+}
+.poster-actor {
+    color:rgba(136,136,136,1);
+    font-size: 12px;
+    position: absolute;
+    left: 241px;
+    top: 120px;
+}
+.poster-sessionList {
+    position: relative;
+    left: 200px;
+    top: -160px;
+    display: flex;
+    flex-wrap: wrap;
+    width: 70%;
+
+}
+.poster-sessionInfo {
+    display: flex;
+    flex-direction: column;
+    width: 90px;
+    color:rgba(136,136,136,1);
+    font-size:9px;
+    height: 90px;
+    text-align: center;
+}
+.poster-foot {
+    position: relative;
+    padding: 0 165px;
+    display: flex;
+    justify-content: space-around;
+}
+.poster-qrcode {
+    width: 152px;
+    height: 152px;
+}
+.poster-btn {
+    width:118px;
+    height:25px;
+    background:rgba(0,154,255,1);
+    border-radius:25px;
+    color:rgba(255,255,255,1);
+    font-size: 11px;
+    line-height: 25px;
+    text-align: center;
 }
 </style>
 
