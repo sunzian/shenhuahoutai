@@ -234,14 +234,14 @@
         <!--新增弹出框-->
         <el-dialog :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
-                <el-form-item label="服务费规则名称：" :label-width="formLabelWidth" prop="cinemaName">
+                <el-form-item :required="true" label="服务费规则名称：" :label-width="formLabelWidth" >
                     <el-input
                             style="width: 150px"
                             v-model="oForm.serviceFeeName"
                             autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="选择影厅：" :label-width="formLabelWidth" prop="screenName">
+                <el-form-item :required="true" label="选择影厅：" :label-width="formLabelWidth" >
                     <el-radio-group v-model="oForm.selectHallType">
                         <el-radio label="1">全部影厅</el-radio>
                         <el-radio label="2">部分影厅</el-radio>
@@ -259,24 +259,16 @@
                         >{{item.screenName}}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
-                <el-form-item label="选择影片：" :label-width="formLabelWidth" prop="filmName">
+                <el-form-item :required="true" label="选择影片：" :label-width="formLabelWidth" >
                     <el-radio-group v-model="oForm.selectFilmType">
                         <el-radio label="1">全部影片</el-radio>
                         <el-radio label="2">部分影片</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item
-                    v-if="oForm.selectFilmType == 2"
-                    label="选择影片"
-                    :label-width="formLabelWidth"
-                >
+                <el-form-item :required="true" v-if="oForm.selectFilmType == 2" label="选择影片" :label-width="formLabelWidth">
                     <el-button type="primary" @click="openNext">点击选择</el-button>
                 </el-form-item>
-                <el-form-item
-                    label="所选影片"
-                    :label-width="formLabelWidth"
-                    v-if="selectedSell.length>0&&oForm.selectFilmType == 2"
-                >
+                <el-form-item :required="true" label="所选影片" :label-width="formLabelWidth" v-if="selectedSell.length>0&&oForm.selectFilmType == 2">
                     <div
                         v-for="(item, index) in selectedSell"
                         style="margin-bottom: 5px"
@@ -293,7 +285,7 @@
                         <span style="color:red;cursor: pointer;" @click="deleteSell()">删除</span>
                     </div>
                 </el-form-item>
-                <el-form-item label="有效期：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="有效期：" :label-width="formLabelWidth">
                     <el-date-picker
                         v-model="oForm.startDate"
                         type="datetime"
@@ -309,7 +301,7 @@
                         format="yyyy-MM-dd hh:mm:ss"
                     ></el-date-picker>
                 </el-form-item>
-                <el-form-item label="每日时间段：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="每日时间段：" :label-width="formLabelWidth">
                     <el-time-picker
                         v-model="oForm.startDay"
                         value-format="hh:mm:ss"
@@ -324,7 +316,7 @@
                     ></el-time-picker>
                     <span style="cursor: pointer;color: blue" @click="addTime">添加</span>
                 </el-form-item>
-                <el-form-item label="所选时间段：" :label-width="formLabelWidth" v-if="date.length>0">
+                <el-form-item :required="true" label="所选时间段：" :label-width="formLabelWidth" v-if="date.length>0">
                     <div v-for="(item, index) in date" :key="index">
                         {{item}}
                         <span
@@ -333,7 +325,7 @@
                         >删除</span>
                     </div>
                 </el-form-item>
-                <el-form-item label="开启状态：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="开启状态：" :label-width="formLabelWidth">
                     <el-select v-model="oForm.status" placeholder="请选择">
                         <el-option
                             v-for="item in options"
@@ -343,14 +335,14 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="第三方支付代售费：" :label-width="formLabelWidth" prop="cinemaName">
+                <el-form-item :required="true" label="第三方支付代售费：" :label-width="formLabelWidth">
                     <el-input
                         style="width: 150px"
                         v-model="oForm.thirdServiceFee"
                         autocomplete="off"
                     ></el-input>元
                 </el-form-item>
-                <el-form-item label="会员卡支付代售费：" :label-width="formLabelWidth" prop="cinemaName">
+                <el-form-item :required="true" label="会员卡支付代售费：" :label-width="formLabelWidth">
                     <el-input
                         style="width: 150px"
                         v-model="oForm.memberServiceFee"
@@ -366,14 +358,14 @@
         <!-- 编辑弹出框 -->
         <el-dialog title="详情" :visible.sync="editVisible">
             <el-form :model="form">
-                <el-form-item label="服务费规则名称：" :label-width="formLabelWidth" prop="cinemaName">
+                <el-form-item :required="true" label="服务费规则名称：" :label-width="formLabelWidth">
                     <el-input
                             style="width: 150px"
                             v-model="oServiceFeeName"
                             autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="选择影厅：" :label-width="formLabelWidth" prop="screenName">
+                <el-form-item :required="true" label="选择影厅：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oScreenType">
                         <el-radio :label="1">全部影厅</el-radio>
                         <el-radio :label="2">部分影厅</el-radio>
@@ -391,20 +383,16 @@
                         >{{item.screenName}}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
-                <el-form-item label="选择影片：" :label-width="formLabelWidth" prop="filmName">
+                <el-form-item :required="true" label="选择影片：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oFilmType">
                         <el-radio :label="1">全部影片</el-radio>
                         <el-radio :label="2">部分影片</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item v-if="oFilmType == 2" label="选择影片" :label-width="formLabelWidth">
+                <el-form-item :required="true" v-if="oFilmType == 2" label="选择影片" :label-width="formLabelWidth">
                     <el-button type="primary" @click="openNext">点击选择</el-button>
                 </el-form-item>
-                <el-form-item
-                    label="所选影片"
-                    :label-width="formLabelWidth"
-                    v-if="selectedSell.length>0 && oFilmType == 2"
-                >
+                <el-form-item :required="true" label="所选影片" :label-width="formLabelWidth" v-if="selectedSell.length>0 && oFilmType == 2">
                     <div
                         v-for="(item, index) in selectedSell"
                         style="margin-bottom: 5px"
@@ -421,7 +409,7 @@
                         <span style="color:red;cursor: pointer;" @click="deleteSell()">删除</span>
                     </div>
                 </el-form-item>
-                <el-form-item label="有效期：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="有效期：" :label-width="formLabelWidth">
                     <el-date-picker
                         v-model="oStartDate"
                         type="datetime"
@@ -437,7 +425,7 @@
                         format="yyyy-MM-dd hh:mm:ss"
                     ></el-date-picker>
                 </el-form-item>
-                <el-form-item label="每日时间段：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="每日时间段：" :label-width="formLabelWidth">
                     <el-time-picker
                         v-model="oStartDay"
                         value-format="hh:mm:ss"
@@ -452,7 +440,7 @@
                     ></el-time-picker>
                     <span style="cursor: pointer;color: blue" @click="addTime2">添加</span>
                 </el-form-item>
-                <el-form-item label="所选时间段：" :label-width="formLabelWidth" v-if="date.length>0">
+                <el-form-item :required="true" label="所选时间段：" :label-width="formLabelWidth" v-if="date.length>0">
                     <div v-for="(item, index) in date" :key="index">
                         {{item}}
                         <span
@@ -461,7 +449,7 @@
                         >删除</span>
                     </div>
                 </el-form-item>
-                <el-form-item label="开启状态：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="开启状态：" :label-width="formLabelWidth">
                     <el-select v-model="oStatus" placeholder="请选择">
                         <el-option
                             v-for="item in options"
@@ -471,10 +459,10 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="第三方支付代售费：" :label-width="formLabelWidth" prop="cinemaName">
+                <el-form-item :required="true" label="第三方支付代售费：" :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oThirdServiceFee" autocomplete="off"></el-input>元
                 </el-form-item>
-                <el-form-item label="会员卡支付代售费：" :label-width="formLabelWidth" prop="cinemaName">
+                <el-form-item :required="true" label="会员卡支付代售费：" :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oMemberServiceFee" autocomplete="off"></el-input>元
                 </el-form-item>
             </el-form>

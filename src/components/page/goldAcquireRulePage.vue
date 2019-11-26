@@ -9,10 +9,10 @@
         </div>
         <div class="container">
             <el-form v-model="oForm">
-                <el-form-item label="邀请注册获得金币数量" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="邀请注册获得金币数量" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oForm.miniRegisterNumber" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="积分兑换金币比例" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="积分兑换金币比例" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oForm.pointChangePercent" autocomplete="off"></el-input>
                 </el-form-item>
             </el-form>

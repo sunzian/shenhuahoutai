@@ -45,7 +45,7 @@
         <!-- 新增奖项弹出框 -->
         <el-dialog title="新增" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
-                <el-form-item label="连续签到天数" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="连续签到天数" :label-width="formLabelWidth">
                     <el-input
                             style="width: 250px"
                             v-model="oContinuousDays"
@@ -53,30 +53,30 @@
                             :disabled="true"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="连续签到奖励" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="连续签到奖励" :label-width="formLabelWidth">
                     <el-input
                             style="width: 250px"
                             v-model="oGoldAward"
                             autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item v-if="oContinuousDays==1" label="签到规则" :label-width="formLabelWidth">
+                <el-form-item :required="true" v-if="oContinuousDays==1" label="签到规则" :label-width="formLabelWidth">
                 <el-input style="width: 250px;height: 200px;" type="textarea" v-model="oSignTips" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item v-if="oContinuousDays==7" label="是否设置连续7天额外奖励" :label-width="formLabelWidth">
+                <el-form-item :required="true" v-if="oContinuousDays==7" label="是否设置连续7天额外奖励" :label-width="formLabelWidth">
                     <el-radio-group v-model="oExtraFlag">
                         <el-radio label="1">是</el-radio>
                         <el-radio label="2">否</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item v-if="oExtraFlag==1&&oContinuousDays==7" label="额外奖励的礼物名称" :label-width="formLabelWidth">
+                <el-form-item :required="true" v-if="oExtraFlag==1&&oContinuousDays==7" label="额外奖励的礼物名称" :label-width="formLabelWidth">
                     <el-input
                             style="width: 250px"
                             v-model="oExtraPrizeName"
                             autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item v-if="oExtraFlag==1&&oContinuousDays==7" label="额外奖励的礼物图片" :label-width="formLabelWidth">
+                <el-form-item :required="true" v-if="oExtraFlag==1&&oContinuousDays==7" label="额外奖励的礼物图片" :label-width="formLabelWidth">
                     <el-upload
                             :before-upload="beforeUpload"
                             :data="type"
@@ -95,23 +95,23 @@
                         <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过200kb 建议尺寸150*150或按比例上传</div>
                     </el-upload>
                 </el-form-item>
-                <el-form-item v-if="oExtraFlag==1&&oContinuousDays==7" label="领取后几天过期" :label-width="formLabelWidth">
+                <el-form-item :required="true" v-if="oExtraFlag==1&&oContinuousDays==7" label="领取后几天过期" :label-width="formLabelWidth">
                     <el-input
                             style="width: 250px"
                             v-model="oExpireDays"
                             autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item v-if="oExtraFlag==1&&oContinuousDays==7" label="额外奖励的礼物类型" :label-width="formLabelWidth">
+                <el-form-item :required="true" v-if="oExtraFlag==1&&oContinuousDays==7" label="额外奖励的礼物类型" :label-width="formLabelWidth">
                     <el-radio-group v-model="oExtraPrizeType">
                         <el-radio label="1">优惠券</el-radio>
                         <el-radio label="2">实物</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item v-if="oExtraPrizeType==1&&oContinuousDays==7" label="选择优惠券" :label-width="formLabelWidth">
+                <el-form-item :required="true" v-if="oExtraPrizeType==1&&oContinuousDays==7" label="选择优惠券" :label-width="formLabelWidth">
                     <el-button type="primary" @click="getAllCoupon">选择优惠券</el-button>
                 </el-form-item>
-                <el-form-item v-if="oExtraPrizeType==1&&oContinuousDays==7" label="所选优惠券：" :label-width="formLabelWidth">
+                <el-form-item :required="true" v-if="oExtraPrizeType==1&&oContinuousDays==7" label="所选优惠券：" :label-width="formLabelWidth">
                     <el-input
                             style="width: 150px"
                             v-model="couponInfo.couponName"

@@ -236,7 +236,7 @@
             <!--excel发送条件弹出框-->
             <div style="margin-left:50%;transform:translate(-50%)">
                 <el-form :model="excelCouponForm">
-                    <el-form-item label="选择影院：" :label-width="formLabelWidth" prop="screenName">
+                    <el-form-item :required="true" label="选择影院：" :label-width="formLabelWidth">
                         <el-select
                             v-model="query.cinemaCode"
                             placeholder="请选择影院"
@@ -252,7 +252,7 @@
                             ></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="选择excel文件：" :label-width="formLabelWidth" prop="screenName">
+                    <el-form-item :required="true" label="选择excel文件：" :label-width="formLabelWidth">
                         <el-upload
                             :data="paramsData"
                             class="upload-demo"
@@ -266,7 +266,7 @@
                             </div>
                         </el-upload>
                     </el-form-item>
-                    <el-form-item label="选择有效时间类型：" :label-width="formLabelWidth" prop="screenName">
+                    <el-form-item :required="true" label="选择有效时间类型：" :label-width="formLabelWidth">
                         <el-radio-group v-model="excelCouponForm.effectiveTimeType">
                             <el-radio :label="1">固定天数后过期</el-radio>
                             <el-radio :label="2">指定时间段有效</el-radio>
@@ -275,8 +275,8 @@
                     <el-form-item
                         label="指定时间段："
                         :label-width="formLabelWidth"
-                        prop="date1"
                         v-if="excelCouponForm.effectiveTimeType == 2"
+                        :required="true"
                     >
                         <el-date-picker
                             v-model="excelCouponForm.startDate"
@@ -296,8 +296,8 @@
                     <el-form-item
                         label="领取后几天过期："
                         :label-width="formLabelWidth"
-                        prop="cinemaName"
                         v-if="excelCouponForm.effectiveTimeType == 1"
+                        :required="true"
                     >
                         <el-input
                             style="width: 150px"
@@ -305,13 +305,14 @@
                             autocomplete="off"
                         ></el-input>天
                     </el-form-item>
-                    <el-form-item label="选择优惠券：" :label-width="formLabelWidth" prop="screenName">
+                    <el-form-item :required="true" label="选择优惠券：" :label-width="formLabelWidth">
                         <el-button @click="getAllCoupon">选择优惠券</el-button>
                     </el-form-item>
                     <el-form-item
                         label="所选优惠券"
                         :label-width="formLabelWidth"
                         v-if="couponList.length>0"
+                        :required="true"
                     >
                         <div
                             v-for="(item, index) in couponList"
@@ -336,7 +337,7 @@
                             <span style="color:red;cursor: pointer;" @click="deleteCoupon(index)">删除</span>
                         </div>
                     </el-form-item>
-                    <el-form-item label="短信模板：" :label-width="formLabelWidth" prop="screenName">
+                    <el-form-item label="短信模板：" :label-width="formLabelWidth">
                         <el-input
                             style="width: 350px"
                             type="textarea"
@@ -479,7 +480,7 @@
             :close-on-click-modal="false"
             >
             <el-form :model="couponForm">
-                <el-form-item label="选择有效时间类型：" :label-width="formLabelWidth" prop="screenName">
+                <el-form-item :required="true" label="选择有效时间类型：" :label-width="formLabelWidth">
                     <el-radio-group v-model="couponForm.effectiveTimeType">
                         <el-radio :label="1">固定天数后过期</el-radio>
                         <el-radio :label="2">指定时间段有效</el-radio>
@@ -488,8 +489,8 @@
                 <el-form-item
                     label="指定时间段："
                     :label-width="formLabelWidth"
-                    prop="date1"
                     v-if="couponForm.effectiveTimeType == 2"
+                    :required="true"
                 >
                     <el-date-picker
                         v-model="couponForm.startDate"
@@ -509,18 +510,19 @@
                 <el-form-item
                     label="领取后几天过期："
                     :label-width="formLabelWidth"
-                    prop="cinemaName"
                     v-if="couponForm.effectiveTimeType == 1"
+                    :required="true"
                 >
                     <el-input style="width: 150px" v-model="couponForm.overDays" autocomplete="off"></el-input>天
                 </el-form-item>
-                <el-form-item label="选择优惠券：" :label-width="formLabelWidth" prop="screenName">
+                <el-form-item :required="true" label="选择优惠券：" :label-width="formLabelWidth">
                     <el-button @click="getAllCoupon">选择优惠券</el-button>
                 </el-form-item>
                 <el-form-item
                     label="所选优惠券"
                     :label-width="formLabelWidth"
                     v-if="couponList.length>0"
+                    :required="true"
                 >
                     <div
                         v-for="(item, index) in couponList"
@@ -545,7 +547,7 @@
                         <span style="color:red;cursor: pointer;" @click="deleteCoupon(index)">删除</span>
                     </div>
                 </el-form-item>
-                <el-form-item label="短信模板：" :label-width="formLabelWidth" prop="screenName">
+                <el-form-item label="短信模板：" :label-width="formLabelWidth">
                     <el-input
                         style="width: 350px"
                         type="textarea"

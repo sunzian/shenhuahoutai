@@ -23,6 +23,12 @@
                     autocomplete="off"
                     class="mr10"
                 ></el-input>
+                <el-input
+                        placeholder="奖品名称"
+                        v-model="query.prizeName"
+                        autocomplete="off"
+                        class="mr10"
+                ></el-input>
                 <el-select
                     clearable
                     v-model="query.prizeType"
@@ -276,6 +282,7 @@ export default {
                 let userMobile = this.query.userMobile;
                 let prizeType = this.query.prizeType;
                 let prizeStatus = this.query.prizeStatus;
+                let prizeName = this.query.prizeName;
                 if (!cinemaCode) {
                     cinemaCode = '';
                 }
@@ -288,7 +295,11 @@ export default {
                 if (!prizeStatus) {
                     prizeStatus = '';
                 }
+                if (!prizeName) {
+                    prizeName = '';
+                }
                 let jsonArr = [];
+                jsonArr.push({ key: 'prizeName', value: prizeName });
                 jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
                 jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
                 jsonArr.push({ key: 'pageSize', value: this.query.pageSize });

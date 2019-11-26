@@ -103,13 +103,13 @@
         <!--新增弹出框-->
         <el-dialog title="新增用户" :visible.sync="dialogFormVisible">
             <el-form v-model="oForm">
-                <el-form-item label="用户名" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="用户名" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oForm.userName" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="密码" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="密码" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oForm.userPass" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="状态" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="状态" :label-width="formLabelWidth">
                     <el-select v-model="oForm.value" placeholder="请选择状态">
                         <el-option
                             v-for="item in options"
@@ -119,7 +119,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="真实姓名" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="真实姓名" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         maxlength="9"
@@ -127,7 +127,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="呼叫号码" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="呼叫号码" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         maxlength="18"
@@ -142,7 +142,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="选择影院" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="选择影院" :label-width="formLabelWidth">
                     <el-checkbox-group v-model="checkedCities">
                         <el-checkbox
                             v-for="city in cities"
@@ -152,7 +152,7 @@
                         >{{city.cinemaName}}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
-                <el-form-item label="角色" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="角色" :label-width="formLabelWidth">
                     <el-select v-model="selectList.id">
                         <el-option
                             v-for="item in selectList"
@@ -162,7 +162,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="设置权限" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="设置权限" :label-width="formLabelWidth">
                     <el-button type="primary" @click="openNext">点击修改</el-button>
                 </el-form-item>
             </el-form>
@@ -191,10 +191,10 @@
         <!-- 编辑弹出框 -->
         <el-dialog title="编辑" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
-                <el-form-item label="用户名" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="用户名" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="userName" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="状态" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="状态" :label-width="formLabelWidth">
                     <el-select v-model="selectValue">
                         <el-option
                             v-for="item in options"
@@ -204,7 +204,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="真实姓名" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="真实姓名" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         maxlength="9"
@@ -212,7 +212,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="呼叫号码" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="呼叫号码" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         maxlength="18"
@@ -228,7 +228,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="选择影院" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="选择影院" :label-width="formLabelWidth">
                     <el-checkbox-group v-model="oCheckedCities">
                         <el-checkbox
                             v-for="city in oCities"
@@ -238,7 +238,7 @@
                         >{{city.cinemaName}}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
-                <el-form-item label="角色" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="角色" :label-width="formLabelWidth">
                     <el-select v-model="oSelectList[0]">
                         <el-option
                             v-for="item in oSelectList"
@@ -248,7 +248,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="设置权限" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="设置权限" :label-width="formLabelWidth">
                     <el-button type="primary" @click="changerNext">点击修改</el-button>
                 </el-form-item>
             </el-form>
@@ -277,7 +277,7 @@
         <!-- 修改密码弹出框 -->
         <el-dialog title="修改密码" :visible.sync="passShow">
             <el-form ref="form" :model="form">
-                <el-form-item label="旧密码" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="旧密码" :label-width="formLabelWidth">
                     <el-input
                         type="password"
                         style="width: 250px"
@@ -285,7 +285,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="新密码" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="新密码" :label-width="formLabelWidth">
                     <el-input
                         type="password"
                         style="width: 250px"
@@ -294,7 +294,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="确认密码" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="确认密码" :label-width="formLabelWidth">
                     <el-input
                         type="password"
                         style="width: 250px"

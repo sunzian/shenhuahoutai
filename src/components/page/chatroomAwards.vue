@@ -79,13 +79,13 @@
                     type="primary"
                     @click="back"
                     icon="el-icon-circle-plus-outline"
-                    style="float: right"
+                    style="float: right;margin-top: -20px"
                 >返回影院列表</el-button>
                 <el-button
                     type="primary"
                     @click="addPage"
                     icon="el-icon-circle-plus-outline"
-                    style="float: right;margin-right: 10px"
+                    style="float: right;margin-right: 10px;margin-top: -20px"
                 >新增奖品</el-button>
             </div>
             <el-table
@@ -159,7 +159,7 @@
         <!--新增弹出框-->
         <el-dialog :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
-                <el-form-item label="礼品类型：" :label-width="formLabelWidth" prop="cinemaName">
+                <el-form-item :required="true" label="礼品类型：" :label-width="formLabelWidth">
                     <el-select v-model="oForm.type" placeholder="请选择">
                         <el-option
                             v-for="item in options"
@@ -169,18 +169,13 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item
-                    v-if="oForm.type==2"
-                    label="礼品名称："
-                    :label-width="formLabelWidth"
-                    prop="cinemaName"
-                >
+                <el-form-item :required="true" v-if="oForm.type==2" label="礼品名称：" :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oForm.name" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="优惠券名称：" :label-width="formLabelWidth" v-if="oForm.type == 1">
+                <el-form-item :required="true" label="优惠券名称：" :label-width="formLabelWidth" v-if="oForm.type == 1">
                     <el-button type="primary" @click="getAllCoupon">选择优惠券</el-button>
                 </el-form-item>
-                <el-form-item label="所选优惠券：" :label-width="formLabelWidth" v-if="oForm.type == 1">
+                <el-form-item :required="true" label="所选优惠券：" :label-width="formLabelWidth" v-if="oForm.type == 1">
                     <el-input
                         style="width: 150px"
                         v-model="couponInfo.couponName"
@@ -193,7 +188,7 @@
                         @click="deletCoupon"
                     >删除</span>
                 </el-form-item>
-                <el-form-item label="礼品图片" :label-width="formLabelWidth" v-if="oForm.type == 2">
+                <el-form-item :required="true" label="礼品图片" :label-width="formLabelWidth" v-if="oForm.type == 2">
                     <el-upload
                         class="upload-demo"
                         action="/api/upload/uploadImage"
@@ -212,16 +207,16 @@
                         >只能上传jpg/png文件，且不超过200kb 建议尺寸1500*150或按比例上传</div>
                     </el-upload>
                 </el-form-item>
-                <el-form-item label="每组发放数量：" :label-width="formLabelWidth" prop="number">
+                <el-form-item :required="true" label="每组发放数量：" :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oForm.singleNumber" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="发放组数：" :label-width="formLabelWidth" prop="number">
+                <el-form-item :required="true" label="发放组数：" :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oForm.groupNumber" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="领取后多少天过期：" :label-width="formLabelWidth" prop="number">
+                <el-form-item :required="true" label="领取后多少天过期：" :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oForm.overDays" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="是否限制用户每月领取数量：" :label-width="formLabelWidth" prop="number">
+                <el-form-item :required="true" label="是否限制用户每月领取数量：" :label-width="formLabelWidth" >
                     <el-select v-model="oForm.limitStatus" placeholder="请选择">
                         <el-option
                             v-for="item in canUse"
@@ -231,12 +226,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item
-                    label="用户单月领取张数限制："
-                    :label-width="formLabelWidth"
-                    prop="number"
-                    v-if="oForm.limitStatus == 2"
-                >
+                <el-form-item :required="true" label="用户单月领取张数限制：" :label-width="formLabelWidth" v-if="oForm.limitStatus == 2">
                     <el-input
                         style="width: 150px"
                         v-model="oForm.singleLimitNumber"
@@ -252,7 +242,7 @@
         <!-- 编辑弹出框 -->
         <el-dialog title="详情" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
-                <el-form-item label="影院名称：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="影院名称：" :label-width="formLabelWidth">
                     <el-input
                         style="width: 150px"
                         v-model="oCinemaName"
@@ -260,14 +250,14 @@
                         disabled
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="奖品名称：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="奖品名称：" :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oName" autocomplete="off" disabled></el-input>
                 </el-form-item>
-                <el-form-item label="奖品类型：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="奖品类型：" :label-width="formLabelWidth">
                     <el-tag v-if="oType=='1'">优惠券</el-tag>
                     <el-tag v-if="oType=='2'">实物</el-tag>
                 </el-form-item>
-                <el-form-item label="礼物图片：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="礼物图片：" :label-width="formLabelWidth">
                     <el-popover placement="right" title trigger="hover">
                         <img style="width:400px" :src="oImageUrl" />
                         <img
@@ -278,26 +268,22 @@
                         />
                     </el-popover>
                 </el-form-item>
-                <el-form-item label="发放组数：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="发放组数：" :label-width="formLabelWidth">
                     <el-input style="width: 75px" v-model="oGroupNumber" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="每组发放数量：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="每组发放数量：" :label-width="formLabelWidth">
                     <el-input style="width: 75px" v-model="oSingleNumber" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="领取后多少天过期：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="领取后多少天过期：" :label-width="formLabelWidth">
                     <el-input style="width: 75px" v-model="oOverDays" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="是否限制用户每月领取数量：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="是否限制用户每月领取数量：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oLimitStatus">
                         <el-radio :label="1">不限制</el-radio>
                         <el-radio :label="2">限制</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item
-                    label="用户单月领取张数限制："
-                    :label-width="formLabelWidth"
-                    v-if="oLimitStatus == 2"
-                >
+                <el-form-item :required="true" label="用户单月领取张数限制：" :label-width="formLabelWidth" v-if="oLimitStatus == 2">
                     <el-input style="width: 75px" v-model="oSingleLimitNumber" autocomplete="off"></el-input>
                 </el-form-item>
             </el-form>

@@ -9,6 +9,15 @@
         </div>
         <div class="container">
             <div class="handle-box">
+                <el-select clearable v-model="query.cinemaCode" placeholder="请选择影院" class="mr10">
+                    <el-option
+                            v-for="item in cinemaInfo"
+                            :key="item.cinemaCode"
+                            :label="item.cinemaName"
+                            :value="item.cinemaCode"
+                    ></el-option>
+                </el-select>
+                <el-input placeholder="商品名称" class="mr10" v-model="query.commodityName" autocomplete="off"></el-input>
                 <el-input placeholder="订单号" class="mr10" v-model="query.orderNo" autocomplete="off"></el-input>
                 <el-input placeholder="手机号" class="mr10" v-model="query.mobile" autocomplete="off"></el-input>
                 <el-select clearable v-model="query.changeType" placeholder="兑换方式" class="handle-select mr10">
@@ -243,6 +252,7 @@
                 businessInfoList: [],
                 value: '',
                 form:[],
+                cinemaInfo:[],
             };
         },
         created() {},
@@ -297,8 +307,8 @@
                     }
                     let jsonArr = [];
                     jsonArr.push({ key: 'tableName', value: "commodity_change_record" });
-                    jsonArr.push({ key: 'exportKeysJson', value: "['id','cinemaCode','orderNo','chPayStatus','mobile','chChangeType','gold','money','chStatus']"});
-                    jsonArr.push({ key: 'exportTitlesJson', value:"['ID','影院编码','订单号','支付状态','手机号','兑换方式','支付金币数量','支付金额','领取状态']" });
+                    jsonArr.push({ key: 'exportKeysJson', value: "['id','cinemaCode','cinemaName','orderNo','mobile','commodityName','gold','money','payTime','chPayStatus','tradeNo','payReturnMsg','chChangeType','chStatus','chRefundStatus','refundNo','refundReason','refundApply','refundTime','refundPrice']"});
+                    jsonArr.push({ key: 'exportTitlesJson', value:"['ID','影院编码','影院名称','订单号','手机号','商品名称','消费金币','支付金额','兑换时间','兑换状态','支付交易号','支付回调消息','兑换方式','核销状态','退款状态','退款交易号','退款原因','微信退款回复','退款时间','退款金额']" });
                     jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
                     jsonArr.push({ key: 'orderNo', value: orderNo });
                     jsonArr.push({ key: 'mobile', value: mobile });
@@ -319,6 +329,26 @@
                     https.exportMethod(myObj);
                     loading.close();
                 }, 1500);
+            },
+            getAllCinema() {
+                https
+                    .fetchPost('/cinema/getAllCinema')
+                    .then(data => {
+                        if (data.data.code == 'success') {
+                            var res = JSON.parse(Decrypt(data.data.data));
+                            this.cinemaInfo = res;
+                        } else if (data.data.code == 'nologin') {
+                            this.message = data.data.message;
+                            this.open();
+                            this.$router.push('/login');
+                        } else {
+                            this.message = data.data.message;
+                            this.open();
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
             },
             addChange(index, row) {
                 //是否修改权限
@@ -415,6 +445,14 @@
                     let changeType=this.query.changeType;
                     let status=this.query.status;
                     let refundStatus=this.query.refundStatus;
+                    let cinemaCode=this.query.cinemaCode;
+                    let commodityName=this.query.commodityName;
+                    if(!cinemaCode){
+                        cinemaCode=''
+                    }
+                    if(!commodityName){
+                        commodityName=''
+                    }
                     if(!orderNo){
                         orderNo=''
                     }
@@ -441,6 +479,8 @@
                     }
                     let jsonArr = [];
                     jsonArr.push({key:"orderNo",value:orderNo});
+                    jsonArr.push({key:"cinemaCode",value:cinemaCode});
+                    jsonArr.push({key:"commodityName",value:commodityName});
                     jsonArr.push({key:"mobile",value:mobile});
                     jsonArr.push({key:"payStatus",value:payStatus});
                     jsonArr.push({key:"changeType",value:changeType});
@@ -466,6 +506,7 @@
                             this.query.pageNo = oData.pageResult.pageNo;
                             this.query.totalCount = oData.pageResult.totalCount;
                             this.query.totalPage = oData.pageResult.totalPage;
+                            this.getAllCinema();
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
                             this.open();

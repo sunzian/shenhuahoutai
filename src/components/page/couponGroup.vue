@@ -98,10 +98,10 @@
         <!--新增弹出框-->
         <el-dialog :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
-                <el-form-item label="券包名称：" :label-width="formLabelWidth" prop="name">
+                <el-form-item :required="true" label="券包名称：" :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oForm.name" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="选择影院：" :label-width="formLabelWidth" prop="cinemaName">
+                <el-form-item :required="true" label="选择影院：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.cinemaCode" @change="selectCinema">
                         <el-radio
                             v-for="item in cinemaInfo"
@@ -111,13 +111,14 @@
                         >{{item.cinemaName}}</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item label="选择优惠券" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="选择优惠券" :label-width="formLabelWidth">
                     <el-button type="primary" @click="openNext">点击选择</el-button>
                 </el-form-item>
                 <el-form-item
                         label="所选优惠券"
                         :label-width="formLabelWidth"
                         v-if="selectedSell.length>0"
+                        :required="true"
                 >
                     <div v-for="(item, index) in selectedSell" style="margin-bottom: 5px" :key="index">
                         <el-input
@@ -137,7 +138,7 @@
                         >删除</span>
                     </div>
                 </el-form-item>
-                <el-form-item label="开启状态：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="开启状态：" :label-width="formLabelWidth">
                     <el-select v-model="oForm.status" placeholder="请选择">
                         <el-option
                             v-for="item in options"
@@ -159,20 +160,20 @@
         <!-- 编辑弹出框 -->
         <el-dialog title="详情" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
-                ,
-                <el-form-item label="适用影院名称：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="适用影院名称：" :label-width="formLabelWidth">
                     <span>{{oCinemaName}}</span>
                 </el-form-item>
-                <el-form-item label="券包名称：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="券包名称：" :label-width="formLabelWidth">
                     <el-input style="width: 215px" v-model="oGroupName" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="选择优惠券" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="选择优惠券" :label-width="formLabelWidth">
                     <el-button type="primary" @click="openNext">点击选择</el-button>
                 </el-form-item>
                 <el-form-item
                         label="所选优惠券"
                         :label-width="formLabelWidth"
                         v-if="selectedSell.length>0"
+                        :required="true"
                 >
                     <div v-for="(item, index) in selectedSell" style="margin-bottom: 5px" :key="index">
                         <el-input

@@ -106,9 +106,9 @@
             </div>
         </div>
         <!--新增弹出框-->
-        <el-dialog title="设置规则" :visible.sync="dialogFormVisible">
+        <el-dialog title="新增规则" :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
-                <el-form-item label="影院名称：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="影院名称：" :label-width="formLabelWidth">
                     <el-select v-model="oForm.cinemaName" placeholder="请选择" @change="getCinemaCode">
                         <el-option
                             v-for="info in cinemaInfo"
@@ -118,7 +118,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="会员卡名称：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="会员卡名称：" :label-width="formLabelWidth">
                     <el-select v-model="oForm.levelName" placeholder="请选择" @change="getCardInfo">
                         <el-option
                             v-for="info in cardList"
@@ -128,7 +128,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="开卡规则名称：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="开卡规则名称：" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -136,7 +136,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="赠送类型：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="赠送类型：" :label-width="formLabelWidth">
                     <el-select v-model="oForm.givenType" placeholder="请选择">
                         <el-option
                             v-for="item in type"
@@ -150,6 +150,7 @@
                     label="设置券包："
                     :label-width="formLabelWidth"
                     v-if="oForm.givenType == 3"
+                    :required="true"
                 >
                     <el-button type="primary" @click="getAllCoupon">选择券包</el-button>
                 </el-form-item>
@@ -157,6 +158,7 @@
                     label="所选券包："
                     :label-width="formLabelWidth"
                     v-if="oForm.givenType == 3 || oForm.givenType == 4"
+                    :required="true"
                 >
                     <el-input style="width: 150px" v-model="groupName" autocomplete="off" disabled></el-input>&nbsp;&nbsp;&nbsp;&nbsp;
                     <span
@@ -165,7 +167,7 @@
                         @click="deletCoupon"
                     >删除</span>
                 </el-form-item>
-                <el-form-item v-if="oForm.givenType == 3" label="优惠券领取后过期天数：" :label-width="formLabelWidth">
+                <el-form-item :required="true" v-if="oForm.givenType == 3" label="领取后过期天数：" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model.trim="oForm.overDays" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="优惠描述：" :label-width="formLabelWidth">
@@ -177,7 +179,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="有效期：" :label-width="formLabelWidth" prop="date1">
+                <el-form-item :required="true" label="有效期：" :label-width="formLabelWidth">
                     <el-date-picker
                         v-model="oForm.startDate"
                         type="datetime"
@@ -193,7 +195,7 @@
                         format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
                 </el-form-item>
-                <el-form-item label="状态：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="状态：" :label-width="formLabelWidth">
                     <el-select v-model="oForm.status" placeholder="请选择">
                         <el-option
                             v-for="item in options"
@@ -210,9 +212,9 @@
             </span>
         </el-dialog>
         <!-- 编辑弹出框 -->
-        <el-dialog title="价格设置" :visible.sync="editVisible">
+        <el-dialog title="修改规则" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
-                <el-form-item label="影院名称：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="影院名称：" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         disabled
@@ -220,7 +222,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="会员卡名称：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="会员卡名称：" :label-width="formLabelWidth">
                     <el-select v-model="oCardLevelName" placeholder="请选择" @change="getCardInfo">
                         <el-option
                                 v-for="info in cardList"
@@ -230,10 +232,10 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="开卡规则名称：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="开卡规则名称：" :label-width="formLabelWidth">
                     <el-input style="width: 250px" min="1" v-model.trim="oRuleName" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="赠送类型：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="赠送类型：" :label-width="formLabelWidth">
                     <el-select v-model="oGivenType" placeholder="请选择">
                         <el-option
                             v-for="item in type"
@@ -247,6 +249,7 @@
                     label="已设券包："
                     :label-width="formLabelWidth"
                     v-if="oGivenType == 3 || oGivenType == '赠送券包'"
+                    :required="true"
                 >
                     <el-input
                         style="width: 250px"
@@ -257,13 +260,13 @@
                     ></el-input>
                     <el-button type="primary" @click="changeCoupon">更换券包</el-button>
                 </el-form-item>
-                <el-form-item v-if="oGivenType == 3 || oGivenType == '赠送券包'" label="优惠券领取后过期天数：" :label-width="formLabelWidth">
+                <el-form-item :required="true" v-if="oGivenType == 3 || oGivenType == '赠送券包'" label="领取后过期天数：" :label-width="formLabelWidth">
                     <el-input style="width: 250px" min="1" v-model.trim="oOverDays" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="优惠描述：" :label-width="formLabelWidth">
                     <el-input style="width: 250px" min="1" v-model.trim="oRuleMemo" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="有效期：" :label-width="formLabelWidth" prop="date1">
+                <el-form-item :required="true" label="有效期：" :label-width="formLabelWidth" prop="date1">
                     <el-date-picker
                         v-model="oStartDate"
                         type="datetime"
@@ -279,7 +282,7 @@
                         format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
                 </el-form-item>
-                <el-form-item label="状态：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="状态：" :label-width="formLabelWidth">
                     <el-select v-model="oStatus" placeholder="请选择">
                         <el-option
                             v-for="item in options"

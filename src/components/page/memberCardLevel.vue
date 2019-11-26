@@ -492,6 +492,7 @@
                     jsonArr.push({key:"levelName",value:levelName});
                     jsonArr.push({key:"status",value:status});
                     jsonArr.push({ key: 'pageNo', value: '1' });
+                    jsonArr.push({ key: 'cinemaCode', value: this.cinemaCode });
                     jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
                     let sign = md5(preSign(jsonArr));
                     jsonArr.push({ key: 'sign', value: sign });

@@ -132,10 +132,10 @@
         <!--新增弹出框-->
         <el-dialog title="新增分类" :visible.sync="dialogFormVisible">
             <el-form v-model="oForm">
-                <el-form-item label="分类名称" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="分类名称" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oForm.name" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="分类图片" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="分类图片" :label-width="formLabelWidth">
                     <el-popover placement="right" title trigger="hover">
                         <img style="width: 400px" :src="oForm.image_url" />
                         <img
@@ -175,10 +175,10 @@
         <!-- 编辑弹出框 -->
         <el-dialog title="编辑" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
-                <el-form-item label="分类名称" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="分类名称" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="form.typeName" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="分类图片" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="分类图片" :label-width="formLabelWidth">
                     <el-popover placement="right" title trigger="hover">
                         <img style="width: 400px" :src="form.imageUrl" />
                         <img

@@ -318,7 +318,7 @@ export default {
                 let jsonArr = [];
                 jsonArr.push({ key: 'tableName', value: "member_card_consume" });
                 jsonArr.push({ key: 'exportKeysJson', value: "['id','cinemaCode','cinemaName','consumeCinemaCode','consumeCinemaName','cardNo','userName','mobilePhone','consumeAmount','consumeDetail','chStatus','orderCode','chOrderType','consumeTime']"});
-                jsonArr.push({ key: 'exportTitlesJson', value:"['ID','开卡影院编码','开卡影院名称','消费影院编码','消费影院名称','卡号','用户','手机号','消费金额','消费明细','支付状态','订单号','订单类型','消费时间']" });
+                jsonArr.push({ key: 'exportTitlesJson', value:"['ID','开卡影院编码','开卡影院名称','消费影院编码','消费影院名称','消费卡号','会员卡所属用户','消费手机号','消费金额','消费明细','支付状态','订单号','订单类型','消费时间']" });
                 jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
                 jsonArr.push({ key: 'cardNo', value: cardNo });
                 jsonArr.push({ key: 'mobilePhone', value: mobilePhone });
