@@ -151,13 +151,13 @@
         <!--新增弹出框-->
         <el-dialog :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
-                <el-form-item label="员工名称：" :label-width="formLabelWidth" prop="cinemaName">
+                <el-form-item :required="true" label="员工名称：" :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oForm.name" maxlength="10" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="员工手机号码：" :label-width="formLabelWidth" prop="cinemaName">
+                <el-form-item label="员工手机号码：" :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oForm.employeeMobile" maxlength="18" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="推荐充值送券：" :label-width="formLabelWidth" prop="cinemaName">
+                <el-form-item :required="true" label="推荐充值送券：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.couponGroupStatus">
                         <el-radio label="1">赠送</el-radio>
                         <el-radio label="2">不赠送</el-radio>
@@ -166,13 +166,15 @@
                 <el-form-item
                         v-if="oForm.couponGroupStatus==1"
                         label="设置券包："
-                        :label-width="formLabelWidth">
+                        :label-width="formLabelWidth"
+                        :required="true">
                     <el-button type="primary" @click="changeCoupon">选择券包</el-button>
                 </el-form-item>
                 <el-form-item
                         v-if="couponId&&oForm.couponGroupStatus==1"
                         label="所选券包："
-                        :label-width="formLabelWidth">
+                        :label-width="formLabelWidth"
+                        :required="true">
                     <el-input style="width: 150px" v-model="groupName" autocomplete="off" disabled></el-input>&nbsp;&nbsp;&nbsp;&nbsp;
                     <span
                             v-if="groupName"
@@ -180,7 +182,7 @@
                             @click="deletCoupon"
                     >删除</span>
                 </el-form-item>
-                <el-form-item v-if="groupName&&oForm.couponGroupStatus==1" label="领取后几天过期：" :label-width="formLabelWidth" prop="cinemaName">
+                <el-form-item :required="true" v-if="groupName&&oForm.couponGroupStatus==1" label="领取后几天过期：" :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oForm.overDays" autocomplete="off"></el-input>
                 </el-form-item>
             </el-form>
@@ -192,7 +194,7 @@
         <!-- 编辑弹出框 -->
         <el-dialog title="详情" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
-                <el-form-item label="员工名称：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="员工名称：" :label-width="formLabelWidth">
                     <el-input
                         style="width: 150px"
                         v-model="oName"
@@ -203,7 +205,7 @@
                 <el-form-item label="员工手机号码：" :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oEmployeeMobile" maxlength="18" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="推荐充值送券：" :label-width="formLabelWidth" prop="cinemaName">
+                <el-form-item :required="true" label="推荐充值送券：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oCouponGroupStatus">
                         <el-radio label="1">赠送</el-radio>
                         <el-radio label="2">不赠送</el-radio>
@@ -212,13 +214,15 @@
                 <el-form-item
                         v-if="oCouponGroupStatus==1"
                         label="设置券包："
-                        :label-width="formLabelWidth">
+                        :label-width="formLabelWidth"
+                        :required="true">
                     <el-button type="primary" @click="changeCoupon">选择券包</el-button>
                 </el-form-item>
                 <el-form-item
                         v-if="couponId&&oCouponGroupStatus==1"
                         label="所选券包："
-                        :label-width="formLabelWidth">
+                        :label-width="formLabelWidth"
+                        :required="true">
                     <el-input style="width: 150px" v-model="groupName" autocomplete="off" disabled></el-input>&nbsp;&nbsp;&nbsp;&nbsp;
                     <span
                             v-if="groupName"
@@ -226,7 +230,7 @@
                             @click="deletCoupon"
                     >删除</span>
                 </el-form-item>
-                <el-form-item v-if="groupName&&oCouponGroupStatus==1" label="领取后几天过期：" :label-width="formLabelWidth" prop="cinemaName">
+                <el-form-item :required="true" v-if="groupName&&oCouponGroupStatus==1" label="领取后几天过期：" :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oOverDays" autocomplete="off"></el-input>
                 </el-form-item>
             </el-form>
@@ -485,6 +489,20 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
+            if(!this.oForm.name){
+                this.message = '必填项不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(this.oForm.couponGroupStatus==1){
+                if(!this.oForm.overDays||!this.groupName){
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
             var jsonArr = [];
             jsonArr.push({ key: 'employeeName', value: this.oForm.name });
             jsonArr.push({ key: 'employeeMobile', value: this.oForm.employeeMobile });
@@ -690,6 +708,20 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
+            if(!this.oName){
+                this.message = '必填项不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(this.oCouponGroupStatus==1){
+                if(!this.oOverDays||!this.groupName){
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
             var jsonArr = [];
             jsonArr.push({ key: 'employeeName', value: this.oName });
             jsonArr.push({ key: 'employeeMobile', value: this.oEmployeeMobile });

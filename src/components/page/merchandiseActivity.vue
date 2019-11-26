@@ -127,10 +127,10 @@
         <!--新增弹出框-->
         <el-dialog :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
-                <el-form-item label="活动名称：" :label-width="formLabelWidth" prop="name">
+                <el-form-item :required="true" label="活动名称：" :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oForm.name" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="选择影院：" :label-width="formLabelWidth" prop="cinemaName">
+                <el-form-item :required="true" label="选择影院：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.code" @change="selectCinema">
                         <el-radio
                                 v-for="item in cinemaInfo"
@@ -140,34 +140,35 @@
                         >{{item.cinemaName}}</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item label="优惠方式：" :label-width="formLabelWidth" prop="reduceType">
+                <el-form-item :required="true" label="优惠方式：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.reduceType">
                         <el-radio label="1">固定价格</el-radio>
                         <el-radio label="2">满减</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item label="固定金额：" :label-width="formLabelWidth" v-if="oForm.reduceType == 1">
+                <el-form-item :required="true" label="固定金额：" :label-width="formLabelWidth" v-if="oForm.reduceType == 1">
                     <el-input style="width: 150px" v-model="oForm.discountMoney" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="减免金额：" :label-width="formLabelWidth" v-if="oForm.reduceType == 2">
+                <el-form-item :required="true" label="减免金额：" :label-width="formLabelWidth" v-if="oForm.reduceType == 2">
                     满
                     <el-input style="width: 150px" v-model="oForm.achieveMoney" autocomplete="off"></el-input>减
                     <el-input style="width: 150px" v-model="oForm.discountMoney" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="选择商品：" :label-width="formLabelWidth" prop="filmName">
+                <el-form-item :required="true" label="选择商品：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.selectFilmType">
                         <el-radio label="0">全部商品</el-radio>
                         <el-radio label="1">部分商品</el-radio>
                         <el-radio v-if="oForm.reduceType==2" label="2">排除商品</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item v-if="oForm.selectFilmType != 0" label="选择商品" :label-width="formLabelWidth">
+                <el-form-item :required="true" v-if="oForm.selectFilmType != 0" label="选择商品" :label-width="formLabelWidth">
                     <el-button type="primary" @click="openNext">点击选择</el-button>
                 </el-form-item>
                 <el-form-item
                         label="所选商品"
                         :label-width="formLabelWidth"
                         v-if="selectedSell.length>0&&oForm.selectFilmType==1"
+                        :required="true"
                 >
                     <div v-for="(item, index) in selectedSell" style="margin-bottom: 5px" :key="index">
                         <el-input
@@ -185,7 +186,7 @@
                         >删除</span>
                     </div>
                 </el-form-item>
-                <el-form-item label="有效期：" :label-width="formLabelWidth" prop="date1">
+                <el-form-item :required="true" label="有效期：" :label-width="formLabelWidth">
                     <el-date-picker
                             v-model="oForm.startDate"
                             type="datetime"
@@ -201,14 +202,14 @@
                             format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
                 </el-form-item>
-                <el-form-item label="支付类型：" :label-width="formLabelWidth" prop="date2">
+                <el-form-item :required="true" label="支付类型：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.validPayType">
                         <el-radio label="0">全部</el-radio>
                         <el-radio label="1">仅非会员卡支付</el-radio>
                         <el-radio label="2">仅会员卡支付</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item label="开启状态：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="开启状态：" :label-width="formLabelWidth">
                     <el-select v-model="oForm.status" placeholder="请选择">
                         <el-option
                                 v-for="item in options"
@@ -218,7 +219,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="节假日是否可用：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="节假日是否可用：" :label-width="formLabelWidth">
                     <el-select v-model="oForm.holidayValid" placeholder="请选择">
                         <el-option
                                 v-for="item in canUse"
@@ -263,7 +264,7 @@
                         >{{day}}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
-                <el-form-item label="是否和券共用" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="是否和券共用" :label-width="formLabelWidth">
                     <el-select v-model="oForm.activityTogether" placeholder="请选择">
                         <el-option
                                 v-for="item in canUse"
@@ -273,7 +274,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="是否限制张数：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="是否限制张数：" :label-width="formLabelWidth">
                     <el-select v-model="oForm.oCanNum" placeholder="请选择">
                         <el-option
                                 v-for="item in canUse"
@@ -283,10 +284,10 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="活动总张数：" v-if="oForm.oCanNum==1" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="活动总张数：" v-if="oForm.oCanNum==1" :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oForm.oNum" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="是否限制个人张数：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="是否限制个人张数：" :label-width="formLabelWidth">
                     <el-select v-model="oForm.oneCanNum" placeholder="请选择">
                         <el-option
                                 v-for="item in canUse"
@@ -296,7 +297,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="限购时间：" v-if="oForm.oneCanNum==1" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="限购时间：" v-if="oForm.oneCanNum==1" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.limitSingleUnit">
                         <el-radio label="年">年</el-radio>
                         <el-radio label="月">月</el-radio>
@@ -304,10 +305,10 @@
                         <el-radio label="日">日</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item label="个人总张数：" v-if="oForm.oneCanNum==1" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="个人总张数：" v-if="oForm.oneCanNum==1" :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oForm.oneNum" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="使用须知：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="使用须知：" :label-width="formLabelWidth">
                     <el-input
                             type="textarea"
                             :rows="2"
@@ -377,10 +378,10 @@
         <!-- 编辑弹出框 -->
         <el-dialog title="修改" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
-                <el-form-item label="活动名称：" :label-width="formLabelWidth" prop="name">
+                <el-form-item :required="true" label="活动名称：" :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oName" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="选择影院：" :label-width="formLabelWidth" prop="cinemaName">
+                <el-form-item :required="true" label="选择影院：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oCinemaCode" @change="selectCinema">
                         <el-radio
                                 v-for="item in cinemaInfo"
@@ -390,34 +391,35 @@
                         >{{item.cinemaName}}</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item label="优惠方式：" :label-width="formLabelWidth" prop="reduceType">
+                <el-form-item :required="true" label="优惠方式：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oReduceType">
                         <el-radio label="1">固定价格</el-radio>
                         <el-radio label="2">满减</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item label="固定金额：" :label-width="formLabelWidth" v-if="oReduceType == 1">
+                <el-form-item :required="true" label="固定金额：" :label-width="formLabelWidth" v-if="oReduceType == 1">
                     <el-input style="width: 150px" v-model="oDiscountMoney" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="减免金额：" :label-width="formLabelWidth" v-if="oReduceType == 2">
+                <el-form-item :required="true" label="减免金额：" :label-width="formLabelWidth" v-if="oReduceType == 2">
                     满
                     <el-input style="width: 150px" v-model="oAchieveMoney" autocomplete="off"></el-input>减
                     <el-input style="width: 150px" v-model="oDiscountMoney" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="选择商品：" :label-width="formLabelWidth" prop="filmName">
+                <el-form-item :required="true" label="选择商品：" :label-width="formLabelWidth" prop="filmName">
                     <el-radio-group v-model="oSelectMerchandiseType">
                         <el-radio label="0">全部商品</el-radio>
                         <el-radio label="1">部分商品</el-radio>
                         <el-radio v-if="oReduceType==2" label="2">排除商品</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item v-if="oSelectMerchandiseType != 0" label="选择商品" :label-width="formLabelWidth">
+                <el-form-item :required="true" v-if="oSelectMerchandiseType != 0" label="选择商品" :label-width="formLabelWidth">
                     <el-button type="primary" @click="openNext">点击选择</el-button>
                 </el-form-item>
                 <el-form-item
                         label="所选商品"
                         :label-width="formLabelWidth"
                         v-if="selectedSell.length>0&&oSelectMerchandiseType==1"
+                        :required="true"
                 >
                     <div v-for="(item, index) in selectedSell" style="margin-bottom: 5px" :key="index">
                         <el-input
@@ -435,7 +437,7 @@
                         >删除</span>
                     </div>
                 </el-form-item>
-                <el-form-item label="有效期：" :label-width="formLabelWidth" prop="date1">
+                <el-form-item :required="true" label="有效期：" :label-width="formLabelWidth">
                     <el-date-picker
                             v-model="oStartDate"
                             type="datetime"
@@ -451,14 +453,14 @@
                             format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
                 </el-form-item>
-                <el-form-item label="支付类型：" :label-width="formLabelWidth" prop="date2">
+                <el-form-item :required="true" label="支付类型：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oValidPayType">
                         <el-radio label="0">全部</el-radio>
                         <el-radio label="1">仅非会员卡支付</el-radio>
                         <el-radio label="2">仅会员卡支付</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item label="开启状态：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="开启状态：" :label-width="formLabelWidth">
                     <el-select v-model="oStatus" placeholder="请选择">
                         <el-option
                                 v-for="item in options"
@@ -468,7 +470,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="节假日是否可用：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="节假日是否可用：" :label-width="formLabelWidth">
                     <el-select v-model="oIsHolidayValid" placeholder="请选择">
                         <el-option
                                 v-for="item in canUse"
@@ -514,7 +516,7 @@
                         >{{item.value}}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
-                <el-form-item label="是否和券共用" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="是否和券共用" :label-width="formLabelWidth">
                     <el-select v-model="oIsCouponTogether" placeholder="请选择">
                         <el-option
                                 v-for="item in canUse"
@@ -524,7 +526,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="是否限制张数：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="是否限制张数：" :label-width="formLabelWidth">
                     <el-select v-model="oIsLimitTotal" placeholder="请选择">
                         <el-option
                                 v-for="item in canUse"
@@ -534,10 +536,10 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="活动总张数：" v-if="oIsLimitTotal==1" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="活动总张数：" v-if="oIsLimitTotal==1" :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oTotalNumber" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="是否限制个人张数：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="是否限制个人张数：" :label-width="formLabelWidth">
                     <el-select v-model="oIsLimitSingle" placeholder="请选择">
                         <el-option
                                 v-for="item in canUse"
@@ -547,7 +549,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="限购时间：" v-if="oIsLimitSingle==1" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="限购时间：" v-if="oIsLimitSingle==1" :label-width="formLabelWidth">
                     <el-radio-group v-model="oLimitSingleUnit">
                         <el-radio label="年">年</el-radio>
                         <el-radio label="月">月</el-radio>
@@ -555,10 +557,10 @@
                         <el-radio label="日">日</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item label="个人总张数：" v-if="oIsLimitSingle==1" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="个人总张数：" v-if="oIsLimitSingle==1" :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oSingleNumber" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="使用须知：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="使用须知：" :label-width="formLabelWidth">
                     <el-input
                             type="textarea"
                             :rows="2"
@@ -813,6 +815,52 @@
                     background: 'rgba(0, 0, 0, 0.7)',
                     target: document.querySelector('.div1')
                 });
+                if(!this.oForm.name||!this.oForm.startDate||!this.oForm.endDate||!this.oForm.couponDesc){
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if(this.oForm.reduceType==1){
+                    if(!oForm.discountMoney){
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if(this.oForm.reduceType==2){
+                    if(!oForm.discountMoney||!oForm.achieveMoney){
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if(this.oForm.selectFilmType==1||this.oForm.selectFilmType==2){
+                    if(!this.selectedSell){
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if(this.oForm.oCanNum==1){
+                    if(!this.oForm.oNum){
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if(this.oForm.oneCanNum==1){
+                    if(!this.oForm.oneNum){
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
                 if (this.oForm.code == true) {
                     this.oForm.code = this.cinemaInfo[0].code;
                 }
@@ -976,6 +1024,8 @@
                     loading.close();
                     console.log(data);
                     this.dateInfo=[];
+                    this.startArr=[];
+                    this.endArr=[];
                     for(let x in JSON.parse(Decrypt(data.data.data))){
                         let jsonarr=[];
                         jsonarr.push(JSON.parse(Decrypt(data.data.data))[x].startTime);
@@ -1117,6 +1167,52 @@
                 let merchandiseCodeList=[];
                 for(let x in this.selectedSell){
                     merchandiseCodeList.push(this.selectedSell[x].merchandiseCode)
+                }
+                if(!this.oName||!this.oStartDate||!this.oEndDate||!this.oActivityDesc){
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if(this.oReduceType==1){
+                    if(!this.oDiscountMoney){
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if(this.oReduceType==2){
+                    if(!oDiscountMoney||!oAchieveMoney){
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if(this.oSelectMerchandiseType==1||this.oSelectMerchandiseType==2){
+                    if(!this.selectedSell){
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if(this.oIsLimitTotal==1){
+                    if(!this.oTotalNumber){
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if(this.oIsLimitSingle==1){
+                    if(!this.oSingleNumber){
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
                 }
                 var jsonArr = [];
                 jsonArr.push({ key: 'name', value: this.oName });

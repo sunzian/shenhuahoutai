@@ -124,10 +124,10 @@
         <!--新增弹出框-->
         <el-dialog :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
-                <el-form-item label="优惠券名称：" :label-width="formLabelWidth" prop="name">
+                <el-form-item :required="true" label="优惠券名称：" :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oForm.name" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="选择影院：" :label-width="formLabelWidth" prop="cinemaName">
+                <el-form-item :required="true" label="选择影院：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.cinemaCode" @change="selectCinema">
                         <el-radio
                             v-for="item in cinemaInfo"
@@ -137,7 +137,7 @@
                         >{{item.cinemaName}}</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item label="选择影厅：" :label-width="formLabelWidth" prop="screenName">
+                <el-form-item :required="true" label="选择影厅：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.selectHallType">
                         <el-radio label="0">全部影厅</el-radio>
                         <el-radio label="1">指定影厅参加</el-radio>
@@ -156,7 +156,7 @@
                         >{{item.screenName}}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
-                <el-form-item label="选择制式：" :label-width="formLabelWidth" prop="formatName">
+                <el-form-item :required="true" label="选择制式：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.selectFilmFormatType">
                         <el-radio label="0">全部制式参加</el-radio>
                         <el-radio label="1">指定制式参加</el-radio>
@@ -171,20 +171,21 @@
                         >{{item.formatName}}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
-                <el-form-item label="选择影片：" :label-width="formLabelWidth" prop="filmName">
+                <el-form-item :required="true" label="选择影片：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.selectFilmType">
                         <el-radio label="0">全部影片</el-radio>
                         <el-radio label="1">部分影片</el-radio>
                         <el-radio label="2">排除影片</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item v-if="oForm.selectFilmType != 0" label="选择影片" :label-width="formLabelWidth">
+                <el-form-item :required="true" v-if="oForm.selectFilmType != 0" label="选择影片" :label-width="formLabelWidth">
                     <el-button type="primary" @click="openNext">点击选择</el-button>
                 </el-form-item>
                 <el-form-item
                         label="所选影片"
                         :label-width="formLabelWidth"
                         v-if="selectedSell.length>0"
+                        :required="true"
                 >
                     <div v-for="(item, index) in selectedSell" style="margin-bottom: 5px" :key="index">
                         <el-input
@@ -202,14 +203,14 @@
                         >删除</span>
                     </div>
                 </el-form-item>
-                <el-form-item label="支付类型：" :label-width="formLabelWidth" prop="date2">
+                <el-form-item :required="true" label="支付类型：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.validPayType">
                         <el-radio label="0">全部</el-radio>
                         <el-radio label="1">仅非会员卡支付</el-radio>
                         <el-radio label="2">仅会员卡支付</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item label="优惠方式：" :label-width="formLabelWidth" prop="reduceType">
+                <el-form-item :required="true" label="优惠方式：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.reduceType">
                         <el-radio label="1">固定价格</el-radio>
                         <el-radio label="2">立减</el-radio>
@@ -219,6 +220,7 @@
                     label="固定金额："
                     :label-width="formLabelWidth"
                     v-if="oForm.reduceType == 1"
+                    :required="true"
                 >
                     <el-input style="width: 150px" v-model="oForm.discountMoney" autocomplete="off"></el-input>
                 </el-form-item>
@@ -226,9 +228,10 @@
                     label="减免金额："
                     :label-width="formLabelWidth"
                     v-if="oForm.reduceType == 2"
+                    :required="true"
                 >   立减<el-input style="width: 150px" v-model="oForm.discountMoney" autocomplete="off"></el-input>元
                 </el-form-item>
-                <el-form-item label="开启状态：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="开启状态：" :label-width="formLabelWidth">
                     <el-select v-model="oForm.status" placeholder="请选择">
                         <el-option
                             v-for="item in options"
@@ -238,7 +241,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="节假日是否可用：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="节假日是否可用：" :label-width="formLabelWidth">
                     <el-select v-model="oForm.holidayValid" placeholder="请选择">
                         <el-option
                             v-for="item in canUse"
@@ -257,7 +260,7 @@
                         >{{day}}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
-                <el-form-item label="是否和活动共用" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="是否和活动共用" :label-width="formLabelWidth">
                     <el-select v-model="oForm.activityTogether" placeholder="请选择">
                         <el-option
                             v-for="item in canUse"
@@ -267,7 +270,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="库存：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="库存：" :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oForm.sendNumber" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="使用须知：" :label-width="formLabelWidth">
@@ -287,10 +290,10 @@
         <!-- 编辑弹出框 -->
         <el-dialog title="修改" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
-                <el-form-item label="优惠券名称：" :label-width="formLabelWidth" prop="name">
+                <el-form-item :required="true" label="优惠券名称：" :label-width="formLabelWidth">
                     <el-input style="width: 180px" v-model="oName" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="选择影院：" :label-width="formLabelWidth" prop="cinemaName">
+                <el-form-item :required="true" label="选择影院：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oCinemaCode" @change="selectCinema">
                         <el-radio
                                 v-for="item in cinemaInfo"
@@ -300,7 +303,7 @@
                         >{{item.cinemaName}}</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item label="选择影厅：" :label-width="formLabelWidth" prop="screenName">
+                <el-form-item :required="true" label="选择影厅：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oSelectHallType">
                         <el-radio label="0">全部影厅</el-radio>
                         <el-radio label="1">指定影厅参加</el-radio>
@@ -319,7 +322,7 @@
                         >{{item.screenName}}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
-                <el-form-item label="选择制式：" :label-width="formLabelWidth" prop="formatName">
+                <el-form-item :required="true" label="选择制式：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oSelectFilmFormatType">
                         <el-radio label="0">全部制式参加</el-radio>
                         <el-radio label="1">指定制式参加</el-radio>
@@ -334,20 +337,21 @@
                         >{{item.formatName}}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
-                <el-form-item label="选择影片：" :label-width="formLabelWidth" prop="filmName">
+                <el-form-item :required="true" label="选择影片：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oSelectFilmType">
                         <el-radio label="0">全部影片</el-radio>
                         <el-radio label="1">部分影片</el-radio>
                         <el-radio label="2">排除影片</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item v-if="oSelectFilmType != 0" label="选择影片" :label-width="formLabelWidth">
+                <el-form-item :required="true" v-if="oSelectFilmType != 0" label="选择影片" :label-width="formLabelWidth">
                     <el-button type="primary" @click="openNext">点击选择</el-button>
                 </el-form-item>
                 <el-form-item
                         label="所选影片"
                         :label-width="formLabelWidth"
                         v-if="selectedSell.length>0"
+                        :required="true"
                 >
                     <div v-for="(item, index) in selectedSell" style="margin-bottom: 5px" :key="index">
                         <el-input
@@ -381,14 +385,14 @@
                             format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
                 </el-form-item> -->
-                <el-form-item label="支付类型：" :label-width="formLabelWidth" prop="date2">
+                <el-form-item :required="true" label="支付类型：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oValidPayType">
                         <el-radio label="0">全部</el-radio>
                         <el-radio label="1">仅非会员卡支付</el-radio>
                         <el-radio label="2">仅会员卡支付</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item label="优惠方式：" :label-width="formLabelWidth" prop="reduceType">
+                <el-form-item :required="true" label="优惠方式：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oReduceType">
                         <el-radio label="1">固定价格</el-radio>
                         <el-radio label="2">立减</el-radio>
@@ -398,6 +402,7 @@
                         label="固定金额："
                         :label-width="formLabelWidth"
                         v-if="oReduceType == 1"
+                        :required="true"
                 >
                     <el-input style="width: 150px" v-model="oDiscountMoney" autocomplete="off"></el-input>
                 </el-form-item>
@@ -405,9 +410,10 @@
                         label="减免金额："
                         :label-width="formLabelWidth"
                         v-if="oReduceType == 2"
+                        :required="true"
                 >   立减<el-input style="width: 150px" v-model="oDiscountMoney" autocomplete="off"></el-input>元
                 </el-form-item>
-                <el-form-item label="开启状态：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="开启状态：" :label-width="formLabelWidth">
                     <el-select v-model="oStatus" placeholder="请选择">
                         <el-option
                                 v-for="item in options"
@@ -417,7 +423,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="节假日是否可用：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="节假日是否可用：" :label-width="formLabelWidth">
                     <el-select v-model="oHolidayValid" placeholder="请选择">
                         <el-option
                                 v-for="item in canUse"
@@ -437,7 +443,7 @@
                         >{{item.value}}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
-                <el-form-item label="是否和活动共用" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="是否和活动共用" :label-width="formLabelWidth">
                     <el-select v-model="oActivityTogether" placeholder="请选择">
                         <el-option
                                 v-for="item in canUse"
@@ -447,7 +453,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="库存：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="库存：" :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oSendNumber" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="使用须知：" :label-width="formLabelWidth">
@@ -795,6 +801,36 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
+            if (!this.oForm.name||!this.oForm.sendNumber||!this.oForm.discountMoney){
+                this.message = '必填项不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(this.oForm.selectHallType==1||this.oForm.selectHallType==2){
+                if(!this.oForm.screenCode){
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
+            if(this.oForm.selectFilmFormatType==1||this.oForm.selectFilmFormatType==2){
+                if(!this.oForm.filmFormatCode){
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
+            if(this.oForm.selectFilmType==1||this.oForm.selectFilmType==2){
+                if(!this.selectedSell){
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
             if (this.oForm.cinemaCode == true) {
                 this.oForm.cinemaCode = this.cinemaInfo[0].cinemaCode;
             }
@@ -1102,6 +1138,36 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
+            if (!this.oName||!this.oSendNumber||!this.oDiscountMoney){
+                this.message = '必填项不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(this.oSelectHallType==1||this.oSelectHallType==2){
+                if(!this.oScreenCode){
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
+            if(this.oSelectFilmFormatType==1||this.oSelectFilmFormatType==2){
+                if(!this.oFilmFormatCode){
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
+            if(this.oSelectFilmType==1||this.oSelectFilmType==2){
+                if(!this.selectedSell){
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
             console.log(this.selectedSell);
             let filmCodeList=[];
             for(let x in this.selectedSell){

@@ -65,10 +65,10 @@
                 >返回影院列表</el-button>
             </div>
             <el-form ref="form" :model="oForm">
-                <el-form-item label="游戏名称" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="游戏名称" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oForm.gameName" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="大转盘背景图" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="大转盘背景图" :label-width="formLabelWidth">
                     <el-popover placement="right" title trigger="hover">
                         <img style="width: 400px" :src="this.form.imageUrl" />
                         <img
@@ -95,8 +95,8 @@
                         </div>
                         <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过200kb  建议尺寸120*120或按比例上传</div>
                     </el-upload>
-                </el-form-item>
-                <el-form-item label="活动开始时间" :label-width="formLabelWidth">
+                </el-form-item :required="true">
+                <el-form-item :required="true" label="活动开始时间" :label-width="formLabelWidth">
                     <el-date-picker
                         style="width:250px"
                         v-model="oForm.startDate"
@@ -106,7 +106,7 @@
                         placeholder="选择日期时间"
                     ></el-date-picker>
                 </el-form-item>
-                <el-form-item label="活动结束时间" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="活动结束时间" :label-width="formLabelWidth">
                     <el-date-picker
                         style="width:250px"
                         v-model="oForm.endDate"
@@ -116,13 +116,13 @@
                         placeholder="选择日期时间"
                     ></el-date-picker>
                 </el-form-item>
-                <el-form-item label="消耗金币" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="消耗金币" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oForm.consumeGold" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="抽奖规则说明" :label-width="formLabelWidth">
                     <el-input style="width: 250px" type="textarea" v-model="oForm.gameRule" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="状态" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="状态" :label-width="formLabelWidth">
                     <el-select v-model="oForm.status" placeholder="请选择">
                         <el-option
                             v-for="item in options"
@@ -214,13 +214,13 @@
         <!-- 新增奖项弹出框 -->
         <el-dialog title="新增" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
-                <el-form-item label="奖品等级" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="奖品等级" :label-width="formLabelWidth">
                     <el-input style="width: 250px" type="number" @blur="match" v-model="form.prizeLevel" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="奖品名称" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="奖品名称" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="form.prizeName" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="奖品图片" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="奖品图片" :label-width="formLabelWidth">
                     <el-upload
                         :before-upload="beforeUpload"
                         :data="type"
@@ -239,16 +239,16 @@
                         <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过200kb 建议尺寸120*120或按比例上传</div>
                     </el-upload>
                 </el-form-item>
-                <el-form-item label="奖品个数" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="奖品个数" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="form.prizeNumber" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="奖品概率（小数）" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="奖品概率（小数）" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="form.percent" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="过期天数" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="过期天数" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="form.expireDay" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="奖品类型" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="奖品类型" :label-width="formLabelWidth">
                     <el-select v-model="form.prizeType" placeholder="请选择类型">
                         <el-option
                             v-for="item in prizeType"
@@ -258,10 +258,10 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item v-if="form.prizeType==1" label="选择优惠券" :label-width="formLabelWidth">
+                <el-form-item :required="true" v-if="form.prizeType==1" label="选择优惠券" :label-width="formLabelWidth">
                     <el-button type="primary" @click="getAllCoupon">选择优惠券</el-button>
                 </el-form-item>
-                <el-form-item v-if="form.prizeType==1" label="所选优惠券：" :label-width="formLabelWidth">
+                <el-form-item :required="true" v-if="form.prizeType==1" label="所选优惠券：" :label-width="formLabelWidth">
                     <el-input
                         style="width: 150px"
                         v-model="couponInfo.couponName"
@@ -283,13 +283,13 @@
         <!-- 修改奖项弹出框 -->
         <el-dialog title="编辑" :visible.sync="showModify">
             <el-form ref="form" :model="pForm">
-                <el-form-item label="奖品等级" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="奖品等级" :label-width="formLabelWidth">
                     <el-input style="width: 250px" type="number" @blur="oMatch" v-model="pForm.prizeLevel" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="奖品名称" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="奖品名称" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="pForm.prizeName" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="奖品图片" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="奖品图片" :label-width="formLabelWidth">
                     <el-popover placement="right" title trigger="hover">
                         <img style="width: 400px" :src="pForm.prizePicture" />
                         <img
@@ -317,16 +317,16 @@
                         <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过200kb 建议尺寸120*120或按比例上传</div>
                     </el-upload>
                 </el-form-item>
-                <el-form-item label="奖品个数" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="奖品个数" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="pForm.prizeNumber" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="奖品概率（小数）" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="奖品概率（小数）" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="pForm.percent" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="过期天数" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="过期天数" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="pForm.expireDay" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="奖品类型" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="奖品类型" :label-width="formLabelWidth">
                     <el-select v-model="pForm.prizeType" placeholder="请选择类型">
                         <el-option
                             v-for="item in prizeType"
@@ -336,13 +336,14 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item v-if="pForm.prizeType==1" label="选择优惠券" :label-width="formLabelWidth">
+                <el-form-item :required="true" v-if="pForm.prizeType==1" label="选择优惠券" :label-width="formLabelWidth">
                     <el-button type="primary" @click="getAllCoupon">选择优惠券</el-button>
                 </el-form-item>
                 <el-form-item
                     v-if="pForm.prizeType==1"
                     label="所选优惠券："
                     :label-width="formLabelWidth"
+                    :required="true"
                 >
                     <el-input
                         style="width: 150px"
@@ -429,10 +430,10 @@
                 >返回影院列表</el-button>
             </div>
             <el-form ref="form" :model="form">
-                <el-form-item label="游戏名称" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="游戏名称" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="form.gameName" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="大转盘背景图" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="大转盘背景图" :label-width="formLabelWidth">
                     <el-popover placement="right" title trigger="hover">
                         <img style="width: 400px" :src="this.form.imageUrl" />
                         <img
@@ -460,7 +461,7 @@
                         <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过200kb 建议尺寸375*600或按比例上传</div>
                     </el-upload>
                 </el-form-item>
-                <el-form-item label="活动开始时间" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="活动开始时间" :label-width="formLabelWidth">
                     <el-date-picker
                         style="width:250px"
                         v-model="form.startDate"
@@ -470,7 +471,7 @@
                         placeholder="选择日期时间"
                     ></el-date-picker>
                 </el-form-item>
-                <el-form-item label="活动结束时间" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="活动结束时间" :label-width="formLabelWidth">
                     <el-date-picker
                         style="width:250px"
                         v-model="form.endDate"
@@ -480,13 +481,13 @@
                         placeholder="选择日期时间"
                     ></el-date-picker>
                 </el-form-item>
-                <el-form-item label="消耗金币" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="消耗金币" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="form.consumeGold" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="抽奖规则说明" :label-width="formLabelWidth">
                     <el-input style="width: 250px" type="textarea" v-model="form.gameRule" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="状态" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="状态" :label-width="formLabelWidth">
                     <el-select v-model="form.status" placeholder="请选择">
                         <el-option
                             v-for="item in options"

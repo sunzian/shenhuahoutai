@@ -19,7 +19,7 @@
                 </el-select>
                 <el-input
                     placeholder="订单号"
-                    v-model="query.orderNo"
+                    v-model="query.submitOrderCode"
                     autocomplete="off"
                     class="mr10"
                 ></el-input>
@@ -433,6 +433,14 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
+                <el-form-item label="活动名称" :label-width="formLabelWidth">
+                    <el-input
+                            :disabled="true"
+                            style="width: 250px"
+                            v-model="form.activityName"
+                            autocomplete="off"
+                    ></el-input>
+                </el-form-item>
                 <el-form-item label="活动优惠金额" :label-width="formLabelWidth">
                     <el-input
                         :disabled="true"
@@ -754,8 +762,8 @@ export default {
                 }
                 let jsonArr = [];
                 jsonArr.push({ key: 'tableName', value: "ticket_order" });
-                jsonArr.push({ key: 'exportKeysJson', value: "[\"id\",\"cinemaCode\",\"orderNo\",\"sessionTime\",\"mobile\",\"filmName\",\"seatName\",\"number\",\"totalOriginalPrice\",\"totalPrice\",\"totalServiceFee\",\"totalPlatHandFee\",\"totalActivityDiscount\",\"totalCouponDiscount\",\"totalActualPrice\",\"totalReportPrice\",\"totalSubmitPrice\",\"chPayStatus\",\"chPayWay\",\"payTime\",\"chOrderStatus\",\"submitTime\"]"});
-                jsonArr.push({ key: 'exportTitlesJson', value:"[\"ID\",\"影院编码\",\"订单号\",\"场次时间\",\"手机号\",\"影片名称\",\"座位\",\"数量\",\"总原价\",\"原票价\",\"服务费\",\"代售费\",\"活动优惠金额\",\"优惠券优惠金额\",\"实付金额\",\"上报金额\",\"回传金额\",\"支付状态\",\"支付方式\",\"支付时间\",\"订单状态\",\"下单时间\"]" });
+                jsonArr.push({ key: 'exportKeysJson', value: "['id','cinemaCode','orderNo','submitOrderCode','sessionTime','mobile','filmName','seatName','number','totalOriginalPrice','totalPrice','totalServiceFee','totalPlatHandFee','totalCinemaAllowance','totalLowestPrice','totalActivityDiscount','totalCouponDiscount','totalActualPrice','totalReportPrice','totalSubmitPrice','chPayStatus','chPayWay','payTime','chOrderStatus','submitTime','openCardCinemaName','bindCardCinemaName','chActivityType','activityName','userCouponName','printNo','submitMessage','cancelTime','totalRefundHandFee','refundReason','tradeNo']"});
+                jsonArr.push({ key: 'exportTitlesJson', value:"['ID','影院编码','本地单号','售票系统单号','场次时间','手机号','影片名称','座位','数量','总原价','原票价','服务费','代售费','影院补贴','最低票价','活动优惠金额','优惠券优惠金额','实付金额','上报金额','回传金额','支付状态','支付方式','支付时间','订单状态','下单时间','开卡影院','消费影院','活动类型','活动名称','优惠券名称','取票码','下单失败原因','退票时间','退票手续费','退款原因','支付交易号']" });
                 jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
                 jsonArr.push({ key: 'orderNo', value: orderNo });
                 jsonArr.push({ key: 'mobile', value: mobile });
@@ -809,7 +817,7 @@ export default {
             });
             setTimeout(() => {
                 let cinemaCode = this.query.cinemaCode;
-                let orderNo = this.query.orderNo;
+                let submitOrderCode = this.query.submitOrderCode;
                 let mobile = this.query.mobile;
                 let payWay = this.query.payWay;
                 let payStatus = this.query.payStatus;
@@ -821,8 +829,8 @@ export default {
                 if (!cinemaCode) {
                     cinemaCode = '';
                 }
-                if (!orderNo) {
-                    orderNo = '';
+                if (!submitOrderCode) {
+                    submitOrderCode = '';
                 }
                 if (!mobile) {
                     mobile = '';
@@ -850,7 +858,7 @@ export default {
                 }
                 let jsonArr = [];
                 jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
-                jsonArr.push({ key: 'orderNo', value: orderNo });
+                jsonArr.push({ key: 'submitOrderCode', value: submitOrderCode });
                 jsonArr.push({ key: 'mobile', value: mobile });
                 jsonArr.push({ key: 'payWay', value: payWay });
                 jsonArr.push({ key: 'payStatus', value: payStatus });

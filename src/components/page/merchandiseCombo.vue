@@ -156,10 +156,10 @@
         <!--新增弹出框-->
         <el-dialog title="新增套餐" :visible.sync="dialogFormVisible">
             <el-form v-model="oForm">
-                <el-form-item label="套餐名称" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="套餐名称" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oForm.comboName" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="套餐图片" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="套餐图片" :label-width="formLabelWidth">
                     <el-popover placement="right" title trigger="hover">
                         <img style="width: 400px" :src="oForm.image_url" />
                         <img
@@ -187,13 +187,14 @@
                         <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过200kb 建议尺寸300*240或按比例上传</div>
                     </el-upload>
                 </el-form-item>
-                <el-form-item label="选择商品" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="选择商品" :label-width="formLabelWidth">
                     <el-button type="primary" @click="openNext">点击选择</el-button>
                 </el-form-item>
                 <el-form-item
                     label="所选商品"
                     :label-width="formLabelWidth"
                     v-if="selectedSell.length>0"
+                    :required="true"
                 >
                     <div v-for="(item, index) in selectedSell" style="margin-bottom: 5px" :key="index">
                         <el-input
@@ -210,10 +211,10 @@
                 <el-form-item label="排序" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oForm.showSeqNo" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="套餐价格" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="套餐价格" :label-width="formLabelWidth">
                     <el-input :disabled="true" style="width: 250px" v-model="oForm.originalPrice" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="套餐类型" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="套餐类型" :label-width="formLabelWidth">
                     <el-select v-model="oForm.comboType" placeholder="请选择套餐状态">
                         <el-option
                             v-for="item in showTypes"
@@ -223,7 +224,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="套餐状态" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="套餐状态" :label-width="formLabelWidth">
                     <el-select v-model="oForm.status" placeholder="请选择套餐状态">
                         <el-option
                             v-for="item in showStatus"
@@ -315,10 +316,10 @@
         <!-- 编辑弹出框 -->
         <el-dialog title="编辑" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
-                <el-form-item label="套餐名称" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="套餐名称" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="form.comboName" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="套餐图片" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="套餐图片" :label-width="formLabelWidth">
                     <el-popover placement="right" title trigger="hover">
                         <img style="width: 400px" :src="form.imageUrl" />
                         <img
@@ -346,13 +347,14 @@
                         <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过200kb 建议尺寸300*240或按比例上传</div>
                     </el-upload>
                 </el-form-item>
-                <el-form-item label="选择商品" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="选择商品" :label-width="formLabelWidth">
                     <el-button type="primary" @click="openNext">点击选择</el-button>
                 </el-form-item>
                 <el-form-item
                     label="所选商品"
                     :label-width="formLabelWidth"
                     v-if="selectedSell.length>0"
+                    :required="true"
                 >
                     <div v-for="(item, index) in selectedSell" style="margin-bottom: 5px" :key="index">
                         <el-input
@@ -369,10 +371,10 @@
                 <el-form-item label="排序" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="form.showSeqNo" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="套餐价格" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="套餐价格" :label-width="formLabelWidth">
                     <el-input :disabled="true" style="width: 250px" v-model="form.originalPrice" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="套餐类型" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="套餐类型" :label-width="formLabelWidth">
                     <el-select v-model="form.comboType" placeholder="请选择套餐状态">
                         <el-option
                             v-for="item in showTypes"
@@ -382,7 +384,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="套餐状态" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="套餐状态" :label-width="formLabelWidth">
                     <el-select v-model="form.status" placeholder="请选择套餐状态">
                         <el-option
                             v-for="item in showStatus"

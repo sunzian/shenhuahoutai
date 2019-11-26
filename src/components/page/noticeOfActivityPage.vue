@@ -85,15 +85,6 @@
                     <el-option key="1" label="未上线" value="1"></el-option>
                     <el-option key="2" label="上线" value="2"></el-option>
                 </el-select>
-                <el-select
-                    clearable
-                    v-model="query.type"
-                    placeholder="类型"
-                    class="handle-select mr10"
-                >
-                    <el-option key="1" label="纯文本" value="1"></el-option>
-                    <el-option key="2" label="图文" value="2"></el-option>
-                </el-select>
                 <el-button  style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="searchNotice">搜索</el-button>
                 <el-button
                     type="primary"
@@ -111,6 +102,7 @@
             <el-table
                 :data="oTableData"
                 border
+                height="400"
                 class="table"
                 ref="multipleTable"
                 header-cell-class-name="table-header"
@@ -133,12 +125,6 @@
                                 style="max-height: 50px;max-width: 130px"
                             />
                         </el-popover>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="memo" label="文章类型" width="130">
-                    <template slot-scope="scope">
-                        <el-tag v-if="scope.row.type=='1'">纯图片</el-tag>
-                        <el-tag v-if="scope.row.type=='2'">图文</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column prop="sort" label="上线状态" width="130">
@@ -185,7 +171,7 @@
         <!--新增弹出框-->
         <el-dialog title="新增文章" :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
-                <el-form-item label="标题" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="标题" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         maxlength="30"
@@ -193,7 +179,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="概述" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="概述" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         type="textarea"
@@ -201,7 +187,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="封面图片" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="封面图片" :label-width="formLabelWidth">
                     <el-upload
                         :before-upload="beforeUpload"
                         :data="type"
@@ -224,13 +210,7 @@
                         >只能上传jpg/png文件，且不超过200kb 建议尺寸750*360或按比例上传</div>
                     </el-upload>
                 </el-form-item>
-                <el-form-item label="文章类型" :label-width="formLabelWidth" prop="cinemaName">
-                    <el-radio-group v-model="oForm.type">
-                        <el-radio label="1">纯图片</el-radio>
-                        <el-radio label="2">图文</el-radio>
-                    </el-radio-group>
-                </el-form-item>
-                <el-form-item label="内容" :label-width="formLabelWidth" v-if="oForm.type == 2">
+                <el-form-item :required="true" label="内容" :label-width="formLabelWidth">
                     <quill-editor
                         ref="text"
                         v-model="oForm.content"
@@ -238,43 +218,11 @@
                         :options="editorOption"
                     />
                 </el-form-item>
-                <el-form-item label="内容" :label-width="formLabelWidth" v-if="oForm.type == 1">
-                    <el-upload
-                        :before-upload="beforeUpload"
-                        :data="type"
-                        class="load-demo"
-                        drag
-                        :limit="8"
-                        ref="downContentLoad"
-                        action="/api/upload/uploadImage"
-                        :on-success="onContentSuccess"
-                        multiple
-                    >
-                        <i class="el-icon-upload"></i>
-                        <div class="el-upload__text">
-                            将文件拖到此处，或
-                            <em>点击上传</em>
-                        </div>
-                        <div
-                            class="el-upload__tip"
-                            slot="tip"
-                        >只能上传jpg/png文件，且不超过200kb 建议尺寸750*360或按比例上传</div>
-                    </el-upload>
-                </el-form-item>
-                <el-form-item label="上线状态" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="上线状态" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.status">
                         <el-radio label="1">未上线</el-radio>
                         <el-radio label="2">上线</el-radio>
                     </el-radio-group>
-                </el-form-item>
-                <el-form-item label="发布时间" :label-width="formLabelWidth">
-                    <el-date-picker
-                        v-model="oForm.publishDate"
-                        type="datetime"
-                        placeholder="开始时间"
-                        value-format="yyyy-MM-dd HH:mm:ss"
-                        format="yyyy-MM-dd HH:mm:ss"
-                    ></el-date-picker>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -285,7 +233,7 @@
         <!-- 编辑弹出框 -->
         <el-dialog title="编辑" :visible.sync="editVisible">
             <el-form>
-                <el-form-item label="标题" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="标题" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         maxlength="30"
@@ -293,7 +241,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="概述" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="概述" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         type="textarea"
@@ -301,7 +249,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="封面图片" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="封面图片" :label-width="formLabelWidth">
                     <el-popover placement="right" title trigger="hover">
                         <img :src="oImageUrl" />
                         <img
@@ -333,13 +281,7 @@
                         >只能上传jpg/png文件，且不超过200kb 建议尺寸750*360或按比例上传</div>
                     </el-upload>
                 </el-form-item>
-                <el-form-item label="文章类型" :label-width="formLabelWidth" prop="cinemaName">
-                    <el-radio-group v-model="oType">
-                        <el-radio :label="1">纯图片</el-radio>
-                        <el-radio :label="2">图文</el-radio>
-                    </el-radio-group>
-                </el-form-item>
-                <el-form-item label="内容" :label-width="formLabelWidth" v-if="oType == 2">
+                <el-form-item :required="true" label="内容" :label-width="formLabelWidth">
                     <quill-editor
                         ref="text"
                         v-model="oContent"
@@ -347,56 +289,18 @@
                         :options="editorOption"
                     />
                 </el-form-item>
-                <el-form-item label="内容" :label-width="formLabelWidth" v-if="oType == 1">
-                    <el-popover placement="right" title trigger="hover">
-                        <img :src="oImageContent" />
-                        <img
-                            slot="reference"
-                            :src="oImageContent"
-                            :alt="oImageContent"
-                            style="max-height: 50px;max-width: 130px"
-                        />
-                    </el-popover>
-                    <el-upload
-                        :before-upload="beforeUpload"
-                        :data="type"
-                        class="upload-demo"
-                        drag
-                        :limit="8"
-                        ref="upContentLoad"
-                        action="/api/upload/uploadImage"
-                        :on-success="unContentSuccess"
-                        multiple
-                    >
-                        <i class="el-icon-upload"></i>
-                        <div class="el-upload__text">
-                            将文件拖到此处，或
-                            <em>点击上传</em>
-                        </div>
-                        <div
-                            class="el-upload__tip"
-                            slot="tip"
-                        >只能上传jpg/png文件，且不超过200kb 建议尺寸750*360或按比例上传</div>
-                    </el-upload>
-                </el-form-item>
-                <el-form-item label="上线状态" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="上线状态" :label-width="formLabelWidth">
                     <el-radio-group v-model="oStatus">
                         <el-radio :label="1">未上线</el-radio>
                         <el-radio :label="2">上线</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item label="发布时间" :label-width="formLabelWidth">
-                    <el-date-picker
-                        v-model="oPublishDate"
-                        type="datetime"
-                        placeholder="开始时间"
-                        value-format="yyyy-MM-dd HH:mm:ss"
-                        format="yyyy-MM-dd HH:mm:ss"
-                    ></el-date-picker>
+                <el-form-item :required="true" label="发布时间" :label-width="formLabelWidth">
+                    <el-input style="width: 250px" :disabled="true" v-model="oPublishDate"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogFormVisible = false">取 消</el-button>
+                <el-button @click="editVisible = false">取 消</el-button>
                 <el-button type="primary" @click="exChanger">确 定</el-button>
             </div>
         </el-dialog>
@@ -422,9 +326,7 @@ export default {
             oCinemaCode: '',
             oSummary: '',
             oImageUrl: '',
-            oType: '',
             oContent: '',
-            oImageContent: '',
             oStatus: '',
             oPublishDate: '',
             type: {
@@ -590,9 +492,6 @@ export default {
                             if (this.$refs.download) {
                                 this.$refs.download.clearFiles();
                             }
-                            if (this.$refs.downContentLoad) {
-                                this.$refs.downContentLoad.clearFiles();
-                            }
                             this.dialogFormVisible = true;
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
@@ -620,19 +519,15 @@ export default {
             });
             setTimeout(() => {
                 var jsonArr = [];
-                if (this.oForm.type == 2) {
                     jsonArr.push({ key: 'content', value: this.oForm.content });
-                }
-                if (this.oForm.type == 1) {
-                    jsonArr.push({ key: 'imageContent', value: this.oForm.imageContent });
-                }
+                // if (this.oForm.type == 1) {
+                //     jsonArr.push({ key: 'imageContent', value: this.oForm.imageContent });
+                // }
                 jsonArr.push({ key: 'cinemaCodes', value: this.cinemaCode });
                 jsonArr.push({ key: 'title', value: this.oForm.title });
                 jsonArr.push({ key: 'summary', value: this.oForm.summary });
                 jsonArr.push({ key: 'imageUrl', value: this.oForm.imageUrl });
-                jsonArr.push({ key: 'type', value: this.oForm.type });
                 jsonArr.push({ key: 'status', value: this.oForm.status });
-                jsonArr.push({ key: 'publishDate', value: this.oForm.publishDate });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
                 let params = ParamsAppend(jsonArr);
@@ -647,12 +542,10 @@ export default {
                                 this.$message.success(`新增成功`);
                                 this.oForm.cinemaCode = '';
                                 this.$refs.download.clearFiles();
-                                this.$refs.downContentLoad.clearFiles();
                                 this.oForm.content = '';
                                 this.oForm.imageContent = '';
                                 this.oForm.title = '';
                                 this.oForm.summary = '';
-                                this.oForm.type = '';
                                 this.oForm.status = '';
                                 this.oForm.imageUrl = '';
                                 this.oForm.publishDate = '';
@@ -764,12 +657,10 @@ export default {
                             this.oCinemaCode = JSON.parse(Decrypt(data.data.data)).cinemaCodes;
                             this.oContent = JSON.parse(Decrypt(data.data.data)).content;
                             this.oImageUrl = JSON.parse(Decrypt(data.data.data)).imageUrl;
-                            this.oImageContent = JSON.parse(Decrypt(data.data.data)).imageContent;
                             this.oPublishDate = JSON.parse(Decrypt(data.data.data)).publishDate;
                             this.oStatus = JSON.parse(Decrypt(data.data.data)).status;
                             this.oSummary = JSON.parse(Decrypt(data.data.data)).summary;
                             this.oTitle = JSON.parse(Decrypt(data.data.data)).title;
-                            this.oType = JSON.parse(Decrypt(data.data.data)).type;
                             this.oId = JSON.parse(Decrypt(data.data.data)).id;
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
@@ -797,17 +688,11 @@ export default {
             });
             setTimeout(() => {
                 var jsonArr = [];
-                if (this.oType == 2) {
-                    jsonArr.push({ key: 'content', value: this.oContent });
-                }
-                if (this.oType == 1) {
-                    jsonArr.push({ key: 'imageContent', value: this.oImageContent });
-                }
+                jsonArr.push({ key: 'content', value: this.oContent });
                 jsonArr.push({ key: 'cinemaCodes', value: this.oCinemaCode });
                 jsonArr.push({ key: 'title', value: this.oTitle });
                 jsonArr.push({ key: 'summary', value: this.oSummary });
                 jsonArr.push({ key: 'imageUrl', value: this.oImageUrl });
-                jsonArr.push({ key: 'type', value: this.oType });
                 jsonArr.push({ key: 'status', value: this.oStatus });
                 jsonArr.push({ key: 'publishDate', value: this.oPublishDate });
                 jsonArr.push({ key: 'id', value: this.oId });
@@ -822,7 +707,6 @@ export default {
                         loading.close();
                         console.log(data);
                         if (data.data.code == 'success') {
-                            this.$refs.upContentLoad.clearFiles();
                             this.$refs.upload.clearFiles(); //清除已上传文件
                             this.$message.success(`编辑成功`);
                             this.show();
@@ -854,34 +738,6 @@ export default {
                 return;
             }
             this.oForm.imageUrl = data.data;
-            if (data.code == 'nologin') {
-                this.message = data.message;
-                this.open();
-                this.$router.push('/login');
-            }
-        },
-        onContentSuccess(data) {
-            if (data.status == '-1') {
-                this.message = data.message;
-                this.open();
-                this.$refs.downContentLoad.clearFiles();
-                return;
-            }
-            this.oForm.imageContent = data.data;
-            if (data.code == 'nologin') {
-                this.message = data.message;
-                this.open();
-                this.$router.push('/login');
-            }
-        },
-        unContentSuccess(data) {
-            if (data.status == '-1') {
-                this.message = data.message;
-                this.open();
-                this.$refs.upContentLoad.clearFiles();
-                return;
-            }
-            this.oImageContent = data.data;
             if (data.code == 'nologin') {
                 this.message = data.message;
                 this.open();
@@ -929,7 +785,6 @@ export default {
                 let status = this.query.status;
                 let title = this.query.title;
                 // let cinemaName = this.query.cinemaName;
-                let type = this.query.type;
                 if (!status) {
                     status = '';
                 }
@@ -939,9 +794,6 @@ export default {
                 // if (!cinemaName) {
                 //     cinemaName = '';
                 // }
-                if (!type) {
-                    type = '';
-                }
                 if (row) {
                     this.cinemaCode = row.cinemaCode;
                 }
@@ -949,7 +801,6 @@ export default {
                 jsonArr.push({ key: 'status', value: status });
                 jsonArr.push({ key: 'title', value: title });
                 jsonArr.push({ key: 'cinemaCode', value: this.cinemaCode });
-                jsonArr.push({ key: 'type', value: type });
                 jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
                 jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
                 let sign = md5(preSign(jsonArr));

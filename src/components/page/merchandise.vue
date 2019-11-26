@@ -146,7 +146,7 @@
         <!-- 编辑弹出框 -->
         <el-dialog title="编辑" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
-                <el-form-item label="商品名称" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="商品名称" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         v-model="form.name"
@@ -189,7 +189,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="零售价" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="零售价" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         v-model="form.standardPrice"
@@ -197,7 +197,7 @@
                         :disabled="true"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="结算价" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="结算价" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         v-model="form.settlePrice"
@@ -208,10 +208,10 @@
                 <el-form-item label="展示顺序" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="form.showSeqNo" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="库存" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="form.stockCount" autocomplete="off" type="number"></el-input>
-                </el-form-item>
-                <el-form-item label="状态" :label-width="formLabelWidth">
+                <!--<el-form-item label="库存" :label-width="formLabelWidth">-->
+                    <!--<el-input style="width: 250px" v-model="form.stockCount" autocomplete="off" type="number"></el-input>-->
+                <!--</el-form-item>-->
+                <el-form-item :required="true" label="状态" :label-width="formLabelWidth">
                     <el-select v-model="oMerchandiseStatus" placeholder="请选择状态">
                         <el-option
                                 v-for="item in showStatus"

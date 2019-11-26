@@ -148,7 +148,7 @@
         <!--新增弹出框-->
         <el-dialog title="新增轮播图" :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
-                <el-form-item label="适用影院" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="适用影院" :label-width="formLabelWidth">
                     <el-select
                         v-model="oForm.cinemaCode"
                         placeholder="请选择影院"
@@ -162,7 +162,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="是否显示" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="是否显示" :label-width="formLabelWidth">
                     <el-select v-model="oForm.statusValue" placeholder="选择是否显示">
                         <el-option
                             v-for="item in showStatus"
@@ -172,7 +172,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="开始显示时间" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="开始显示时间" :label-width="formLabelWidth">
                     <el-date-picker
                         style="width: 200px"
                         v-model="startTime"
@@ -182,7 +182,7 @@
                         placeholder="选择日期时间"
                     ></el-date-picker>
                 </el-form-item>
-                <el-form-item label="结束显示时间" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="结束显示时间" :label-width="formLabelWidth">
                     <el-date-picker
                         style="width: 200px"
                         v-model="endTime"
@@ -200,7 +200,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="轮播图类别" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="轮播图类别" :label-width="formLabelWidth">
                     <el-select v-model="oForm.bannerType" placeholder="请选择">
                         <el-option
                             v-for="item in bannerType"
@@ -210,7 +210,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="图片地址" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="图片地址" :label-width="formLabelWidth">
                     <el-upload
                         :before-upload="beforeUpload"
                         :data="type"
@@ -230,8 +230,8 @@
                         <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过200kb</div>
                     </el-upload>
                 </el-form-item>
-                <el-form-item label="跳转类型" :label-width="formLabelWidth">
-                    <el-select v-model="oForm.tabType" placeholder="请选择跳转类型">
+                <el-form-item :required="true" label="跳转类型" :label-width="formLabelWidth">
+                    <el-select v-model="oForm.tabType" placeholder="请选择跳转类型" @change="addType">
                         <el-option
                             v-for="item in tabType"
                             :key="item.value"
@@ -240,10 +240,10 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item v-if="oForm.tabType==1||oForm.tabType==2||oForm.tabType==3" label="选择跳转类型" :label-width="formLabelWidth">
+                <el-form-item :required="true" v-if="oForm.tabType==1||oForm.tabType==2||oForm.tabType==3" label="选择跳转类型" :label-width="formLabelWidth">
                     <el-button type="primary" @click="openNext">点击选择</el-button>
                 </el-form-item>
-                <el-form-item v-if="oForm.tabType==1||oForm.tabType==2||oForm.tabType==3" label="跳转的具体类型" :label-width="formLabelWidth">
+                <el-form-item :required="true" v-if="oForm.tabType==1||oForm.tabType==2||oForm.tabType==3" label="跳转的具体类型" :label-width="formLabelWidth">
                     <el-input
                         style="width: 150px"
                         v-model.number="oForm.goType"
@@ -260,7 +260,7 @@
         <!-- 编辑弹出框 -->
         <el-dialog title="编辑" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
-                <el-form-item label="适用影院" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="适用影院" :label-width="formLabelWidth">
                     <el-select v-model="form.cinemaCodes" placeholder="请选择影院">
                         <el-option
                             v-for="item in cinemaList"
@@ -270,7 +270,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="是否显示" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="是否显示" :label-width="formLabelWidth">
                     <el-select v-model="form.status" placeholder="选择是否显示">
                         <el-option
                             v-for="item in showStatus"
@@ -280,7 +280,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="开始显示时间" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="开始显示时间" :label-width="formLabelWidth">
                     <el-date-picker
                         style="width: 190px"
                         v-model="changeStartTime"
@@ -290,7 +290,7 @@
                         placeholder="选择日期时间"
                     ></el-date-picker>
                 </el-form-item>
-                <el-form-item label="结束显示时间" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="结束显示时间" :label-width="formLabelWidth">
                     <el-date-picker
                         style="width: 190px"
                         v-model="changeEndTime"
@@ -308,7 +308,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="轮播图类别" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="轮播图类别" :label-width="formLabelWidth">
                     <el-select v-model="oBannerType" placeholder="请选择">
                         <el-option
                             v-for="item in bannerType"
@@ -318,7 +318,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="图片地址" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="图片地址" :label-width="formLabelWidth">
                     <el-popover placement="right" title trigger="hover">
                         <img style="width: 400px" :src="imageUrl" />
                         <img
@@ -347,8 +347,8 @@
                         <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过200kb</div>
                     </el-upload>
                 </el-form-item>
-                <el-form-item label="跳转类型" :label-width="formLabelWidth">
-                    <el-select v-model="oTabType" placeholder="请选择跳转类型">
+                <el-form-item :required="true" label="跳转类型" :label-width="formLabelWidth">
+                    <el-select v-model="oTabType" placeholder="请选择跳转类型" @change="changeType">
                         <el-option
                             v-for="item in tabType"
                             :key="item.value"
@@ -357,10 +357,10 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item v-if="oTabType==1||oTabType==2||oTabType==3" label="选择跳转类型" :label-width="formLabelWidth">
+                <el-form-item :required="true" v-if="oTabType==1||oTabType==2||oTabType==3" label="选择跳转类型" :label-width="formLabelWidth">
                     <el-button type="primary" @click="openNext1">点击选择</el-button>
                 </el-form-item>
-                <el-form-item v-if="oTabType==1||oTabType==2||oTabType==3"  label="跳转的具体类型" :label-width="formLabelWidth">
+                <el-form-item :required="true" v-if="oTabType==1||oTabType==2||oTabType==3"  label="跳转的具体类型" :label-width="formLabelWidth">
                     <el-input
                         style="width: 150px"
                         :disabled="true"
@@ -678,6 +678,14 @@ export default {
         this.getMenu();
     },
     methods: {
+        addType(){
+            this.oForm.goType='';
+            this.oForm.redirectGoal=''
+        },
+        changeType(){
+            this.goType='';
+            this.form.redirectGoal=''
+        },
         getCurrentRow(index){//优惠券弹出框index
             this.sellIndex=index;
         },
@@ -1059,7 +1067,7 @@ export default {
                 jsonArr.push({ key: 'category', value: this.oForm.bannerType });
                 jsonArr.push({ key: 'imageUrl', value: this.oForm.imageUrl });
                 jsonArr.push({ key: 'redirectType', value: this.oForm.tabType });
-                jsonArr.push({ key: 'redirectGoal', value: this.oForm.goType });
+                jsonArr.push({ key: 'redirectGoal', value: this.oForm.redirectGoal });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
                 let params = ParamsAppend(jsonArr);

@@ -186,7 +186,7 @@
         <!--新增弹出框-->
         <el-dialog title="新增商品" :visible.sync="dialogFormVisible">
             <el-form v-model="oForm">
-                <el-form-item label="商品类型" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="商品类型" :label-width="formLabelWidth">
                     <el-select v-model="oForm.commodity_type" placeholder="请选择商品类型">
                         <el-option
                             v-for="item in commodityType"
@@ -196,14 +196,10 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item
-                    v-if="oForm.commodity_type==1"
-                    label="商品名称"
-                    :label-width="formLabelWidth"
-                >
+                <el-form-item :required="true" v-if="oForm.commodity_type==1" label="商品名称" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oForm.name" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="商品图片" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="商品图片" :label-width="formLabelWidth">
                     <el-upload
                         :before-upload="beforeUpload"
                         :data="type"
@@ -223,7 +219,7 @@
                         <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过200kb 建议尺寸200*200或按比例上传</div>
                     </el-upload>
                 </el-form-item>
-                <el-form-item label="允许兑换的门店" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="允许兑换的门店" :label-width="formLabelWidth">
                     <el-checkbox-group v-model="checkedCities" :max="1" @change="getCinemaCode">
                         <el-checkbox
                                 v-for="city in cities"
@@ -241,7 +237,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="详情" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="详情" :label-width="formLabelWidth">
                     <quill-editor
                         ref="text"
                         v-model="oForm.details"
@@ -249,20 +245,16 @@
                         :options="editorOption"
                     />
                 </el-form-item>
-                <el-form-item
-                    v-if="oForm.commodity_type==1"
-                    label="原价"
-                    :label-width="formLabelWidth"
-                >
+                <el-form-item :required="true" v-if="oForm.commodity_type==1" label="原价" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oForm.originalPrice" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="库存" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="库存" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oForm.store" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="领取几天后过期" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="领取几天后过期" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oForm.expireDay" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="兑换方式" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="兑换方式" :label-width="formLabelWidth">
                     <el-select v-model="oForm.change_type" placeholder="请选择兑换方式">
                         <el-option
                             v-for="item in showType"
@@ -272,21 +264,13 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item
-                    v-if="oForm.change_type==1||oForm.change_type==3"
-                    label="所需金币数量"
-                    :label-width="formLabelWidth"
-                >
+                <el-form-item :required="true" v-if="oForm.change_type==1||oForm.change_type==3" label="所需金币数量" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oForm.gold" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item
-                    v-if="oForm.change_type==2||oForm.change_type==3"
-                    label="所需RMB"
-                    :label-width="formLabelWidth"
-                >
+                <el-form-item :required="true" v-if="oForm.change_type==2||oForm.change_type==3" label="所需RMB" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oForm.money" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="是否今日大牌" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="是否今日大牌" :label-width="formLabelWidth">
                     <el-select v-model="oForm.topStatus" placeholder="请选择">
                         <el-option
                             v-for="item in topStatusList"
@@ -296,7 +280,17 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="上架状态" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="是否精品推荐" :label-width="formLabelWidth">
+                    <el-select v-model="oForm.recommendStatus" placeholder="请选择">
+                        <el-option
+                                v-for="item in topStatusList"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item :required="true" label="上架状态" :label-width="formLabelWidth">
                     <el-select v-model="oForm.status" placeholder="请选择上架状态">
                         <el-option
                             v-for="item in showStatus"
@@ -306,14 +300,10 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item v-if="oForm.commodity_type==2" label="选择优惠券" :label-width="formLabelWidth">
+                <el-form-item  :required="true" v-if="oForm.commodity_type==2" label="选择优惠券" :label-width="formLabelWidth">
                     <el-button type="primary" @click="openNext">点击选择</el-button>
                 </el-form-item>
-                <el-form-item
-                        label="所选优惠券"
-                        :label-width="formLabelWidth"
-                        v-if="oForm.commodity_type==2&&selectedSell.length>0"
-                >
+                <el-form-item :required="true" label="所选优惠券" :label-width="formLabelWidth" v-if="oForm.commodity_type==2&&selectedSell.length>0">
                     <div v-for="(item, index) in selectedSell" style="margin-bottom: 5px" :key="index">
                         <el-input
                                 style="width: 250px"
@@ -330,7 +320,7 @@
                         >删除</span>
                     </div>
                 </el-form-item>
-                <el-form-item label="是否指定日期可以兑换" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="是否指定日期可以兑换" :label-width="formLabelWidth">
                     <el-select v-model="oForm.assign_type" placeholder="请选择指定日期">
                         <el-option
                             v-for="item in assignType"
@@ -340,11 +330,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item
-                    v-if="oForm.assign_type==2"
-                    label="选择指定日期"
-                    :label-width="formLabelWidth"
-                >
+                <el-form-item :required="true" v-if="oForm.assign_type==2" label="选择指定日期" :label-width="formLabelWidth">
                     <el-date-picker
                         v-model="oForm.assign_info"
                         type="date"
@@ -353,28 +339,16 @@
                         placeholder="选择日期"
                     ></el-date-picker>
                 </el-form-item>
-                <el-form-item
-                    v-if="oForm.assign_type==3"
-                    label="输入每月几号"
-                    :label-width="formLabelWidth"
-                >
+                <el-form-item :required="true" v-if="oForm.assign_type==3" label="输入每月几号" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oForm.assign_info" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item
-                    v-if="oForm.assign_type==4"
-                    label="输入每月第几周"
-                    :label-width="formLabelWidth"
-                >
+                <el-form-item :required="true" v-if="oForm.assign_type==4" label="输入每月第几周" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oForm.assign_info" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item
-                    v-if="oForm.assign_type==5"
-                    label="输入每周几"
-                    :label-width="formLabelWidth"
-                >
+                <el-form-item :required="true" v-if="oForm.assign_type==5" label="输入每周几" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oForm.assign_info" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="是否限制一段时间内可兑换数量" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="是否限制一段时间内可兑换数量" :label-width="formLabelWidth">
                     <el-select v-model="oForm.limit_type" placeholder="请选择限制时间">
                         <el-option
                             v-for="item in limitType"
@@ -388,6 +362,7 @@
                     v-if="oForm.limit_type==2||oForm.limit_type==3||oForm.limit_type==4"
                     label="对应上方的限制兑换数量"
                     :label-width="formLabelWidth"
+                    :required="true"
                 >
                     <el-input style="width: 250px" v-model="oForm.limit_number" autocomplete="off"></el-input>
                 </el-form-item>
@@ -408,7 +383,7 @@
         <!-- 编辑弹出框 -->
         <el-dialog title="编辑" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
-                <el-form-item label="商品类型" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="商品类型" :label-width="formLabelWidth">
                     <el-select v-model="form.commodityType" placeholder="商品类型" :disabled="true">
                         <el-option
                             v-for="item in commodityType"
@@ -422,10 +397,11 @@
                     v-if="form.commodityType==1"
                     label="商品名称"
                     :label-width="formLabelWidth"
+                    :required="true"
                 >
                     <el-input style="width: 250px" v-model="form.name" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="商品图片" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="商品图片" :label-width="formLabelWidth">
                     <el-popover placement="right" title trigger="hover">
                         <img :src="form.image_url" />
                         <img
@@ -461,7 +437,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="详情" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="详情" :label-width="formLabelWidth">
                     <quill-editor
                         ref="text"
                         v-model="form.details"
@@ -469,16 +445,16 @@
                         :options="editorOption"
                     />
                 </el-form-item>
-                <el-form-item label="原价" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="原价" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="form.originalPrice" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="库存" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="库存" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="form.store" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="领取几天后过期" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="领取几天后过期" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="form.expireDay" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="兑换方式" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="兑换方式" :label-width="formLabelWidth">
                     <el-select v-model="form.changeType" placeholder="请选择兑换方式" @change="change">
                         <el-option
                             v-for="item in showType"
@@ -492,6 +468,7 @@
                     v-if="form.changeType==1||form.changeType==3"
                     label="所需金币数量"
                     :label-width="formLabelWidth"
+                    :required="true"
                 >
                     <el-input style="width: 250px" v-model="form.gold" autocomplete="off"></el-input>
                 </el-form-item>
@@ -499,10 +476,11 @@
                     v-if="form.changeType==2||form.changeType==3"
                     label="所需RMB"
                     :label-width="formLabelWidth"
+                    :required="true"
                 >
                     <el-input style="width: 250px" v-model="form.money" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="允许兑换的门店" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="允许兑换的门店" :label-width="formLabelWidth">
                     <el-checkbox-group v-model="oCheckedCities" :max="1" @change="changeCinema">
                         <el-checkbox
                             v-for="city in oCities"
@@ -523,7 +501,7 @@
                         >{{item.cinemaName}}</el-checkbox>
                     </el-checkbox-group>-->
                 </el-form-item>
-                <el-form-item label="是否今日大牌" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="是否今日大牌" :label-width="formLabelWidth">
                     <el-select v-model="oTopstatus" placeholder="请选择">
                         <el-option
                             v-for="item in topStatusList"
@@ -533,7 +511,17 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="上架状态" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="是否精品推荐" :label-width="formLabelWidth">
+                    <el-select v-model="oRecommendStatus" placeholder="请选择">
+                        <el-option
+                                v-for="item in topStatusList"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item :required="true" label="上架状态" :label-width="formLabelWidth">
                     <el-select v-model="form.status" placeholder="请选择上架状态">
                         <el-option
                             v-for="item in showStatus"
@@ -543,13 +531,14 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item v-if="form.commodityType==2" label="选择优惠券" :label-width="formLabelWidth">
+                <el-form-item :required="true" v-if="form.commodityType==2" label="选择优惠券" :label-width="formLabelWidth">
                     <el-button type="primary" @click="openNext">点击选择</el-button>
                 </el-form-item>
                 <el-form-item
                         label="所选优惠券"
                         :label-width="formLabelWidth"
                         v-if="form.commodityType==2&&selectedSell.length>0"
+                        :required="true"
                 >
                     <div v-for="(item, index) in selectedSell" style="margin-bottom: 5px" :key="index">
                         <el-input
@@ -567,7 +556,7 @@
                         >删除</span>
                     </div>
                 </el-form-item>
-                <el-form-item label="是否指定日期可以兑换" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="是否指定日期可以兑换" :label-width="formLabelWidth">
                     <el-select v-model="form.assignType" placeholder="请选择指定日期">
                         <el-option
                             v-for="item in assignType"
@@ -581,6 +570,7 @@
                     v-if="form.assignType==2"
                     label="选择指定日期"
                     :label-width="formLabelWidth"
+                    :required="true"
                 >
                     <el-date-picker
                         v-model="form.assignInfo"
@@ -594,6 +584,7 @@
                     v-if="form.assignType==3"
                     label="输入每月几号"
                     :label-width="formLabelWidth"
+                    :required="true"
                 >
                     <el-input style="width: 250px" v-model="form.assignInfo" autocomplete="off"></el-input>
                 </el-form-item>
@@ -601,13 +592,14 @@
                     v-if="form.assignType==4"
                     label="输入每月第几周"
                     :label-width="formLabelWidth"
+                    :required="true"
                 >
                     <el-input style="width: 250px" v-model="form.assignInfo" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item v-if="form.assignType==5" label="输入每周几" :label-width="formLabelWidth">
+                <el-form-item :required="true" v-if="form.assignType==5" label="输入每周几" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="form.assignInfo" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="是否限制一段时间内可兑换数量" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="是否限制一段时间内可兑换数量" :label-width="formLabelWidth">
                     <el-select v-model="form.limitType" placeholder="请选择限制时间">
                         <el-option
                             v-for="item in limitType"
@@ -621,6 +613,7 @@
                     v-if="form.limitType==2||form.limitType==3||form.limitType==4"
                     label="对应上方的限制兑换数量"
                     :label-width="formLabelWidth"
+                    :required="true"
                 >
                     <el-input style="width: 250px" v-model="form.limitNumber" autocomplete="off"></el-input>
                 </el-form-item>
@@ -698,6 +691,7 @@ export default {
             content: '',
             editorOption: {},
             oTopstatus: '',
+            oRecommendStatus: '',
             type: {
                 type: ''
             },
@@ -1019,6 +1013,7 @@ export default {
                 jsonArr.push({ key: 'details', value: this.oForm.details });
                 jsonArr.push({ key: 'originalPrice', value: this.oForm.originalPrice });
                 jsonArr.push({ key: 'topStatus', value: this.oForm.topStatus });
+                jsonArr.push({ key: 'recommendStatus', value: this.oForm.recommendStatus });
                 jsonArr.push({ key: 'expireDay', value: this.oForm.expireDay });
                 jsonArr.push({ key: 'sort', value: this.oForm.sort });
                 let sign = md5(preSign(jsonArr));
@@ -1053,6 +1048,7 @@ export default {
                                 this.oForm.details = '';
                                 this.oForm.originalPrice = '';
                                 this.oForm.topStatus = '';
+                                this.oForm.recommendStatus = '';
                                 this.oForm.expireDay = '';
                                 this.oForm.sort = '';
                                 this.dialogFormVisible = false;
@@ -1225,6 +1221,13 @@ export default {
                                     break;
                                 }
                             }
+                            //是否精品推荐下拉选显示对应的选项
+                            for (let x in this.topStatusList) {
+                                if (this.topStatusList[x].value == JSON.parse(Decrypt(data.data.data)).goldCommodity.recommendStatus) {
+                                    this.oRecommendStatus = this.topStatusList[x].value;
+                                    break;
+                                }
+                            }
                             //兑换方式下拉选显示对应的选项
                             //   console.log(typeof JSON.parse(Decrypt(data.data.data)).goldCommodity.changeType);
                             for (let x in this.showType) {
@@ -1312,6 +1315,7 @@ export default {
                 jsonArr.push({ key: 'originalPrice', value: this.form.originalPrice });
                 jsonArr.push({ key: 'expireDay', value: this.form.expireDay });
                 jsonArr.push({ key: 'topStatus', value: this.oTopstatus });
+                jsonArr.push({ key: 'recommendStatus', value: this.oRecommendStatus });
                 jsonArr.push({ key: 'sort', value: this.form.sort });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
