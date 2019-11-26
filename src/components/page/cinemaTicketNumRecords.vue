@@ -9,7 +9,17 @@
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-input v-model="query.name" placeholder="影院名称" class="handle-input mr10"></el-input>
+                <el-input v-model="query.cinemaName" placeholder="影院名称" class="handle-input mr10"></el-input>
+                <el-select
+                    clearable
+                    v-model="query.tradeType"
+                    placeholder="请选择交易方式"
+                    class="handle-input mr10"
+                >
+                    <el-option key="1" label="主动充值" value="1"></el-option>
+                    <el-option key="2" label="购票扣除" value="2"></el-option>
+                    <el-option key="3" label="退票返回" value="3"></el-option>
+                </el-select>
                 <el-button style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
                 <el-button
                         type="primary"
@@ -42,17 +52,54 @@
                         >退票返回</el-tag>
                     </template>
                 </el-table-column>
+                <el-table-column prop="code" label="支付方式" width="150">
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row.paymentType=='1'"
+                        >按票收费</el-tag>
+                        <el-tag v-else-if="scope.row.paymentType=='2'"
+                        >包年</el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="sort" label="售票系统">
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row.tradeType=='1'"
+                        >辰星</el-tag>
+                        <el-tag v-else-if="scope.row.tradeType=='2'"
+                        >电影1905</el-tag>
+                        <el-tag v-else-if="scope.row.tradeType=='4'"
+                        >满天星</el-tag>
+                        <el-tag v-if="scope.row.tradeType=='8'"
+                        >粤科</el-tag>
+                        <el-tag v-else-if="scope.row.tradeType=='16'"
+                        >云智</el-tag>
+                        <el-tag v-else-if="scope.row.tradeType=='32'"
+                        >火烈鸟</el-tag>
+                        <el-tag v-else-if="scope.row.tradeType=='64'"
+                        >鼎星</el-tag>
+                        <el-tag v-else-if="scope.row.tradeType=='128'"
+                        >vista</el-tag>
+                    </template>
+                </el-table-column>
                 <el-table-column prop="sort" label="交易明细">
                     <template slot-scope="scope">{{scope.row.tradeDetail}}</template>
                 </el-table-column>
                 <el-table-column prop="name" label="订单号">
                     <template slot-scope="scope">{{scope.row.orderCode}}</template>
                 </el-table-column>
+                <el-table-column prop="name" label="影院出票总量" width="120">
+                    <template slot-scope="scope">{{scope.row.totalSaleTicketNumber}}</template>
+                </el-table-column>
                 <el-table-column prop="name" label="充值张数" width="120">
                     <template slot-scope="scope">{{scope.row.tradeTicketNum}}</template>
                 </el-table-column>
+                <el-table-column prop="name" label="剩余张数" width="120">
+                    <template slot-scope="scope">{{scope.row.remainTicketsNumber}}</template>
+                </el-table-column>
                 <el-table-column prop="sort" label="交易时间" >
                     <template slot-scope="scope">{{scope.row.tradeTime}}</template>
+                </el-table-column>
+                <el-table-column prop="sort" label="到期时间" >
+                    <template slot-scope="scope">{{scope.row.expireDate}}</template>
                 </el-table-column>
             </el-table>
             <div class="pagination">
@@ -177,6 +224,7 @@
         created() {},
         mounted() {
             this.getMenu();
+            this.getAllCinema();
         },
         methods: {
             addPage() {
@@ -291,16 +339,17 @@
                     background: 'rgba(0, 0, 0, 0.7)',
                     target: document.querySelector('.div1')
                 });
-                let name = this.query.name;
-                let status = this.query.status;
-                if (!name) {
-                    name = '';
+                let cinemaName = this.query.cinemaName;
+                let tradeType = this.query.tradeType;
+                if (!cinemaName) {
+                    cinemaName = '';
                 }
-                if (!status) {
-                    status = '';
+                if (!tradeType) {
+                    tradeType = '';
                 }
                 let jsonArr = [];
-                // jsonArr.push({ key: 'cinemaName', value: name });
+                jsonArr.push({ key: 'cinemaName', value: cinemaName });
+                jsonArr.push({ key: 'tradeType', value: tradeType });
                 jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
                 jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
                 let sign = md5(preSign(jsonArr));

@@ -337,14 +337,14 @@
                             <span style="color:red;cursor: pointer;" @click="deleteCoupon(index)">删除</span>
                         </div>
                     </el-form-item>
-                    <el-form-item label="短信模板：" :label-width="formLabelWidth">
+                    <!-- <el-form-item label="短信模板：" :label-width="formLabelWidth" prop="screenName">
                         <el-input
                             style="width: 350px"
                             type="textarea"
                             v-model="excelCouponForm.messageContent"
                             autocomplete="off"
                         ></el-input>
-                    </el-form-item>
+                    </el-form-item> -->
                 </el-form>
                 <div slot="footer" class="dialog-footer" style="display: flex;justify-content: space-around;">
                     <!-- <el-button @click="cancel">取 消</el-button> -->
@@ -547,14 +547,14 @@
                         <span style="color:red;cursor: pointer;" @click="deleteCoupon(index)">删除</span>
                     </div>
                 </el-form-item>
-                <el-form-item label="短信模板：" :label-width="formLabelWidth">
+                <!-- <el-form-item label="短信模板：" :label-width="formLabelWidth" prop="screenName">
                     <el-input
                         style="width: 350px"
                         type="textarea"
                         v-model="couponForm.messageContent"
                         autocomplete="off"
                     ></el-input>
-                </el-form-item>
+                </el-form-item> -->
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="cancel">取 消</el-button>
