@@ -308,7 +308,6 @@
                     // console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.$message.success(`修改成功`);
-                        this.$refs.download.clearFiles();//清除已上传文件
                         this.show();
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
@@ -454,6 +453,7 @@
                             // console.log(JSON.parse(Decrypt(data.data.data)));
                             if (data.data.code == 'success') {
                                 this.$message.success(`编辑成功`);
+                                this.$refs.download.clearFiles();//清除已上传文件
                                 this.show();
                             } else if (data.data.code == 'nologin') {
                                 this.message = data.data.message;

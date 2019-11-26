@@ -504,15 +504,20 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            var jsonArr = [];
-            if (this.oForm.givenType == 3 || this.oForm.givenType == 4) {
-                if (this.couponId == '') {
-                    this.message = '请选择券包';
+            if(!this.oForm.cinemaName||!this.oForm.levelName||!this.oForm.ruleName||!this.oForm.givenType||!this.oForm.startDate||!this.oForm.endDate||!this.oForm.status){
+                this.message = '必填项不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }else if(this.oForm.givenType==3){
+                if(!this.groupName ||!this.oForm.overDays){
+                    this.message = '必填项不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
             }
+            var jsonArr = [];
             if (this.couponId != '') {
                 jsonArr.push({ key: 'givenCouponGroupId', value: this.couponId });
             }
@@ -695,6 +700,19 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
+            if(!this.oCinemaName||!this.oCardLevelName||!this.oRuleName||!this.oGivenType||!this.oStartDate||!this.oEndDate||!this.oStatus){
+                this.message = '必填项不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }else if(this.oGivenType==3){
+                if(!this.groupName ||!this.oOverDays){
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
             var jsonArr = [];
             if (this.oGivenType == '不赠送') {
                 jsonArr.push({ key: 'givenType', value: 1 });

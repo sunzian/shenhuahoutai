@@ -318,7 +318,7 @@ export default {
                 memo: '',
                 number: '',
                 id: '',
-                status: ''
+                status: '0'
             },
             formLabelWidth: '120px',
             selectValue: {},
@@ -424,6 +424,7 @@ export default {
                 .fetchPost('couponGroup/addCouponGroupPage', '')
                 .then(data => {
                     loading.close();
+                    this.selectedSell=[];
                     console.log(data);
                     if (data.data.code == 'success') {
                         var oData = JSON.parse(Decrypt(data.data.data));
@@ -470,6 +471,12 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
+            if(!this.oForm.name||!this.oForm.cinemaCode||!this.selectedSell||!this.oForm.status){
+                this.message = '必填项不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
             var jsonArr = [];
             let coupon = [];
             for (let i = 0; i < this.selectedSell.length; i++) {
@@ -626,6 +633,12 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
+            if(!this.oGroupName||!this.selectedSell){
+                this.message = '必填项不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
             var jsonArr = [];
             let coupon = [];
             for (let i = 0; i < this.selectedSell.length; i++) {

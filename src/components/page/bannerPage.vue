@@ -231,7 +231,7 @@
                     </el-upload>
                 </el-form-item>
                 <el-form-item :required="true" label="跳转类型" :label-width="formLabelWidth">
-                    <el-select v-model="oForm.tabType" placeholder="请选择跳转类型">
+                    <el-select v-model="oForm.tabType" placeholder="请选择跳转类型" @change="addType">
                         <el-option
                             v-for="item in tabType"
                             :key="item.value"
@@ -348,7 +348,7 @@
                     </el-upload>
                 </el-form-item>
                 <el-form-item :required="true" label="跳转类型" :label-width="formLabelWidth">
-                    <el-select v-model="oTabType" placeholder="请选择跳转类型">
+                    <el-select v-model="oTabType" placeholder="请选择跳转类型" @change="changeType">
                         <el-option
                             v-for="item in tabType"
                             :key="item.value"
@@ -678,6 +678,14 @@ export default {
         this.getMenu();
     },
     methods: {
+        addType(){
+            this.oForm.goType='';
+            this.oForm.redirectGoal=''
+        },
+        changeType(){
+            this.goType='';
+            this.form.redirectGoal=''
+        },
         getCurrentRow(index){//优惠券弹出框index
             this.sellIndex=index;
         },

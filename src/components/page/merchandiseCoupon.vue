@@ -534,6 +534,36 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
+            if (!this.oForm.name||!this.oForm.sendNumber){
+                this.message = '必填项不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(this.oForm.reduceType==1){
+                if(!this.oForm.discountMoney){
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
+            if(this.oForm.reduceType==2){
+                if(!this.oForm.discountMoney||!this.oForm.achieveMoney){
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
+            if(this.oForm.selectMerchandiseType==1||this.oForm.selectMerchandiseType==2){
+                if(!this.oForm.merchandiseCode){
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
             if (this.oForm.cinemaCode == true) {
                 this.oForm.cinemaCode = this.cinemaInfo[0].cinemaCode;
             }
@@ -760,6 +790,36 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
+            if (!this.oName||!this.oSendNumber){
+                this.message = '必填项不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(this.oReduceType==1){
+                if(!this.oDiscountMoney){
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
+            if(this.oReduceType==2){
+                if(!this.oDiscountMoney||!this.oAchieveMoney){
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
+            if(this.oSelectMerchandiseType==1||this.oSelectMerchandiseType==2){
+                if(!this.oMerchandiseCode){
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
             var jsonArr = [];
             jsonArr.push({ key: 'name', value: this.oName });
             jsonArr.push({ key: 'cinemaCodes', value: this.oCinemaCode });

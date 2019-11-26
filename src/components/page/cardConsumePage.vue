@@ -104,10 +104,10 @@
                 <el-table-column prop="memo" label="消费明细">
                     <template slot-scope="scope">{{scope.row.consumeDetail}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="卡号" width="110">
+                <el-table-column prop="memo" label="消费卡号" width="110">
                     <template slot-scope="scope">{{scope.row.cardNo}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="手机号" width="110">
+                <el-table-column prop="memo" label="下单手机号" width="110">
                     <template slot-scope="scope">{{scope.row.mobilePhone}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="消费金额" width="80">
@@ -130,8 +130,8 @@
                 </el-table-column>
                 <el-table-column label="交易状态" align="center" width="90">
                     <template slot-scope="scope">
-                        <el-tag v-if="scope.row.status=='1'">成功</el-tag>
-                        <el-tag v-else>失败</el-tag>
+                        <el-tag v-if="scope.row.status=='1'" type='success'>成功</el-tag>
+                        <el-tag v-else type='danger'>失败</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column label="操作" align="center" fixed="right" width="90">
@@ -317,8 +317,8 @@ export default {
                 }
                 let jsonArr = [];
                 jsonArr.push({ key: 'tableName', value: "member_card_consume" });
-                jsonArr.push({ key: 'exportKeysJson', value: "['id','cinemaCode','cinemaName','consumeCinemaCode','consumeCinemaName','cardNo','userName','mobilePhone','consumeAmount','consumeDetail','chStatus','orderCode','chOrderType','consumeTime']"});
-                jsonArr.push({ key: 'exportTitlesJson', value:"['ID','开卡影院编码','开卡影院名称','消费影院编码','消费影院名称','消费卡号','会员卡所属用户','消费手机号','消费金额','消费明细','支付状态','订单号','订单类型','消费时间']" });
+                jsonArr.push({ key: 'exportKeysJson', value: "['id','cinemaCode','cinemaName','consumeCinemaCode','consumeCinemaName','cardNo','userName','mobilePhone','consumeAmount','consumeDetail','chStatus','orderCode','chOrderType','consumeTime','errorMessage','userName','orderCode']"});
+                jsonArr.push({ key: 'exportTitlesJson', value:"['ID','开卡影院编码','开卡影院名称','消费影院编码','消费影院名称','消费卡号','会员卡所属用户','消费手机号','消费金额','消费明细','支付状态','订单号','订单类型','消费时间','接口调用结果','会员卡所属用户','订单号']" });
                 jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
                 jsonArr.push({ key: 'cardNo', value: cardNo });
                 jsonArr.push({ key: 'mobilePhone', value: mobilePhone });

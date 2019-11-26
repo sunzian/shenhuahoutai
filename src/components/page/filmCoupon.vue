@@ -801,6 +801,36 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
+            if (!this.oForm.name||!this.oForm.sendNumber||!this.oForm.discountMoney){
+                this.message = '必填项不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(this.oForm.selectHallType==1||this.oForm.selectHallType==2){
+                if(!this.oForm.screenCode){
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
+            if(this.oForm.selectFilmFormatType==1||this.oForm.selectFilmFormatType==2){
+                if(!this.oForm.filmFormatCode){
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
+            if(this.oForm.selectFilmType==1||this.oForm.selectFilmType==2){
+                if(!this.selectedSell){
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
             if (this.oForm.cinemaCode == true) {
                 this.oForm.cinemaCode = this.cinemaInfo[0].cinemaCode;
             }
@@ -1108,6 +1138,36 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
+            if (!this.oName||!this.oSendNumber||!this.oDiscountMoney){
+                this.message = '必填项不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(this.oSelectHallType==1||this.oSelectHallType==2){
+                if(!this.oScreenCode){
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
+            if(this.oSelectFilmFormatType==1||this.oSelectFilmFormatType==2){
+                if(!this.oFilmFormatCode){
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
+            if(this.oSelectFilmType==1||this.oSelectFilmType==2){
+                if(!this.selectedSell){
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
             console.log(this.selectedSell);
             let filmCodeList=[];
             for(let x in this.selectedSell){

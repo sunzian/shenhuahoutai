@@ -489,6 +489,20 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
+            if(!this.oForm.name){
+                this.message = '必填项不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(this.oForm.couponGroupStatus==1){
+                if(!this.oForm.overDays||!this.groupName){
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
             var jsonArr = [];
             jsonArr.push({ key: 'employeeName', value: this.oForm.name });
             jsonArr.push({ key: 'employeeMobile', value: this.oForm.employeeMobile });
@@ -694,6 +708,20 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
+            if(!this.oName){
+                this.message = '必填项不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(this.oCouponGroupStatus==1){
+                if(!this.oOverDays||!this.groupName){
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
             var jsonArr = [];
             jsonArr.push({ key: 'employeeName', value: this.oName });
             jsonArr.push({ key: 'employeeMobile', value: this.oEmployeeMobile });

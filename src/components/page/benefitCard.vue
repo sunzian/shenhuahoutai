@@ -1335,11 +1335,14 @@
                 this.dateInfo.push(this.value1);
                 this.startArr.push(this.value1[0])
                 this.endArr.push(this.value1[1])
-                console.log(this.startArr.join(','));
-                console.log(this.endArr.join(','));
+                console.log(this.dateInfo);
+                console.log(this.startArr);
+                console.log(this.endArr);
             },
             deletTime(index) {
                 this.dateInfo.splice(index, 1);
+                this.startArr.splice(index, 1);
+                this.endArr.splice(index, 1);
             },
             addPage() {
                 //获取新增按钮权限
@@ -1605,6 +1608,8 @@
                     loading.close();
                     console.log(data);
                     this.dateInfo=[];
+                    this.startArr=[];
+                    this.endArr=[];
                     for(let x in JSON.parse(Decrypt(data.data.data))){
                         let jsonarr=[];
                         jsonarr.push(JSON.parse(Decrypt(data.data.data))[x].startTime);

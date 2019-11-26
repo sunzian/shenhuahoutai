@@ -815,6 +815,52 @@
                     background: 'rgba(0, 0, 0, 0.7)',
                     target: document.querySelector('.div1')
                 });
+                if(!this.oForm.name||!this.oForm.startDate||!this.oForm.endDate||!this.oForm.couponDesc){
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if(this.oForm.reduceType==1){
+                    if(!oForm.discountMoney){
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if(this.oForm.reduceType==2){
+                    if(!oForm.discountMoney||!oForm.achieveMoney){
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if(this.oForm.selectFilmType==1||this.oForm.selectFilmType==2){
+                    if(!this.selectedSell){
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if(this.oForm.oCanNum==1){
+                    if(!this.oForm.oNum){
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if(this.oForm.oneCanNum==1){
+                    if(!this.oForm.oneNum){
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
                 if (this.oForm.code == true) {
                     this.oForm.code = this.cinemaInfo[0].code;
                 }
@@ -978,6 +1024,8 @@
                     loading.close();
                     console.log(data);
                     this.dateInfo=[];
+                    this.startArr=[];
+                    this.endArr=[];
                     for(let x in JSON.parse(Decrypt(data.data.data))){
                         let jsonarr=[];
                         jsonarr.push(JSON.parse(Decrypt(data.data.data))[x].startTime);
@@ -1119,6 +1167,52 @@
                 let merchandiseCodeList=[];
                 for(let x in this.selectedSell){
                     merchandiseCodeList.push(this.selectedSell[x].merchandiseCode)
+                }
+                if(!this.oName||!this.oStartDate||!this.oEndDate||!this.oActivityDesc){
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if(this.oReduceType==1){
+                    if(!this.oDiscountMoney){
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if(this.oReduceType==2){
+                    if(!oDiscountMoney||!oAchieveMoney){
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if(this.oSelectMerchandiseType==1||this.oSelectMerchandiseType==2){
+                    if(!this.selectedSell){
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if(this.oIsLimitTotal==1){
+                    if(!this.oTotalNumber){
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if(this.oIsLimitSingle==1){
+                    if(!this.oSingleNumber){
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
                 }
                 var jsonArr = [];
                 jsonArr.push({ key: 'name', value: this.oName });
