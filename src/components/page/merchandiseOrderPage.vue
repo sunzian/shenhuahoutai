@@ -18,6 +18,12 @@
                     ></el-option>
                 </el-select>
                 <el-input
+                        placeholder="卖品名称"
+                        v-model="query.merNames"
+                        autocomplete="off"
+                        class="mr10"
+                ></el-input>
+                <el-input
                     placeholder="订单号"
                     v-model="query.submitOrderCode"
                     autocomplete="off"
@@ -35,6 +41,15 @@
                     autocomplete="off"
                     class="mr10"
                 ></el-input>
+                <el-select
+                        clearable
+                        v-model="query.deliveryType"
+                        placeholder="取货方式"
+                        class="handle-select mr10"
+                >
+                    <el-option key="0" label="自取" value="0"></el-option>
+                    <el-option key="1" label="送至影厅" value="1"></el-option>
+                </el-select>
                 <el-select
                     clearable
                     v-model="query.payWay"
@@ -744,6 +759,14 @@ export default {
                 let submitStatus = this.query.submitStatus;
                 let startDate = this.query.startDate;
                 let endDate = this.query.endDate;
+                let merNames = this.query.merNames;
+                let deliveryType = this.query.deliveryType;
+                if (!deliveryType) {
+                    deliveryType = '';
+                }
+                if (!merNames) {
+                    merNames = '';
+                }
                 if (!cinemaCode) {
                     cinemaCode = '';
                 }
@@ -772,6 +795,8 @@ export default {
                     endDate = '';
                 }
                 let jsonArr = [];
+                jsonArr.push({ key: 'deliveryType', value: deliveryType });
+                jsonArr.push({ key: 'merNames', value: merNames });
                 jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
                 jsonArr.push({ key: 'submitOrderCode', value: submitOrderCode });
                 jsonArr.push({ key: 'mobile', value: mobile });
