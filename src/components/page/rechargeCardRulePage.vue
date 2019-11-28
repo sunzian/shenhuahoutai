@@ -1186,6 +1186,10 @@ export default {
         },
         // 获取所有券包
         getAllCoupon() {
+            let couponName=this.query.couponName;
+            if(!couponName){
+                couponName=''
+            }
             if (!this.oForm.cinemaCode || this.oForm.cinemaCode == '') {
                 this.message = '请选择影院';
                 this.open();
@@ -1193,6 +1197,7 @@ export default {
             }
             let jsonArr = [];
             jsonArr.push({ key: 'cinemaCodes', value: this.oForm.cinemaCode });
+            jsonArr.push({ key: 'groupName', value: this.couponName });
             jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
             jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
             jsonArr.push({ key: 'status', value: 1 });
@@ -1232,7 +1237,12 @@ export default {
         },
         // 更换券包
         changeCoupon() {
+            let couponName=this.query.couponName;
+            if(!couponName){
+                couponName=''
+            }
             let jsonArr = [];
+            jsonArr.push({ key: 'groupName', value: this.couponName });
             jsonArr.push({ key: 'cinemaCodes', value: this.oCinemaCode });
             jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
             jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
