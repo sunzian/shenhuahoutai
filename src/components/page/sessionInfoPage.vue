@@ -289,33 +289,43 @@
             <div id="posterHtml" ref="posterHtml">
                 <div style="background: rgba(0, 159, 255, 1);">
                     <div class="poster-head">
-                        <div style="font-size: 30px;margin-bottom: 25px;font-weight:bold;letter-spacing: 8px;">今日影讯</div>
+                        <div 
+                         style="font-size: 60px;
+                                margin-bottom: 25px;
+                                font-weight:bold;
+                                letter-spacing: 8px;
+                                padding-top: 50px;
+                                color:rgba(255,255,255,1);
+                                font-weight: 800;
+                                ">今日影讯</div>
                         <div class="poster-date">{{posterForm.date}}</div>
                         <div class="poster-name">{{posterContent.cinemaName}}</div>
-                        <div class="poster-address">{{posterContent.address}}</div>
-                        <div class="poster-mobile">{{posterContent.serviceMobile}}</div>
+                        <div class="poster-address el-icon-location-information" style="display: block;">{{posterContent.address}}</div>
+                        <div class="poster-mobile el-icon-phone-outline" style="display: block;">{{posterContent.serviceMobile}}</div>
                     </div>
                     <div v-for="(item, index) in posterContent.filmList" :key="index" class="poster-session">
                         <img :src="'data:image/png;base64,'+item.image" class="poster-img" />
                         <span class="poster-filmName">{{item.filmName}}
-                            <span style="display: inline;border:1px solid pink;color: pink;font-size: 9px;">{{item.dimensional}}</span>
+                            <span style="display: inline;border:1px solid pink;color: pink;font-size: 18px;">{{item.dimensional}}</span>
                         </span>
                         <span class="poster-area">{{item.duration}}分钟，{{item.area}}，{{item.language}}</span>
                         <span class="poster-actor">{{item.actor}}</span>
-                        <span class="poster-sessionList">
-                            <span class="poster-sessionInfo" v-for="(session, index) in item.sessionList" :key="index">
-                                <span style="font-size: 20px;font-weight:bold;color:rgba(51,51,51,1);">{{session.sessionTime}}</span>
-                                <span>{{session.sessDimensional}}&nbsp;{{session.sessLanguage}}</span>
-                                <span style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">{{session.screenName}}</span>
-                            </span>
-                        </span>
+                        <div class="poster-sessionList">
+                            <div class="poster-sessionInfo" v-for="(session, index) in item.sessionList" :key="index">
+                                <span style="font-size: 30px;font-weight:bold;color:rgba(51,51,51,1);">{{session.sessionTime}}</span>
+                                <span>
+                                    <span>{{session.sessDimensional}}&nbsp;{{session.sessLanguage}}</span>
+                                    <span style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">{{session.screenName}}</span>
+                                </span>
+                            </div>
+                        </div>
                     </div>
-                    <div style="text-align: center;">以上影讯如有变动，请以当日影院公布为准</div>
+                    <div style="text-align: center;position: relative;top: -30px;color:rgba(255,255,255,1);font-size:18px;">以上影讯如有变动，请以当日影院公布为准</div>
                 </div>
                 <div class="poster-foot">
                     <img :src="'data:image/png;base64,'+posterContent.miniAppQRCode" class="poster-qrcode" />
-                    <div style="display: flex;flex-direction: column;justify-content: space-around;">
-                        <span style="color:rgba(77,77,77,1);font-size: 13px;">票比三家，省钱到家</span>
+                    <div style="display: flex;flex-direction: column;justify-content: space-around;height:152px;">
+                        <span style="color:rgba(77,77,77,1);font-size: 26px;font-weight:bold;">票比三家，省钱到家</span>
                         <div class="poster-btn">会员充值巨划算</div>
                     </div>
                 </div>
@@ -987,7 +997,6 @@ export default {
 }
 #posterHtml {
     position: relative;
-    /* width: 750px; */
 }
 .poster-head {
     position: relative;
@@ -995,23 +1004,30 @@ export default {
 }
 .poster-date {
     position: absolute;
-    top: 10%;
-    left: 60%;
-    font-size: 18px;
+    top: 30%;
+    right: 5%;
+    font-size: 24px;
+    font-weight:400;
+    color:rgba(255,255,255,1);
 }
 .poster-name {
-    font-size: 18px;
-    margin-bottom: 15px;
+    font-size: 36px;
+    margin-bottom: 26px;
     font-weight:bold;
     letter-spacing: 2px;
+    color:rgba(255,255,255,1);
 }
 .poster-address {
-    font-size: 16px;
-    margin-bottom: 15px;
+    font-size: 26px;
+    margin-bottom: 26px;
+    font-weight:400;
+    color:rgba(255,255,255,1);
 }
 .poster-mobile {
-    font-size: 16px;
-    margin-bottom: 25px;
+    font-size: 26px;
+    margin-bottom: 35px;
+    font-weight:400;
+    color:rgba(255,255,255,1);
 }
 .poster-session {
     position: relative;
@@ -1027,64 +1043,68 @@ export default {
     width: 200px;
     height: 280px;
     position: relative;
-    top: 30px;
 }
 .poster-filmName {
-    font-size: 16px;
+    font-size: 30px;
     position: absolute;
     left: 241px;
-    top: 60px;
+    top: 53px;
 }
 .poster-area {
     color:rgba(136,136,136,1);
-    font-size: 11px;
+    font-size: 22px;
     position: absolute;
     left: 241px;
-    top: 100px;
+    top: 123px;
 }
 .poster-actor {
     color:rgba(136,136,136,1);
-    font-size: 12px;
+    font-size: 24px;
     position: absolute;
     left: 241px;
-    top: 120px;
+    top: 155px;
 }
 .poster-sessionList {
     position: relative;
-    left: 200px;
-    top: -160px;
+    margin-top: -90px;
     display: flex;
     flex-wrap: wrap;
-    width: 70%;
-
+}
+.poster-sessionList>div:first-child {
+    margin-left: 200px;
 }
 .poster-sessionInfo {
     display: flex;
     flex-direction: column;
-    width: 90px;
+    width: 100px;
     color:rgba(136,136,136,1);
-    font-size:9px;
+    font-size:18px;
     height: 90px;
+    font-weight:400;
     text-align: center;
+    justify-content: space-around;
+    margin-bottom: 50px;
 }
 .poster-foot {
     position: relative;
-    padding: 0 165px;
+    padding: 0 150px;
     display: flex;
     justify-content: space-around;
+    height: 291px;
+    align-items: center;
 }
 .poster-qrcode {
     width: 152px;
     height: 152px;
 }
 .poster-btn {
-    width:118px;
-    height:25px;
+    width:236px;
+    height:50px;
     background:rgba(0,154,255,1);
     border-radius:25px;
     color:rgba(255,255,255,1);
-    font-size: 11px;
-    line-height: 25px;
+    font-size: 22px;
+    line-height: 50px;
     text-align: center;
 }
 </style>
