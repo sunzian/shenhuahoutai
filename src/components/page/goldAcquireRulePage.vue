@@ -37,7 +37,7 @@
                 message:'',//弹出框消息
                 query: {
                     pageNo:1,
-                    pageSize:10
+                    pageSize:15
                 },
                 tableData: [],
                 pageTotal: 0,
