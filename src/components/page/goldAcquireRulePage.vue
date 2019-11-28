@@ -147,8 +147,8 @@
                 }, 500);
             },
             open() {
-                //错误信息弹出框
-                this.$alert(this.message, '错误信息', {
+                //信息提示弹出框
+                this.$alert(this.message, '信息提示', {
                     dangerouslyUseHTMLString: true
                 });
             },
