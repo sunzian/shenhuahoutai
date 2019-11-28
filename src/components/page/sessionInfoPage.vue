@@ -806,7 +806,7 @@ export default {
                 });
         },
         open() {
-            //错误信息弹出框
+            //信息提示弹出框
             this.$alert(this.message, '返回信息', {
                 dangerouslyUseHTMLString: true
             });
