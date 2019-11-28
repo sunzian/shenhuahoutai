@@ -44,18 +44,14 @@
                 <el-table-column prop="code" label="活动名称">
                     <template slot-scope="scope">{{scope.row.name}}</template>
                 </el-table-column>
-                <el-table-column prop="booleans" label="券包名称" width="140">
+                <!-- <el-table-column prop="booleans" label="券包名称" width="140">
                     <template slot-scope="scope">{{scope.row.couponGroupName}}</template>
-                </el-table-column>
-                <el-table-column prop="code" label="送券活动类型" width="110">
+                </el-table-column> -->
+                <!-- <el-table-column prop="code" label="送券活动类型" width="110">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.type=='1'">注册送券</el-tag>
-                        <!--<el-tag v-else-if="scope.row.type=='2'"-->
-                        <!--&gt;活动抢券</el-tag>-->
-                        <!--<el-tag v-else-if="scope.row.type=='3'"-->
-                        <!--&gt;生日送券</el-tag>-->
                     </template>
-                </el-table-column>
+                </el-table-column> -->
                 <el-table-column prop="sort" label="活动开始时间" width="160">
                     <template slot-scope="scope">{{scope.row.startDate}}</template>
                 </el-table-column>
@@ -68,13 +64,13 @@
                         <el-tag v-else-if="scope.row.status=='1'">启用</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="number" label="是否限制总数" width="110">
+                <el-table-column prop="number" label="是否限制数量" width="110">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.isLimitTotal=='0'">不限制</el-tag>
                         <el-tag v-else-if="scope.row.isLimitTotal=='1'">限制</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="number" label="限购总数" width="100">
+                <el-table-column prop="number" label="总数量" width="100">
                     <template slot-scope="scope">{{scope.row.totalNumber}}</template>
                 </el-table-column>
                 <el-table-column prop="number" label="剩余总数" width="100">

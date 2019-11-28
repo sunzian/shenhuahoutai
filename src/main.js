@@ -4,6 +4,8 @@ import router from './router';
 import ElementUI from 'element-ui';
 import VueI18n from 'vue-i18n';
 import { messages } from './components/common/i18n';
+import mavonEditor from 'mavon-editor'
+import 'mavon-editor/dist/css/index.css'
 import 'element-ui/lib/theme-chalk/index.css'; // 默认主题
 // import './assets/css/theme-green/index.css'; // 浅绿色主题
 import './assets/css/icon.css';
@@ -15,6 +17,7 @@ import echarts from 'echarts'
 Vue.prototype.$echarts = echarts;
 Vue.config.productionTip = false;
 Vue.use(VueI18n);
+Vue.use(mavonEditor)
 Vue.use(ElementUI, {
     size: 'small'
 });

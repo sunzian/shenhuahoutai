@@ -93,6 +93,7 @@
                             type="text"
                             icon="el-icon-setting"
                             style="color: gray"
+                            @click="addChange(scope.$index, scope.row)"
                         >确认送达</el-button>
                     </template>
                 </el-table-column>

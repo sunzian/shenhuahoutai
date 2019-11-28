@@ -280,17 +280,17 @@
                     >
                         <el-date-picker
                             v-model="excelCouponForm.startDate"
-                            type="datetime"
+                            type="date"
                             placeholder="开始时间"
-                            value-format="yyyy-MM-dd HH:mm:ss"
-                            format="yyyy-MM-dd HH:mm:ss"
+                            value-format="yyyy-MM-dd"
+                            format="yyyy-MM-dd"
                         ></el-date-picker>至
                         <el-date-picker
                             v-model="excelCouponForm.endDate"
-                            type="datetime"
+                            type="date"
                             placeholder="结束时间"
-                            value-format="yyyy-MM-dd HH:mm:ss"
-                            format="yyyy-MM-dd HH:mm:ss"
+                            value-format="yyyy-MM-dd"
+                            format="yyyy-MM-dd"
                         ></el-date-picker>
                     </el-form-item>
                     <el-form-item
@@ -494,17 +494,17 @@
                 >
                     <el-date-picker
                         v-model="couponForm.startDate"
-                        type="datetime"
+                        type="date"
                         placeholder="开始时间"
-                        value-format="yyyy-MM-dd HH:mm:ss"
-                        format="yyyy-MM-dd HH:mm:ss"
+                        value-format="yyyy-MM-dd"
+                        format="yyyy-MM-dd"
                     ></el-date-picker>至
                     <el-date-picker
                         v-model="couponForm.endDate"
-                        type="datetime"
+                        type="date"
                         placeholder="结束时间"
-                        value-format="yyyy-MM-dd HH:mm:ss"
-                        format="yyyy-MM-dd HH:mm:ss"
+                        value-format="yyyy-MM-dd"
+                        format="yyyy-MM-dd"
                     ></el-date-picker>
                 </el-form-item>
                 <el-form-item
@@ -675,12 +675,10 @@ export default {
             jsonArr.push({ key: 'overDays', value: params.overDays });
             jsonArr.push({ key: 'couponInfo', value: params.couponInfo });
             jsonArr.push({ key: 'messageContent', value: params.messageContent });
-            // console.log(jsonArr)
+            console.log(jsonArr)
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             let paramsInfo =  ParamsAppend(jsonArr);
-            // params.cinemaCode = paramsInfo.cinemaCode;
-            // console.log(params.cinemaCode)
             return paramsInfo;
         }
     },
@@ -854,6 +852,8 @@ export default {
                 jsonArr.push({ key: 'overDays', value: this.couponForm.overDays });
             }
             if (this.couponForm.effectiveTimeType == 2) {
+                this.couponForm.startDate += " 00:00:00";
+                this.couponForm.endDate += " 23:59:59"
                 jsonArr.push({ key: 'startDate', value: this.couponForm.startDate });
                 jsonArr.push({ key: 'endDate', value: this.couponForm.endDate });
             }
@@ -914,6 +914,9 @@ export default {
                     this.message = '请填写时间段';
                     this.open();
                     return;
+                } else {
+                    this.excelCouponForm.startDate += " 00:00:00";
+                    this.excelCouponForm.endDate += " 23:59:59";
                 }
             }
             const loading = this.$loading({
