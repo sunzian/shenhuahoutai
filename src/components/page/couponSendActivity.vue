@@ -73,7 +73,7 @@
                 <el-table-column prop="number" label="总数量" width="100">
                     <template slot-scope="scope">{{scope.row.totalNumber}}</template>
                 </el-table-column>
-                <el-table-column prop="number" label="剩余总数" width="100">
+                <el-table-column prop="number" label="已使用数量" width="100">
                     <template slot-scope="scope">{{scope.row.totalSurplus}}</template>
                 </el-table-column>
                 <!--<el-table-column prop="booleans" label="活动描述">-->

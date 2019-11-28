@@ -928,14 +928,6 @@ export default {
                 }
             }
             this.$refs.upload.submit();
-            setTimeout(function(){
-                console.log(1)
-            if (this.successUpLoad == false) {
-                this.message = '请上传文件';
-                this.open();
-                return;
-            }
-            },1000)
         },
 
         // 取消发放

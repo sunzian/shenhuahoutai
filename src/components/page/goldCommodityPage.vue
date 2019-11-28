@@ -251,12 +251,6 @@
                     ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="详情" :label-width="formLabelWidth">
-                    <!-- <quill-editor
-                        ref="text"
-                        v-model="oForm.details"
-                        class="myQuillEditor"
-                        :options="editorOption"
-                    />-->
                     <mavon-editor
                         v-model="oForm.details"
                         ref="md"
@@ -559,17 +553,6 @@
                             :value="city.cinemaCode"
                         >{{city.cinemaName}}</el-checkbox>
                     </el-checkbox-group>
-                    <!-- <el-checkbox-group
-                        v-model="form.cinemaCode"
-                        @change="changeCinema"
-                    >
-                        <el-checkbox
-                            v-for="item in oCities"
-                            :label="item.cinemaCode"
-                            :key="item.cinemaCode"
-                            :value="item.cinemaName"
-                        >{{item.cinemaName}}</el-checkbox>
-                    </el-checkbox-group>-->
                 </el-form-item>
                 <el-form-item :required="true" label="是否今日大牌" :label-width="formLabelWidth">
                     <el-select v-model="oTopstatus" placeholder="请选择">
@@ -1046,12 +1029,6 @@ export default {
                         if (data.data.code == 'success') {
                             console.log(JSON.parse(Decrypt(data.data.data)));
                             this.cities = JSON.parse(Decrypt(data.data.data));
-                            // this.oForm = [];
-                            // this.oForm.name = '';
-                            // this.oForm.value = '';
-                            // this.oForm.memo = '';
-                            // this.filmInfo = [];
-                            // this.checkedCities = [];
                             this.dialogFormVisible = true;
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
@@ -1611,7 +1588,15 @@ export default {
             this.query.aPageNo = val;
             this.openNext();
         },
+
         $imgAdd(pos, $file) {
+            const isLt2M = $file.size / 1024 < 300;
+            if (!isLt2M) {
+                this.message = '上传图片大小不能超过 300KB!';
+                this.open();
+                delete this.img_file[pos];
+                return;
+            }
             var formdata = new FormData();
             formdata.append('file', $file);
             formdata.append('type', EncryptReplace('business'));
