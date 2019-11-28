@@ -1900,7 +1900,7 @@
                     jsonArr.push({ key: 'endTimeVal', value: this.endArr.join(',')});
                     jsonArr.push({ key: 'isMerchandiseJoin', value: this.oIsMerchandiseJoin});
                     jsonArr.push({ key: 'isHolidayValid', value: this.oIsHolidayValid});
-                    jsonArr.push({ key: 'validWeekDay', value: this.oValidWeekDay});
+                    jsonArr.push({ key: 'validWeekDay', value: this.oCheckedDays});
                     jsonArr.push({ key: 'validPayType', value: this.oValidPayType});
                     jsonArr.push({ key: 'isCouponTogether', value: this.oIsCouponTogether});
                     if(this.oIsFilmJoin==1){

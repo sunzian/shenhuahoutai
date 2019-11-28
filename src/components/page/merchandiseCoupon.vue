@@ -207,7 +207,7 @@
                         >{{day}}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
-                <el-form-item :required="true" label="是否和活动共用" :label-width="formLabelWidth">
+                <el-form-item v-if="oForm.reduceType==2" :required="true" label="是否和活动共用" :label-width="formLabelWidth">
                     <el-select v-model="oForm.activityTogether" placeholder="请选择">
                         <el-option
                             v-for="item in canUse"
@@ -334,7 +334,7 @@
                         >{{item.value}}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
-                <el-form-item :required="true" label="是否和活动共用" :label-width="formLabelWidth">
+                <el-form-item v-if="oReduceType==2" :required="true" label="是否和活动共用" :label-width="formLabelWidth">
                     <el-select v-model="oActivityTogether" placeholder="请选择">
                         <el-option
                                 v-for="item in canUse"
@@ -566,6 +566,9 @@ export default {
             }
             if (this.oForm.cinemaCode == true) {
                 this.oForm.cinemaCode = this.cinemaInfo[0].cinemaCode;
+            }
+            if(this.oForm.reduceType==1){
+                this.oForm.activityTogether=='0'
             }
             var jsonArr = [];
             jsonArr.push({ key: 'name', value: this.oForm.name });
@@ -819,6 +822,9 @@ export default {
                     loading.close();
                     return;
                 }
+            }
+            if(this.oReduceType==1){
+                this.oActivityTogether='0'
             }
             var jsonArr = [];
             jsonArr.push({ key: 'name', value: this.oName });

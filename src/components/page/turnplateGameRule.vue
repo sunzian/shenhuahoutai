@@ -366,7 +366,7 @@
         <el-dialog title="新增" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
                 <el-form-item :required="true" label="奖品等级" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" type="number" @blur="match" v-model="form.prizeLevel" autocomplete="off"></el-input>
+                    <el-input style="width: 250px"  type="number" @blur="match" v-model="form.prizeLevel" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="奖品名称" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="form.prizeName" autocomplete="off"></el-input>
@@ -435,7 +435,7 @@
         <el-dialog title="编辑" :visible.sync="showModify">
             <el-form ref="form" :model="pForm">
                 <el-form-item :required="true" label="奖品等级" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" type="number" @blur="oMatch" v-model="pForm.prizeLevel" autocomplete="off"></el-input>
+                    <el-input style="width: 250px" :disabled="true" type="number" @blur="oMatch" v-model="pForm.prizeLevel" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="奖品名称" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="pForm.prizeName" autocomplete="off"></el-input>
@@ -654,7 +654,10 @@ export default {
                     label: '实物'
                 }
             ],
-            couponInfo: {},
+            couponInfo: {
+                couponName:'',
+                id:'',
+            },
             prizeInfoList: []
         };
     },
@@ -698,8 +701,18 @@ export default {
             }
         },
         prizeModify(row, index) {
+            console.log(row);
+            this.couponInfo.couponName=row.couponName;
+            this.couponInfo.id=row.couponId;
             this.oIndex = index;
             this.pForm = row;
+            for (let x in this.prizeType) {
+                if (this.prizeType[x].value == row.prizeType) {
+                    console.log('22sd ');
+                    this.pForm.prizeType = this.prizeType[x].value;
+                    break;
+                }
+            }
             this.showModify = true;
         },
         getAllCoupon() {
@@ -767,7 +780,7 @@ export default {
         },
         changePrize() {
             //调出编辑奖项页面
-            // console.log(this.prizeInfoList);
+            console.log(this.prizeInfoList);
             if (this.prizeInfoList.length >= 8) {
                 this.message = '奖项数量最多添加8个';
                 this.open();
@@ -881,6 +894,11 @@ export default {
         },
         exChanger() {
             // 新增奖项操作
+            if(this.form.percent>1||this.form.percent<0){
+                this.message = '只能输入0-1的小数';
+                this.open();
+                return
+            }
             let onePrize = {
                 prizeLevel: this.form.prizeLevel,
                 prizeName: this.form.prizeName,
@@ -900,33 +918,31 @@ export default {
             this.form.prizeNumber = '';
             this.form.percent = '';
             this.form.prizeType = '';
-            this.couponInfo = {};
+            this.couponInfo.id = '';
+            this.couponInfo.couponName = '';
             this.editVisible = false;
         },
         sureChanger() {
             // 编辑奖项操作
-            // let onePrize = {
-            //     prizeLevel: this.pForm.prizeLevel,
-            //     prizeName: this.pForm.prizeName,
-            //     prizePicture: this.pForm.prizePicture,
-            //     prizeNumber: this.pForm.prizeNumber,
-            //     percent: this.pForm.percent,
-            //     prizeType: this.pForm.prizeType,
-            //     expireDay: this.pForm.expireDay,
-            //     couponId: this.couponInfo.id,
-            //     couponName: this.couponInfo.couponName
-            // };
-            // this.prizeInfoList[this.oIndex] = onePrize;
-            this.prizeInfoList[this.oIndex].prizeLevel = this.pForm.prizeLevelze;
-            this.prizeInfoList[this.oIndex].prizeName = this.pForm.prizeName;
-            this.prizeInfoList[this.oIndex].prizePicture = this.pForm.prizePicture;
-            this.prizeInfoList[this.oIndex].prizeNumber = this.pForm.prizeNumber;
-            this.prizeInfoList[this.oIndex].percent = this.pForm.percent;
-            this.prizeInfoList[this.oIndex].prizeType = this.pForm.prizeType;
-            this.prizeInfoList[this.oIndex].expireDay = this.pForm.expireDay;
-            this.prizeInfoList[this.oIndex].couponId = this.couponInfo.id;
-            this.prizeInfoList[this.oIndex].couponName = this.couponInfo.couponName;
-            console.log(this.prizeInfoList);
+            if(this.pForm.percent>1||this.pForm.percent<0){
+                this.message = '只能输入0-1的小数';
+                this.open();
+                return
+            }
+            let onePrize = {
+                prizeLevel: this.pForm.prizeLevel,
+                prizeName: this.pForm.prizeName,
+                prizePicture: this.pForm.prizePicture,
+                prizeNumber: this.pForm.prizeNumber,
+                percent: this.pForm.percent,
+                prizeType: this.pForm.prizeType,
+                expireDay: this.pForm.expireDay,
+                couponId: this.couponInfo.id,
+                couponName: this.couponInfo.couponName,
+                hasTheNumber:  this.prizeInfoList[this.oIndex].hasTheNumber,
+                id:  this.prizeInfoList[this.oIndex].id,
+            };
+            this.prizeInfoList[this.oIndex] = onePrize;
             this.pForm.prizeLevel = '';
             this.pForm.prizeName = '';
             this.pForm.image_url = '';
@@ -934,7 +950,8 @@ export default {
             this.pForm.prizeNumber = '';
             this.pForm.percent = '';
             this.pForm.prizeType = '';
-            this.couponInfo = {};
+            this.couponInfo.id = '';
+            this.couponInfo.couponName = '';
             this.showModify = false;
         },
         deletePrize(index) {
