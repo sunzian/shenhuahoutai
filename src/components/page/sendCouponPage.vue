@@ -259,6 +259,7 @@
                             :action="uploadAction"
                             ref="upload"
                             :on-success="uploadExcel"
+                            :before-upload="beforeExcel"
                             :auto-upload="false">
                             <i class="el-icon-upload"></i>
                             <div class="el-upload__text">
@@ -585,6 +586,7 @@ export default {
             showType: true,
             seenFilmList: false,
             sendConditions: false,
+            successUpLoad: false,
             sendType: 1,
             message: '', //弹出框消息
             uploadAction: 'api/batchSendCoupon/importExcelToSendCoupon',
@@ -675,7 +677,6 @@ export default {
             jsonArr.push({ key: 'overDays', value: params.overDays });
             jsonArr.push({ key: 'couponInfo', value: params.couponInfo });
             jsonArr.push({ key: 'messageContent', value: params.messageContent });
-            console.log(jsonArr)
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             let paramsInfo =  ParamsAppend(jsonArr);
@@ -880,6 +881,13 @@ export default {
                     loading.close();
                     if (data.data.code == 'success') {
                         this.sendConditions = false;
+                        this.couponList = [];
+                        this.couponForm.effectiveTimeType = 1;
+                        this.couponForm.startDate = '';
+                        this.couponForm.endDate = '';
+                        this.couponForm.overDays = '';
+                        this.couponForm.messageContent = '';
+                        this.couponForm.couponInfo = '';
                         this.message = '优惠券将陆续发放,短时间内请勿连续发放';
                         this.open();
                         this.Search();
@@ -919,17 +927,15 @@ export default {
                     this.excelCouponForm.endDate += " 23:59:59";
                 }
             }
-            const loading = this.$loading({
-                lock: true,
-                text: 'Loading',
-                spinner: 'el-icon-loading',
-                background: 'rgba(0, 0, 0, 0.7)',
-                target: document.querySelector('.div1')
-            });
             this.$refs.upload.submit();
-            loading.close();
-            this.message = '优惠券将陆续发放,短时间内请勿连续发放';
-            this.open();
+            setTimeout(function(){
+                console.log(1)
+            if (this.successUpLoad == false) {
+                this.message = '请上传文件';
+                this.open();
+                return;
+            }
+            },1000)
         },
 
         // 取消发放
@@ -1098,8 +1104,26 @@ export default {
                 });
         },
 
+        beforeExcel(file) {
+            const extension = file.name.split(".")[1] === "xls";
+            const extension2 = file.name.split(".")[1] === "xlsx";
+            const isLt2M = file.size / 1024 / 1024 < 10;
+            if (!extension && !extension2) {
+                this.message = '上传模板只能是 xls、xlsx格式!';
+                this.open();
+            }
+            if (!isLt2M) {
+                this.message = '上传模板大小不能超过 10MB!';
+                this.open();
+            }
+            return extension || extension2;
+        },
+
         uploadExcel(response) {
+            this.successUpLoad = true;
             this.$refs.upload.clearFiles();
+            this.message = '优惠券将陆续发放,短时间内请勿连续发放';
+            this.open();
             this.excelCouponForm.effectiveTimeType = 1;
             this.excelCouponForm.startDate = '';
             this.excelCouponForm.endDate = '';
