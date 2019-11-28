@@ -351,9 +351,9 @@
                     name = '';
                 }
                 let jsonArr = [];
-                jsonArr.push({ key: 'simpleType', value: 1 });
+                // jsonArr.push({ key: 'simpleType', value: 1 });
                 jsonArr.push({ key: 'name', value: name });
-                jsonArr.push({ key: 'status', value: 1 });
+                // jsonArr.push({ key: 'status', value: 1 });
                 // jsonArr.push({ key: 'cinemaCodes', value: this.cinemaCode });
                 jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
                 jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
@@ -361,7 +361,7 @@
                 jsonArr.push({ key: 'sign', value: sign });
                 console.log(jsonArr);
                 var params = ParamsAppend(jsonArr);
-                https.fetchPost('merchandiseCoupon/merchandiseCouponPage', params).then(data => {
+                https.fetchPost('merchandiseCoupon/getCouponByCinemaCode', params).then(data => {
                     loading.close();
                     if (data.data.code == 'success') {
                         let oData = JSON.parse(Decrypt(data.data.data));

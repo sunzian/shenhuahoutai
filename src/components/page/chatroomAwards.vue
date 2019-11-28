@@ -188,7 +188,7 @@
                         @click="deletCoupon"
                     >删除</span>
                 </el-form-item>
-                <el-form-item :required="true" label="礼品图片" :label-width="formLabelWidth" v-if="oForm.type == 2">
+                <el-form-item :required="true" label="礼品图片" :label-width="formLabelWidth">
                     <el-upload
                         class="upload-demo"
                         action="/api/upload/uploadImage"
@@ -484,12 +484,9 @@ export default {
             if (this.oForm.limitStatus == 2) {
                 jsonArr.push({ key: 'monthLimitNumber', value: this.oForm.singleLimitNumber });
             }
-            // 选择实物奖品
-            if (this.oForm.type == 2) {
-                jsonArr.push({ key: 'imageUrl', value: this.oForm.image_url });
-            }
+            jsonArr.push({ key: 'imageUrl', value: this.oForm.image_url });
             if (this.oForm.type == 1) {
-                jsonArr.push({ key: 'imageUrl', value: this.couponInfo.imgUrl });
+                // jsonArr.push({ key: 'imageUrl', value: this.couponInfo.imgUrl });
                 jsonArr.push({ key: 'couponId', value: this.couponInfo.id });
             }
             jsonArr.push({ key: 'name', value: this.oForm.name });
@@ -512,9 +509,7 @@ export default {
                         console.log(data);
                         if (data.data.code == 'success') {
                             this.dialogFormVisible = false;
-                            if(this.oForm.type==2){
-                                this.$refs.download.clearFiles();
-                            }
+                            this.$refs.download.clearFiles();
                             this.$message.success(`新增成功`);
                             this.couponInfo={};
                             this.show(this.cinemaCode);
@@ -898,11 +893,9 @@ export default {
                 ':' +
                 date.getSeconds();
             let jsonArr = [];
-            jsonArr.push({ key: 'simpleType', value: 1 });
             jsonArr.push({ key: 'name', value: name });
             // jsonArr.push({ key: 'endDate', value: today });
-            jsonArr.push({ key: 'status', value: 1 });
-            jsonArr.push({ key: 'cinemaCodes', value: this.cinemaCode });
+            jsonArr.push({ key: 'cinemaCode', value: this.cinemaCode });
             jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
             jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
             let sign = md5(preSign(jsonArr));
@@ -910,7 +903,7 @@ export default {
             console.log(jsonArr);
             var params = ParamsAppend(jsonArr);
             https
-                .fetchPost('merchandiseCoupon/merchandiseCouponPage', params)
+                .fetchPost('merchandiseCoupon/getCouponByCinemaCode', params)
                 .then(data => {
                     loading.close();
                     if (data.data.code == 'success') {

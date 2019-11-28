@@ -49,6 +49,7 @@
                 >
                     <el-option key="1" label="实物" value="1"></el-option>
                     <el-option key="2" label="优惠券" value="2"></el-option>
+                    <el-option key="3" label="券包" value="3"></el-option>
                 </el-select>
                 <el-button
                     style="margin-top: 10px;width: 90px;"
@@ -122,6 +123,7 @@
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.commodityType=='1'">实物</el-tag>
                         <el-tag v-else-if="scope.row.commodityType=='2'">优惠券</el-tag>
+                        <el-tag v-else-if="scope.row.commodityType=='3'">券包</el-tag>
                     </template>
                 </el-table-column>
                 <!-- <el-table-column prop="sort" label="优惠券名称" width="130">
@@ -358,6 +360,26 @@
                         ></el-input>
                         <span style="color:red;cursor: pointer;" @click="deleteSell()">删除</span>
                     </div>
+                </el-form-item>
+                <el-form-item
+                        :required="true"
+                        v-if="oForm.commodity_type==3"
+                        label="选择券包"
+                        :label-width="formLabelWidth"
+                >
+                    <el-button type="primary" @click="changeCoupon">点击选择</el-button>
+                </el-form-item>
+                <el-form-item
+                        v-if="couponId&&oForm.commodity_type==3"
+                        label="所选券包："
+                        :label-width="formLabelWidth"
+                        :required="true">
+                    <el-input style="width: 150px" v-model="groupName" autocomplete="off" disabled></el-input>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <span
+                            v-if="groupName"
+                            style="color:red;cursor: pointer;"
+                            @click="deletCoupon"
+                    >删除</span>
                 </el-form-item>
                 <el-form-item :required="true" label="是否指定日期可以兑换" :label-width="formLabelWidth">
                     <el-select v-model="oForm.assign_type" placeholder="请选择指定日期">
@@ -614,6 +636,26 @@
                         <span style="color:red;cursor: pointer;" @click="deleteSell()">删除</span>
                     </div>
                 </el-form-item>
+                <el-form-item
+                        :required="true"
+                        v-if="form.commodityType==3"
+                        label="选择券包"
+                        :label-width="formLabelWidth"
+                >
+                    <el-button type="primary" @click="changeCoupon">点击选择</el-button>
+                </el-form-item>
+                <el-form-item
+                        v-if="couponId&&form.commodityType==3"
+                        label="所选券包："
+                        :label-width="formLabelWidth"
+                        :required="true">
+                    <el-input style="width: 150px" v-model="groupName" autocomplete="off" disabled></el-input>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <span
+                            v-if="groupName"
+                            style="color:red;cursor: pointer;"
+                            @click="deletCoupon"
+                    >删除</span>
+                </el-form-item>
                 <el-form-item :required="true" label="是否指定日期可以兑换" :label-width="formLabelWidth">
                     <el-select v-model="form.assignType" placeholder="请选择指定日期">
                         <el-option
@@ -740,6 +782,56 @@
                 <el-button type="primary" @click="sureNext">确 定</el-button>
             </div>
         </el-dialog>
+        <!-- 选择券包弹出窗 -->
+        <el-dialog title="选择券包" :visible.sync="drawerCoupon">
+            <div class="container">
+                <div class="handle-box">
+                    <el-input v-model="query.groupName" placeholder="券包名称" class="handle-input mr10"></el-input>
+                    <el-button type="primary" icon="el-icon-search" @click="changeCoupon">搜索</el-button>
+                </div>
+                <el-table
+                        :data="couponList"
+                        border
+                        class="table"
+                        ref="multipleTable"
+                        header-cell-class-name="table-header"
+                        @selection-change="handleSelectionChange"
+                >
+                    <el-table-column label="操作" width="100" align="center">
+                        <template slot-scope="scope">
+                            <el-radio v-model="couponId" :label="scope.row.id">&nbsp;</el-radio>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="券包名称" width="150">
+                        <template slot-scope="scope">{{scope.row.groupName}}</template>
+                    </el-table-column>
+                    <el-table-column label="优惠券详情">
+                        <template slot-scope="scope">
+                            <span
+                                    v-for="item in scope.row.couponList"
+                                    :key="item"
+                            >{{item.couponName}}x{{item.number}}&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        </template>
+                    </el-table-column>
+                </el-table>
+                <div class="pagination">
+                    <el-pagination
+                            background
+                            layout="total, prev, pager, next"
+                            :current-page="query.bPageNo"
+                            :page-size="query.bPageSize"
+                            :total="query.bTotalCount"
+                            @current-change="bCurrentChange"
+                            @prev-click="bPrev"
+                            @next-click="bNext"
+                    ></el-pagination>
+                </div>
+            </div>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="drawerCoupon = false">取 消</el-button>
+                <el-button type="primary" @click="sureAdd(couponId)">确 定</el-button>
+            </div>
+        </el-dialog>
     </div>
 </template>
 
@@ -771,7 +863,9 @@ export default {
                 pageNo: 1,
                 pageSize: 15,
                 aPageNo: 1,
-                aPageSize: 15
+                aPageSize: 15,
+                bPageNo: 1,
+                bPageSize: 15
             },
             tableData: [],
             multipleSelection: [],
@@ -870,6 +964,10 @@ export default {
                 {
                     value: '2',
                     label: '优惠券'
+                },
+                {
+                    value: '3',
+                    label: '券包'
                 }
             ],
             assignType: [
@@ -923,7 +1021,11 @@ export default {
             sellTableData: [],
             selectedSell: [],
             drawer: false, //选择优惠券弹出框,
-            ticketIds: ''
+            ticketIds: '',
+            couponList:[],
+            drawerCoupon:false,
+            couponId:'',
+            groupName:'',
         };
     },
     components: { quillEditor },
@@ -932,6 +1034,63 @@ export default {
         this.getMenu();
     },
     methods: {
+        deletCoupon() {
+            this.groupName = '';
+            this.couponId = '';
+        },
+        sureAdd(id) {
+            this.couponId = id;
+            for (let i = 0; i < this.couponList.length; i++) {
+                if (this.couponList[i].id == this.couponId) {
+                    this.groupName = this.couponList[i].groupName;
+                }
+            }
+            this.drawerCoupon = false;
+        },
+        // 更换券包
+        changeCoupon() {
+            let groupName=this.query.groupName;
+            if(!groupName){
+                groupName=''
+            }
+            let jsonArr = [];
+            jsonArr.push({ key: 'cinemaCodes', value: this.checkedCities[0] });
+            jsonArr.push({ key: 'groupName', value: groupName});
+            jsonArr.push({ key: 'status', value: 1 });
+            jsonArr.push({ key: 'pageNo', value: this.query.bPageNo });
+            jsonArr.push({ key: 'pageSize', value: this.query.bPageSize });
+            let sign = md5(preSign(jsonArr));
+            jsonArr.push({ key: 'sign', value: sign });
+            var params = ParamsAppend(jsonArr);
+            console.log(jsonArr);
+            https.fetchPost('/couponGroup/couponGroupPage', params).then(data => {
+                if (data.data.code == 'success') {
+                    var res = JSON.parse(Decrypt(data.data.data));
+                    console.log(res);
+                    if (res.data.length == 0) {
+                        this.message = '暂无券包';
+                        this.open();
+                        return;
+                    }
+                    this.couponList = res.data;
+                    this.query.bPageSize = res.pageSize;
+                    this.query.bPageNo = res.pageNo;
+                    this.query.bTotalCount = res.totalCount;
+                    this.query.bTotalPage = res.totalPage;
+                    this.drawerCoupon = true;
+                } else if (data.data.code == 'nologin') {
+                    this.message = data.data.message;
+                    this.open();
+                    this.$router.push('/login');
+                } else {
+                    this.message = data.data.message;
+                    this.open();
+                }
+            })
+                .catch(err => {
+                    console.log(err);
+                });
+        },
         deleteSell(index) {
             this.selectedSell.splice(index, 1);
         },
@@ -972,15 +1131,15 @@ export default {
                 let jsonArr = [];
                 jsonArr.push({ key: 'name', value: name });
                 jsonArr.push({ key: 'cinemaCode', value: this.checkedCities[0] });
-                jsonArr.push({ key: 'simpleType', value: '1' });
-                jsonArr.push({ key: 'status', value: '1' });
+                // jsonArr.push({ key: 'simpleType', value: '1' });
+                // jsonArr.push({ key: 'status', value: '1' });
                 jsonArr.push({ key: 'pageNo', value: this.query.aPageNo });
                 jsonArr.push({ key: 'pageSize', value: this.query.aPageSize });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
                 var params = ParamsAppend(jsonArr);
                 https
-                    .fetchPost('merchandiseCoupon/merchandiseCouponPage', params)
+                    .fetchPost('merchandiseCoupon/getCouponByCinemaCode', params)
                     .then(data => {
                         loading.close();
                         console.log(data);
@@ -1063,7 +1222,6 @@ export default {
                     this.oForm.ticket_ids = couponList.join(',');
                 }
                 var jsonArr = [];
-                jsonArr.push({ key: 'name', value: this.oForm.name });
                 jsonArr.push({ key: 'imageUrl', value: this.oForm.image_url });
                 jsonArr.push({ key: 'memo', value: this.oForm.memo });
                 jsonArr.push({ key: 'store', value: this.oForm.store });
@@ -1073,7 +1231,6 @@ export default {
                 jsonArr.push({ key: 'cinemaCodes', value: this.checkedCities });
                 jsonArr.push({ key: 'status', value: this.oForm.status });
                 jsonArr.push({ key: 'commodityType', value: this.oForm.commodity_type });
-                jsonArr.push({ key: 'ticketIds', value: this.ticketIds });
                 jsonArr.push({ key: 'assignType', value: this.oForm.assign_type });
                 jsonArr.push({ key: 'assignInfo', value: this.oForm.assign_info });
                 jsonArr.push({ key: 'limitType', value: this.oForm.limit_type });
@@ -1085,6 +1242,14 @@ export default {
                 jsonArr.push({ key: 'recommendStatus', value: this.oForm.recommendStatus });
                 jsonArr.push({ key: 'expireDay', value: this.oForm.expireDay });
                 jsonArr.push({ key: 'sort', value: this.oForm.sort });
+                if(this.oForm.commodity_type==3){
+                    jsonArr.push({ key: 'ticketIds', value: this.couponId });
+                    jsonArr.push({ key: 'name', value: this.groupName });
+                }else {
+                    jsonArr.push({ key: 'name', value: this.oForm.name });
+                    jsonArr.push({ key: 'ticketIds', value: this.ticketIds });
+                }
+
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
                 console.log(jsonArr);
@@ -1274,6 +1439,8 @@ export default {
                             this.form.commodityType = JSON.parse(Decrypt(data.data.data)).goldCommodity.commodityType;
                             this.oTopstatus = JSON.parse(Decrypt(data.data.data)).goldCommodity.topStatus;
                             this.ticketIds = JSON.parse(Decrypt(data.data.data)).goldCommodity.ticketIds;
+                            this.couponId = JSON.parse(Decrypt(data.data.data)).goldCommodity.ticketIds;
+                            this.groupName = JSON.parse(Decrypt(data.data.data)).goldCommodity.name;
                             this.form.assignType = JSON.parse(Decrypt(data.data.data)).goldCommodity.assignType;
                             this.form.assignInfo = JSON.parse(Decrypt(data.data.data)).goldCommodity.assignInfo;
                             this.form.limitType = JSON.parse(Decrypt(data.data.data)).goldCommodity.limitType;
@@ -1368,7 +1535,6 @@ export default {
                 }
                 this.form.cinemaCode = this.oCheckedCities.join(',');
                 jsonArr.push({ key: 'id', value: this.form.id });
-                jsonArr.push({ key: 'name', value: this.form.name });
                 jsonArr.push({ key: 'imageUrl', value: this.form.image_url });
                 jsonArr.push({ key: 'memo', value: this.form.memo });
                 jsonArr.push({ key: 'store', value: this.form.store });
@@ -1379,7 +1545,6 @@ export default {
                 jsonArr.push({ key: 'cinemaCodes', value: this.form.cinemaCode });
                 jsonArr.push({ key: 'status', value: this.form.status });
                 jsonArr.push({ key: 'commodityType', value: this.form.commodityType });
-                jsonArr.push({ key: 'ticketIds', value: this.ticketIds });
                 jsonArr.push({ key: 'assignType', value: this.form.assignType });
                 jsonArr.push({ key: 'assignInfo', value: this.form.assignInfo });
                 jsonArr.push({ key: 'limitType', value: this.form.limitType });
@@ -1391,6 +1556,18 @@ export default {
                 jsonArr.push({ key: 'topStatus', value: this.oTopstatus });
                 jsonArr.push({ key: 'recommendStatus', value: this.oRecommendStatus });
                 jsonArr.push({ key: 'sort', value: this.form.sort });
+                if(this.form.commodityType==2){
+                    jsonArr.push({ key: 'ticketIds', value: this.ticketIds });
+                }
+                if(this.form.commodityType==3){
+                    jsonArr.push({ key: 'ticketIds', value: this.couponId });
+                }
+                if(this.form.commodityType==3){
+                    jsonArr.push({ key: 'name', value: this.groupName });
+                }else {
+                    jsonArr.push({ key: 'name', value: this.form.name });
+                }
+
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
                 console.log(jsonArr);
@@ -1588,7 +1765,21 @@ export default {
             this.query.aPageNo = val;
             this.openNext();
         },
-
+        bCurrentChange(val) {
+            //点击选择具体页数
+            this.query.bPageNo = val;
+            this.changeCoupon();
+        },
+        bPrev() {
+            //分页按钮上一页
+            this.query.bPageNo--;
+            this.changeCoupon();
+        },
+        bNext() {
+            //分页按钮下一页
+            this.query.bPageNo++;
+            this.changeCoupon();
+        },
         $imgAdd(pos, $file) {
             const isLt2M = $file.size / 1024 < 300;
             if (!isLt2M) {

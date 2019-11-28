@@ -98,26 +98,6 @@
                         <el-tag v-else-if="scope.row.selectFilmFormatType == 2" >除{{scope.row.filmFormatName}}外所有制式</el-tag>
                     </template>
                 </el-table-column>
-                <!--<el-table-column prop="name" label="适用影片">-->
-                    <!--<template slot-scope="scope">-->
-                        <!--<el-tag v-if="scope.row.selectFilmType == 0">全部影片</el-tag>-->
-                        <!--<el-tag v-else-if="scope.row.selectFilmType == 1" >{{scope.row.filmName}}</el-tag>-->
-                        <!--<el-tag v-else-if="scope.row.selectFilmType == 2" >除{{scope.row.filmName}}外所有影片</el-tag>-->
-                    <!--</template>-->
-                <!--</el-table-column>-->
-                <!--<el-table-column prop="name" label="影票每日限量" width="160">-->
-                    <!--<template slot-scope="scope">-->
-                        <!--<el-tag v-if="scope.row.isLimitFilm == 0">不限量</el-tag>-->
-                        <!--<el-tag v-else-if="scope.row.isLimitFilm == 1" >限量{{scope.row.numberFilm}}张</el-tag>-->
-                    <!--</template>-->
-                <!--</el-table-column>-->
-                <!--<el-table-column prop="name" label="适用卖品">-->
-                    <!--<template slot-scope="scope">-->
-                        <!--<el-tag v-if="scope.row.selectMerchandiseType == 0">全部商品</el-tag>-->
-                        <!--<el-tag v-else-if="scope.row.selectMerchandiseType == 1" >{{scope.row.merchandiseName}}</el-tag>-->
-                        <!--<el-tag v-else-if="scope.row.selectMerchandiseType == 2" >除{{scope.row.merchandiseName}}外所有商品</el-tag>-->
-                    <!--</template>-->
-                <!--</el-table-column>-->
                 <el-table-column prop="memo" label="有效期" width="70">
                     <template slot-scope="scope">{{scope.row.number}}{{scope.row.unit}}</template>
                 </el-table-column>
