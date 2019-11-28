@@ -18,6 +18,12 @@
                     ></el-option>
                 </el-select>
                 <el-input
+                        placeholder="影片名称"
+                        v-model="query.filmName"
+                        autocomplete="off"
+                        class="mr10"
+                ></el-input>
+                <el-input
                     placeholder="订单号"
                     v-model="query.submitOrderCode"
                     autocomplete="off"
@@ -826,6 +832,10 @@ export default {
                 let endDate = this.query.endDate;
                 let sessionStartDate = this.query.sessionStartDate;
                 let sessionEndDate = this.query.sessionEndDate;
+                let filmName = this.query.filmName;
+                if (!filmName) {
+                    filmName = '';
+                }
                 if (!cinemaCode) {
                     cinemaCode = '';
                 }
@@ -857,6 +867,7 @@ export default {
                     sessionEndDate = '';
                 }
                 let jsonArr = [];
+                jsonArr.push({ key: 'filmName', value: filmName });
                 jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
                 jsonArr.push({ key: 'submitOrderCode', value: submitOrderCode });
                 jsonArr.push({ key: 'mobile', value: mobile });

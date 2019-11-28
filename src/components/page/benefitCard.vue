@@ -9,9 +9,21 @@
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-select clearable v-model="query.reduceType" placeholder="优惠方式" class="handle-select mr10">
-                    <el-option key="1" label="特惠活动" value="1"></el-option>
-                    <el-option key="2" label="立减活动" value="2"></el-option>
+                <el-select clearable v-model="query.reduceTypeFilm" placeholder="影片优惠方式" class="handle-select mr10">
+                    <el-option key="0" label="不参加" value="0"></el-option>
+                    <el-option key="1" label="特惠" value="1"></el-option>
+                    <el-option key="2" label="满减" value="2"></el-option>
+                    <el-option key="3" label="折扣" value="3"></el-option>
+                </el-select>
+                <el-select clearable v-model="query.reduceTypeMerchandise" placeholder="卖品优惠方式" class="handle-select mr10">
+                    <el-option key="0" label="不参加" value="0"></el-option>
+                    <el-option key="1" label="特惠" value="1"></el-option>
+                    <el-option key="2" label="满减" value="2"></el-option>
+                    <el-option key="3" label="折扣" value="3"></el-option>
+                </el-select>
+                <el-select clearable v-model="query.cardType" placeholder="权益卡类型" class="handle-select mr10">
+                    <el-option key="1" label="活动类型" value="1"></el-option>
+                    <el-option key="2" label="券包类型" value="2"></el-option>
                 </el-select>
                 <el-select clearable v-model="query.status" placeholder="状态" class="handle-select mr10">
                     <el-option key="1" label="启用" value="1"></el-option>
@@ -376,7 +388,7 @@
                     <el-input style="width: 150px" v-model="oForm.numberMerchandise" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oForm.cardType==2" label="券包简短描述：" :label-width="formLabelWidth">
-                    <el-input style="width: 150px" v-model="oForm.couponSimpleDesc" autocomplete="off"></el-input>
+                    <el-input style="width: 150px" v-model="oForm.couponSimpleDesc" maxlength="70" type="textarea"  autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item
                         v-if="oForm.cardType==2"
@@ -793,7 +805,7 @@
                     <el-input style="width: 150px" v-model="oNumberMerchandise" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oCardType==2" label="券包简短描述：" :label-width="formLabelWidth">
-                    <el-input style="width: 150px" v-model="oCouponSimpleDesc" autocomplete="off"></el-input>
+                    <el-input style="width: 150px" v-model="oCouponSimpleDesc" maxlength="70" type="textarea" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item
                         v-if="oCardType==2"
@@ -1104,6 +1116,7 @@
                 oCinemaCode:'',
                 oBenefitDesc:'',
                 oSellIndex:'',
+                oDiscountMoneyMerchandise:'',
                 oCouponSimpleDesc:'',
                 oNumberMerchandise:'',
                 oLimitMerchandiseUnit:'',
@@ -1226,6 +1239,7 @@
                     isHolidayValid: '1',
                     reduceTypeMerchandise: '1',
                     isLimitFilm: '0',
+                    isLimitMerchandise: '0',
                     isCouponTogether: '0',
                     limitFilmUnit: '年',
                     limitMerchandiseUnit: '年',
@@ -1335,6 +1349,7 @@
                 this.dateInfo.push(this.value1);
                 this.startArr.push(this.value1[0])
                 this.endArr.push(this.value1[1])
+                this.value1='';
                 console.log(this.dateInfo);
                 console.log(this.startArr);
                 console.log(this.endArr);
@@ -1492,6 +1507,12 @@
                             this.dialogFormVisible = false;
                             this.$message.success(`新增成功`);
                             this.oForm.name = '';
+                            this.groupName = '';
+                            this.couponId = '';
+                            this.oForm.simpleDesc = '';
+                            this.oForm.filmSimpleDesc = '';
+                            this.oForm.merchandiseSimpleDesc = '';
+                            this.oForm.value1 = '';
                             this.oForm.cinemaCode='';
                             this.oForm.cardType='1';
                             this.oForm.startDate='';
@@ -1504,9 +1525,16 @@
                             this.oForm.isFilmJoin='0';
                             this.oForm.isMerchandiseJoin='0';
                             this.oForm.isHolidayValid='1';
-                            this.oForm.validWeekDay='';
+                            this.oForm.validWeekDay=[];
+                            this.oForm.screenCode=[];
+                            this.oForm.filmFormatCode=[];
+                            this.selectedSell=[];
+                            this.oSelectedSell=[];
+                            this.dateInfo=[];
+                            this.startArr=[];
+                            this.endArr=[];
                             this.oForm.validPayType='0';
-                            this.oForm.isCouponTogether='';
+                            this.oForm.isCouponTogether='0';
                             this.oForm.reduceTypeFilm='1';
                             this.oForm.discountMoneyFilm='';
                             this.oForm.selectHallType='0';
@@ -1521,7 +1549,7 @@
                             this.oForm.discountMoneyMerchandise='';
                             this.oForm.selectMerchandiseType='0';
                             this.oForm.isRecommend='0';
-                            this.oForm.isLimitMerchandise='';
+                            this.oForm.isLimitMerchandise='0';
                             this.oForm.merchandiseCode='';
                             this.oForm.achieveMoneyMerchandise='';
                             this.oForm.numberMerchandise='';
@@ -1671,6 +1699,7 @@
                         this.oName = JSON.parse(Decrypt(data.data.data)).benefitCard.name;
                         this.oSimpleDesc = JSON.parse(Decrypt(data.data.data)).benefitCard.simpleDesc;
                         this.oCinemaCode = JSON.parse(Decrypt(data.data.data)).benefitCard.cinemaCode;
+                        this.couponId = JSON.parse(Decrypt(data.data.data)).benefitCard.couponGroupId;
                         this.getAllScreen(this.oCinemaCode);
                         if (JSON.parse(Decrypt(data.data.data)).benefitCard.cardType == 1) {
                             this.oCardType = '1';
@@ -1912,7 +1941,7 @@
                         }
                         if(this.oIsLimitFilm!=0){
                             jsonArr.push({ key: 'numberFilm', value: this.oNumberFilm});
-                            jsonArr.push({ key: 'limitFilmUnit', value: this.oLlimitFilmUnit});
+                            jsonArr.push({ key: 'limitFilmUnit', value: this.oLimitFilmUnit});
                         }
                     }
                     if(this.oIsMerchandiseJoin==1){
@@ -2026,11 +2055,25 @@
                     background: 'rgba(0, 0, 0, 0.7)',
                     target: document.querySelector('.div1')
                 });
+                let reduceTypeFilm = this.query.reduceTypeFilm;
+                let reduceTypeMerchandise = this.query.reduceTypeMerchandise;
+                let cardType = this.query.cardType;
+                if (!reduceTypeFilm) {
+                    reduceTypeFilm = '';
+                }
+                if (!reduceTypeMerchandise) {
+                    reduceTypeMerchandise = '';
+                }
+                if (!cardType) {
+                    cardType = '';
+                }
                 let jsonArr = [];
                 jsonArr.push({ key: 'name', value: this.query.name });
                 jsonArr.push({ key: 'status', value: this.query.status });
                 jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
-                jsonArr.push({ key: 'reduceType', value: this.query.reduceType });
+                jsonArr.push({ key: 'reduceTypeFilm', value: reduceTypeFilm });
+                jsonArr.push({ key: 'reduceTypeMerchandise', value: reduceTypeMerchandise });
+                jsonArr.push({ key: 'cardType', value: cardType });
                 jsonArr.push({ key: 'cinemaCode', value: this.query.cinemaCode });
                 jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
                 // jsonArr.push({ key: 'filmName', value: name });
@@ -2275,11 +2318,20 @@
                 });
                 setTimeout(() => {
                     let merchandiseName=this.query.merName;
+                    let cinemaCode='';
+                    if(this.oForm.cinemaCode){
+                         cinemaCode=this.oForm.cinemaCode
+                    }
+                    if(this.oCinemaCode){
+                        cinemaCode=this.oCinemaCode
+                    }
                     if(!merchandiseName){
                         merchandiseName=''
                     }
                     let jsonArr = [];
+                    jsonArr.push({key:"cinemaCode",value:cinemaCode});
                     jsonArr.push({key:"merchandiseName",value:merchandiseName});
+                    jsonArr.push({key:"merchandiseStatus",value:'1'});
                     jsonArr.push({key:"pageNo",value:this.query.oPageNo});
                     jsonArr.push({key:"pageSize",value:this.query.oPageSize});
                     let sign =md5(preSign(jsonArr));

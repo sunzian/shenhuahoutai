@@ -9,12 +9,20 @@
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-select clearable v-model="query.cinemaCode" placeholder="请选择充值影院" class="mr10">
+                <el-select clearable v-model="query.cinemaCode" placeholder="请选择注册影院" class="mr10">
                     <el-option
                         v-for="item in cinemaInfo"
                         :key="item.cinemaCode"
                         :label="item.cinemaName"
                         :value="item.cinemaCode"
+                    ></el-option>
+                </el-select>
+                <el-select clearable v-model="query.rechargeCinemaCode" placeholder="请选择充值影院" class="mr10">
+                    <el-option
+                            v-for="item in cinemaInfo"
+                            :key="item.cinemaCode"
+                            :label="item.cinemaName"
+                            :value="item.cinemaCode"
                     ></el-option>
                 </el-select>
                 <el-input
@@ -565,6 +573,10 @@ export default {
                 let rechargeStatus = this.query.rechargeStatus;
                 let startDate = this.query.startDate;
                 let endDate = this.query.endDate;
+                let rechargeCinemaCode = this.query.rechargeCinemaCode;
+                if (!rechargeCinemaCode) {
+                    rechargeCinemaCode = '';
+                }
                 if (!cinemaCode) {
                     cinemaCode = '';
                 }
@@ -587,6 +599,7 @@ export default {
                     endDate = '';
                 }
                 let jsonArr = [];
+                jsonArr.push({ key: 'rechargeCinemaCode', value: rechargeCinemaCode });
                 jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
                 jsonArr.push({ key: 'cardNo', value: cardNo });
                 jsonArr.push({ key: 'mobilePhone', value: mobile });

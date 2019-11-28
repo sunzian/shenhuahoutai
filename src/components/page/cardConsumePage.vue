@@ -9,12 +9,20 @@
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-select clearable v-model="query.cinemaCode" placeholder="请选择影院" class="mr10">
+                <el-select clearable v-model="query.cinemaCode" placeholder="请选择开卡影院" class="mr10">
                     <el-option
                         v-for="item in cinemaInfo"
                         :key="item.cinemaCode"
                         :label="item.cinemaName"
                         :value="item.cinemaCode"
+                    ></el-option>
+                </el-select>
+                <el-select clearable v-model="query.consumeCinemaCode" placeholder="请选择充值影院" class="mr10">
+                    <el-option
+                            v-for="item in cinemaInfo"
+                            :key="item.cinemaCode"
+                            :label="item.cinemaName"
+                            :value="item.cinemaCode"
                     ></el-option>
                 </el-select>
                 <el-input
@@ -176,12 +184,28 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
+                <el-form-item label="会员卡所属用户" :label-width="formLabelWidth">
+                    <el-input
+                            :disabled="true"
+                            style="width: 250px"
+                            v-model="form.userName"
+                            autocomplete="off"
+                    ></el-input>
+                </el-form-item>
                 <el-form-item label="卡号" :label-width="formLabelWidth">
                     <el-input
                         :disabled="true"
                         style="width: 250px"
                         v-model="form.cardNo"
                         autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="订单号" :label-width="formLabelWidth">
+                    <el-input
+                            :disabled="true"
+                            style="width: 250px"
+                            v-model="form.orderCode"
+                            autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="手机号" :label-width="formLabelWidth">
@@ -426,6 +450,10 @@ export default {
                 let orderType = this.query.orderType;
                 let startDate = this.query.startDate;
                 let endDate = this.query.endDate;
+                let consumeCinemaCode = this.query.consumeCinemaCode;
+                if (!consumeCinemaCode) {
+                    consumeCinemaCode = '';
+                }
                 if (!cinemaCode) {
                     cinemaCode = '';
                 }
@@ -457,6 +485,7 @@ export default {
                 jsonArr.push({ key: 'orderType', value: orderType });
                 jsonArr.push({ key: 'startDate', value: startDate });
                 jsonArr.push({ key: 'endDate', value: endDate });
+                jsonArr.push({ key: 'consumeCinemaCode', value: consumeCinemaCode });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
                 var params = ParamsAppend(jsonArr);

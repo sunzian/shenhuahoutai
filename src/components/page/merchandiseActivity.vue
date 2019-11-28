@@ -822,7 +822,7 @@
                     return;
                 }
                 if(this.oForm.reduceType==1){
-                    if(!oForm.discountMoney){
+                    if(!this.oForm.discountMoney){
                         this.message = '必填项不能为空，请检查！';
                         this.open();
                         loading.close();
@@ -830,7 +830,7 @@
                     }
                 }
                 if(this.oForm.reduceType==2){
-                    if(!oForm.discountMoney||!oForm.achieveMoney){
+                    if(!this.oForm.discountMoney||!this.oForm.achieveMoney){
                         this.message = '必填项不能为空，请检查！';
                         this.open();
                         loading.close();
@@ -1183,7 +1183,7 @@
                     }
                 }
                 if(this.oReduceType==2){
-                    if(!oDiscountMoney||!oAchieveMoney){
+                    if(!this.oDiscountMoney||!this.oAchieveMoney){
                         this.message = '必填项不能为空，请检查！';
                         this.open();
                         loading.close();

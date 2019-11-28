@@ -9,6 +9,26 @@
         </div>
         <!--签到规则页面-->
         <div class="container">
+            <el-form ref="form1" :model="form1">
+                <el-form-item :required="true" label="连续签到天数" :label-width="formLabelWidth">
+                    <el-input
+                            style="width: 250px"
+                            v-model="form1.days"
+                            autocomplete="off"
+                            :disabled="true"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item :required="true" label="连续签到奖励" :label-width="formLabelWidth">
+                    <el-input
+                            style="width: 250px"
+                            v-model="form1.oGoldAward"
+                            autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item :required="true" label="签到规则" :label-width="formLabelWidth">
+                    <el-input style="width: 250px;" type="textarea" v-model="form1.oSignTips" autocomplete="off"></el-input>
+                </el-form-item>
+            </el-form>
             <el-table
                     :data="tableData"
                     border
@@ -59,9 +79,6 @@
                             v-model="oGoldAward"
                             autocomplete="off"
                     ></el-input>
-                </el-form-item>
-                <el-form-item :required="true" v-if="oContinuousDays==1" label="签到规则" :label-width="formLabelWidth">
-                <el-input style="width: 250px;height: 200px;" type="textarea" v-model="oSignTips" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oContinuousDays==7" label="是否设置连续7天额外奖励" :label-width="formLabelWidth">
                     <el-radio-group v-model="oExtraFlag">
@@ -232,6 +249,13 @@
                     sort: '',
                     id: ''
                 },
+                form1: {
+                    days:'1',
+                    sort: '',
+                    id: '',
+                    oGoldAward: '',
+                    oSignTips: '',
+                },
                 formLabelWidth: '120px',
                 value: '',
                 timeout: null,
@@ -280,107 +304,38 @@
                 }
             },
             addChange(index,row){
-                this.id=row.id;
-                const loading = this.$loading({
-                    lock: true,
-                    text: 'Loading',
-                    spinner: 'el-icon-loading',
-                    background: 'rgba(0, 0, 0, 0.7)',
-                    target: document.querySelector('.div1')
-                });
-                let jsonArr = [];
-                jsonArr.push({ key: 'id', value: this.id });
-                jsonArr.push({ key: 'continuousDays', value: row.continuousDays });
-                let sign = md5(preSign(jsonArr));
-                jsonArr.push({ key: 'sign', value: sign });
-                console.log(jsonArr);
-                var params = ParamsAppend(jsonArr);
-                https
-                    .fetchPost('/signinRule/getById', params)
-                    .then(data => {
-                        loading.close();
-                        if (data.data.code == 'success') {
-                            console.log(JSON.parse(Decrypt(data.data.data)));
-                            this.oContinuousDays=JSON.parse(Decrypt(data.data.data)).continuousDays;
-                            this.oGoldAward=JSON.parse(Decrypt(data.data.data)).goldAward;
-                            this.oSignTips=JSON.parse(Decrypt(data.data.data)).signTips;
-                            this.oExtraPrizeName=JSON.parse(Decrypt(data.data.data)).extraPrizeName;
-                            this.oExpireDays=JSON.parse(Decrypt(data.data.data)).expireDays;
-                            if (JSON.parse(Decrypt(data.data.data)).extraFlag == 1) {
-                                this.oExtraFlag = '1';
-                            }
-                            if (JSON.parse(Decrypt(data.data.data)).extraFlag == 2) {
-                                this.oExtraFlag = '2';
-                            }
-                            if (JSON.parse(Decrypt(data.data.data)).extraPrizeType == 1) {
-                                this.oExtraPrizeType = '1';
-                            }
-                            if (JSON.parse(Decrypt(data.data.data)).extraPrizeType == 2) {
-                                this.oExtraPrizeType = '2';
-                            }
-                            this.editVisible=true;
-                        } else if (data.data.code == 'nologin') {
-                            this.message = data.data.message;
-                            this.open();
-                            this.$router.push('/login');
-                        } else {
-                            this.message = data.data.message;
-                            this.open();
-                        }
-                    })
-                    .catch(err => {
-                        loading.close();
-                        console.log(err);
-                    });
+                console.log(index);
+                this.index=index;
+                console.log(row);
+                this.oContinuousDays=row.continuousDays;
+                this.oGoldAward=row.goldAward;
+                if(row.extraFlag==1){
+                    this.oExtraFlag='1'
+                }
+                if(row.extraFlag==2){
+                    this.oExtraFlag='2'
+                }
+                this.oExtraPrizeName=row.extraPrizeName;
+                this.oExtraPrizePicture=row.extraPrizePicture;
+                this.oExpireDays=row.expireDays;
+                if(row.extraPrizeType==1){
+                    this.oExtraPrizeType='1'
+                }
+                if(row.extraPrizeType==2){
+                    this.oExtraPrizeType='2'
+                }
+                this.editVisible=true;
             },
             exChanger() {
-                const loading = this.$loading({
-                    lock: true,
-                    text: 'Loading',
-                    spinner: 'el-icon-loading',
-                    background: 'rgba(0, 0, 0, 0.7)',
-                    target: document.querySelector('.div1')
-                });
-                let jsonArr = [];
-                jsonArr.push({ key: 'id', value: this.id });
-                jsonArr.push({ key: 'continuousDays', value: this.oContinuousDays });
-                jsonArr.push({ key: 'goldAward', value: this.oGoldAward });
-                jsonArr.push({ key: 'signTips', value: this.oSignTips });
-                jsonArr.push({ key: 'extraFlag', value: this.oExtraFlag });
-                jsonArr.push({ key: 'extraPrizeName', value: this.oExtraPrizeName });
-                jsonArr.push({ key: 'extraPrizePicture', value: this.oExtraPrizePicture });
-                jsonArr.push({ key: 'extraPrizeType', value: this.oExtraPrizeType });
-                jsonArr.push({ key: 'couponId', value: this.couponInfo.id });
-                jsonArr.push({ key: 'expireDays', value: this.oExpireDays });
-                let sign = md5(preSign(jsonArr));
-                jsonArr.push({ key: 'sign', value: sign });
-                console.log(jsonArr);
-                var params = ParamsAppend(jsonArr);
-                https
-                    .fetchPost('/signinRule/addExtraSignRule', params)
-                    .then(data => {
-                        loading.close();
-                        console.log(data);
-                        if (data.data.code == 'success') {
-                            if(this.clearFiles==2){
-                                this.$refs.download.clearFiles();//清除已上传文件
-                            }
-                            this.$message.success(`成功`);
-                            this.getMenu();
-                            this.editVisible=false;
-                        } else if (data.data.code == 'nologin') {
-                            this.message = data.data.message;
-                            this.open();
-                            this.$router.push('/login');
-                        } else {
-                            this.message = data.data.message;
-                            this.open();
-                        }
-                    })
-                    .catch(err => {
-                        loading.close();
-                        console.log(err);
-                    });
+                this.tableData[this.index].continuousDays=this.oContinuousDays
+                this.tableData[this.index].goldAward=this.oGoldAward
+                this.tableData[this.index].extraFlag=this.oExtraFlag
+                this.tableData[this.index].extraPrizeName=this.oExtraPrizeName
+                this.tableData[this.index].extraPrizePicture=this.oExtraPrizePicture
+                this.tableData[this.index].extraPrizeType=this.oExtraPrizeType
+                this.tableData[this.index].couponId=this.couponInfo.id
+                this.tableData[this.index].expireDays=this.oExpireDays
+                this.editVisible=false;
             },
             getAllCoupon() {
                 // 获取所有优惠券
@@ -451,8 +406,15 @@
                     background: 'rgba(0, 0, 0, 0.7)',
                     target: document.querySelector('.div1')
                 });
-                setTimeout(() => {
-                    https.fetchPost('/signinRule/confirmSigninRule','').then(data => {
+                let jsonArr = [];
+                jsonArr.push({key:"id",value:this.id});
+                jsonArr.push({key:"goldAward",value:this.form1.oGoldAward});
+                jsonArr.push({key:"signTips",value:this.form1.oSignTips});
+                jsonArr.push({key:"extraSignRuleJson",value: JSON.stringify(this.tableData)});
+                let sign = md5(preSign(jsonArr));
+                jsonArr.push({ key: 'sign', value: sign });
+                var params = ParamsAppend(jsonArr);
+                    https.fetchPost('/signinRule/updateSigninRule',params).then(data => {
                         loading.close();
                         console.log(data);
                         if (data.data.code == 'success') {
@@ -471,7 +433,6 @@
                             loading.close();
                             console.log(err);
                         });
-                }, 500);
             },
             Search() {
                 this.query.pageNo = 1;
@@ -495,10 +456,8 @@
                             console.log(oData);
                             this.id=oData.id;
                             this.tableData = oData.extraRuleList;
-                            this.query.pageSize = oData.pageSize;
-                            this.query.pageNo = oData.pageNo;
-                            this.query.totalCount = oData.totalCount;
-                            this.query.totalPage = oData.totalPage;
+                            this.form1.oGoldAward=oData.goldAward
+                            this.form1.oSignTips=oData.signTips
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
                             this.open();

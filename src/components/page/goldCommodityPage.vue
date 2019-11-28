@@ -1103,8 +1103,6 @@ export default {
                 jsonArr.push({ key: 'limitNumber', value: this.oForm.limit_number });
                 jsonArr.push({ key: 'details', value: this.content });
                 jsonArr.push({ key: 'markdown', value: this.oForm.markdown });
-                console.log(this.content)
-                console.log(this.oForm.markdown)
                 jsonArr.push({ key: 'originalPrice', value: this.oForm.originalPrice });
                 jsonArr.push({ key: 'topStatus', value: this.oForm.topStatus });
                 jsonArr.push({ key: 'recommendStatus', value: this.oForm.recommendStatus });

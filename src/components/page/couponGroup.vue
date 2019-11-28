@@ -186,7 +186,7 @@
                         >
                         </el-input>
                         &nbsp;&nbsp;&nbsp;&nbsp;
-                        数量：{{item.num}}
+                        每人发放数量：{{item.num}}
                         <span
                                 style="color:red;cursor: pointer;"
                                 @click="deleteSell(index)"
@@ -225,7 +225,7 @@
                     <el-table-column prop="sort" label="优惠券名称">
                         <template slot-scope="scope">{{scope.row.name}}</template>
                     </el-table-column>
-                    <el-table-column prop="sort" label="优惠券数量">
+                    <el-table-column prop="sort" label="每人发放数量">
                         <template slot-scope="scope">
                             <el-input placeholder="输入数量" v-model="scope.row.num"></el-input>
                         </template>
@@ -379,6 +379,7 @@ export default {
                 jsonArr.push({key:"pageNo",value:this.query.aPageNo});
                 jsonArr.push({key:"pageSize",value:this.query.aPageSize});
                 let sign =md5(preSign(jsonArr));
+                console.log(jsonArr);
                 jsonArr.push({key:"sign",value:sign});
                 var params = ParamsAppend(jsonArr);
                 https.fetchPost('/merchandiseCoupon/getCouponByCinemaCode',params).then((data) => {
@@ -528,14 +529,6 @@ export default {
                 .then(() => {
                     this.idx = index;
                     this.form = row;
-                    let name = this.query.name;
-                    let status = this.query.status;
-                    if (!name) {
-                        name = '';
-                    }
-                    if (!status) {
-                        status = '';
-                    }
                     let jsonArr = [];
                     jsonArr.push({ key: 'id', value: row.id });
                     let sign = md5(preSign(jsonArr));

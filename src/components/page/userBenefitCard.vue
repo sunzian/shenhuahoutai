@@ -51,6 +51,7 @@
                     <el-option key="1" label="正常" value="1"></el-option>
                     <el-option key="2" label="作废" value="2"></el-option>
                     <el-option key="3" label="过期" value="3"></el-option>
+                    <el-option key="4" label="续卡" value="4"></el-option>
                 </el-select>
                 <el-select
                     clearable
@@ -129,7 +130,7 @@
                         <el-tag v-else-if="scope.row.benefitStatus=='1'">正常</el-tag>
                         <el-tag v-else-if="scope.row.benefitStatus=='2'">作废</el-tag>
                         <el-tag v-else-if="scope.row.benefitStatus=='3'">过期</el-tag>
-                        <el-tag v-else-if="scope.row.benefitStatus=='4'">正常</el-tag>
+                        <el-tag v-else-if="scope.row.benefitStatus=='4'">续卡</el-tag>
                     </template>
                 </el-table-column>
             </el-table>

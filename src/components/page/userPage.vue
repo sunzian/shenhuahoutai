@@ -31,7 +31,7 @@
                 header-cell-class-name="table-header"
                 @selection-change="handleSelectionChange"
             >
-                <el-table-column prop="name" label="用户名" width="140">
+                <el-table-column prop="name" label="用户名">
                     <template slot-scope="scope">{{scope.row.userName}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="真实姓名" width="140">
