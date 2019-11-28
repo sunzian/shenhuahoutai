@@ -701,7 +701,7 @@ export default {
                     couponName = '';
                 }
                 let jsonArr = [];
-                jsonArr.push({ key: 'couponName', value: couponName });
+                jsonArr.push({ key: 'name', value: couponName });
                 jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
                 jsonArr.push({ key: 'pageNo', value: this.query.couponPageNo });
                 jsonArr.push({ key: 'pageSize', value: this.query.couponPageSize });

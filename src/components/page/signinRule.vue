@@ -10,7 +10,7 @@
         <!--签到规则页面-->
         <div class="container">
             <el-form ref="form1" :model="form1">
-                <el-form-item :required="true" label="连续签到天数" :label-width="formLabelWidth">
+                <el-form-item label="连续签到天数" :label-width="formLabelWidth">
                     <el-input
                             style="width: 250px"
                             v-model="form1.days"
@@ -65,7 +65,7 @@
         <!-- 新增奖项弹出框 -->
         <el-dialog title="新增" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
-                <el-form-item :required="true" label="连续签到天数" :label-width="formLabelWidth">
+                <el-form-item label="连续签到天数" :label-width="formLabelWidth">
                     <el-input
                             style="width: 250px"
                             v-model="oContinuousDays"
@@ -327,6 +327,36 @@
                 this.editVisible=true;
             },
             exChanger() {
+                if(!this.oGoldAward){
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if(this.oContinuousDays==7){
+                    if(!this.oExtraFlag){
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if(this.oContinuousDays==7&&this.oExtraFlag==1){
+                    if(!this.oExtraPrizeName||!this.oExtraPrizePicture||!this.oExpireDays||!this.oExtraPrizeType){
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                    if(this.oExtraPrizeType==1){
+                        if(!this.couponInfo.couponName){
+                            this.message = '必填项不能为空，请检查！';
+                            this.open();
+                            loading.close();
+                            return;
+                        }
+                    }
+                }
                 this.tableData[this.index].continuousDays=this.oContinuousDays
                 this.tableData[this.index].goldAward=this.oGoldAward
                 this.tableData[this.index].extraFlag=this.oExtraFlag
@@ -351,17 +381,17 @@
                     name = '';
                 }
                 let jsonArr = [];
-                // jsonArr.push({ key: 'simpleType', value: 1 });
+                jsonArr.push({ key: 'simpleType', value: 1 });
                 jsonArr.push({ key: 'name', value: name });
-                // jsonArr.push({ key: 'status', value: 1 });
-                // jsonArr.push({ key: 'cinemaCodes', value: this.cinemaCode });
+                jsonArr.push({ key: 'status', value: 1 });
+                jsonArr.push({ key: 'cinemaCodes', value: this.cinemaCode });
                 jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
                 jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
                 console.log(jsonArr);
                 var params = ParamsAppend(jsonArr);
-                https.fetchPost('merchandiseCoupon/getCouponByCinemaCode', params).then(data => {
+                https.fetchPost('/merchandiseCoupon/merchandiseCouponPage', params).then(data => {
                     loading.close();
                     if (data.data.code == 'success') {
                         let oData = JSON.parse(Decrypt(data.data.data));
@@ -406,6 +436,12 @@
                     background: 'rgba(0, 0, 0, 0.7)',
                     target: document.querySelector('.div1')
                 });
+                if(!this.form1.oGoldAward||!this.form1.oSignTips){
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
                 let jsonArr = [];
                 jsonArr.push({key:"id",value:this.id});
                 jsonArr.push({key:"goldAward",value:this.form1.oGoldAward});

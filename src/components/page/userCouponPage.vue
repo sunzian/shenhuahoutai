@@ -551,7 +551,7 @@ export default {
                 jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
                 jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
                 jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
-                jsonArr.push({ key: 'cardNum', value: orderNo });
+                jsonArr.push({ key: 'orderNum', value: orderNo });
                 jsonArr.push({ key: 'couponName', value: couponName });
                 jsonArr.push({ key: 'userName', value: userName });
                 jsonArr.push({ key: 'status', value: status });

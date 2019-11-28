@@ -327,8 +327,13 @@ export default {
             this.type.type=EncryptReplace('business')
         },
         onSuccess(data){//上传文件 登录超时
-            // console.log(data);
-            // console.log(data);
+            console.log(data);
+            if (data.status == '-1') {
+                this.message = data.message;
+                this.open();
+                this.$refs.upload.clearFiles();
+                return;
+            }
             this.oForm.logo=data.data
             if(data.code=='nologin'){
                 this.message=data.message
@@ -339,6 +344,12 @@ export default {
         unSuccess(data){//上传文件 登录超时
             // console.log(data);
             // console.log(data);
+            if (data.status == '-1') {
+                this.message = data.message;
+                this.open();
+                this.$refs.upload.clearFiles();
+                return;
+            }
             this.oLogo=data.data
             if(data.code=='nologin'){
                 this.message=data.message

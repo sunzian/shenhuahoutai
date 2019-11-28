@@ -316,9 +316,9 @@
                 </el-form-item>
                 <el-form-item :required="true" v-if="oForm.isMerchandiseJoin==1&&oForm.cardType==1"  label="选择商品：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.selectMerchandiseType">
-                        <el-radio label="0">全部商品</el-radio>
+                        <el-radio label="0" v-if="oForm.reduceTypeMerchandise==2||oForm.reduceTypeMerchandise==3">全部商品</el-radio>
                         <el-radio label="1">部分商品</el-radio>
-                        <el-radio label="2">排除商品</el-radio>
+                        <el-radio label="2" v-if="oForm.reduceTypeMerchandise==2||oForm.reduceTypeMerchandise==3">排除商品</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oForm.selectMerchandiseType!=0&&oForm.isMerchandiseJoin==1&&oForm.cardType==1" label="选择商品" :label-width="formLabelWidth">
@@ -733,9 +733,9 @@
                 </el-form-item>
                 <el-form-item :required="true" v-if="oIsMerchandiseJoin==1&&oCardType==1"  label="选择商品：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oSelectMerchandiseType">
-                        <el-radio label="0">全部商品</el-radio>
+                        <el-radio label="0" v-if="oReduceTypeMerchandise==2||oReduceTypeMerchandise==3">全部商品</el-radio>
                         <el-radio label="1">部分商品</el-radio>
-                        <el-radio label="2">排除商品</el-radio>
+                        <el-radio label="2" v-if="oReduceTypeMerchandise==2||oReduceTypeMerchandise==3">排除商品</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oSelectMerchandiseType!=0&&oIsMerchandiseJoin==1&&oCardType==1" label="选择商品" :label-width="formLabelWidth">
@@ -1353,6 +1353,7 @@
                     if (data.data.code == 'success') {
                         this.selectedSell=[];
                         this.oForm.code = this.cinemaInfo[0].cinemaCode;
+                        this.getAllScreen(this.oForm.code);
                         let formats = JSON.parse(Decrypt(data.data.data)).formatList;
                         this.formatList = [];
                         for (let i = 0; i < formats.length; i++) {
@@ -2074,7 +2075,7 @@
                             cinemaList.cinemaName = oData.cinemaList[i].cinemaName;
                             this.cinemaInfo.push(cinemaList);
                         }
-                        console.log(this.cinemaInfo)
+                        console.log(this.cinemaInfo);
                         this.oForm.cinemaCode = this.cinemaInfo[0].cinemaCode;
                         this.selectValue = this.cinemaInfo[0].cinemaCode;
                         this.tableData = oData.pageResult.data;

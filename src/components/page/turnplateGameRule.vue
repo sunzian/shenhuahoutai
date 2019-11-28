@@ -132,13 +132,11 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <!--<el-form-item label="添加奖项" :label-width="formLabelWidth">-->
                 <el-button
                     style="margin-top:-35px;float: right"
                     type="primary"
                     @click="changePrize"
                 >添加奖项</el-button>
-                <!--</el-form-item>-->
             </el-form>
             <el-table
                 v-if="prizeInfoList.length!=0"
@@ -208,6 +206,159 @@
                     style="margin-top: 10px;float: right"
                     type="primary"
                     @click="exAddChanger"
+                >确 定</el-button>
+            </span>
+        </div>
+        <!--修改游戏规则页面-->
+        <div class="container" v-if="changeShow">
+            <div class="handle-box">
+                <el-button
+                        type="primary"
+                        @click="back"
+                        icon="el-icon-circle-plus-outline"
+                        style="float: right"
+                >返回影院列表</el-button>
+            </div>
+            <el-form ref="form" :model="form">
+                <el-form-item :required="true" label="游戏名称" :label-width="formLabelWidth">
+                    <el-input style="width: 250px" v-model="form.gameName" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item :required="true" label="大转盘背景图" :label-width="formLabelWidth">
+                    <el-popover placement="right" title trigger="hover">
+                        <img style="width: 400px" :src="this.form.imageUrl" />
+                        <img
+                                slot="reference"
+                                :src="this.form.imageUrl"
+                                :alt="this.form.imageUrl"
+                                style="max-height: 50px;max-width: 130px"
+                        />
+                    </el-popover>
+                    <el-upload
+                            :before-upload="beforeUpload"
+                            :data="type"
+                            class="upload-demo"
+                            ref="download"
+                            drag
+                            action="/api/upload/uploadImage"
+                            :on-success="unSuccess"
+                            multiple
+                    >
+                        <i class="el-icon-upload"></i>
+                        <div class="el-upload__text">
+                            将文件拖到此处，或
+                            <em>点击上传</em>
+                        </div>
+                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过200kb 建议尺寸375*600或按比例上传</div>
+                    </el-upload>
+                </el-form-item>
+                <el-form-item :required="true" label="活动开始时间" :label-width="formLabelWidth">
+                    <el-date-picker
+                            style="width:250px"
+                            v-model="form.startDate"
+                            type="datetime"
+                            value-format="yyyy-MM-dd HH:mm:ss"
+                            format="yyyy-MM-dd HH:mm:ss"
+                            placeholder="选择日期时间"
+                    ></el-date-picker>
+                </el-form-item>
+                <el-form-item :required="true" label="活动结束时间" :label-width="formLabelWidth">
+                    <el-date-picker
+                            style="width:250px"
+                            v-model="form.endDate"
+                            type="datetime"
+                            value-format="yyyy-MM-dd HH:mm:ss"
+                            format="yyyy-MM-dd HH:mm:ss"
+                            placeholder="选择日期时间"
+                    ></el-date-picker>
+                </el-form-item>
+                <el-form-item :required="true" label="消耗金币" :label-width="formLabelWidth">
+                    <el-input style="width: 250px" v-model="form.consumeGold" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="抽奖规则说明" :label-width="formLabelWidth">
+                    <el-input style="width: 250px" type="textarea" v-model="form.gameRule" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item :required="true" label="状态" :label-width="formLabelWidth">
+                    <el-select v-model="form.status" placeholder="请选择">
+                        <el-option
+                                v-for="item in options"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
+                <!--<el-form-item label="添加奖项" :label-width="formLabelWidth">-->
+                <el-button style="float: right" type="primary" @click="changePrize">添加奖项</el-button>
+                <!--</el-form-item>-->
+            </el-form>
+            <el-table
+                    style="margin-top: 20px"
+                    v-if="prizeInfoList.length!=0"
+                    :data="prizeInfoList"
+                    border
+                    class="table"
+                    ref="multipleTable"
+                    header-cell-class-name="table-header"
+                    @selection-change="handleSelectionChange"
+            >
+                <el-table-column prop="name" label="奖品等级" width="100">
+                    <template slot-scope="scope">{{scope.row.prizeLevel}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="奖品名称">
+                    <template slot-scope="scope">{{scope.row.prizeName}}</template>
+                </el-table-column>
+                <el-table-column prop="sort" label="奖品图片" width="100">
+                    <template slot-scope="scope">
+                        <el-popover placement="right" title trigger="hover">
+                            <img style="width: 400px" :src="scope.row.prizePicture" />
+                            <img
+                                    slot="reference"
+                                    :src="scope.row.prizePicture"
+                                    :alt="scope.row.prizePicture"
+                                    style="max-height: 50px;max-width: 130px"
+                            />
+                        </el-popover>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="sort" label="奖品总数量">
+                    <template slot-scope="scope">{{scope.row.prizeNumber}}</template>
+                </el-table-column>
+                <el-table-column prop="sort" label="奖品概率" width="100">
+                    <template slot-scope="scope">{{scope.row.percent}}</template>
+                </el-table-column>
+                <el-table-column prop="sort" label="已中奖数量">
+                    <template slot-scope="scope">{{scope.row.hasTheNumber}}</template>
+                </el-table-column>
+                <el-table-column prop="sort" label="奖品类型" width="100">
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row.prizeType=='1'">优惠券</el-tag>
+                        <el-tag v-else-if="scope.row.prizeType=='2'">实物</el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="sort" label="优惠券名称">
+                    <template slot-scope="scope">{{scope.row.couponName}}</template>
+                </el-table-column>
+                <el-table-column label="操作" width="160" align="center" fixed="right">
+                    <template slot-scope="scope">
+                        <el-button
+                                type="text"
+                                icon="el-icon-edit"
+                                @click="prizeModify(scope.row,scope.$index)"
+                        >修改</el-button>
+                        <el-button
+                                type="text"
+                                icon="el-icon-delete"
+                                @click="deletePrize(scope.$index)"
+                                class="red"
+                        >删除</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <span slot="footer" class="dialog-footer" style="margin-left: 1040px">
+                <el-button
+                        style="margin-top: 10px;float: right"
+                        type="primary"
+                        @click="exChangeChanger"
                 >确 定</el-button>
             </span>
         </div>
@@ -405,12 +556,12 @@
                     <el-pagination
                         background
                         layout="total, prev, pager, next"
-                        :current-page="query.pageNo"
-                        :page-size="query.pageSize"
-                        :total="query.totalCount"
-                        @current-change="currentChange"
-                        @prev-click="prev"
-                        @next-click="next"
+                        :current-page="query.aPageNo"
+                        :page-size="query.aPageSize"
+                        :total="query.aTotalCount"
+                        @current-change="aCurrentChange"
+                        @prev-click="aPrev"
+                        @next-click="aNext"
                     ></el-pagination>
                 </div>
             </div>
@@ -419,159 +570,6 @@
                 <el-button type="primary" @click="sureNext(id)">确 定</el-button>
             </div>
         </el-dialog>
-        <!--修改游戏规则页面-->
-        <div class="container" v-if="changeShow">
-            <div class="handle-box">
-                <el-button
-                    type="primary"
-                    @click="back"
-                    icon="el-icon-circle-plus-outline"
-                    style="float: right"
-                >返回影院列表</el-button>
-            </div>
-            <el-form ref="form" :model="form">
-                <el-form-item :required="true" label="游戏名称" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="form.gameName" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item :required="true" label="大转盘背景图" :label-width="formLabelWidth">
-                    <el-popover placement="right" title trigger="hover">
-                        <img style="width: 400px" :src="this.form.imageUrl" />
-                        <img
-                            slot="reference"
-                            :src="this.form.imageUrl"
-                            :alt="this.form.imageUrl"
-                            style="max-height: 50px;max-width: 130px"
-                        />
-                    </el-popover>
-                    <el-upload
-                        :before-upload="beforeUpload"
-                        :data="type"
-                        class="upload-demo"
-                        ref="download"
-                        drag
-                        action="/api/upload/uploadImage"
-                        :on-success="unSuccess"
-                        multiple
-                    >
-                        <i class="el-icon-upload"></i>
-                        <div class="el-upload__text">
-                            将文件拖到此处，或
-                            <em>点击上传</em>
-                        </div>
-                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过200kb 建议尺寸375*600或按比例上传</div>
-                    </el-upload>
-                </el-form-item>
-                <el-form-item :required="true" label="活动开始时间" :label-width="formLabelWidth">
-                    <el-date-picker
-                        style="width:250px"
-                        v-model="form.startDate"
-                        type="datetime"
-                        value-format="yyyy-MM-dd HH:mm:ss"
-                        format="yyyy-MM-dd HH:mm:ss"
-                        placeholder="选择日期时间"
-                    ></el-date-picker>
-                </el-form-item>
-                <el-form-item :required="true" label="活动结束时间" :label-width="formLabelWidth">
-                    <el-date-picker
-                        style="width:250px"
-                        v-model="form.endDate"
-                        type="datetime"
-                        value-format="yyyy-MM-dd HH:mm:ss"
-                        format="yyyy-MM-dd HH:mm:ss"
-                        placeholder="选择日期时间"
-                    ></el-date-picker>
-                </el-form-item>
-                <el-form-item :required="true" label="消耗金币" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="form.consumeGold" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="抽奖规则说明" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" type="textarea" v-model="form.gameRule" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item :required="true" label="状态" :label-width="formLabelWidth">
-                    <el-select v-model="form.status" placeholder="请选择">
-                        <el-option
-                            v-for="item in options"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value"
-                        ></el-option>
-                    </el-select>
-                </el-form-item>
-                <!--<el-form-item label="添加奖项" :label-width="formLabelWidth">-->
-                <el-button style="float: right" type="primary" @click="changePrize">添加奖项</el-button>
-                <!--</el-form-item>-->
-            </el-form>
-            <el-table
-                style="margin-top: 20px"
-                v-if="prizeInfoList.length!=0"
-                :data="prizeInfoList"
-                border
-                class="table"
-                ref="multipleTable"
-                header-cell-class-name="table-header"
-                @selection-change="handleSelectionChange"
-            >
-                <el-table-column prop="name" label="奖品等级" width="100">
-                    <template slot-scope="scope">{{scope.row.prizeLevel}}</template>
-                </el-table-column>
-                <el-table-column prop="memo" label="奖品名称">
-                    <template slot-scope="scope">{{scope.row.prizeName}}</template>
-                </el-table-column>
-                <el-table-column prop="sort" label="奖品图片" width="100">
-                    <template slot-scope="scope">
-                        <el-popover placement="right" title trigger="hover">
-                            <img style="width: 400px" :src="scope.row.prizePicture" />
-                            <img
-                                slot="reference"
-                                :src="scope.row.prizePicture"
-                                :alt="scope.row.prizePicture"
-                                style="max-height: 50px;max-width: 130px"
-                            />
-                        </el-popover>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="sort" label="奖品总数量">
-                    <template slot-scope="scope">{{scope.row.prizeNumber}}</template>
-                </el-table-column>
-                <el-table-column prop="sort" label="奖品概率" width="100">
-                    <template slot-scope="scope">{{scope.row.percent}}</template>
-                </el-table-column>
-                <el-table-column prop="sort" label="已中奖数量">
-                    <template slot-scope="scope">{{scope.row.hasTheNumber}}</template>
-                </el-table-column>
-                <el-table-column prop="sort" label="奖品类型" width="100">
-                    <template slot-scope="scope">
-                        <el-tag v-if="scope.row.prizeType=='1'">优惠券</el-tag>
-                        <el-tag v-else-if="scope.row.prizeType=='2'">实物</el-tag>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="sort" label="优惠券名称">
-                    <template slot-scope="scope">{{scope.row.couponName}}</template>
-                </el-table-column>
-                <el-table-column label="操作" width="160" align="center" fixed="right">
-                    <template slot-scope="scope">
-                        <el-button
-                            type="text"
-                            icon="el-icon-edit"
-                            @click="prizeModify(scope.row,scope.$index)"
-                        >修改</el-button>
-                        <el-button
-                            type="text"
-                            icon="el-icon-delete"
-                            @click="deletePrize(scope.$index)"
-                            class="red"
-                        >删除</el-button>
-                    </template>
-                </el-table-column>
-            </el-table>
-            <span slot="footer" class="dialog-footer" style="margin-left: 1040px">
-                <el-button
-                    style="margin-top: 10px;float: right"
-                    type="primary"
-                    @click="exChangeChanger"
-                >确 定</el-button>
-            </span>
-        </div>
     </div>
 </template>
 
@@ -598,7 +596,9 @@ export default {
             message: '', //弹出框消息
             query: {
                 pageNo: 1,
-                pageSize: 15
+                pageSize: 15,
+                aPageNo: 1,
+                aPageSize: 15
             },
             tableData: [],
             oTableData: [],
@@ -721,8 +721,8 @@ export default {
             jsonArr.push({ key: 'name', value: name });
             // jsonArr.push({ key: 'status', value: 1 });
             jsonArr.push({ key: 'cinemaCode', value: this.cinemaCode });
-            jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
-            jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
+            jsonArr.push({ key: 'pageNo', value: this.query.aPageNo });
+            jsonArr.push({ key: 'pageSize', value: this.query.aPageSize });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             console.log(jsonArr);
@@ -736,10 +736,10 @@ export default {
                         this.drawer = true;
                         this.sellTableData = oData.pageResult.data;
                         console.log(this.sellTableData);
-                        this.query.pageSize = oData.pageResult.pageSize;
-                        this.query.pageNo = oData.pageResult.pageNo;
-                        this.query.totalCount = oData.pageResult.totalCount;
-                        this.query.totalPage = oData.pageResult.totalPage;
+                        this.query.aPageSize = oData.pageResult.pageSize;
+                        this.query.aPageNo = oData.pageResult.pageNo;
+                        this.query.aTotalCount = oData.pageResult.totalCount;
+                        this.query.aTotalPage = oData.pageResult.totalPage;
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
@@ -905,18 +905,28 @@ export default {
         },
         sureChanger() {
             // 编辑奖项操作
-            let onePrize = {
-                prizeLevel: this.pForm.prizeLevel,
-                prizeName: this.pForm.prizeName,
-                prizePicture: this.pForm.prizePicture,
-                prizeNumber: this.pForm.prizeNumber,
-                percent: this.pForm.percent,
-                prizeType: this.pForm.prizeType,
-                expireDay: this.pForm.expireDay,
-                couponId: this.couponInfo.id,
-                couponName: this.couponInfo.couponName
-            };
-            this.prizeInfoList[this.oIndex] = onePrize;
+            // let onePrize = {
+            //     prizeLevel: this.pForm.prizeLevel,
+            //     prizeName: this.pForm.prizeName,
+            //     prizePicture: this.pForm.prizePicture,
+            //     prizeNumber: this.pForm.prizeNumber,
+            //     percent: this.pForm.percent,
+            //     prizeType: this.pForm.prizeType,
+            //     expireDay: this.pForm.expireDay,
+            //     couponId: this.couponInfo.id,
+            //     couponName: this.couponInfo.couponName
+            // };
+            // this.prizeInfoList[this.oIndex] = onePrize;
+            this.prizeInfoList[this.oIndex].prizeLevel = this.pForm.prizeLevelze;
+            this.prizeInfoList[this.oIndex].prizeName = this.pForm.prizeName;
+            this.prizeInfoList[this.oIndex].prizePicture = this.pForm.prizePicture;
+            this.prizeInfoList[this.oIndex].prizeNumber = this.pForm.prizeNumber;
+            this.prizeInfoList[this.oIndex].percent = this.pForm.percent;
+            this.prizeInfoList[this.oIndex].prizeType = this.pForm.prizeType;
+            this.prizeInfoList[this.oIndex].expireDay = this.pForm.expireDay;
+            this.prizeInfoList[this.oIndex].couponId = this.couponInfo.id;
+            this.prizeInfoList[this.oIndex].couponName = this.couponInfo.couponName;
+            console.log(this.prizeInfoList);
             this.pForm.prizeLevel = '';
             this.pForm.prizeName = '';
             this.pForm.image_url = '';
@@ -1118,6 +1128,21 @@ export default {
             //分页按钮下一页
             this.query.pageNo++;
             this.getMenu();
+        },
+        aCurrentChange(val) {
+            //点击选择具体页数
+            this.query.aPageNo = val;
+            this.getAllCoupon();
+        },
+        aPrev() {
+            //分页按钮上一页
+            this.query.aPageNo--;
+            this.getAllCoupon();
+        },
+        aNext() {
+            //分页按钮下一页
+            this.query.aPageNo++;
+            this.getAllCoupon();
         }
     }
 };
