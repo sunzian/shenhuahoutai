@@ -3,7 +3,7 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
-                    <i class="el-icon-lx-cascades"></i> 送券活动管理
+                    <i class="el-icon-lx-cascades"></i> 注册送券活动管理
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
@@ -214,12 +214,20 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="领取后多少天失效：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="发放后多少天之后开始生效：" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
                         v-model="oForm.validDay"
                         autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item :required="true" label="生效后有效期天数：" :label-width="formLabelWidth">
+                    <el-input
+                            style="width: 250px"
+                            min="1"
+                            v-model="oForm.overDays"
+                            autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="设置券包：" :label-width="formLabelWidth">
@@ -351,12 +359,20 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="领取后多少天失效：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="发放后多少天之后开始生效：" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
                         v-model="form.validDay"
                         autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item :required="true" label="生效后有效期天数：" :label-width="formLabelWidth">
+                    <el-input
+                            style="width: 250px"
+                            min="1"
+                            v-model="form.overDays"
+                            autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="设置券包：" :label-width="formLabelWidth">
@@ -630,6 +646,7 @@ export default {
             jsonArr.push({ key: 'totalNumber', value: this.oForm.totalNumber });
             jsonArr.push({ key: 'activityDesc', value: this.oForm.activityDesc });
             jsonArr.push({ key: 'validDay', value: this.oForm.validDay });
+            jsonArr.push({ key: 'overDays', value: this.oForm.overDays });
             jsonArr.push({ key: 'couponGroupId', value: this.couponId });
             console.log(jsonArr);
             let sign = md5(preSign(jsonArr));
@@ -845,6 +862,7 @@ export default {
             jsonArr.push({ key: 'totalNumber', value: this.form.totalNumber });
             jsonArr.push({ key: 'activityDesc', value: this.form.activityDesc });
             jsonArr.push({ key: 'validDay', value: this.form.validDay });
+            jsonArr.push({ key: 'overDays', value: this.form.overDays });
             jsonArr.push({ key: 'couponGroupId', value: this.couponId });
             jsonArr.push({ key: 'id', value: this.form.id });
             console.log(jsonArr);
@@ -929,6 +947,7 @@ export default {
                     loading.close();
                     if (data.data.code == 'success') {
                         var oData = JSON.parse(Decrypt(data.data.data));
+                        console.log(oData);
                         this.tableData = oData.data;
                         console.log(this.tableData);
                         this.query.pageSize = oData.pageSize;
