@@ -17,6 +17,23 @@
                         :value="item.cinemaCode"
                     ></el-option>
                 </el-select>
+                <el-input
+                        placeholder="充值规则名称"
+                        v-model="query.ruleName"
+                        autocomplete="off"
+                        class="mr10"
+                ></el-input>
+                <el-select
+                        clearable
+                        v-model="query.givenType"
+                        placeholder="赠送类型"
+                        class="handle-select mr10"
+                >
+                    <el-option key="1" label="不赠送" value="1"></el-option>
+                    <el-option key="2" label="赠送RMB" value="2"></el-option>
+                    <el-option key="3" label="赠送券包" value="3"></el-option>
+                    <el-option key="4" label="两者都送" value="4"></el-option>
+                </el-select>
                 <el-select clearable v-model="query.status" placeholder="状态" class="handle-select mr10">
                     <el-option key="1" label="启用" value="1"></el-option>
                     <el-option key="2" label="禁用" value="2"></el-option>
@@ -1011,13 +1028,23 @@ export default {
             });
             let cinemaCode = this.query.cinemaCode;
             let status = this.query.status;
+            let ruleName = this.query.ruleName;
+            let givenType = this.query.givenType;
             if (!cinemaCode) {
                 cinemaCode = '';
             }
             if (!status) {
                 status = '';
             }
+            if (!ruleName) {
+                ruleName = '';
+            }
+            if (!givenType) {
+                givenType = '';
+            }
             let jsonArr = [];
+            jsonArr.push({ key: 'givenType', value: givenType });
+            jsonArr.push({ key: 'ruleName', value: ruleName });
             jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
             jsonArr.push({ key: 'status', value: status });
             jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
