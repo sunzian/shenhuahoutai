@@ -405,12 +405,12 @@
                     <el-pagination
                         background
                         layout="total, prev, pager, next"
-                        :current-page="query.pageNo"
-                        :page-size="query.pageSize"
-                        :total="query.totalCount"
-                        @current-change="currentChange"
-                        @prev-click="prev"
-                        @next-click="next"
+                        :current-page="query.aPageNo"
+                        :page-size="query.aPageSize"
+                        :total="query.aTotalCount"
+                        @current-change="aCurrentChange"
+                        @prev-click="aPrev"
+                        @next-click="aNext"
                     ></el-pagination>
                 </div>
             </div>
@@ -598,7 +598,9 @@ export default {
             message: '', //弹出框消息
             query: {
                 pageNo: 1,
-                pageSize: 15
+                pageSize: 15,
+                aPageNo: 1,
+                aPageSize: 15
             },
             tableData: [],
             oTableData: [],
@@ -721,8 +723,8 @@ export default {
             jsonArr.push({ key: 'name', value: name });
             // jsonArr.push({ key: 'status', value: 1 });
             jsonArr.push({ key: 'cinemaCode', value: this.cinemaCode });
-            jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
-            jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
+            jsonArr.push({ key: 'pageNo', value: this.query.aPageNo });
+            jsonArr.push({ key: 'pageSize', value: this.query.aPageSize });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             console.log(jsonArr);
@@ -736,10 +738,10 @@ export default {
                         this.drawer = true;
                         this.sellTableData = oData.pageResult.data;
                         console.log(this.sellTableData);
-                        this.query.pageSize = oData.pageResult.pageSize;
-                        this.query.pageNo = oData.pageResult.pageNo;
-                        this.query.totalCount = oData.pageResult.totalCount;
-                        this.query.totalPage = oData.pageResult.totalPage;
+                        this.query.aPageSize = oData.pageResult.pageSize;
+                        this.query.aPageNo = oData.pageResult.pageNo;
+                        this.query.aTotalCount = oData.pageResult.totalCount;
+                        this.query.aTotalPage = oData.pageResult.totalPage;
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
@@ -905,18 +907,28 @@ export default {
         },
         sureChanger() {
             // 编辑奖项操作
-            let onePrize = {
-                prizeLevel: this.pForm.prizeLevel,
-                prizeName: this.pForm.prizeName,
-                prizePicture: this.pForm.prizePicture,
-                prizeNumber: this.pForm.prizeNumber,
-                percent: this.pForm.percent,
-                prizeType: this.pForm.prizeType,
-                expireDay: this.pForm.expireDay,
-                couponId: this.couponInfo.id,
-                couponName: this.couponInfo.couponName
-            };
-            this.prizeInfoList[this.oIndex] = onePrize;
+            // let onePrize = {
+            //     prizeLevel: this.pForm.prizeLevel,
+            //     prizeName: this.pForm.prizeName,
+            //     prizePicture: this.pForm.prizePicture,
+            //     prizeNumber: this.pForm.prizeNumber,
+            //     percent: this.pForm.percent,
+            //     prizeType: this.pForm.prizeType,
+            //     expireDay: this.pForm.expireDay,
+            //     couponId: this.couponInfo.id,
+            //     couponName: this.couponInfo.couponName
+            // };
+            // this.prizeInfoList[this.oIndex] = onePrize;
+            this.prizeInfoList[this.oIndex].prizeLevel = this.pForm.prizeLevelze;
+            this.prizeInfoList[this.oIndex].prizeName = this.pForm.prizeName;
+            this.prizeInfoList[this.oIndex].prizePicture = this.pForm.prizePicture;
+            this.prizeInfoList[this.oIndex].prizeNumber = this.pForm.prizeNumber;
+            this.prizeInfoList[this.oIndex].percent = this.pForm.percent;
+            this.prizeInfoList[this.oIndex].prizeType = this.pForm.prizeType;
+            this.prizeInfoList[this.oIndex].expireDay = this.pForm.expireDay;
+            this.prizeInfoList[this.oIndex].couponId = this.couponInfo.id;
+            this.prizeInfoList[this.oIndex].couponName = this.couponInfo.couponName;
+            console.log(this.prizeInfoList);
             this.pForm.prizeLevel = '';
             this.pForm.prizeName = '';
             this.pForm.image_url = '';
@@ -1118,6 +1130,21 @@ export default {
             //分页按钮下一页
             this.query.pageNo++;
             this.getMenu();
+        },
+        aCurrentChange(val) {
+            //点击选择具体页数
+            this.query.aPageNo = val;
+            this.getAllCoupon();
+        },
+        aPrev() {
+            //分页按钮上一页
+            this.query.aPageNo--;
+            this.getAllCoupon();
+        },
+        aNext() {
+            //分页按钮下一页
+            this.query.aPageNo++;
+            this.getAllCoupon();
         }
     }
 };

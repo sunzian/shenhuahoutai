@@ -156,7 +156,7 @@
                 </el-form-item>
                 <el-form-item :required="true" label="选择商品：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.selectFilmType">
-                        <el-radio label="0">全部商品</el-radio>
+                        <el-radio v-if="oForm.reduceType==2" label="0">全部商品</el-radio>
                         <el-radio label="1">部分商品</el-radio>
                         <el-radio v-if="oForm.reduceType==2" label="2">排除商品</el-radio>
                     </el-radio-group>
@@ -407,7 +407,7 @@
                 </el-form-item>
                 <el-form-item :required="true" label="选择商品：" :label-width="formLabelWidth" prop="filmName">
                     <el-radio-group v-model="oSelectMerchandiseType">
-                        <el-radio label="0">全部商品</el-radio>
+                        <el-radio v-if="oReduceType==2" label="0">全部商品</el-radio>
                         <el-radio label="1">部分商品</el-radio>
                         <el-radio v-if="oReduceType==2" label="2">排除商品</el-radio>
                     </el-radio-group>
