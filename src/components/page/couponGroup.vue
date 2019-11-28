@@ -349,7 +349,16 @@ export default {
         sureNext() {
             if(this.sellIndex>=0){
                 // this.selectedSell=[]
-                this.selectedSell.push(this.sellTableData[this.sellIndex]);
+                if(!this.sellTableData[this.sellIndex].num){
+                    this.message = '请填写每人发放数量！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                else {
+                    this.selectedSell.push(this.sellTableData[this.sellIndex]);
+                }
+
             }
             console.log(this.selectedSell);
             this.drawer = false;

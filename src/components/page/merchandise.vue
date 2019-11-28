@@ -146,7 +146,7 @@
         <!-- 编辑弹出框 -->
         <el-dialog title="编辑" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
-                <el-form-item :required="true" label="商品名称" :label-width="formLabelWidth">
+                <el-form-item label="商品名称" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         v-model="form.name"
@@ -189,7 +189,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="零售价" :label-width="formLabelWidth">
+                <el-form-item label="零售价" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         v-model="form.standardPrice"
@@ -197,7 +197,7 @@
                         :disabled="true"
                     ></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="结算价" :label-width="formLabelWidth">
+                <el-form-item label="结算价" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         v-model="form.settlePrice"
@@ -430,6 +430,12 @@ export default {
             setTimeout(() => {
                 if (!this.form.image_url) {
                     this.form.image_url = this.form.imageUrl;
+                }
+                if(!this.oMerchandiseStatus){
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
                 }
                 var jsonArr = [];
                 jsonArr.push({ key: 'id', value: this.form.id });

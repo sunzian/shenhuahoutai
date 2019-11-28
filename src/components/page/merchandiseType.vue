@@ -330,6 +330,13 @@ export default {
                 target: document.querySelector('.div1')
             });
             setTimeout(() => {
+
+                if(!this.oForm.image_url||!this.oForm.name){
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
                 var jsonArr = [];
                 jsonArr.push({ key: 'cinemaCode', value: this.cinemaCode });
                 jsonArr.push({ key: 'typeName', value: this.oForm.name });
@@ -478,6 +485,12 @@ export default {
             setTimeout(() => {
                 if (!this.form.image_url) {
                     this.form.image_url = this.form.imageUrl;
+                }
+                if(!this.form.imageUrl||!this.form.typeName){
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
                 }
                 var jsonArr = [];
                 jsonArr.push({ key: 'id', value: this.form.id });

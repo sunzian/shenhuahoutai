@@ -256,7 +256,7 @@
         <!--影讯弹出框-->
         <el-dialog title="生成影讯" :visible.sync="poster">
             <el-form :model="oForm">
-                <el-form-item label="影院名称" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="影院名称" :label-width="formLabelWidth">
                     <el-select v-model="posterForm.cinemaCode" placeholder="请选择">
                         <el-option
                             v-for="info in cinemaInfo"
@@ -266,7 +266,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="时间" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="时间" :label-width="formLabelWidth">
                     <el-date-picker
                         v-model="posterForm.date"
                         type="date"
@@ -927,7 +927,7 @@ export default {
                 });
         },
 
-        /* 第一个参数为需要保存的div的id名  
+        /* 第一个参数为需要保存的div的id名
            第二个参数为保存图片的名称 */
         downLoad(divText, imgText) {
             let canvasID = this.$refs[divText];

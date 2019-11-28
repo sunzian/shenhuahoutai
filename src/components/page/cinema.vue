@@ -164,7 +164,7 @@
         <!-- 编辑弹出框 -->
         <el-dialog title="编辑" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
-                <el-form-item :required="true" label="影院编码" :label-width="formLabelWidth">
+                <el-form-item label="影院编码" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -173,22 +173,22 @@
                         :disabled="true"
                     ></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="影院名称" :label-width="formLabelWidth">
+                <el-form-item label="影院名称" :label-width="formLabelWidth">
                     <el-input style="width: 250px" :disabled="true" v-model="oCinemaName" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="所在省份" :label-width="formLabelWidth">
+                <el-form-item label="所在省份" :label-width="formLabelWidth">
                     <el-input style="width: 250px" :disabled="true" v-model="oProvince" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="所在城市" :label-width="formLabelWidth">
+                <el-form-item label="所在城市" :label-width="formLabelWidth">
                     <el-input style="width: 250px" :disabled="true" v-model="oCity" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="详细地址" :label-width="formLabelWidth">
+                <el-form-item label="详细地址" :label-width="formLabelWidth">
                     <el-input style="width: 250px" :disabled="true" v-model="oAddress" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="经度" :label-width="formLabelWidth">
+                <el-form-item label="经度" :label-width="formLabelWidth">
                     <el-input style="width: 250px" :disabled="true" v-model="oLongitude" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="纬度" :label-width="formLabelWidth">
+                <el-form-item label="纬度" :label-width="formLabelWidth">
                     <el-input style="width: 250px" :disabled="true" v-model="oLatitude" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="影院联系人姓名" :label-width="formLabelWidth">
@@ -521,13 +521,13 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item :required="true" label="小程序名称" :label-width="formLabelWidth">
+                <el-form-item label="小程序名称" :label-width="formLabelWidth">
                     <el-input style="width: 250px" :disabled="true" v-model="oMiniAppName" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="小程序二维码" :label-width="formLabelWidth">
+                <el-form-item label="小程序二维码" :label-width="formLabelWidth">
                     <el-input style="width: 250px" :disabled="true" v-model="oMiniAppQRCode" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item :required="true" prop="miniAppId" label="小程序appId" :label-width="formLabelWidth">
+                <el-form-item prop="miniAppId" label="小程序appId" :label-width="formLabelWidth">
                     <el-input style="width: 250px" :disabled="true" v-model="oMiniAppId" autocomplete="off"></el-input>
                 </el-form-item>
                 <!--<el-form-item-->
@@ -537,7 +537,7 @@
                 <!--&gt;-->
                     <!--<el-input style="width: 250px" v-model="oMiniAppSecret" autocomplete="off"></el-input>-->
                 <!--</el-form-item>-->
-                <el-form-item :required="true" label="小程序支付商户号" :label-width="formLabelWidth">
+                <el-form-item label="小程序支付商户号" :label-width="formLabelWidth">
                     <el-input style="width: 250px" :disabled="true" v-model="oMiniMerchantNo" autocomplete="off"></el-input>
                 </el-form-item>
                 <!--<el-form-item-->
@@ -559,7 +559,6 @@
                     <!--&gt;</el-input>-->
                 <!--</el-form-item>-->
                 <el-form-item
-                        :required="true"
                     label="售票系统账号"
                     :label-width="formLabelWidth"
                 >
@@ -948,6 +947,14 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
+            if(!this.oConcatName||!this.oConcatMobile||!this.oServiceMobile||!this.oMembershipServiceAgreement||!this.oBuyTicketHint
+                ||!this.oEquityCardAgreement||!this.oOpenSnackStatus||!this.oSnackDispatcherStatus||!this.oRefundable||!this.oSnackBeginTime
+                ||!this.oSnackEndTime||!this.oOpenMemberCardStatus||!this.oMemberCardCommonUseStatus||!this.oVerificationCode){
+                this.message = '必填项不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
             var jsonArr = [];
             jsonArr.push({ key: 'cinemaName', value: this.oCinemaName });
             jsonArr.push({ key: 'cinemaCode', value: this.oCinemaCode });

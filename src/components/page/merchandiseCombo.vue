@@ -211,7 +211,7 @@
                 <el-form-item label="排序" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oForm.showSeqNo" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="套餐价格" :label-width="formLabelWidth">
+                <el-form-item label="套餐价格" :label-width="formLabelWidth">
                     <el-input :disabled="true" style="width: 250px" v-model="oForm.originalPrice" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="套餐类型" :label-width="formLabelWidth">
@@ -371,7 +371,7 @@
                 <el-form-item label="排序" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="form.showSeqNo" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="套餐价格" :label-width="formLabelWidth">
+                <el-form-item label="套餐价格" :label-width="formLabelWidth">
                     <el-input :disabled="true" style="width: 250px" v-model="form.originalPrice" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="套餐类型" :label-width="formLabelWidth">
@@ -554,6 +554,12 @@ export default {
                 target: document.querySelector('.div1')
             });
             setTimeout(() => {
+                if(!this.oForm.comboName||!this.oForm.image_url||!this.selectedSell||!this.oForm.comboType||!this.oForm.status){
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
                 var jsonArr = [];
                 jsonArr.push({ key: 'cinemaCode', value: this.cinemaCode });
                 jsonArr.push({ key: 'comboName', value: this.oForm.comboName });
@@ -789,6 +795,12 @@ export default {
             setTimeout(() => {
                 if (!this.form.image_url) {
                     this.form.image_url = this.form.imageUrl;
+                }
+                if(!this.form.comboName||!this.form.image_url||!this.selectedSell||!this.form.comboType||!this.form.status){
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
                 }
                 var jsonArr = [];
                 jsonArr.push({ key: 'id', value: this.form.id });

@@ -1234,7 +1234,6 @@ export default {
                     this.oForm.ticket_ids = couponList.join(',');
                 }
                 var jsonArr = [];
-                jsonArr.push({ key: 'name', value: this.oForm.name });
                 jsonArr.push({ key: 'imageUrl', value: this.oForm.image_url });
                 jsonArr.push({ key: 'memo', value: this.oForm.memo });
                 jsonArr.push({ key: 'store', value: this.oForm.store });
@@ -1244,7 +1243,6 @@ export default {
                 jsonArr.push({ key: 'cinemaCodes', value: this.checkedCities });
                 jsonArr.push({ key: 'status', value: this.oForm.status });
                 jsonArr.push({ key: 'commodityType', value: this.oForm.commodity_type });
-                jsonArr.push({ key: 'ticketIds', value: this.ticketIds });
                 jsonArr.push({ key: 'assignType', value: this.oForm.assign_type });
                 jsonArr.push({ key: 'assignInfo', value: this.oForm.assign_info });
                 jsonArr.push({ key: 'limitType', value: this.oForm.limit_type });
@@ -1256,8 +1254,14 @@ export default {
                 jsonArr.push({ key: 'recommendStatus', value: this.oForm.recommendStatus });
                 jsonArr.push({ key: 'expireDay', value: this.oForm.expireDay });
                 jsonArr.push({ key: 'sort', value: this.oForm.sort });
-                jsonArr.push({ key: 'ticketIds', value: this.couponId });
-                jsonArr.push({ key: 'name', value: this.groupName });
+                if(this.oForm.commodity_type==3){
+                    jsonArr.push({ key: 'ticketIds', value: this.couponId });
+                    jsonArr.push({ key: 'name', value: this.groupName });
+                }else {
+                    jsonArr.push({ key: 'name', value: this.oForm.name });
+                    jsonArr.push({ key: 'ticketIds', value: this.ticketIds });
+                }
+
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
                 console.log(jsonArr);
