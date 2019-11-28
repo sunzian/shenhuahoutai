@@ -95,7 +95,7 @@
                         </div>
                         <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过200kb  建议尺寸120*120或按比例上传</div>
                     </el-upload>
-                </el-form-item :required="true">
+                </el-form-item>
                 <el-form-item :required="true" label="活动开始时间" :label-width="formLabelWidth">
                     <el-date-picker
                         style="width:250px"
