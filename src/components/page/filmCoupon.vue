@@ -805,11 +805,19 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            if (!this.oForm.name||!this.oForm.sendNumber||!this.oForm.discountMoney){
+            if (!this.oForm.name||!this.oForm.sendNumber){
                 this.message = '必填项不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
+            }
+            if(this.oForm.discountMoney!=0){
+                if(!this.oForm.discountMoney){
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
             }
             if(this.oForm.selectHallType==1||this.oForm.selectHallType==2){
                 if(!this.oForm.screenCode){
@@ -1142,11 +1150,19 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            if (!this.oName||!this.oSendNumber||!this.oDiscountMoney){
+            if (!this.oName||!this.oSendNumber){
                 this.message = '必填项不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
+            }
+            if(this.oDiscountMoney!=0){
+                if(!this.oDiscountMoney){
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
             }
             if(this.oSelectHallType==1||this.oSelectHallType==2){
                 if(!this.oScreenCode){

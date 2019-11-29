@@ -346,7 +346,7 @@
                         >删除</span>
                     </div>
                 </el-form-item>
-                <el-form-item :required="true" v-if="oForm.isMerchandiseJoin==1&&oForm.cardType==1"  label="是否限量：" :label-width="formLabelWidth">
+                <el-form-item :required="true" v-if="oForm.isMerchandiseJoin==1&&oForm.cardType==1&&(oForm.reduceTypeMerchandise!=2)"  label="是否限量：" :label-width="formLabelWidth">
                     <el-select v-model="oForm.isLimitMerchandise" placeholder="请选择">
                         <el-option
                                 v-for="item in canUse"
@@ -356,7 +356,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item :required="true" label="限购时间：" v-if="oForm.isLimitMerchandise==1&&oForm.cardType==1&&oForm.isMerchandiseJoin==1" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="限购时间：" v-if="oForm.isLimitMerchandise==1&&oForm.cardType==1&&oForm.isMerchandiseJoin==1&&(oForm.reduceTypeMerchandise!=2)" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.limitMerchandiseUnit">
                         <el-radio label="年">年</el-radio>
                         <el-radio label="月">月</el-radio>
@@ -364,7 +364,7 @@
                         <el-radio label="日">日</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item :required="true" label="限购次数：" v-if="oForm.isLimitMerchandise==1&&oForm.cardType==1&&oForm.isMerchandiseJoin==1" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="限购次数：" v-if="oForm.isLimitMerchandise==1&&oForm.cardType==1&&oForm.isMerchandiseJoin==1&&(oForm.reduceTypeMerchandise!=2)" :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oForm.numberMerchandise" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oForm.cardType==2" label="券包简短描述：" :label-width="formLabelWidth">
@@ -765,7 +765,7 @@
                         >删除</span>
                     </div>
                 </el-form-item>
-                <el-form-item :required="true" v-if="oIsMerchandiseJoin==1&&oCardType==1"  label="是否限量：" :label-width="formLabelWidth">
+                <el-form-item :required="true" v-if="oIsMerchandiseJoin==1&&oCardType==1&&(oReduceTypeMerchandise!=2)"  label="是否限量：" :label-width="formLabelWidth">
                     <el-select v-model="oIsLimitMerchandise" placeholder="请选择">
                         <el-option
                                 v-for="item in canUse"
@@ -775,7 +775,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item :required="true" label="限购时间：" v-if="oIsLimitMerchandise==1&&oCardType==1&&oIsMerchandiseJoin==1" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="限购时间：" v-if="oIsLimitMerchandise==1&&oCardType==1&&oIsMerchandiseJoin==1&&(oReduceTypeMerchandise!=2)" :label-width="formLabelWidth">
                     <el-radio-group v-model="oLimitMerchandiseUnit">
                         <el-radio label="年">年</el-radio>
                         <el-radio label="月">月</el-radio>
@@ -783,7 +783,7 @@
                         <el-radio label="日">日</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item :required="true" label="限购次数：" v-if="oIsLimitMerchandise==1&&oCardType==1&&oIsMerchandiseJoin==1" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="限购次数：" v-if="oIsLimitMerchandise==1&&oCardType==1&&oIsMerchandiseJoin==1&&(oReduceTypeMerchandise!=2)" :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oNumberMerchandise" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oCardType==2" label="券包简短描述：" :label-width="formLabelWidth">
@@ -1462,12 +1462,14 @@
                         jsonArr.push({ key: 'merchandiseSimpleDesc', value: this.oForm.merchandiseSimpleDesc});
                         jsonArr.push({ key: 'discountMoneyMerchandise', value: this.oForm.discountMoneyMerchandise});
                         jsonArr.push({ key: 'selectMerchandiseType', value: this.oForm.selectMerchandiseType});
-                        jsonArr.push({ key: 'isLimitMerchandise', value: this.oForm.isLimitMerchandise});
                         if(this.oForm.selectMerchandiseType!=0){
                             jsonArr.push({ key: 'merchandiseCode', value: this.oForm.merchandiseCode});
                         }
                         if(this.oForm.reduceTypeMerchandise==2){
                             jsonArr.push({ key: 'achieveMoneyMerchandise', value: this.oForm.achieveMoneyMerchandise});
+                            jsonArr.push({ key: 'isLimitMerchandise', value: '0'});
+                        }else{
+                            jsonArr.push({ key: 'isLimitMerchandise', value: this.oForm.isLimitMerchandise});
                         }
                         if(this.oForm.isLimitMerchandise!=0){
                             jsonArr.push({ key: 'numberMerchandise', value: this.oForm.numberMerchandise});
@@ -1934,12 +1936,15 @@
                         jsonArr.push({ key: 'merchandiseSimpleDesc', value: this.oMerchandiseSimpleDesc});
                         jsonArr.push({ key: 'discountMoneyMerchandise', value: this.oDiscountMoneyMerchandise});
                         jsonArr.push({ key: 'selectMerchandiseType', value: this.oSelectMerchandiseType});
-                        jsonArr.push({ key: 'isLimitMerchandise', value: this.oIsLimitMerchandise});
+
                         if(this.oSelectMerchandiseType!=0){
                             jsonArr.push({ key: 'merchandiseCode', value: merchandiseCodeList.join(',')});
                         }
                         if(this.oReduceTypeMerchandise==2){
                             jsonArr.push({ key: 'achieveMoneyMerchandise', value: this.oAchieveMoneyMerchandise});
+                            jsonArr.push({ key: 'isLimitMerchandise', value: '0'});
+                        }else{
+                            jsonArr.push({ key: 'isLimitMerchandise', value: this.oIsLimitMerchandise});
                         }
                         if(this.oIsLimitMerchandise!=0){
                             jsonArr.push({ key: 'numberMerchandise', value: this.oNumberMerchandise});
