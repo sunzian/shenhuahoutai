@@ -10,7 +10,7 @@
         <!--签到规则页面-->
         <div class="container">
             <el-form ref="form1" :model="form1">
-                <el-form-item label="连续签到天数" :label-width="formLabelWidth">
+                <!-- <el-form-item label="连续签到天数" :label-width="formLabelWidth">
                     <el-input
                             style="width: 250px"
                             v-model="form1.days"
@@ -24,7 +24,7 @@
                             v-model="form1.oGoldAward"
                             autocomplete="off"
                     ></el-input>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item :required="true" label="签到规则" :label-width="formLabelWidth">
                     <el-input style="width: 250px;" type="textarea" v-model="form1.oSignTips" autocomplete="off"></el-input>
                 </el-form-item>
@@ -443,10 +443,25 @@
                     return;
                 }
                 let jsonArr = [];
+                let goldAward;
                 jsonArr.push({key:"id",value:this.id});
-                jsonArr.push({key:"goldAward",value:this.form1.oGoldAward});
                 jsonArr.push({key:"signTips",value:this.form1.oSignTips});
+                console.log(this.tableData)
+                for (let i = 0;i < this.tableData.length;i ++) {
+                    if (!this.tableData[i].goldAward) {
+                        this.message = '连续签到奖励不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                    if (this.tableData[i].id == 1) {
+                        goldAward = this.tableData[i].goldAward;
+                        this.tableData.splice(i,1)
+                    }
+                }
+                jsonArr.push({key:"goldAward",value:goldAward});
                 jsonArr.push({key:"extraSignRuleJson",value: JSON.stringify(this.tableData)});
+                console.log(jsonArr)
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
                 var params = ParamsAppend(jsonArr);
@@ -489,6 +504,7 @@
                         console.log(data);
                         if (data.data.code == 'success') {
                             var oData = JSON.parse(Decrypt(data.data.data));
+                            oData.extraRuleList.unshift({continuousDays: 1,goldAward: oData.goldAward,id: 1})
                             console.log(oData);
                             this.id=oData.id;
                             this.tableData = oData.extraRuleList;

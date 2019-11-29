@@ -360,8 +360,8 @@
                         style="width: 250px"
                         v-model="oForm.rechargeMemo"
                         autocomplete="off"
-                        maxlength="30"
-                        type="textarea"
+                        maxlength="10"
+                        placeholder="最多输入10个字"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="金币活动描述" :label-width="formLabelWidth">
@@ -369,8 +369,8 @@
                         style="width: 250px"
                         v-model="oForm.goldActivityMemo"
                         autocomplete="off"
-                        maxlength="30"
-                        type="textarea"
+                        maxlength="10"
+                        placeholder="最多输入10个字"
                     ></el-input>
                 </el-form-item>
                 <el-form-item prop="openSnackStatus" label="是否开通套餐" :label-width="formLabelWidth">
@@ -940,18 +940,18 @@
                     <el-input
                         style="width: 250px"
                         v-model="oRechargeMemo"
-                        type="textarea"
                         autocomplete="off"
-                        maxlength="30"
+                        maxlength="10"
+                        placeholder="最多输入10个字"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="金币活动描述" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         v-model="oGoldActivityMemo"
-                        type="textarea"
                         autocomplete="off"
-                        maxlength="30"
+                        maxlength="10"
+                        placeholder="最多输入10个字"
                     ></el-input>
                 </el-form-item>
                 <el-form-item prop="openSnackStatus" label="是否开通套餐" :label-width="formLabelWidth">
