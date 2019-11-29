@@ -298,7 +298,7 @@
                                 color:rgba(255,255,255,1);
                                 font-weight: 800;
                                 ">今日影讯</div>
-                        <div class="poster-date">{{posterForm.date}}</div>
+                        <div class="poster-date">{{posterContent.dateInfo}}</div>
                         <div class="poster-name">{{posterContent.cinemaName}}</div>
                         <div class="poster-address el-icon-location-information" style="display: block;">{{posterContent.address}}</div>
                         <div class="poster-mobile el-icon-phone-outline" style="display: block;">{{posterContent.serviceMobile}}</div>
@@ -309,14 +309,14 @@
                             <span style="display: inline;border:1px solid pink;color: pink;font-size: 18px;">{{item.dimensional}}</span>
                         </span>
                         <span class="poster-area">{{item.duration}}分钟，{{item.area}}，{{item.language}}</span>
-                        <span class="poster-actor">{{item.actor}}</span>
+                        <div class="poster-actor">{{item.actor}}</div>
                         <div class="poster-sessionList">
                             <div class="poster-sessionInfo" v-for="(session, index) in item.sessionList" :key="index">
-                                <span style="font-size: 30px;font-weight:bold;color:rgba(51,51,51,1);">{{session.sessionTime}}</span>
-                                <span>
-                                    <span>{{session.sessDimensional}}&nbsp;{{session.sessLanguage}}</span>
-                                    <span style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">{{session.screenName}}</span>
-                                </span>
+                                <div style="font-size: 30px;font-weight:bold;color:rgba(51,51,51,1);">{{session.sessionTime}}</div>
+                                <div>
+                                    <div>{{session.sessDimensional}}&nbsp;{{session.sessLanguage}}</div>
+                                    <div style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">{{session.screenName}}</div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1064,6 +1064,11 @@ export default {
     position: absolute;
     left: 241px;
     top: 155px;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    display:-webkit-box;
+    -webkit-line-clamp:2;
+    -webkit-box-orient:vertical;
 }
 .poster-sessionList {
     position: relative;
