@@ -95,13 +95,13 @@
                     type="primary"
                     @click="back"
                     icon="el-icon-circle-plus-outline"
-                    style="float: right;margin-top: -20px"
+                    style="float: right;margin-top: 10px"
                 >返回影院列表</el-button>
                 <el-button
                     type="primary"
                     @click="addPage"
                     icon="el-icon-circle-plus-outline"
-                    style="float: right;margin-right: 10px;margin-top: -20px"
+                    style="float: right;margin-right: 10px;margin-top: 10px"
                 >新增奖品</el-button>
             </div>
             <el-table
@@ -188,7 +188,7 @@
                 <el-form-item :required="true" v-if="oForm.type==2" label="礼品名称：" :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oForm.name" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="优惠券名称：" :label-width="formLabelWidth" v-if="oForm.type == 1">
+                <el-form-item :required="true" label="选择优惠券：" :label-width="formLabelWidth" v-if="oForm.type == 1">
                     <el-button type="primary" @click="getAllCoupon">选择优惠券</el-button>
                 </el-form-item>
                 <el-form-item :required="true" label="所选优惠券：" :label-width="formLabelWidth" v-if="oForm.type == 1">

@@ -274,7 +274,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item :required="true" label="是否限制张数：" :label-width="formLabelWidth">
+                <el-form-item v-if="oForm.reduceType!=2" :required="true" label="是否限制张数：" :label-width="formLabelWidth">
                     <el-select v-model="oForm.oCanNum" placeholder="请选择">
                         <el-option
                                 v-for="item in canUse"
@@ -284,10 +284,10 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item :required="true" label="活动总张数：" v-if="oForm.oCanNum==1" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="活动总张数：" v-if="oForm.oCanNum==1&&(oForm.reduceType!=2)" :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oForm.oNum" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="是否限制个人张数：" :label-width="formLabelWidth">
+                <el-form-item v-if="oForm.reduceType!=2" :required="true" label="是否限制个人张数：" :label-width="formLabelWidth">
                     <el-select v-model="oForm.oneCanNum" placeholder="请选择">
                         <el-option
                                 v-for="item in canUse"
@@ -297,7 +297,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item :required="true" label="限购时间：" v-if="oForm.oneCanNum==1" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="限购时间：" v-if="oForm.oneCanNum==1&&(oForm.reduceType!=2)" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.limitSingleUnit">
                         <el-radio label="年">年</el-radio>
                         <el-radio label="月">月</el-radio>
@@ -305,7 +305,7 @@
                         <el-radio label="日">日</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item :required="true" label="个人总张数：" v-if="oForm.oneCanNum==1" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="个人总张数：" v-if="oForm.oneCanNum==1&&(oForm.reduceType!=2)" :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oForm.oneNum" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="使用须知：" :label-width="formLabelWidth">
@@ -526,7 +526,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item :required="true" label="是否限制张数：" :label-width="formLabelWidth">
+                <el-form-item v-if="oReduceType!=2" :required="true" label="是否限制张数：" :label-width="formLabelWidth">
                     <el-select v-model="oIsLimitTotal" placeholder="请选择">
                         <el-option
                                 v-for="item in canUse"
@@ -536,10 +536,10 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item :required="true" label="活动总张数：" v-if="oIsLimitTotal==1" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="活动总张数：" v-if="oIsLimitTotal==1&&(oReduceType!=2)" :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oTotalNumber" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="是否限制个人张数：" :label-width="formLabelWidth">
+                <el-form-item v-if="oReduceType!=2" :required="true" label="是否限制个人张数：" :label-width="formLabelWidth">
                     <el-select v-model="oIsLimitSingle" placeholder="请选择">
                         <el-option
                                 v-for="item in canUse"
@@ -549,7 +549,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item :required="true" label="限购时间：" v-if="oIsLimitSingle==1" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="限购时间：" v-if="oIsLimitSingle==1&&(oReduceType!=2)" :label-width="formLabelWidth">
                     <el-radio-group v-model="oLimitSingleUnit">
                         <el-radio label="年">年</el-radio>
                         <el-radio label="月">月</el-radio>
@@ -557,7 +557,7 @@
                         <el-radio label="日">日</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item :required="true" label="个人总张数：" v-if="oIsLimitSingle==1" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="个人总张数：" v-if="oIsLimitSingle==1&&(oReduceType!=2)" :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oSingleNumber" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="使用须知：" :label-width="formLabelWidth">
@@ -821,20 +821,22 @@
                     loading.close();
                     return;
                 }
-                if(this.oForm.reduceType==1){
-                    if(!this.oForm.discountMoney){
-                        this.message = '必填项不能为空，请检查！';
-                        this.open();
-                        loading.close();
-                        return;
+                if(this.oForm.discountMoney!=0){
+                    if(this.oForm.reduceType==1){
+                        if(!this.oForm.discountMoney){
+                            this.message = '必填项不能为空，请检查！';
+                            this.open();
+                            loading.close();
+                            return;
+                        }
                     }
-                }
-                if(this.oForm.reduceType==2){
-                    if(!this.oForm.discountMoney||!this.oForm.achieveMoney){
-                        this.message = '必填项不能为空，请检查！';
-                        this.open();
-                        loading.close();
-                        return;
+                    if(this.oForm.reduceType==2){
+                        if(!this.oForm.discountMoney||!this.oForm.achieveMoney){
+                            this.message = '必填项不能为空，请检查！';
+                            this.open();
+                            loading.close();
+                            return;
+                        }
                     }
                 }
                 if(this.oForm.selectFilmType==1||this.oForm.selectFilmType==2){
@@ -883,6 +885,11 @@
                 jsonArr.push({ key: 'reduceType', value: this.oForm.reduceType });
                 if( this.oForm.reduceType==2){
                     jsonArr.push({ key: 'achieveMoney', value: this.oForm.achieveMoney });
+                    jsonArr.push({ key: 'isLimitTotal', value: '0' });
+                    jsonArr.push({ key: 'isLimitSingle', value: '0' });
+                }else{
+                    jsonArr.push({ key: 'isLimitTotal', value: this.oForm.oCanNum });
+                    jsonArr.push({ key: 'isLimitSingle', value: this.oForm.oneCanNum });
                 }
                 jsonArr.push({ key: 'validPayType', value: this.oForm.validPayType });
                 jsonArr.push({ key: 'discountMoney', value: this.oForm.discountMoney });
@@ -893,7 +900,6 @@
                 jsonArr.push({ key: 'activityDesc', value: this.oForm.couponDesc });
                 jsonArr.push({ key: 'startTimeVal', value: this.startArr.join(',')});
                 jsonArr.push({ key: 'endTimeVal', value: this.endArr.join(',')});
-                jsonArr.push({ key: 'isLimitTotal', value: this.oForm.oCanNum });
                 if(this.oForm.oCanNum!=0){
                     jsonArr.push({ key: 'totalNumber', value: this.oForm.oNum });
                 }
@@ -901,7 +907,6 @@
                     jsonArr.push({ key: 'singleNumber', value: this.oForm.oneNum });
                     jsonArr.push({ key: 'limitSingleUnit', value: this.oForm.limitSingleUnit });
                 }
-                jsonArr.push({ key: 'isLimitSingle', value: this.oForm.oneCanNum });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
                 console.log(jsonArr);
@@ -1174,20 +1179,22 @@
                     loading.close();
                     return;
                 }
-                if(this.oReduceType==1){
-                    if(!this.oDiscountMoney){
-                        this.message = '必填项不能为空，请检查！';
-                        this.open();
-                        loading.close();
-                        return;
+                if(this.oDiscountMoney!=0){
+                    if(this.oReduceType==1){
+                        if(!this.oDiscountMoney){
+                            this.message = '必填项不能为空，请检查！';
+                            this.open();
+                            loading.close();
+                            return;
+                        }
                     }
-                }
-                if(this.oReduceType==2){
-                    if(!this.oDiscountMoney||!this.oAchieveMoney){
-                        this.message = '必填项不能为空，请检查！';
-                        this.open();
-                        loading.close();
-                        return;
+                    if(this.oReduceType==2){
+                        if(!this.oDiscountMoney||!this.oAchieveMoney){
+                            this.message = '必填项不能为空，请检查！';
+                            this.open();
+                            loading.close();
+                            return;
+                        }
                     }
                 }
                 if(this.oSelectMerchandiseType==1||this.oSelectMerchandiseType==2){
@@ -1226,6 +1233,11 @@
                 jsonArr.push({ key: 'reduceType', value: this.oReduceType });
                 if( this.oReduceType==2){
                     jsonArr.push({ key: 'achieveMoney', value: this.oAchieveMoney });
+                    jsonArr.push({ key: 'isLimitTotal', value: '0'});
+                    jsonArr.push({ key: 'isLimitSingle', value: '0'});
+                }else{
+                    jsonArr.push({ key: 'isLimitTotal', value: this.oIsLimitTotal });
+                    jsonArr.push({ key: 'isLimitSingle', value: this.oIsLimitSingle });
                 }
                 jsonArr.push({ key: 'validPayType', value: this.oValidPayType });
                 jsonArr.push({ key: 'discountMoney', value: this.oDiscountMoney });
@@ -1236,7 +1248,7 @@
                 jsonArr.push({ key: 'activityDesc', value: this.oActivityDesc });
                 jsonArr.push({ key: 'startTimeVal', value: this.startArr.join(',')});
                 jsonArr.push({ key: 'endTimeVal', value: this.endArr.join(',')});
-                jsonArr.push({ key: 'isLimitTotal', value: this.oIsLimitTotal });
+
                 if(this.oIsLimitTotal!=0){
                     jsonArr.push({ key: 'totalNumber', value: this.oTotalNumber });
                 }
@@ -1244,7 +1256,7 @@
                     jsonArr.push({ key: 'singleNumber', value: this.oSingleNumber });
                     jsonArr.push({ key: 'limitSingleUnit', value: this.oLimitSingleUnit });
                 }
-                jsonArr.push({ key: 'isLimitSingle', value: this.oIsLimitSingle });
+
                 jsonArr.push({ key: 'id', value: this.form.id });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });

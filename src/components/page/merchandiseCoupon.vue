@@ -509,6 +509,8 @@ export default {
                     console.log(data);
                     if (data.data.code == 'success') {
                         this.dialogFormVisible = true;
+                        // console.log(this.oForm.cinemaCode);
+                        this.getAllGoods(this.oForm.cinemaCode)
                         // console.log(this.oForm.checkedDays)
                         // let checkedDays = this.oForm.checkedDays.join(',');
                     } else if (data.data.code == 'nologin') {
@@ -540,20 +542,22 @@ export default {
                 loading.close();
                 return;
             }
-            if(this.oForm.reduceType==1){
-                if(!this.oForm.discountMoney){
-                    this.message = '必填项不能为空，请检查！';
-                    this.open();
-                    loading.close();
-                    return;
+            if(this.oForm.discountMoney!=0){
+                if(this.oForm.reduceType==1){
+                    if(!this.oForm.discountMoney){
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
                 }
-            }
-            if(this.oForm.reduceType==2){
-                if(!this.oForm.discountMoney||!this.oForm.achieveMoney){
-                    this.message = '必填项不能为空，请检查！';
-                    this.open();
-                    loading.close();
-                    return;
+                if(this.oForm.reduceType==2){
+                    if(!this.oForm.discountMoney||!this.oForm.achieveMoney){
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
                 }
             }
             if(this.oForm.selectMerchandiseType==1||this.oForm.selectMerchandiseType==2){
@@ -799,20 +803,22 @@ export default {
                 loading.close();
                 return;
             }
-            if(this.oReduceType==1){
-                if(!this.oDiscountMoney){
-                    this.message = '必填项不能为空，请检查！';
-                    this.open();
-                    loading.close();
-                    return;
+            if(this.oDiscountMoney!=0){
+                if(this.oReduceType==1){
+                    if(!this.oDiscountMoney){
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
                 }
-            }
-            if(this.oReduceType==2){
-                if(!this.oDiscountMoney||!this.oAchieveMoney){
-                    this.message = '必填项不能为空，请检查！';
-                    this.open();
-                    loading.close();
-                    return;
+                if(this.oReduceType==2){
+                    if(!this.oDiscountMoney||!this.oAchieveMoney){
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
                 }
             }
             if(this.oSelectMerchandiseType==1||this.oSelectMerchandiseType==2){

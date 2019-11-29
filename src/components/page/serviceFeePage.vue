@@ -677,6 +677,28 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
+            if(!this.oForm.serviceFeeName||!this.oForm.startDate||!this.oForm.endDate||this.date.length==0||!this.oForm.status||!this.oForm.thirdServiceFee||!this.oForm.memberServiceFee){
+                this.message = '必填项不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(this.oForm.selectHallType==2){
+                if(this.oForm.screenCode.length==0){
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
+            if(this.oForm.selectFilmType==2){
+                if(this.selectedSell.length==0){
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
             var jsonArr = [];
             jsonArr.push({ key: 'serviceFeeName', value: this.oForm.serviceFeeName });
             if (this.oForm.selectHallType == 2) {
@@ -1007,12 +1029,29 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            var jsonArr = [];
-            if (this.date.length == 0) {
-                this.message = '请选择时间段';
+            if(!this.oServiceFeeName||!this.oStartDate||!this.oEndDate||this.date.length==0||!this.oStatus||!this.oThirdServiceFee||!this.oMemberServiceFee){
+                this.message = '必填项不能为空，请检查！';
                 this.open();
+                loading.close();
                 return;
             }
+            if(this.oScreenType==2){
+                if(this.oScreenCode.length==0){
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
+            if(this.oFilmType==2){
+                if(this.selectedSell.length==0){
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
+            var jsonArr = [];
             if (this.oScreenType == 2) {
                 for (let i = 0; i < this.selectScreenCode.length; i++) {
                     if (!this.selectScreenCode[i].screenCode) {

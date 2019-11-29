@@ -85,6 +85,12 @@
                     background: 'rgba(0, 0, 0, 0.7)',
                     target: document.querySelector('.div1')
                 });
+                if(!this.oForm.miniRegisterNumber||!this.oForm.pointChangePercent){
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
                 var jsonArr = [];
                 jsonArr.push({ key: 'id', value: this.oForm.id });
                 jsonArr.push({ key: 'miniRegisterNumber', value: this.oForm.miniRegisterNumber });
