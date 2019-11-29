@@ -265,6 +265,19 @@
                 <el-form-item :required="true" label="折扣：" :label-width="formLabelWidth" v-if="oForm.reduceTypeFilm == 3&&oForm.cardType==1&&oForm.isFilmJoin==1">
                     <el-input style="width: 150px" v-model="oForm.discountMoneyFilm" autocomplete="off"></el-input>%
                 </el-form-item>
+                <el-form-item :required="true" v-if="oForm.isFilmJoin==1&&oForm.cardType==1"  label="是否限制每部影片购买数量：" :label-width="formLabelWidth">
+                    <el-select v-model="oForm.isLimitEachFilm" placeholder="请选择">
+                        <el-option
+                                v-for="item in canUse"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item :required="true" label="每部影片限购数量：" v-if="oForm.isLimitEachFilm==1&&oForm.cardType==1&&oForm.isFilmJoin==1" :label-width="formLabelWidth">
+                    <el-input style="width: 150px" v-model="oForm.eachFilmNumber" autocomplete="off"></el-input>
+                </el-form-item>
                 <el-form-item :required="true" v-if="oForm.isFilmJoin==1&&oForm.cardType==1"  label="是否限量：" :label-width="formLabelWidth">
                     <el-select v-model="oForm.isLimitFilm" placeholder="请选择">
                         <el-option
@@ -518,59 +531,6 @@
                 <el-button type="primary" @click="addRole">确 定</el-button>
             </div>
         </el-dialog>
-        <!--新增影片弹出框-->
-        <el-dialog title="选择影片" :visible.sync="drawer">
-            <div class="container">
-                <div class="handle-box">
-                    <el-input v-model="query.filmName" placeholder="影片名称" class="handle-input mr10"></el-input>
-                    <el-button type="primary" icon="el-icon-search" @click="openNext">搜索</el-button>
-                </div>
-                <el-table
-                        :data="sellTableData"
-                        border
-                        class="table"
-                        ref="multipleTable"
-                        header-cell-class-name="table-header"
-                        @selection-change="handleSelectionChange"
-                >
-                    <el-table-column label="操作" width="100" align="center">
-                        <template slot-scope="scope">
-                            <el-radio v-model="id" :label="scope.$index" @change.native="getCurrentRow(scope.$index)">&nbsp;</el-radio>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="name" label="图片">
-                        <template slot-scope="scope">
-                            <el-popover
-                                    placement="right"
-                                    title=""
-                                    trigger="hover">
-                                <img style="width:400px" :src="scope.row.image"/>
-                                <img slot="reference" :src="scope.row.image" :alt="scope.row.image" style="max-height: 50px;max-width: 130px">
-                            </el-popover>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="sort" label="影片名称" width="150">
-                        <template slot-scope="scope">{{scope.row.filmName}}</template>
-                    </el-table-column>
-                </el-table>
-                <div class="pagination">
-                    <el-pagination
-                            background
-                            layout="total, prev, pager, next"
-                            :current-page="query.aPageNo"
-                            :page-size="query.aPageSize"
-                            :total="query.aTotalCount"
-                            @current-change="aCurrentChange"
-                            @prev-click='aPrev'
-                            @next-click="aNext"
-                    ></el-pagination>
-                </div>
-            </div>
-            <div slot="footer" class="dialog-footer">
-                <el-button @click="drawer = false">取 消</el-button>
-                <el-button type="primary" @click="sureNext">确 定</el-button>
-            </div>
-        </el-dialog>
         <!-- 编辑弹出框 -->
         <el-dialog title="修改" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
@@ -683,6 +643,19 @@
                 </el-form-item>
                 <el-form-item :required="true" label="折扣：" :label-width="formLabelWidth" v-if="oReduceTypeFilm == 3&&oCardType==1">
                     <el-input style="width: 150px" v-model="oDiscountMoneyFilm" autocomplete="off"></el-input>%
+                </el-form-item>
+                <el-form-item :required="true" v-if="oIsFilmJoin==1&&oCardType==1"  label="是否限制每部影片购买数量：" :label-width="formLabelWidth">
+                    <el-select v-model="oIsLimitEachFilm" placeholder="请选择">
+                        <el-option
+                                v-for="item in canUse"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item :required="true" label="每部影片限购数量：" v-if="oIsLimitEachFilm==1&&oCardType==1&&oIsFilmJoin==1" :label-width="formLabelWidth">
+                    <el-input style="width: 150px" v-model="oEachFilmNumber" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oIsFilmJoin==1&&oCardType==1"  label="是否限量：" :label-width="formLabelWidth">
                     <el-select v-model="oIsLimitFilm" placeholder="请选择">
@@ -936,6 +909,59 @@
                 <el-button @click="exChanger">确 定</el-button>
             </span>
         </el-dialog>
+        <!--新增影片弹出框-->
+        <el-dialog title="选择影片" :visible.sync="drawer">
+            <div class="container">
+                <div class="handle-box">
+                    <el-input v-model="query.filmName" placeholder="影片名称" class="handle-input mr10"></el-input>
+                    <el-button type="primary" icon="el-icon-search" @click="openNext">搜索</el-button>
+                </div>
+                <el-table
+                        :data="sellTableData"
+                        border
+                        class="table"
+                        ref="multipleTable"
+                        header-cell-class-name="table-header"
+                        @selection-change="handleSelectionChange"
+                >
+                    <el-table-column label="操作" width="100" align="center">
+                        <template slot-scope="scope">
+                            <el-radio v-model="id" :label="scope.$index" @change.native="getCurrentRow(scope.$index)">&nbsp;</el-radio>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="name" label="图片">
+                        <template slot-scope="scope">
+                            <el-popover
+                                    placement="right"
+                                    title=""
+                                    trigger="hover">
+                                <img style="width:400px" :src="scope.row.image"/>
+                                <img slot="reference" :src="scope.row.image" :alt="scope.row.image" style="max-height: 50px;max-width: 130px">
+                            </el-popover>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="sort" label="影片名称" width="150">
+                        <template slot-scope="scope">{{scope.row.filmName}}</template>
+                    </el-table-column>
+                </el-table>
+                <div class="pagination">
+                    <el-pagination
+                            background
+                            layout="total, prev, pager, next"
+                            :current-page="query.aPageNo"
+                            :page-size="query.aPageSize"
+                            :total="query.aTotalCount"
+                            @current-change="aCurrentChange"
+                            @prev-click='aPrev'
+                            @next-click="aNext"
+                    ></el-pagination>
+                </div>
+            </div>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="drawer = false">取 消</el-button>
+                <el-button type="primary" @click="sureNext">确 定</el-button>
+            </div>
+        </el-dialog>
         <!--新增卖品弹出框-->
         <el-dialog title="选择卖品" :visible.sync="oDrawer">
             <div class="container">
@@ -1113,6 +1139,8 @@
                 oDrawer: false,//选择商品弹出框
                 value1:'',
                 oCardType:'',
+                oIsLimitEachFilm:'',
+                oEachFilmNumber:'',
                 oIsFilmJoin:'',
                 oCinemaName: '',
                 oNumberFilm: '',
@@ -1206,6 +1234,7 @@
                     selectHallType: '0',//选择影厅
                     benefitType:'0',//权益类型
                     selectFilmFormatType:'0',//选择制式
+                    isLimitEachFilm:'0',//是否限制每部影片限购数量
                     code:[],//选择影院
                     filmCode: '',
                     filmName: '',
@@ -1441,6 +1470,10 @@
                         jsonArr.push({ key: 'selectFilmFormatType', value: this.oForm.selectFilmFormatType});
                         jsonArr.push({ key: 'selectFilmType', value: this.oForm.selectFilmType});
                         jsonArr.push({ key: 'isLimitFilm', value: this.oForm.isLimitFilm});
+                        jsonArr.push({ key: 'isLimitEachFilm', value: this.oForm.isLimitEachFilm});
+                        if(this.oForm.isLimitEachFilm!=0){
+                            jsonArr.push({ key: 'eachFilmNumber', value: this.oForm.eachFilmNumber});
+                        }
                         if(this.oForm.selectHallType!=0){
                             jsonArr.push({ key: 'screenCode', value: this.oForm.screenCode});
                         }
@@ -1527,6 +1560,7 @@
                             this.oForm.reduceType='1';
                             this.oForm.selectFilmFormatType='0';
                             this.oForm.selectFilmType='0';
+                            this.oForm.isLimitEachFilm='0';
                             this.oForm.isLimitFilm='0';
                             this.oForm.filmCode='';
                             this.oForm.numberFilm='';
@@ -1748,6 +1782,13 @@
                                 break;
                             }
                         }
+                        for (let x in this.canUse) {
+                            if (this.canUse[x].value == JSON.parse(Decrypt(data.data.data)).benefitCard.isLimitEachFilm) {
+                                this.oIsLimitEachFilm = this.canUse[x].value;
+                                break;
+                            }
+                        }
+                        this.oEachFilmNumber = JSON.parse(Decrypt(data.data.data)).benefitCard.eachFilmNumber;
                         this.oLimitFilmUnit = JSON.parse(Decrypt(data.data.data)).benefitCard.limitFilmUnit;
                         this.oNumberFilm = JSON.parse(Decrypt(data.data.data)).benefitCard.numberFilm;
                         if (JSON.parse(Decrypt(data.data.data)).benefitCard.isMerchandiseJoin == 0) {
@@ -1915,6 +1956,10 @@
                         jsonArr.push({ key: 'selectFilmFormatType', value: this.oSelectFilmFormatType});
                         jsonArr.push({ key: 'selectFilmType', value: this.oSelectFilmType});
                         jsonArr.push({ key: 'isLimitFilm', value: this.oIsLimitFilm});
+                        jsonArr.push({ key: 'isLimitEachFilm', value: this.oIsLimitEachFilm});
+                        if(this.oIsLimitEachFilm!=0){
+                            jsonArr.push({ key: 'eachFilmNumber', value: this.oEachFilmNumber});
+                        }
                         if(this.oSelectHallType!=0){
                             jsonArr.push({ key: 'screenCode', value: this.oScreenCode});
                         }
