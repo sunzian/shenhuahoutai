@@ -23,30 +23,45 @@
                     ></el-option>
                 </el-select>
                 <el-date-picker
-                        v-model="query.startDate"
-                        type="date"
-                        class="mr10"
-                        value-format="yyyy-MM-dd"
-                        format="yyyy-MM-dd"
-                        placeholder="开始时间（起）">
-                </el-date-picker>
+                    v-model="query.startDate"
+                    type="date"
+                    class="mr10"
+                    value-format="yyyy-MM-dd"
+                    format="yyyy-MM-dd"
+                    placeholder="开始时间（起）"
+                ></el-date-picker>
                 <el-date-picker
-                        v-model="query.endDate"
-                        type="date"
-                        class="mr10"
-                        value-format="yyyy-MM-dd"
-                        format="yyyy-MM-dd"
-                        placeholder="结束时间（止）">
-                </el-date-picker>
-                <el-select clearable v-model="query.paymentType" placeholder="费用支付类型" class="handle-select mr10">
+                    v-model="query.endDate"
+                    type="date"
+                    class="mr10"
+                    value-format="yyyy-MM-dd"
+                    format="yyyy-MM-dd"
+                    placeholder="结束时间（止）"
+                ></el-date-picker>
+                <el-select
+                    clearable
+                    v-model="query.paymentType"
+                    placeholder="费用支付类型"
+                    class="handle-select mr10"
+                >
                     <el-option key="1" label="包年" value="1"></el-option>
                     <el-option key="2" label="按票收费" value="2"></el-option>
                 </el-select>
-                <el-select clearable v-model="query.reportedType" placeholder="票价上报方式" class="handle-select mr10">
+                <el-select
+                    clearable
+                    v-model="query.reportedType"
+                    placeholder="票价上报方式"
+                    class="handle-select mr10"
+                >
                     <el-option key="1" label="标准价格上报" value="1"></el-option>
                     <el-option key="2" label="优惠后价格上报" value="2"></el-option>
                 </el-select>
-                <el-button style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
+                <el-button
+                    style="margin-top: 10px;width: 90px;"
+                    type="primary"
+                    icon="el-icon-search"
+                    @click="Search"
+                >搜索</el-button>
             </div>
             <el-table
                 :data="tableData"
@@ -57,7 +72,7 @@
                 header-cell-class-name="table-header"
                 @selection-change="handleSelectionChange"
             >
-                <el-table-column prop="code" label="影院编码" fixed  width="140">
+                <el-table-column prop="code" label="影院编码" fixed width="140">
                     <template slot-scope="scope">{{scope.row.cinemaCode}}</template>
                 </el-table-column>
                 <el-table-column prop="name" label="影院名称" fixed>
@@ -79,10 +94,10 @@
                     <template slot-scope="scope">{{scope.row.memberCardPayCommissionFee}}</template>
                 </el-table-column>
                 <!--<el-table-column prop="booleans" label="是否开通套餐">-->
-                    <!--<template slot-scope="scope">-->
-                        <!--<el-tag v-if="scope.row.openSnackStatus == 1" type="success">已开通</el-tag>-->
-                        <!--<el-tag v-else type="danger">未开通</el-tag>-->
-                    <!--</template>-->
+                <!--<template slot-scope="scope">-->
+                <!--<el-tag v-if="scope.row.openSnackStatus == 1" type="success">已开通</el-tag>-->
+                <!--<el-tag v-else type="danger">未开通</el-tag>-->
+                <!--</template>-->
                 <!--</el-table-column>-->
                 <el-table-column prop="booleans" label="是否支持卖品送餐" width="140" align="center">
                     <template slot-scope="scope">
@@ -91,52 +106,58 @@
                     </template>
                 </el-table-column>
                 <!--<el-table-column prop="string" label="短信平台">-->
-                    <!--<template slot-scope="scope">-->
-                        <!--<el-tag v-if="scope.row.messagePlatformType == 1" type="info">专信云</el-tag>-->
-                        <!--<el-tag v-else type="info">三体</el-tag>-->
-                    <!--</template>-->
+                <!--<template slot-scope="scope">-->
+                <!--<el-tag v-if="scope.row.messagePlatformType == 1" type="info">专信云</el-tag>-->
+                <!--<el-tag v-else type="info">三体</el-tag>-->
+                <!--</template>-->
                 <!--</el-table-column>-->
                 <!--<el-table-column prop="booleans" label="是否开通服务">-->
-                    <!--<template slot-scope="scope">-->
-                        <!--<el-tag v-if="scope.row.openStatus == 1" type="success">是</el-tag>-->
-                        <!--<el-tag v-else type="danger">否</el-tag>-->
-                    <!--</template>-->
+                <!--<template slot-scope="scope">-->
+                <!--<el-tag v-if="scope.row.openStatus == 1" type="success">是</el-tag>-->
+                <!--<el-tag v-else type="danger">否</el-tag>-->
+                <!--</template>-->
                 <!--</el-table-column>-->
                 <!--<el-table-column prop="string" label="费用支付类型">-->
-                    <!--<template slot-scope="scope">-->
-                        <!--<el-tag v-if="scope.row.paymentType == 1" type="info">包年</el-tag>-->
-                        <!--<el-tag v-else type="info">按票收费</el-tag>-->
-                    <!--</template>-->
+                <!--<template slot-scope="scope">-->
+                <!--<el-tag v-if="scope.row.paymentType == 1" type="info">包年</el-tag>-->
+                <!--<el-tag v-else type="info">按票收费</el-tag>-->
+                <!--</template>-->
                 <!--</el-table-column>-->
                 <el-table-column prop="number" label="剩余票数" width="90">
-                        <template v-if="scope.row.paymentType == 2" slot-scope="scope">{{scope.row.remainTicketsNumber}}</template>
+                    <template
+                        v-if="scope.row.paymentType == 2"
+                        slot-scope="scope"
+                    >{{scope.row.remainTicketsNumber}}</template>
                 </el-table-column>
                 <el-table-column prop="time" label="到期时间" width="150">
-                        <template v-if="scope.row.paymentType == 1" slot-scope="scope">{{scope.row.expireDate}}</template>
+                    <template
+                        v-if="scope.row.paymentType == 1"
+                        slot-scope="scope"
+                    >{{scope.row.expireDate}}</template>
                 </el-table-column>
                 <!--<el-table-column prop="string" label="票价上报方式">-->
-                    <!--<template slot-scope="scope">-->
-                        <!--<el-tag v-if="scope.row.reportedType == 1" type="info">标准价格上报</el-tag>-->
-                        <!--<el-tag v-else type="info">优惠后价格上报</el-tag>-->
-                    <!--</template>-->
+                <!--<template slot-scope="scope">-->
+                <!--<el-tag v-if="scope.row.reportedType == 1" type="info">标准价格上报</el-tag>-->
+                <!--<el-tag v-else type="info">优惠后价格上报</el-tag>-->
+                <!--</template>-->
                 <!--</el-table-column>-->
                 <!--<el-table-column prop="booleans" label="是否开通会员卡">-->
-                    <!--<template slot-scope="scope">-->
-                        <!--<el-tag v-if="scope.row.openMemberCardStatus == 1" type="success">开通</el-tag>-->
-                        <!--<el-tag v-else type="danger">未开通</el-tag>-->
-                    <!--</template>-->
+                <!--<template slot-scope="scope">-->
+                <!--<el-tag v-if="scope.row.openMemberCardStatus == 1" type="success">开通</el-tag>-->
+                <!--<el-tag v-else type="danger">未开通</el-tag>-->
+                <!--</template>-->
                 <!--</el-table-column>-->
                 <!--<el-table-column prop="booleans" label="会员卡是否门店通用">-->
-                    <!--<template slot-scope="scope">-->
-                        <!--<el-tag v-if="scope.row.memberCardCommonUseStatus == 1" type="success">是</el-tag>-->
-                        <!--<el-tag v-else type="danger">否</el-tag>-->
-                    <!--</template>-->
+                <!--<template slot-scope="scope">-->
+                <!--<el-tag v-if="scope.row.memberCardCommonUseStatus == 1" type="success">是</el-tag>-->
+                <!--<el-tag v-else type="danger">否</el-tag>-->
+                <!--</template>-->
                 <!--</el-table-column>-->
                 <!--<el-table-column prop="booleans" label="会员卡支付是否可用优惠券">-->
-                    <!--<template slot-scope="scope">-->
-                        <!--<el-tag v-if="scope.row.ticketsForMemberCardPayStatus == 1" type="success">是</el-tag>-->
-                        <!--<el-tag v-else type="danger">否</el-tag>-->
-                    <!--</template>-->
+                <!--<template slot-scope="scope">-->
+                <!--<el-tag v-if="scope.row.ticketsForMemberCardPayStatus == 1" type="success">是</el-tag>-->
+                <!--<el-tag v-else type="danger">否</el-tag>-->
+                <!--</template>-->
                 <!--</el-table-column>-->
                 <el-table-column label="操作" width="100" align="center" fixed="right">
                     <template slot-scope="scope">
@@ -174,30 +195,70 @@
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="影院名称" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" :disabled="true" v-model="oCinemaName" autocomplete="off"></el-input>
+                    <el-input
+                        style="width: 250px"
+                        :disabled="true"
+                        v-model="oCinemaName"
+                        autocomplete="off"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item label="所在省份" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" :disabled="true" v-model="oProvince" autocomplete="off"></el-input>
+                    <el-input
+                        style="width: 250px"
+                        :disabled="true"
+                        v-model="oProvince"
+                        autocomplete="off"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item label="所在城市" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" :disabled="true" v-model="oCity" autocomplete="off"></el-input>
+                    <el-input
+                        style="width: 250px"
+                        :disabled="true"
+                        v-model="oCity"
+                        autocomplete="off"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item label="详细地址" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" :disabled="true" v-model="oAddress" autocomplete="off"></el-input>
+                    <el-input
+                        style="width: 250px"
+                        :disabled="true"
+                        v-model="oAddress"
+                        autocomplete="off"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item label="经度" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" :disabled="true" v-model="oLongitude" autocomplete="off"></el-input>
+                    <el-input
+                        style="width: 250px"
+                        :disabled="true"
+                        v-model="oLongitude"
+                        autocomplete="off"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item label="纬度" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" :disabled="true" v-model="oLatitude" autocomplete="off"></el-input>
+                    <el-input
+                        style="width: 250px"
+                        :disabled="true"
+                        v-model="oLatitude"
+                        autocomplete="off"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="影院联系人姓名" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" maxlength="20" v-model="oConcatName" autocomplete="off"></el-input>
+                    <el-input
+                        style="width: 250px"
+                        maxlength="20"
+                        v-model="oConcatName"
+                        autocomplete="off"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="影院联系人电话" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oConcatMobile" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item :required="true" prop="serviceMobile" label="客服电话" :label-width="formLabelWidth">
+                <el-form-item
+                    :required="true"
+                    prop="serviceMobile"
+                    label="客服电话"
+                    :label-width="formLabelWidth"
+                >
                     <el-input style="width: 250px" v-model="oServiceMobile" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="开场前的购票时间限制" :label-width="formLabelWidth">
@@ -249,15 +310,21 @@
                 </el-form-item>
                 <el-form-item label="金币活动描述 " :label-width="formLabelWidth">
                     <el-input
-                            style="width: 250px"
-                            type="textarea"
-                            v-model="oGoldActivityMemo"
-                            autocomplete="off"
-                            maxlength="200"
+                        style="width: 250px"
+                        v-model="oGoldActivityMemo"
+                        autocomplete="off"
+                        maxlength="10"
+                        placeholder="最多可输入10个字"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="充值活动描述" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="oRechargeMemo" maxlength="20" autocomplete="off"></el-input>
+                    <el-input
+                        style="width: 250px"
+                        v-model="oRechargeMemo"
+                        maxlength="10"
+                        placeholder="最多可输入10个字"
+                        autocomplete="off"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="是否开通套餐" :label-width="formLabelWidth">
                     <el-select v-model="oOpenSnackStatus" @change="openServe">
@@ -269,11 +336,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item
-                    label="是否小卖配送"
-                    :label-width="formLabelWidth"
-                    :required="true"
-                >
+                <el-form-item label="是否小卖配送" :label-width="formLabelWidth" :required="true">
                     <el-select v-model="oSnackDispatcherStatus" @change="openServe">
                         <el-option
                             v-for="info in boolean"
@@ -312,185 +375,181 @@
                     ></el-time-picker>
                 </el-form-item>
                 <!--<el-form-item label="短信平台类型" :label-width="formLabelWidth">-->
-                    <!--<el-radio-group v-model="oMessagePlatformType">-->
-                        <!--<el-radio label="1">专信云</el-radio>-->
-                        <!--<el-radio label="2">三体</el-radio>-->
-                    <!--</el-radio-group>-->
+                <!--<el-radio-group v-model="oMessagePlatformType">-->
+                <!--<el-radio label="1">专信云</el-radio>-->
+                <!--<el-radio label="2">三体</el-radio>-->
+                <!--</el-radio-group>-->
                 <!--</el-form-item>-->
                 <!--<el-form-item-->
-                    <!--label="注册验证码"-->
-                    <!--:label-width="formLabelWidth"-->
-                    <!--v-if="oMessagePlatformType"-->
+                <!--label="注册验证码"-->
+                <!--:label-width="formLabelWidth"-->
+                <!--v-if="oMessagePlatformType"-->
                 <!--&gt;-->
-                    <!--<el-input-->
-                        <!--style="width: 250px"-->
-                        <!--v-model="oMessageType1"-->
-                        <!--autocomplete="off"-->
-                        <!--v-if="oMessagePlatformType==2"-->
-                        <!--placeholder="短信模板id"-->
-                    <!--&gt;</el-input>-->
-                    <!--<el-input-->
-                        <!--v-if="oMessagePlatformType==1"-->
-                        <!--style="width: 250px"-->
-                        <!--v-model="oMessageType1"-->
-                        <!--autocomplete="off"-->
-                        <!--type="textarea"-->
-                        <!--placeholder="短信内容，长度不超过200个汉字"-->
-                        <!--maxlength="200"-->
-                        <!--show-word-limit-->
-                    <!--&gt;</el-input>-->
+                <!--<el-input-->
+                <!--style="width: 250px"-->
+                <!--v-model="oMessageType1"-->
+                <!--autocomplete="off"-->
+                <!--v-if="oMessagePlatformType==2"-->
+                <!--placeholder="短信模板id"-->
+                <!--&gt;</el-input>-->
+                <!--<el-input-->
+                <!--v-if="oMessagePlatformType==1"-->
+                <!--style="width: 250px"-->
+                <!--v-model="oMessageType1"-->
+                <!--autocomplete="off"-->
+                <!--type="textarea"-->
+                <!--placeholder="短信内容，长度不超过200个汉字"-->
+                <!--maxlength="200"-->
+                <!--show-word-limit-->
+                <!--&gt;</el-input>-->
                 <!--</el-form-item>-->
                 <!--<el-form-item-->
-                    <!--label="购票成功"-->
-                    <!--:label-width="formLabelWidth"-->
-                    <!--v-if="oMessagePlatformType"-->
+                <!--label="购票成功"-->
+                <!--:label-width="formLabelWidth"-->
+                <!--v-if="oMessagePlatformType"-->
                 <!--&gt;-->
-                    <!--<el-input-->
-                        <!--style="width: 250px"-->
-                        <!--v-model="oMessageType2"-->
-                        <!--autocomplete="off"-->
-                        <!--v-if="oMessagePlatformType==2"-->
-                        <!--placeholder="短信模板id"-->
-                    <!--&gt;</el-input>-->
-                    <!--<el-input-->
-                        <!--v-if="oMessagePlatformType==1"-->
-                        <!--style="width: 250px"-->
-                        <!--v-model="oMessageType2"-->
-                        <!--autocomplete="off"-->
-                        <!--type="textarea"-->
-                        <!--placeholder="短信内容，长度不超过200个汉字"-->
-                        <!--maxlength="200"-->
-                        <!--show-word-limit-->
-                    <!--&gt;</el-input>-->
+                <!--<el-input-->
+                <!--style="width: 250px"-->
+                <!--v-model="oMessageType2"-->
+                <!--autocomplete="off"-->
+                <!--v-if="oMessagePlatformType==2"-->
+                <!--placeholder="短信模板id"-->
+                <!--&gt;</el-input>-->
+                <!--<el-input-->
+                <!--v-if="oMessagePlatformType==1"-->
+                <!--style="width: 250px"-->
+                <!--v-model="oMessageType2"-->
+                <!--autocomplete="off"-->
+                <!--type="textarea"-->
+                <!--placeholder="短信内容，长度不超过200个汉字"-->
+                <!--maxlength="200"-->
+                <!--show-word-limit-->
+                <!--&gt;</el-input>-->
                 <!--</el-form-item>-->
                 <!--<el-form-item-->
-                    <!--label="下单失败"-->
-                    <!--:label-width="formLabelWidth"-->
-                    <!--v-if="oMessagePlatformType"-->
+                <!--label="下单失败"-->
+                <!--:label-width="formLabelWidth"-->
+                <!--v-if="oMessagePlatformType"-->
                 <!--&gt;-->
-                    <!--<el-input-->
-                        <!--style="width: 250px"-->
-                        <!--v-model="oMessageType3"-->
-                        <!--autocomplete="off"-->
-                        <!--v-if="oMessagePlatformType==2"-->
-                        <!--placeholder="短信模板id"-->
-                    <!--&gt;</el-input>-->
-                    <!--<el-input-->
-                        <!--v-if="oMessagePlatformType==1"-->
-                        <!--style="width: 250px"-->
-                        <!--v-model="oMessageType3"-->
-                        <!--autocomplete="off"-->
-                        <!--type="textarea"-->
-                        <!--placeholder="短信内容，长度不超过200个汉字"-->
-                        <!--maxlength="200"-->
-                        <!--show-word-limit-->
-                    <!--&gt;</el-input>-->
+                <!--<el-input-->
+                <!--style="width: 250px"-->
+                <!--v-model="oMessageType3"-->
+                <!--autocomplete="off"-->
+                <!--v-if="oMessagePlatformType==2"-->
+                <!--placeholder="短信模板id"-->
+                <!--&gt;</el-input>-->
+                <!--<el-input-->
+                <!--v-if="oMessagePlatformType==1"-->
+                <!--style="width: 250px"-->
+                <!--v-model="oMessageType3"-->
+                <!--autocomplete="off"-->
+                <!--type="textarea"-->
+                <!--placeholder="短信内容，长度不超过200个汉字"-->
+                <!--maxlength="200"-->
+                <!--show-word-limit-->
+                <!--&gt;</el-input>-->
                 <!--</el-form-item>-->
                 <!--<el-form-item-->
-                    <!--label="退票通知"-->
-                    <!--:label-width="formLabelWidth"-->
-                    <!--v-if="oMessagePlatformType"-->
+                <!--label="退票通知"-->
+                <!--:label-width="formLabelWidth"-->
+                <!--v-if="oMessagePlatformType"-->
                 <!--&gt;-->
-                    <!--<el-input-->
-                        <!--style="width: 250px"-->
-                        <!--v-model="oMessageType4"-->
-                        <!--autocomplete="off"-->
-                        <!--v-if="oMessagePlatformType==2"-->
-                        <!--placeholder="短信模板id"-->
-                    <!--&gt;</el-input>-->
-                    <!--<el-input-->
-                        <!--v-if="oMessagePlatformType==1"-->
-                        <!--style="width: 250px"-->
-                        <!--v-model="oMessageType4"-->
-                        <!--autocomplete="off"-->
-                        <!--type="textarea"-->
-                        <!--placeholder="短信内容，长度不超过200个汉字"-->
-                        <!--maxlength="200"-->
-                        <!--show-word-limit-->
-                    <!--&gt;</el-input>-->
+                <!--<el-input-->
+                <!--style="width: 250px"-->
+                <!--v-model="oMessageType4"-->
+                <!--autocomplete="off"-->
+                <!--v-if="oMessagePlatformType==2"-->
+                <!--placeholder="短信模板id"-->
+                <!--&gt;</el-input>-->
+                <!--<el-input-->
+                <!--v-if="oMessagePlatformType==1"-->
+                <!--style="width: 250px"-->
+                <!--v-model="oMessageType4"-->
+                <!--autocomplete="off"-->
+                <!--type="textarea"-->
+                <!--placeholder="短信内容，长度不超过200个汉字"-->
+                <!--maxlength="200"-->
+                <!--show-word-limit-->
+                <!--&gt;</el-input>-->
                 <!--</el-form-item>-->
                 <!--<el-form-item-->
-                    <!--label="会员卡充值"-->
-                    <!--:label-width="formLabelWidth"-->
-                    <!--v-if="oMessagePlatformType"-->
+                <!--label="会员卡充值"-->
+                <!--:label-width="formLabelWidth"-->
+                <!--v-if="oMessagePlatformType"-->
                 <!--&gt;-->
-                    <!--<el-input-->
-                        <!--style="width: 250px"-->
-                        <!--v-model="oMessageType5"-->
-                        <!--autocomplete="off"-->
-                        <!--v-if="oMessagePlatformType==2"-->
-                        <!--placeholder="短信模板id"-->
-                    <!--&gt;</el-input>-->
-                    <!--<el-input-->
-                        <!--v-if="oMessagePlatformType==1"-->
-                        <!--style="width: 250px"-->
-                        <!--v-model="oMessageType5"-->
-                        <!--autocomplete="off"-->
-                        <!--type="textarea"-->
-                        <!--placeholder="短信内容，长度不超过200个汉字"-->
-                        <!--maxlength="200"-->
-                        <!--show-word-limit-->
-                    <!--&gt;</el-input>-->
+                <!--<el-input-->
+                <!--style="width: 250px"-->
+                <!--v-model="oMessageType5"-->
+                <!--autocomplete="off"-->
+                <!--v-if="oMessagePlatformType==2"-->
+                <!--placeholder="短信模板id"-->
+                <!--&gt;</el-input>-->
+                <!--<el-input-->
+                <!--v-if="oMessagePlatformType==1"-->
+                <!--style="width: 250px"-->
+                <!--v-model="oMessageType5"-->
+                <!--autocomplete="off"-->
+                <!--type="textarea"-->
+                <!--placeholder="短信内容，长度不超过200个汉字"-->
+                <!--maxlength="200"-->
+                <!--show-word-limit-->
+                <!--&gt;</el-input>-->
                 <!--</el-form-item>-->
                 <!--<el-form-item-->
-                    <!--label="卖品送餐"-->
-                    <!--:label-width="formLabelWidth"-->
-                    <!--v-if="oMessagePlatformType"-->
+                <!--label="卖品送餐"-->
+                <!--:label-width="formLabelWidth"-->
+                <!--v-if="oMessagePlatformType"-->
                 <!--&gt;-->
-                    <!--<el-input-->
-                        <!--style="width: 250px"-->
-                        <!--v-model="oMessageType6"-->
-                        <!--autocomplete="off"-->
-                        <!--v-if="oMessagePlatformType==2"-->
-                        <!--placeholder="短信模板id"-->
-                    <!--&gt;</el-input>-->
-                    <!--<el-input-->
-                        <!--v-if="oMessagePlatformType==1"-->
-                        <!--style="width: 250px"-->
-                        <!--v-model="oMessageType6"-->
-                        <!--autocomplete="off"-->
-                        <!--type="textarea"-->
-                        <!--placeholder="短信内容，长度不超过200个汉字"-->
-                        <!--maxlength="200"-->
-                        <!--show-word-limit-->
-                    <!--&gt;</el-input>-->
+                <!--<el-input-->
+                <!--style="width: 250px"-->
+                <!--v-model="oMessageType6"-->
+                <!--autocomplete="off"-->
+                <!--v-if="oMessagePlatformType==2"-->
+                <!--placeholder="短信模板id"-->
+                <!--&gt;</el-input>-->
+                <!--<el-input-->
+                <!--v-if="oMessagePlatformType==1"-->
+                <!--style="width: 250px"-->
+                <!--v-model="oMessageType6"-->
+                <!--autocomplete="off"-->
+                <!--type="textarea"-->
+                <!--placeholder="短信内容，长度不超过200个汉字"-->
+                <!--maxlength="200"-->
+                <!--show-word-limit-->
+                <!--&gt;</el-input>-->
                 <!--</el-form-item>-->
                 <!--<el-form-item label="短信平台账号" :label-width="formLabelWidth">-->
-                    <!--<el-input-->
-                        <!--style="width: 250px"-->
-                        <!--v-model="oMessagePlatformAccount"-->
-                        <!--autocomplete="off"-->
-                    <!--&gt;</el-input>-->
+                <!--<el-input-->
+                <!--style="width: 250px"-->
+                <!--v-model="oMessagePlatformAccount"-->
+                <!--autocomplete="off"-->
+                <!--&gt;</el-input>-->
                 <!--</el-form-item>-->
                 <!--<el-form-item label="短信平台密码" :label-width="formLabelWidth">-->
-                    <!--<el-input-->
-                        <!--style="width: 250px"-->
-                        <!--v-model="oMessagePlatformPassword"-->
-                        <!--autocomplete="off"-->
-                    <!--&gt;</el-input>-->
+                <!--<el-input-->
+                <!--style="width: 250px"-->
+                <!--v-model="oMessagePlatformPassword"-->
+                <!--autocomplete="off"-->
+                <!--&gt;</el-input>-->
                 <!--</el-form-item>-->
                 <!--<el-form-item label="短信平台签名id" :label-width="formLabelWidth">-->
-                    <!--<el-input-->
-                        <!--style="width: 250px"-->
-                        <!--v-model="oMessagePlatformSignId"-->
-                        <!--autocomplete="off"-->
-                    <!--&gt;</el-input>-->
+                <!--<el-input-->
+                <!--style="width: 250px"-->
+                <!--v-model="oMessagePlatformSignId"-->
+                <!--autocomplete="off"-->
+                <!--&gt;</el-input>-->
                 <!--</el-form-item>-->
                 <!--<el-form-item prop="openStatus" label="是否开通服务" :label-width="formLabelWidth">-->
-                    <!--<el-select v-model="oOpenStatus" @change="openServe">-->
-                        <!--<el-option-->
-                            <!--v-for="info in boolean"-->
-                            <!--:key="info.value"-->
-                            <!--:label="info.label"-->
-                            <!--:value="info.value"-->
-                        <!--&gt;</el-option>-->
-                    <!--</el-select>-->
+                <!--<el-select v-model="oOpenStatus" @change="openServe">-->
+                <!--<el-option-->
+                <!--v-for="info in boolean"-->
+                <!--:key="info.value"-->
+                <!--:label="info.label"-->
+                <!--:value="info.value"-->
+                <!--&gt;</el-option>-->
+                <!--</el-select>-->
                 <!--</el-form-item>-->
-                <el-form-item
-                        :required="true"
-                    label="是否开通会员卡功能"
-                    :label-width="formLabelWidth"
-                >
+                <el-form-item :required="true" label="是否开通会员卡功能" :label-width="formLabelWidth">
                     <el-select v-model="oOpenMemberCardStatus" @change="openServe">
                         <el-option
                             v-for="info in boolean"
@@ -501,20 +560,16 @@
                     </el-select>
                 </el-form-item>
                 <!--<el-form-item prop="videoStatus" label="是否开通预告片" :label-width="formLabelWidth">-->
-                    <!--<el-select v-model="oVideoStatus" @change="openServe">-->
-                        <!--<el-option-->
-                            <!--v-for="info in boolean"-->
-                            <!--:key="info.value"-->
-                            <!--:label="info.label"-->
-                            <!--:value="info.value"-->
-                        <!--&gt;</el-option>-->
-                    <!--</el-select>-->
+                <!--<el-select v-model="oVideoStatus" @change="openServe">-->
+                <!--<el-option-->
+                <!--v-for="info in boolean"-->
+                <!--:key="info.value"-->
+                <!--:label="info.label"-->
+                <!--:value="info.value"-->
+                <!--&gt;</el-option>-->
+                <!--</el-select>-->
                 <!--</el-form-item>-->
-                <el-form-item
-                        :required="true"
-                    label="会员卡是否门店通用"
-                    :label-width="formLabelWidth"
-                >
+                <el-form-item :required="true" label="会员卡是否门店通用" :label-width="formLabelWidth">
                     <el-select v-model="oMemberCardCommonUseStatus" @change="openServe">
                         <el-option
                             v-for="info in boolean"
@@ -525,46 +580,63 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="小程序名称" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" :disabled="true" v-model="oMiniAppName" autocomplete="off"></el-input>
+                    <el-input
+                        style="width: 250px"
+                        :disabled="true"
+                        v-model="oMiniAppName"
+                        autocomplete="off"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item label="小程序二维码" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" :disabled="true" v-model="oMiniAppQRCode" autocomplete="off"></el-input>
+                    <el-input
+                        style="width: 250px"
+                        :disabled="true"
+                        v-model="oMiniAppQRCode"
+                        autocomplete="off"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item prop="miniAppId" label="小程序appId" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" :disabled="true" v-model="oMiniAppId" autocomplete="off"></el-input>
+                    <el-input
+                        style="width: 250px"
+                        :disabled="true"
+                        v-model="oMiniAppId"
+                        autocomplete="off"
+                    ></el-input>
                 </el-form-item>
                 <!--<el-form-item-->
-                    <!--prop="miniAppSecret"-->
-                    <!--label="小程序appSecret"-->
-                    <!--:label-width="formLabelWidth"-->
+                <!--prop="miniAppSecret"-->
+                <!--label="小程序appSecret"-->
+                <!--:label-width="formLabelWidth"-->
                 <!--&gt;-->
-                    <!--<el-input style="width: 250px" v-model="oMiniAppSecret" autocomplete="off"></el-input>-->
+                <!--<el-input style="width: 250px" v-model="oMiniAppSecret" autocomplete="off"></el-input>-->
                 <!--</el-form-item>-->
                 <el-form-item label="小程序支付商户号" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" :disabled="true" v-model="oMiniMerchantNo" autocomplete="off"></el-input>
+                    <el-input
+                        style="width: 250px"
+                        :disabled="true"
+                        v-model="oMiniMerchantNo"
+                        autocomplete="off"
+                    ></el-input>
                 </el-form-item>
                 <!--<el-form-item-->
-                    <!--prop="miniMerchantSecret"-->
-                    <!--label="小程序支付密钥"-->
-                    <!--:label-width="formLabelWidth"-->
+                <!--prop="miniMerchantSecret"-->
+                <!--label="小程序支付密钥"-->
+                <!--:label-width="formLabelWidth"-->
                 <!--&gt;-->
-                    <!--<el-input style="width: 250px" v-model="oMiniMerchantSecret" autocomplete="off"></el-input>-->
+                <!--<el-input style="width: 250px" v-model="oMiniMerchantSecret" autocomplete="off"></el-input>-->
                 <!--</el-form-item>-->
                 <!--<el-form-item-->
-                    <!--prop="miniRefundCertificateUrl"-->
-                    <!--label="小程序退款证书阿里云路径"-->
-                    <!--:label-width="formLabelWidth"-->
+                <!--prop="miniRefundCertificateUrl"-->
+                <!--label="小程序退款证书阿里云路径"-->
+                <!--:label-width="formLabelWidth"-->
                 <!--&gt;-->
-                    <!--<el-input-->
-                        <!--style="width: 250px"-->
-                        <!--v-model="oMiniRefundCertificateUrl"-->
-                        <!--autocomplete="off"-->
-                    <!--&gt;</el-input>-->
+                <!--<el-input-->
+                <!--style="width: 250px"-->
+                <!--v-model="oMiniRefundCertificateUrl"-->
+                <!--autocomplete="off"-->
+                <!--&gt;</el-input>-->
                 <!--</el-form-item>-->
-                <el-form-item
-                    label="售票系统账号"
-                    :label-width="formLabelWidth"
-                >
+                <el-form-item label="售票系统账号" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         :disabled="true"
@@ -573,22 +645,22 @@
                     ></el-input>
                 </el-form-item>
                 <!--<el-form-item-->
-                    <!--style="width: 250px"-->
-                    <!--prop="ticketingSystemPassword"-->
-                    <!--label="售票系统密码"-->
-                    <!--:label-width="formLabelWidth"-->
+                <!--style="width: 250px"-->
+                <!--prop="ticketingSystemPassword"-->
+                <!--label="售票系统密码"-->
+                <!--:label-width="formLabelWidth"-->
                 <!--&gt;-->
-                    <!--<el-input-->
-                        <!--style="width: 250px"-->
-                        <!--v-model="oTicketingSystemPassword"-->
-                        <!--autocomplete="off"-->
-                    <!--&gt;</el-input>-->
+                <!--<el-input-->
+                <!--style="width: 250px"-->
+                <!--v-model="oTicketingSystemPassword"-->
+                <!--autocomplete="off"-->
+                <!--&gt;</el-input>-->
                 <!--</el-form-item>-->
                 <!--<el-form-item label="售票系统类型版本(目前辰星系统)：" :label-width="formLabelWidth" prop="cinemaName">-->
-                    <!--<el-radio-group v-model="oTicketingSystemTypeVersion">-->
-                        <!--<el-radio label="1">1.0</el-radio>-->
-                        <!--<el-radio label="2">2.0</el-radio>-->
-                    <!--</el-radio-group>-->
+                <!--<el-radio-group v-model="oTicketingSystemTypeVersion">-->
+                <!--<el-radio label="1">1.0</el-radio>-->
+                <!--<el-radio label="2">2.0</el-radio>-->
+                <!--</el-radio-group>-->
                 <!--</el-form-item>-->
                 <el-form-item :required="true" label="影院奖品核销码" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oVerificationCode" autocomplete="off"></el-input>
@@ -877,24 +949,24 @@ export default {
                         //         break;
                         //     }
                         // }
-                        for (let i = 0; i < JSON.parse(Decrypt(data.data.data)).MessageInfo.length; i ++) {
+                        for (let i = 0; i < JSON.parse(Decrypt(data.data.data)).MessageInfo.length; i++) {
                             if (JSON.parse(Decrypt(data.data.data)).MessageInfo[i].messageType == 1) {
-                                this.oMessageType1 = JSON.parse(Decrypt(data.data.data)).MessageInfo[i].content
+                                this.oMessageType1 = JSON.parse(Decrypt(data.data.data)).MessageInfo[i].content;
                             }
                             if (JSON.parse(Decrypt(data.data.data)).MessageInfo[i].messageType == 2) {
-                                this.oMessageType2 = JSON.parse(Decrypt(data.data.data)).MessageInfo[i].content
+                                this.oMessageType2 = JSON.parse(Decrypt(data.data.data)).MessageInfo[i].content;
                             }
                             if (JSON.parse(Decrypt(data.data.data)).MessageInfo[i].messageType == 3) {
-                                this.oMessageType3 = JSON.parse(Decrypt(data.data.data)).MessageInfo[i].content
+                                this.oMessageType3 = JSON.parse(Decrypt(data.data.data)).MessageInfo[i].content;
                             }
                             if (JSON.parse(Decrypt(data.data.data)).MessageInfo[i].messageType == 4) {
-                                this.oMessageType4 = JSON.parse(Decrypt(data.data.data)).MessageInfo[i].content
+                                this.oMessageType4 = JSON.parse(Decrypt(data.data.data)).MessageInfo[i].content;
                             }
                             if (JSON.parse(Decrypt(data.data.data)).MessageInfo[i].messageType == 5) {
-                                this.oMessageType5 = JSON.parse(Decrypt(data.data.data)).MessageInfo[i].content
+                                this.oMessageType5 = JSON.parse(Decrypt(data.data.data)).MessageInfo[i].content;
                             }
                             if (JSON.parse(Decrypt(data.data.data)).MessageInfo[i].messageType == 6) {
-                                this.oMessageType6 = JSON.parse(Decrypt(data.data.data)).MessageInfo[i].content
+                                this.oMessageType6 = JSON.parse(Decrypt(data.data.data)).MessageInfo[i].content;
                             }
                         }
                         if (JSON.parse(Decrypt(data.data.data)).Cinema.ticketingSystemTypeVersion == 1) {
@@ -950,9 +1022,22 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            if(!this.oConcatName||!this.oConcatMobile||!this.oServiceMobile||!this.oMembershipServiceAgreement||!this.oBuyTicketHint
-                ||!this.oEquityCardAgreement||!this.oOpenSnackStatus||!this.oSnackDispatcherStatus||!this.oRefundable||!this.oSnackBeginTime
-                ||!this.oSnackEndTime||!this.oOpenMemberCardStatus||!this.oMemberCardCommonUseStatus||!this.oVerificationCode){
+            if (
+                !this.oConcatName ||
+                !this.oConcatMobile ||
+                !this.oServiceMobile ||
+                !this.oMembershipServiceAgreement ||
+                !this.oBuyTicketHint ||
+                !this.oEquityCardAgreement ||
+                !this.oOpenSnackStatus ||
+                !this.oSnackDispatcherStatus ||
+                !this.oRefundable ||
+                !this.oSnackBeginTime ||
+                !this.oSnackEndTime ||
+                !this.oOpenMemberCardStatus ||
+                !this.oMemberCardCommonUseStatus ||
+                !this.oVerificationCode
+            ) {
                 this.message = '必填项不能为空，请检查！';
                 this.open();
                 loading.close();
@@ -1199,18 +1284,18 @@ input[type='number'] {
 </style>
 
 <style scoped>
-    .handle-box {
-        width: 100%;
-        margin-bottom: 20px;
-        font-size: 14px;
-    }
-    .table {
-        width: 100%;
-        font-size: 14px;
-    }
-    .mr10 {
-        width: 16%;
-        margin-right: 10px;
-    }
+.handle-box {
+    width: 100%;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+.table {
+    width: 100%;
+    font-size: 14px;
+}
+.mr10 {
+    width: 16%;
+    margin-right: 10px;
+}
 </style>
 

@@ -505,6 +505,8 @@
                 <el-form-item :required="true" label="使用说明：" :label-width="formLabelWidth">
                     <el-input
                             type="textarea"
+                            maxlength="200"
+                            show-word-limit
                             :rows="2"
                             placeholder="请输入内容"
                             v-model="oForm.benefitDesc"

@@ -10,7 +10,7 @@
         <!--签到规则页面-->
         <div class="container">
             <el-form ref="form1" :model="form1">
-                <el-form-item label="连续签到天数" :label-width="formLabelWidth">
+                <!-- <el-form-item label="连续签到天数" :label-width="formLabelWidth">
                     <el-input
                             style="width: 250px"
                             v-model="form1.days"
@@ -24,9 +24,9 @@
                             v-model="form1.oGoldAward"
                             autocomplete="off"
                     ></el-input>
-                </el-form-item>
-                <el-form-item :required="true" label="签到规则" :label-width="formLabelWidth">
-                    <el-input style="width: 250px;" type="textarea" v-model="form1.oSignTips" autocomplete="off"></el-input>
+                </el-form-item> -->
+                <el-form-item :required="true" label="签到规则说明" :label-width="formLabelWidth">
+                    <el-input style="width: 250px;" type="textarea" maxlength="50" show-word-limit v-model="form1.oSignTips" autocomplete="off"></el-input>
                 </el-form-item>
             </el-form>
             <el-table
@@ -36,11 +36,12 @@
                     ref="multipleTable"
                     header-cell-class-name="table-header"
                     @selection-change="handleSelectionChange"
+                    v-if="showRule"
             >
                 <el-table-column prop="name" label="连续签到天数">
                     <template slot-scope="scope">{{scope.row.continuousDays}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="连续签到奖励">
+                <el-table-column prop="memo" label="奖励金币数量">
                     <template slot-scope="scope">{{scope.row.goldAward}}</template>
                 </el-table-column>
                 <el-table-column label="操作" width="180" align="center" fixed="right">
@@ -73,7 +74,7 @@
                             :disabled="true"
                     ></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="连续签到奖励" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="奖励金币数量" :label-width="formLabelWidth">
                     <el-input
                             style="width: 250px"
                             v-model="oGoldAward"
@@ -225,6 +226,7 @@
                 oExtraPrizeType:'',
                 drawer:false,
                 couponName:'',
+                showRule: true,
                 sellTableData:[],
                 type: {
                     type: ''
@@ -304,9 +306,7 @@
                 }
             },
             addChange(index,row){
-                console.log(index);
                 this.index=index;
-                console.log(row);
                 this.oContinuousDays=row.continuousDays;
                 this.oGoldAward=row.goldAward;
                 if(row.extraFlag==1){
@@ -442,11 +442,27 @@
                     loading.close();
                     return;
                 }
+                this.showRule = false;
                 let jsonArr = [];
+                let goldAward;
                 jsonArr.push({key:"id",value:this.id});
-                jsonArr.push({key:"goldAward",value:this.form1.oGoldAward});
                 jsonArr.push({key:"signTips",value:this.form1.oSignTips});
+                for (let i = 0;i < this.tableData.length;i ++) {
+                    if (!this.tableData[i].goldAward) {
+                        this.message = '连续签到奖励不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        this.showRule = true;
+                        return;
+                    }
+                    if (this.tableData[i].id == 1) {
+                        goldAward = this.tableData[i].goldAward;
+                        this.tableData.splice(i,1)
+                    }
+                }
+                jsonArr.push({key:"goldAward",value:goldAward});
                 jsonArr.push({key:"extraSignRuleJson",value: JSON.stringify(this.tableData)});
+                console.log(jsonArr)
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
                 var params = ParamsAppend(jsonArr);
@@ -456,6 +472,7 @@
                         if (data.data.code == 'success') {
                             this.$message.success(`成功`);
                             this.getMenu();
+                            // this.showRule = true;
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
                             this.open();
@@ -463,6 +480,7 @@
                         } else {
                             this.message = data.data.message;
                             this.open();
+                            this.showRule = true;
                         }
                     })
                         .catch(err => {
@@ -489,11 +507,13 @@
                         console.log(data);
                         if (data.data.code == 'success') {
                             var oData = JSON.parse(Decrypt(data.data.data));
+                            oData.extraRuleList.unshift({continuousDays: 1,goldAward: oData.goldAward,id: 1})
                             console.log(oData);
                             this.id=oData.id;
                             this.tableData = oData.extraRuleList;
                             this.form1.oGoldAward=oData.goldAward
-                            this.form1.oSignTips=oData.signTips
+                            this.form1.oSignTips=oData.signTips;
+                            this.showRule = true;
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
                             this.open();

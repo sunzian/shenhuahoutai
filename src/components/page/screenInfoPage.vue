@@ -45,9 +45,9 @@
             >
 				<el-table-column type="selection" width="55">
                 </el-table-column>
-                <el-table-column prop="name" label="影院编码" width="130">
+                <!-- <el-table-column prop="name" label="影院编码" width="130">
                     <template slot-scope="scope">{{scope.row.cinemaCode}}</template>
-                </el-table-column>
+                </el-table-column> -->
                 <el-table-column prop="name" label="影院名称" width="260">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
@@ -63,13 +63,16 @@
                 <el-table-column prop="sort" label="影厅类型" width="110">
                     <template slot-scope="scope">{{scope.row.screenType}}</template>
                 </el-table-column>
+                <el-table-column prop="sort" label="第三方影厅名称" width="110">
+                    <template slot-scope="scope">{{scope.row.thirdPartyScreenName}}</template>
+                </el-table-column>
                 <el-table-column label="操作" width="180" align="center">
                     <template slot-scope="scope">
                         <el-button
                             type="text"
                             icon="el-icon-circle-plus-outline"
                             @click="addChange(scope.$index, scope.row)"
-                        >重新获取影厅座位</el-button>
+                        >编辑</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -111,44 +114,15 @@
         </el-dialog>
         <!-- 编辑弹出框 -->
         <el-dialog title="编辑" :visible.sync="editVisible">
-            <el-form ref="form" :model="form">
-                <el-form-item label="所属影院" :label-width="formLabelWidth">
+            <el-form ref="screenForm" :model="screenForm">
+                <el-form-item label="第三方影厅名称" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        maxlength="10"
+                        maxlength="50"
                         show-word-limit
-                        v-model="oName"
+                        v-model="screenForm.thirdPartyScreenName"
                         autocomplete="off"
                     ></el-input>
-                </el-form-item>
-                <el-form-item label="描述" :label-width="formLabelWidth">
-                    <el-input
-                        maxlength="30"
-                        type="textarea"
-                        :rows="2"
-                        show-word-limit
-                        v-model="form.memo"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="排序" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 250px"
-                        min="1"
-                        maxlength="7"
-                        v-model="form.sort"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="状态" :label-width="formLabelWidth">
-                    <el-select v-model="selectValue">
-                        <!-- <el-option
-                                v-for="item in options"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value">
-                        </el-option>-->
-                    </el-select>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -180,7 +154,7 @@ export default {
             delList: [],
             editVisible: false,
             pageTotal: 0,
-            form: {
+            screenForm: {
                 cinemaCode: ''
             },
             selectScreen: '', // 选中的影厅
@@ -332,21 +306,18 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            this.form = row;
             var jsonArr = [];
-            jsonArr.push({ key: 'cinemaCode', value: row.cinemaCode });
-            jsonArr.push({ key: 'screenCode', value: row.screenCode });
+            jsonArr.push({ key: 'id', value: row.id });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             let params = ParamsAppend(jsonArr);
             https
-                .fetchPost('/screenSeat/updateScreenSeat', params)
+                .fetchPost('/screenInfo/updatePage', params)
                 .then(data => {
                     loading.close();
-                    // console.log(data);
                     if (data.data.code == 'success') {
-                        this.$message.success(`获取成功`);
-                        this.getMenu();
+                        this.screenForm = JSON.parse(Decrypt(data.data.data));
+                        this.editVisible = true
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
@@ -370,26 +341,26 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            console.log(this.form.sort);
-            // console.log(this.from.sort.toString());
+            if (this.screenForm.thirdPartyScreenName.split(" ").join("").length == 0) {
+                this.message = '影厅名称不能为空或纯空格！';
+                this.open();
+                loading.close();
+                return
+            }
             var jsonArr = [];
-            jsonArr.push({ key: 'id', value: this.form.id });
-            jsonArr.push({ key: 'roleName', value: this.oName });
-            jsonArr.push({ key: 'sort', value: '' + this.form.sort + '' });
-            jsonArr.push({ key: 'memo', value: this.form.memo });
-            jsonArr.push({ key: 'status', value: this.selectValue });
+            jsonArr.push({ key: 'id', value: this.screenForm.id });
+            jsonArr.push({ key: 'thirdPartyScreenName', value: this.screenForm.thirdPartyScreenName });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
-            console.log(jsonArr);
             let params = ParamsAppend(jsonArr);
-            console.log(params);
             this.editVisible = false;
             https
-                .fetchPost('/role/modifyRole', params)
+                .fetchPost('/screenInfo/updateScreenName', params)
                 .then(data => {
                     loading.close();
                     if (data.data.code == 'success') {
                         this.$message.success(`编辑成功`);
+                        this.editVisible = false
                         this.getMenu();
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;

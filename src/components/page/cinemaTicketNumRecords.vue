@@ -116,7 +116,7 @@
             </div>
         </div>
         <!--新增弹出框-->
-        <el-dialog title="设置活动" :visible.sync="dialogFormVisible">
+        <el-dialog title="充值" :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
                 <el-form-item label="选择影院：" :label-width="formLabelWidth">
                     <el-select v-model="oForm.cinemaCode" placeholder="请选择">
@@ -132,7 +132,7 @@
                     <el-input style="width: 200px" min="1" v-model="oForm.tradeTicketNum" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="充值明细：" :label-width="formLabelWidth">
-                    <el-input style="width: 200px" type="textarea" min="1" v-model="oForm.tradeDetail" autocomplete="off"></el-input>
+                    <el-input style="width: 200px" type="textarea" min="1" maxlength="200" v-model="oForm.tradeDetail" autocomplete="off"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
