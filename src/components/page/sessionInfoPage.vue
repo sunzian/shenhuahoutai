@@ -887,6 +887,7 @@ export default {
 
         showPoster() {
             this.poster = true;
+            this.posterForm.cinemaCode = this.cinemaInfo[0].cinemaCode;
         },
 
         // 生成影讯
