@@ -132,7 +132,7 @@
                     <el-input style="width: 200px" min="1" v-model="oForm.tradeTicketNum" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="充值明细：" :label-width="formLabelWidth">
-                    <el-input style="width: 200px" type="textarea" min="1" maxlength="200" v-model="oForm.tradeDetail" autocomplete="off"></el-input>
+                    <el-input style="width: 200px" type="textarea" min="1" maxlength="200" show-word-limit v-model="oForm.tradeDetail" autocomplete="off"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">

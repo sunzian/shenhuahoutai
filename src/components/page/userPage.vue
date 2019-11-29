@@ -137,6 +137,8 @@
                 </el-form-item>
                 <el-form-item label="描述" :label-width="formLabelWidth">
                     <el-input type="textarea"
+                        show-word-limit
+                        maxlength="100"
                         style="width: 250px"
                         v-model="oForm.memo"
                         autocomplete="off"

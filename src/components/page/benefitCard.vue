@@ -184,7 +184,7 @@
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oForm.isFilmJoin==1&&oForm.cardType==1" label="影票优惠简短描述：" :label-width="formLabelWidth">
-                  <el-input v-model="oForm.filmSimpleDesc" maxlength="70" type="textarea"></el-input>
+                  <el-input v-model="oForm.filmSimpleDesc" maxlength="200" show-word-limit type="textarea"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oForm.isFilmJoin==1&&oForm.cardType==1" label="选择影厅：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.selectHallType">
@@ -293,7 +293,7 @@
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oForm.isMerchandiseJoin==1&&oForm.cardType==1" label="卖品优惠简短描述：" :label-width="formLabelWidth">
-                    <el-input v-model="oForm.merchandiseSimpleDesc" maxlength="70" type="textarea"></el-input>
+                    <el-input v-model="oForm.merchandiseSimpleDesc" maxlength="200" show-word-limit type="textarea"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oForm.isMerchandiseJoin==1&&oForm.cardType==1"  label="优惠方式：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.reduceTypeMerchandise">
@@ -368,7 +368,7 @@
                     <el-input style="width: 150px" v-model="oForm.numberMerchandise" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oForm.cardType==2" label="券包简短描述：" :label-width="formLabelWidth">
-                    <el-input style="width: 150px" v-model="oForm.couponSimpleDesc" maxlength="70" type="textarea"  autocomplete="off"></el-input>
+                    <el-input style="width: 150px" v-model="oForm.couponSimpleDesc" maxlength="200" show-word-limit type="textarea"  autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item
                         v-if="oForm.cardType==2"
@@ -603,7 +603,7 @@
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oIsFilmJoin==1&&oCardType==1" label="影票优惠简短描述：" :label-width="formLabelWidth">
-                    <el-input v-model="oFilmSimpleDesc"  maxlength="70" type="textarea"></el-input>
+                    <el-input v-model="oFilmSimpleDesc"  maxlength="200" show-word-limit type="textarea"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oIsFilmJoin==1&&oCardType==1" label="选择影厅：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oSelectHallType">
@@ -712,7 +712,7 @@
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oIsMerchandiseJoin==1&&oCardType==1" label="卖品优惠简短描述：" :label-width="formLabelWidth">
-                    <el-input v-model="oMerchandiseSimpleDesc" maxlength="70" type="textarea"></el-input>
+                    <el-input v-model="oMerchandiseSimpleDesc" maxlength="200" show-word-limit type="textarea"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oIsMerchandiseJoin==1&&oCardType==1"  label="优惠方式：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oReduceTypeMerchandise">
@@ -787,7 +787,7 @@
                     <el-input style="width: 150px" v-model="oNumberMerchandise" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oCardType==2" label="券包简短描述：" :label-width="formLabelWidth">
-                    <el-input style="width: 150px" v-model="oCouponSimpleDesc" maxlength="70" type="textarea" autocomplete="off"></el-input>
+                    <el-input style="width: 150px" v-model="oCouponSimpleDesc" maxlength="200" show-word-limit type="textarea" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item
                         v-if="oCardType==2"
@@ -925,6 +925,8 @@
                 <el-form-item :required="true" label="使用说明：" :label-width="formLabelWidth">
                     <el-input
                             type="textarea"
+                            maxlength="200"
+                            show-word-limit
                             :rows="2"
                             placeholder="请输入内容"
                             v-model="oBenefitDesc"

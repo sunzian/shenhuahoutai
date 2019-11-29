@@ -248,6 +248,8 @@
                     <el-input
                         style="width: 360px"
                         type="textarea"
+                        show-word-limit
+                        maxlength="100"
                         v-model="oForm.memo"
                         autocomplete="off"
                     ></el-input>
@@ -450,7 +452,7 @@
                 <el-form-item label="排序" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        type="textarea"
+                        type="number"
                         v-model="oForm.sort"
                         autocomplete="off"
                     ></el-input>
@@ -517,6 +519,8 @@
                     <el-input
                         style="width: 360px"
                         type="textarea"
+                        show-word-limit
+                        maxlength="100"
                         v-model="form.memo"
                         autocomplete="off"
                     ></el-input>
@@ -725,7 +729,7 @@
                 <el-form-item label="排序" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        type="textarea"
+                        type="number"
                         v-model="form.sort"
                         autocomplete="off"
                     ></el-input>

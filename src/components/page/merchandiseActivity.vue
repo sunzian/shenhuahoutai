@@ -311,6 +311,8 @@
                 <el-form-item :required="true" label="使用须知：" :label-width="formLabelWidth">
                     <el-input
                             type="textarea"
+                            show-word-limit
+                            maxlength="200"
                             :rows="2"
                             placeholder="请输入内容"
                             v-model="oForm.couponDesc"
@@ -563,6 +565,8 @@
                 <el-form-item :required="true" label="使用须知：" :label-width="formLabelWidth">
                     <el-input
                             type="textarea"
+                            show-word-limit
+                            maxlength="200"
                             :rows="2"
                             placeholder="请输入内容"
                             v-model="oActivityDesc"

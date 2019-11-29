@@ -149,7 +149,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="券包说明：" :label-width="formLabelWidth">
-                    <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="oForm.memo"></el-input>
+                    <el-input type="textarea" maxlength="100" show-word-limit :rows="2" placeholder="请输入内容" v-model="oForm.memo"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -193,8 +193,8 @@
                         >删除</span>
                     </div>
                 </el-form-item>
-                <el-form-item label="使用须知：" :label-width="formLabelWidth">
-                    <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="oMemo"></el-input>
+                <el-form-item label="券包说明：" :label-width="formLabelWidth">
+                    <el-input type="textarea" maxlength="100" show-word-limit :rows="2" placeholder="请输入内容" v-model="oMemo"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
