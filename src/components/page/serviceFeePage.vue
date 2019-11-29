@@ -290,28 +290,28 @@
                         v-model="oForm.startDate"
                         type="datetime"
                         placeholder="开始时间"
-                        value-format="yyyy-MM-dd hh:mm:ss"
-                        format="yyyy-MM-dd hh:mm:ss"
+                        value-format="yyyy-MM-dd HH:mm:ss"
+                        format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>至
                     <el-date-picker
                         v-model="oForm.endDate"
                         type="datetime"
                         placeholder="结束时间"
-                        value-format="yyyy-MM-dd hh:mm:ss"
-                        format="yyyy-MM-dd hh:mm:ss"
+                        value-format="yyyy-MM-dd HH:mm:ss"
+                        format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
                 </el-form-item>
                 <el-form-item :required="true" label="每日时间段：" :label-width="formLabelWidth">
                     <el-time-picker
                         v-model="oForm.startDay"
-                        value-format="hh:mm:ss"
-                        format="hh:mm:ss"
+                        value-format="HH:mm:ss"
+                        format="HH:mm:ss"
                         placeholder="起始时间"
                     ></el-time-picker>至
                     <el-time-picker
                         v-model="oForm.endDay"
-                        value-format="hh:mm:ss"
-                        format="hh:mm:ss"
+                        value-format="HH:mm:ss"
+                        format="HH:mm:ss"
                         placeholder="结束时间"
                     ></el-time-picker>
                     <span style="cursor: pointer;color: blue" @click="addTime">添加</span>
@@ -414,28 +414,28 @@
                         v-model="oStartDate"
                         type="datetime"
                         placeholder="开始时间"
-                        value-format="yyyy-MM-dd hh:mm:ss"
-                        format="yyyy-MM-dd hh:mm:ss"
+                        value-format="yyyy-MM-dd HH:mm:ss"
+                        format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>至
                     <el-date-picker
                         v-model="oEndDate"
                         type="datetime"
                         placeholder="结束时间"
-                        value-format="yyyy-MM-dd hh:mm:ss"
-                        format="yyyy-MM-dd hh:mm:ss"
+                        value-format="yyyy-MM-dd HH:mm:ss"
+                        format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
                 </el-form-item>
                 <el-form-item :required="true" label="每日时间段：" :label-width="formLabelWidth">
                     <el-time-picker
                         v-model="oStartDay"
-                        value-format="hh:mm:ss"
-                        format="hh:mm:ss"
+                        value-format="HH:mm:ss"
+                        format="HH:mm:ss"
                         placeholder="起始时间"
                     ></el-time-picker>至
                     <el-time-picker
                         v-model="oEndDay"
-                        value-format="hh:mm:ss"
-                        format="hh:mm:ss"
+                        value-format="HH:mm:ss"
+                        format="HH:mm:ss"
                         placeholder="结束时间"
                     ></el-time-picker>
                     <span style="cursor: pointer;color: blue" @click="addTime2">添加</span>
