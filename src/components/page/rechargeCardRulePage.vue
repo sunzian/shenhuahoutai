@@ -216,6 +216,7 @@
                         style="width: 250px"
                         type="textarea"
                         :maxlength="10"
+                        show-word-limit
                         v-model="oForm.ruleMemo"
                         placeholder="建议长度不超过10字"
                         autocomplete="off"
@@ -322,7 +323,8 @@
                     <el-input style="width: 250px" min="1" v-model.trim="oOverDays" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="优惠描述：" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" type="textarea" :maxlength="10" v-model="oRuleMemo" autocomplete="off"></el-input>
+                    <el-input style="width: 250px" type="textarea" :maxlength="10" show-word-limit
+                         v-model="oRuleMemo" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="有效期：" :label-width="formLabelWidth">
                     <el-date-picker

@@ -183,6 +183,8 @@
                     <el-input
                         style="width: 250px"
                         type="textarea"
+                        show-word-limit
+                        maxlength="150"
                         v-model="oForm.summary"
                         autocomplete="off"
                     ></el-input>
@@ -245,6 +247,8 @@
                     <el-input
                         style="width: 250px"
                         type="textarea"
+                        show-word-limit
+                        maxlength="150"
                         v-model="oSummary"
                         autocomplete="off"
                     ></el-input>

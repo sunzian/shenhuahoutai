@@ -120,7 +120,8 @@
                     <el-input style="width: 250px" v-model="oForm.consumeGold" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="抽奖规则说明" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" type="textarea" v-model="oForm.gameRule" autocomplete="off"></el-input>
+                    <el-input style="width: 250px" type="textarea" show-word-limit
+                        maxlength="300" v-model="oForm.gameRule" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="状态" :label-width="formLabelWidth">
                     <el-select v-model="oForm.status" placeholder="请选择">
@@ -275,7 +276,8 @@
                     <el-input style="width: 250px" v-model="form.consumeGold" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="抽奖规则说明" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" type="textarea" v-model="form.gameRule" autocomplete="off"></el-input>
+                    <el-input style="width: 250px" type="textarea" show-word-limit
+                        maxlength="300" v-model="form.gameRule" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="状态" :label-width="formLabelWidth">
                     <el-select v-model="form.status" placeholder="请选择">

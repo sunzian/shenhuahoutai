@@ -86,7 +86,7 @@
                     <el-input style="width: 250px" v-model="oForm.country" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="介绍" :label-width="formLabelWidth">
-                    <el-input type="textarea" style="width: 250px" v-model="oForm.introduction" autocomplete="off"></el-input>
+                    <el-input type="textarea" show-word-limit maxlength="200" style="width: 250px" v-model="oForm.introduction" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="导演图片" :label-width="formLabelWidth">
                     <el-upload
@@ -134,7 +134,7 @@
                     <el-input style="width: 250px" v-model="oCountry" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="介绍" :label-width="formLabelWidth">
-                    <el-input type="textarea" style="width: 250px" v-model="oIntroduction" autocomplete="off"></el-input>
+                    <el-input type="textarea" show-word-limit maxlength="200" style="width: 250px" v-model="oIntroduction" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="图片地址" :label-width="formLabelWidth">
                     <el-popover placement="right" title trigger="hover">

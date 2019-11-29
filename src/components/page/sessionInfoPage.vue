@@ -287,7 +287,7 @@
             :close-on-click-modal="false"
             >
             <div id="posterHtml" ref="posterHtml">
-                <div style="background: rgba(0, 159, 255, 1);">
+                <div style="background: linear-gradient(to bottom, #2177b9,#da4e7b);">
                     <div class="poster-head">
                         <div 
                          style="font-size: 60px;
@@ -1001,6 +1001,7 @@ export default {
 .poster-head {
     position: relative;
     padding-left: 20px;
+    
 }
 .poster-date {
     position: absolute;
