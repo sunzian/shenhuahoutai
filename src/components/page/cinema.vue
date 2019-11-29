@@ -290,25 +290,22 @@
                         type="textarea"
                         v-model="oMembershipServiceAgreement"
                         autocomplete="off"
-                        maxlength="200"
+                        maxlength="2000"
+                        show-word-limit
                     ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="购票提示" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 250px"
-                        type="textarea"
-                        v-model="oBuyTicketHint"
-                        maxlength="20"
-                        autocomplete="off"
-                    ></el-input>
+                    <el-input style="width: 250px" type="textarea" v-model="oBuyTicketHint" maxlength="100"
+                              show-word-limit autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="权益卡协议" :label-width="formLabelWidth">
                     <el-input
-                        style="width: 250px"
-                        type="textarea"
-                        v-model="oEquityCardAgreement"
-                        autocomplete="off"
-                        maxlength="200"
+                            style="width: 250px"
+                            type="textarea"
+                            v-model="oEquityCardAgreement"
+                            autocomplete="off"
+                            maxlength="1000"
+                            show-word-limit
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="金币活动描述 " :label-width="formLabelWidth">

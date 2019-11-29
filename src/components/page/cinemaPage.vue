@@ -915,7 +915,8 @@
                         v-model="oMembershipServiceAgreement"
                         type="textarea"
                         autocomplete="off"
-                        maxlength="200"
+                        maxlength="2000"
+                        show-word-limit
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="权益卡协议" :label-width="formLabelWidth">
@@ -924,7 +925,8 @@
                             type="textarea"
                             v-model="oEquityCardAgreement"
                             autocomplete="off"
-                            maxlength="200"
+                            maxlength="1000"
+                            show-word-limit
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="购票提示" :label-width="formLabelWidth">
@@ -933,7 +935,8 @@
                         v-model="oBuyTicketHint"
                         type="textarea"
                         autocomplete="off"
-                        maxlength="30"
+                        maxlength="100"
+                        show-word-limit
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="充值活动描述" :label-width="formLabelWidth">

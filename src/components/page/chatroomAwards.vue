@@ -75,6 +75,22 @@
         </div>
         <div class="container" v-if="!showSell">
             <div class="handle-box">
+                <el-input
+                        placeholder="礼物名称"
+                        v-model="query.name"
+                        autocomplete="off"
+                        class="mr10"
+                ></el-input>
+                <el-select
+                        clearable
+                        v-model="query.type"
+                        placeholder="奖品类型"
+                        class="handle-select mr10"
+                >
+                    <el-option key="1" label="优惠券" value="1"></el-option>
+                    <el-option key="2" label="实物" value="2"></el-option>
+                </el-select>
+                <el-button style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="show1()">搜索</el-button>
                 <el-button
                     type="primary"
                     @click="back"
@@ -312,19 +328,19 @@
                             <el-radio v-model="couponInfo.id" :label="scope.row.id">&nbsp;</el-radio>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="name" label="图片">
-                        <template slot-scope="scope">
-                            <el-popover placement="right" title trigger="hover">
-                                <img style="width:400px" :src="scope.row.imgUrl" />
-                                <img
-                                    slot="reference"
-                                    :src="scope.row.imgUrl"
-                                    :alt="scope.row.imgUrl"
-                                    style="max-height: 50px;max-width: 130px"
-                                />
-                            </el-popover>
-                        </template>
-                    </el-table-column>
+                    <!--<el-table-column prop="name" label="图片">-->
+                        <!--<template slot-scope="scope">-->
+                            <!--<el-popover placement="right" title trigger="hover">-->
+                                <!--<img style="width:400px" :src="scope.row.imgUrl" />-->
+                                <!--<img-->
+                                    <!--slot="reference"-->
+                                    <!--:src="scope.row.imgUrl"-->
+                                    <!--:alt="scope.row.imgUrl"-->
+                                    <!--style="max-height: 50px;max-width: 130px"-->
+                                <!--/>-->
+                            <!--</el-popover>-->
+                        <!--</template>-->
+                    <!--</el-table-column>-->
                     <el-table-column prop="sort" label="优惠券类型" width="150">
                         <template slot-scope="scope">
                             <el-tag v-if="scope.row.couponType=='1'">影票优惠券</el-tag>
@@ -334,7 +350,7 @@
                     <el-table-column prop="sort" label="优惠券名称" width="150">
                         <template slot-scope="scope">{{scope.row.name}}</template>
                     </el-table-column>
-                    <el-table-column prop="sort" label="优惠券说明" width="150">
+                    <el-table-column prop="sort" label="优惠券说明">
                         <template slot-scope="scope">
                             <el-tag v-if="scope.row.reduceType=='1'">{{scope.row.discountMoney}}元兑换卷</el-tag>
                             <el-tag
@@ -347,12 +363,12 @@
                     <el-pagination
                         background
                         layout="total, prev, pager, next"
-                        :current-page="query.pageNo"
-                        :page-size="query.pageSize"
-                        :total="query.totalCount"
-                        @current-change="currentChange"
-                        @prev-click="prev"
-                        @next-click="next"
+                        :current-page="query.aPageNo"
+                        :page-size="query.aPageSize"
+                        :total="query.aTotalCount"
+                        @current-change="aCurrentChange"
+                        @prev-click="aPrev"
+                        @next-click="aNext"
                     ></el-pagination>
                 </div>
             </div>
@@ -393,7 +409,9 @@ export default {
             message: '', //弹出框消息
             query: {
                 pageNo: 1,
-                pageSize: 15
+                pageSize: 15,
+                aPageNo: 1,
+                aPageSize: 15
             },
             restaurants: [],
             tableData: [],
@@ -445,7 +463,7 @@ export default {
             cinemaData: [],
             couponInfo: {},
             value: [],
-            couponName: ''
+            couponName: '',
         };
     },
     created() {
@@ -538,14 +556,6 @@ export default {
                 .then(() => {
                     this.idx = index;
                     this.form = row;
-                    let name = this.query.name;
-                    let status = this.query.status;
-                    if (!name) {
-                        name = '';
-                    }
-                    if (!status) {
-                        status = '';
-                    }
                     let jsonArr = [];
                     jsonArr.push({ key: 'id', value: row.id });
                     let sign = md5(preSign(jsonArr));
@@ -626,6 +636,7 @@ export default {
                 });
         },
         show(row) {
+            // console.log(row);
             this.showSell = false;
             //是否拥有权限
             const loading = this.$loading({
@@ -639,6 +650,59 @@ export default {
                 this.cinemaCode = row.cinemaCode;
             }
             var jsonArr = [];
+            jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
+            jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
+            jsonArr.push({ key: 'cinemaCode', value: this.cinemaCode });
+            let sign = md5(preSign(jsonArr));
+            jsonArr.push({ key: 'sign', value: sign });
+            let params = ParamsAppend(jsonArr);
+            https
+                .fetchPost('/chatroomAwards/awardsPage', params)
+                .then(data => {
+                    loading.close();
+                    if (data.data.code == 'success') {
+                        var oData = JSON.parse(Decrypt(data.data.data));
+                        console.log(oData);
+                        this.tableData = oData.data;
+                        this.query.pageSize = oData.pageSize;
+                        this.query.pageNo = oData.pageNo;
+                        this.query.totalCount = oData.totalCount;
+                        this.query.totalPage = oData.totalPage;
+                    } else if (data.data.code == 'nologin') {
+                        this.message = data.data.message;
+                        this.open();
+                        this.$router.push('/login');
+                    } else {
+                        this.message = data.data.message;
+                        this.open();
+                    }
+                })
+                .catch(err => {
+                    loading.close();
+                    console.log(err);
+                });
+        },
+        show1() {
+            this.showSell = false;
+            //是否拥有权限
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
+            let name = this.query.name;
+            let type = this.query.type;
+            if (!name) {
+                name = '';
+            }
+            if (!type) {
+                type = '';
+            }
+            var jsonArr = [];
+            jsonArr.push({ key: 'name', value: name });
+            jsonArr.push({ key: 'type', value: type });
             jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
             jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
             jsonArr.push({ key: 'cinemaCode', value: this.cinemaCode });
@@ -896,8 +960,8 @@ export default {
             jsonArr.push({ key: 'name', value: name });
             // jsonArr.push({ key: 'endDate', value: today });
             jsonArr.push({ key: 'cinemaCode', value: this.cinemaCode });
-            jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
-            jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
+            jsonArr.push({ key: 'pageNo', value: this.query.aPageNo });
+            jsonArr.push({ key: 'pageSize', value: this.query.aPageSize });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             console.log(jsonArr);
@@ -910,17 +974,17 @@ export default {
                         let oData = JSON.parse(Decrypt(data.data.data));
                         this.drawer = true;
                         this.sellTableData = oData.pageResult.data;
-                        for (let i = 0; i < this.sellTableData.length; i++) {
-                            this.$set(
-                                this.sellTableData[i],
-                                'imgUrl',
-                                'http://xiangshan-wexin.oss-cn-hangzhou.aliyuncs.com/images/201909262039272.jpg'
-                            );
-                        }
-                        this.query.pageSize = oData.pageResult.pageSize;
-                        this.query.pageNo = oData.pageResult.pageNo;
-                        this.query.totalCount = oData.pageResult.totalCount;
-                        this.query.totalPage = oData.pageResult.totalPage;
+                        // for (let i = 0; i < this.sellTableData.length; i++) {
+                        //     this.$set(
+                        //         this.sellTableData[i],
+                        //         'imgUrl',
+                        //         'http://xiangshan-wexin.oss-cn-hangzhou.aliyuncs.com/images/201909262039272.jpg'
+                        //     );
+                        // }
+                        this.query.aPageSize = oData.pageResult.pageSize;
+                        this.query.aPageNo = oData.pageResult.pageNo;
+                        this.query.aTotalCount = oData.pageResult.totalCount;
+                        this.query.aTotalPage = oData.pageResult.totalPage;
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
@@ -998,6 +1062,21 @@ export default {
             //分页按钮下一页
             this.query.pageNo++;
             this.getMenu();
+        },
+        aCurrentChange(val) {
+            //点击选择具体页数
+            this.query.aPageNo = val;
+            this.getAllCoupon();
+        },
+        aPrev() {
+            //分页按钮上一页
+            this.query.aPageNo--;
+            this.getAllCoupon();
+        },
+        aNext() {
+            //分页按钮下一页
+            this.query.aPageNo++;
+            this.getAllCoupon();
         }
     }
 };

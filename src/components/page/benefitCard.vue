@@ -505,6 +505,8 @@
                 <el-form-item :required="true" label="使用说明：" :label-width="formLabelWidth">
                     <el-input
                             type="textarea"
+                            maxlength="200"
+                            show-word-limit
                             :rows="2"
                             placeholder="请输入内容"
                             v-model="oForm.benefitDesc"
@@ -1900,7 +1902,7 @@
                     jsonArr.push({ key: 'endTimeVal', value: this.endArr.join(',')});
                     jsonArr.push({ key: 'isMerchandiseJoin', value: this.oIsMerchandiseJoin});
                     jsonArr.push({ key: 'isHolidayValid', value: this.oIsHolidayValid});
-                    jsonArr.push({ key: 'validWeekDay', value: this.oValidWeekDay});
+                    jsonArr.push({ key: 'validWeekDay', value: this.oCheckedDays});
                     jsonArr.push({ key: 'validPayType', value: this.oValidPayType});
                     jsonArr.push({ key: 'isCouponTogether', value: this.oIsCouponTogether});
                     if(this.oIsFilmJoin==1){
