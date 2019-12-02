@@ -275,7 +275,7 @@
                         placeholder="选择日期时间"
                     ></el-date-picker>
                 </el-form-item>
-                <div style="text-align:center;color:red;">*请用谷歌浏览器生成</div>
+                <div style="text-align:center;color:red;">*请用谷歌浏览器或火狐浏览器最新版本生成</div>
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="poster = false">取 消</el-button>
@@ -307,7 +307,7 @@
                     <div v-for="(item, index) in posterContent.filmList" :key="index" class="poster-session">
                         <img :src="'data:image/png;base64,'+item.image" class="poster-img" />
                         <span class="poster-filmName">{{item.filmName}}
-                            <span style="display: inline;border:1px solid pink;color: pink;font-size: 18px;">{{item.dimensional}}</span>
+                            <span style="display: inline;border:1px solid red;color: red;font-size: 18px;">{{item.dimensional}}</span>
                         </span>
                         <span class="poster-area">{{item.duration}}分钟，{{item.area}}，{{item.language}}</span>
                         <div class="poster-actor">{{item.actor}}</div>
@@ -1034,7 +1034,7 @@ export default {
 }
 .poster-session {
     position: relative;
-    left: 20px;
+    left: 15px;
     width: 90%;
     box-shadow:0px 7px 16px 0px rgba(3,143,228,0.45);
     border-radius:20px;
