@@ -677,11 +677,27 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            if(!this.oForm.serviceFeeName||!this.oForm.startDate||!this.oForm.endDate||this.date.length==0||!this.oForm.status||!this.oForm.thirdServiceFee||!this.oForm.memberServiceFee){
+            if(!this.oForm.serviceFeeName||!this.oForm.startDate||!this.oForm.endDate||this.date.length==0||!this.oForm.status){
                 this.message = '必填项不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
+            }
+            if(this.oForm.memberServiceFee!=0) {
+                if (!this.oForm.memberServiceFee) {
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
+            if(this.oForm.thirdServiceFee!=0) {
+                if (!this.oForm.thirdServiceFee) {
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
             }
             if(this.oForm.selectHallType==2){
                 if(this.oForm.screenCode.length==0){
@@ -1029,11 +1045,27 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            if(!this.oServiceFeeName||!this.oStartDate||!this.oEndDate||this.date.length==0||!this.oStatus||!this.oThirdServiceFee||!this.oMemberServiceFee){
+            if(!this.oServiceFeeName||!this.oStartDate||!this.oEndDate||this.date.length==0||!this.oStatus){
                 this.message = '必填项不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
+            }
+            if(this.oThirdServiceFee!=0){
+                if(!this.oThirdServiceFee){
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
+            if(this.oMemberServiceFee!=0){
+                if(!this.oMemberServiceFee){
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
             }
             if(this.oScreenType==2){
                 if(this.oScreenCode.length==0){
