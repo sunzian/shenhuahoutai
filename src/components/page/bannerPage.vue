@@ -1020,9 +1020,7 @@ export default {
                 target: document.querySelector('.div1')
             });
             setTimeout(() => {
-                https
-                    .fetchPost('/banner/addPage', '')
-                    .then(data => {
+                https.fetchPost('/banner/addPage', '').then(data => {
                         loading.close();
                         console.log(data);
                         console.log(JSON.parse(Decrypt(data.data.data)));
@@ -1056,6 +1054,20 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
+            if(!this.oForm.statusValue||!this.startTime||!this.endTime||!this.oForm.bannerType||!this.oForm.imageUrl||!this.oForm.tabType){
+                this.message = '必填项不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(this.oForm.tabType!=4) {
+                if (!this.oForm.goType) {
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
             setTimeout(() => {
                 var jsonArr = [];
                 jsonArr.push({ key: 'cinemaCodes', value: this.oForm.cinemaCode });
@@ -1270,6 +1282,20 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
+            if(!this.form.cinemaCodes||!this.form.status||!this.changeStartTime||!this.changeEndTime||!this.oBannerType||!this.form.imageUrl||!this.oTabType){
+                this.message = '必填项不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(this.oTabType!=4) {
+                if (!this.goType) {
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
             setTimeout(() => {
                 var jsonArr = [];
                 jsonArr.push({ key: 'id', value: this.form.id });

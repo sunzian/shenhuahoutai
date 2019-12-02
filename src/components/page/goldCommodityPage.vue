@@ -1217,6 +1217,70 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
+            if(!this.oForm.commodity_type||!this.oForm.image_url||(this.checkedCities.length=0)||!this.oForm.details||!this.oForm.store
+                ||!this.oForm.expireDay||!this.oForm.change_type||!this.oForm.topStatus||!this.oForm.recommendStatus||!this.oForm.status
+            ||!this.oForm.assign_type||!this.oForm.limit_type){
+                this.message = '必填项不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(this.oForm.commodity_type==1) {
+                if (!this.oForm.name||!this.oForm.originalPrice) {
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
+            if(this.oForm.commodity_type==2) {
+                if (this.selectedSell.length=0) {
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
+            if(this.oForm.commodity_type==3) {
+                if (!this.groupName) {
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
+            if(this.oForm.change_type==1||this.oForm.change_type==3) {
+                if (!this.oForm.gold) {
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
+            if(this.oForm.change_type==2||this.oForm.change_type==3) {
+                if (!this.oForm.money) {
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
+            if(this.oForm.assign_type==2||this.oForm.assign_type==3||this.oForm.assign_type==4||this.oForm.assign_type==5) {
+                if (!this.oForm.assign_info) {
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
+            if(this.oForm.limit_type==2||this.oForm.limit_type==3||this.oForm.limit_type==4) {
+                if (!this.oForm.limit_number) {
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
             setTimeout(() => {
                 if (this.filmInfo) {
                     let couponList = []; //优惠券编码
@@ -1528,6 +1592,70 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
+            if(!this.form.commodityType||!this.form.image_url||(this.oCheckedCities.length=0)||!this.form.markdown||!this.form.store
+                ||!this.form.expireDay||!this.form.changeType||!this.oTopStatus||!this.oRecommendStatus||!this.form.status
+                ||!this.form.assignType||!this.form.limitType){
+                this.message = '必填项不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(this.form.commodityType==1) {
+                if (!this.form.name||!this.form.originalPrice) {
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
+            if(this.form.commodityType==2) {
+                if (this.selectedSell.length=0) {
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
+            if(this.form.commodityType==3) {
+                if (!this.groupName) {
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
+            if(this.form.changeType==1||this.form.changeType==3) {
+                if (!this.form.gold) {
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
+            if(this.form.changeType==2||this.form.changeType==3) {
+                if (!this.form.money) {
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
+            if(this.form.assignType==2||this.form.assignType==3||this.form.assignType==4||this.form.assignType==5) {
+                if (!this.form.assignInfo) {
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
+            if(this.form.limitType==2||this.form.limitType==3||this.form.limitType==4) {
+                if (!this.form.limitNumber) {
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
             setTimeout(() => {
                 console.log(this.form.sort);
                 // console.log(this.from.sort.toString());
