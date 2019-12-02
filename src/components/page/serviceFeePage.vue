@@ -290,28 +290,28 @@
                         v-model="oForm.startDate"
                         type="datetime"
                         placeholder="开始时间"
-                        value-format="yyyy-MM-dd hh:mm:ss"
-                        format="yyyy-MM-dd hh:mm:ss"
+                        value-format="yyyy-MM-dd HH:mm:ss"
+                        format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>至
                     <el-date-picker
                         v-model="oForm.endDate"
                         type="datetime"
                         placeholder="结束时间"
-                        value-format="yyyy-MM-dd hh:mm:ss"
-                        format="yyyy-MM-dd hh:mm:ss"
+                        value-format="yyyy-MM-dd HH:mm:ss"
+                        format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
                 </el-form-item>
                 <el-form-item :required="true" label="每日时间段：" :label-width="formLabelWidth">
                     <el-time-picker
                         v-model="oForm.startDay"
-                        value-format="hh:mm:ss"
-                        format="hh:mm:ss"
+                        value-format="HH:mm:ss"
+                        format="HH:mm:ss"
                         placeholder="起始时间"
                     ></el-time-picker>至
                     <el-time-picker
                         v-model="oForm.endDay"
-                        value-format="hh:mm:ss"
-                        format="hh:mm:ss"
+                        value-format="HH:mm:ss"
+                        format="HH:mm:ss"
                         placeholder="结束时间"
                     ></el-time-picker>
                     <span style="cursor: pointer;color: blue" @click="addTime">添加</span>
@@ -414,28 +414,28 @@
                         v-model="oStartDate"
                         type="datetime"
                         placeholder="开始时间"
-                        value-format="yyyy-MM-dd hh:mm:ss"
-                        format="yyyy-MM-dd hh:mm:ss"
+                        value-format="yyyy-MM-dd HH:mm:ss"
+                        format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>至
                     <el-date-picker
                         v-model="oEndDate"
                         type="datetime"
                         placeholder="结束时间"
-                        value-format="yyyy-MM-dd hh:mm:ss"
-                        format="yyyy-MM-dd hh:mm:ss"
+                        value-format="yyyy-MM-dd HH:mm:ss"
+                        format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
                 </el-form-item>
                 <el-form-item :required="true" label="每日时间段：" :label-width="formLabelWidth">
                     <el-time-picker
                         v-model="oStartDay"
-                        value-format="hh:mm:ss"
-                        format="hh:mm:ss"
+                        value-format="HH:mm:ss"
+                        format="HH:mm:ss"
                         placeholder="起始时间"
                     ></el-time-picker>至
                     <el-time-picker
                         v-model="oEndDay"
-                        value-format="hh:mm:ss"
-                        format="hh:mm:ss"
+                        value-format="HH:mm:ss"
+                        format="HH:mm:ss"
                         placeholder="结束时间"
                     ></el-time-picker>
                     <span style="cursor: pointer;color: blue" @click="addTime2">添加</span>
@@ -677,11 +677,27 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            if(!this.oForm.serviceFeeName||!this.oForm.startDate||!this.oForm.endDate||this.date.length==0||!this.oForm.status||!this.oForm.thirdServiceFee||!this.oForm.memberServiceFee){
+            if(!this.oForm.serviceFeeName||!this.oForm.startDate||!this.oForm.endDate||this.date.length==0||!this.oForm.status){
                 this.message = '必填项不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
+            }
+            if(this.oForm.memberServiceFee!=0) {
+                if (!this.oForm.memberServiceFee) {
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
+            if(this.oForm.thirdServiceFee!=0) {
+                if (!this.oForm.thirdServiceFee) {
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
             }
             if(this.oForm.selectHallType==2){
                 if(this.oForm.screenCode.length==0){
@@ -1029,11 +1045,27 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            if(!this.oServiceFeeName||!this.oStartDate||!this.oEndDate||this.date.length==0||!this.oStatus||!this.oThirdServiceFee||!this.oMemberServiceFee){
+            if(!this.oServiceFeeName||!this.oStartDate||!this.oEndDate||this.date.length==0||!this.oStatus){
                 this.message = '必填项不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
+            }
+            if(this.oThirdServiceFee!=0){
+                if(!this.oThirdServiceFee){
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
+            if(this.oMemberServiceFee!=0){
+                if(!this.oMemberServiceFee){
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
             }
             if(this.oScreenType==2){
                 if(this.oScreenCode.length==0){
