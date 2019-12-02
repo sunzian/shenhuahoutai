@@ -588,12 +588,15 @@
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="小程序二维码" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 250px"
-                        :disabled="true"
-                        v-model="oMiniAppQRCode"
-                        autocomplete="off"
-                    ></el-input>
+                    <el-popover placement="right" title trigger="hover">
+                        <img style="width: 400px" :src="oMiniAppQRCode" />
+                        <img
+                            slot="reference"
+                            :src="oMiniAppQRCode"
+                            :alt="oMiniAppQRCode"
+                            style="max-height: 50px;max-width: 130px"
+                        />
+                    </el-popover>
                 </el-form-item>
                 <el-form-item prop="miniAppId" label="小程序appId" :label-width="formLabelWidth">
                     <el-input

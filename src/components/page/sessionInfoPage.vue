@@ -275,6 +275,7 @@
                         placeholder="选择日期时间"
                     ></el-date-picker>
                 </el-form-item>
+                <div style="text-align:center;color:red;">*请用谷歌浏览器生成</div>
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="poster = false">取 消</el-button>
