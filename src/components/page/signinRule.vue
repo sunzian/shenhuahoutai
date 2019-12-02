@@ -436,7 +436,7 @@
                     background: 'rgba(0, 0, 0, 0.7)',
                     target: document.querySelector('.div1')
                 });
-                if(!this.form1.oGoldAward||!this.form1.oSignTips){
+                if(!this.form1.oSignTips){
                     this.message = '必填项不能为空，请检查！';
                     this.open();
                     loading.close();
