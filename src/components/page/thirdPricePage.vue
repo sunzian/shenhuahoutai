@@ -577,10 +577,11 @@ export default {
                 .fetchPost('/thirdPrice/getThirdPriceById', params)
                 .then(data => {
                     loading.close();
-                    console.log(data);
+                    console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.editVisible = true;
                         this.oCinemaName = JSON.parse(Decrypt(data.data.data)).cinemaName;
+                        this.oCinemaCode = JSON.parse(Decrypt(data.data.data)).cinemaCode;
                         this.oScreenName = JSON.parse(Decrypt(data.data.data)).screenName;
                         this.oFilmName = JSON.parse(Decrypt(data.data.data)).filmName;
                         this.oTypeName = JSON.parse(Decrypt(data.data.data)).typeName;
@@ -611,6 +612,7 @@ export default {
                 target: document.querySelector('.div1')
             });
             var jsonArr = [];
+            jsonArr.push({ key: 'cinemaCode', value: this.oCinemaCode });
             jsonArr.push({ key: 'settlePrice', value: this.oSettlePrice });
             jsonArr.push({ key: 'id', value: this.oId });
             let sign = md5(preSign(jsonArr));
