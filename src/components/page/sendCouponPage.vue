@@ -258,6 +258,7 @@
                             class="upload-demo"
                             :action="uploadAction"
                             ref="upload"
+                            :on-change="changeExcel"
                             :on-success="uploadExcel"
                             :before-upload="beforeExcel"
                             :auto-upload="false">
@@ -588,6 +589,7 @@ export default {
             sendConditions: false,
             successUpLoad: false,
             sendType: 1,
+            hasExcel: false,
             message: '', //弹出框消息
             uploadAction: 'api/batchSendCoupon/importExcelToSendCoupon',
             type: {},
@@ -927,6 +929,11 @@ export default {
                     this.excelCouponForm.endDate += " 23:59:59";
                 }
             }
+            if (this.hasExcel == false) {
+                this.message = '请上传文件！';
+                this.open();
+                return
+            }
             this.$refs.upload.submit();
         },
 
@@ -1096,6 +1103,10 @@ export default {
                 });
         },
 
+        changeExcel(file,fileList) {
+            this.hasExcel = true;
+        },
+
         beforeExcel(file) {
             const extension = file.name.split(".")[1] === "xls";
             const extension2 = file.name.split(".")[1] === "xlsx";
@@ -1113,15 +1124,16 @@ export default {
 
         uploadExcel(response) {
             this.successUpLoad = true;
-            this.$refs.upload.clearFiles();
             this.message = '优惠券将陆续发放,短时间内请勿连续发放';
             this.open();
+            this.$refs.upload.clearFiles();
             this.excelCouponForm.effectiveTimeType = 1;
             this.excelCouponForm.startDate = '';
             this.excelCouponForm.endDate = '';
             this.excelCouponForm.overDays = '';
             this.excelCouponForm.couponInfo = '';
             this.couponList = [];
+            this.hasExcel = false;
             this.excelCouponForm.messageContent = '';
         },
 

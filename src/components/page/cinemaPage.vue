@@ -333,6 +333,7 @@
                         type="textarea"
                         rows="6"
                         maxlength="200"
+                        show-word-limit
                         v-model="oForm.membershipServiceAgreement"
                         autocomplete="off"
                     ></el-input>
@@ -341,6 +342,7 @@
                     <el-input
                             style="width: 250px"
                             type="textarea"
+                            show-word-limit
                             v-model="oForm.equityCardAgreement"
                             autocomplete="off"
                             maxlength="200"
@@ -351,8 +353,9 @@
                         style="width: 250px"
                         v-model="oForm.buyTicketHint"
                         autocomplete="off"
-                        maxlength="30"
+                        maxlength="100"
                         type="textarea"
+                        show-word-limit
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="充值活动描述" :label-width="formLabelWidth">
