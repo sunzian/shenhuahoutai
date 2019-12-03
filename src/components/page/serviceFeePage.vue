@@ -1155,12 +1155,12 @@ export default {
             jsonArr.push({ key: 'sign', value: sign });
             console.log(jsonArr);
             let params = ParamsAppend(jsonArr);
-            this.editVisible = false;
             https
                 .fetchPost('/serviceFee/modifyServiceFee', params)
                 .then(data => {
                     loading.close();
                     if (data.data.code == 'success') {
+                        this.editVisible = false;
                         this.$message.success(`编辑成功`);
                         this.selectScreenCode = [];
                         this.selectedSell = [];

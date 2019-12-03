@@ -84,7 +84,7 @@
                 <el-table-column prop="number" label="退票手续费">
                     <template slot-scope="scope">{{scope.row.refundFee}}</template>
                 </el-table-column>
-                <el-table-column prop="number" label="第三方支付代售费（微信支付）">
+                <el-table-column prop="number" label="第三方支付代售费">
                     <template slot-scope="scope">{{scope.row.thirdPartyPayCommissionFee}}</template>
                 </el-table-column>
                 <el-table-column prop="number" label="会员卡支付代售费">
@@ -313,7 +313,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="第三方支付代售费（微信支付）" :label-width="formLabelWidth">
+                <el-form-item label="第三方支付代售费" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         v-model="oForm.thirdPartyPayCommissionFee"
@@ -676,7 +676,7 @@
                             将文件拖到此处，或
                             <em>点击上传</em>
                         </div>
-                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，建议100*100 且大小不超过500kb</div>
+                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，建议100*100 且大小不超过300kb</div>
                     </el-upload>
                 </el-form-item>
                 <el-form-item prop="miniAppId" label="小程序appId" :label-width="formLabelWidth">
@@ -898,7 +898,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="第三方支付代售费（微信支付）" :label-width="formLabelWidth">
+                <el-form-item label="第三方支付代售费" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         v-model="oThirdPartyPayCommissionFee"
@@ -1264,12 +1264,13 @@
                         :before-upload="beforeUpload"
                         :data="type"
                         :limit="1"
+                        ref="upload"
                         :on-success="onSuccess"
                         :file-list="fileList"
                         list-type="picture"
                     >
                         <el-button size="small" type="primary">点击上传修改</el-button>
-                        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，建议100*100 且大小不超过500kb</div>
+                        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，建议100*100 且大小不超过300kb</div>
                         </el-upload>
                 </el-form-item>
                 <el-form-item prop="miniAppId" label="小程序appId" :label-width="formLabelWidth">
@@ -2158,7 +2159,6 @@ export default {
             jsonArr.push({ key: 'sign', value: sign });
             let params = ParamsAppend(jsonArr);
             console.log(jsonArr);
-            this.editVisible = false;
             https
                 .fetchPost('/cinema/updateCinema', params)
                 .then(data => {
@@ -2166,6 +2166,7 @@ export default {
                     console.log(data);
                     // console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
+                        this.editVisible = false;
                         this.$message.success(`编辑成功`);
                         this.$refs.download.clearFiles();//清除已上传文件
                         this.getMenu();
@@ -2283,12 +2284,25 @@ export default {
                     console.log(err);
                 });
         },
-        beforeUpload() {
+        beforeUpload(file) {
             //上传之前
             this.type.type = EncryptReplace('bussiness');
+            // const isLt2M = file.size / 1024  < 200;
+            // if (!isLt2M) {
+            //     this.message = '上传模板大小不能超过 200KB!';
+            //     this.$refs.upload.clearFiles();
+            //     this.open();
+            //     return
+            // }
         },
         onSuccess(data) {
             // 修改图片
+            if (data.status == '-1') {
+                this.message = data.message;
+                this.open();
+                this.$refs.upload.clearFiles();
+                return;
+            }
             this.oMiniAppQRCode = data.data;
             if (data.code == 'nologin') {
                 this.message = data.message;
@@ -2299,6 +2313,12 @@ export default {
         setPicture(data) {
             // 上传图片
             console.log(data);
+            if (data.status == '-1') {
+                this.message = data.message;
+                this.open();
+                this.$refs.upload.clearFiles();
+                return;
+            }
             this.oForm.miniAppQRCode = data.data;
             if (data.code == 'nologin') {
                 this.message = data.message;

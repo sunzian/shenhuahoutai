@@ -472,14 +472,6 @@ export default {
                     });
                     this.idx = index;
                     this.form = row;
-                    let name = this.query.name;
-                    let status = this.query.status;
-                    if (!name) {
-                        name = '';
-                    }
-                    if (!status) {
-                        status = '';
-                    }
                     let jsonArr = [];
                     jsonArr.push({ key: 'id', value: row.id });
                     let sign = md5(preSign(jsonArr));
@@ -588,13 +580,13 @@ export default {
             let params = ParamsAppend(jsonArr);
             console.log(params);
             console.log(jsonArr);
-            this.editVisible = false;
             https
                 .fetchPost('/businessInfo/updateById', params)
                 .then(data => {
                     loading.close();
                     console.log(data);
                     if (data.data.code == 'success') {
+                        this.editVisible = false;
                         this.$refs.upload.clearFiles();//清除已上传文件
                         this.$message.success(`编辑成功`);
                         this.getMenu();

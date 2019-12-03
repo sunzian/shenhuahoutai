@@ -270,7 +270,7 @@
                 <el-form-item label="退票手续费" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oRefundFee" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="第三方支付代售费（微信支付）" :label-width="formLabelWidth">
+                <el-form-item label="第三方支付代售费" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         v-model="oThirdPartyPayCommissionFee"
@@ -287,9 +287,9 @@
                 <el-form-item :required="true" label="影院会员服务协议" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        type="textarea"
                         v-model="oMembershipServiceAgreement"
                         autocomplete="off"
+                        type="textarea"
                         maxlength="2000"
                         show-word-limit
                     ></el-input>
@@ -1120,7 +1120,6 @@ export default {
             jsonArr.push({ key: 'sign', value: sign });
             let params = ParamsAppend(jsonArr);
             console.log(jsonArr);
-            this.editVisible = false;
             https
                 .fetchPost('/cinema/updateCinemaFromBusiness', params)
                 .then(data => {
@@ -1128,6 +1127,7 @@ export default {
                     console.log(data);
                     // console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
+                        this.editVisible = false;
                         this.$message.success(`编辑成功`);
                         this.getMenu();
                     } else if (data.data.code == 'nologin') {

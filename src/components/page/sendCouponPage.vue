@@ -710,9 +710,7 @@ export default {
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
                 var params = ParamsAppend(jsonArr);
-                https
-                    .fetchPost('/merchandiseCoupon/getCouponByCinemaCode', params)
-                    .then(data => {
+                https.fetchPost('/merchandiseCoupon/getCouponByCinemaCode', params).then(data => {
                         if (data.data.code == 'success') {
                             var res = JSON.parse(Decrypt(data.data.data));
                             this.couponInfo = res.pageResult.data;
@@ -876,6 +874,7 @@ export default {
             jsonArr.push({ key: 'messageContent', value: this.couponForm.messageContent });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
+            console.log(jsonArr);
             var params = ParamsAppend(jsonArr);
             https
                 .fetchPost('/batchSendCoupon/batchSendCoupon', params)

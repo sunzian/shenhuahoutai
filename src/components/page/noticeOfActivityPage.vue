@@ -716,13 +716,13 @@ export default {
                 jsonArr.push({ key: 'sign', value: sign });
                 console.log(jsonArr);
                 let params = ParamsAppend(jsonArr);
-                this.editVisible = false;
                 https
                     .fetchPost('/noticeOfActivity/updateNoticeOfActivityById', params)
                     .then(data => {
                         loading.close();
                         console.log(data);
                         if (data.data.code == 'success') {
+                            this.editVisible = false;
                             this.$refs.upload.clearFiles(); //清除已上传文件
                             this.$message.success(`编辑成功`);
                             this.show();

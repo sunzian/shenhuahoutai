@@ -1103,8 +1103,9 @@ export default {
             console.log(a);
             this.ticketIds = a;
         },
-        getCinemaCode() {
-            console.log(this.checkedCities[0]);
+        getCinemaCode(val) {
+            this.checkedCities = val;
+            console.log(this.checkedCities);
         },
         getCurrentRow(index) {
             //优惠券弹出框index
@@ -1217,9 +1218,9 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            if(!this.oForm.commodity_type||!this.oForm.image_url||(this.checkedCities.length=0)||!this.oForm.details||!this.oForm.store
-                ||!this.oForm.expireDay||!this.oForm.change_type||!this.oForm.topStatus||!this.oForm.recommendStatus||!this.oForm.status
-            ||!this.oForm.assign_type||!this.oForm.limit_type){
+            if(!this.oForm.commodity_type||!this.oForm.image_url||this.checkedCities.length==0||!this.oForm.details
+                ||!this.oForm.store ||!this.oForm.expireDay||!this.oForm.change_type||!this.oForm.topStatus
+                ||!this.oForm.recommendStatus||!this.oForm.status ||!this.oForm.assign_type||!this.oForm.limit_type){
                 this.message = '必填项不能为空，请检查！';
                 this.open();
                 loading.close();
@@ -1234,7 +1235,7 @@ export default {
                 }
             }
             if(this.oForm.commodity_type==2) {
-                if (this.selectedSell.length=0) {
+                if (this.selectedSell.length==0) {
                     this.message = '必填项不能为空，请检查！';
                     this.open();
                     loading.close();
@@ -1281,7 +1282,6 @@ export default {
                     return;
                 }
             }
-            setTimeout(() => {
                 if (this.filmInfo) {
                     let couponList = []; //优惠券编码
                     for (let x in this.filmInfo) {
@@ -1296,7 +1296,7 @@ export default {
                 jsonArr.push({ key: 'changeType', value: this.oForm.change_type });
                 jsonArr.push({ key: 'gold', value: this.oForm.gold });
                 jsonArr.push({ key: 'money', value: this.oForm.money });
-                jsonArr.push({ key: 'cinemaCodes', value: this.checkedCities });
+                jsonArr.push({ key: 'cinemaCodes', value: this.checkedCities});
                 jsonArr.push({ key: 'status', value: this.oForm.status });
                 jsonArr.push({ key: 'commodityType', value: this.oForm.commodity_type });
                 jsonArr.push({ key: 'assignType', value: this.oForm.assign_type });
@@ -1371,7 +1371,6 @@ export default {
                             console.log(err);
                         });
                 }
-            }, 500);
         },
         cancel() {
             this.$confirm('该操作将清空页面数据, 是否继续?', '提示', {
@@ -1592,8 +1591,8 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            if(!this.form.commodityType||!this.form.image_url||(this.oCheckedCities.length=0)||!this.form.markdown||!this.form.store
-                ||!this.form.expireDay||!this.form.changeType||!this.oTopStatus||!this.oRecommendStatus||!this.form.status
+            if(!this.form.commodityType||!this.form.image_url||(this.oCheckedCities.length==0)||!this.form.markdown||!this.form.store
+                ||!this.form.expireDay||!this.form.changeType||!this.oTopstatus||!this.oRecommendStatus||!this.form.status
                 ||!this.form.assignType||!this.form.limitType){
                 this.message = '必填项不能为空，请检查！';
                 this.open();
@@ -1609,7 +1608,7 @@ export default {
                 }
             }
             if(this.form.commodityType==2) {
-                if (this.selectedSell.length=0) {
+                if (this.selectedSell.length==0) {
                     this.message = '必填项不能为空，请检查！';
                     this.open();
                     loading.close();
@@ -1704,7 +1703,6 @@ export default {
                 jsonArr.push({ key: 'sign', value: sign });
                 console.log(jsonArr);
                 let params = ParamsAppend(jsonArr);
-                this.editVisible = false;
                 https
                     .fetchPost('goldCommodity/updateById', params)
                     .then(data => {
@@ -1712,6 +1710,7 @@ export default {
                         // console.log(data);
                         // console.log(JSON.parse(Decrypt(data.data.data)));
                         if (data.data.code == 'success') {
+                            this.editVisible = false;
                             this.$message.success(`编辑成功`);
                             this.$refs.download.clearFiles();
                             this.selectedSell = [];

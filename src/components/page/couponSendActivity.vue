@@ -79,8 +79,11 @@
                 <!--<el-table-column prop="booleans" label="活动描述">-->
                     <!--<template slot-scope="scope">{{scope.row.activityDesc}}</template>-->
                 <!--</el-table-column>-->
-                <el-table-column prop="booleans" label="券有效天数" width="110">
+                <el-table-column prop="booleans" label="发放后多少天之后开始生效" width="190">
                     <template slot-scope="scope">{{scope.row.validDay}}</template>
+                </el-table-column>
+                <el-table-column prop="booleans" label="生效后有效期天数" width="140">
+                    <template slot-scope="scope">{{scope.row.overDays}}</template>
                 </el-table-column>
                 <el-table-column label="操作" width="140" align="center" fixed="right">
                     <template slot-scope="scope">
@@ -897,7 +900,6 @@ export default {
             jsonArr.push({ key: 'sign', value: sign });
             console.log(jsonArr);
             let params = ParamsAppend(jsonArr);
-            this.editVisible = false;
             https
                 .fetchPost('/couponSendActivity/updateCouponSendActivityById', params)
                 .then(data => {
@@ -905,6 +907,7 @@ export default {
                     console.log(data);
                     // console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
+                        this.editVisible = false;
                         this.$refs.upload.clearFiles(); //清除已上传文件
                         this.$message.success(`编辑成功`);
                         this.getMenu();

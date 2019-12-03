@@ -44,13 +44,14 @@ export default {
                 this.$router.push('/login');
             }
             else if(data.data.code == 'success'){
-                this.key=true
-                let menus=Decrypt(data.data.data)//返回的数据进行解密
-                this.menuList =JSON.parse(menus)
-                console.log(this.menuList);
+                this.key=true;
+                // let menus=;//返回的数据进行解密
+                this.menuList =JSON.parse(Decrypt(data.data.data));
+                // console.log(this.menuList);
             }
         }).catch(err=>{
-                console.log(err)
+            console.log(err);
+            this.$router.push('/login');
             }
         )
     },
