@@ -327,10 +327,12 @@
                         // console.log(oData);
                         this.form=oData
                     } else if (data.data.code == 'nologin') {
+                        console.log(1);
                         this.message = data.data.message;
                         this.open();
                         this.$router.push('/login');
                     } else {
+                        console.log(2);
                         this.message = data.data.message;
                         this.open();
                     }

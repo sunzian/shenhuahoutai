@@ -299,7 +299,7 @@
                         <el-radio :label="2">上线</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item :required="true" label="发布时间" :label-width="formLabelWidth">
+                <el-form-item label="发布时间" :label-width="formLabelWidth">
                     <el-input style="width: 250px" :disabled="true" v-model="oPublishDate"></el-input>
                 </el-form-item>
             </el-form>
@@ -521,6 +521,12 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
+            if(!this.oForm.title||!this.summary||!this.imageUrl||!this.oForm.content||!this.oForm.status){
+                this.message = '必填项不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
             setTimeout(() => {
                 var jsonArr = [];
                     jsonArr.push({ key: 'content', value: this.oForm.content });
@@ -690,6 +696,12 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
+            if(!this.oTitle||!this.oSummary||!this.oImageUrl||!this.oContent||!this.oStatus){
+                this.message = '必填项不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
             setTimeout(() => {
                 var jsonArr = [];
                 jsonArr.push({ key: 'content', value: this.oContent });
@@ -704,13 +716,13 @@ export default {
                 jsonArr.push({ key: 'sign', value: sign });
                 console.log(jsonArr);
                 let params = ParamsAppend(jsonArr);
-                this.editVisible = false;
                 https
                     .fetchPost('/noticeOfActivity/updateNoticeOfActivityById', params)
                     .then(data => {
                         loading.close();
                         console.log(data);
                         if (data.data.code == 'success') {
+                            this.editVisible = false;
                             this.$refs.upload.clearFiles(); //清除已上传文件
                             this.$message.success(`编辑成功`);
                             this.show();

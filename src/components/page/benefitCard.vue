@@ -1442,6 +1442,159 @@
                 if (this.oForm.reduceType == 1) {
                     this.oForm.achieveMoney = '';
                 }
+                if(!this.oForm.name||!this.oForm.simpleDesc||!this.oForm.cinemaCode||!this.oForm.cardType
+                    ||!this.oForm.unit||!this.oForm.number||!this.oForm.expense||!this.oForm.startDate||!this.oForm.endDate
+                    ||!this.oForm.status||!this.oForm.isRecommend||!this.oForm.benefitDesc){
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if(this.oForm.cardType==1) {
+                    if (!this.oForm.isFilmJoin||!this.oForm.isMerchandiseJoin||!this.oForm.validPayType||!this.oForm.isHolidayValid||!this.oForm.isCouponTogether) {
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if(this.oForm.isFilmJoin==1&&this.oForm.cardType==1) {
+                    if (!this.oForm.filmSimpleDesc||!this.oForm.selectHallType||!this.oForm.selectFilmFormatType||!this.oForm.selectFilmType
+                        ||!this.oForm.reduceTypeFilm||!this.oForm.isLimitEachFilm||!this.oForm.isLimitFilm) {
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if(this.oForm.selectHallType != 0) {
+                    if (this.oForm.screenCode.length==0) {
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if(this.oForm.selectFilmFormatType != 0) {
+                    if (this.oForm.filmFormatCode.length==0) {
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if(this.oForm.isFilmJoin==1&&this.oForm.selectFilmType!=0&&this.oForm.cardType==1) {
+                    if (this.selectedSell.length==0) {
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if(this.oForm.reduceTypeFilm == 1&&this.oForm.cardType==1&&this.oForm.isFilmJoin==1) {
+                    if (!this.oForm.discountMoneyFilm) {
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if(this.oForm.reduceTypeFilm == 2&&this.oForm.cardType==1&&this.oForm.isFilmJoin==1) {
+                    if (!this.oForm.discountMoneyFilm) {
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if(this.oForm.reduceTypeFilm == 3&&this.oForm.cardType==1&&this.oForm.isFilmJoin==1) {
+                    if (!this.oForm.discountMoneyFilm) {
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if(this.oForm.isLimitEachFilm==1&&this.oForm.cardType==1&&this.oForm.isFilmJoin==1) {
+                    if (!this.oForm.eachFilmNumber) {
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if(this.oForm.isLimitFilm==1&&this.oForm.cardType==1&&this.oForm.isFilmJoin==1) {
+                    if (!this.oForm.limitFilmUnit||!this.oForm.numberFilm) {
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if(this.oForm.isMerchandiseJoin==1&&this.oForm.cardType==1) {
+                    if (!this.oForm.merchandiseSimpleDesc||!this.oForm.reduceTypeMerchandise||!this.oForm.selectMerchandiseType) {
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if(this.oForm.reduceTypeMerchandise == 1&&this.oForm.cardType==1&&this.oForm.isMerchandiseJoin==1) {
+                    if (!this.oForm.discountMoneyMerchandise) {
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if(this.oForm.reduceTypeMerchandise == 2&&this.oForm.cardType==1&&this.oForm.isMerchandiseJoin==1) {
+                    if (!this.oForm.achieveMoneyMerchandise||!this.oForm.discountMoneyMerchandise) {
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if(this.oForm.reduceTypeMerchandise == 3&&this.oForm.cardType==1&&this.oForm.isMerchandiseJoin==1) {
+                    if (!this.oForm.discountMoneyMerchandise) {
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if(this.oForm.selectMerchandiseType!=0&&this.oForm.isMerchandiseJoin==1&&this.oForm.cardType==1) {
+                    if (this.oSelectedSell.length==0) {
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if(this.oForm.isMerchandiseJoin==1&&this.oForm.cardType==1&&(this.oForm.reduceTypeMerchandise!=2)) {
+                    if (!this.oForm.isLimitMerchandise) {
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if(this.oForm.isLimitMerchandise==1&&this.oForm.cardType==1&&this.oForm.isMerchandiseJoin==1&&(this.oForm.reduceTypeMerchandise!=2)) {
+                    if (!this.oForm.limitMerchandiseUnit||!this.oForm.numberMerchandise) {
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if(this.oForm.cardType==2) {
+                    if (!this.oForm.couponSimpleDesc||!this.groupName) {
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
                 var jsonArr = [];
                 jsonArr.push({ key: 'name', value: this.oForm.name });
                 jsonArr.push({ key: 'cinemaCode', value: this.oForm.cinemaCode });
@@ -1600,14 +1753,6 @@
                 }).then(() => {
                     this.idx = index;
                     this.form = row;
-                    let name = this.query.name;
-                    let status = this.query.status;
-                    if (!name) {
-                        name = '';
-                    }
-                    if (!status) {
-                        status = '';
-                    }
                     let jsonArr = [];
                     jsonArr.push({ key: 'id', value: row.id });
                     let sign = md5(preSign(jsonArr));
@@ -1928,6 +2073,159 @@
                 for(let x in this.oSelectedSell){
                     merchandiseCodeList.push(this.oSelectedSell[x].merchandiseCode)
                 }
+                if(!this.oName||!this.oSimpleDesc||!this.oCinemaCode||!this.oCardType
+                    ||!this.oUnit||!this.oNumber||!this.oExpense||!this.oStartDate||!this.oEndDate
+                    ||!this.oStatus||!this.oIsRecommend||!this.oBenefitDesc){
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if(this.oCardType==1) {
+                    if (!this.oIsFilmJoin||!this.oIsMerchandiseJoin||!this.oValidPayType||!this.oIsHolidayValid||!this.oIsCouponTogether) {
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if(this.oIsFilmJoin==1&&this.oCardType==1) {
+                    if (!this.oFilmSimpleDesc||!this.oSelectHallType||!this.oSelectFilmFormatType||!this.oSelectFilmType
+                        ||!this.oReduceTypeFilm||!this.oIsLimitEachFilm||!this.oIsLimitFilm) {
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if(this.oSelectHallType != 0) {
+                    if (this.oScreenCode.length==0) {
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if(this.oSelectFilmFormatType != 0) {
+                    if (this.oFilmFormatCode.length==0) {
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if(this.oIsFilmJoin==1&&this.oSelectFilmType!=0&&this.oCardType==1) {
+                    if (this.selectedSell.length==0) {
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if(this.oReduceTypeFilm == 1&&this.oCardType==1&&this.oIsFilmJoin==1) {
+                    if (!this.oDiscountMoneyFilm) {
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if(this.oReduceTypeFilm == 2&&this.oCardType==1&&this.oIsFilmJoin==1) {
+                    if (!this.oDiscountMoneyFilm) {
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if(this.oReduceTypeFilm == 3&&this.oCardType==1&&this.oIsFilmJoin==1) {
+                    if (!this.oDiscountMoneyFilm) {
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if(this.oIsLimitEachFilm==1&&this.oCardType==1&&this.oIsFilmJoin==1) {
+                    if (!this.oEachFilmNumber) {
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if(this.oIsLimitFilm==1&&this.oCardType==1&&this.oIsFilmJoin==1) {
+                    if (!this.oLimitFilmUnit||!this.oNumberFilm) {
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if(this.oIsMerchandiseJoin==1&&this.oCardType==1) {
+                    if (!this.oMerchandiseSimpleDesc||!this.oReduceTypeMerchandise||!this.oSelectMerchandiseType) {
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if(this.oReduceTypeMerchandise == 1&&this.oCardType==1&&this.oIsMerchandiseJoin==1) {
+                    if (!this.oDiscountMoneyMerchandise) {
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if(this.oReduceTypeMerchandise == 2&&this.oCardType==1&&this.oIsMerchandiseJoin==1) {
+                    if (!this.oAchieveMoneyMerchandise||!this.oDiscountMoneyMerchandise) {
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if(this.oReduceTypeMerchandise == 3&&this.oCardType==1&&this.oIsMerchandiseJoin==1) {
+                    if (!this.oDiscountMoneyMerchandise) {
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if(this.oSelectMerchandiseType!=0&&this.oIsMerchandiseJoin==1&&this.oCardType==1) {
+                    if (this.oSelectedSell.length==0) {
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if(this.oIsMerchandiseJoin==1&&this.oCardType==1&&(this.oReduceTypeMerchandise!=2)) {
+                    if (!this.oIsLimitMerchandise) {
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if(this.oIsLimitMerchandise==1&&this.oCardType==1&&this.oIsMerchandiseJoin==1&&(this.oReduceTypeMerchandise!=2)) {
+                    if (!this.oLimitMerchandiseUnit||!this.oNumberMerchandise) {
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if(this.oCardType==2) {
+                    if (!this.oCouponSimpleDesc||!this.groupName) {
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
                 var jsonArr = [];
                 jsonArr.push({ key: 'name', value: this.oName });
                 jsonArr.push({ key: 'cinemaCode', value: this.oCinemaCode });
@@ -2007,11 +2305,11 @@
                 jsonArr.push({ key: 'sign', value: sign });
                 console.log(jsonArr);
                 let params = ParamsAppend(jsonArr);
-                this.editVisible = false;
                 https.fetchPost('/benefitCard/updateBenefitById', params).then(data => {
                     loading.close();
                     // console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
+                        this.editVisible = false;
                         this.$message.success(`编辑成功`);
                         this.getMenu();
                     } else if (data.data.code == 'nologin') {
@@ -2278,8 +2576,27 @@
             },
             sureNext() {
                 if(this.sellIndex>=0){
-                    // this.selectedSell=[]
-                    this.selectedSell.push(this.sellTableData[this.sellIndex]);
+                    // console.log('选了数据');
+                    if(this.selectedSell.length<=0){
+                        // console.log('长度为0');
+                        this.selectedSell.push(this.sellTableData[this.sellIndex]);
+                    }
+                    else if(this.selectedSell.length>0){
+                        // console.log('有数据');
+                        for(let x in this.selectedSell){
+                            if(this.selectedSell[x].filmCode==this.sellTableData[this.sellIndex].filmCode){
+                                this.message = '不能添加相同影片！';
+                                this.open();
+                                return
+                            }
+                            else {
+                                // console.log('判断不重复');
+                                this.selectedSell.push(this.sellTableData[this.sellIndex]);
+                            }
+
+                        }
+                    }
+
                 }
                 console.log(this.selectedSell);
                 this.drawer = false;

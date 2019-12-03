@@ -817,7 +817,6 @@ export default {
                 console.log(jsonArr);
                 let params = ParamsAppend(jsonArr);
                 console.log(params);
-                this.editVisible = false;
                 https
                     .fetchPost('/merchandiseCombo/modifyMerchandiseCombo', params)
                     .then(data => {
@@ -825,6 +824,7 @@ export default {
                         console.log(data);
                         // console.log(JSON.parse(Decrypt(data.data.data)));
                         if (data.data.code == 'success') {
+                            this.editVisible = false;
                             this.selectedSell = [];
                             this.$message.success(`编辑成功`);
                             this.$refs.download.clearFiles();

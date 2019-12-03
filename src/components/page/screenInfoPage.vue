@@ -353,12 +353,12 @@ export default {
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             let params = ParamsAppend(jsonArr);
-            this.editVisible = false;
             https
                 .fetchPost('/screenInfo/updateScreenName', params)
                 .then(data => {
                     loading.close();
                     if (data.data.code == 'success') {
+                        this.editVisible = false;
                         this.$message.success(`编辑成功`);
                         this.editVisible = false
                         this.getMenu();

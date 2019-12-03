@@ -79,8 +79,11 @@
                 <!--<el-table-column prop="booleans" label="活动描述">-->
                     <!--<template slot-scope="scope">{{scope.row.activityDesc}}</template>-->
                 <!--</el-table-column>-->
-                <el-table-column prop="booleans" label="券有效天数" width="110">
+                <el-table-column prop="booleans" label="发放后多少天之后开始生效" width="190">
                     <template slot-scope="scope">{{scope.row.validDay}}</template>
+                </el-table-column>
+                <el-table-column prop="booleans" label="生效后有效期天数" width="140">
+                    <template slot-scope="scope">{{scope.row.overDays}}</template>
                 </el-table-column>
                 <el-table-column label="操作" width="140" align="center" fixed="right">
                     <template slot-scope="scope">
@@ -370,7 +373,6 @@
                 <el-form-item :required="true" label="生效后有效期天数：" :label-width="formLabelWidth">
                     <el-input
                             style="width: 250px"
-                            min="1"
                             v-model="form.overDays"
                             autocomplete="off"
                     ></el-input>
@@ -634,6 +636,21 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
+            if(!this.oForm.name||!this.oActivityImageUrl||!this.oForm.cinemaCode||!this.oForm.startDate||!this.oForm.endDate||!this.oForm.status
+                ||!this.oForm.isLimitTotal||!this.oForm.validDay||!this.oForm.overDays||!this.groupName){
+                this.message = '必填项不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(this.oForm.isLimitTotal==1) {
+                if (!this.oForm.totalNumber) {
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
             var jsonArr = [];
             jsonArr.push({ key: 'cinemaCode', value: this.oForm.cinemaCode });
             jsonArr.push({ key: 'activityImageUrl', value: this.oActivityImageUrl });
@@ -654,9 +671,7 @@ export default {
             console.log(jsonArr);
             let params = ParamsAppend(jsonArr);
             if (this.dialogFormVisible == true) {
-                https
-                    .fetchPost('/couponSendActivity/addCouponSendActivity', params)
-                    .then(data => {
+                https.fetchPost('/couponSendActivity/addCouponSendActivity', params).then(data => {
                         loading.close();
                         console.log(data);
                         if (data.data.code == 'success') {
@@ -850,6 +865,21 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
+            if(!this.form.name||!this.oActivityImageUrl||!this.form.cinemaCode||!this.form.type||!this.form.startDate||!this.form.endDate||!this.form.status
+                ||!this.form.isLimitTotal||!this.form.validDay||!this.form.overDays||!this.groupName){
+                this.message = '必填项不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(this.form.isLimitTotal==1) {
+                if (!this.form.totalNumber) {
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
             var jsonArr = [];
             jsonArr.push({ key: 'cinemaCode', value: this.form.cinemaCode });
             jsonArr.push({ key: 'activityImageUrl', value: this.oActivityImageUrl });
@@ -870,7 +900,6 @@ export default {
             jsonArr.push({ key: 'sign', value: sign });
             console.log(jsonArr);
             let params = ParamsAppend(jsonArr);
-            this.editVisible = false;
             https
                 .fetchPost('/couponSendActivity/updateCouponSendActivityById', params)
                 .then(data => {
@@ -878,6 +907,7 @@ export default {
                     console.log(data);
                     // console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
+                        this.editVisible = false;
                         this.$refs.upload.clearFiles(); //清除已上传文件
                         this.$message.success(`编辑成功`);
                         this.getMenu();

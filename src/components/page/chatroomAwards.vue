@@ -258,7 +258,7 @@
         <!-- 编辑弹出框 -->
         <el-dialog title="详情" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
-                <el-form-item :required="true" label="影院名称：" :label-width="formLabelWidth">
+                <el-form-item label="影院名称：" :label-width="formLabelWidth">
                     <el-input
                         style="width: 150px"
                         v-model="oCinemaName"
@@ -266,14 +266,14 @@
                         disabled
                     ></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="奖品名称：" :label-width="formLabelWidth">
+                <el-form-item label="奖品名称：" :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oName" autocomplete="off" disabled></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="奖品类型：" :label-width="formLabelWidth">
+                <el-form-item label="奖品类型：" :label-width="formLabelWidth">
                     <el-tag v-if="oType=='1'">优惠券</el-tag>
                     <el-tag v-if="oType=='2'">实物</el-tag>
                 </el-form-item>
-                <el-form-item :required="true" label="礼物图片：" :label-width="formLabelWidth">
+                <el-form-item label="礼物图片：" :label-width="formLabelWidth">
                     <el-popover placement="right" title trigger="hover">
                         <img style="width:400px" :src="oImageUrl" />
                         <img
@@ -498,6 +498,36 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
+            if(!this.oForm.type||!this.oForm.image_url||!this.oForm.singleNumber||!this.oForm.groupNumber||!this.oForm.overDays||!this.oForm.limitStatus){
+                this.message = '必填项不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(this.oForm.type==2) {
+                if (!this.oForm.name) {
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
+            if(this.oForm.type==1) {
+                if (!this.couponInfo.couponName) {
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
+            if(this.oForm.limitStatus == 2) {
+                if (!this.oForm.singleLimitNumber) {
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
             var jsonArr = [];
             if (this.oForm.limitStatus == 2) {
                 jsonArr.push({ key: 'monthLimitNumber', value: this.oForm.singleLimitNumber });
@@ -744,6 +774,20 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
+            if(!this.oGroupNumber||!this.oSingleNumber||!this.oOverDays){
+                this.message = '必填项不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(this.oLimitStatus==2) {
+                if (!this.oSingleLimitNumber) {
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
             var jsonArr = [];
             if (this.oLimitStatus == 2) {
                 jsonArr.push({ key: 'monthLimitNumber', value: this.oSingleLimitNumber });
@@ -757,13 +801,13 @@ export default {
             jsonArr.push({ key: 'sign', value: sign });
             console.log(jsonArr);
             let params = ParamsAppend(jsonArr);
-            this.editVisible = false;
             https
                 .fetchPost('chatroomAwards/updateAwards', params)
                 .then(data => {
                     loading.close();
                     // console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
+                        this.editVisible = false;
                         this.$message.success(`编辑成功`);
                         this.show(this.cinemaCode);
                     } else if (data.data.code == 'nologin') {

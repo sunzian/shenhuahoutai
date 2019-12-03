@@ -79,16 +79,16 @@
         <!--新增弹出框-->
         <el-dialog :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
-                <el-form-item label="演员名称" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="演员名称" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oForm.name" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="国家" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oForm.country" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="介绍" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="oForm.introduction" autocomplete="off"></el-input>
+                    <el-input style="width: 250px" v-model="oForm.introduction" autocomplete="off"  type="textarea" maxlength="200" show-word-limit></el-input>
                 </el-form-item>
-                <el-form-item label="导演图片" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="演员图片" :label-width="formLabelWidth">
                     <el-upload
                         :data="type"
                         class="upload-demo"
@@ -118,16 +118,16 @@
         <!-- 编辑弹出框 -->
         <el-dialog title="编辑" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
-                <el-form-item label="演员名称" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="演员名称" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oName" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="国家" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oCountry" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="介绍" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="oIntroduction" autocomplete="off"></el-input>
+                    <el-input style="width: 250px" v-model="oIntroduction" autocomplete="off" type="textarea" maxlength="200" show-word-limit></el-input>
                 </el-form-item>
-                <el-form-item label="图片地址" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="演员图片" :label-width="formLabelWidth">
                     <el-popover placement="right" title trigger="hover">
                         <img :src="oPicture" />
                         <img
@@ -250,6 +250,12 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
+            if(!this.oForm.name||!this.oForm.picture){
+                this.message = '必填项不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
             var jsonArr = [];
             jsonArr.push({ key: 'name', value: this.oForm.name });
             jsonArr.push({ key: 'country', value: this.oForm.country });
@@ -304,14 +310,6 @@ export default {
                     });
                     this.idx = index;
                     this.form = row;
-                    let name = this.query.name;
-                    let status = this.query.status;
-                    if (!name) {
-                        name = '';
-                    }
-                    if (!status) {
-                        status = '';
-                    }
                     let jsonArr = [];
                     jsonArr.push({key: 'id', value: row.id});
                     let sign = md5(preSign(jsonArr));
@@ -394,6 +392,12 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
+            if(!this.oName||!this.oPicture){
+                this.message = '必填项不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
             var jsonArr = [];
             jsonArr.push({ key: 'name', value: this.oName });
             jsonArr.push({ key: 'country', value: this.oCountry });
@@ -404,11 +408,11 @@ export default {
             jsonArr.push({ key: 'sign', value: sign });
             console.log(jsonArr);
             let params = ParamsAppend(jsonArr);
-            this.editVisible = false;
             https.fetchPost('/actor/updateActor', params).then(data => {
                     // console.log(JSON.parse(Decrypt(data.data.data)));
                     loading.close();
                     if (data.data.code == 'success') {
+                        this.editVisible = false;
                         this.$message.success(`编辑成功`);
                         this.$refs.download.clearFiles();//清除已上传文件
                         this.getMenu();

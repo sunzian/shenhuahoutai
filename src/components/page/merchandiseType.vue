@@ -502,7 +502,6 @@ export default {
                 console.log(jsonArr);
                 let params = ParamsAppend(jsonArr);
                 console.log(params);
-                this.editVisible = false;
                 https
                     .fetchPost('/merchandiseType/modifyMerchandiseType', params)
                     .then(data => {
@@ -510,6 +509,7 @@ export default {
                         console.log(data);
                         // console.log(JSON.parse(Decrypt(data.data.data)));
                         if (data.data.code == 'success') {
+                            this.editVisible = false;
                             this.$message.success(`编辑成功`);
                             this.refresh();
                         } else if (data.data.code == 'nologin') {

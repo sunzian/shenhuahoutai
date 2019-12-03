@@ -619,7 +619,6 @@ export default {
             jsonArr.push({ key: 'sign', value: sign });
             let params = ParamsAppend(jsonArr);
             console.log(jsonArr);
-            this.editVisible = false;
             https
                 .fetchPost('/thirdPrice/updateThirdPrice', params)
                 .then(data => {
@@ -627,6 +626,7 @@ export default {
                     console.log(data);
                     // console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
+                        this.editVisible = false;
                         this.$message.success(`编辑成功`);
                         this.getMenu();
                     } else if (data.data.code == 'nologin') {

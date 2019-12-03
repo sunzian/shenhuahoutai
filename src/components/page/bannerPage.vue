@@ -39,14 +39,14 @@
                     class="handle-select mr10"
                 >
                     <el-option key="1" label="卖品首页" value="1"></el-option>
-                    <el-option key="2" label="积分商城首页" value="2"></el-option>
+                    <el-option key="2" label="金币商场首页" value="2"></el-option>
                     <el-option key="3" label="个人中心首页" value="3"></el-option>
                     <el-option key="4" label="支付成功页" value="4"></el-option>
-                    <el-option key="5" label="放映厅首页" value="5"></el-option>
+                    <el-option key="5" label="游戏室首页" value="5"></el-option>
                     <el-option key="6" label="首页广告弹窗" value="6"></el-option>
                     <!--<el-option key="7" label="今日大牌" value="7"></el-option>-->
-                    <el-option key="8" label="签到送积分" value="8"></el-option>
-                    <el-option key="9" label="分享得金币" value="9"></el-option>
+                    <el-option key="8" label="签到送金币" value="8"></el-option>
+                    <el-option key="9" label="邀请好友首页" value="9"></el-option>
                     <el-option key="10" label="积分换金币" value="10"></el-option>
                 </el-select>
                 <el-button style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
@@ -621,7 +621,7 @@ export default {
                 },
                 {
                     value: '2',
-                    label: '积分商城首页 建议尺寸750*360'
+                    label: '金币商场首页 建议尺寸750*360'
                 },
                 {
                     value: '3',
@@ -633,7 +633,7 @@ export default {
                 },
                 {
                     value: '5',
-                    label: '放映厅首页 建议尺寸750*360'
+                    label: '游戏室首页 建议尺寸750*360'
                 },
                 {
                     value: '6',
@@ -641,11 +641,11 @@ export default {
                 },
                 {
                     value: '8',
-                    label: '签到送积分 建议尺寸670*200'
+                    label: '签到送金币 建议尺寸670*200'
                 },
                 {
                     value: '9',
-                    label: '分享得金币 建议尺寸670*200'
+                    label: '邀请好友首页 建议尺寸670*200'
                 }
             ],
             tabType: [
@@ -1020,9 +1020,7 @@ export default {
                 target: document.querySelector('.div1')
             });
             setTimeout(() => {
-                https
-                    .fetchPost('/banner/addPage', '')
-                    .then(data => {
+                https.fetchPost('/banner/addPage', '').then(data => {
                         loading.close();
                         console.log(data);
                         console.log(JSON.parse(Decrypt(data.data.data)));
@@ -1056,6 +1054,20 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
+            if(!this.oForm.statusValue||!this.startTime||!this.endTime||!this.oForm.bannerType||!this.oForm.imageUrl||!this.oForm.tabType){
+                this.message = '必填项不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(this.oForm.tabType!=4) {
+                if (!this.oForm.goType) {
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
             setTimeout(() => {
                 var jsonArr = [];
                 jsonArr.push({ key: 'cinemaCodes', value: this.oForm.cinemaCode });
@@ -1127,17 +1139,7 @@ export default {
                     setTimeout(() => {
                         this.idx = index;
                         this.form = row;
-                        let name = this.query.name;
-                        let status = this.query.status;
-                        if (!name) {
-                            name = '';
-                        }
-                        if (!status) {
-                            status = '';
-                        }
                         let jsonArr = [];
-                        // jsonArr.push({key:"roleName",value:name});
-                        // jsonArr.push({key:"status",value:status});
                         jsonArr.push({ key: 'id', value: row.id });
                         let sign = md5(preSign(jsonArr));
                         jsonArr.push({ key: 'sign', value: sign });
@@ -1270,6 +1272,20 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
+            if(!this.form.cinemaCodes||!this.form.status||!this.changeStartTime||!this.changeEndTime||!this.oBannerType||!this.form.imageUrl||!this.oTabType){
+                this.message = '必填项不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(this.oTabType!=4) {
+                if (!this.goType) {
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
             setTimeout(() => {
                 var jsonArr = [];
                 jsonArr.push({ key: 'id', value: this.form.id });
@@ -1287,14 +1303,12 @@ export default {
                 jsonArr.push({ key: 'sign', value: sign });
                 console.log(jsonArr);
                 let params = ParamsAppend(jsonArr);
-                this.editVisible = false;
-                https
-                    .fetchPost('/banner/updateById', params)
-                    .then(data => {
+                https.fetchPost('/banner/updateById', params).then(data => {
                         loading.close();
                         console.log(data);
                         // console.log(JSON.parse(Decrypt(data.data.data)));
                         if (data.data.code == 'success') {
+                            this.editVisible = false;
                             this.$refs.download.clearFiles(); //清除已上传文件
                             this.$message.success(`编辑成功`);
                             this.getMenu();

@@ -138,7 +138,7 @@
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" label="选择影厅：" :label-width="formLabelWidth">
-                    <el-radio-group v-model="oForm.selectHallType">
+                    <el-radio-group v-model="oForm.selectHallType" @change="clearScreenCode()">
                         <el-radio label="0">全部影厅</el-radio>
                         <el-radio label="1">指定影厅参加</el-radio>
                         <el-radio label="2">指定影厅不参加</el-radio>
@@ -306,7 +306,7 @@
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" label="选择影厅：" :label-width="formLabelWidth">
-                    <el-radio-group v-model="oSelectHallType">
+                    <el-radio-group v-model="oSelectHallType" @change="clearScreenCode()">
                         <el-radio label="0">全部影厅</el-radio>
                         <el-radio label="1">指定影厅参加</el-radio>
                         <el-radio label="2">指定影厅不参加</el-radio>
@@ -681,6 +681,10 @@ export default {
         this.getMenu();
     },
     methods: {
+        clearScreenCode(){
+            this.oForm.screenCode=[];
+            this.oScreenCode=[];
+        },
         one(a){//获取卖品绑定的value值
             // console.log(a);
             this.oForm.filmCode =a
@@ -1218,12 +1222,12 @@ export default {
             jsonArr.push({ key: 'sign', value: sign });
             console.log(jsonArr);
             let params = ParamsAppend(jsonArr);
-            this.editVisible = false;
             https.fetchPost('/filmCoupon/updateCouponById', params).then(data => {
                     loading.close();
                     // console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.$message.success(`编辑成功`);
+                        this.editVisible = false;
                         this.getMenu();
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;

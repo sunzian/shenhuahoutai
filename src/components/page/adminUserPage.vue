@@ -276,15 +276,14 @@
                         loading.close();
                         console.log(data);
                         if(data.data.code == 'success'){
-                            this.oForm=[]
-                            this.dialogFormVisible = true
+                            this.dialogFormVisible = true;
                             // console.log(JSON.parse(JSON.stringify(JSON.parse(Decrypt(data.data.data)).permissionList).replace(/submenuList/g,'children').replace(/menuName/g,'label')));
                             console.log(JSON.parse(Decrypt(data.data.data)));
-                            this.data=JSON.parse(Decrypt(data.data.data)).permissionList
-                            this.selectList =JSON.parse(Decrypt(data.data.data)).businessInfoList
+                            this.data=JSON.parse(Decrypt(data.data.data)).permissionList;
+                            this.selectList =JSON.parse(Decrypt(data.data.data)).businessInfoList;
                         }else if(data.data.code=='nologin'){
                             this.message=data.data.message
-                            this.open()
+                            this.open();
                             this.$router.push('/login');
                         }else {
                             this.message=data.data.message
@@ -326,18 +325,18 @@
                             loading.close();
                             console.log(data);
                             if(data.data.code=='success'){
-                                this.dialogFormVisible = false
+                                this.dialogFormVisible = false;
                                 this.$message.success(`新增成功`);
                                 // this.oForm.name = ''
                                 // this.oForm.value = ''
                                 // this.oForm.memo = ''
                                 this.getMenu()
                             }else if(data.data.code=='nologin'){
-                                this.message=data.data.message
+                                this.message=data.data.message;
                                 this.open()
                                 this.$router.push('/login');
                             }else{
-                                this.message=data.data.message
+                                this.message=data.data.message;
                                 this.open()
                             }
                         }).catch(err=>{
@@ -365,14 +364,6 @@
                         setTimeout(() => {
                             this.idx = index;
                             this.form = row;
-                            // let name=this.query.name
-                            // let status=this.query.status
-                            // if(!name){
-                            //     name=''
-                            // }
-                            // if(!status){
-                            //     status=''
-                            // }
                             let jsonArr = [];
                             jsonArr.push({key:"id",value:row.id});
                             let sign =md5(preSign(jsonArr));
@@ -498,14 +489,14 @@
                     jsonArr.push({key:"menuIds",value:this.$refs.tree.getCheckedKeys().concat(this.$refs.tree.getHalfCheckedKeys())});
                     let sign =md5(preSign(jsonArr));
                     jsonArr.push({key:"sign",value:sign});
-                    console.log(jsonArr)
+                    console.log(jsonArr);
                     let params = ParamsAppend(jsonArr);
-                    this.editVisible = false;
                     https.fetchPost('/user/modifyAdminUser',params).then((data) => {
                         loading.close();
                         console.log(data);
                         // console.log(JSON.parse(Decrypt(data.data.data)));
                         if(data.data.code=='success'){
+                            this.editVisible = false;
                             this.$message.success(`编辑成功`);
                             this.getMenu()
                         }else if(data.data.code=='nologin'){
@@ -526,7 +517,7 @@
                 }, 500);
             },
             Search(){
-                this.query.pageNo=1
+                this.query.pageNo=1;
                 this.getMenu()
             },
             getMenu(){//获取菜单栏
@@ -538,7 +529,7 @@
                     target: document.querySelector('.div1')
                 });
                 setTimeout(() => {
-                    let businessName=this.query.businessName
+                    let businessName=this.query.businessName;
                     let userName=this.query.userName;
                     if(!businessName){
                         businessName=''
@@ -567,11 +558,11 @@
                             this.query.totalCount = oData.totalCount;
                             this.query.totalPage = oData.totalPage
                         }else if(data.data.code=='nologin'){
-                            this.message=data.data.message
-                            this.open()
+                            this.message=data.data.message;
+                            this.open();
                             this.$router.push('/login');
                         }else{
-                            this.message=data.data.message
+                            this.message=data.data.message;
                             this.open()
                         }
 

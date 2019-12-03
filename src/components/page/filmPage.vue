@@ -88,19 +88,19 @@
         <!--新增弹出框-->
         <el-dialog :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
-                <el-form-item label="影片编码" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="影片编码" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oForm.filmCode" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="影片名称" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="影片名称" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oForm.filmName" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="影片版本" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="影片版本" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oForm.dimensional" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="影片时长" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="影片时长" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oForm.duration" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="上映时间" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="上映时间" :label-width="formLabelWidth">
                     <el-date-picker
                             v-model="oForm.publishDate"
                             type="date"
@@ -163,10 +163,10 @@
                 <el-form-item label="类型" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oForm.type" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="语言" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="语言" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oForm.language" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="是否显示" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="是否显示" :label-width="formLabelWidth">
                     <el-select v-model="oForm.status" placeholder="请选择">
                         <el-option
                             v-for="item in options"
@@ -176,7 +176,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="图片" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="图片" :label-width="formLabelWidth">
                     <el-upload
                         class="upload-demo"
                         action="/api/upload/uploadImage"
@@ -983,13 +983,13 @@ export default {
             jsonArr.push({ key: 'sign', value: sign });
             console.log(jsonArr);
             let params = ParamsAppend(jsonArr);
-            this.editVisible = false;
             https
                 .fetchPost('/film/updateFilm', params)
                 .then(data => {
                     loading.close();
                     // console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
+                        this.editVisible = false;
                         this.$message.success(`编辑成功`);
                         this.directorList=[];
                         this.actorList=[];

@@ -51,6 +51,12 @@
                     style="margin-top: 10px;width: 90px;"
                     @click="Search"
                 >搜索</el-button>
+                <el-button
+                        type="primary"
+                        @click="derive"
+                        icon="el-icon-circle-plus-outline"
+                        style="float: right;margin-top: 10px"
+                >导出</el-button>
             </div>
             <el-table
                 :data="tableData"
@@ -306,6 +312,56 @@ export default {
         this.getMenu();
     },
     methods: {
+        derive(){
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
+            setTimeout(() => {
+                let cinemaCode = this.query.cinemaCode;
+                let userName = this.query.userName;
+                let userMobile = this.query.mobile;
+                let startDate = this.query.startDate;
+                let endDate = this.query.endDate;
+                if (!cinemaCode) {
+                    cinemaCode = '';
+                }
+                if (!userName) {
+                    userName = '';
+                }
+                if (!userMobile) {
+                    userMobile = '';
+                }
+                if (!startDate) {
+                    startDate = '';
+                }
+                if (!endDate) {
+                    endDate = '';
+                }
+                let jsonArr = [];
+                jsonArr.push({ key: 'tableName', value: "member_user" });
+                jsonArr.push({ key: 'exportKeysJson', value: "['id','cinemaCode','cinemaName','userName','userMobile','cnUserSex','birthday','userAge','chMemberType','cnBindMemberCardStatus','cnMiniRegisterStatus','cnAppRegisterStatus','miniRegisterDate','appRegisterDate','country','province','city','loginDate','goldNumber','cnUserRole','remainCoupons','ticketStubNumber','lastConsumeDate','consumptionAmount','cnStatus','employeeCode']"});
+                jsonArr.push({ key: 'exportTitlesJson', value:"['ID','注册影院编码','注册影院名称','用户名','手机号','用户性别','用户生日','用户年龄','用户类型','是否绑定会员卡','是否注册小程序','是否注册APP','小程序注册时间','APP注册时间','国家','省份','城市','最近登录时间','金币数量','聊天室角色','剩余优惠券数量','票根数量','最近一次消费时间','累计消费金额','用户状态','推荐员工编码']" });
+                jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
+                jsonArr.push({ key: 'userName', value: userName });
+                jsonArr.push({ key: 'userMobile', value: userMobile });
+                jsonArr.push({ key: 'startDate', value: startDate });
+                jsonArr.push({ key: 'endDate', value: endDate });
+                var params = ParamsAppend(jsonArr);
+                console.log(jsonArr);
+                let myObj = {
+                    method: 'get',
+                    url: '/exportExcel/memberUser',
+                    fileName: '注册用户列表统计',
+                    params: params
+                };
+                https.exportMethod(myObj);
+                loading.close();
+            }, 1500);
+        },
         addChange(index, row) {
             //是否修改权限
             const loading = this.$loading({

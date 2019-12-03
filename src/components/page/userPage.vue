@@ -231,8 +231,8 @@
                         >{{city.cinemaName}}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
-                <el-form-item :required="true" label="角色" :label-width="formLabelWidth">
-                    <el-select v-model="oSelectList[0]">
+                <el-form-item label="角色" :label-width="formLabelWidth">
+                    <el-select :disabled="true" v-model="oSelectList[0]">
                         <el-option
                             v-for="item in oSelectList"
                             :key="item.id"
@@ -754,11 +754,11 @@
                         }
                     )
             },
-            Search(){
+        Search(){
                 this.query.pageNo=1
                 this.getMenu()
             },
-            getMenu(){//获取菜单栏
+        getMenu(){//获取菜单栏
                 const loading = this.$loading({
                     lock: true,
                     text: 'Loading',
