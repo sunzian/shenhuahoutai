@@ -160,7 +160,7 @@
                             将文件拖到此处，或
                             <em>点击上传</em>
                         </div>
-                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过200kb 建议尺寸120*120或按比例上传</div>
+                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过50kb 建议尺寸120*120或按比例上传</div>
                     </el-upload>
                 </el-form-item>
                 <el-form-item label="排序" :label-width="formLabelWidth">
@@ -203,7 +203,7 @@
                             将文件拖到此处，或
                             <em>点击上传</em>
                         </div>
-                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过200kb 建议尺寸120*120或按比例上传</div>
+                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过50kb 建议尺寸120*120或按比例上传</div>
                     </el-upload>
                 </el-form-item>
                 <el-form-item label="展示顺序" :label-width="formLabelWidth">
@@ -689,9 +689,16 @@ export default {
                     });
             }, 500);
         },
-        beforeUpload() {
+        beforeUpload(file) {
             //上传之前
             this.type.type = EncryptReplace('product');
+            const isLt50Kb = file.size / 1024 < 50;
+            if (!isLt50Kb) {
+                this.message = '图片大小不能超过50kb！';
+                this.open();
+                return false
+            }
+            return isLt50Kb
         },
         onSuccess(data) {
             //上传文件 登录超时

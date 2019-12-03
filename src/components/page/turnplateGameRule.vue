@@ -431,6 +431,16 @@
                 </el-form-item>
                 <el-form-item :required="true" label="奖品图片" :label-width="formLabelWidth">
                     <el-upload
+<<<<<<< HEAD
+                        :before-upload="beforeUploadPrize"
+                        :data="type"
+                        class="upload-demo"
+                        drag
+                        ref="download"
+                        action="/api/upload/uploadImage"
+                        :on-success="onSuccess"
+                        multiple
+=======
                             :before-upload="beforeUpload"
                             :data="type"
                             class="upload-demo"
@@ -439,13 +449,14 @@
                             action="/api/upload/uploadImage"
                             :on-success="onSuccess"
                             multiple
+>>>>>>> d2887803f7496735b946d6524f234b3cd9c7cc5b
                     >
                         <i class="el-icon-upload"></i>
                         <div class="el-upload__text">
                             将文件拖到此处，或
                             <em>点击上传</em>
                         </div>
-                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过200kb 建议尺寸120*120或按比例上传</div>
+                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过100kb 建议尺寸120*120或按比例上传</div>
                     </el-upload>
                 </el-form-item>
                 <el-form-item :required="true" label="奖品个数" :label-width="formLabelWidth">
@@ -509,6 +520,16 @@
                         />
                     </el-popover>
                     <el-upload
+<<<<<<< HEAD
+                        :before-upload="beforeUploadPrize"
+                        :data="type"
+                        class="upload-demo"
+                        drag
+                        ref="snload"
+                        action="/api/upload/uploadImage"
+                        :on-success="snSuccess"
+                        multiple
+=======
                             :before-upload="beforeUpload"
                             :data="type"
                             class="upload-demo"
@@ -517,13 +538,14 @@
                             action="/api/upload/uploadImage"
                             :on-success="snSuccess"
                             multiple
+>>>>>>> d2887803f7496735b946d6524f234b3cd9c7cc5b
                     >
                         <i class="el-icon-upload"></i>
                         <div class="el-upload__text">
                             将文件拖到此处，或
                             <em>点击上传</em>
                         </div>
-                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过200kb 建议尺寸120*120或按比例上传</div>
+                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过100kb 建议尺寸120*120或按比例上传</div>
                     </el-upload>
                 </el-form-item>
                 <el-form-item :required="true" label="奖品个数" :label-width="formLabelWidth">
@@ -687,6 +709,17 @@ export default {
         beforeUpload() {
             //上传之前
             this.type.type = EncryptReplace('activity');
+        },
+        beforeUploadPrize(file) {
+            //上传之前
+            this.type.type = EncryptReplace('activity');
+            const isLt100Kb = file.size / 1024 < 100;
+            if (!isLt100Kb) {
+                this.message = '图片大小不能超过100kb！';
+                this.open();
+                return false
+            }
+            return isLt100Kb
         },
         unSuccess(data) {
             if (data.status == '-1') {
