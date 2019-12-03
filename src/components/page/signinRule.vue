@@ -291,7 +291,6 @@
                 this.type.type = EncryptReplace('activity');
             },
             unSuccess(data) {
-                // console.log(data);
                 if (data.status == '-1') {
                     this.message = data.message;
                     this.open();
@@ -447,22 +446,23 @@
                 let goldAward;
                 jsonArr.push({key:"id",value:this.id});
                 jsonArr.push({key:"signTips",value:this.form1.oSignTips});
-                for (let i = 0;i < this.tableData.length;i ++) {
-                    if (!this.tableData[i].goldAward) {
+                let tableArr = [];
+                tableArr = tableArr.concat(this.tableData);
+                for (let i = 0;i < tableArr.length;i ++) {
+                    if (!tableArr[i].goldAward) {
                         this.message = '连续签到奖励不能为空，请检查！';
                         this.open();
                         loading.close();
                         this.showRule = true;
                         return;
                     }
-                    if (this.tableData[i].id == 1) {
-                        goldAward = this.tableData[i].goldAward;
-                        this.tableData.splice(i,1)
+                    if (tableArr[i].id == 1) {
+                        goldAward = tableArr[i].goldAward;
+                        tableArr.splice(i,1)
                     }
                 }
                 jsonArr.push({key:"goldAward",value:goldAward});
-                jsonArr.push({key:"extraSignRuleJson",value: JSON.stringify(this.tableData)});
-                console.log(jsonArr)
+                jsonArr.push({key:"extraSignRuleJson",value: JSON.stringify(tableArr)});
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
                 var params = ParamsAppend(jsonArr);
@@ -472,7 +472,7 @@
                         if (data.data.code == 'success') {
                             this.$message.success(`成功`);
                             this.getMenu();
-                            // this.showRule = true;
+                            this.showRule = true;
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
                             this.open();
@@ -481,6 +481,7 @@
                             this.message = data.data.message;
                             this.open();
                             this.showRule = true;
+                            console.log(this.tableData)
                         }
                     })
                         .catch(err => {
@@ -504,7 +505,6 @@
                 setTimeout(() => {
                     https.fetchPost('/signinRule/signinRulePage','').then(data => {
                         loading.close();
-                        console.log(data);
                         if (data.data.code == 'success') {
                             var oData = JSON.parse(Decrypt(data.data.data));
                             oData.extraRuleList.unshift({continuousDays: 1,goldAward: oData.goldAward,id: 1})

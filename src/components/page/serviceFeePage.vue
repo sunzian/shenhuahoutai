@@ -516,9 +516,9 @@
                     <el-pagination
                         background
                         layout="total, prev, pager, next"
-                        :current-page="query.pageNo"
-                        :page-size="query.pageSize"
-                        :total="query.totalCount"
+                        :current-page="query.filmPageNo"
+                        :page-size="query.filmPageSize"
+                        :total="query.filmTotalCount"
                         @current-change="aCurrentChange"
                         @prev-click="aPrev"
                         @next-click="aNext"
@@ -575,7 +575,9 @@ export default {
             message: '', //弹出框消息
             query: {
                 pageNo: 1,
-                pageSize: 15
+                pageSize: 15,
+                filmPageSize: 15,
+                filmPageNo: 1
             },
             restaurants: [],
             tableData: [],
@@ -1420,8 +1422,8 @@ export default {
                 }
                 let jsonArr = [];
                 jsonArr.push({ key: 'filmName', value: filmName });
-                jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
-                jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
+                jsonArr.push({ key: 'pageNo', value: this.query.filmPageNo });
+                jsonArr.push({ key: 'pageSize', value: this.query.filmPageSize });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
                 var params = ParamsAppend(jsonArr);
@@ -1433,10 +1435,10 @@ export default {
                             this.drawer = true;
                             var oData = JSON.parse(Decrypt(data.data.data));
                             this.sellTableData = oData.data;
-                            this.query.pageSize = oData.pageSize;
-                            this.query.pageNo = oData.pageNo;
-                            this.query.totalCount = oData.totalCount;
-                            this.query.totalPage = oData.totalPage;
+                            this.query.filmPageSize = oData.pageSize;
+                            this.query.filmPageNo = oData.pageNo;
+                            this.query.filmTotalCount = oData.totalCount;
+                            this.query.filmTotalPage = oData.totalPage;
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
                             this.open();

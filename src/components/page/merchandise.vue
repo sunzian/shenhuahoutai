@@ -179,7 +179,7 @@
                             将文件拖到此处，或
                             <em>点击上传</em>
                         </div>
-                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过200kb 建议尺寸300*240或按比例上传</div>
+                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过100kb 建议尺寸600*480或按比例上传</div>
                     </el-upload>
                 </el-form-item>
                 <el-form-item label="商品描述" :label-width="formLabelWidth">
@@ -677,9 +677,16 @@ export default {
                     });
             }, 500);
         },
-        beforeUpload() {
+        beforeUpload(file) {
             //上传之前
             this.type.type = EncryptReplace('business');
+            const isLt100Kb = file.size / 1024 < 100;
+            if (!isLt100Kb) {
+                this.message = '图片大小不能超过100kb！';
+                this.open();
+                return false
+            }
+            return isLt100Kb
         },
         onSuccess(data) {
             //上传文件 登录超时
