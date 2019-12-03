@@ -101,7 +101,7 @@
             </div>
         </div>
         <!--新增弹出框-->
-        <el-dialog title="新增用户" :visible.sync="dialogFormVisible">
+        <el-dialog :close-on-click-modal="false" title="新增用户" :visible.sync="dialogFormVisible">
             <el-form v-model="oForm">
                 <el-form-item :required="true" label="用户名" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oForm.userName" autocomplete="off"></el-input>
@@ -182,7 +182,7 @@
             </div>
         </el-dialog>
         <!-- 编辑弹出框 -->
-        <el-dialog title="编辑" :visible.sync="editVisible">
+        <el-dialog :close-on-click-modal="false" title="编辑" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
                 <el-form-item :required="true" label="用户名" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="userName" autocomplete="off"></el-input>
@@ -259,7 +259,7 @@
             </span>
         </el-dialog>
         <!-- 修改密码弹出框 -->
-        <el-dialog title="修改密码" :visible.sync="passShow">
+        <el-dialog :close-on-click-modal="false" title="修改密码" :visible.sync="passShow">
             <el-form ref="form" :model="form">
                 <el-form-item :required="true" label="旧密码" :label-width="formLabelWidth">
                     <el-input

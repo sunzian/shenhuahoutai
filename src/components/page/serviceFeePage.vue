@@ -232,7 +232,7 @@
             </div>
         </div>
         <!--新增弹出框-->
-        <el-dialog :visible.sync="dialogFormVisible">
+        <el-dialog :close-on-click-modal="false" :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
                 <el-form-item :required="true" label="服务费规则名称：" :label-width="formLabelWidth" >
                     <el-input
@@ -356,7 +356,7 @@
             </div>
         </el-dialog>
         <!-- 编辑弹出框 -->
-        <el-dialog title="详情" :visible.sync="editVisible">
+        <el-dialog :close-on-click-modal="false" title="详情" :visible.sync="editVisible">
             <el-form :model="form">
                 <el-form-item :required="true" label="服务费规则名称：" :label-width="formLabelWidth">
                     <el-input
@@ -472,7 +472,7 @@
             </span>
         </el-dialog>
         <!--选择影片弹出框-->
-        <el-dialog title="选择影片" :visible.sync="drawer">
+        <el-dialog :close-on-click-modal="false" title="选择影片" :visible.sync="drawer">
             <div class="container">
                 <div class="handle-box">
                     <el-input v-model="query.filmName" placeholder="影片名" class="handle-input mr10"></el-input>

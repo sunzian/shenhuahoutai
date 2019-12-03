@@ -73,7 +73,7 @@
             </div>
         </div>
         <!--查看弹出框-->
-        <el-dialog title="查看" :visible.sync="viewVisible" width="30%">
+        <el-dialog :close-on-click-modal="false" title="查看" :visible.sync="viewVisible" width="30%">
             <el-form ref="form" :model="form" label-width="70px">
                 <el-form-item label="权限" >
                     <el-tree
@@ -89,7 +89,7 @@
             </el-form>
         </el-dialog>
         <!-- 编辑弹出框 -->
-        <el-dialog title="编辑" :visible.sync="editVisible" width="30%">
+        <el-dialog :close-on-click-modal="false" title="编辑" :visible.sync="editVisible" width="30%">
             <el-form ref="form" :model="form" label-width="100px">
                 <el-form-item label="权限" >
                     <el-tree

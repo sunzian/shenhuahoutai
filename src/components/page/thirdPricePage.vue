@@ -112,7 +112,7 @@
             </div>
         </div>
         <!--新增弹出框-->
-        <el-dialog title="获取排期" :visible.sync="dialogFormVisible">
+        <el-dialog :close-on-click-modal="false" title="获取排期" :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
                 <el-form-item label="影院名称">
                     <el-select v-model="oForm.cinemaName" placeholder="请选择">
@@ -176,7 +176,7 @@
             </span>
         </el-dialog>
         <!-- 编辑弹出框 -->
-        <el-dialog title="价格设置" :visible.sync="editVisible">
+        <el-dialog :close-on-click-modal="false" title="价格设置" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
                 <el-form-item label="影院名称" :label-width="formLabelWidth">
                     <el-input
@@ -238,7 +238,7 @@
             </span>
         </el-dialog>
         <!-- 批量修改弹出框 -->
-        <el-dialog title="批量修改" :visible.sync="drawer">
+        <el-dialog :close-on-click-modal="false" title="批量修改" :visible.sync="drawer">
             <el-form ref="formOne" v-model="formOne">
                 <el-form-item label="第三方售价金额" :label-width="formLabelWidth">
                     <el-input

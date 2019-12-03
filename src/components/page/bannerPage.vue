@@ -146,7 +146,7 @@
             </div>
         </div>
         <!--新增弹出框-->
-        <el-dialog title="新增轮播图" :visible.sync="dialogFormVisible">
+        <el-dialog :close-on-click-modal="false" title="新增轮播图" :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
                 <el-form-item :required="true" label="适用影院" :label-width="formLabelWidth">
                     <el-select
@@ -258,7 +258,7 @@
             </div>
         </el-dialog>
         <!-- 编辑弹出框 -->
-        <el-dialog title="编辑" :visible.sync="editVisible">
+        <el-dialog :close-on-click-modal="false" title="编辑" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
                 <el-form-item :required="true" label="适用影院" :label-width="formLabelWidth">
                     <el-select v-model="form.cinemaCodes" placeholder="请选择影院">
@@ -375,7 +375,7 @@
             </span>
         </el-dialog>
         <!--新增金币商品弹出框-->
-        <el-dialog title="选择跳转类型" :visible.sync="drawer">
+        <el-dialog :close-on-click-modal="false" title="选择跳转类型" :visible.sync="drawer">
             <div class="container">
                 <div class="handle-box">
                     <el-input v-model="query.name" placeholder="商品名称" class="handle-input mr10"></el-input>
@@ -430,7 +430,7 @@
             </div>
         </el-dialog>
         <!--新增文章弹出框-->
-        <el-dialog title="选择跳转类型" :visible.sync="drawer1">
+        <el-dialog :close-on-click-modal="false" title="选择跳转类型" :visible.sync="drawer1">
             <div class="container">
                 <div class="handle-box">
                     <el-input v-model="query.name" placeholder="标题" class="handle-input mr10"></el-input>
@@ -485,7 +485,7 @@
             </div>
         </el-dialog>
         <!--新增电影弹出框-->
-        <el-dialog title="选择跳转类型" :visible.sync="drawer2">
+        <el-dialog :close-on-click-modal="false" title="选择跳转类型" :visible.sync="drawer2">
             <div class="container">
                 <div class="handle-box">
                     <el-input v-model="query.name" placeholder="影片名称" class="handle-input mr10"></el-input>

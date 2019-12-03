@@ -55,7 +55,7 @@
             </div>
         </div>
         <!-- 选择优惠券弹出窗 -->
-        <el-dialog title="选择优惠券" :visible.sync="drawer">
+        <el-dialog :close-on-click-modal="false" title="选择优惠券" :visible.sync="drawer">
             <div class="container">
                 <div class="handle-box">
                     <el-input v-model="couponName" placeholder="优惠券名称" class="handle-input mr10"></el-input>
@@ -421,7 +421,7 @@
             </span>
         </div>
         <!-- 新增奖项弹出框 -->
-        <el-dialog title="新增" :visible.sync="editVisible">
+        <el-dialog :close-on-click-modal="false" title="新增" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
                 <el-form-item :required="true" label="奖品等级" :label-width="formLabelWidth">
                     <el-input style="width: 250px"  type="number" @blur="match" v-model="form.prizeLevel" autocomplete="off"></el-input>
@@ -490,7 +490,7 @@
             </span>
         </el-dialog>
         <!-- 修改奖项弹出框 -->
-        <el-dialog title="编辑" :visible.sync="showModify">
+        <el-dialog :close-on-click-modal="false" title="编辑" :visible.sync="showModify">
             <el-form ref="form" :model="pForm">
                 <el-form-item label="奖品等级" :label-width="formLabelWidth">
                     <el-input style="width: 250px" :disabled="true" type="number" @blur="oMatch" v-model="pForm.prizeLevel" autocomplete="off"></el-input>

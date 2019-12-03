@@ -77,7 +77,7 @@
             </div>
         </div>
         <!--新增弹出框-->
-        <el-dialog :visible.sync="dialogFormVisible">
+        <el-dialog :close-on-click-modal="false" :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
                 <el-form-item :required="true" label="导演名称" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oForm.name" autocomplete="off"></el-input>
@@ -125,7 +125,7 @@
             </div>
         </el-dialog>
         <!-- 编辑弹出框 -->
-        <el-dialog title="编辑" :visible.sync="editVisible">
+        <el-dialog :close-on-click-modal="false" title="编辑" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
                 <el-form-item :required="true" label="导演名称" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oName" autocomplete="off"></el-input>

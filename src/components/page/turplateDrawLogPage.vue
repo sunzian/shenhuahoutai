@@ -105,7 +105,7 @@
             </div>
         </div>
         <!-- 详情弹出框 -->
-        <el-dialog title="详情" :visible.sync="editVisible">
+        <el-dialog :close-on-click-modal="false" title="详情" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
                 <el-form-item label="影院名称" :label-width="formLabelWidth">
                     <el-input
