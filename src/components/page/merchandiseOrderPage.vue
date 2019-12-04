@@ -155,6 +155,9 @@
                 <el-table-column prop="memo" label="手机号码" width="110">
                     <template slot-scope="scope">{{scope.row.mobile}}</template>
                 </el-table-column>
+                <el-table-column prop="memo" label="送餐手机号" width="110">
+                    <template slot-scope="scope">{{scope.row.deliveryMobile}}</template>
+                </el-table-column>
                 <el-table-column prop="memo" label="取货码" width="85">
                     <template slot-scope="scope">{{scope.row.printNo}}</template>
                 </el-table-column>
@@ -289,6 +292,14 @@
                         :disabled="true"
                         style="width: 250px"
                         v-model="form.mobile"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="送餐手机号" :label-width="formLabelWidth">
+                    <el-input
+                        :disabled="true"
+                        style="width: 250px"
+                        v-model="form.deliveryMobile"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>

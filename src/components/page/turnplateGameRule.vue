@@ -431,7 +431,6 @@
                 </el-form-item>
                 <el-form-item :required="true" label="奖品图片" :label-width="formLabelWidth">
                     <el-upload
-<<<<<<< HEAD
                         :before-upload="beforeUploadPrize"
                         :data="type"
                         class="upload-demo"
@@ -440,16 +439,6 @@
                         action="/api/upload/uploadImage"
                         :on-success="onSuccess"
                         multiple
-=======
-                            :before-upload="beforeUpload"
-                            :data="type"
-                            class="upload-demo"
-                            drag
-                            ref="download"
-                            action="/api/upload/uploadImage"
-                            :on-success="onSuccess"
-                            multiple
->>>>>>> d2887803f7496735b946d6524f234b3cd9c7cc5b
                     >
                         <i class="el-icon-upload"></i>
                         <div class="el-upload__text">
@@ -520,7 +509,6 @@
                         />
                     </el-popover>
                     <el-upload
-<<<<<<< HEAD
                         :before-upload="beforeUploadPrize"
                         :data="type"
                         class="upload-demo"
@@ -529,16 +517,6 @@
                         action="/api/upload/uploadImage"
                         :on-success="snSuccess"
                         multiple
-=======
-                            :before-upload="beforeUpload"
-                            :data="type"
-                            class="upload-demo"
-                            drag
-                            ref="snload"
-                            action="/api/upload/uploadImage"
-                            :on-success="snSuccess"
-                            multiple
->>>>>>> d2887803f7496735b946d6524f234b3cd9c7cc5b
                     >
                         <i class="el-icon-upload"></i>
                         <div class="el-upload__text">

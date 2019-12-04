@@ -292,14 +292,14 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="开场前的购票时间限制" :label-width="formLabelWidth">
+                <el-form-item label="开场前的购票时间限制（分钟）" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         v-model="oForm.buyMinutesLimit"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="开场前的退票时间限制" :label-width="formLabelWidth">
+                <el-form-item label="开场前的退票时间限制（分钟）" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         v-model="oForm.refundMinutesLimit"
@@ -877,14 +877,14 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="开场前的购票时间限制" :label-width="formLabelWidth">
+                <el-form-item label="开场前的购票时间限制（分钟）" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         v-model="oBuyMinutesLimit"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="开场前的退票时间限制" :label-width="formLabelWidth">
+                <el-form-item label="开场前的退票时间限制（分钟）" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         v-model="oRefundMinutesLimit"
