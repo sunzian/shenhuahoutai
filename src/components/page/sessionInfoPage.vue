@@ -1036,7 +1036,7 @@ export default {
     position: relative;
     left: 15px;
     width: 90%;
-    box-shadow:0px 7px 16px 0px rgba(3,143,228,0.45);
+    /* box-shadow:0px 7px 16px 0px rgba(3,143,228,0.45); */
     border-radius:20px;
     padding: 20px;
     margin-bottom: 60px;
