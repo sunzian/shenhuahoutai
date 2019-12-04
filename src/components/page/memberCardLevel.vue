@@ -196,14 +196,14 @@
                             :disabled="true"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="默认卡号（只用于查询会员价）" :label-width="formLabelWidth">
+                <el-form-item label="默认卡号" :label-width="formLabelWidth">
                     <el-input
                             style="width: 250px"
                             v-model="form.cardNo"
                             autocomplete="off"
                     ></el-input>
                     <br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size:12px;">提供一张有效的并且卡类型相同的会员卡</span>
+                    <span style="font-size:12px;">提供一张有效的并且卡类型相同的会员卡号（只用于查询会员价）</span>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">

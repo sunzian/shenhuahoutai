@@ -888,7 +888,7 @@ export default {
                 return;
             }
             if(this.oForm.reduceType==1){
-                if(this.oForm.discountMoney>0){
+                if(this.oForm.discountMoney>=0){
                     if(!this.oForm.discountMoney){
                         this.message = '固定金额不能为空，请检查！';
                         this.open();
@@ -904,7 +904,7 @@ export default {
                 }
             }
             if(this.oForm.reduceType==2){
-                if(this.oForm.discountMoney>0){
+                if(this.oForm.discountMoney>=0){
                     if(!this.oForm.discountMoney){
                         this.message = '减免金额不能为空，请检查！';
                         this.open();
