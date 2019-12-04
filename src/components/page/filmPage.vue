@@ -183,6 +183,7 @@
                         :before-upload="beforeUpload"
                         :data="type"
                         :limit="1"
+                        ref="download"
                         :on-success="onSuccess"
                         :file-list="fileList"
                         list-type="picture"
@@ -1071,12 +1072,25 @@ export default {
                     console.log(err);
                 });
         },
-        beforeUpload() {
+        beforeUpload(file) {
             //上传之前
             this.type.type = EncryptReplace('movielogo');
+            const isLt200Kb = file.size / 1024 < 200;
+            if (!isLt200Kb) {
+                this.message = '图片大小不能超过200kb！';
+                this.open();
+                return false
+            }
+            return isLt200Kb
         },
         onSuccess(response) {
             //上传文件 登录超时
+            if (response.status == '-1') {
+                this.message = response.message;
+                this.open();
+                this.$refs.download.clearFiles();
+                return;
+            }
             this.oForm.image = response.data;
             if (response.code == 'nologin') {
                 this.message = response.message;
@@ -1086,6 +1100,12 @@ export default {
         },
         onSuccessChange(response) {
             //上传文件 登录超时
+            if (response.status == '-1') {
+                this.message = response.message;
+                this.open();
+                this.$refs.upload.clearFiles();
+                return;
+            }
             this.oImage = response.data;
             if (response.code == 'nologin') {
                 this.message = response.message;
@@ -1093,9 +1113,16 @@ export default {
                 this.$router.push('/login');
             }
         },
-        beforeUploadPhoto() {
+        beforeUploadPhoto(file) {
             //上传之前
             this.photoType.type = EncryptReplace('moviepic');
+            const isLt300Kb = file.size / 1024 < 300;
+            if (!isLt300Kb) {
+                this.message = '图片大小不能超过300kb！';
+                this.open();
+                return false
+            }
+            return isLt300Kb
         },
         onPhotoSuccess(response, file) {
             if (response.status == '-1') {

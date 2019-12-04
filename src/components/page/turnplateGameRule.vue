@@ -684,9 +684,16 @@ export default {
                 this.open();
             }
         },
-        beforeUpload() {
+        beforeUpload(file) {
             //上传之前
             this.type.type = EncryptReplace('activity');
+            const isLt200Kb = file.size / 1024 < 200;
+            if (!isLt200Kb) {
+                this.message = '图片大小不能超过200kb！';
+                this.open();
+                return false
+            }
+            return isLt200Kb
         },
         beforeUploadPrize(file) {
             //上传之前

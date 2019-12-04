@@ -32,6 +32,22 @@
                     ></el-option>
                 </el-select>
                 <el-input v-model="query.filmName" placeholder="影片名称" class="handle-input mr10"></el-input>
+                <el-date-picker
+                        v-model="query.startDate"
+                        type="date"
+                        class="mr10"
+                        value-format="yyyy-MM-dd"
+                        format="yyyy-MM-dd"
+                        placeholder="放映开始时间（起）"
+                ></el-date-picker>
+                <el-date-picker
+                        v-model="query.endDate"
+                        type="date"
+                        class="mr10"
+                        value-format="yyyy-MM-dd"
+                        format="yyyy-MM-dd"
+                        placeholder="放映结束时间（止）"
+                ></el-date-picker>
                 <el-button
                     style="margin-top: 10px;width: 90px;"
                     type="primary"
@@ -774,6 +790,8 @@ export default {
             let cinemaCode = this.query.cinemaCode;
             let screenCode = this.query.screenCode;
             let filmName = this.query.filmName;
+            let startDate = this.query.startDate;
+            let endDate = this.query.endDate;
             if (!cinemaCode) {
                 cinemaCode = '';
             }
@@ -783,8 +801,16 @@ export default {
             if (!filmName) {
                 filmName = '';
             }
+            if (!startDate) {
+                startDate = '';
+            }
+            if (!endDate) {
+                endDate = '';
+            }
             let jsonArr = [];
             jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
+            jsonArr.push({ key: 'startDate', value: startDate });
+            jsonArr.push({ key: 'endDate', value: endDate });
             jsonArr.push({ key: 'screenCode', value: screenCode });
             jsonArr.push({ key: 'filmName', value: filmName });
             jsonArr.push({ key: 'pageNo', value: this.query.pageNo });

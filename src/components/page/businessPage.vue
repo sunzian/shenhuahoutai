@@ -323,8 +323,15 @@ export default {
         this.getMenu();
     },
     methods: {
-        beforeUpload(){//上传之前
-            this.type.type=EncryptReplace('business')
+        beforeUpload(file){//上传之前
+            this.type.type=EncryptReplace('business');
+            const isLt200Kb = file.size / 1024 < 200;
+            if (!isLt200Kb) {
+                this.message = '图片大小不能超过200kb！';
+                this.open();
+                return false
+            }
+            return isLt200Kb
         },
         onSuccess(data){//上传文件 登录超时
             console.log(data);
