@@ -575,7 +575,7 @@ export default {
                 return;
             }
             if(this.oForm.reduceType==1){
-                if(this.oForm.discountMoney>=0){
+                if(this.oForm.discountMoney>0){
                     if(!this.oForm.discountMoney){
                         this.message = '固定金额不能为空，请检查！';
                         this.open();
@@ -591,7 +591,7 @@ export default {
                 }
             }
             if(this.oForm.reduceType==2){
-                if(this.oForm.discountMoney>=0||this.oForm.achieveMoney>=0){
+                if(this.oForm.discountMoney>0||this.oForm.achieveMoney>0){
                     if(!this.oForm.discountMoney||!this.oForm.achieveMoney){
                         this.message = '减免金额不能为空，请检查！';
                         this.open();
@@ -624,7 +624,7 @@ export default {
                 loading.close();
                 return;
             }
-            if(this.oForm.sendNumber!=0){
+            if(this.oForm.sendNumber!0){
                 if(!this.oForm.sendNumber){
                     this.message = '库存不能为空，请检查！';
                     this.open();
@@ -725,14 +725,6 @@ export default {
                 .then(() => {
                     this.idx = index;
                     this.form = row;
-                    let name = this.query.name;
-                    let status = this.query.status;
-                    if (!name) {
-                        name = '';
-                    }
-                    if (!status) {
-                        status = '';
-                    }
                     let jsonArr = [];
                     jsonArr.push({ key: 'id', value: row.id });
                     let sign = md5(preSign(jsonArr));
@@ -920,7 +912,7 @@ export default {
                 return;
             }
             if(this.oReduceType==1){
-                if(this.oDiscountMoney>=0){
+                if(this.oDiscountMoney>0){
                     if(!this.oDiscountMoney){
                         this.message = '固定金额不能为空，请检查！';
                         this.open();
@@ -936,7 +928,7 @@ export default {
                 }
             }
             if(this.oReduceType==2){
-                if(this.oDiscountMoney>=0||this.oAchieveMoney>=0){
+                if(this.oDiscountMoney>0||this.oAchieveMoney>0){
                     if(!this.oDiscountMoney||!this.oAchieveMoney){
                         this.message = '减免金额不能为空，请检查！';
                         this.open();

@@ -324,59 +324,6 @@
                 <el-button type="primary" @click="addRole">确 定</el-button>
             </div>
         </el-dialog>
-        <!--新增抽屉弹出框-->
-        <el-dialog :close-on-click-modal="false" title="选择卖品" :visible.sync="drawer">
-            <div class="container">
-                <div class="handle-box">
-                    <el-input v-model="query.merchandiseName" placeholder="卖品名称" class="handle-input mr10"></el-input>
-                    <el-button type="primary" icon="el-icon-search" @click="SearchSell">搜索</el-button>
-                </div>
-                <el-table
-                        :data="sellTableData"
-                        border
-                        class="table"
-                        ref="multipleTable"
-                        header-cell-class-name="table-header"
-                        @selection-change="handleSelectionChange"
-                >
-                    <el-table-column label="操作" width="100" align="center">
-                        <template slot-scope="scope">
-                            <el-radio v-model="id" :label="scope.$index" @change.native="getCurrentRow(scope.$index)">&nbsp;</el-radio>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="name" label="图片">
-                        <template slot-scope="scope">
-                            <el-popover
-                                    placement="right"
-                                    title=""
-                                    trigger="hover">
-                                <img style="width:400px" :src="scope.row.merchandisePic"/>
-                                <img slot="reference" :src="scope.row.merchandisePic" :alt="scope.row.merchandisePic" style="max-height: 50px;max-width: 130px">
-                            </el-popover>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="sort" label="卖品名称" width="150">
-                        <template slot-scope="scope">{{scope.row.merchandiseName}}</template>
-                    </el-table-column>
-                </el-table>
-                <div class="pagination">
-                    <el-pagination
-                            background
-                            layout="total, prev, pager, next"
-                            :current-page="query.pageNo"
-                            :page-size="query.pageSize"
-                            :total="query.totalCount"
-                            @current-change="aCurrentChange"
-                            @prev-click='aPrev'
-                            @next-click="aNext"
-                    ></el-pagination>
-                </div>
-            </div>
-            <div slot="footer" class="dialog-footer">
-                <el-button @click="drawer = false">取 消</el-button>
-                <el-button type="primary" @click="sureNext">确 定</el-button>
-            </div>
-        </el-dialog>
         <!-- 编辑弹出框 -->
         <el-dialog :close-on-click-modal="false" title="修改" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
@@ -578,6 +525,59 @@
                 <el-button @click="exChanger">确 定</el-button>
             </span>
         </el-dialog>
+        <!--新增抽屉弹出框-->
+        <el-dialog :close-on-click-modal="false" title="选择卖品" :visible.sync="drawer">
+            <div class="container">
+                <div class="handle-box">
+                    <el-input v-model="query.merchandiseName" placeholder="卖品名称" class="handle-input mr10"></el-input>
+                    <el-button type="primary" icon="el-icon-search" @click="SearchSell">搜索</el-button>
+                </div>
+                <el-table
+                        :data="sellTableData"
+                        border
+                        class="table"
+                        ref="multipleTable"
+                        header-cell-class-name="table-header"
+                        @selection-change="handleSelectionChange"
+                >
+                    <el-table-column label="操作" width="100" align="center">
+                        <template slot-scope="scope">
+                            <el-radio v-model="id" :label="scope.$index" @change.native="getCurrentRow(scope.$index)">&nbsp;</el-radio>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="name" label="图片">
+                        <template slot-scope="scope">
+                            <el-popover
+                                    placement="right"
+                                    title=""
+                                    trigger="hover">
+                                <img style="width:400px" :src="scope.row.merchandisePic"/>
+                                <img slot="reference" :src="scope.row.merchandisePic" :alt="scope.row.merchandisePic" style="max-height: 50px;max-width: 130px">
+                            </el-popover>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="sort" label="卖品名称" width="150">
+                        <template slot-scope="scope">{{scope.row.merchandiseName}}</template>
+                    </el-table-column>
+                </el-table>
+                <div class="pagination">
+                    <el-pagination
+                            background
+                            layout="total, prev, pager, next"
+                            :current-page="query.aPageNo"
+                            :page-size="query.aPageSize"
+                            :total="query.aTotalCount"
+                            @current-change="aCurrentChange"
+                            @prev-click='aPrev'
+                            @next-click="aNext"
+                    ></el-pagination>
+                </div>
+            </div>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="drawer = false">取 消</el-button>
+                <el-button type="primary" @click="sureNext">确 定</el-button>
+            </div>
+        </el-dialog>
     </div>
 </template>
 
@@ -660,7 +660,9 @@
                 message: '', //弹出框消息
                 query: {
                     pageNo: 1,
-                    pageSize: 15
+                    pageSize: 15,
+                    aPageNo: 1,
+                    aPageSize: 15
                 },
                 restaurants: [],
                 merSelect:[],
@@ -1546,8 +1548,8 @@
                         merchandiseName=''
                     }
                     jsonArr.push({key:"merchandiseName",value:merchandiseName});
-                    jsonArr.push({key:"pageNo",value:this.query.pageNo});
-                    jsonArr.push({key:"pageSize",value:this.query.pageSize});
+                    jsonArr.push({key:"pageNo",value:this.query.aPageNo});
+                    jsonArr.push({key:"pageSize",value:this.query.aPageSize});
                     jsonArr.push({key:"merchandiseStatus",value:1});
                     jsonArr.push({key:"cinemaCode",value:this.oForm.code});
                     let sign =md5(preSign(jsonArr));
@@ -1557,15 +1559,15 @@
                         loading.close();
                         console.log(data);
                         if(data.data.code=='success') {
-                            this.drawer=true
+                            this.drawer=true;
                             var oData = JSON.parse(Decrypt(data.data.data));
                             console.log(oData);
                             // console.log(this.query);
                             this.sellTableData = oData.data;
-                            this.query.pageSize = oData.pageSize;
-                            this.query.pageNo = oData.pageNo;
-                            this.query.totalCount = oData.totalCount;
-                            this.query.totalPage = oData.totalPage
+                            this.query.aPageSize = oData.pageSize;
+                            this.query.aPageNo = oData.pageNo;
+                            this.query.aTotalCount = oData.totalCount;
+                            this.query.aTotalPage = oData.totalPage
                         }else if(data.data.code=='nologin'){
                             this.message=data.data.message
                             this.open()
@@ -1584,15 +1586,15 @@
             },
             //新增套餐选择卖品页面
             aCurrentChange(val){//点击选择具体页数
-                this.query.pageNo = val;
+                this.query.aPageNo = val;
                 this.openNext()
             },
             aPrev(){//分页按钮上一页
-                this.query.pageNo--;
+                this.query.aPageNo--;
                 this.openNext()
             },
             aNext(){//分页按钮下一页
-                this.query.pageNo++;
+                this.query.aPageNo++;
                 this.openNext()
             }
         }
