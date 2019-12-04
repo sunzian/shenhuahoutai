@@ -676,7 +676,7 @@
                             将文件拖到此处，或
                             <em>点击上传</em>
                         </div>
-                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，建议100*100 且大小不超过300kb</div>
+                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，建议100*100 且大小不超过200kb</div>
                     </el-upload>
                 </el-form-item>
                 <el-form-item prop="miniAppId" label="小程序appId" :label-width="formLabelWidth">
@@ -1266,11 +1266,12 @@
                         :limit="1"
                         ref="upload"
                         :on-success="onSuccess"
+                        :on-exceed="sza"
                         :file-list="fileList"
                         list-type="picture"
                     >
                         <el-button size="small" type="primary">点击上传修改</el-button>
-                        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，建议100*100 且大小不超过300kb</div>
+                        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，建议100*100 且大小不超过200kb</div>
                         </el-upload>
                 </el-form-item>
                 <el-form-item prop="miniAppId" label="小程序appId" :label-width="formLabelWidth">
@@ -1600,6 +1601,9 @@ export default {
         this.getBusinessInfo();
     },
     methods: {
+        sza(){
+
+        },
         addPage() {
             //获取新增按钮权限
             const loading = this.$loading({
@@ -2287,13 +2291,13 @@ export default {
         beforeUpload(file) {
             //上传之前
             this.type.type = EncryptReplace('bussiness');
-            // const isLt2M = file.size / 1024  < 200;
-            // if (!isLt2M) {
-            //     this.message = '上传模板大小不能超过 200KB!';
-            //     this.$refs.upload.clearFiles();
-            //     this.open();
-            //     return
-            // }
+            const isLt200Kb = file.size / 1024 < 200;
+            if (!isLt200Kb) {
+                this.message = '图片大小不能超过200kb！';
+                this.open();
+                return false
+            }
+            return isLt200Kb
         },
         onSuccess(data) {
             // 修改图片

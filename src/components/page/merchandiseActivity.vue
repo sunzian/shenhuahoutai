@@ -407,7 +407,7 @@
                     <el-input style="width: 150px" v-model="oAchieveMoney" autocomplete="off"></el-input>减
                     <el-input style="width: 150px" v-model="oDiscountMoney" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="选择商品：" :label-width="formLabelWidth" prop="filmName">
+                <el-form-item :required="true" label="选择商品：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oSelectMerchandiseType">
                         <el-radio v-if="oReduceType==2" label="0">全部商品</el-radio>
                         <el-radio label="1">部分商品</el-radio>
@@ -1290,10 +1290,10 @@
             },
             // 修改状态
             changeStatus(index, row) {
-                if(row.status==1){
+                if(row.status==0){
                     this.rowMess='启用'
                 }
-                if(row.status==0){
+                if(row.status==1){
                     this.rowMess='停用'
                 }
                 this.$confirm('是否确定'+this.rowMess+'此活动?', '提示', {

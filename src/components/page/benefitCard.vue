@@ -2341,10 +2341,10 @@
             },
             // 修改状态
             changeStatus(index, row) {
-                if(row.status==1){
+                if(row.status==0){
                     this.rowMess='启用'
                 }
-                if(row.status==0){
+                if(row.status==1){
                     this.rowMess='停用'
                 }
                 this.$confirm('是否确定'+this.rowMess+'此权益卡?', '提示', {

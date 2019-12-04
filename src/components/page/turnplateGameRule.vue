@@ -431,7 +431,6 @@
                 </el-form-item>
                 <el-form-item :required="true" label="奖品图片" :label-width="formLabelWidth">
                     <el-upload
-<<<<<<< HEAD
                         :before-upload="beforeUploadPrize"
                         :data="type"
                         class="upload-demo"
@@ -440,16 +439,6 @@
                         action="/api/upload/uploadImage"
                         :on-success="onSuccess"
                         multiple
-=======
-                            :before-upload="beforeUpload"
-                            :data="type"
-                            class="upload-demo"
-                            drag
-                            ref="download"
-                            action="/api/upload/uploadImage"
-                            :on-success="onSuccess"
-                            multiple
->>>>>>> d2887803f7496735b946d6524f234b3cd9c7cc5b
                     >
                         <i class="el-icon-upload"></i>
                         <div class="el-upload__text">
@@ -520,7 +509,6 @@
                         />
                     </el-popover>
                     <el-upload
-<<<<<<< HEAD
                         :before-upload="beforeUploadPrize"
                         :data="type"
                         class="upload-demo"
@@ -529,16 +517,6 @@
                         action="/api/upload/uploadImage"
                         :on-success="snSuccess"
                         multiple
-=======
-                            :before-upload="beforeUpload"
-                            :data="type"
-                            class="upload-demo"
-                            drag
-                            ref="snload"
-                            action="/api/upload/uploadImage"
-                            :on-success="snSuccess"
-                            multiple
->>>>>>> d2887803f7496735b946d6524f234b3cd9c7cc5b
                     >
                         <i class="el-icon-upload"></i>
                         <div class="el-upload__text">
@@ -706,9 +684,16 @@ export default {
                 this.open();
             }
         },
-        beforeUpload() {
+        beforeUpload(file) {
             //上传之前
             this.type.type = EncryptReplace('activity');
+            const isLt200Kb = file.size / 1024 < 200;
+            if (!isLt200Kb) {
+                this.message = '图片大小不能超过200kb！';
+                this.open();
+                return false
+            }
+            return isLt200Kb
         },
         beforeUploadPrize(file) {
             //上传之前

@@ -1818,9 +1818,16 @@ export default {
                     console.log(err);
                 });
         },
-        beforeUpload() {
+        beforeUpload(file) {
             //上传之前
             this.type.type = EncryptReplace('business');
+            const isLt200Kb = file.size / 1024 < 200;
+            if (!isLt200Kb) {
+                this.message = '图片大小不能超过200kb！';
+                this.open();
+                return false
+            }
+            return isLt200Kb
         },
         onSuccess(data) {
             //上传文件 登录超时
@@ -1914,7 +1921,7 @@ export default {
         $imgAdd(pos, $file) {
             const isLt2M = $file.size / 1024 < 300;
             if (!isLt2M) {
-                this.message = '上传图片大小不能超过 300KB!';
+                this.message = '上传图片大小不能超过 200kb!';
                 this.open();
                 delete this.img_file[pos];
                 return;

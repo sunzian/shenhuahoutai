@@ -519,12 +519,25 @@ export default {
                 dangerouslyUseHTMLString: true
             });
         },
-        beforeUpload() {
+        beforeUpload(file) {
             //上传之前
             this.type.type = EncryptReplace('director');
+            const isLt200Kb = file.size / 1024 < 200;
+            if (!isLt200Kb) {
+                this.message = '图片大小不能超过200kb！';
+                this.open();
+                return false
+            }
+            return isLt200Kb
         },
         onSuccess(data) {
             // 修改图片
+            if (data.status == '-1') {
+                this.message = data.message;
+                this.open();
+                this.$refs.download.clearFiles();
+                return;
+            }
             this.oPicture = data.data;
             if (data.code == 'nologin') {
                 this.message = data.message;
@@ -534,6 +547,12 @@ export default {
         },
         setPicture(data) {
             // 上传图片
+            if (data.status == '-1') {
+                this.message = data.message;
+                this.open();
+                this.$refs.upload.clearFiles();
+                return;
+            }
             this.oForm.picture = data.data;
             if (data.code == 'nologin') {
                 this.message = data.message;
