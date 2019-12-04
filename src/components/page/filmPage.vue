@@ -189,7 +189,7 @@
                         list-type="picture"
                     >
                         <el-button size="small" type="primary">点击上传</el-button>
-                        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过200kb 建议尺寸140*195或按比例上传</div>
+                        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过200kb 建议尺寸280*390或按比例上传</div>
                     </el-upload>
                 </el-form-item>
                 <el-form-item label="影片剧照" :label-width="formLabelWidth">
@@ -353,17 +353,17 @@
                         list-type="picture"
                     >
                         <el-button size="small" type="primary">点击上传修改</el-button>
-                        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过200kb 建议尺寸140*195或按比例上传</div>
+                        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过200kb 建议尺寸280*390或按比例上传</div>
                     </el-upload>
                 </el-form-item>
                 <el-form-item label="影片剧照" :label-width="formLabelWidth">
-                    <el-popover placement="right" title trigger="hover" v-for="item in oStagePhotoList" :key="item">
-                        <img style="width: 400px" :src="item" />
+                    <el-popover placement="right" title v-for="(item,index) in oStagePhotoList" :key="index">
+                        <!-- <img style="width: 400px" :src="item" /> -->
                         <img
                             slot="reference"
                             :src="item"
                             :alt="item"
-                            style="max-height: 50px;max-width: 130px"
+                            style="height: 170px;width: 300px"
                         />
                     </el-popover>
                     <el-upload
@@ -379,6 +379,7 @@
                     >
                         <span class="el-icon-plus">重新上传</span>
                     </el-upload>
+                    <span>只能上传jpg/png文件，且不超过200kb 建议尺寸300*170或按比例上传</span>
                     <el-dialog :visible.sync="dialogVisible">
                         <img width="100%" :src="dialogImageUrl" alt />
                     </el-dialog>
@@ -1440,5 +1441,9 @@ export default {
     .mr10 {
         width: 16%;
         margin-right: 10px;
+    }
+    li {
+        width: 300px;
+        height: 170px;
     }
 </style>
