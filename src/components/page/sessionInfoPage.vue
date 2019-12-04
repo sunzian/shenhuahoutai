@@ -33,20 +33,20 @@
                 </el-select>
                 <el-input v-model="query.filmName" placeholder="影片名称" class="handle-input mr10"></el-input>
                 <el-date-picker
-                        v-model="query.startDate"
-                        type="date"
-                        class="mr10"
-                        value-format="yyyy-MM-dd"
-                        format="yyyy-MM-dd"
-                        placeholder="放映开始时间（起）"
+                    v-model="query.startDate"
+                    type="date"
+                    class="mr10"
+                    value-format="yyyy-MM-dd"
+                    format="yyyy-MM-dd"
+                    placeholder="放映开始时间（起）"
                 ></el-date-picker>
                 <el-date-picker
-                        v-model="query.endDate"
-                        type="date"
-                        class="mr10"
-                        value-format="yyyy-MM-dd"
-                        format="yyyy-MM-dd"
-                        placeholder="放映结束时间（止）"
+                    v-model="query.endDate"
+                    type="date"
+                    class="mr10"
+                    value-format="yyyy-MM-dd"
+                    format="yyyy-MM-dd"
+                    placeholder="放映结束时间（止）"
                 ></el-date-picker>
                 <el-button
                     style="margin-top: 10px;width: 90px;"
@@ -67,10 +67,10 @@
                     icon="el-icon-circle-plus-outline"
                 >刷新小程序会员价</el-button>
                 <!--<el-button-->
-                    <!--type="primary"-->
-                    <!--@click="thirdPrice"-->
-                    <!--style="float: right;margin-top: 10px"-->
-                    <!--icon="el-icon-circle-plus-outline"-->
+                <!--type="primary"-->
+                <!--@click="thirdPrice"-->
+                <!--style="float: right;margin-top: 10px"-->
+                <!--icon="el-icon-circle-plus-outline"-->
                 <!--&gt;批量修改展示会员价</el-button>-->
                 <el-button
                     type="primary"
@@ -117,7 +117,7 @@
                     <template slot-scope="scope">{{scope.row.lowestPrice}}</template>
                 </el-table-column>
                 <!--<el-table-column prop="number" label="会员价" width="70">-->
-                    <!--<template slot-scope="scope">{{scope.row.memberPrice}}</template>-->
+                <!--<template slot-scope="scope">{{scope.row.memberPrice}}</template>-->
                 <!--</el-table-column>-->
                 <el-table-column prop="time" label="增值服务费" width="100">
                     <template slot-scope="scope">{{scope.row.ticketFee}}</template>
@@ -136,7 +136,7 @@
                         <el-button
                             type="text"
                             icon="el-icon-circle-plus-outline"
-                            @click="addChange(scope.$index, scope.row)"
+                            @click="addChange(scope.row)"
                         >编辑</el-button>
                     </template>
                 </el-table-column>
@@ -154,6 +154,32 @@
                 ></el-pagination>
             </div>
         </div>
+        <!--编辑弹出框-->
+        <el-dialog :close-on-click-modal="false" title="编辑活动" :visible.sync="showActivity">
+            <el-form :model="activityForm">
+                <el-form-item label="活动类型" :label-width="formLabelWidth">
+                    <el-select v-model="activityForm.activityType" clearable placeholder="请选择">
+                        <el-option
+                            v-for="item in options"
+                            :key="item.label"
+                            :label="item.value"
+                            :value="item.label"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="活动说明" :label-width="formLabelWidth">
+                    <el-input
+                        style="width: 250px"
+                        v-model="activityForm.activityDesc"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="showActivity = false">取 消</el-button>
+                <el-button type="primary" @click="addActivity">确 定</el-button>
+            </span>
+        </el-dialog>
         <!--新增弹出框-->
         <el-dialog :close-on-click-modal="false" title="获取排期" :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
@@ -311,47 +337,80 @@
             :close-on-press-escape="false"
             :visible.sync="showPosterImg"
             :close-on-click-modal="false"
-            >
+        >
             <div id="posterHtml" ref="posterHtml">
                 <div style="background: linear-gradient(to bottom, #2177b9,#da4e7b);">
                     <div class="poster-head">
                         <div
-                         style="font-size: 60px;
+                            style="font-size: 60px;
                                 margin-bottom: 25px;
                                 font-weight:bold;
                                 letter-spacing: 8px;
                                 padding-top: 50px;
                                 color:rgba(255,255,255,1);
                                 font-weight: 800;
-                                ">今日影讯</div>
+                                "
+                        >今日影讯</div>
                         <div class="poster-date">{{posterContent.dateInfo}}</div>
                         <div class="poster-name">{{posterContent.cinemaName}}</div>
-                        <div class="poster-address el-icon-location-information" style="display: block;">{{posterContent.address}}</div>
-                        <div class="poster-mobile el-icon-phone-outline" style="display: block;">{{posterContent.serviceMobile}}</div>
+                        <div
+                            class="poster-address el-icon-location-information"
+                            style="display: block;"
+                        >{{posterContent.address}}</div>
+                        <div
+                            class="poster-mobile el-icon-phone-outline"
+                            style="display: block;"
+                        >{{posterContent.serviceMobile}}</div>
                     </div>
-                    <div v-for="(item, index) in posterContent.filmList" :key="index" class="poster-session">
+                    <div
+                        v-for="(item, index) in posterContent.filmList"
+                        :key="index"
+                        class="poster-session"
+                    >
                         <img :src="'data:image/png;base64,'+item.image" class="poster-img" />
-                        <span class="poster-filmName">{{item.filmName}}
-                            <span style="display: inline;border:1px solid red;color: red;font-size: 18px;">{{item.dimensional}}</span>
+                        <span class="poster-filmName">
+                            {{item.filmName}}
+                            <span
+                                style="display: inline;border:1px solid red;color: red;font-size: 18px;"
+                            >{{item.dimensional}}</span>
                         </span>
-                        <span class="poster-area">{{item.duration}}分钟，{{item.area}}，{{item.language}}</span>
+                        <span
+                            class="poster-area"
+                        >{{item.duration}}分钟，{{item.area}}，{{item.language}}</span>
                         <div class="poster-actor">{{item.actor}}</div>
                         <div class="poster-sessionList">
-                            <div class="poster-sessionInfo" v-for="(session, index) in item.sessionList" :key="index">
-                                <div style="font-size: 30px;font-weight:bold;color:rgba(51,51,51,1);">{{session.sessionTime}}</div>
+                            <div
+                                class="poster-sessionInfo"
+                                v-for="(session, index) in item.sessionList"
+                                :key="index"
+                            >
+                                <div
+                                    style="font-size: 30px;font-weight:bold;color:rgba(51,51,51,1);"
+                                >{{session.sessionTime}}</div>
                                 <div>
                                     <div>{{session.sessDimensional}}&nbsp;{{session.sessLanguage}}</div>
-                                    <div style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">{{session.screenName}}</div>
+                                    <div
+                                        style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;"
+                                    >{{session.screenName}}</div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div style="text-align: center;position: relative;top: -30px;color:rgba(255,255,255,1);font-size:18px;">以上影讯如有变动，请以当日影院公布为准</div>
+                    <div
+                        style="text-align: center;position: relative;top: -30px;color:rgba(255,255,255,1);font-size:18px;"
+                    >以上影讯如有变动，请以当日影院公布为准</div>
                 </div>
                 <div class="poster-foot">
-                    <img :src="'data:image/png;base64,'+posterContent.miniAppQRCode" class="poster-qrcode" />
-                    <div style="display: flex;flex-direction: column;justify-content: space-around;height:152px;">
-                        <span style="color:rgba(77,77,77,1);font-size: 26px;font-weight:bold;">票比三家，省钱到家</span>
+                    <img
+                        :src="'data:image/png;base64,'+posterContent.miniAppQRCode"
+                        class="poster-qrcode"
+                    />
+                    <div
+                        style="display: flex;flex-direction: column;justify-content: space-around;height:152px;"
+                    >
+                        <span
+                            style="color:rgba(77,77,77,1);font-size: 26px;font-weight:bold;"
+                        >票比三家，省钱到家</span>
                         <div class="poster-btn">会员充值巨划算</div>
                     </div>
                 </div>
@@ -380,6 +439,9 @@ export default {
             drawer: false,
             poster: false,
             showPosterImg: false,
+            showActivity: false,
+            activityCinemaCode: '',
+            activitySessionCode: '',
             oCinemaName: '',
             oCinemaCode: '',
             oScreenCode: '',
@@ -420,6 +482,16 @@ export default {
                     id: '2'
                 }
             ],
+            options: [
+                {
+                    value: '见面会',
+                    label: '1'
+                },
+                {
+                    value: '点映',
+                    label: '2'
+                }
+            ],
             cinemaInfo: [],
             screenInfo: [],
             selectIdList: [],
@@ -441,6 +513,12 @@ export default {
                 startDate: '',
                 endDate: ''
             },
+            activityForm: {
+                activityType: '',
+                activityDesc: '',
+                activityCinemaCode: '',
+                activitySessionCode: ''
+            },
             posterForm: {
                 cinemaCode: '',
                 date: ''
@@ -459,11 +537,100 @@ export default {
         this.getMenu();
     },
     methods: {
-        addChange(id,row) {
-            console.log(id)
-            console.log(row)
+        addChange(row) {
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
+            var jsonArr = [];
+            jsonArr.push({ key: 'id', value: row.id });
+            let sign = md5(preSign(jsonArr));
+            jsonArr.push({ key: 'sign', value: sign });
+            let params = ParamsAppend(jsonArr);
+            https
+                .fetchPost('/sessionInfo/modifyActivityPage', params)
+                .then(data => {
+                    loading.close();
+                    if (data.data.code == 'success') {
+                        console.log(JSON.parse(Decrypt(data.data.data)));
+                        this.activityForm.activityCinemaCode = JSON.parse(Decrypt(data.data.data)).cinemaCode;
+                        this.activityForm.activitySessionCode = JSON.parse(Decrypt(data.data.data)).sessionCode;
+                        if (JSON.parse(Decrypt(data.data.data)).activityType && JSON.parse(Decrypt(data.data.data)).activityType == 1) {
+                            this.activityForm.activityType = '见面会'
+                        }
+                        if (JSON.parse(Decrypt(data.data.data)).activityType && JSON.parse(Decrypt(data.data.data)).activityType == 2) {
+                            this.activityForm.activityType = '点映'
+                        }
+                        this.activityForm.activityDesc = JSON.parse(Decrypt(data.data.data)).activityDesc;
+                        this.showActivity = true;
+                    } else if (data.data.code == 'nologin') {
+                        this.message = data.data.message;
+                        this.open();
+                        this.$router.push('/login');
+                    } else {
+                        this.message = data.data.message;
+                        this.open();
+                    }
+                })
+                .catch(err => {
+                    loading.close();
+                    console.log(err);
+                });
+            this.showActivity = true;
         },
-
+        addActivity() {
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
+            var jsonArr = [];
+            if (this.activityForm.activityType == '见面会') {
+                this.activityForm.activityType = '1'
+            }
+            if (this.activityForm.activityType == '点映') {
+                this.activityForm.activityType = '2'
+            }
+            jsonArr.push({ key: 'cinemaCode', value: this.activityForm.activityCinemaCode });
+            jsonArr.push({ key: 'sessionCode', value: this.activityForm.activitySessionCode });
+            jsonArr.push({ key: 'activityType', value: this.activityForm.activityType });
+            jsonArr.push({ key: 'activityDesc', value: this.activityForm.activityDesc });
+            let sign = md5(preSign(jsonArr));
+            jsonArr.push({ key: 'sign', value: sign });
+            console.log(jsonArr)
+            let params = ParamsAppend(jsonArr);
+            https
+                .fetchPost('/sessionInfo/updateSessionActivity', params)
+                .then(data => {
+                    loading.close();
+                    if (data.data.code == 'success') {
+                        this.activityForm.activityCinemaCode = '';
+                        this.activityForm.activitySessionCode = '';
+                        this.activityForm.activityType = '';
+                        this.activityForm.activityDesc = '';
+                        this.showActivity = false;
+                        this.message = '编辑成功！';
+                        this.open();
+                        this.getMenu();
+                    } else if (data.data.code == 'nologin') {
+                        this.message = data.data.message;
+                        this.open();
+                        this.$router.push('/login');
+                    } else {
+                        this.message = data.data.message;
+                        this.open();
+                    }
+                })
+                .catch(err => {
+                    loading.close();
+                    console.log(err);
+                });
+        },
         thirdPrice() {
             //获取批量修改按钮权限
             if (this.multipleSelection.length == 0) {
@@ -1002,7 +1169,7 @@ export default {
         },
 
         //图片转换格式的方法
-       dataURLToBlob(dataurl) {
+        dataURLToBlob(dataurl) {
             let arr = dataurl.split(',');
             let mime = arr[0].match(/:(.*?);/)[1];
             let bstr = atob(arr[1]);
@@ -1012,7 +1179,7 @@ export default {
                 u8arr[n] = bstr.charCodeAt(n);
             }
             return new Blob([u8arr], { type: mime });
-        },
+        }
     }
 };
 </script>
@@ -1043,44 +1210,43 @@ export default {
 .poster-head {
     position: relative;
     padding-left: 20px;
-
 }
 .poster-date {
     position: absolute;
     top: 30%;
     right: 5%;
     font-size: 24px;
-    font-weight:400;
-    color:rgba(255,255,255,1);
+    font-weight: 400;
+    color: rgba(255, 255, 255, 1);
 }
 .poster-name {
     font-size: 36px;
     margin-bottom: 26px;
-    font-weight:bold;
+    font-weight: bold;
     letter-spacing: 2px;
-    color:rgba(255,255,255,1);
+    color: rgba(255, 255, 255, 1);
 }
 .poster-address {
     font-size: 26px;
     margin-bottom: 26px;
-    font-weight:400;
-    color:rgba(255,255,255,1);
+    font-weight: 400;
+    color: rgba(255, 255, 255, 1);
 }
 .poster-mobile {
     font-size: 26px;
     margin-bottom: 35px;
-    font-weight:400;
-    color:rgba(255,255,255,1);
+    font-weight: 400;
+    color: rgba(255, 255, 255, 1);
 }
 .poster-session {
     position: relative;
     left: 15px;
     width: 90%;
     /* box-shadow:0px 7px 16px 0px rgba(3,143,228,0.45); */
-    border-radius:20px;
+    border-radius: 20px;
     padding: 20px;
     margin-bottom: 60px;
-    background: rgba(255,255,255,1);
+    background: rgba(255, 255, 255, 1);
 }
 .poster-img {
     width: 200px;
@@ -1094,23 +1260,23 @@ export default {
     top: 53px;
 }
 .poster-area {
-    color:rgba(136,136,136,1);
+    color: rgba(136, 136, 136, 1);
     font-size: 22px;
     position: absolute;
     left: 241px;
     top: 123px;
 }
 .poster-actor {
-    color:rgba(136,136,136,1);
+    color: rgba(136, 136, 136, 1);
     font-size: 24px;
     position: absolute;
     left: 241px;
     top: 155px;
     overflow: hidden;
-    text-overflow:ellipsis;
-    display:-webkit-box;
-    -webkit-line-clamp:2;
-    -webkit-box-orient:vertical;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
 }
 .poster-sessionList {
     position: relative;
@@ -1118,17 +1284,17 @@ export default {
     display: flex;
     flex-wrap: wrap;
 }
-.poster-sessionList>div:first-child {
+.poster-sessionList > div:first-child {
     margin-left: 200px;
 }
 .poster-sessionInfo {
     display: flex;
     flex-direction: column;
     width: 100px;
-    color:rgba(136,136,136,1);
-    font-size:18px;
+    color: rgba(136, 136, 136, 1);
+    font-size: 18px;
     height: 90px;
-    font-weight:400;
+    font-weight: 400;
     text-align: center;
     justify-content: space-around;
     margin-bottom: 50px;
@@ -1146,11 +1312,11 @@ export default {
     height: 152px;
 }
 .poster-btn {
-    width:236px;
-    height:50px;
-    background:rgba(0,154,255,1);
-    border-radius:25px;
-    color:rgba(255,255,255,1);
+    width: 236px;
+    height: 50px;
+    background: rgba(0, 154, 255, 1);
+    border-radius: 25px;
+    color: rgba(255, 255, 255, 1);
     font-size: 22px;
     line-height: 50px;
     text-align: center;

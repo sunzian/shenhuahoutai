@@ -624,7 +624,7 @@ export default {
                 loading.close();
                 return;
             }
-            if(this.oForm.sendNumber!0){
+            if(this.oForm.sendNumber!=0){
                 if(!this.oForm.sendNumber){
                     this.message = '库存不能为空，请检查！';
                     this.open();
