@@ -250,7 +250,7 @@
             </div>
         </div>
         <!-- 详情弹出框 -->
-        <el-dialog title="详情" :visible.sync="editVisible">
+        <el-dialog :close-on-click-modal="false" title="详情" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
                 <el-form-item label="本地单号" :label-width="formLabelWidth">
                     <el-input
@@ -467,7 +467,7 @@
             </span>
         </el-dialog>
         <!-- 选择影院 -->
-        <el-dialog :visible.sync="showCinema">
+        <el-dialog :close-on-click-modal="false" :visible.sync="showCinema">
             <el-form>
                 <el-form-item label="适用影院" :label-width="formLabelWidth">
                     <el-select v-model="order.cinemaCode" placeholder="请选择影院">

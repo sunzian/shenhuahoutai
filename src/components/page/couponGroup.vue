@@ -96,7 +96,7 @@
             </div>
         </div>
         <!--新增弹出框-->
-        <el-dialog :visible.sync="dialogFormVisible">
+        <el-dialog :close-on-click-modal="false" :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
                 <el-form-item :required="true" label="券包名称：" :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oForm.name" autocomplete="off"></el-input>
@@ -158,7 +158,7 @@
             </div>
         </el-dialog>
         <!-- 编辑弹出框 -->
-        <el-dialog title="详情" :visible.sync="editVisible">
+        <el-dialog :close-on-click-modal="false" title="详情" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
                 <el-form-item :required="true" label="适用影院名称：" :label-width="formLabelWidth">
                     <span>{{oCinemaName}}</span>
@@ -203,7 +203,7 @@
             </span>
         </el-dialog>
         <!--新增优惠券弹出框-->
-        <el-dialog title="选择优惠券" :visible.sync="drawer">
+        <el-dialog :close-on-click-modal="false" title="选择优惠券" :visible.sync="drawer">
             <div class="container">
                 <div class="handle-box">
                     <el-input v-model="query.name" placeholder="优惠券名称" class="handle-input mr10"></el-input>

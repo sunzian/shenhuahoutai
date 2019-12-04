@@ -163,7 +163,7 @@
             </div>
         </div>
         <!-- 详情弹出框 -->
-        <el-dialog title="详情" :visible.sync="editVisible">
+        <el-dialog :close-on-click-modal="false" title="详情" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
                 <el-form-item label="领取影院名称" :label-width="formLabelWidth">
                     <el-input :disabled="true" style="width: 250px" v-model="form.exchangeCinemaName" autocomplete="off"></el-input>

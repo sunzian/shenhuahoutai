@@ -79,7 +79,7 @@
             </div>
         </div>
         <!--新增弹出框-->
-        <el-dialog title="新增影城" :visible.sync="dialogFormVisible">
+        <el-dialog :close-on-click-modal="false" title="新增影城" :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
                 <el-form-item label="商家名" :label-width="formLabelWidth">
                     <el-input
@@ -164,7 +164,7 @@
             </div>
         </el-dialog>
         <!-- 编辑弹出框 -->
-        <el-dialog title="编辑" :visible.sync="editVisible" width="40%">
+        <el-dialog :close-on-click-modal="false" title="编辑" :visible.sync="editVisible" width="40%">
             <el-form ref="form" :model="form" label-width="100px">
                 <el-form-item label="商家名称">
                     <el-input

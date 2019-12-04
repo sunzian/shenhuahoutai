@@ -169,7 +169,7 @@
             </div>
         </div>
         <!--新增弹出框-->
-        <el-dialog title="新增文章" :visible.sync="dialogFormVisible">
+        <el-dialog :close-on-click-modal="false" title="新增文章" :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
                 <el-form-item :required="true" label="标题" :label-width="formLabelWidth">
                     <el-input
@@ -233,7 +233,7 @@
             </div>
         </el-dialog>
         <!-- 编辑弹出框 -->
-        <el-dialog title="编辑" :visible.sync="editVisible">
+        <el-dialog :close-on-click-modal="false" title="编辑" :visible.sync="editVisible">
             <el-form>
                 <el-form-item :required="true" label="标题" :label-width="formLabelWidth">
                     <el-input

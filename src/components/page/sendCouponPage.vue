@@ -355,12 +355,7 @@
             </div>
         </div>
         <!-- 优惠券弹出框 -->
-        <el-dialog
-            title="选择优惠券"
-            :visible.sync="editVisible"
-            :show-close="false"
-            :close-on-click-modal="false"
-            >
+        <el-dialog title="选择优惠券" :visible.sync="editVisible" :show-close="false" :close-on-click-modal="false">
             <div class="container">
                 <div class="handle-box">
                     <el-input

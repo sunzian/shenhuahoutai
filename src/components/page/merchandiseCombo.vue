@@ -154,7 +154,7 @@
             </div>
         </div>
         <!--新增弹出框-->
-        <el-dialog title="新增套餐" :visible.sync="dialogFormVisible">
+        <el-dialog :close-on-click-modal="false" title="新增套餐" :visible.sync="dialogFormVisible">
             <el-form v-model="oForm">
                 <el-form-item :required="true" label="套餐名称" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oForm.comboName" autocomplete="off"></el-input>
@@ -241,7 +241,7 @@
             </div>
         </el-dialog>
         <!--新增抽屉弹出框-->
-        <el-dialog title="选择卖品" :visible.sync="drawer">
+        <el-dialog :close-on-click-modal="false" title="选择卖品" :visible.sync="drawer">
             <div class="container">
                 <div class="handle-box">
                     <el-input v-model="query.name" placeholder="角色名" class="handle-input mr10"></el-input>
@@ -314,7 +314,7 @@
             </div>
         </el-dialog>
         <!-- 编辑弹出框 -->
-        <el-dialog title="编辑" :visible.sync="editVisible">
+        <el-dialog :close-on-click-modal="false" title="编辑" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
                 <el-form-item :required="true" label="套餐名称" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="form.comboName" autocomplete="off"></el-input>

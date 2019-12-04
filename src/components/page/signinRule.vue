@@ -64,7 +64,7 @@
             </span>
         </div>
         <!-- 新增奖项弹出框 -->
-        <el-dialog title="新增" :visible.sync="editVisible">
+        <el-dialog :close-on-click-modal="false" title="新增" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
                 <el-form-item label="连续签到天数" :label-width="formLabelWidth">
                     <el-input
@@ -148,7 +148,7 @@
                 <el-button type="primary" @click="exChanger">确 定</el-button>
             </span>
         </el-dialog>
-        <el-dialog title="选择优惠券" :visible.sync="drawer">
+        <el-dialog :close-on-click-modal="false" title="选择优惠券" :visible.sync="drawer">
             <div class="container">
                 <div class="handle-box">
                     <el-input v-model="couponName" placeholder="优惠券名称" class="handle-input mr10"></el-input>

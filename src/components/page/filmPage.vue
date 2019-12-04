@@ -86,7 +86,7 @@
             </div>
         </div>
         <!--新增弹出框-->
-        <el-dialog :visible.sync="dialogFormVisible">
+        <el-dialog :close-on-click-modal="false" :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
                 <el-form-item :required="true" label="影片编码" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oForm.filmCode" autocomplete="off"></el-input>
@@ -243,7 +243,7 @@
             </div>
         </el-dialog>
         <!-- 编辑弹出框 -->
-        <el-dialog title="编辑" :visible.sync="editVisible">
+        <el-dialog :close-on-click-modal="false" title="编辑" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
                 <el-form-item label="影片编码" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oFilmCode" autocomplete="off" disabled></el-input>
@@ -421,7 +421,7 @@
             </span>
         </el-dialog>
         <!-- 选择导演弹出窗 -->
-        <el-dialog title="选择导演" :visible.sync="allDirector">
+        <el-dialog :close-on-click-modal="false" title="选择导演" :visible.sync="allDirector">
             <div class="handle-box">
                 <el-input v-model="query.directorName" placeholder="导演名称" class="handle-input mr10"></el-input>
                 <el-button type="primary" icon="el-icon-search" @click="directorSearch">搜索</el-button>
@@ -477,7 +477,7 @@
             </div>
         </el-dialog>
         <!-- 选择演员弹出窗 -->
-        <el-dialog title="选择演员" :visible.sync="allActor">
+        <el-dialog :close-on-click-modal="false" title="选择演员" :visible.sync="allActor">
             <div class="handle-box">
                 <el-input v-model="query.actorName" placeholder="演员名称" class="handle-input mr10"></el-input>
                 <el-button type="primary" icon="el-icon-search" @click="actorSearch">搜索</el-button>

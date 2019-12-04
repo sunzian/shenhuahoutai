@@ -50,12 +50,12 @@
                     style="float: right;margin-top: 10px"
                     icon="el-icon-circle-plus-outline"
                 >刷新小程序会员价</el-button>
-                <el-button
-                    type="primary"
-                    @click="thirdPrice"
-                    style="float: right;margin-top: 10px"
-                    icon="el-icon-circle-plus-outline"
-                >批量修改展示会员价</el-button>
+                <!--<el-button-->
+                    <!--type="primary"-->
+                    <!--@click="thirdPrice"-->
+                    <!--style="float: right;margin-top: 10px"-->
+                    <!--icon="el-icon-circle-plus-outline"-->
+                <!--&gt;批量修改展示会员价</el-button>-->
                 <el-button
                     type="primary"
                     @click="addPage"
@@ -100,9 +100,9 @@
                 <el-table-column prop="booleans" label="最低价" width="70">
                     <template slot-scope="scope">{{scope.row.lowestPrice}}</template>
                 </el-table-column>
-                <el-table-column prop="number" label="会员价" width="70">
-                    <template slot-scope="scope">{{scope.row.memberPrice}}</template>
-                </el-table-column>
+                <!--<el-table-column prop="number" label="会员价" width="70">-->
+                    <!--<template slot-scope="scope">{{scope.row.memberPrice}}</template>-->
+                <!--</el-table-column>-->
                 <el-table-column prop="time" label="增值服务费" width="100">
                     <template slot-scope="scope">{{scope.row.ticketFee}}</template>
                 </el-table-column>
@@ -130,7 +130,7 @@
             </div>
         </div>
         <!--新增弹出框-->
-        <el-dialog title="获取排期" :visible.sync="dialogFormVisible">
+        <el-dialog :close-on-click-modal="false" title="获取排期" :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
                 <el-form-item label="影院名称" :label-width="formLabelWidth">
                     <el-select v-model="oForm.cinemaName" placeholder="请选择">
@@ -167,7 +167,7 @@
             </span>
         </el-dialog>
         <!-- 编辑弹出框 -->
-        <el-dialog title="价格设置" :visible.sync="editVisible">
+        <el-dialog :close-on-click-modal="false" title="价格设置" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
                 <el-form-item label="影院名称" :label-width="formLabelWidth">
                     <el-input
@@ -237,7 +237,7 @@
             </span>
         </el-dialog>
         <!-- 批量修改弹出框 -->
-        <el-dialog title="批量修改" :visible.sync="drawer">
+        <el-dialog :close-on-click-modal="false" title="批量修改" :visible.sync="drawer">
             <el-form ref="formOne" v-model="formOne">
                 <el-form-item label="会员价" :label-width="formLabelWidth">
                     <el-input
@@ -254,7 +254,7 @@
             </span>
         </el-dialog>
         <!--影讯弹出框-->
-        <el-dialog title="生成影讯" :visible.sync="poster">
+        <el-dialog :close-on-click-modal="false" title="生成影讯" :visible.sync="poster">
             <el-form :model="oForm">
                 <el-form-item :required="true" label="影院名称" :label-width="formLabelWidth">
                     <el-select v-model="posterForm.cinemaCode" placeholder="请选择">
@@ -290,7 +290,7 @@
             <div id="posterHtml" ref="posterHtml">
                 <div style="background: linear-gradient(to bottom, #2177b9,#da4e7b);">
                     <div class="poster-head">
-                        <div 
+                        <div
                          style="font-size: 60px;
                                 margin-bottom: 25px;
                                 font-weight:bold;
@@ -1003,7 +1003,7 @@ export default {
 .poster-head {
     position: relative;
     padding-left: 20px;
-    
+
 }
 .poster-date {
     position: absolute;

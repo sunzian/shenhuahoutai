@@ -116,7 +116,7 @@
             </div>
         </div>
         <!--新增弹出框-->
-        <el-dialog title="充值" :visible.sync="dialogFormVisible">
+        <el-dialog :close-on-click-modal="false" title="充值" :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
                 <el-form-item label="选择影院：" :label-width="formLabelWidth">
                     <el-select v-model="oForm.cinemaCode" placeholder="请选择">

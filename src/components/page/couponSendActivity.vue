@@ -115,7 +115,7 @@
             </div>
         </div>
         <!--新增弹出框-->
-        <el-dialog title="设置活动" :visible.sync="dialogFormVisible">
+        <el-dialog :close-on-click-modal="false" title="设置活动" :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
                 <el-form-item :required="true" label="活动名称：" :label-width="formLabelWidth">
                     <el-input style="width: 250px" min="1" v-model="oForm.name" autocomplete="off"></el-input>
@@ -251,7 +251,7 @@
             </span>
         </el-dialog>
         <!-- 编辑弹出框 -->
-        <el-dialog title="价格设置" :visible.sync="editVisible">
+        <el-dialog :close-on-click-modal="false" title="价格设置" :visible.sync="editVisible">
             <el-form :model="form">
                 <el-form-item :required="true" label="活动名称：" :label-width="formLabelWidth">
                     <el-input style="width: 250px" min="1" v-model="form.name" autocomplete="off"></el-input>
@@ -395,7 +395,7 @@
             </span>
         </el-dialog>
         <!-- 选择优惠券弹出窗 -->
-        <el-dialog title="选择优惠券" :visible.sync="drawer">
+        <el-dialog :close-on-click-modal="false" title="选择优惠券" :visible.sync="drawer">
             <div class="container">
                 <div class="handle-box">
                     <el-input v-model="couponName" placeholder="券包名称" class="handle-input mr10"></el-input>

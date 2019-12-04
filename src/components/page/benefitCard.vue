@@ -153,7 +153,7 @@
             </div>
         </div>
         <!--新增弹出框-->
-        <el-dialog :visible.sync="dialogFormVisible">
+        <el-dialog :close-on-click-modal="false" :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
                 <el-form-item :required="true" label="权益卡名称：" :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oForm.name" maxlength="15" autocomplete="off"></el-input>
@@ -532,7 +532,7 @@
             </div>
         </el-dialog>
         <!-- 编辑弹出框 -->
-        <el-dialog title="修改" :visible.sync="editVisible">
+        <el-dialog :close-on-click-modal="false" title="修改" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
                 <el-form-item :required="true" label="权益卡名称：" :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oName" maxlength="15" autocomplete="off"></el-input>
@@ -912,7 +912,7 @@
             </span>
         </el-dialog>
         <!--新增影片弹出框-->
-        <el-dialog title="选择影片" :visible.sync="drawer">
+        <el-dialog :close-on-click-modal="false" title="选择影片" :visible.sync="drawer">
             <div class="container">
                 <div class="handle-box">
                     <el-input v-model="query.filmName" placeholder="影片名称" class="handle-input mr10"></el-input>
@@ -965,7 +965,7 @@
             </div>
         </el-dialog>
         <!--新增卖品弹出框-->
-        <el-dialog title="选择卖品" :visible.sync="oDrawer">
+        <el-dialog :close-on-click-modal="false" title="选择卖品" :visible.sync="oDrawer">
             <div class="container">
                 <div class="handle-box">
                     <el-input v-model="query.merName" placeholder="卖品名称" class="handle-input mr10"></el-input>
@@ -1018,7 +1018,7 @@
             </div>
         </el-dialog>
         <!-- 选择券包弹出窗 -->
-        <el-dialog title="选择券包" :visible.sync="drawerCoupon">
+        <el-dialog :close-on-click-modal="false" title="选择券包" :visible.sync="drawerCoupon">
             <div class="container">
                 <div class="handle-box">
                     <el-input v-model="query.groupName" placeholder="券包名称" class="handle-input mr10"></el-input>
@@ -2589,12 +2589,9 @@
                                 this.open();
                                 return
                             }
-                            else {
-                                // console.log('判断不重复');
-                                this.selectedSell.push(this.sellTableData[this.sellIndex]);
-                            }
-
                         }
+                        // console.log('判断不重复');
+                        this.selectedSell.push(this.sellTableData[this.sellIndex]);
                     }
 
                 }

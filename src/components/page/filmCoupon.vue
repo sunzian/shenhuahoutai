@@ -122,7 +122,7 @@
             </div>
         </div>
         <!--新增弹出框-->
-        <el-dialog :visible.sync="dialogFormVisible">
+        <el-dialog title="新增" :close-on-click-modal="false" :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
                 <el-form-item :required="true" label="优惠券名称：" :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oForm.name" autocomplete="off"></el-input>
@@ -184,7 +184,7 @@
                 <el-form-item
                         label="所选影片"
                         :label-width="formLabelWidth"
-                        v-if="selectedSell.length>0"
+                        v-if="selectedSell.length>0&&oForm.selectFilmType != 0"
                         :required="true"
                 >
                     <div v-for="(item, index) in selectedSell" style="margin-bottom: 5px" :key="index">
@@ -252,7 +252,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="星期几不可用：" :label-width="formLabelWidth">
-                    <el-checkbox-group v-model="oForm.checkedDays" @change="selectDay">
+                    <el-checkbox-group :max="6" v-model="oForm.checkedDays" @change="selectDay">
                         <el-checkbox
                             v-for="(day, index) in oForm.exceptWeekDay"
                             :label="index+1"
@@ -286,11 +286,11 @@
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="cancel">取 消</el-button>
-                <el-button type="primary" @click="addRole">确 定</el-button>
+                <el-button type="primary" @click="addRole" @keyup.enter.native="addRole()" >确 定</el-button>
             </div>
         </el-dialog>
         <!-- 编辑弹出框 -->
-        <el-dialog title="修改" :visible.sync="editVisible">
+        <el-dialog title="修改" :close-on-click-modal="false" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
                 <el-form-item :required="true" label="优惠券名称：" :label-width="formLabelWidth">
                     <el-input style="width: 180px" v-model="oName" autocomplete="off"></el-input>
@@ -352,7 +352,7 @@
                 <el-form-item
                         label="所选影片"
                         :label-width="formLabelWidth"
-                        v-if="selectedSell.length>0"
+                        v-if="selectedSell.length>0&&oSelectFilmType != 0"
                         :required="true"
                 >
                     <div v-for="(item, index) in selectedSell" style="margin-bottom: 5px" :key="index">
@@ -436,7 +436,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="星期几不可用：" :label-width="formLabelWidth">
-                    <el-checkbox-group v-model="oCheckedDays" @change="selectDay">
+                    <el-checkbox-group :max="6" v-model="oCheckedDays" @change="selectDay">
                         <el-checkbox
                                 v-for="item in oExceptWeekDay"
                                 :label="item.index"
@@ -474,7 +474,7 @@
             </span>
         </el-dialog>
         <!--新增抽屉弹出框-->
-        <el-dialog title="选择影片" :visible.sync="drawer">
+        <el-dialog title="选择影片" :close-on-click-modal="false" :visible.sync="drawer">
             <div class="container">
                 <div class="handle-box">
                     <el-input v-model="query.filmName" placeholder="影片名称" class="handle-input mr10"></el-input>
@@ -672,6 +672,7 @@ export default {
             selectFilmCode:[],
             selectedSell:[],
             sellIndex:'',
+            rowMess:'',
         };
     },
     created() {
@@ -697,13 +698,27 @@ export default {
         },
         sureNext() {
             if(this.sellIndex>=0){
-                // this.selectedSell=[]
-                this.selectedSell.push(this.sellTableData[this.sellIndex]);
+                // console.log('选了数据');
+                if(this.selectedSell.length<=0){
+                    // console.log('长度为0');
+                    this.selectedSell.push(this.sellTableData[this.sellIndex]);
+                }
+                else if(this.selectedSell.length>0){
+                    // console.log('有数据');
+                    for(let x in this.selectedSell){
+                        if(this.selectedSell[x].filmCode==this.sellTableData[this.sellIndex].filmCode){
+                            this.message = '不能添加相同影片！';
+                            this.open();
+                            return
+                        }
+                    }
+                    // console.log('判断不重复');
+                    this.selectedSell.push(this.sellTableData[this.sellIndex]);
+                }
+
             }
-            this.drawer = false;
-            console.log(this.sellIndex);
-            console.log(this.sellTableData);
             console.log(this.selectedSell);
+            this.drawer = false;
         },
         SearchFilm() {
             this.query.pageNo = 1;
@@ -775,6 +790,7 @@ export default {
                     console.log(data);
                     if (data.data.code == 'success') {
                         this.dialogFormVisible = true;
+                        this.selectedSell=[];
                         this.getAllScreen(this.oForm.cinemaCode);
                         console.log(JSON.parse(Decrypt(data.data.data)));
                         let formats = JSON.parse(Decrypt(data.data.data)).formatList;
@@ -1022,6 +1038,7 @@ export default {
             let params = ParamsAppend(jsonArr);
             https.fetchPost('/filmCoupon/getFilmCouponById', params).then(data => {
                     loading.close();
+                    this.selectedSell=[];
                     console.log(data);
                     console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
@@ -1245,7 +1262,14 @@ export default {
         },
         // 修改状态
         changeStatus(index, row) {
-            this.$confirm('此操作将修改状态, 是否继续?', '提示', {
+            console.log(row);
+            if(row.status==1){
+                this.rowMess='启用'
+            }
+            if(row.status==0){
+                this.rowMess='停用'
+            }
+            this.$confirm('是否确定'+this.rowMess+'此优惠券?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
