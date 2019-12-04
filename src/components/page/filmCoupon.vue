@@ -125,7 +125,7 @@
         <el-dialog title="新增" :close-on-click-modal="false" :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
                 <el-form-item :required="true" label="优惠券名称：" :label-width="formLabelWidth">
-                    <el-input style="width: 150px" v-model="oForm.name" autocomplete="off"></el-input>
+                    <el-input style="width: 150px" maxlength="15" v-model="oForm.name" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="选择影院：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.cinemaCode" @change="selectCinema">
@@ -157,7 +157,7 @@
                     </el-checkbox-group>
                 </el-form-item>
                 <el-form-item :required="true" label="选择制式：" :label-width="formLabelWidth">
-                    <el-radio-group v-model="oForm.selectFilmFormatType">
+                    <el-radio-group v-model="oForm.selectFilmFormatType" @change="clearFilmFormatCode()">
                         <el-radio label="0">全部制式参加</el-radio>
                         <el-radio label="1">指定制式参加</el-radio>
                         <el-radio label="2">指定制式不参加</el-radio>
@@ -293,7 +293,7 @@
         <el-dialog title="修改" :close-on-click-modal="false" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
                 <el-form-item :required="true" label="优惠券名称：" :label-width="formLabelWidth">
-                    <el-input style="width: 180px" v-model="oName" autocomplete="off"></el-input>
+                    <el-input style="width: 180px"  maxlength="15" v-model="oName" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="选择影院：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oCinemaCode" @change="selectCinema">
@@ -325,7 +325,7 @@
                     </el-checkbox-group>
                 </el-form-item>
                 <el-form-item :required="true" label="选择制式：" :label-width="formLabelWidth">
-                    <el-radio-group v-model="oSelectFilmFormatType">
+                    <el-radio-group v-model="oSelectFilmFormatType" @change="clearFilmFormatCode()">
                         <el-radio label="0">全部制式参加</el-radio>
                         <el-radio label="1">指定制式参加</el-radio>
                         <el-radio label="2">指定制式不参加</el-radio>
@@ -685,6 +685,10 @@ export default {
         clearScreenCode(){
             this.oForm.screenCode=[];
             this.oScreenCode=[];
+        },
+        clearFilmFormatCode(){
+            this.oForm.filmFormatCode=[];
+            this.oFilmFormatCode=[];
         },
         one(a){//获取卖品绑定的value值
             // console.log(a);
@@ -1318,7 +1322,8 @@ export default {
                             loading.close();
                             console.log(err);
                         });
-                }) .catch(() => {
+                })
+                .catch(() => {
                 this.$message({
                     type: 'info',
                     message: '已取消修改'

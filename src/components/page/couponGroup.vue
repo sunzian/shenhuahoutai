@@ -330,7 +330,8 @@ export default {
             couponList: [],
             selectedSell: [],
             value: '',
-            sellIndex: ''
+            sellIndex: '',
+            rowMess: '',
         };
     },
     created() {},
@@ -682,49 +683,67 @@ export default {
         },
         // 修改状态
         changeStatus(index, row) {
-            const loading = this.$loading({
-                lock: true,
-                text: 'Loading',
-                spinner: 'el-icon-loading',
-                background: 'rgba(0, 0, 0, 0.7)',
-                target: document.querySelector('.div1')
-            });
-            this.idx = index;
-            this.form = row;
-            var jsonArr = [];
-            let status;
-            if (row.status == 1) {
-                status = 0;
-            } else if (row.status == 0) {
-                status = 1;
+            if(row.status==1){
+                this.rowMess='启用'
             }
-            jsonArr.push({ key: 'id', value: row.id });
-            jsonArr.push({ key: 'status', value: status });
-            let sign = md5(preSign(jsonArr));
-            jsonArr.push({ key: 'sign', value: sign });
-            console.log(jsonArr);
-            let params = ParamsAppend(jsonArr);
-            https
-                .fetchPost('couponGroup/updateStatusById', params)
-                .then(data => {
-                    loading.close();
-                    // console.log(JSON.parse(Decrypt(data.data.data)));
-                    if (data.data.code == 'success') {
-                        this.$message.success(`修改成功`);
-                        this.getMenu();
-                    } else if (data.data.code == 'nologin') {
-                        this.message = data.data.message;
-                        this.open();
-                        this.$router.push('/login');
-                    } else {
-                        this.message = data.data.message;
-                        this.open();
+            if(row.status==0){
+                this.rowMess='停用'
+            }
+            this.$confirm('是否确定'+this.rowMess+'此券包?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            })
+                .then(() => {
+                    const loading = this.$loading({
+                        lock: true,
+                        text: 'Loading',
+                        spinner: 'el-icon-loading',
+                        background: 'rgba(0, 0, 0, 0.7)',
+                        target: document.querySelector('.div1')
+                    });
+                    this.idx = index;
+                    this.form = row;
+                    var jsonArr = [];
+                    let status;
+                    if (row.status == 1) {
+                        status = 0;
+                    } else if (row.status == 0) {
+                        status = 1;
                     }
-                })
-                .catch(err => {
-                    loading.close();
-                    console.log(err);
+                    jsonArr.push({ key: 'id', value: row.id });
+                    jsonArr.push({ key: 'status', value: status });
+                    let sign = md5(preSign(jsonArr));
+                    jsonArr.push({ key: 'sign', value: sign });
+                    console.log(jsonArr);
+                    let params = ParamsAppend(jsonArr);
+                    https
+                        .fetchPost('couponGroup/updateStatusById', params)
+                        .then(data => {
+                            loading.close();
+                            // console.log(JSON.parse(Decrypt(data.data.data)));
+                            if (data.data.code == 'success') {
+                                this.$message.success(`修改成功`);
+                                this.getMenu();
+                            } else if (data.data.code == 'nologin') {
+                                this.message = data.data.message;
+                                this.open();
+                                this.$router.push('/login');
+                            } else {
+                                this.message = data.data.message;
+                                this.open();
+                            }
+                        })
+                        .catch(err => {
+                            loading.close();
+                            console.log(err);
+                        });
+                }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消修改'
                 });
+            })
         },
         Search() {
             this.query.pageNo = 1;

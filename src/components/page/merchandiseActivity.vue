@@ -256,7 +256,7 @@
                     </div>
                 </el-form-item>
                 <el-form-item label="星期几不可用：" :label-width="formLabelWidth">
-                    <el-checkbox-group v-model="oForm.checkedDays" @change="selectDay">
+                    <el-checkbox-group :max="6" v-model="oForm.checkedDays" @change="selectDay">
                         <el-checkbox
                                 v-for="(day, index) in oForm.exceptWeekDay"
                                 :label="index+1"
@@ -509,7 +509,7 @@
                     </div>
                 </el-form-item>
                 <el-form-item label="星期几不可用：" :label-width="formLabelWidth">
-                    <el-checkbox-group v-model="oCheckedDays" @change="selectDay">
+                    <el-checkbox-group :max="6" v-model="oCheckedDays" @change="selectDay">
                         <el-checkbox
                                 v-for="item in oExceptWeekDay"
                                 :label="item.index"
@@ -731,6 +731,7 @@
                 endArr:[],
                 value: '',
                 canTimeList:[],//可用时间段列表
+                rowMess:'',
             };
         },
         created() {},
@@ -1289,48 +1290,66 @@
             },
             // 修改状态
             changeStatus(index, row) {
-                const loading = this.$loading({
-                    lock: true,
-                    text: 'Loading',
-                    spinner: 'el-icon-loading',
-                    background: 'rgba(0, 0, 0, 0.7)',
-                    target: document.querySelector('.div1')
-                });
-                this.idx = index;
-                this.form = row;
-                var jsonArr = [];
-                let status;
-                if (row.status == 1) {
-                    status = 0;
-                } else if (row.status == 0) {
-                    status = 1;
+                if(row.status==1){
+                    this.rowMess='启用'
                 }
-                jsonArr.push({ key: 'id', value: row.id });
-                jsonArr.push({ key: 'status', value: status });
-                let sign = md5(preSign(jsonArr));
-                jsonArr.push({ key: 'sign', value: sign });
-                console.log(jsonArr);
-                let params = ParamsAppend(jsonArr);
-                https.fetchPost('/merchandiseDiscountActivity/updateStatusById', params).then(data => {
-                    loading.close();
-                    console.log(data);
-                    // console.log(JSON.parse(Decrypt(data.data.data)));
-                    if (data.data.code == 'success') {
-                        this.$message.success(`修改成功`);
-                        this.getMenu();
-                    } else if (data.data.code == 'nologin') {
-                        this.message = data.data.message;
-                        this.open();
-                        this.$router.push('/login');
-                    } else {
-                        this.message = data.data.message;
-                        this.open();
-                    }
+                if(row.status==0){
+                    this.rowMess='停用'
+                }
+                this.$confirm('是否确定'+this.rowMess+'此活动?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
                 })
-                    .catch(err => {
-                        loading.close();
-                        console.log(err);
+                    .then(() => {
+                        const loading = this.$loading({
+                            lock: true,
+                            text: 'Loading',
+                            spinner: 'el-icon-loading',
+                            background: 'rgba(0, 0, 0, 0.7)',
+                            target: document.querySelector('.div1')
+                        });
+                        this.idx = index;
+                        this.form = row;
+                        var jsonArr = [];
+                        let status;
+                        if (row.status == 1) {
+                            status = 0;
+                        } else if (row.status == 0) {
+                            status = 1;
+                        }
+                        jsonArr.push({ key: 'id', value: row.id });
+                        jsonArr.push({ key: 'status', value: status });
+                        let sign = md5(preSign(jsonArr));
+                        jsonArr.push({ key: 'sign', value: sign });
+                        console.log(jsonArr);
+                        let params = ParamsAppend(jsonArr);
+                        https.fetchPost('/merchandiseDiscountActivity/updateStatusById', params).then(data => {
+                            loading.close();
+                            console.log(data);
+                            // console.log(JSON.parse(Decrypt(data.data.data)));
+                            if (data.data.code == 'success') {
+                                this.$message.success(`修改成功`);
+                                this.getMenu();
+                            } else if (data.data.code == 'nologin') {
+                                this.message = data.data.message;
+                                this.open();
+                                this.$router.push('/login');
+                            } else {
+                                this.message = data.data.message;
+                                this.open();
+                            }
+                        })
+                            .catch(err => {
+                                loading.close();
+                                console.log(err);
+                            });
+                    })  .catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消修改'
                     });
+                });
             },
             Search() {
                 console.log(this.query.reduceType);
@@ -1489,9 +1508,26 @@
             },
             sureNext() {
                 if(this.sellIndex>=0){
-                    // this.selectedSell=[]
-                    this.selectedSell.push(this.sellTableData[this.sellIndex]);
+                    // console.log('选了数据');
+                    if(this.selectedSell.length<=0){
+                        // console.log('长度为0');
+                        this.selectedSell.push(this.sellTableData[this.sellIndex]);
+                    }
+                    else if(this.selectedSell.length>0){
+                        // console.log('有数据');
+                        for(let x in this.selectedSell){
+                            if(this.selectedSell[x].merchandiseCode==this.sellTableData[this.sellIndex].merchandiseCode){
+                                this.message = '不能添加相同卖品！';
+                                this.open();
+                                return
+                            }
+                        }
+                        // console.log('判断不重复');
+                        this.selectedSell.push(this.sellTableData[this.sellIndex]);
+                    }
+
                 }
+                console.log(this.selectedSell);
                 this.drawer = false;
             },
             openNext() {

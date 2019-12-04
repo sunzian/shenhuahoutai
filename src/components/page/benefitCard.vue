@@ -458,7 +458,7 @@
                     </div>
                 </el-form-item>
                 <el-form-item label="星期几不可用：" :label-width="formLabelWidth" v-if="oForm.cardType==1">
-                    <el-checkbox-group v-model="oForm.validWeekDay" @change="selectDay">
+                    <el-checkbox-group :max="6" v-model="oForm.validWeekDay" @change="selectDay">
                         <el-checkbox
                                 v-for="(day, index) in oForm.exceptWeekDay"
                                 :label="index+1"
@@ -837,7 +837,7 @@
                     </div>
                 </el-form-item>
                 <el-form-item label="星期几不可用：" :label-width="formLabelWidth" v-if="oCardType==1">
-                    <el-checkbox-group v-model="oCheckedDays" @change="selectDay">
+                    <el-checkbox-group :max="6" v-model="oCheckedDays" @change="selectDay">
                         <el-checkbox
                                 v-for="item in oExceptWeekDay"
                                 :label="item.index"
@@ -1279,6 +1279,7 @@
                 couponName: '',
                 couponList: [],
                 groupName: '',
+                rowMess: '',
             };
         },
         created() {},
@@ -1453,6 +1454,12 @@
                 if(this.oForm.cardType==1) {
                     if (!this.oForm.isFilmJoin||!this.oForm.isMerchandiseJoin||!this.oForm.validPayType||!this.oForm.isHolidayValid||!this.oForm.isCouponTogether) {
                         this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                    if(this.oForm.isFilmJoin==0&&this.oForm.isMerchandiseJoin==0){
+                        this.message = '卖品与影票必须有一种参加！';
                         this.open();
                         loading.close();
                         return;
@@ -2088,6 +2095,12 @@
                         loading.close();
                         return;
                     }
+                    if(this.oIsFilmJoin==0&&this.oIsMerchandiseJoin==0){
+                        this.message = '卖品与影票必须有一种参加！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
                 }
                 if(this.oIsFilmJoin==1&&this.oCardType==1) {
                     if (!this.oFilmSimpleDesc||!this.oSelectHallType||!this.oSelectFilmFormatType||!this.oSelectFilmType
@@ -2328,48 +2341,66 @@
             },
             // 修改状态
             changeStatus(index, row) {
-                const loading = this.$loading({
-                    lock: true,
-                    text: 'Loading',
-                    spinner: 'el-icon-loading',
-                    background: 'rgba(0, 0, 0, 0.7)',
-                    target: document.querySelector('.div1')
-                });
-                this.idx = index;
-                this.form = row;
-                var jsonArr = [];
-                let status;
-                if (row.status == 1) {
-                    status = 0;
-                } else if (row.status == 0) {
-                    status = 1;
+                if(row.status==1){
+                    this.rowMess='启用'
                 }
-                jsonArr.push({ key: 'id', value: row.id });
-                jsonArr.push({ key: 'status', value: status });
-                let sign = md5(preSign(jsonArr));
-                jsonArr.push({ key: 'sign', value: sign });
-                console.log(jsonArr);
-                let params = ParamsAppend(jsonArr);
-                https.fetchPost('/benefitCard/updateStatusById', params).then(data => {
-                    loading.close();
-                    console.log(data);
-                    // console.log(JSON.parse(Decrypt(data.data.data)));
-                    if (data.data.code == 'success') {
-                        this.$message.success(`修改成功`);
-                        this.getMenu();
-                    } else if (data.data.code == 'nologin') {
-                        this.message = data.data.message;
-                        this.open();
-                        this.$router.push('/login');
-                    } else {
-                        this.message = data.data.message;
-                        this.open();
-                    }
+                if(row.status==0){
+                    this.rowMess='停用'
+                }
+                this.$confirm('是否确定'+this.rowMess+'此权益卡?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
                 })
-                    .catch(err => {
-                        loading.close();
-                        console.log(err);
+                    .then(() => {
+                        const loading = this.$loading({
+                            lock: true,
+                            text: 'Loading',
+                            spinner: 'el-icon-loading',
+                            background: 'rgba(0, 0, 0, 0.7)',
+                            target: document.querySelector('.div1')
+                        });
+                        this.idx = index;
+                        this.form = row;
+                        var jsonArr = [];
+                        let status;
+                        if (row.status == 1) {
+                            status = 0;
+                        } else if (row.status == 0) {
+                            status = 1;
+                        }
+                        jsonArr.push({ key: 'id', value: row.id });
+                        jsonArr.push({ key: 'status', value: status });
+                        let sign = md5(preSign(jsonArr));
+                        jsonArr.push({ key: 'sign', value: sign });
+                        console.log(jsonArr);
+                        let params = ParamsAppend(jsonArr);
+                        https.fetchPost('/benefitCard/updateStatusById', params).then(data => {
+                            loading.close();
+                            console.log(data);
+                            // console.log(JSON.parse(Decrypt(data.data.data)));
+                            if (data.data.code == 'success') {
+                                this.$message.success(`修改成功`);
+                                this.getMenu();
+                            } else if (data.data.code == 'nologin') {
+                                this.message = data.data.message;
+                                this.open();
+                                this.$router.push('/login');
+                            } else {
+                                this.message = data.data.message;
+                                this.open();
+                            }
+                        })
+                            .catch(err => {
+                                loading.close();
+                                console.log(err);
+                            });
+                    }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消修改'
                     });
+                })
             },
             Search() {
                 console.log(this.query.reduceType);
@@ -2600,7 +2631,24 @@
             },
             oSureNext() {
                 if(this.oSellIndex>=0){
-                    this.oSelectedSell.push(this.oSellTableData[this.oSellIndex]);
+                    // console.log('选了数据');
+                    if(this.oSelectedSell.length<=0){
+                        // console.log('长度为0');
+                        this.oSelectedSell.push(this.oSellTableData[this.oSellIndex]);
+                    }
+                    else if(this.oSelectedSell.length>0){
+                        // console.log('有数据');
+                        for(let x in this.oSelectedSell){
+                            if(this.oSelectedSell[x].merchandiseCode==this.oSellTableData[this.oSellIndex].merchandiseCode){
+                                this.message = '不能添加相同卖品！';
+                                this.open();
+                                return
+                            }
+                        }
+                        // console.log('判断不重复');
+                        this.oSelectedSell.push(this.oSellTableData[this.oSellIndex]);
+                    }
+
                 }
                 console.log(this.oSelectedSell);
                 this.oDrawer = false;

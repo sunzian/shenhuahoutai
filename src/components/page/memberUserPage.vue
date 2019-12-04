@@ -29,6 +29,12 @@
                     autocomplete="off"
                     class="mr10"
                 ></el-input>
+                <el-input
+                        placeholder="推荐员工编码"
+                        v-model="query.employeeCode"
+                        autocomplete="off"
+                        class="mr10"
+                ></el-input>
                 <el-date-picker
                     v-model="query.startDate"
                     type="datetime"
@@ -112,6 +118,9 @@
                 </el-table-column>
                 <el-table-column prop="memo" label="有效优惠券数量" width="130">
                     <template slot-scope="scope">{{scope.row.remainCoupons}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="推荐员工编码" width="120">
+                    <template slot-scope="scope">{{scope.row.employeeCode}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="游戏厅角色" width="100">
                     <template slot-scope="scope">
@@ -322,6 +331,7 @@ export default {
             });
             setTimeout(() => {
                 let cinemaCode = this.query.cinemaCode;
+                let employeeCode = this.query.employeeCode;
                 let userName = this.query.userName;
                 let userMobile = this.query.mobile;
                 let startDate = this.query.startDate;
@@ -341,11 +351,15 @@ export default {
                 if (!endDate) {
                     endDate = '';
                 }
+                if (!employeeCode) {
+                    employeeCode = '';
+                }
                 let jsonArr = [];
                 jsonArr.push({ key: 'tableName', value: "member_user" });
                 jsonArr.push({ key: 'exportKeysJson', value: "['id','cinemaCode','cinemaName','userName','userMobile','cnUserSex','birthday','userAge','chMemberType','cnBindMemberCardStatus','cnMiniRegisterStatus','cnAppRegisterStatus','miniRegisterDate','appRegisterDate','country','province','city','loginDate','goldNumber','cnUserRole','remainCoupons','ticketStubNumber','lastConsumeDate','consumptionAmount','cnStatus','employeeCode']"});
                 jsonArr.push({ key: 'exportTitlesJson', value:"['ID','注册影院编码','注册影院名称','用户名','手机号','用户性别','用户生日','用户年龄','用户类型','是否绑定会员卡','是否注册小程序','是否注册APP','小程序注册时间','APP注册时间','国家','省份','城市','最近登录时间','金币数量','聊天室角色','剩余优惠券数量','票根数量','最近一次消费时间','累计消费金额','用户状态','推荐员工编码']" });
                 jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
+                jsonArr.push({ key: 'employeeCode', value: employeeCode });
                 jsonArr.push({ key: 'userName', value: userName });
                 jsonArr.push({ key: 'userMobile', value: userMobile });
                 jsonArr.push({ key: 'startDate', value: startDate });
@@ -508,12 +522,16 @@ export default {
             });
             setTimeout(() => {
                 let cinemaCode = this.query.cinemaCode;
+                let employeeCode = this.query.employeeCode;
                 let userName = this.query.userName;
                 let mobile = this.query.mobile;
                 let startDate = this.query.startDate;
                 let endDate = this.query.endDate;
                 if (!cinemaCode) {
                     cinemaCode = '';
+                }
+                if (!employeeCode) {
+                    employeeCode = '';
                 }
                 if (!userName) {
                     userName = '';
@@ -529,6 +547,7 @@ export default {
                 }
                 let jsonArr = [];
                 jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
+                jsonArr.push({ key: 'employeeCode', value: employeeCode });
                 jsonArr.push({ key: 'userName', value: userName });
                 jsonArr.push({ key: 'userMobile', value: mobile });
                 jsonArr.push({ key: 'startDate', value: startDate });

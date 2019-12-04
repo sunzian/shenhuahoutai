@@ -301,7 +301,7 @@
                     </div>
                 </el-form-item>
                 <el-form-item label="星期几不可用：" :label-width="formLabelWidth">
-                    <el-checkbox-group v-model="oForm.checkedDays" @change="selectDay">
+                    <el-checkbox-group :max="6" v-model="oForm.checkedDays" @change="selectDay">
                         <el-checkbox
                                 v-for="(day, index) in oForm.exceptWeekDay"
                                 :label="index+1"
@@ -585,7 +585,7 @@
                     </div>
                 </el-form-item>
                 <el-form-item label="星期几不可用：" :label-width="formLabelWidth">
-                    <el-checkbox-group v-model="oCheckedDays" @change="selectDay">
+                    <el-checkbox-group :max="6" v-model="oCheckedDays" @change="selectDay">
                         <el-checkbox
                                 v-for="item in oExceptWeekDay"
                                 :label="item.index"
@@ -813,6 +813,7 @@
                 endArr:[],
                 value: '',
                 canTimeList:[],//可用时间段列表
+                rowMess:'',
             };
         },
         created() {},
@@ -1424,7 +1425,13 @@
             },
             // 修改状态
             changeStatus(index, row) {
-                this.$confirm('此操作将修改状态, 是否继续?', '提示', {
+                if(row.status==1){
+                    this.rowMess='启用'
+                }
+                if(row.status==0){
+                    this.rowMess='停用'
+                }
+                this.$confirm('是否确定'+this.rowMess+'此活动?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
@@ -1472,7 +1479,7 @@
                                 loading.close();
                                 console.log(err);
                             });
-                    }) .catch(() => {
+                    }).catch(() => {
                     this.$message({
                         type: 'info',
                         message: '已取消修改'
@@ -1634,13 +1641,27 @@
             },
             sureNext() {
                 if(this.sellIndex>=0){
-                    // this.selectedSell=[]
-                    this.selectedSell.push(this.sellTableData[this.sellIndex]);
+                    // console.log('选了数据');
+                    if(this.selectedSell.length<=0){
+                        // console.log('长度为0');
+                        this.selectedSell.push(this.sellTableData[this.sellIndex]);
+                    }
+                    else if(this.selectedSell.length>0){
+                        // console.log('有数据');
+                        for(let x in this.selectedSell){
+                            if(this.selectedSell[x].filmCode==this.sellTableData[this.sellIndex].filmCode){
+                                this.message = '不能添加相同影片！';
+                                this.open();
+                                return
+                            }
+                        }
+                        // console.log('判断不重复');
+                        this.selectedSell.push(this.sellTableData[this.sellIndex]);
+                    }
+
                 }
-                this.drawer = false;
-                console.log(this.sellIndex);
-                console.log(this.sellTableData);
                 console.log(this.selectedSell);
+                this.drawer = false;
             },
             openNext() {
                 //获取商品列表

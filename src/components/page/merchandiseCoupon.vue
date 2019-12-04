@@ -125,10 +125,10 @@
             </div>
         </div>
         <!--新增弹出框-->
-        <el-dialog :close-on-click-modal="false" :visible.sync="dialogFormVisible">
+        <el-dialog :close-on-click-modal="false" title="新增" :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
                 <el-form-item :required="true" label="优惠券名称：" :label-width="formLabelWidth">
-                    <el-input style="width: 150px" v-model="oForm.name" autocomplete="off"></el-input>
+                    <el-input style="width: 150px" maxlength="15" v-model="oForm.name" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="选择影院：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.cinemaCode" @change="selectCinema">
@@ -141,7 +141,7 @@
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" label="选择商品：" :label-width="formLabelWidth">
-                    <el-radio-group v-model="oForm.selectMerchandiseType">
+                    <el-radio-group v-model="oForm.selectMerchandiseType" @change="clearMerchandiseCode()">
                         <el-radio label="0">全部商品</el-radio>
                         <el-radio label="1">部分商品</el-radio>
                         <el-radio label="2">排除商品</el-radio>
@@ -199,7 +199,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="星期几不可用：" :label-width="formLabelWidth">
-                    <el-checkbox-group v-model="oForm.checkedDays" @change="selectDay">
+                    <el-checkbox-group :max="6" v-model="oForm.checkedDays" @change="selectDay">
                         <el-checkbox
                             v-for="(day, index) in oForm.exceptWeekDay"
                             :label="index+1"
@@ -240,7 +240,7 @@
         <el-dialog :close-on-click-modal="false" title="修改" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
                 <el-form-item :required="true" label="优惠券名称：" :label-width="formLabelWidth">
-                    <el-input style="width: 180px" v-model="oName" autocomplete="off"></el-input>
+                    <el-input style="width: 180px" maxlength="15" v-model="oName" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="选择影院：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oCinemaCode" @change="selectCinema">
@@ -253,7 +253,7 @@
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" label="选择商品：" :label-width="formLabelWidth">
-                    <el-radio-group v-model="oSelectMerchandiseType">
+                    <el-radio-group v-model="oSelectMerchandiseType" @change="clearMerchandiseCode()">
                         <el-radio label="0">全部商品</el-radio>
                         <el-radio label="1">部分商品</el-radio>
                         <el-radio label="2">排除商品</el-radio>
@@ -327,7 +327,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="星期几不可用：" :label-width="formLabelWidth">
-                    <el-checkbox-group v-model="oCheckedDays" @change="selectDay">
+                    <el-checkbox-group :max="7" v-model="oCheckedDays" @change="selectDay">
                         <el-checkbox
                                 v-for="item in oExceptWeekDay"
                                 :label="item.index"
@@ -489,7 +489,8 @@ export default {
             cinemaInfo: [],
             cinemaData: [],
             goodsInfo: [],
-            value: ''
+            value: '',
+            rowMess: '',
         };
     },
     created() {},
@@ -497,6 +498,10 @@ export default {
         this.getMenu();
     },
     methods: {
+        clearMerchandiseCode(){
+            this.oForm.merchandiseCode=[];
+            this.oMerchandiseCode=[];
+        },
         addPage() {
             //获取新增按钮权限
             const loading = this.$loading({
@@ -513,6 +518,7 @@ export default {
                     console.log(data);
                     if (data.data.code == 'success') {
                         this.dialogFormVisible = true;
+                        this.oForm.merchandiseCode = [];
                         // console.log(this.oForm.cinemaCode);
                         this.getAllGoods(this.oForm.cinemaCode)
                         // console.log(this.oForm.checkedDays)
@@ -715,6 +721,7 @@ export default {
                     if (data.data.code == 'success') {
                         this.editVisible = true;
                         this.cinemaInfo = [];
+                        this.oMerchandiseCode = [];
                         for (let i = 0; i < JSON.parse(Decrypt(data.data.data)).cinemaList.length; i++) {
                             let cinemaList = {};
                             cinemaList.cinemaCode = JSON.parse(Decrypt(data.data.data)).cinemaList[i].cinemaCode;
@@ -883,7 +890,13 @@ export default {
         },
         // 修改状态
         changeStatus(index, row) {
-            this.$confirm('此操作将修改状态, 是否继续?', '提示', {
+            if(row.status==1){
+                this.rowMess='启用'
+            }
+            if(row.status==0){
+                this.rowMess='停用'
+            }
+            this.$confirm('是否确定'+this.rowMess+'此优惠券?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
