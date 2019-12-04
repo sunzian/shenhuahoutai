@@ -37,6 +37,12 @@
                     autocomplete="off"
                     class="mr10"
                 ></el-input>
+                <el-input
+                        placeholder="推荐员工编码"
+                        v-model="query.employeeCode"
+                        autocomplete="off"
+                        class="mr10"
+                ></el-input>
                 <el-select
                     clearable
                     v-model="query.payStatus"
@@ -134,6 +140,9 @@
                 </el-table-column>
                 <el-table-column prop="memo" label="充值时间" width="160">
                     <template slot-scope="scope">{{scope.row.payTime}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="推荐员工编码" width="120">
+                    <template slot-scope="scope">{{scope.row.employeeCode}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="支付状态" width="90">
                     <template slot-scope="scope">
@@ -372,6 +381,7 @@ export default {
             });
             setTimeout(() => {
                 let cinemaCode = this.query.cinemaCode;
+                let employeeCode = this.query.employeeCode;
                 let cinemaName = this.query.cinemaName;
                 let rechargeCinemaName = this.query.rechargeCinemaName;
                 let cardNo = this.query.cardNo;
@@ -411,12 +421,16 @@ export default {
                 if (!rechargeStatus) {
                     rechargeStatus = '';
                 }
+                if (!employeeCode) {
+                    employeeCode = '';
+                }
                 let jsonArr = [];
                 jsonArr.push({ key: 'tableName', value: "member_card_recharge" });
-                jsonArr.push({ key: 'exportKeysJson', value: "['id','cinemaCode','cinemaName','rechargeCinemaCode','rechargeCinemaName','cardNo','userName','mobilePhone','rechargeAmount','payAmount','chPayStatus','chRechargeStatus','payTime','chGivenType','groupName','givenMoney','errorMsg','refundMsg','rechargeOrderNo','payTradeNo','payTradeNo']"});
-                jsonArr.push({ key: 'exportTitlesJson', value:"['ID','开卡影院编码','开卡影院名称','充值影院编码','充值影院名称','卡号','用户','手机号','充值金额','支付金额','支付状态','充值状态','充值时间','赠送类型','赠送券包','赠送金额','充值失败原因','退款详情','充值订单号','支付交易号']" });
+                jsonArr.push({ key: 'exportKeysJson', value: "['id','cinemaCode','cinemaName','rechargeCinemaCode','rechargeCinemaName','cardNo','userName','mobilePhone','rechargeAmount','payAmount','chPayStatus','chRechargeStatus','payTime','chGivenType','groupName','givenMoney','errorMsg','refundMsg','rechargeOrderNo','payTradeNo','employeeCode']"});
+                jsonArr.push({ key: 'exportTitlesJson', value:"['ID','开卡影院编码','开卡影院名称','充值影院编码','充值影院名称','卡号','用户','手机号','充值金额','支付金额','支付状态','充值状态','充值时间','赠送类型','赠送券包','赠送金额','充值失败原因','退款详情','充值订单号','支付交易号','推荐员工编码']" });
                 jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
                 jsonArr.push({ key: 'cardNo', value: cardNo });
+                jsonArr.push({ key: 'employeeCode', value: employeeCode });
                 jsonArr.push({ key: 'mobilePhone', value: mobilePhone });
                 jsonArr.push({ key: 'rechargeCinemaName', value: rechargeCinemaName });
                 jsonArr.push({ key: 'cinemaName', value: cinemaName });
@@ -567,6 +581,7 @@ export default {
             });
             setTimeout(() => {
                 let cinemaCode = this.query.cinemaCode;
+                let employeeCode = this.query.employeeCode;
                 let cardNo = this.query.cardNo;
                 let mobile = this.query.mobile;
                 let payStatus = this.query.payStatus;
@@ -576,6 +591,9 @@ export default {
                 let rechargeCinemaCode = this.query.rechargeCinemaCode;
                 if (!rechargeCinemaCode) {
                     rechargeCinemaCode = '';
+                }
+                if (!employeeCode) {
+                    employeeCode = '';
                 }
                 if (!cinemaCode) {
                     cinemaCode = '';
@@ -600,6 +618,7 @@ export default {
                 }
                 let jsonArr = [];
                 jsonArr.push({ key: 'rechargeCinemaCode', value: rechargeCinemaCode });
+                jsonArr.push({ key: 'employeeCode', value: employeeCode });
                 jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
                 jsonArr.push({ key: 'cardNo', value: cardNo });
                 jsonArr.push({ key: 'mobilePhone', value: mobile });

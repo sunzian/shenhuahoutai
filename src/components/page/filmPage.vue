@@ -198,6 +198,7 @@
                         list-type="picture-card"
                         :before-upload="beforeUploadPhoto"
                         :data="photoType"
+                        ref="upload"
                         :on-success="onPhotoSuccess"
                         :on-preview="handlePictureCardPreview"
                         :on-remove="handleRemove"
@@ -370,6 +371,7 @@
                         list-type="picture-card"
                         :before-upload="beforeUploadPhoto"
                         :data="photoType"
+                        ref="download"
                         :on-success="onPhotoSuccessChange"
                         :on-preview="handlePictureCardPreview"
                         :on-remove="handleRemoveChange"
@@ -1095,6 +1097,12 @@ export default {
             this.photoType.type = EncryptReplace('moviepic');
         },
         onPhotoSuccess(response, file) {
+            if (response.status == '-1') {
+                this.message = response.message;
+                this.open();
+                this.$refs.upload.clearFiles();
+                return;
+            }
             this.oForm.stagePhoto.push({ name: file.name, url: response.data });
             if (response.code == 'nologin') {
                 this.message = response.message;
@@ -1105,6 +1113,12 @@ export default {
         onPhotoSuccessChange(response, file) {
             console.log(response);
             console.log(file);
+            if (response.status == '-1') {
+                this.message = response.message;
+                this.open();
+                this.$refs.download.clearFiles();
+                return;
+            }
             this.oStagePhoto.push({ name: file.name, url: response.data });
             console.log(this.oStagePhoto);
             if (response.code == 'nologin') {
