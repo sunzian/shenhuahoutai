@@ -115,6 +115,15 @@
                 <el-table-column prop="time" label="会员卡支付代售费" width="150">
                     <template slot-scope="scope">{{scope.row.memberCardPayCommissionFee}}</template>
                 </el-table-column>
+                <el-table-column label="操作" width="110" align="center">
+                    <template slot-scope="scope">
+                        <el-button
+                            type="text"
+                            icon="el-icon-circle-plus-outline"
+                            @click="addChange(scope.$index, scope.row)"
+                        >编辑</el-button>
+                    </template>
+                </el-table-column>
             </el-table>
             <div class="pagination">
                 <el-pagination
@@ -434,6 +443,11 @@ export default {
         this.getMenu();
     },
     methods: {
+        addChange(id,row) {
+            console.log(id)
+            console.log(row)
+        },
+
         thirdPrice() {
             //获取批量修改按钮权限
             if (this.multipleSelection.length == 0) {
