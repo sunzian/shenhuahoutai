@@ -141,7 +141,7 @@
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" label="优惠方式：" :label-width="formLabelWidth">
-                    <el-radio-group v-model="oForm.reduceType">
+                    <el-radio-group v-model="oForm.reduceType" @change="clearDiscountMoney()">
                         <el-radio label="1">固定价格</el-radio>
                         <el-radio label="2">满减</el-radio>
                     </el-radio-group>
@@ -155,10 +155,10 @@
                     <el-input style="width: 150px" v-model="oForm.discountMoney" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="选择商品：" :label-width="formLabelWidth">
-                    <el-radio-group v-model="oForm.selectFilmType">
-                        <el-radio v-if="oForm.reduceType==2" label="0">全部商品</el-radio>
+                    <el-radio-group v-model="oForm.selectFilmType" @change="clearSelectedSell()">
+                        <el-radio label="0">全部商品</el-radio>
                         <el-radio label="1">部分商品</el-radio>
-                        <el-radio v-if="oForm.reduceType==2" label="2">排除商品</el-radio>
+                        <el-radio label="2">排除商品</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oForm.selectFilmType != 0" label="选择商品" :label-width="formLabelWidth">
@@ -167,7 +167,7 @@
                 <el-form-item
                         label="所选商品"
                         :label-width="formLabelWidth"
-                        v-if="selectedSell.length>0&&oForm.selectFilmType==1"
+                        v-if="selectedSell.length>0&&oForm.selectFilmType!=0"
                         :required="true"
                 >
                     <div v-for="(item, index) in selectedSell" style="margin-bottom: 5px" :key="index">
@@ -275,7 +275,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item v-if="oForm.reduceType!=2" :required="true" label="是否限制张数：" :label-width="formLabelWidth">
-                    <el-select v-model="oForm.oCanNum" placeholder="请选择">
+                    <el-select v-model="oForm.oCanNum" placeholder="请选择" @change="clearOnum()">
                         <el-option
                                 v-for="item in canUse"
                                 :key="item.value"
@@ -288,7 +288,7 @@
                     <el-input style="width: 150px" v-model="oForm.oNum" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item v-if="oForm.reduceType!=2" :required="true" label="是否限制个人张数：" :label-width="formLabelWidth">
-                    <el-select v-model="oForm.oneCanNum" placeholder="请选择">
+                    <el-select v-model="oForm.oneCanNum" placeholder="请选择" @change="clearOneNum()">
                         <el-option
                                 v-for="item in canUse"
                                 :key="item.value"
@@ -341,7 +341,7 @@
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" label="优惠方式：" :label-width="formLabelWidth">
-                    <el-radio-group v-model="oReduceType">
+                    <el-radio-group v-model="oReduceType" @change="clearDiscountMoney()">
                         <el-radio label="1">固定价格</el-radio>
                         <el-radio label="2">满减</el-radio>
                     </el-radio-group>
@@ -355,10 +355,10 @@
                     <el-input style="width: 150px" v-model="oDiscountMoney" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="选择商品：" :label-width="formLabelWidth">
-                    <el-radio-group v-model="oSelectMerchandiseType">
-                        <el-radio v-if="oReduceType==2" label="0">全部商品</el-radio>
+                    <el-radio-group v-model="oSelectMerchandiseType" @change="clearSelectedSell()">
+                        <el-radio label="0">全部商品</el-radio>
                         <el-radio label="1">部分商品</el-radio>
-                        <el-radio v-if="oReduceType==2" label="2">排除商品</el-radio>
+                        <el-radio label="2">排除商品</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oSelectMerchandiseType != 0" label="选择商品" :label-width="formLabelWidth">
@@ -367,7 +367,7 @@
                 <el-form-item
                         label="所选商品"
                         :label-width="formLabelWidth"
-                        v-if="selectedSell.length>0&&oSelectMerchandiseType==1"
+                        v-if="selectedSell.length>0&&oSelectMerchandiseType != 0"
                         :required="true"
                 >
                     <div v-for="(item, index) in selectedSell" style="margin-bottom: 5px" :key="index">
@@ -476,7 +476,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item v-if="oReduceType!=2" :required="true" label="是否限制张数：" :label-width="formLabelWidth">
-                    <el-select v-model="oIsLimitTotal" placeholder="请选择">
+                    <el-select v-model="oIsLimitTotal" placeholder="请选择" @change="clearOnum()">
                         <el-option
                                 v-for="item in canUse"
                                 :key="item.value"
@@ -489,7 +489,7 @@
                     <el-input style="width: 150px" v-model="oTotalNumber" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item v-if="oReduceType!=2" :required="true" label="是否限制个人张数：" :label-width="formLabelWidth">
-                    <el-select v-model="oIsLimitSingle" placeholder="请选择">
+                    <el-select v-model="oIsLimitSingle" placeholder="请选择" @change="clearOneNum()">
                         <el-option
                                 v-for="item in canUse"
                                 :key="item.value"
@@ -529,7 +529,7 @@
         <el-dialog :close-on-click-modal="false" title="选择卖品" :visible.sync="drawer">
             <div class="container">
                 <div class="handle-box">
-                    <el-input v-model="query.merchandiseName" placeholder="卖品名称" class="handle-input mr10"></el-input>
+                    <el-input v-model="query.merchandiseName" placeholder="卖品名称" class="handle-input mr12"></el-input>
                     <el-button type="primary" icon="el-icon-search" @click="SearchSell">搜索</el-button>
                 </div>
                 <el-table
@@ -718,7 +718,9 @@
                     holidayValid: '1',
                     couponDesc: '',
                     id: '',
-                    status: '0'
+                    status: '0',
+                    oNum: '',
+                    oneNum: '',
                 },
                 formLabelWidth: '120px',
                 selectValue: {},
@@ -741,6 +743,25 @@
             this.getMenu();
         },
         methods: {
+            clearOneNum(){
+                this.oForm.limitSingleUnit='';
+                this.oForm.oneNum='';
+                this.oLimitSingleUnit='';
+                this.oSingleNumber='';
+            },
+            clearOnum(){
+                this.oForm.oNum='';
+                this.oTotalNumber='';
+            },
+            clearSelectedSell(){
+                this.selectedSell=[];
+            },
+            clearDiscountMoney(){
+                this.oForm.discountMoney='';
+                this.oForm.achieveMoney='';
+                this.oDiscountMoney='';
+                this.oAchieveMoney='';
+            },
             deleteSell(index) {
                 this.selectedSell.splice(index, 1);
             },
@@ -822,53 +843,145 @@
                     background: 'rgba(0, 0, 0, 0.7)',
                     target: document.querySelector('.div1')
                 });
-                if(!this.oForm.name||!this.oForm.startDate||!this.oForm.endDate||!this.oForm.couponDesc){
-                    this.message = '必填项不能为空，请检查！';
+                if(!this.oForm.name){
+                    this.message = '活动名称不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
-                if(this.oForm.discountMoney!=0){
-                    if(this.oForm.reduceType==1){
+                if(!this.oForm.code){
+                    this.message = '所选影院不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if(!this.oForm.reduceType){
+                    this.message = '优惠方式不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if(this.oForm.reduceType==1){
+                    if(this.oForm.discountMoney>=0){
                         if(!this.oForm.discountMoney){
-                            this.message = '必填项不能为空，请检查！';
+                            this.message = '固定金额不能为空，请检查！';
                             this.open();
                             loading.close();
                             return;
                         }
                     }
-                    if(this.oForm.reduceType==2){
+                    if(this.oForm.discountMoney<0){
+                        this.message = '固定金额不能小于0！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                    if(this.oForm.selectFilmType!=1){
+                        this.message = '固定金额只能选择部分商品！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if(this.oForm.reduceType==2){
+                    if(this.oForm.discountMoney>=0||this.oForm.achieveMoney>=0){
                         if(!this.oForm.discountMoney||!this.oForm.achieveMoney){
-                            this.message = '必填项不能为空，请检查！';
+                            this.message = '减免金额不能为空，请检查！';
                             this.open();
                             loading.close();
                             return;
                         }
                     }
+                    if(this.oForm.discountMoney<0||this.oForm.achieveMoney<0){
+                        this.message = '减免金额不能小于0！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if(!this.oForm.selectFilmType){
+                    this.message = '商品类型不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
                 }
                 if(this.oForm.selectFilmType==1||this.oForm.selectFilmType==2){
-                    if(!this.selectedSell){
-                        this.message = '必填项不能为空，请检查！';
+                    if(this.selectedSell.length==0){
+                        this.message = '所选卖品不能为空，请检查！';
                         this.open();
                         loading.close();
                         return;
                     }
                 }
-                if(this.oForm.oCanNum==1){
-                    if(!this.oForm.oNum){
-                        this.message = '必填项不能为空，请检查！';
+                if(!this.oForm.startDate||!this.oForm.endDate){
+                    this.message = '有效期不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if(!this.oForm.validPayType){
+                    this.message = '支付类型不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if(!this.oForm.status){
+                    this.message = '开启状态不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if(!this.oForm.holidayValid){
+                    this.message = '节假日是否可用不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if(!this.oForm.activityTogether){
+                    this.message = '是否和券共用不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if(this.oForm.reduceType!=2){
+                    if(!this.oForm.oCanNum){
+                        this.message = '是否限制张数不能为空，请检查！';
                         this.open();
                         loading.close();
                         return;
+                    }else if(this.oForm.oCanNum==1){
+                        if(!this.oForm.oNum){
+                            this.message = '活动总张数不能为空，请检查！';
+                            this.open();
+                            loading.close();
+                            return;
+                        }
+                    }
+                    if(!this.oForm.oneCanNum){
+                        this.message = '是否限制个人张数不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }else if(this.oForm.oneCanNum==1){
+                        if(!this.oForm.limitSingleUnit){
+                            this.message = '限购时间不能为空，请检查！';
+                            this.open();
+                            loading.close();
+                            return;
+                        }
+                        if(!this.oForm.oneNum){
+                            this.message = '个人总张数不能为空，请检查！';
+                            this.open();
+                            loading.close();
+                            return;
+                        }
                     }
                 }
-                if(this.oForm.oneCanNum==1){
-                    if(!this.oForm.oneNum){
-                        this.message = '必填项不能为空，请检查！';
-                        this.open();
-                        loading.close();
-                        return;
-                    }
+                if(!this.oForm.couponDesc){
+                    this.message = '使用须知不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
                 }
                 if (this.oForm.code == true) {
                     this.oForm.code = this.cinemaInfo[0].code;
@@ -1175,59 +1288,198 @@
                     background: 'rgba(0, 0, 0, 0.7)',
                     target: document.querySelector('.div1')
                 });
-
                 let merchandiseCodeList=[];
                 for(let x in this.selectedSell){
                     merchandiseCodeList.push(this.selectedSell[x].merchandiseCode)
                 }
-                if(!this.oName||!this.oStartDate||!this.oEndDate||!this.oActivityDesc){
-                    this.message = '必填项不能为空，请检查！';
+                if(!this.oName){
+                    this.message = '活动名称不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
-                if(this.oDiscountMoney!=0){
-                    if(this.oReduceType==1){
+                if(!this.oCinemaCode){
+                    this.message = '所选影院不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if(!this.oReduceType){
+                    this.message = '优惠方式不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if(this.oReduceType==1){
+                    if(this.oDiscountMoney>=0){
                         if(!this.oDiscountMoney){
-                            this.message = '必填项不能为空，请检查！';
+                            this.message = '固定金额不能为空，请检查！';
                             this.open();
                             loading.close();
                             return;
                         }
                     }
-                    if(this.oReduceType==2){
+                    if(this.oDiscountMoney<0){
+                        this.message = '固定金额不能小于0！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                    if(this.oSelectMerchandiseType!=1){
+                        this.message = '固定金额只能选择部分商品！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if(this.oReduceType==2){
+                    if(this.oDiscountMoney>=0||this.oAchieveMoney>=0){
                         if(!this.oDiscountMoney||!this.oAchieveMoney){
-                            this.message = '必填项不能为空，请检查！';
+                            this.message = '减免金额不能为空，请检查！';
                             this.open();
                             loading.close();
                             return;
                         }
                     }
+                    if(this.oDiscountMoney<0||this.oAchieveMoney<0){
+                        this.message = '减免金额不能小于0！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if(!this.oSelectMerchandiseType){
+                    this.message = '商品类型不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
                 }
                 if(this.oSelectMerchandiseType==1||this.oSelectMerchandiseType==2){
-                    if(!this.selectedSell){
-                        this.message = '必填项不能为空，请检查！';
+                    if(this.selectedSell.length==0){
+                        this.message = '所选卖品不能为空，请检查！';
                         this.open();
                         loading.close();
                         return;
                     }
                 }
-                if(this.oIsLimitTotal==1){
-                    if(!this.oTotalNumber){
-                        this.message = '必填项不能为空，请检查！';
+                if(!this.oStartDate||!this.oEndDate){
+                    this.message = '有效期不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if(!this.oValidPayType){
+                    this.message = '支付类型不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if(!this.oStatus){
+                    this.message = '开启状态不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if(!this.oIsHolidayValid){
+                    this.message = '节假日是否可用不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if(!this.oIsCouponTogether){
+                    this.message = '是否和券共用不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if(this.oReduceType!=2){
+                    if(!this.oIsLimitTotal){
+                        this.message = '是否限制张数不能为空，请检查！';
                         this.open();
                         loading.close();
                         return;
+                    }else if(this.oIsLimitTotal==1){
+                        if(!this.oTotalNumber){
+                            this.message = '活动总张数不能为空，请检查！';
+                            this.open();
+                            loading.close();
+                            return;
+                        }
                     }
-                }
-                if(this.oIsLimitSingle==1){
-                    if(!this.oSingleNumber){
-                        this.message = '必填项不能为空，请检查！';
+                    if(!this.oIsLimitSingle){
+                        this.message = '是否限制个人张数不能为空，请检查！';
                         this.open();
                         loading.close();
                         return;
+                    }else if(this.oIsLimitSingle==1){
+                        if(!this.oLimitSingleUnit){
+                            this.message = '限购时间不能为空，请检查！';
+                            this.open();
+                            loading.close();
+                            return;
+                        }
+                        if(!this.oSingleNumber){
+                            this.message = '个人总张数不能为空，请检查！';
+                            this.open();
+                            loading.close();
+                            return;
+                        }
                     }
                 }
+                if(!this.oActivityDesc){
+                    this.message = '使用须知不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                // if(!this.oName||!this.oStartDate||!this.oEndDate||!this.oActivityDesc){
+                //     this.message = '必填项不能为空，请检查！';
+                //     this.open();
+                //     loading.close();
+                //     return;
+                // }
+                // if(this.oDiscountMoney!=0){
+                //     if(this.oReduceType==1){
+                //         if(!this.oDiscountMoney){
+                //             this.message = '必填项不能为空，请检查！';
+                //             this.open();
+                //             loading.close();
+                //             return;
+                //         }
+                //     }
+                //     if(this.oReduceType==2){
+                //         if(!this.oDiscountMoney||!this.oAchieveMoney){
+                //             this.message = '必填项不能为空，请检查！';
+                //             this.open();
+                //             loading.close();
+                //             return;
+                //         }
+                //     }
+                // }
+                // if(this.oSelectMerchandiseType==1||this.oSelectMerchandiseType==2){
+                //     if(!this.selectedSell){
+                //         this.message = '必填项不能为空，请检查！';
+                //         this.open();
+                //         loading.close();
+                //         return;
+                //     }
+                // }
+                // if(this.oIsLimitTotal==1){
+                //     if(!this.oTotalNumber){
+                //         this.message = '必填项不能为空，请检查！';
+                //         this.open();
+                //         loading.close();
+                //         return;
+                //     }
+                // }
+                // if(this.oIsLimitSingle==1){
+                //     if(!this.oSingleNumber){
+                //         this.message = '必填项不能为空，请检查！';
+                //         this.open();
+                //         loading.close();
+                //         return;
+                //     }
+                // }
                 var jsonArr = [];
                 jsonArr.push({ key: 'name', value: this.oName });
                 jsonArr.push({ key: 'cinemaCode', value: this.oCinemaCode });
@@ -1613,6 +1865,10 @@
     }
     .mr10 {
         width: 16%;
+        margin-right: 10px;
+    }
+    .mr12 {
+        width: 30%;
         margin-right: 10px;
     }
 </style>
