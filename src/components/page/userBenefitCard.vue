@@ -87,6 +87,23 @@
                     @click="Search"
                 >搜索</el-button>
             </div>
+            <div class="handle-box">
+                支付金额：
+                <el-input
+                    style="width: 150px"
+                    v-model="totalData.payPrice"
+                    :disabled="true"
+                    autocomplete="off"
+                    class="mr10"
+                ></el-input>累计优惠金额：
+                <el-input
+                    style="width: 150px"
+                    v-model="totalData.totalDiscountMoney"
+                    :disabled="true"
+                    autocomplete="off"
+                    class="mr10"
+                ></el-input>
+            </div>
             <el-table
                 :data="tableData"
                 border
@@ -110,6 +127,12 @@
                 </el-table-column>
                 <el-table-column prop="memo" label="订单号">
                     <template slot-scope="scope">{{scope.row.orderNumber}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="支付金额">
+                    <template slot-scope="scope">{{scope.row.payPrice}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="累计优惠金额">
+                    <template slot-scope="scope">{{scope.row.totalDiscountMoney}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="生效时间" width="160">
                     <template slot-scope="scope">{{scope.row.startDate}}</template>
@@ -412,11 +435,12 @@ export default {
                         if (data.data.code == 'success') {
                             var oData = JSON.parse(Decrypt(data.data.data));
                             console.log(oData);
-                            this.tableData = oData.data;
-                            this.query.pageSize = oData.pageSize;
-                            this.query.pageNo = oData.pageNo;
-                            this.query.totalCount = oData.totalCount;
-                            this.query.totalPage = oData.totalPage;
+                            this.tableData = oData.pageResult.data;
+                            this.totalData = oData.statistics;
+                            this.query.pageSize = oData.pageResult.pageSize;
+                            this.query.pageNo = oData.pageResult.pageNo;
+                            this.query.totalCount = oData.pageResult.totalCount;
+                            this.query.totalPage = oData.pageResult.totalPage;
                             this.getAllCinema();
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;

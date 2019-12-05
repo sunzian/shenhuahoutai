@@ -41,6 +41,11 @@ export default new Router({
                     meta: { title: '卖品订单' }
                 },
                 {
+                    path: '/adminMerchandiseOrderPage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/adminMerchandiseOrderPage.vue'),
+                    meta: { title: '卖品订单' }
+                },
+                {
                     path: '/memberCardRechargePage',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/memberCardRechargePage.vue'),
                     meta: { title: '会员卡充值订单' }

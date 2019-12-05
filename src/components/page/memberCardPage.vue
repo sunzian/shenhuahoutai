@@ -45,6 +45,23 @@
                     @click="Search"
                 >搜索</el-button>
             </div>
+            <div class="handle-box">
+                余额：
+                <el-input
+                    style="width: 150px"
+                    v-model="totalData.balance"
+                    :disabled="true"
+                    autocomplete="off"
+                    class="mr10"
+                ></el-input>积分：
+                <el-input
+                    style="width: 150px"
+                    v-model="totalData.creditsAmount"
+                    :disabled="true"
+                    autocomplete="off"
+                    class="mr10"
+                ></el-input>
+            </div>
             <el-table
                 :data="tableData"
                 border
@@ -521,11 +538,12 @@ export default {
                         if (data.data.code == 'success') {
                             var oData = JSON.parse(Decrypt(data.data.data));
                             console.log(oData);
-                            this.tableData = oData.data;
-                            this.query.pageSize = oData.pageSize;
-                            this.query.pageNo = oData.pageNo;
-                            this.query.totalCount = oData.totalCount;
-                            this.query.totalPage = oData.totalPage;
+                            this.tableData = oData.pageResult.data;
+                            this.totalData = oData.statistics;
+                            this.query.pageSize = oData.pageResult.pageSize;
+                            this.query.pageNo = oData.pageResult.pageNo;
+                            this.query.totalCount = oData.pageResult.totalCount;
+                            this.query.totalPage = oData.pageResult.totalPage;
                             this.getAllCinema();
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
