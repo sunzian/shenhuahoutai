@@ -31,6 +31,11 @@ export default new Router({
                     meta: { title: '影票订单' }
                 },
                 {
+                    path: '/adminTicketOrderPage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/adminTicketOrderPage.vue'),
+                    meta: { title: '影票订单' }
+                },
+                {
                     path: '/merchandiseOrderPage',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/merchandiseOrderPage.vue'),
                     meta: { title: '卖品订单' }
