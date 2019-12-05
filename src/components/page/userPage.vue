@@ -265,6 +265,8 @@
                     <el-input
                         type="password"
                         style="width: 250px"
+                        placeholder="密码长度最高16位"
+                        maxlength="16"
                         v-model="oldPass"
                         autocomplete="off"
                     ></el-input>
@@ -273,7 +275,8 @@
                     <el-input
                         type="password"
                         style="width: 250px"
-                        maxlength="9"
+                        placeholder="密码长度最高16位"
+                        maxlength="16"
                         v-model="newPass"
                         autocomplete="off"
                     ></el-input>
@@ -282,7 +285,8 @@
                     <el-input
                         type="password"
                         style="width: 250px"
-                        maxlength="9"
+                        placeholder="密码长度最高16位"
+                        maxlength="16"
                         v-model="surePass"
                         autocomplete="off"
                     ></el-input>

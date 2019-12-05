@@ -513,6 +513,7 @@ export default {
             tableData: [],
             message: '', //弹出框消息
             query: {
+                payStatus:'1',
                 pageNo: 1,
                 pageSize: 15
             },
