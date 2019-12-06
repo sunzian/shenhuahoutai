@@ -271,6 +271,7 @@
                 setTimeout(() => {
                     let cinemaCode = this.query.cinemaCode;
                     let orderNo = this.query.orderNo;
+                    let commodityName = this.query.commodityName;
                     let mobile = this.query.mobile;
                     let status = this.query.status;
                     let payStatus = this.query.payStatus;
@@ -286,6 +287,9 @@
                     }
                     if (!orderNo) {
                         orderNo = '';
+                    }
+                    if (!commodityName) {
+                        commodityName = '';
                     }
                     if (!mobile) {
                         mobile = '';
@@ -311,6 +315,7 @@
                     jsonArr.push({ key: 'exportTitlesJson', value:"['ID','影院编码','影院名称','订单号','手机号','商品名称','消费金币','支付金额','兑换时间','兑换状态','支付交易号','支付回调消息','兑换方式','核销状态','退款状态','退款交易号','退款原因','微信退款回复','退款时间','退款金额']" });
                     jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
                     jsonArr.push({ key: 'orderNo', value: orderNo });
+                    jsonArr.push({ key: 'commodityName', value: commodityName });
                     jsonArr.push({ key: 'mobile', value: mobile });
                     jsonArr.push({ key: 'refundStatus', value: refundStatus });
                     jsonArr.push({ key: 'status', value: status });

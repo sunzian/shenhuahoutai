@@ -61,6 +61,11 @@ export default new Router({
                     meta: { title: '金币商城订单' }
                 },
                 {
+                    path: '/adminCommodityChangeRecordPage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/adminCommodityChangeRecordPage.vue'),
+                    meta: { title: '金币商城订单' }
+                },
+                {
                     path: '/noticeOfActivityPage',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/noticeOfActivityPage.vue'),
                     meta: { title: '轮播图文章管理' }
