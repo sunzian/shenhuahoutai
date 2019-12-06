@@ -9,6 +9,19 @@
         </div>
         <div class="container">
             <div class="handle-box">
+                <el-select
+                    v-model="query.businessCode"
+                    placeholder="请选择商家"
+                    class="mr10"
+                    @change="changeBusiness"
+                >
+                    <el-option
+                        v-for="item in businessInfo"
+                        :key="item.businessCode"
+                        :label="item.businessName"
+                        :value="item.businessCode"
+                    ></el-option>
+                </el-select>
                 <el-select clearable v-model="query.cinemaCode" placeholder="请选择注册影院" class="mr10">
                     <el-option
                         v-for="item in cinemaInfo"
@@ -363,11 +376,13 @@ export default {
             businessInfoList: [],
             value: '',
             form: [],
-            cinemaInfo: []
+            cinemaInfo: [],
+            businessInfo: []
         };
     },
     created() {},
     mounted() {
+        this.getAllBusiness();
         this.getMenu();
     },
     methods: {
@@ -380,6 +395,7 @@ export default {
                 target: document.querySelector('.div1')
             });
             setTimeout(() => {
+                let businessCode = this.query.businessCode;
                 let cinemaCode = this.query.cinemaCode;
                 let employeeCode = this.query.employeeCode;
                 let cinemaName = this.query.cinemaName;
@@ -393,6 +409,9 @@ export default {
                 let rechargeStatus = this.query.rechargeStatus;
                 if (!cinemaName) {
                     cinemaName = '';
+                }
+                if (!businessCode) {
+                    businessCode = '';
                 }
                 if (!cinemaCode) {
                     cinemaCode = '';
@@ -429,6 +448,7 @@ export default {
                 jsonArr.push({ key: 'exportKeysJson', value: "['id','cinemaCode','cinemaName','rechargeCinemaCode','rechargeCinemaName','cardNo','userName','mobilePhone','rechargeAmount','payAmount','chPayStatus','chRechargeStatus','payTime','chGivenType','groupName','givenMoney','errorMsg','refundMsg','rechargeOrderNo','payTradeNo','employeeCode']"});
                 jsonArr.push({ key: 'exportTitlesJson', value:"['ID','开卡影院编码','开卡影院名称','充值影院编码','充值影院名称','卡号','用户','手机号','充值金额','支付金额','支付状态','充值状态','充值时间','赠送类型','赠送券包','赠送金额','充值失败原因','退款详情','充值订单号','支付交易号','推荐员工编码']" });
                 jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
+                jsonArr.push({ key: 'businessCode', value: businessCode });
                 jsonArr.push({ key: 'cardNo', value: cardNo });
                 jsonArr.push({ key: 'employeeCode', value: employeeCode });
                 jsonArr.push({ key: 'mobilePhone', value: mobilePhone });
@@ -441,10 +461,16 @@ export default {
                 jsonArr.push({ key: 'endDate', value: endDate });
                 var params = ParamsAppend(jsonArr);
                 console.log(jsonArr);
+                let businessName = '';
+                for (let i = 0;i < this.businessInfo.length; i ++) {
+                    if (businessCode == this.businessInfo[i].businessCode) {
+                        businessName = this.businessInfo[i].businessName
+                    }
+                }
                 let myObj = {
                     method: 'get',
                     url: '/exportExcel/memberCardRecharge',
-                    fileName: '会员卡充值订单统计',
+                    fileName: businessName + '_会员卡充值订单统计',
                     params: params
                 };
                 https.exportMethod(myObj);
@@ -469,7 +495,7 @@ export default {
                 jsonArr.push({ key: 'sign', value: sign });
                 let params = ParamsAppend(jsonArr);
                 https
-                    .fetchPost('/memberCardRecharge/getRechargeDetailById', params)
+                    .fetchPost('/admin/memberCardRecharge/getRechargeDetailById', params)
                     .then(data => {
                         loading.close();
                         console.log(data);
@@ -549,14 +575,23 @@ export default {
             this.query.pageNo = 1;
             this.getMenu();
         },
-        // 获取所有影院
-        getAllCinema() {
+        getAllBusiness() {
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
             https
-                .fetchPost('/cinema/getAllCinema')
+                .fetchPost('/businessInfo/getBusinessList')
                 .then(data => {
+                    loading.close();
                     if (data.data.code == 'success') {
                         var res = JSON.parse(Decrypt(data.data.data));
-                        this.cinemaInfo = res;
+                        this.businessInfo = res;
+                        this.query.businessCode = res[0].businessCode;
+                        this.getAllCinema();
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
@@ -567,6 +602,51 @@ export default {
                     }
                 })
                 .catch(err => {
+                    loading.close();
+                    console.log(err);
+                });
+        },
+        changeBusiness(val) {
+            this.query.businessCode = val;
+            this.getAllCinema();
+            this.$forceUpdate();
+        },
+        // 获取所有影院
+        getAllCinema() {
+            if (!this.query.businessCode) {
+                return;
+            }
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
+            var jsonArr = [];
+            jsonArr.push({ key: 'businessCode', value: this.query.businessCode });
+            let sign = md5(preSign(jsonArr));
+            jsonArr.push({ key: 'sign', value: sign });
+            let params = ParamsAppend(jsonArr);
+            https
+                .fetchPost('/cinema/getCinemaListByBusinessCode', params)
+                .then(data => {
+                    loading.close();
+                    if (data.data.code == 'success') {
+                        var res = JSON.parse(Decrypt(data.data.data));
+                        this.cinemaInfo = res;
+                        console.log(res);
+                    } else if (data.data.code == 'nologin') {
+                        this.message = data.data.message;
+                        this.open();
+                        this.$router.push('/login');
+                    } else {
+                        this.message = data.data.message;
+                        this.open();
+                    }
+                })
+                .catch(err => {
+                    loading.close();
                     console.log(err);
                 });
         },
@@ -580,6 +660,7 @@ export default {
                 target: document.querySelector('.div1')
             });
             setTimeout(() => {
+                let businessCode = this.query.businessCode;
                 let cinemaCode = this.query.cinemaCode;
                 let employeeCode = this.query.employeeCode;
                 let cardNo = this.query.cardNo;
@@ -594,6 +675,9 @@ export default {
                 }
                 if (!employeeCode) {
                     employeeCode = '';
+                }
+                if (!businessCode) {
+                    businessCode = '';
                 }
                 if (!cinemaCode) {
                     cinemaCode = '';
@@ -619,6 +703,7 @@ export default {
                 let jsonArr = [];
                 jsonArr.push({ key: 'rechargeCinemaCode', value: rechargeCinemaCode });
                 jsonArr.push({ key: 'employeeCode', value: employeeCode });
+                jsonArr.push({ key: 'businessCode', value: businessCode });
                 jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
                 jsonArr.push({ key: 'cardNo', value: cardNo });
                 jsonArr.push({ key: 'mobilePhone', value: mobile });
@@ -632,20 +717,18 @@ export default {
                 jsonArr.push({ key: 'sign', value: sign });
                 var params = ParamsAppend(jsonArr);
                 https
-                    .fetchPost('/memberCardRecharge/memberCardRechargePage', params)
+                    .fetchPost('/admin/memberCardRecharge/memberCardRechargePage', params)
                     .then(data => {
                         loading.close();
                         console.log(data);
                         if (data.data.code == 'success') {
                             var oData = JSON.parse(Decrypt(data.data.data));
-                            console.log(oData);
                             this.tableData = oData.memberCardRecharge.data;
                             this.totalData = oData.memberCardStatistics;
                             this.query.pageSize = oData.memberCardRecharge.pageSize;
                             this.query.pageNo = oData.memberCardRecharge.pageNo;
                             this.query.totalCount = oData.memberCardRecharge.totalCount;
                             this.query.totalPage = oData.memberCardRecharge.totalPage;
-                            this.getAllCinema();
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
                             this.open();
@@ -659,7 +742,7 @@ export default {
                         loading.close();
                         console.log(err);
                     });
-            }, 500);
+            }, 1000);
         },
         open() {
             //信息提示弹出框

@@ -51,8 +51,18 @@ export default new Router({
                     meta: { title: '会员卡充值订单' }
                 },
                 {
+                    path: '/adminMemberCardRechargePage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/adminMemberCardRechargePage.vue'),
+                    meta: { title: '会员卡充值订单' }
+                },
+                {
                     path: '/memberUserPage',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/memberUserPage.vue'),
+                    meta: { title: '注册会员列表' }
+                },
+                {
+                    path: '/adminMemberUserPage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/adminMemberUserPage.vue'),
                     meta: { title: '注册会员列表' }
                 },
                 {
@@ -111,8 +121,18 @@ export default new Router({
                     meta: { title: '会员卡用户' }
                 },
                 {
+                    path: '/adminMemberCardPage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/adminMemberCardPage.vue'),
+                    meta: { title: '会员卡用户' }
+                },
+                {
                     path: '/cardConsumePage',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/cardConsumePage.vue'),
+                    meta: { title: '会员卡消费记录' }
+                },
+                {
+                    path: '/adminCardConsumePage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/adminCardConsumePage.vue'),
                     meta: { title: '会员卡消费记录' }
                 },
                 {
@@ -126,8 +146,18 @@ export default new Router({
                     meta: { title: '放映厅领取记录' }
                 },
                 {
+                    path: '/adminChatroomUserGetRecord',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/adminChatroomUserGetRecord.vue'),
+                    meta: { title: '放映厅领取记录' }
+                },
+                {
                     path: '/chatroomSendRecords',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/chatroomSendRecords.vue'),
+                    meta: { title: '放映厅发放记录' }
+                },
+                {
+                    path: '/adminChatroomSendRecords',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/adminChatroomSendRecords.vue'),
                     meta: { title: '放映厅发放记录' }
                 },
                 {
@@ -151,8 +181,18 @@ export default new Router({
                     meta: { title: '优惠券发放记录' }
                 },
                 {
+                    path: '/adminBatchSendCouponRecord',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/adminBatchSendCouponRecord.vue'),
+                    meta: { title: '优惠券发放记录' }
+                },
+                {
                     path: '/userCouponPage',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/userCouponPage.vue'),
+                    meta: { title: '用户优惠券列表' }
+                },
+                {
+                    path: '/adminUserCouponPage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/adminUserCouponPage.vue'),
                     meta: { title: '用户优惠券列表' }
                 },
                 {
@@ -216,6 +256,11 @@ export default new Router({
                     meta: { title: '卡类别管理' }
                 },
                 {
+                    path: '/adminMemberCardLevel',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/adminMemberCardLevel.vue'),
+                    meta: { title: '卡类别管理' }
+                },
+                {
                     path: '/actorPage',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/actorPage.vue'),
                     meta: { title: '演员管理' }
@@ -243,6 +288,11 @@ export default new Router({
                 {
                     path: '/cardOpenRulesPage',
                     component: () => import(/* webpackChunkName: "table" */ '../components/page/cardOpenRulesPage.vue'),
+                    meta: { title: '开卡规则管理' }
+                },
+                {
+                    path: '/adminCardOpenRulesPage',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/adminCardOpenRulesPage.vue'),
                     meta: { title: '开卡规则管理' }
                 },
                 {

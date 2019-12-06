@@ -128,6 +128,20 @@
                         :value="item.value"
                     ></el-option>
                 </el-select>
+                <el-input
+                        style="margin-top: 10px;width:18%;"
+                        placeholder="邀请注册人数（起）"
+                        v-model="query.startRegisterNumber"
+                        autocomplete="off"
+                        class="mr10"
+                ></el-input>
+                <el-input
+                        style="margin-top: 10px;width:18%;"
+                        placeholder="邀请注册人数（止）"
+                        v-model="query.endRegisterNumber"
+                        autocomplete="off"
+                        class="mr10"
+                ></el-input>
                 <el-button
                     type="primary"
                     style="margin-top: 10px;width: 90px;"
@@ -205,6 +219,9 @@
                 <el-table-column prop="memo" label="有效优惠券数量" width="130">
                     <template slot-scope="scope">{{scope.row.remainCoupons}}</template>
                 </el-table-column>
+                <el-table-column prop="memo" label="邀请注册人数" width="120">
+                    <template slot-scope="scope">{{scope.row.shareRegisterNumber}}</template>
+                </el-table-column>
                 <el-table-column prop="memo" label="游戏厅角色" width="100">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.userRole=='1'" type="danger">普通用户</el-tag>
@@ -215,6 +232,7 @@
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.bindMemberCardStatus=='1'" type="danger">未绑定</el-tag>
                         <el-tag v-else-if="scope.row.bindMemberCardStatus=='2'" type="success">已绑定</el-tag>
+                        <el-tag v-else-if="scope.row.bindMemberCardStatus=='3'" type="success">已解绑</el-tag>
                     </template>
                 </el-table-column>
             </el-table>
@@ -795,6 +813,8 @@ export default {
             let consumeEndAmount = this.query.consumeEndAmount;
             let couponStartNumber = this.query.couponStartNumber;
             let couponEndNumber = this.query.couponEndNumber;
+            let startRegisterNumber = this.query.startRegisterNumber;
+            let endRegisterNumber = this.query.endRegisterNumber;
             let userRole = this.query.userRole;
             let bindCardStatus = this.query.bindCardStatus;
             let filmList = this.filmList;
@@ -822,6 +842,12 @@ export default {
             }
             if (!couponEndNumber) {
                 couponEndNumber = '';
+            }
+            if (!startRegisterNumber) {
+                startRegisterNumber = '';
+            }
+            if (!endRegisterNumber) {
+                endRegisterNumber = '';
             }
             if (!userRole) {
                 userRole = '';
@@ -861,6 +887,8 @@ export default {
             jsonArr.push({ key: 'consumeEndAmount', value: consumeEndAmount });
             jsonArr.push({ key: 'couponStartNumber', value: couponStartNumber });
             jsonArr.push({ key: 'couponEndNumber', value: couponEndNumber });
+            jsonArr.push({ key: 'startRegisterNumber', value: startRegisterNumber });
+            jsonArr.push({ key: 'endRegisterNumber', value: endRegisterNumber });
             jsonArr.push({ key: 'userRole', value: userRole });
             jsonArr.push({ key: 'bindCardStatus', value: bindCardStatus });
             jsonArr.push({ key: 'filmCodes', value: filmCodes });
@@ -979,6 +1007,8 @@ export default {
                 let consumeEndAmount = this.query.consumeEndAmount;
                 let couponStartNumber = this.query.couponStartNumber;
                 let couponEndNumber = this.query.couponEndNumber;
+                let startRegisterNumber = this.query.startRegisterNumber;
+                let endRegisterNumber = this.query.endRegisterNumber;
                 let userRole = this.query.userRole;
                 let bindCardStatus = this.query.bindCardStatus;
                 let filmList = this.filmList;
@@ -1007,6 +1037,12 @@ export default {
                 if (!couponEndNumber) {
                     couponEndNumber = '';
                 }
+                if (!startRegisterNumber) {
+                    startRegisterNumber = '';
+                }
+                if (!endRegisterNumber) {
+                    endRegisterNumber = '';
+                }
                 if (!userRole) {
                     userRole = '';
                 }
@@ -1031,6 +1067,8 @@ export default {
                 jsonArr.push({ key: 'consumeEndAmount', value: consumeEndAmount });
                 jsonArr.push({ key: 'couponStartNumber', value: couponStartNumber });
                 jsonArr.push({ key: 'couponEndNumber', value: couponEndNumber });
+                jsonArr.push({ key: 'startRegisterNumber', value: startRegisterNumber });
+                jsonArr.push({ key: 'endRegisterNumber', value: endRegisterNumber });
                 jsonArr.push({ key: 'userRole', value: userRole });
                 jsonArr.push({ key: 'bindCardStatus', value: bindCardStatus });
                 jsonArr.push({ key: 'filmCodes', value: filmCodes });

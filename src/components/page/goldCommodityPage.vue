@@ -91,11 +91,11 @@
                         </el-popover>
                     </template>
                 </el-table-column>
-                <!-- <el-table-column prop="memo" label="商品描述">
-                    <template slot-scope="scope">{{scope.row.memo}}</template>
-                </el-table-column>-->
                 <el-table-column prop="sort" label="库存" width="70">
                     <template slot-scope="scope">{{scope.row.store}}</template>
+                </el-table-column>
+                <el-table-column prop="sort" label="已兑换数量" width="70">
+                    <template slot-scope="scope">{{scope.row.alreadyChangedNumber}}</template>
                 </el-table-column>
                 <el-table-column prop="sort" label="兑换方式" width="130">
                     <template slot-scope="scope">
@@ -303,6 +303,58 @@
                 >
                     <el-input style="width: 250px" v-model="oForm.money" autocomplete="off"></el-input>
                 </el-form-item>
+                <el-form-item
+                    :required="true"
+                    label="生效方式"
+                    :label-width="formLabelWidth"
+                    v-if="oForm.commodity_type!=1"
+                >
+                    <el-select v-model="oForm.effectiveType" placeholder="请选择生效方式">
+                        <el-option
+                            v-for="item in effectiveType"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item
+                    :required="true"
+                    v-if="oForm.effectiveType==1 && oForm.commodity_type!=1"
+                    label="领取后几天开始生效"
+                    :label-width="formLabelWidth"
+                >
+                    <el-input style="width: 250px" v-model="oForm.laterDays" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item
+                    :required="true"
+                    v-if="oForm.effectiveType==1 && oForm.commodity_type!=1"
+                    label="生效后几天过期"
+                    :label-width="formLabelWidth"
+                >
+                    <el-input style="width: 250px" v-model="oForm.expireDay" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item
+                    :required="true"
+                    label="有效期："
+                    :label-width="formLabelWidth"
+                    v-if="oForm.effectiveType==2 && oForm.commodity_type!=1"
+                >
+                    <el-date-picker
+                        v-model="oForm.startEffectiveDate"
+                        type="datetime"
+                        placeholder="开始时间"
+                        value-format="yyyy-MM-dd HH:mm:ss"
+                        format="yyyy-MM-dd HH:mm:ss"
+                    ></el-date-picker>至
+                    <el-date-picker
+                        v-model="oForm.endEffectiveDate"
+                        type="datetime"
+                        placeholder="结束时间"
+                        value-format="yyyy-MM-dd HH:mm:ss"
+                        format="yyyy-MM-dd HH:mm:ss"
+                    ></el-date-picker>
+                </el-form-item>
                 <el-form-item :required="true" label="是否今日大牌" :label-width="formLabelWidth">
                     <el-select v-model="oForm.topStatus" placeholder="请选择">
                         <el-option
@@ -364,23 +416,24 @@
                     </div>
                 </el-form-item>
                 <el-form-item
-                        :required="true"
-                        v-if="oForm.commodity_type==3"
-                        label="选择券包"
-                        :label-width="formLabelWidth"
+                    :required="true"
+                    v-if="oForm.commodity_type==3"
+                    label="选择券包"
+                    :label-width="formLabelWidth"
                 >
                     <el-button type="primary" @click="changeCoupon">点击选择</el-button>
                 </el-form-item>
                 <el-form-item
-                        v-if="couponId&&oForm.commodity_type==3"
-                        label="所选券包："
-                        :label-width="formLabelWidth"
-                        :required="true">
+                    v-if="couponId&&oForm.commodity_type==3"
+                    label="所选券包："
+                    :label-width="formLabelWidth"
+                    :required="true"
+                >
                     <el-input style="width: 150px" v-model="groupName" autocomplete="off" disabled></el-input>&nbsp;&nbsp;&nbsp;&nbsp;
                     <span
-                            v-if="groupName"
-                            style="color:red;cursor: pointer;"
-                            @click="deletCoupon"
+                        v-if="groupName"
+                        style="color:red;cursor: pointer;"
+                        @click="deletCoupon"
                     >删除</span>
                 </el-form-item>
                 <el-form-item :required="true" label="是否指定日期可以兑换" :label-width="formLabelWidth">
@@ -570,6 +623,58 @@
                 >
                     <el-input style="width: 250px" v-model="form.money" autocomplete="off"></el-input>
                 </el-form-item>
+                <el-form-item
+                    :required="true"
+                    label="生效方式"
+                    :label-width="formLabelWidth"
+                    v-if="form.commodityType!=1"
+                >
+                    <el-select v-model="oEffectiveType" placeholder="请选择生效方式">
+                        <el-option
+                            v-for="item in effectiveType"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item
+                    :required="true"
+                    v-if="oEffectiveType==1 && form.commodityType!=1"
+                    label="领取后几天开始生效"
+                    :label-width="formLabelWidth"
+                >
+                    <el-input style="width: 250px" v-model="oLaterDays" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item
+                    :required="true"
+                    v-if="oEffectiveType==1 && form.commodityType!=1"
+                    label="生效后几天过期"
+                    :label-width="formLabelWidth"
+                >
+                    <el-input style="width: 250px" v-model="oExpireDay" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item
+                    :required="true"
+                    label="有效期："
+                    :label-width="formLabelWidth"
+                    v-if="oEffectiveType==2 && form.commodityType!=1"
+                >
+                    <el-date-picker
+                        v-model="oStartEffectiveDate"
+                        type="datetime"
+                        placeholder="开始时间"
+                        value-format="yyyy-MM-dd HH:mm:ss"
+                        format="yyyy-MM-dd HH:mm:ss"
+                    ></el-date-picker>至
+                    <el-date-picker
+                        v-model="oEndEffectiveDate"
+                        type="datetime"
+                        placeholder="结束时间"
+                        value-format="yyyy-MM-dd HH:mm:ss"
+                        format="yyyy-MM-dd HH:mm:ss"
+                    ></el-date-picker>
+                </el-form-item>
                 <el-form-item :required="true" label="允许兑换的门店" :label-width="formLabelWidth">
                     <el-checkbox-group v-model="oCheckedCities" :max="1" @change="changeCinema">
                         <el-checkbox
@@ -641,23 +746,24 @@
                     </div>
                 </el-form-item>
                 <el-form-item
-                        :required="true"
-                        v-if="form.commodityType==3"
-                        label="选择券包"
-                        :label-width="formLabelWidth"
+                    :required="true"
+                    v-if="form.commodityType==3"
+                    label="选择券包"
+                    :label-width="formLabelWidth"
                 >
                     <el-button type="primary" @click="changeCoupon">点击选择</el-button>
                 </el-form-item>
                 <el-form-item
-                        v-if="couponId&&form.commodityType==3"
-                        label="所选券包："
-                        :label-width="formLabelWidth"
-                        :required="true">
+                    v-if="couponId&&form.commodityType==3"
+                    label="所选券包："
+                    :label-width="formLabelWidth"
+                    :required="true"
+                >
                     <el-input style="width: 150px" v-model="groupName" autocomplete="off" disabled></el-input>&nbsp;&nbsp;&nbsp;&nbsp;
                     <span
-                            v-if="groupName"
-                            style="color:red;cursor: pointer;"
-                            @click="deletCoupon"
+                        v-if="groupName"
+                        style="color:red;cursor: pointer;"
+                        @click="deletCoupon"
                     >删除</span>
                 </el-form-item>
                 <el-form-item :required="true" label="是否指定日期可以兑换" :label-width="formLabelWidth">
@@ -790,16 +896,20 @@
         <el-dialog :close-on-click-modal="false" title="选择券包" :visible.sync="drawerCoupon">
             <div class="container">
                 <div class="handle-box">
-                    <el-input v-model="query.groupName" placeholder="券包名称" class="handle-input mr10"></el-input>
+                    <el-input
+                        v-model="query.groupName"
+                        placeholder="券包名称"
+                        class="handle-input mr10"
+                    ></el-input>
                     <el-button type="primary" icon="el-icon-search" @click="changeCoupon">搜索</el-button>
                 </div>
                 <el-table
-                        :data="couponList"
-                        border
-                        class="table"
-                        ref="multipleTable"
-                        header-cell-class-name="table-header"
-                        @selection-change="handleSelectionChange"
+                    :data="couponList"
+                    border
+                    class="table"
+                    ref="multipleTable"
+                    header-cell-class-name="table-header"
+                    @selection-change="handleSelectionChange"
                 >
                     <el-table-column label="操作" width="100" align="center">
                         <template slot-scope="scope">
@@ -812,22 +922,22 @@
                     <el-table-column label="优惠券详情">
                         <template slot-scope="scope">
                             <span
-                                    v-for="item in scope.row.couponList"
-                                    :key="item"
+                                v-for="item in scope.row.couponList"
+                                :key="item"
                             >{{item.couponName}}x{{item.number}}&nbsp;&nbsp;&nbsp;&nbsp;</span>
                         </template>
                     </el-table-column>
                 </el-table>
                 <div class="pagination">
                     <el-pagination
-                            background
-                            layout="total, prev, pager, next"
-                            :current-page="query.bPageNo"
-                            :page-size="query.bPageSize"
-                            :total="query.bTotalCount"
-                            @current-change="bCurrentChange"
-                            @prev-click="bPrev"
-                            @next-click="bNext"
+                        background
+                        layout="total, prev, pager, next"
+                        :current-page="query.bPageNo"
+                        :page-size="query.bPageSize"
+                        :total="query.bTotalCount"
+                        @current-change="bCurrentChange"
+                        @prev-click="bPrev"
+                        @next-click="bNext"
                     ></el-pagination>
                 </div>
             </div>
@@ -858,6 +968,7 @@ export default {
             img_file: {},
             oTopstatus: '',
             oRecommendStatus: '',
+            oEffectiveType: '',
             type: {
                 type: ''
             },
@@ -924,6 +1035,16 @@ export default {
                 {
                     value: '4',
                     label: '审核失败'
+                }
+            ],
+            effectiveType: [
+                {
+                    value: '1',
+                    label: '领取后固定天数之后生效'
+                },
+                {
+                    value: '2',
+                    label: '固定时间段'
                 }
             ],
             showType: [
@@ -1026,10 +1147,10 @@ export default {
             selectedSell: [],
             drawer: false, //选择优惠券弹出框,
             ticketIds: '',
-            couponList:[],
-            drawerCoupon:false,
-            couponId:'',
-            groupName:'',
+            couponList: [],
+            drawerCoupon: false,
+            couponId: '',
+            groupName: ''
         };
     },
     components: { quillEditor },
@@ -1053,13 +1174,13 @@ export default {
         },
         // 更换券包
         changeCoupon() {
-            let groupName=this.query.groupName;
-            if(!groupName){
-                groupName=''
+            let groupName = this.query.groupName;
+            if (!groupName) {
+                groupName = '';
             }
             let jsonArr = [];
             jsonArr.push({ key: 'cinemaCodes', value: this.checkedCities[0] });
-            jsonArr.push({ key: 'groupName', value: groupName});
+            jsonArr.push({ key: 'groupName', value: groupName });
             jsonArr.push({ key: 'status', value: 1 });
             jsonArr.push({ key: 'pageNo', value: this.query.bPageNo });
             jsonArr.push({ key: 'pageSize', value: this.query.bPageSize });
@@ -1067,30 +1188,32 @@ export default {
             jsonArr.push({ key: 'sign', value: sign });
             var params = ParamsAppend(jsonArr);
             console.log(jsonArr);
-            https.fetchPost('/couponGroup/couponGroupPage', params).then(data => {
-                if (data.data.code == 'success') {
-                    var res = JSON.parse(Decrypt(data.data.data));
-                    console.log(res);
-                    if (res.data.length == 0) {
-                        this.message = '暂无券包';
+            https
+                .fetchPost('/couponGroup/couponGroupPage', params)
+                .then(data => {
+                    if (data.data.code == 'success') {
+                        var res = JSON.parse(Decrypt(data.data.data));
+                        console.log(res);
+                        if (res.data.length == 0) {
+                            this.message = '暂无券包';
+                            this.open();
+                            return;
+                        }
+                        this.couponList = res.data;
+                        this.query.bPageSize = res.pageSize;
+                        this.query.bPageNo = res.pageNo;
+                        this.query.bTotalCount = res.totalCount;
+                        this.query.bTotalPage = res.totalPage;
+                        this.drawerCoupon = true;
+                    } else if (data.data.code == 'nologin') {
+                        this.message = data.data.message;
                         this.open();
-                        return;
+                        this.$router.push('/login');
+                    } else {
+                        this.message = data.data.message;
+                        this.open();
                     }
-                    this.couponList = res.data;
-                    this.query.bPageSize = res.pageSize;
-                    this.query.bPageNo = res.pageNo;
-                    this.query.bTotalCount = res.totalCount;
-                    this.query.bTotalPage = res.totalPage;
-                    this.drawerCoupon = true;
-                } else if (data.data.code == 'nologin') {
-                    this.message = data.data.message;
-                    this.open();
-                    this.$router.push('/login');
-                } else {
-                    this.message = data.data.message;
-                    this.open();
-                }
-            })
+                })
                 .catch(err => {
                     console.log(err);
                 });
@@ -1218,31 +1341,60 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            if(!this.oForm.commodity_type||!this.oForm.image_url||this.checkedCities.length==0||!this.oForm.details
-                ||!this.oForm.store ||!this.oForm.expireDay||!this.oForm.change_type||!this.oForm.topStatus
-                ||!this.oForm.recommendStatus||!this.oForm.status ||!this.oForm.assign_type||!this.oForm.limit_type){
+            if (
+                !this.oForm.commodity_type ||
+                !this.oForm.image_url ||
+                this.checkedCities.length == 0 ||
+                !this.oForm.details ||
+                !this.oForm.store ||
+                !this.oForm.expireDay ||
+                !this.oForm.change_type ||
+                !this.oForm.topStatus ||
+                !this.oForm.recommendStatus ||
+                !this.oForm.status ||
+                !this.oForm.assign_type ||
+                !this.oForm.limit_type
+            ) {
                 this.message = '必填项不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
             }
-            if(this.oForm.commodity_type==1) {
-                if (!this.oForm.name||!this.oForm.originalPrice) {
+            if (this.oForm.commodity_type != 1) {
+                if (this.oForm.effectiveType == 1) {
+                    if (!this.oForm.laterDays || !this.oForm.expireDay) {
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if (this.oForm.effectiveType == 2) {
+                    if (!this.oForm.startEffectiveDate || !this.oForm.endEffectiveDate) {
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+            }
+            if (this.oForm.commodity_type == 1) {
+                if (!this.oForm.name || !this.oForm.originalPrice) {
                     this.message = '必填项不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
             }
-            if(this.oForm.commodity_type==2) {
-                if (this.selectedSell.length==0) {
+            if (this.oForm.commodity_type == 2) {
+                if (this.selectedSell.length == 0) {
                     this.message = '必填项不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
             }
-            if(this.oForm.commodity_type==3) {
+            if (this.oForm.commodity_type == 3) {
                 if (!this.groupName) {
                     this.message = '必填项不能为空，请检查！';
                     this.open();
@@ -1250,7 +1402,7 @@ export default {
                     return;
                 }
             }
-            if(this.oForm.change_type==1||this.oForm.change_type==3) {
+            if (this.oForm.change_type == 1 || this.oForm.change_type == 3) {
                 if (!this.oForm.gold) {
                     this.message = '必填项不能为空，请检查！';
                     this.open();
@@ -1258,7 +1410,7 @@ export default {
                     return;
                 }
             }
-            if(this.oForm.change_type==2||this.oForm.change_type==3) {
+            if (this.oForm.change_type == 2 || this.oForm.change_type == 3) {
                 if (!this.oForm.money) {
                     this.message = '必填项不能为空，请检查！';
                     this.open();
@@ -1266,7 +1418,7 @@ export default {
                     return;
                 }
             }
-            if(this.oForm.assign_type==2||this.oForm.assign_type==3||this.oForm.assign_type==4||this.oForm.assign_type==5) {
+            if (this.oForm.assign_type == 2 || this.oForm.assign_type == 3 || this.oForm.assign_type == 4 || this.oForm.assign_type == 5) {
                 if (!this.oForm.assign_info) {
                     this.message = '必填项不能为空，请检查！';
                     this.open();
@@ -1274,7 +1426,7 @@ export default {
                     return;
                 }
             }
-            if(this.oForm.limit_type==2||this.oForm.limit_type==3||this.oForm.limit_type==4) {
+            if (this.oForm.limit_type == 2 || this.oForm.limit_type == 3 || this.oForm.limit_type == 4) {
                 if (!this.oForm.limit_number) {
                     this.message = '必填项不能为空，请检查！';
                     this.open();
@@ -1282,95 +1434,108 @@ export default {
                     return;
                 }
             }
-                if (this.filmInfo) {
-                    let couponList = []; //优惠券编码
-                    for (let x in this.filmInfo) {
-                        couponList.push(this.filmInfo[x].address);
-                    }
-                    this.oForm.ticket_ids = couponList.join(',');
+            if (this.filmInfo) {
+                let couponList = []; //优惠券编码
+                for (let x in this.filmInfo) {
+                    couponList.push(this.filmInfo[x].address);
                 }
-                var jsonArr = [];
-                jsonArr.push({ key: 'imageUrl', value: this.oForm.image_url });
-                jsonArr.push({ key: 'memo', value: this.oForm.memo });
-                jsonArr.push({ key: 'store', value: this.oForm.store });
-                jsonArr.push({ key: 'changeType', value: this.oForm.change_type });
-                jsonArr.push({ key: 'gold', value: this.oForm.gold });
-                jsonArr.push({ key: 'money', value: this.oForm.money });
-                jsonArr.push({ key: 'cinemaCodes', value: this.checkedCities});
-                jsonArr.push({ key: 'status', value: this.oForm.status });
-                jsonArr.push({ key: 'commodityType', value: this.oForm.commodity_type });
-                jsonArr.push({ key: 'assignType', value: this.oForm.assign_type });
-                jsonArr.push({ key: 'assignInfo', value: this.oForm.assign_info });
-                jsonArr.push({ key: 'limitType', value: this.oForm.limit_type });
-                jsonArr.push({ key: 'limitNumber', value: this.oForm.limit_number });
-                jsonArr.push({ key: 'details', value: this.content });
-                jsonArr.push({ key: 'markdown', value: this.oForm.markdown });
-                jsonArr.push({ key: 'originalPrice', value: this.oForm.originalPrice });
-                jsonArr.push({ key: 'topStatus', value: this.oForm.topStatus });
-                jsonArr.push({ key: 'recommendStatus', value: this.oForm.recommendStatus });
-                jsonArr.push({ key: 'expireDay', value: this.oForm.expireDay });
-                jsonArr.push({ key: 'sort', value: this.oForm.sort });
-                if(this.oForm.commodity_type==3){
-                    jsonArr.push({ key: 'ticketIds', value: this.couponId });
-                    jsonArr.push({ key: 'name', value: this.groupName });
-                }else {
-                    jsonArr.push({ key: 'name', value: this.oForm.name });
-                    jsonArr.push({ key: 'ticketIds', value: this.ticketIds });
+                this.oForm.ticket_ids = couponList.join(',');
+            }
+            var jsonArr = [];
+            jsonArr.push({ key: 'imageUrl', value: this.oForm.image_url });
+            jsonArr.push({ key: 'memo', value: this.oForm.memo });
+            jsonArr.push({ key: 'store', value: this.oForm.store });
+            jsonArr.push({ key: 'changeType', value: this.oForm.change_type });
+            jsonArr.push({ key: 'gold', value: this.oForm.gold });
+            jsonArr.push({ key: 'money', value: this.oForm.money });
+            jsonArr.push({ key: 'cinemaCodes', value: this.checkedCities });
+            jsonArr.push({ key: 'status', value: this.oForm.status });
+            jsonArr.push({ key: 'commodityType', value: this.oForm.commodity_type });
+            jsonArr.push({ key: 'assignType', value: this.oForm.assign_type });
+            jsonArr.push({ key: 'assignInfo', value: this.oForm.assign_info });
+            jsonArr.push({ key: 'limitType', value: this.oForm.limit_type });
+            jsonArr.push({ key: 'limitNumber', value: this.oForm.limit_number });
+            jsonArr.push({ key: 'details', value: this.content });
+            jsonArr.push({ key: 'markdown', value: this.oForm.markdown });
+            jsonArr.push({ key: 'originalPrice', value: this.oForm.originalPrice });
+            jsonArr.push({ key: 'topStatus', value: this.oForm.topStatus });
+            jsonArr.push({ key: 'recommendStatus', value: this.oForm.recommendStatus });
+            jsonArr.push({ key: 'expireDay', value: this.oForm.expireDay });
+            jsonArr.push({ key: 'sort', value: this.oForm.sort });
+            if (this.oForm.commodity_type == 3) {
+                jsonArr.push({ key: 'ticketIds', value: this.couponId });
+                jsonArr.push({ key: 'name', value: this.groupName });
+            } else {
+                jsonArr.push({ key: 'name', value: this.oForm.name });
+                jsonArr.push({ key: 'ticketIds', value: this.ticketIds });
+            }
+            if (this.oForm.commodity_type != 1) {
+                if (this.oForm.effectiveType == 1) {
+                    jsonArr.push({ key: 'laterDays', value: this.oForm.laterDays });
+                    jsonArr.push({ key: 'expireDay', value: this.oForm.expireDay });
+                } else {
+                    jsonArr.push({ key: 'startEffectiveDate', value: this.oForm.startEffectiveDate });
+                    jsonArr.push({ key: 'endEffectiveDate', value: this.oForm.endEffectiveDate });
                 }
-
-                let sign = md5(preSign(jsonArr));
-                jsonArr.push({ key: 'sign', value: sign });
-                console.log(jsonArr);
-                let params = ParamsAppend(jsonArr);
-                if (this.dialogFormVisible == true) {
-                    https
-                        .fetchPost('/goldCommodity/addGoldCommodity', params)
-                        .then(data => {
-                            loading.close();
-                            //新增
-                            console.log(data);
-                            if (data.data.code == 'success') {
-                                this.$refs.upload.clearFiles(); //清除已上传文件
-                                this.oForm.name = '';
-                                this.oForm.image_url = '';
-                                this.oForm.memo = '';
-                                this.selectedSell = [];
-                                this.oForm.store = '';
-                                this.oForm.change_type = '';
-                                this.oForm.gold = '';
-                                this.oForm.money = '';
-                                this.oForm.checkedCities = '';
-                                this.oForm.status = '';
-                                this.oForm.commodity_type = '';
-                                this.oForm.ticketIds = '';
-                                this.oForm.assign_type = '';
-                                this.oForm.assign_info = '';
-                                this.oForm.limit_type = '';
-                                this.oForm.limit_number = '';
-                                this.oForm.details = '';
-                                this.oForm.markdown = '';
-                                this.oForm.originalPrice = '';
-                                this.oForm.topStatus = '';
-                                this.oForm.recommendStatus = '';
-                                this.oForm.expireDay = '';
-                                this.oForm.sort = '';
-                                this.dialogFormVisible = false;
-                                this.$message.success(`新增成功`);
-                                this.getMenu();
-                            } else if (data.data.code == 'nologin') {
-                                this.message = data.data.message;
-                                this.open();
-                                this.$router.push('/login');
-                            } else {
-                                this.message = data.data.message;
-                                this.open();
-                            }
-                        })
-                        .catch(err => {
-                            loading.close();
-                            console.log(err);
-                        });
-                }
+            }
+            let sign = md5(preSign(jsonArr));
+            jsonArr.push({ key: 'sign', value: sign });
+            console.log(jsonArr);
+            let params = ParamsAppend(jsonArr);
+            if (this.dialogFormVisible == true) {
+                https
+                    .fetchPost('/goldCommodity/addGoldCommodity', params)
+                    .then(data => {
+                        loading.close();
+                        //新增
+                        console.log(data);
+                        if (data.data.code == 'success') {
+                            this.$refs.upload.clearFiles(); //清除已上传文件
+                            this.oForm.name = '';
+                            this.oForm.image_url = '';
+                            this.oForm.memo = '';
+                            this.selectedSell = [];
+                            this.oForm.store = '';
+                            this.oForm.change_type = '';
+                            this.oForm.effectiveType = '';
+                            this.oForm.laterDays = '';
+                            this.oForm.expireDay = '';
+                            this.oForm.startEffectiveDate = '';
+                            this.oForm.endEffectiveDate = '';
+                            this.oForm.gold = '';
+                            this.oForm.money = '';
+                            this.oForm.checkedCities = '';
+                            this.oForm.status = '';
+                            this.oForm.commodity_type = '';
+                            this.oForm.ticketIds = '';
+                            this.oForm.assign_type = '';
+                            this.oForm.assign_info = '';
+                            this.oForm.limit_type = '';
+                            this.oForm.limit_number = '';
+                            this.oForm.details = '';
+                            this.oForm.markdown = '';
+                            this.oForm.originalPrice = '';
+                            this.oForm.topStatus = '';
+                            this.oForm.recommendStatus = '';
+                            this.oForm.expireDay = '';
+                            this.oForm.sort = '';
+                            this.dialogFormVisible = false;
+                            this.$message.success(`新增成功`);
+                            this.getMenu();
+                        } else if (data.data.code == 'nologin') {
+                            this.message = data.data.message;
+                            this.open();
+                            this.$router.push('/login');
+                        } else {
+                            this.message = data.data.message;
+                            this.open();
+                        }
+                    })
+                    .catch(err => {
+                        loading.close();
+                        console.log(err);
+                    });
+            }
         },
         cancel() {
             this.$confirm('该操作将清空页面数据, 是否继续?', '提示', {
@@ -1514,6 +1679,10 @@ export default {
                             this.form.limitNumber = JSON.parse(Decrypt(data.data.data)).goldCommodity.limitNumber;
                             this.form.sort = JSON.parse(Decrypt(data.data.data)).goldCommodity.sort;
                             this.oCities = JSON.parse(Decrypt(data.data.data)).cinemas;
+                            this.oLaterDays = JSON.parse(Decrypt(data.data.data)).goldCommodity.laterDays;
+                            this.ticketIds = JSON.parse(Decrypt(data.data.data)).goldCommodity.expireDay;
+                            this.oStartEffectiveDate = JSON.parse(Decrypt(data.data.data)).goldCommodity.startEffectiveDate;
+                            this.oEndEffectiveDate = JSON.parse(Decrypt(data.data.data)).goldCommodity.endEffectiveDate;
                             //商品类型下拉选显示对应的选项
                             for (let x in this.commodityType) {
                                 if (this.commodityType[x].value == JSON.parse(Decrypt(data.data.data)).goldCommodity.commodityType) {
@@ -1540,6 +1709,15 @@ export default {
                             for (let x in this.showType) {
                                 if (this.showType[x].value == JSON.parse(Decrypt(data.data.data)).goldCommodity.changeType) {
                                     this.form.changeType = this.showType[x].value;
+                                    break;
+                                }
+                            }
+
+                            //生效方式下拉选显示对应的选项
+                            //   console.log(typeof JSON.parse(Decrypt(data.data.data)).goldCommodity.changeType);
+                            for (let x in this.effectiveType) {
+                                if (this.effectiveType[x].value == JSON.parse(Decrypt(data.data.data)).goldCommodity.effectiveType) {
+                                    this.oEffectiveType = this.effectiveType[x].value;
                                     break;
                                 }
                             }
@@ -1591,31 +1769,42 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            if(!this.form.commodityType||!this.form.image_url||(this.oCheckedCities.length==0)||!this.form.markdown||!this.form.store
-                ||!this.form.expireDay||!this.form.changeType||!this.oTopstatus||!this.oRecommendStatus||!this.form.status
-                ||!this.form.assignType||!this.form.limitType){
+            if (
+                !this.form.commodityType ||
+                !this.form.image_url ||
+                this.oCheckedCities.length == 0 ||
+                !this.form.markdown ||
+                !this.form.store ||
+                !this.form.expireDay ||
+                !this.form.changeType ||
+                !this.oTopstatus ||
+                !this.oRecommendStatus ||
+                !this.form.status ||
+                !this.form.assignType ||
+                !this.form.limitType
+            ) {
                 this.message = '必填项不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
             }
-            if(this.form.commodityType==1) {
-                if (!this.form.name||!this.form.originalPrice) {
+            if (this.form.commodityType == 1) {
+                if (!this.form.name || !this.form.originalPrice) {
                     this.message = '必填项不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
             }
-            if(this.form.commodityType==2) {
-                if (this.selectedSell.length==0) {
+            if (this.form.commodityType == 2) {
+                if (this.selectedSell.length == 0) {
                     this.message = '必填项不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
             }
-            if(this.form.commodityType==3) {
+            if (this.form.commodityType == 3) {
                 if (!this.groupName) {
                     this.message = '必填项不能为空，请检查！';
                     this.open();
@@ -1623,7 +1812,25 @@ export default {
                     return;
                 }
             }
-            if(this.form.changeType==1||this.form.changeType==3) {
+            if (this.form.commodityType != 1) {
+                if (this.oEffectiveType == 1) {
+                    if (!this.oLaterDays || !this.oExpireDay) {
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if (this.oEffectiveType == 2) {
+                    if (!this.oStartEffectiveDate || !this.oEndEffectiveDate) {
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+            }
+            if (this.form.changeType == 1 || this.form.changeType == 3) {
                 if (!this.form.gold) {
                     this.message = '必填项不能为空，请检查！';
                     this.open();
@@ -1631,7 +1838,7 @@ export default {
                     return;
                 }
             }
-            if(this.form.changeType==2||this.form.changeType==3) {
+            if (this.form.changeType == 2 || this.form.changeType == 3) {
                 if (!this.form.money) {
                     this.message = '必填项不能为空，请检查！';
                     this.open();
@@ -1639,7 +1846,7 @@ export default {
                     return;
                 }
             }
-            if(this.form.assignType==2||this.form.assignType==3||this.form.assignType==4||this.form.assignType==5) {
+            if (this.form.assignType == 2 || this.form.assignType == 3 || this.form.assignType == 4 || this.form.assignType == 5) {
                 if (!this.form.assignInfo) {
                     this.message = '必填项不能为空，请检查！';
                     this.open();
@@ -1647,7 +1854,7 @@ export default {
                     return;
                 }
             }
-            if(this.form.limitType==2||this.form.limitType==3||this.form.limitType==4) {
+            if (this.form.limitType == 2 || this.form.limitType == 3 || this.form.limitType == 4) {
                 if (!this.form.limitNumber) {
                     this.message = '必填项不能为空，请检查！';
                     this.open();
@@ -1687,18 +1894,27 @@ export default {
                 jsonArr.push({ key: 'topStatus', value: this.oTopstatus });
                 jsonArr.push({ key: 'recommendStatus', value: this.oRecommendStatus });
                 jsonArr.push({ key: 'sort', value: this.form.sort });
-                if(this.form.commodityType==2){
+                if (this.form.commodityType == 2) {
                     jsonArr.push({ key: 'ticketIds', value: this.ticketIds });
                 }
-                if(this.form.commodityType==3){
+                if (this.form.commodityType == 3) {
                     jsonArr.push({ key: 'ticketIds', value: this.couponId });
                 }
-                if(this.form.commodityType==3){
+                if (this.form.commodityType == 3) {
                     jsonArr.push({ key: 'name', value: this.groupName });
-                }else {
+                } else {
                     jsonArr.push({ key: 'name', value: this.form.name });
                 }
-
+                if (this.form.commodityType != 1) {
+                    if (this.oEffectiveType == 1) {
+                        jsonArr.push({ key: 'laterDays', value: this.oLaterDays });
+                        jsonArr.push({ key: 'expireDay', value: this.oExpireDay });
+                    }
+                    if (this.form.commodityType == 2) {
+                        jsonArr.push({ key: 'startEffectiveDate', value: this.oStartEffectiveDate });
+                        jsonArr.push({ key: 'endEffectiveDate', value: this.oEndEffectiveDate });
+                    }
+                }
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
                 console.log(jsonArr);
@@ -1776,6 +1992,7 @@ export default {
                         loading.close();
                         if (data.data.code == 'success') {
                             var oData = JSON.parse(Decrypt(data.data.data));
+                            console.log(oData)
                             this.tableData = oData.data;
                             this.query.pageSize = oData.pageSize;
                             this.query.pageNo = oData.pageNo;
@@ -1825,9 +2042,9 @@ export default {
             if (!isLt200Kb) {
                 this.message = '图片大小不能超过200kb！';
                 this.open();
-                return false
+                return false;
             }
-            return isLt200Kb
+            return isLt200Kb;
         },
         onSuccess(data) {
             //上传文件 登录超时
@@ -1930,10 +2147,10 @@ export default {
             formdata.append('file', $file);
             formdata.append('type', EncryptReplace('business'));
             this.img_file[pos] = $file;
-            const instance=axios.create({
+            const instance = axios.create({
                 withCredentials: true
-            })
-            instance.post('/upload/uploadImage', formdata , { headers: { 'Content-Type': 'multipart/form-data' } }).then(res => {
+            });
+            instance.post('/upload/uploadImage', formdata, { headers: { 'Content-Type': 'multipart/form-data' } }).then(res => {
                 let _res = res.data;
                 this.$refs.md.$img2Url(pos, _res.data);
             });

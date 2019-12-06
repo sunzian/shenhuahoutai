@@ -9,6 +9,19 @@
         </div>
         <div class="container">
             <div class="handle-box">
+                <el-select
+                    v-model="query.businessCode"
+                    placeholder="请选择商家"
+                    class="mr10"
+                    @change="changeBusiness"
+                >
+                    <el-option
+                        v-for="item in businessInfo"
+                        :key="item.businessCode"
+                        :label="item.businessName"
+                        :value="item.businessCode"
+                    ></el-option>
+                </el-select>
                 <el-select clearable v-model="query.cinemaCode" placeholder="注册影院" class="mr10">
                     <el-option
                         v-for="item in cinemaInfo"
@@ -335,11 +348,13 @@ export default {
             businessInfoList: [],
             value: '',
             form: [],
-            cinemaInfo: []
+            cinemaInfo: [],
+            businessInfo: []
         };
     },
     created() {},
     mounted() {
+        this.getAllBusiness();
         this.getMenu();
     },
     methods: {
@@ -353,6 +368,7 @@ export default {
             });
             setTimeout(() => {
                 let cinemaCode = this.query.cinemaCode;
+                let businessCode = this.query.businessCode;
                 let employeeCode = this.query.employeeCode;
                 let userName = this.query.userName;
                 let userMobile = this.query.mobile;
@@ -362,6 +378,9 @@ export default {
                 let endRegisterNumber = this.query.endRegisterNumber;
                 if (!cinemaCode) {
                     cinemaCode = '';
+                }
+                if (!businessCode) {
+                    businessCode = '';
                 }
                 if (!userName) {
                     userName = '';
@@ -389,6 +408,7 @@ export default {
                 jsonArr.push({ key: 'exportKeysJson', value: "['id','cinemaCode','cinemaName','userName','userMobile','cnUserSex','birthday','userAge','chMemberType','cnBindMemberCardStatus','cnMiniRegisterStatus','cnAppRegisterStatus','miniRegisterDate','appRegisterDate','country','province','city','loginDate','goldNumber','cnUserRole','remainCoupons','ticketStubNumber','lastConsumeDate','consumptionAmount','cnStatus','employeeCode']"});
                 jsonArr.push({ key: 'exportTitlesJson', value:"['ID','注册影院编码','注册影院名称','用户名','手机号','用户性别','用户生日','用户年龄','用户类型','是否绑定会员卡','是否注册小程序','是否注册APP','小程序注册时间','APP注册时间','国家','省份','城市','最近登录时间','金币数量','聊天室角色','剩余优惠券数量','票根数量','最近一次消费时间','累计消费金额','用户状态','推荐员工编码']" });
                 jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
+                jsonArr.push({ key: 'businessCode', value: businessCode });
                 jsonArr.push({ key: 'employeeCode', value: employeeCode });
                 jsonArr.push({ key: 'userName', value: userName });
                 jsonArr.push({ key: 'userMobile', value: userMobile });
@@ -398,10 +418,16 @@ export default {
                 jsonArr.push({ key: 'endRegisterNumber', value: endRegisterNumber });
                 var params = ParamsAppend(jsonArr);
                 console.log(jsonArr);
+                let businessName = '';
+                for (let i = 0;i < this.businessInfo.length; i ++) {
+                    if (businessCode == this.businessInfo[i].businessCode) {
+                        businessName = this.businessInfo[i].businessName
+                    }
+                }
                 let myObj = {
                     method: 'get',
                     url: '/exportExcel/memberUser',
-                    fileName: '注册用户列表统计',
+                    fileName: businessName + '_注册用户列表统计',
                     params: params
                 };
                 https.exportMethod(myObj);
@@ -426,7 +452,7 @@ export default {
                 jsonArr.push({ key: 'sign', value: sign });
                 let params = ParamsAppend(jsonArr);
                 https
-                    .fetchPost('/memberUser/getMemberUserById', params)
+                    .fetchPost('/admin/memberUser/getMemberUserById', params)
                     .then(data => {
                         loading.close();
                         console.log(JSON.parse(Decrypt(data.data.data)));
@@ -494,7 +520,7 @@ export default {
                     jsonArr.push({ key: 'sign', value: sign });
                     let params = ParamsAppend(jsonArr);
                     https
-                        .fetchPost('/memberUser/updateUserRole',params)
+                        .fetchPost('/admin/memberUser/updateUserRole',params)
                         .then(data => {
                             loading.close();
                             if (data.data.code == 'success') {
@@ -522,14 +548,23 @@ export default {
             this.query.pageNo = 1;
             this.getMenu();
         },
-        // 获取所有影院
-        getAllCinema() {
+        getAllBusiness() {
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
             https
-                .fetchPost('/cinema/getAllCinema')
+                .fetchPost('/businessInfo/getBusinessList')
                 .then(data => {
+                    loading.close();
                     if (data.data.code == 'success') {
                         var res = JSON.parse(Decrypt(data.data.data));
-                        this.cinemaInfo = res;
+                        this.businessInfo = res;
+                        this.query.businessCode = res[0].businessCode;
+                        this.getAllCinema();
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
@@ -540,6 +575,51 @@ export default {
                     }
                 })
                 .catch(err => {
+                    loading.close();
+                    console.log(err);
+                });
+        },
+        changeBusiness(val) {
+            this.query.businessCode = val;
+            this.getAllCinema();
+            this.$forceUpdate();
+        },
+        // 获取所有影院
+        getAllCinema() {
+            if (!this.query.businessCode) {
+                return;
+            }
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
+            var jsonArr = [];
+            jsonArr.push({ key: 'businessCode', value: this.query.businessCode });
+            let sign = md5(preSign(jsonArr));
+            jsonArr.push({ key: 'sign', value: sign });
+            let params = ParamsAppend(jsonArr);
+            https
+                .fetchPost('/cinema/getCinemaListByBusinessCode', params)
+                .then(data => {
+                    loading.close();
+                    if (data.data.code == 'success') {
+                        var res = JSON.parse(Decrypt(data.data.data));
+                        this.cinemaInfo = res;
+                        console.log(res);
+                    } else if (data.data.code == 'nologin') {
+                        this.message = data.data.message;
+                        this.open();
+                        this.$router.push('/login');
+                    } else {
+                        this.message = data.data.message;
+                        this.open();
+                    }
+                })
+                .catch(err => {
+                    loading.close();
                     console.log(err);
                 });
         },
@@ -554,6 +634,7 @@ export default {
             });
             setTimeout(() => {
                 let cinemaCode = this.query.cinemaCode;
+                let businessCode = this.query.businessCode;
                 let employeeCode = this.query.employeeCode;
                 let userName = this.query.userName;
                 let mobile = this.query.mobile;
@@ -563,6 +644,9 @@ export default {
                 let endRegisterNumber = this.query.endRegisterNumber;
                 if (!cinemaCode) {
                     cinemaCode = '';
+                }
+                if (!businessCode) {
+                    businessCode = '';
                 }
                 if (!employeeCode) {
                     employeeCode = '';
@@ -587,6 +671,7 @@ export default {
                 }
                 let jsonArr = [];
                 jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
+                jsonArr.push({ key: 'businessCode', value: businessCode });
                 jsonArr.push({ key: 'employeeCode', value: employeeCode });
                 jsonArr.push({ key: 'userName', value: userName });
                 jsonArr.push({ key: 'userMobile', value: mobile });
@@ -600,7 +685,7 @@ export default {
                 jsonArr.push({ key: 'sign', value: sign });
                 var params = ParamsAppend(jsonArr);
                 https
-                    .fetchPost('/memberUser/memberUserPage', params)
+                    .fetchPost('/admin/memberUser/memberUserPage', params)
                     .then(data => {
                         loading.close();
                         console.log(data);
@@ -612,7 +697,6 @@ export default {
                             this.query.pageNo = oData.pageNo;
                             this.query.totalCount = oData.totalCount;
                             this.query.totalPage = oData.totalPage;
-                            this.getAllCinema();
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
                             this.open();
