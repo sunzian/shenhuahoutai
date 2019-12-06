@@ -241,15 +241,15 @@
                 </el-form-item>
                 <el-form-item :required="true" label="优惠方式：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.reduceType" @change="clearDiscountMoney()">
-                        <el-radio label="1">固定价格</el-radio>
-                        <el-radio label="2">立减</el-radio>
+                        <el-radio label="1">固定价格（特惠价格）</el-radio>
+                        <el-radio label="2">立减（立减活动）</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" label="固定金额：" :label-width="formLabelWidth" v-if="oForm.reduceType == 1">
-                    <el-input style="width: 150px" v-model="oForm.discountMoney" autocomplete="off"></el-input>
+                    <el-input placeholder="影票以此价格结算" style="width: 150px" v-model="oForm.discountMoney" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="立减金额：" :label-width="formLabelWidth" v-if="oForm.reduceType == 2">
-                    减<el-input style="width: 150px" v-model="oForm.discountMoney" autocomplete="off"></el-input>
+                    减<el-input placeholder="每张票分别减掉多少" style="width: 150px" v-model="oForm.discountMoney" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="开启状态：" :label-width="formLabelWidth">
                     <el-select v-model="oForm.status" placeholder="请选择">
@@ -469,15 +469,15 @@
                 </el-form-item>
                 <el-form-item :required="true" label="优惠方式：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oReduceType" @change="clearDiscountMoney()">
-                        <el-radio label="1">固定价格</el-radio>
-                        <el-radio label="2">立减</el-radio>
+                        <el-radio label="1">固定价格（特惠价格）</el-radio>
+                        <el-radio label="2">立减（立减活动）</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" label="固定金额：" :label-width="formLabelWidth" v-if="oReduceType == 1">
-                    <el-input style="width: 150px" v-model="oDiscountMoney" autocomplete="off"></el-input>
+                    <el-input placeholder="影票以此价格结算" style="width: 150px" v-model="oDiscountMoney" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="立减金额：" :label-width="formLabelWidth" v-if="oReduceType == 2">
-                    减<el-input style="width: 150px" v-model="oDiscountMoney" autocomplete="off"></el-input>
+                    减<el-input placeholder="每张票分别减掉多少" style="width: 150px" v-model="oDiscountMoney" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="开启状态：" :label-width="formLabelWidth">
                     <el-select v-model="oStatus" placeholder="请选择">
@@ -850,20 +850,24 @@
             },
             addTime(){
                 // 筛选重复时间段
-                var result = this.dateInfo.some(item => {
-                    if (item == this.value1) {
-                        return true;
+                if(this.value1){
+                    var result = this.dateInfo.some(item => {
+                        if (item == this.value1) {
+                            return true;
+                        }
+                    });
+                    if (result) {
+                        this.message = '不可添加相同时间段，请检查！';
+                        this.open();
+                        return;
                     }
-                });
-                if (result) {
-                    return;
+                    this.dateInfo.push(this.value1);
+                    this.startArr.push(this.value1[0]);
+                    this.endArr.push(this.value1[1]);
+                    console.log(this.startArr.join(','));
+                    console.log(this.endArr.join(','));
+                    console.log(this.dateInfo);
                 }
-                this.dateInfo.push(this.value1);
-                this.startArr.push(this.value1[0]);
-                this.endArr.push(this.value1[1]);
-                console.log(this.startArr.join(','));
-                console.log(this.endArr.join(','));
-                console.log(this.dateInfo);
             },
             deletTime(index) {
                 this.dateInfo.splice(index, 1);
@@ -1016,8 +1020,8 @@
                             return;
                         }
                     }
-                    if(this.oForm.discountMoney<0){
-                        this.message = '减免金额不能小于0！';
+                    if(this.oForm.discountMoney<=0){
+                        this.message = '减免金额必须大于0！';
                         this.open();
                         loading.close();
                         return;
@@ -1053,6 +1057,12 @@
                         loading.close();
                         return;
                     }
+                    if(this.oForm.oNum<=0){
+                        this.message = '活动总张数必须大于0';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
                 }
                 if(!this.oForm.oneCanNum){
                     this.message = '是否限制个人张数不能为空，请检查！';
@@ -1068,6 +1078,12 @@
                     }
                     if(!this.oForm.oneNum){
                         this.message = '个人总张数不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                    if(this.oForm.oneNum<=0){
+                        this.message = '个人总张数必须大于0';
                         this.open();
                         loading.close();
                         return;
@@ -1523,8 +1539,8 @@
                             return;
                         }
                     }
-                    if(this.oDiscountMoney<0){
-                        this.message = '减免金额不能小于0！';
+                    if(this.oDiscountMoney<=0){
+                        this.message = '减免金额必须大于0！';
                         this.open();
                         loading.close();
                         return;
@@ -1560,6 +1576,12 @@
                         loading.close();
                         return;
                     }
+                    if(this.oTotalNumber<=0){
+                        this.message = '活动总张数必须大于0';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
                 }
                 if(!this.oIsLimitSingle){
                     this.message = '是否限制个人张数不能为空，请检查！';
@@ -1575,6 +1597,12 @@
                     }
                     if(!this.oSingleNumber){
                         this.message = '个人总张数不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                    if(this.oSingleNumber<=0){
+                        this.message = '个人总张数必须大于0';
                         this.open();
                         loading.close();
                         return;

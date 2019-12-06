@@ -220,7 +220,7 @@
                         <div
                             slot="tip"
                             class="el-upload__tip"
-                        >只能上传jpg/png文件，且不超过200kb 建议尺寸1500*150或按比例上传</div>
+                        >只能上传jpg/png文件，且不超过200kb 建议尺寸150*150或按比例上传</div>
                     </el-upload>
                 </el-form-item>
                 <el-form-item :required="true" label="每组发放数量：" :label-width="formLabelWidth">

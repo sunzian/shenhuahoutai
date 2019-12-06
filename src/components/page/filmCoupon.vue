@@ -222,14 +222,14 @@
                     v-if="oForm.reduceType == 1"
                     :required="true"
                 >
-                    <el-input style="width: 150px" v-model="oForm.discountMoney" autocomplete="off"></el-input>
+                    <el-input placeholder="影票以此价格结算" style="width: 150px" v-model="oForm.discountMoney" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item
                     label="减免金额："
                     :label-width="formLabelWidth"
                     v-if="oForm.reduceType == 2"
                     :required="true"
-                >   立减<el-input style="width: 150px" v-model="oForm.discountMoney" autocomplete="off"></el-input>元
+                >   立减<el-input placeholder="每张票分别减掉多少" style="width: 150px" v-model="oForm.discountMoney" autocomplete="off"></el-input>元
                 </el-form-item>
                 <el-form-item :required="true" label="开启状态：" :label-width="formLabelWidth">
                     <el-select v-model="oForm.status" placeholder="请选择">
@@ -390,14 +390,14 @@
                         v-if="oReduceType == 1"
                         :required="true"
                 >
-                    <el-input style="width: 150px" v-model="oDiscountMoney" autocomplete="off"></el-input>
+                    <el-input placeholder="影票以此价格结算" style="width: 150px" v-model="oDiscountMoney" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item
                         label="减免金额："
                         :label-width="formLabelWidth"
                         v-if="oReduceType == 2"
                         :required="true"
-                >   立减<el-input style="width: 150px" v-model="oDiscountMoney" autocomplete="off"></el-input>元
+                >   立减<el-input placeholder="每张票分别减掉多少" style="width: 150px" v-model="oDiscountMoney" autocomplete="off"></el-input>元
                 </el-form-item>
                 <el-form-item :required="true" label="开启状态：" :label-width="formLabelWidth">
                     <el-select v-model="oStatus" placeholder="请选择">
@@ -580,7 +580,8 @@ export default {
                 pageNo: 1,
                 pageSize: 15,
                 aPageNo: 1,
-                aPageSize: 15
+                aPageSize: 15,
+                filmName:''
             },
             restaurants: [],
             tableData: [],
@@ -754,6 +755,7 @@ export default {
                         this.query.aPageNo = oData.pageNo;
                         this.query.aTotalCount = oData.totalCount;
                         this.query.aTotalPage = oData.totalPage
+                        this.query.filmName=''
                     }else if(data.data.code=='nologin'){
                         this.message=data.data.message
                         this.open()

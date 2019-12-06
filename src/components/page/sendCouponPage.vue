@@ -30,7 +30,6 @@
             </el-dialog>
         </div>
         <div class="container" v-if="sendType == 1">
-            <el-button @click="chooseOtherType">选择其他方式发放</el-button>
             <div class="handle-box" style="margin-bottom: 0;">
                 <el-select
                     v-model="query.cinemaCode"
@@ -128,11 +127,6 @@
                         :value="item.value"
                     ></el-option>
                 </el-select>
-                <el-button
-                    type="primary"
-                    style="margin-top: 10px;width: 90px;"
-                    @click="chooseFilm"
-                >看过的电影</el-button>
             </div>
             <div v-if="filmList.length > 0">
                 <span class="filmItem" v-for="(item, index) in filmList" :key="index">
@@ -156,6 +150,16 @@
             </div>
             <div style="margin-bottom: 10px; margin-top: 10px;height: 42px; float: right;">
                 <el-button type="primary" style="margin-right: 10px;" @click="setConditions">发放优惠券</el-button>
+            </div>
+            <div style="float: right;">
+                <el-button
+                        type="primary"
+                        style="margin-top: 10px;width: 90px;margin-right: 10px;"
+                        @click="chooseFilm"
+                >看过的电影</el-button>
+            </div>
+            <div style="float: right;">
+                <el-button @click="chooseOtherType" style="margin-top: 10px;width: 120px;margin-right: 10px;">选择发放方式</el-button>
             </div>
             <el-table
                 :data="tableData"
@@ -232,7 +236,7 @@
             </div>
         </div>
         <div class="container" v-if="sendType == 2">
-            <el-button @click="chooseOtherType">选择其他方式发放</el-button>
+            <el-button @click="chooseOtherType">选择发放方式</el-button>
             <!--excel发送条件弹出框-->
             <div style="margin-left:50%;transform:translate(-50%)">
                 <el-form :model="excelCouponForm">
