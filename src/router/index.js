@@ -171,6 +171,11 @@ export default new Router({
                     meta: { title: '权益卡用户列表' }
                 },
                 {
+                    path: '/adminUserBenefitCard',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/adminUserBenefitCard.vue'),
+                    meta: { title: '权益卡用户列表' }
+                },
+                {
                     path: '/sendCouponPage',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/sendCouponPage.vue'),
                     meta: { title: '优惠券发放' }
@@ -251,6 +256,11 @@ export default new Router({
                     meta: { title: '充值规则管理' }
                 },
                 {
+                    path: '/adminRechargeCardRulePage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/adminRechargeCardRulePage.vue'),
+                    meta: { title: '充值规则管理' }
+                },
+                {
                     path: '/memberCardLevel',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/memberCardLevel.vue'),
                     meta: { title: '卡类别管理' }
@@ -328,6 +338,11 @@ export default new Router({
                 {
                     path: '/benefitCard',
                     component: () => import(/* webpackChunkName: "table" */ '../components/page/benefitCard.vue'),
+                    meta: { title: '权益卡管理' }
+                },
+                {
+                    path: '/adminBenefitCard',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/adminBenefitCard.vue'),
                     meta: { title: '权益卡管理' }
                 },
                 {
