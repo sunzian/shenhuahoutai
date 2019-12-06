@@ -320,25 +320,25 @@
                 </el-form-item>
                 <el-form-item
                     :required="true"
-                    v-if="oForm.effectiveType==1 && oForm.commodity_type!=1"
+                    v-if="oForm.effectiveType==1"
                     label="领取后几天开始生效"
                     :label-width="formLabelWidth"
                 >
                     <el-input style="width: 250px" v-model="oForm.laterDays" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item
+                <!-- <el-form-item
                     :required="true"
-                    v-if="oForm.effectiveType==1 && oForm.commodity_type!=1"
+                    v-if="oForm.effectiveType==1"
                     label="生效后几天过期"
                     :label-width="formLabelWidth"
                 >
                     <el-input style="width: 250px" v-model="oForm.expireDay" autocomplete="off"></el-input>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item
                     :required="true"
                     label="有效期："
                     :label-width="formLabelWidth"
-                    v-if="oForm.effectiveType==2 && oForm.commodity_type!=1"
+                    v-if="oForm.effectiveType==2"
                 >
                     <el-date-picker
                         v-model="oForm.startEffectiveDate"
@@ -512,7 +512,7 @@
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="cancel">取 消</el-button>
+                <el-button @click="dialogFormVisible = false">取 消</el-button>
                 <el-button type="primary" @click="addRole">确 定</el-button>
             </div>
         </el-dialog>
@@ -640,7 +640,7 @@
                 </el-form-item>
                 <el-form-item
                     :required="true"
-                    v-if="oEffectiveType==1 && form.commodityType!=1"
+                    v-if="oEffectiveType==1"
                     label="领取后几天开始生效"
                     :label-width="formLabelWidth"
                 >
@@ -648,17 +648,9 @@
                 </el-form-item>
                 <el-form-item
                     :required="true"
-                    v-if="oEffectiveType==1 && form.commodityType!=1"
-                    label="生效后几天过期"
-                    :label-width="formLabelWidth"
-                >
-                    <el-input style="width: 250px" v-model="oExpireDay" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item
-                    :required="true"
                     label="有效期："
                     :label-width="formLabelWidth"
-                    v-if="oEffectiveType==2 && form.commodityType!=1"
+                    v-if="oEffectiveType==2"
                 >
                     <el-date-picker
                         v-model="oStartEffectiveDate"
@@ -1223,7 +1215,6 @@ export default {
         },
         one(a) {
             //获取影片绑定的value值
-            console.log(a);
             this.ticketIds = a;
         },
         getCinemaCode(val) {
@@ -1239,7 +1230,6 @@ export default {
                 this.selectedSell = [];
                 this.selectedSell.push(this.sellTableData[this.sellIndex]);
             }
-            console.log(this.selectedSell);
             this.drawer = false;
         },
         openNext() {
@@ -1362,7 +1352,7 @@ export default {
             }
             if (this.oForm.commodity_type != 1) {
                 if (this.oForm.effectiveType == 1) {
-                    if (!this.oForm.laterDays || !this.oForm.expireDay) {
+                    if (!this.oForm.laterDays) {
                         this.message = '必填项不能为空，请检查！';
                         this.open();
                         loading.close();
@@ -1442,6 +1432,7 @@ export default {
                 this.oForm.ticket_ids = couponList.join(',');
             }
             var jsonArr = [];
+            jsonArr.push({ key: 'effectiveType', value: this.oForm.effectiveType });
             jsonArr.push({ key: 'imageUrl', value: this.oForm.image_url });
             jsonArr.push({ key: 'memo', value: this.oForm.memo });
             jsonArr.push({ key: 'store', value: this.oForm.store });
@@ -1472,7 +1463,6 @@ export default {
             if (this.oForm.commodity_type != 1) {
                 if (this.oForm.effectiveType == 1) {
                     jsonArr.push({ key: 'laterDays', value: this.oForm.laterDays });
-                    jsonArr.push({ key: 'expireDay', value: this.oForm.expireDay });
                 } else {
                     jsonArr.push({ key: 'startEffectiveDate', value: this.oForm.startEffectiveDate });
                     jsonArr.push({ key: 'endEffectiveDate', value: this.oForm.endEffectiveDate });
@@ -1517,7 +1507,6 @@ export default {
                             this.oForm.originalPrice = '';
                             this.oForm.topStatus = '';
                             this.oForm.recommendStatus = '';
-                            this.oForm.expireDay = '';
                             this.oForm.sort = '';
                             this.dialogFormVisible = false;
                             this.$message.success(`新增成功`);
@@ -1653,7 +1642,6 @@ export default {
                                 json.id = id;
                                 json.name = name;
                                 this.selectedSell.push(json);
-                                console.log(this.selectedSell);
                             }
                             this.form.name = JSON.parse(Decrypt(data.data.data)).goldCommodity.name;
                             this.form.image_url = JSON.parse(Decrypt(data.data.data)).goldCommodity.imageUrl;
@@ -1680,7 +1668,6 @@ export default {
                             this.form.sort = JSON.parse(Decrypt(data.data.data)).goldCommodity.sort;
                             this.oCities = JSON.parse(Decrypt(data.data.data)).cinemas;
                             this.oLaterDays = JSON.parse(Decrypt(data.data.data)).goldCommodity.laterDays;
-                            this.ticketIds = JSON.parse(Decrypt(data.data.data)).goldCommodity.expireDay;
                             this.oStartEffectiveDate = JSON.parse(Decrypt(data.data.data)).goldCommodity.startEffectiveDate;
                             this.oEndEffectiveDate = JSON.parse(Decrypt(data.data.data)).goldCommodity.endEffectiveDate;
                             //商品类型下拉选显示对应的选项
@@ -1714,14 +1701,14 @@ export default {
                             }
 
                             //生效方式下拉选显示对应的选项
-                            //   console.log(typeof JSON.parse(Decrypt(data.data.data)).goldCommodity.changeType);
+                              console.log(typeof JSON.parse(Decrypt(data.data.data)).goldCommodity.effectiveType);
                             for (let x in this.effectiveType) {
                                 if (this.effectiveType[x].value == JSON.parse(Decrypt(data.data.data)).goldCommodity.effectiveType) {
                                     this.oEffectiveType = this.effectiveType[x].value;
                                     break;
                                 }
                             }
-
+                            console.log(this.oEffectiveType)
                             //上架状态下拉选显示对应的选项
                             for (let x in this.showStatus) {
                                 if (this.showStatus[x].value == JSON.parse(Decrypt(data.data.data)).goldCommodity.status) {
@@ -1814,7 +1801,7 @@ export default {
             }
             if (this.form.commodityType != 1) {
                 if (this.oEffectiveType == 1) {
-                    if (!this.oLaterDays || !this.oExpireDay) {
+                    if (!this.oLaterDays) {
                         this.message = '必填项不能为空，请检查！';
                         this.open();
                         loading.close();
@@ -1873,6 +1860,7 @@ export default {
                 }
                 this.form.cinemaCode = this.oCheckedCities.join(',');
                 jsonArr.push({ key: 'id', value: this.form.id });
+                jsonArr.push({ key: 'effectiveType', value: this.oEffectiveType });
                 jsonArr.push({ key: 'imageUrl', value: this.form.image_url });
                 jsonArr.push({ key: 'memo', value: this.form.memo });
                 jsonArr.push({ key: 'store', value: this.form.store });
@@ -1908,7 +1896,6 @@ export default {
                 if (this.form.commodityType != 1) {
                     if (this.oEffectiveType == 1) {
                         jsonArr.push({ key: 'laterDays', value: this.oLaterDays });
-                        jsonArr.push({ key: 'expireDay', value: this.oExpireDay });
                     }
                     if (this.form.commodityType == 2) {
                         jsonArr.push({ key: 'startEffectiveDate', value: this.oStartEffectiveDate });
