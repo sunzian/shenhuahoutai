@@ -131,7 +131,7 @@
                 <el-table-column prop="time" label="会员卡支付代售费" width="150">
                     <template slot-scope="scope">{{scope.row.memberCardPayCommissionFee}}</template>
                 </el-table-column>
-                <el-table-column label="操作" width="110" align="center">
+                <el-table-column label="操作" width="110" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-button
                             type="text"

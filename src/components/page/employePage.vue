@@ -116,7 +116,7 @@
                                 style="max-height: 50px;max-width: 130px"
                             />
                         </el-popover>
-                        <el-button type="text" v-else @click="addCode(scope.row.id)">点击生成二维码</el-button>
+                        <!-- <el-button type="text" v-else @click="addCode(scope.row.id)">点击生成二维码</el-button> -->
                     </template>
                 </el-table-column>
                 <el-table-column label="操作" width="180" align="center">
@@ -132,6 +132,20 @@
                             class="red"
                             @click="delChange(scope.$index, scope.row)"
                         >删除</el-button>
+                        <el-button
+                            type="text"
+                            icon="el-icon-refresh"
+                            class="red"
+                            v-if="!scope.row.qrCode"
+                            @click="addCode(scope.row.id)"
+                        >生成员工二维码</el-button>
+                        <el-button
+                            type="text"
+                            icon="el-icon-refresh"
+                            class="red"
+                            v-if="scope.row.qrCode"
+                            @click="addCode(scope.row.id)"
+                        >刷新员工二维码</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -680,6 +694,7 @@ export default {
                     loading.close();
                     if (data.data.code == 'success') {
                         var oData = JSON.parse(Decrypt(data.data.data));
+                        console.log(oData)
                         this.tableData = oData.data;
                         // this.query.pageSize = oData.pageSize;
                         // this.query.pageNo = oData.pageNo;
