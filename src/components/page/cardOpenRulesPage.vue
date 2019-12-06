@@ -81,9 +81,6 @@
                 <el-table-column prop="sort" label="会员卡名称" width="120">
                     <template slot-scope="scope">{{scope.row.cardLevelName}}</template>
                 </el-table-column>
-                <el-table-column prop="number" label="充值金额" width="100">
-                    <template slot-scope="scope">{{scope.row.rechargeAmount}}</template>
-                </el-table-column>
                 <el-table-column prop="sort" align="center" label="赠送类型" width="100">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.givenType=='1'">不赠送</el-tag>

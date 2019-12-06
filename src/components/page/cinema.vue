@@ -326,16 +326,16 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="是否开通套餐" :label-width="formLabelWidth">
-                    <el-select v-model="oOpenSnackStatus" @change="openServe">
-                        <el-option
-                            v-for="info in boolean"
-                            :key="info.value"
-                            :label="info.label"
-                            :value="info.value"
-                        ></el-option>
-                    </el-select>
-                </el-form-item>
+                <!--<el-form-item :required="true" label="是否开通套餐" :label-width="formLabelWidth">-->
+                    <!--<el-select v-model="oOpenSnackStatus" @change="openServe">-->
+                        <!--<el-option-->
+                            <!--v-for="info in boolean"-->
+                            <!--:key="info.value"-->
+                            <!--:label="info.label"-->
+                            <!--:value="info.value"-->
+                        <!--&gt;</el-option>-->
+                    <!--</el-select>-->
+                <!--</el-form-item>-->
                 <el-form-item label="是否小卖配送" :label-width="formLabelWidth" :required="true">
                     <el-select v-model="oSnackDispatcherStatus" @change="openServe">
                         <el-option
@@ -569,16 +569,16 @@
                 <!--&gt;</el-option>-->
                 <!--</el-select>-->
                 <!--</el-form-item>-->
-                <el-form-item :required="true" label="会员卡是否门店通用" :label-width="formLabelWidth">
-                    <el-select v-model="oMemberCardCommonUseStatus" @change="openServe">
-                        <el-option
-                            v-for="info in boolean"
-                            :key="info.value"
-                            :label="info.label"
-                            :value="info.value"
-                        ></el-option>
-                    </el-select>
-                </el-form-item>
+                <!--<el-form-item :required="true" label="会员卡是否门店通用" :label-width="formLabelWidth">-->
+                    <!--<el-select v-model="oMemberCardCommonUseStatus" @change="openServe">-->
+                        <!--<el-option-->
+                            <!--v-for="info in boolean"-->
+                            <!--:key="info.value"-->
+                            <!--:label="info.label"-->
+                            <!--:value="info.value"-->
+                        <!--&gt;</el-option>-->
+                    <!--</el-select>-->
+                <!--</el-form-item>-->
                 <el-form-item label="小程序名称" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
@@ -743,7 +743,7 @@ export default {
             oMemberCardPayCommissionFee: '',
             oMembershipServiceAgreement: '',
             oBuyTicketHint: '',
-            oOpenSnackStatus: '',
+            // oOpenSnackStatus: '',
             oSnackDispatcherStatus: '',
             oRefundable: '',
             oSnackBeginTime: '',
@@ -760,7 +760,7 @@ export default {
             oMessagePlatformSignId: '',
             oOpenStatus: '',
             oOpenMemberCardStatus: '',
-            oMemberCardCommonUseStatus: '',
+            // oMemberCardCommonUseStatus: '',
             oMiniAppSecret: '',
             oMiniMerchantNo: '',
             oMiniMerchantSecret: '',
@@ -908,18 +908,18 @@ export default {
                         // this.oMessagePlatformAccount = JSON.parse(Decrypt(data.data.data)).CinemaMessagePlatFormInfo.messagePlatformAccount;
                         // this.oMessagePlatformPassword = JSON.parse(Decrypt(data.data.data)).CinemaMessagePlatFormInfo.messagePlatformPassword;
                         // this.oMessagePlatformSignId = JSON.parse(Decrypt(data.data.data)).CinemaMessagePlatFormInfo.messagePlatformSignId;
-                        for (let x in this.boolean) {
-                            if (this.boolean[x].value == JSON.parse(Decrypt(data.data.data)).Cinema.memberCardCommonUseStatus) {
-                                this.oMemberCardCommonUseStatus = this.boolean[x].value;
-                                break;
-                            }
-                        }
-                        for (let x in this.boolean) {
-                            if (this.boolean[x].value == JSON.parse(Decrypt(data.data.data)).Cinema.openSnackStatus) {
-                                this.oOpenSnackStatus = this.boolean[x].value;
-                                break;
-                            }
-                        }
+                        // for (let x in this.boolean) {
+                        //     if (this.boolean[x].value == JSON.parse(Decrypt(data.data.data)).Cinema.memberCardCommonUseStatus) {
+                        //         this.oMemberCardCommonUseStatus = this.boolean[x].value;
+                        //         break;
+                        //     }
+                        // }
+                        // for (let x in this.boolean) {
+                        //     if (this.boolean[x].value == JSON.parse(Decrypt(data.data.data)).Cinema.openSnackStatus) {
+                        //         this.oOpenSnackStatus = this.boolean[x].value;
+                        //         break;
+                        //     }
+                        // }
                         for (let x in this.boolean) {
                             if (this.boolean[x].value == JSON.parse(Decrypt(data.data.data)).Cinema.snackDispatcherStatus) {
                                 this.oSnackDispatcherStatus = this.boolean[x].value;
@@ -1032,13 +1032,12 @@ export default {
                 !this.oMembershipServiceAgreement ||
                 !this.oBuyTicketHint ||
                 !this.oEquityCardAgreement ||
-                !this.oOpenSnackStatus ||
                 !this.oSnackDispatcherStatus ||
                 !this.oRefundable ||
                 !this.oSnackBeginTime ||
                 !this.oSnackEndTime ||
                 !this.oOpenMemberCardStatus ||
-                !this.oMemberCardCommonUseStatus ||
+                // !this.oMemberCardCommonUseStatus ||
                 !this.oVerificationCode
             ) {
                 this.message = '必填项不能为空，请检查！';
@@ -1068,7 +1067,7 @@ export default {
             jsonArr.push({ key: 'membershipServiceAgreement', value: this.oMembershipServiceAgreement });
             jsonArr.push({ key: 'buyTicketHint', value: this.oBuyTicketHint });
             jsonArr.push({ key: 'rechargeMemo', value: this.oRechargeMemo });
-            jsonArr.push({ key: 'openSnackStatus', value: this.oOpenSnackStatus });
+            // jsonArr.push({ key: 'openSnackStatus', value: this.oOpenSnackStatus });
             jsonArr.push({ key: 'snackDispatcherStatus', value: this.oSnackDispatcherStatus });
             jsonArr.push({ key: 'refundable', value: this.oRefundable });
             jsonArr.push({ key: 'snackBeginTime', value: this.oSnackBeginTime });
@@ -1104,7 +1103,7 @@ export default {
             // jsonArr.push({ key: 'messagePlatformSignId', value: this.oMessagePlatformSignId });
             // jsonArr.push({ key: 'openStatus', value: this.oOpenStatus });
             jsonArr.push({ key: 'openMemberCardStatus', value: this.oOpenMemberCardStatus });
-            jsonArr.push({ key: 'memberCardCommonUseStatus', value: this.oMemberCardCommonUseStatus });
+            // jsonArr.push({ key: 'memberCardCommonUseStatus', value: this.oMemberCardCommonUseStatus });
             // jsonArr.push({ key: 'miniAppSecret', value: this.oMiniAppSecret });
             jsonArr.push({ key: 'miniMerchantNo', value: this.oMiniMerchantNo });
             // jsonArr.push({ key: 'miniMerchantSecret', value: this.oMiniMerchantSecret });

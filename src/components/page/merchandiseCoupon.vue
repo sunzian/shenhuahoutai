@@ -171,7 +171,7 @@
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oForm.reduceType == 1" label="固定金额：" :label-width="formLabelWidth">
-                    <el-input style="width: 150px" v-model="oForm.discountMoney" autocomplete="off"></el-input>
+                    <el-input placeholder="所选卖品以此价格结算" style="width: 150px" v-model="oForm.discountMoney" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oForm.reduceType==2" label="减免金额：" :label-width="formLabelWidth">
                     满
@@ -283,7 +283,7 @@
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oReduceType == 1" label="固定金额：" :label-width="formLabelWidth">
-                    <el-input style="width: 150px" v-model="oDiscountMoney" autocomplete="off"></el-input>
+                    <el-input placeholder="所选卖品以此价格结算" style="width: 150px" v-model="oDiscountMoney" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oReduceType==2" label="减免金额：" :label-width="formLabelWidth">
                     满
@@ -311,7 +311,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="星期几不可用：" :label-width="formLabelWidth">
-                    <el-checkbox-group :max="7" v-model="oCheckedDays" @change="selectDay">
+                    <el-checkbox-group :max="6" v-model="oCheckedDays" @change="selectDay">
                         <el-checkbox
                                 v-for="item in oExceptWeekDay"
                                 :label="item.index"
@@ -601,6 +601,18 @@ export default {
                 }
                 if(this.oForm.discountMoney<0||this.oForm.achieveMoney<0){
                     this.message = '减免金额不能小于0！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if(this.oForm.achieveMoney<this.oForm.discountMoney){
+                    this.message = '请输入合理的满减金额！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if(this.oForm.achieveMoney==0&&this.oForm.discountMoney==0){
+                    this.message = '请输入合理的满减金额！';
                     this.open();
                     loading.close();
                     return;
@@ -938,6 +950,18 @@ export default {
                 }
                 if(this.oDiscountMoney<0||this.oAchieveMoney<0){
                     this.message = '减免金额不能小于0！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if(this.oAchieveMoney<this.oDiscountMoney){
+                    this.message = '请输入合理的满减金额！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if(this.oAchieveMoney==0&&this.oDiscountMoney==0){
+                    this.message = '请输入合理的满减金额！';
                     this.open();
                     loading.close();
                     return;

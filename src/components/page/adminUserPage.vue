@@ -93,7 +93,7 @@
                     <el-input style="width: 250px" v-model="oForm.userName" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="密码" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="oForm.userPass" autocomplete="off"></el-input>
+                    <el-input type="password" style="width: 250px" maxlength="16" v-model="oForm.userPass" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="状态" :label-width="formLabelWidth">
                     <el-select v-model="oForm.value" placeholder="请选择状态">

@@ -376,18 +376,18 @@
                         placeholder="最多输入10个字"
                     ></el-input>
                 </el-form-item>
-                <el-form-item prop="openSnackStatus" label="是否开通套餐" :label-width="formLabelWidth">
-                    <el-select
-                            v-model="oForm.openSnackStatus"
-                    >
-                        <el-option
-                                v-for="info in boolean"
-                                :key="info.value"
-                                :label="info.label"
-                                :value="info.value"
-                        ></el-option>
-                    </el-select>
-                </el-form-item>
+                <!--<el-form-item prop="openSnackStatus" label="是否开通套餐" :label-width="formLabelWidth">-->
+                        <!--<el-select-->
+                            <!--v-model="oForm.openSnackStatus"-->
+                    <!--&gt;-->
+                        <!--<el-option-->
+                                <!--v-for="info in boolean"-->
+                                <!--:key="info.value"-->
+                                <!--:label="info.label"-->
+                                <!--:value="info.value"-->
+                        <!--&gt;</el-option>-->
+                    <!--</el-select>-->
+                <!--</el-form-item>-->
                 <el-form-item prop="snackDispatcherStatus" label="是否小卖配送" :label-width="formLabelWidth">
                     <el-select
                             v-model="oForm.snackDispatcherStatus"
@@ -960,18 +960,18 @@
                         placeholder="最多输入10个字"
                     ></el-input>
                 </el-form-item>
-                <el-form-item prop="openSnackStatus" label="是否开通套餐" :label-width="formLabelWidth">
-                    <el-select
-                    v-model="oOpenSnackStatus"
-                    >
-                        <el-option
-                            v-for="info in boolean"
-                            :key="info.value"
-                            :label="info.label"
-                            :value="info.value"
-                        ></el-option>
-                    </el-select>
-                </el-form-item>
+                <!--<el-form-item prop="openSnackStatus" label="是否开通套餐" :label-width="formLabelWidth">-->
+                    <!--<el-select-->
+                    <!--v-model="oOpenSnackStatus"-->
+                    <!--&gt;-->
+                        <!--<el-option-->
+                            <!--v-for="info in boolean"-->
+                            <!--:key="info.value"-->
+                            <!--:label="info.label"-->
+                            <!--:value="info.value"-->
+                        <!--&gt;</el-option>-->
+                    <!--</el-select>-->
+                <!--</el-form-item>-->
                 <el-form-item prop="snackDispatcherStatus" label="是否小卖配送" :label-width="formLabelWidth">
                     <el-select
                     v-model="oSnackDispatcherStatus"
@@ -1409,7 +1409,7 @@ export default {
                 latitude: [{required: true, message: '请输入纬度', trigger: 'blur'}],
                 belongBusinessCode: [{required: true, message: '请选择', trigger: 'change'}],
                 serviceMobile: [{required: true, message: '请输入客服电话', trigger: 'blur'}],
-                openSnackStatus: [{required: true, message: '请选择', trigger: 'change'}],
+                // openSnackStatus: [{required: true, message: '请选择', trigger: 'change'}],
                 snackDispatcherStatus: [{required: true, message: '请选择', trigger: 'change'}],
                 refundable: [{required: true, message: '请选择', trigger: 'change'}],
                 snackBeginTime: [{required: true, message: '请选择开始时间', trigger: 'blur'}],
@@ -1468,7 +1468,7 @@ export default {
             oMembershipServiceAgreement: '',
             oBuyTicketHint: '',
             oGoldActivityMemo: '',
-            oOpenSnackStatus: '',
+            // oOpenSnackStatus: '',
             oRemainTicketsNumber: '',
             oSnackDispatcherStatus: '',
             oRefundable: '',
@@ -1554,7 +1554,7 @@ export default {
                 memberCardPayCommissionFee: '',
                 membershipServiceAgreement: '',
                 buyTicketHint: '',
-                openSnackStatus: '',
+                // openSnackStatus: '',
                 snackDispatcherStatus: '',
                 refundable: '',
                 snackBeginTime: '',
@@ -1686,7 +1686,7 @@ export default {
             jsonArr.push({ key: 'rechargeMemo', value: this.oForm.rechargeMemo });
             jsonArr.push({ key: 'goldActivityMemo', value: this.oForm.goldActivityMemo });
             jsonArr.push({ key: 'buyTicketHint', value: this.oForm.buyTicketHint });
-            jsonArr.push({ key: 'openSnackStatus', value: this.oForm.openSnackStatus });
+            // jsonArr.push({ key: 'openSnackStatus', value: this.oForm.openSnackStatus });
             jsonArr.push({ key: 'snackDispatcherStatus', value: this.oForm.snackDispatcherStatus });
             jsonArr.push({ key: 'refundable', value: this.oForm.refundable });
             jsonArr.push({ key: 'snackBeginTime', value: this.oForm.snackBeginTime});
@@ -1779,7 +1779,7 @@ export default {
                             this.oForm.memberCardPayCommissionFee = '';
                             this.oForm.membershipServiceAgreement = '';
                             this.oForm.buyTicketHint = '';
-                            this.oForm.openSnackStatus = '';
+                            // this.oForm.openSnackStatus = '';
                             this.oForm.snackDispatcherStatus = '';
                             this.oForm.refundable = '';
                             this.oForm.goldActivityMemo = '';
@@ -1952,12 +1952,12 @@ export default {
                                 break;
                             }
                         }
-                        for (let x in this.boolean) {
-                            if (this.boolean[x].value == JSON.parse(Decrypt(data.data.data)).Cinema.openSnackStatus) {
-                                this.oOpenSnackStatus = this.boolean[x].value;
-                                break;
-                            }
-                        }
+                        // for (let x in this.boolean) {
+                        //     if (this.boolean[x].value == JSON.parse(Decrypt(data.data.data)).Cinema.openSnackStatus) {
+                        //         this.oOpenSnackStatus = this.boolean[x].value;
+                        //         break;
+                        //     }
+                        // }
                         for (let x in this.boolean) {
                             if (this.boolean[x].value == JSON.parse(Decrypt(data.data.data)).Cinema.snackDispatcherStatus) {
                                 this.oSnackDispatcherStatus = this.boolean[x].value;
@@ -2104,7 +2104,7 @@ export default {
             jsonArr.push({ key: 'buyTicketHint', value: this.oBuyTicketHint });
             jsonArr.push({ key: 'rechargeMemo', value: this.oRechargeMemo });
             jsonArr.push({ key: 'goldActivityMemo', value: this.oGoldActivityMemo });
-            jsonArr.push({ key: 'openSnackStatus', value: this.oOpenSnackStatus });
+            // jsonArr.push({ key: 'openSnackStatus', value: this.oOpenSnackStatus });
             jsonArr.push({ key: 'snackDispatcherStatus', value: this.oSnackDispatcherStatus });
             jsonArr.push({ key: 'refundable', value: this.oRefundable });
             jsonArr.push({ key: 'snackBeginTime', value: this.oSnackBeginTime });

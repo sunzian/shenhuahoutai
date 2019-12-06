@@ -85,19 +85,19 @@
                 header-cell-class-name="table-header"
                 @selection-change="handleSelectionChange"
                 >
-                <el-table-column prop="name" label="头像" width="90">
-                    <template slot-scope="scope">
-                        <el-popover placement="right" title trigger="hover">
-                            <img style="width:400px" :src="scope.row.userHeadPic" />
-                            <img
-                                slot="reference"
-                                :src="scope.row.userHeadPic"
-                                :alt="scope.row.userHeadPic"
-                                style="max-height: 50px;max-width: 130px"
-                            />
-                        </el-popover>
-                    </template>
-                </el-table-column>
+                <!--<el-table-column prop="name" label="头像" width="90">-->
+                    <!--<template slot-scope="scope">-->
+                        <!--<el-popover placement="right" title trigger="hover">-->
+                            <!--<img style="width:400px" :src="scope.row.userHeadPic" />-->
+                            <!--<img-->
+                                <!--slot="reference"-->
+                                <!--:src="scope.row.userHeadPic"-->
+                                <!--:alt="scope.row.userHeadPic"-->
+                                <!--style="max-height: 50px;max-width: 130px"-->
+                            <!--/>-->
+                        <!--</el-popover>-->
+                    <!--</template>-->
+                <!--</el-table-column>-->
                 <el-table-column label="昵称" width="110">
                     <template slot-scope="scope">{{scope.row.userName}}</template>
                 </el-table-column>

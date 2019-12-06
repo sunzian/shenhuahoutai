@@ -113,7 +113,7 @@
                         <el-tag v-else type="danger">未启用</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" width="180" align="center" fixed="right">
+                <el-table-column label="操作" width="200" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-button
                                 type="success"
@@ -300,7 +300,7 @@
                     <el-input style="width: 150px" v-model="oForm.numberFilm" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oForm.cardType==1" label="卖品是否参与：" :label-width="formLabelWidth">
-                    <el-radio-group v-model="oForm.isMerchandiseJoin">
+                    <el-radio-group v-model="oForm.isMerchandiseJoin" @change="clearMerchandiseJoin()">
                         <el-radio label="1">参加</el-radio>
                         <el-radio label="0">不参加</el-radio>
                     </el-radio-group>
@@ -650,11 +650,11 @@
                 <el-form-item :required="true" label="固定金额：" :label-width="formLabelWidth" v-if="oReduceTypeFilm == 1&&oCardType==1&&oIsFilmJoin==1">
                     <el-input style="width: 150px" v-model="oDiscountMoneyFilm" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="立减金额：" :label-width="formLabelWidth" v-if="oReduceTypeFilm == 2&&oCardType==1">
+                <el-form-item :required="true" label="立减金额：" :label-width="formLabelWidth" v-if="oReduceTypeFilm == 2&&oCardType==1&&oIsFilmJoin==1">
                     减
                     <el-input style="width: 150px" v-model="oDiscountMoneyFilm" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="折扣：" :label-width="formLabelWidth" v-if="oReduceTypeFilm == 3&&oCardType==1">
+                <el-form-item :required="true" label="折扣：" :label-width="formLabelWidth" v-if="oReduceTypeFilm == 3&&oCardType==1&&oIsFilmJoin==1">
                     <el-input style="width: 150px" v-model="oDiscountMoneyFilm" autocomplete="off"></el-input>%
                 </el-form-item>
                 <el-form-item :required="true" v-if="oIsFilmJoin==1&&oCardType==1"  label="是否限制每部影片购买数量：" :label-width="formLabelWidth">
@@ -1418,21 +1418,25 @@
             },
             addTime(){
                 // 筛选重复时间段
-                var result = this.dateInfo.some(item => {
-                    if (item == this.value1) {
-                        return true;
+                if(this.value1){
+                    var result = this.dateInfo.some(item => {
+                        if (item == this.value1) {
+                            return true;
+                        }
+                    });
+                    if (result) {
+                        this.message = '不可添加相同时间段，请检查！';
+                        this.open();
+                        return;
                     }
-                });
-                if (result) {
-                    return;
+                    this.dateInfo.push(this.value1);
+                    this.startArr.push(this.value1[0])
+                    this.endArr.push(this.value1[1])
+                    this.value1='';
+                    console.log(this.dateInfo);
+                    console.log(this.startArr);
+                    console.log(this.endArr);
                 }
-                this.dateInfo.push(this.value1);
-                this.startArr.push(this.value1[0])
-                this.endArr.push(this.value1[1])
-                this.value1='';
-                console.log(this.dateInfo);
-                console.log(this.startArr);
-                console.log(this.endArr);
             },
             deletTime(index) {
                 this.dateInfo.splice(index, 1);
@@ -1663,8 +1667,8 @@
                                     return;
                                 }
                             }
-                            if(this.oForm.discountMoneyFilm<0){
-                                this.message = '减免金额不能小于0！';
+                            if(this.oForm.discountMoneyFilm<=0){
+                                this.message = '减免金额必须大于0！';
                                 this.open();
                                 loading.close();
                                 return;
@@ -1801,8 +1805,8 @@
                                     return;
                                 }
                             }
-                            if(this.oForm.discountMoneyMerchandise<0||this.oForm.achieveMoneyMerchandise<0){
-                                this.message = '减免金额不能小于0！';
+                            if(this.oForm.discountMoneyMerchandise<=0||this.oForm.achieveMoneyMerchandise<=0){
+                                this.message = '减免金额必须大于0！';
                                 this.open();
                                 loading.close();
                                 return;
@@ -2583,8 +2587,8 @@
                                     return;
                                 }
                             }
-                            if(this.oDiscountMoneyFilm<0){
-                                this.message = '减免金额不能小于0！';
+                            if(this.oDiscountMoneyFilm<=0){
+                                this.message = '减免金额必须大于0！';
                                 this.open();
                                 loading.close();
                                 return;
@@ -2721,8 +2725,8 @@
                                     return;
                                 }
                             }
-                            if(this.oDiscountMoneyMerchandise<0||this.oAchieveMoneyMerchandise<0){
-                                this.message = '减免金额不能小于0！';
+                            if(this.oDiscountMoneyMerchandise<=0||this.oAchieveMoneyMerchandise<=0){
+                                this.message = '减免金额必须大于0！';
                                 this.open();
                                 loading.close();
                                 return;
