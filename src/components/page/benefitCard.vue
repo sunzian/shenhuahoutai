@@ -178,7 +178,7 @@
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true"  v-if="oForm.cardType==1" label="影票是否参与：" :label-width="formLabelWidth">
-                    <el-radio-group v-model="oForm.isFilmJoin">
+                    <el-radio-group v-model="oForm.isFilmJoin" @change="clearFilmJoin()">
                         <el-radio label="1">参加</el-radio>
                         <el-radio label="0">不参加</el-radio>
                     </el-radio-group>
@@ -266,7 +266,7 @@
                     <el-input style="width: 150px" v-model="oForm.discountMoneyFilm" autocomplete="off"></el-input>%
                 </el-form-item>
                 <el-form-item :required="true" v-if="oForm.isFilmJoin==1&&oForm.cardType==1"  label="是否限制每部影片购买数量：" :label-width="formLabelWidth">
-                    <el-select v-model="oForm.isLimitEachFilm" placeholder="请选择">
+                    <el-select v-model="oForm.isLimitEachFilm" placeholder="请选择" @change="clearIsLimitEachFilm()">
                         <el-option
                                 v-for="item in canUse"
                                 :key="item.value"
@@ -279,7 +279,7 @@
                     <el-input style="width: 150px" v-model="oForm.eachFilmNumber" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oForm.isFilmJoin==1&&oForm.cardType==1"  label="是否限量：" :label-width="formLabelWidth">
-                    <el-select v-model="oForm.isLimitFilm" placeholder="请选择">
+                    <el-select v-model="oForm.isLimitFilm" placeholder="请选择" @change="clearIsLimitFilm()">
                         <el-option
                                 v-for="item in canUse"
                                 :key="item.value"
@@ -328,7 +328,7 @@
                     <el-input style="width: 150px" v-model="oForm.discountMoneyMerchandise" autocomplete="off"></el-input>%
                 </el-form-item>
                 <el-form-item :required="true" v-if="oForm.isMerchandiseJoin==1&&oForm.cardType==1"  label="选择商品：" :label-width="formLabelWidth">
-                    <el-radio-group v-model="oForm.selectMerchandiseType">
+                    <el-radio-group v-model="oForm.selectMerchandiseType" @change="clearMerchandiseType()">
                         <el-radio label="0">全部商品</el-radio>
                         <el-radio label="1">部分商品</el-radio>
                         <el-radio label="2">排除商品</el-radio>
@@ -360,7 +360,7 @@
                     </div>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oForm.isMerchandiseJoin==1&&oForm.cardType==1&&(oForm.reduceTypeMerchandise!=2)"  label="是否限量：" :label-width="formLabelWidth">
-                    <el-select v-model="oForm.isLimitMerchandise" placeholder="请选择">
+                    <el-select v-model="oForm.isLimitMerchandise" placeholder="请选择" @change="clearIsLimitMerchandise()">
                         <el-option
                                 v-for="item in canUse"
                                 :key="item.value"
@@ -570,7 +570,7 @@
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true"  v-if="oCardType==1" label="影票是否参与：" :label-width="formLabelWidth">
-                    <el-radio-group v-model="oIsFilmJoin">
+                    <el-radio-group v-model="oIsFilmJoin" @change="clearFilmJoin()">
                         <el-radio label="1">参加</el-radio>
                         <el-radio label="0">不参加</el-radio>
                     </el-radio-group>
@@ -658,7 +658,7 @@
                     <el-input style="width: 150px" v-model="oDiscountMoneyFilm" autocomplete="off"></el-input>%
                 </el-form-item>
                 <el-form-item :required="true" v-if="oIsFilmJoin==1&&oCardType==1"  label="是否限制每部影片购买数量：" :label-width="formLabelWidth">
-                    <el-select v-model="oIsLimitEachFilm" placeholder="请选择">
+                    <el-select v-model="oIsLimitEachFilm" placeholder="请选择" @change="clearIsLimitEachFilm()">
                         <el-option
                                 v-for="item in canUse"
                                 :key="item.value"
@@ -671,7 +671,7 @@
                     <el-input style="width: 150px" v-model="oEachFilmNumber" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oIsFilmJoin==1&&oCardType==1"  label="是否限量：" :label-width="formLabelWidth">
-                    <el-select v-model="oIsLimitFilm" placeholder="请选择">
+                    <el-select v-model="oIsLimitFilm" placeholder="请选择" @change="clearIsLimitFilm()">
                         <el-option
                                 v-for="item in canUse"
                                 :key="item.value"
@@ -692,7 +692,7 @@
                     <el-input style="width: 150px" v-model="oNumberFilm" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oCardType==1" label="卖品是否参与：" :label-width="formLabelWidth">
-                    <el-radio-group v-model="oIsMerchandiseJoin">
+                    <el-radio-group v-model="oIsMerchandiseJoin" @change="clearMerchandiseJoin()">
                         <el-radio label="1">参加</el-radio>
                         <el-radio label="0">不参加</el-radio>
                     </el-radio-group>
@@ -720,7 +720,7 @@
                     <el-input style="width: 150px" v-model="oDiscountMoneyMerchandise" autocomplete="off"></el-input>%
                 </el-form-item>
                 <el-form-item :required="true" v-if="oIsMerchandiseJoin==1&&oCardType==1"  label="选择商品：" :label-width="formLabelWidth">
-                    <el-radio-group v-model="oSelectMerchandiseType">
+                    <el-radio-group v-model="oSelectMerchandiseType" @change="clearMerchandiseType()">
                         <el-radio label="0">全部商品</el-radio>
                         <el-radio label="1">部分商品</el-radio>
                         <el-radio label="2">排除商品</el-radio>
@@ -752,7 +752,7 @@
                     </div>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oIsMerchandiseJoin==1&&oCardType==1&&(oReduceTypeMerchandise!=2)"  label="是否限量：" :label-width="formLabelWidth">
-                    <el-select v-model="oIsLimitMerchandise" placeholder="请选择">
+                    <el-select v-model="oIsLimitMerchandise" placeholder="请选择" @change="clearIsLimitMerchandise()">
                         <el-option
                                 v-for="item in canUse"
                                 :key="item.value"
@@ -1328,6 +1328,67 @@
             this.getMenu();
         },
         methods: {
+            clearIsLimitFilm(){
+                this.oForm.limitFilmUnit='';
+                this.oForm.numberFilm='';
+                this.oLimitFilmUnit='';
+                this.oNumberFilm='';
+            },
+            clearIsLimitEachFilm(){
+                this.oForm.eachFilmNumber='';
+                this.oEachFilmNumber='';
+            },
+            clearIsLimitMerchandise(){
+                this.oForm.limitMerchandiseUnit='';
+                this.oForm.numberMerchandise='';
+                this.oLimitMerchandiseUnit='';
+                this.oNumberMerchandise='';
+            },
+            clearMerchandiseType(){
+                this.oSelectedSell=[]
+            },
+            clearFilmJoin(){
+                this.oForm.filmSimpleDesc='';
+                this.oForm.selectHallType='';
+                this.clearScreenCode()
+                this.oForm.selectFilmFormatType='';
+                this.clearFilmFormatCode()
+                this.oForm.selectFilmType='';
+                this.clearSelectedSell()
+                this.oForm.reduceTypeFilm='';
+                this.clearDiscountMoneyFilm()
+                this.oForm.isLimitEachFilm='';
+                this.oForm.eachFilmNumber='';
+                this.oForm.isLimitFilm='';
+                this.oForm.limitFilmUnit='';
+                this.oForm.numberFilm='';
+                this.oFilmSimpleDesc='';
+                this.oSelectHallType='';
+                this.oSelectFilmFormatType='';
+                this.oSelectFilmType='';
+                this.oReduceTypeFilm='';
+                this.oIsLimitEachFilm='';
+                this.oEachFilmNumber='';
+                this.oIsLimitFilm='';
+                this.oLimitFilmUnit='';
+                this.oNumberFilm='';
+            },
+            clearMerchandiseJoin(){
+                this.clearDiscountMoneyMerchandise()
+                this.oForm.merchandiseSimpleDesc='';
+                this.oForm.reduceTypeMerchandise='';
+                this.oForm.selectMerchandiseType='';
+                this.oForm.isLimitMerchandise='';
+                this.oForm.limitMerchandiseUnit='';
+                this.oForm.numberMerchandise='';
+                this.oMerchandiseSimpleDesc='';
+                this.oReduceTypeMerchandise='';
+                this.oSelectMerchandiseType='';
+                this.oIsLimitMerchandise='';
+                this.oLimitMerchandiseUnit='';
+                this.oNumberMerchandise='';
+                this.oSelectedSell=[]
+            },
             clearDiscountMoneyMerchandise(){
                 this.oForm.discountMoneyMerchandise='';
                 this.oForm.achieveMoneyMerchandise='';
