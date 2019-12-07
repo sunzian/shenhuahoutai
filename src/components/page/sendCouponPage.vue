@@ -674,11 +674,6 @@ export default {
     },
     computed: {
         paramsData: function () {
-            let couponData = [];
-            for (let i = 0; i < this.couponList.length; i++) {
-                couponData.push(this.couponList[i].id + '=' + this.couponList[i].count);
-            }
-            this.excelCouponForm.couponInfo = couponData.join(',');
             let params = {
                 cinemaCode: this.query.cinemaCode,
                 effectiveTimeType: this.excelCouponForm.effectiveTimeType,
@@ -1283,7 +1278,12 @@ export default {
         sureCoupon() {
             let couponList = [];
             this.couponList = couponList.concat(this.selectCouponList)
-            this.editVisible = false
+            this.editVisible = false;
+            let couponData = [];
+            for (let i = 0; i < this.couponList.length; i++) {
+                couponData.push(this.couponList[i].id + '=' + this.couponList[i].count);
+            }
+            this.excelCouponForm.couponInfo = couponData.join(',');
         },
 
         getFilmId(row) {
