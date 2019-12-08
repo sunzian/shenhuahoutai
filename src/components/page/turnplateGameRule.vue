@@ -114,10 +114,10 @@
         <div class="container" v-if="addShow">
             <div class="handle-box">
                 <el-button
-                        type="primary"
-                        @click="back"
-                        icon="el-icon-circle-plus-outline"
-                        style="float: right"
+                    type="primary"
+                    @click="back"
+                    icon="el-icon-circle-plus-outline"
+                    style="float: right"
                 >返回影院列表</el-button>
             </div>
             <el-form ref="form" :model="oForm">
@@ -128,81 +128,97 @@
                     <el-popover placement="right" title trigger="hover">
                         <img style="width: 400px" :src="this.form.imageUrl" />
                         <img
-                                slot="reference"
-                                :src="this.form.imageUrl"
-                                :alt="this.form.imageUrl"
-                                style="max-height: 50px;max-width: 130px"
+                            slot="reference"
+                            :src="this.form.imageUrl"
+                            :alt="this.form.imageUrl"
+                            style="max-height: 50px;max-width: 130px"
                         />
                     </el-popover>
                     <el-upload
-                            :before-upload="beforeUpload"
-                            :data="type"
-                            class="upload-demo"
-                            ref="upload"
-                            drag
-                            action="/api/upload/uploadImage"
-                            :on-success="unSuccess"
-                            multiple
+                        :before-upload="beforeUpload"
+                        :data="type"
+                        class="upload-demo"
+                        ref="upload"
+                        drag
+                        action="/api/upload/uploadImage"
+                        :on-success="unSuccess"
+                        multiple
                     >
                         <i class="el-icon-upload"></i>
                         <div class="el-upload__text">
                             将文件拖到此处，或
                             <em>点击上传</em>
                         </div>
-                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过200kb  建议尺寸120*120或按比例上传</div>
+                        <div
+                            class="el-upload__tip"
+                            slot="tip"
+                        >只能上传jpg/png文件，且不超过200kb 建议尺寸120*120或按比例上传</div>
                     </el-upload>
                 </el-form-item>
                 <el-form-item :required="true" label="活动开始时间" :label-width="formLabelWidth">
                     <el-date-picker
-                            style="width:250px"
-                            v-model="oForm.startDate"
-                            type="datetime"
-                            value-format="yyyy-MM-dd HH:mm:ss"
-                            format="yyyy-MM-dd HH:mm:ss"
-                            placeholder="选择日期时间"
+                        style="width:250px"
+                        v-model="oForm.startDate"
+                        type="datetime"
+                        value-format="yyyy-MM-dd HH:mm:ss"
+                        format="yyyy-MM-dd HH:mm:ss"
+                        placeholder="选择日期时间"
                     ></el-date-picker>
                 </el-form-item>
                 <el-form-item :required="true" label="活动结束时间" :label-width="formLabelWidth">
                     <el-date-picker
-                            style="width:250px"
-                            v-model="oForm.endDate"
-                            type="datetime"
-                            value-format="yyyy-MM-dd HH:mm:ss"
-                            format="yyyy-MM-dd HH:mm:ss"
-                            placeholder="选择日期时间"
+                        style="width:250px"
+                        v-model="oForm.endDate"
+                        type="datetime"
+                        value-format="yyyy-MM-dd HH:mm:ss"
+                        format="yyyy-MM-dd HH:mm:ss"
+                        placeholder="选择日期时间"
                     ></el-date-picker>
                 </el-form-item>
                 <el-form-item :required="true" label="消耗金币" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="oForm.consumeGold" autocomplete="off"></el-input>
+                    <el-input
+                         style="width: 250px"
+                         v-model="oForm.consumeGold" 
+                         autocomplete="off"
+                         type="number"
+                         onkeyup="this.value=this.value.replace(/\D/g,'')"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item label="抽奖规则说明" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" type="textarea" show-word-limit
-                              maxlength="300" v-model="oForm.gameRule" autocomplete="off"></el-input>
+                    <el-input
+                        style="width: 250px;"
+                        type="textarea"
+                        show-word-limit
+                        :rows="4"
+                        maxlength="300"
+                        v-model="oForm.gameRule"
+                        autocomplete="off"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="状态" :label-width="formLabelWidth">
                     <el-select v-model="oForm.status" placeholder="请选择">
                         <el-option
-                                v-for="item in options"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
+                            v-for="item in options"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value"
                         ></el-option>
                     </el-select>
                 </el-form-item>
                 <el-button
-                        style="margin-top:-35px;float: right"
-                        type="primary"
-                        @click="changePrize"
+                    style="margin-top:-35px;float: right"
+                    type="primary"
+                    @click="changePrize"
                 >添加奖项</el-button>
             </el-form>
             <el-table
-                    v-if="prizeInfoList.length!=0"
-                    :data="prizeInfoList"
-                    border
-                    class="table"
-                    ref="multipleTable"
-                    header-cell-class-name="table-header"
-                    @selection-change="handleSelectionChange"
+                v-if="prizeInfoList.length!=0"
+                :data="prizeInfoList"
+                border
+                class="table"
+                ref="multipleTable"
+                header-cell-class-name="table-header"
+                @selection-change="handleSelectionChange"
             >
                 <el-table-column prop="name" label="奖品等级" width="100">
                     <template slot-scope="scope">{{scope.row.prizeLevel}}</template>
@@ -215,10 +231,10 @@
                         <el-popover placement="right" title trigger="hover">
                             <img style="width: 400px" :src="scope.row.prizePicture" />
                             <img
-                                    slot="reference"
-                                    :src="scope.row.prizePicture"
-                                    :alt="scope.row.prizePicture"
-                                    style="max-height: 50px;max-width: 130px"
+                                slot="reference"
+                                :src="scope.row.prizePicture"
+                                :alt="scope.row.prizePicture"
+                                style="max-height: 50px;max-width: 130px"
                             />
                         </el-popover>
                     </template>
@@ -244,15 +260,15 @@
                 <el-table-column label="操作" width="160" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-button
-                                type="text"
-                                icon="el-icon-edit"
-                                @click="prizeModify(scope.row,scope.$index)"
+                            type="text"
+                            icon="el-icon-edit"
+                            @click="prizeModify(scope.row,scope.$index)"
                         >修改</el-button>
                         <el-button
-                                type="text"
-                                icon="el-icon-delete"
-                                @click="deletePrize(scope.$index)"
-                                class="red"
+                            type="text"
+                            icon="el-icon-delete"
+                            @click="deletePrize(scope.$index)"
+                            class="red"
                         >删除</el-button>
                     </template>
                 </el-table-column>
@@ -260,9 +276,9 @@
             <span slot="footer" class="dialog-footer" style="margin-left: 1040px">
                 <!--<el-button @click="addShow = false,showSell=true">取 消</el-button>-->
                 <el-button
-                        style="margin-top: 10px;float: right"
-                        type="primary"
-                        @click="exAddChanger"
+                    style="margin-top: 10px;float: right"
+                    type="primary"
+                    @click="exAddChanger"
                 >确 定</el-button>
             </span>
         </div>
@@ -270,10 +286,10 @@
         <div class="container" v-if="changeShow">
             <div class="handle-box">
                 <el-button
-                        type="primary"
-                        @click="back"
-                        icon="el-icon-circle-plus-outline"
-                        style="float: right"
+                    type="primary"
+                    @click="back"
+                    icon="el-icon-circle-plus-outline"
+                    style="float: right"
                 >返回影院列表</el-button>
             </div>
             <el-form ref="form" :model="form">
@@ -284,64 +300,73 @@
                     <el-popover placement="right" title trigger="hover">
                         <img style="width: 400px" :src="this.form.imageUrl" />
                         <img
-                                slot="reference"
-                                :src="this.form.imageUrl"
-                                :alt="this.form.imageUrl"
-                                style="max-height: 50px;max-width: 130px"
+                            slot="reference"
+                            :src="this.form.imageUrl"
+                            :alt="this.form.imageUrl"
+                            style="max-height: 50px;max-width: 130px"
                         />
                     </el-popover>
                     <el-upload
-                            :before-upload="beforeUpload"
-                            :data="type"
-                            class="upload-demo"
-                            ref="download"
-                            drag
-                            action="/api/upload/uploadImage"
-                            :on-success="unSuccess"
-                            multiple
+                        :before-upload="beforeUpload"
+                        :data="type"
+                        class="upload-demo"
+                        ref="download"
+                        drag
+                        action="/api/upload/uploadImage"
+                        :on-success="unSuccess"
+                        multiple
                     >
                         <i class="el-icon-upload"></i>
                         <div class="el-upload__text">
                             将文件拖到此处，或
                             <em>点击上传</em>
                         </div>
-                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过200kb 建议尺寸375*600或按比例上传</div>
+                        <div
+                            class="el-upload__tip"
+                            slot="tip"
+                        >只能上传jpg/png文件，且不超过200kb 建议尺寸375*600或按比例上传</div>
                     </el-upload>
                 </el-form-item>
                 <el-form-item :required="true" label="活动开始时间" :label-width="formLabelWidth">
                     <el-date-picker
-                            style="width:250px"
-                            v-model="form.startDate"
-                            type="datetime"
-                            value-format="yyyy-MM-dd HH:mm:ss"
-                            format="yyyy-MM-dd HH:mm:ss"
-                            placeholder="选择日期时间"
+                        style="width:250px"
+                        v-model="form.startDate"
+                        type="datetime"
+                        value-format="yyyy-MM-dd HH:mm:ss"
+                        format="yyyy-MM-dd HH:mm:ss"
+                        placeholder="选择日期时间"
                     ></el-date-picker>
                 </el-form-item>
                 <el-form-item :required="true" label="活动结束时间" :label-width="formLabelWidth">
                     <el-date-picker
-                            style="width:250px"
-                            v-model="form.endDate"
-                            type="datetime"
-                            value-format="yyyy-MM-dd HH:mm:ss"
-                            format="yyyy-MM-dd HH:mm:ss"
-                            placeholder="选择日期时间"
+                        style="width:250px"
+                        v-model="form.endDate"
+                        type="datetime"
+                        value-format="yyyy-MM-dd HH:mm:ss"
+                        format="yyyy-MM-dd HH:mm:ss"
+                        placeholder="选择日期时间"
                     ></el-date-picker>
                 </el-form-item>
                 <el-form-item :required="true" label="消耗金币" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="form.consumeGold" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="抽奖规则说明" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" type="textarea" show-word-limit
-                              maxlength="300" v-model="form.gameRule" autocomplete="off"></el-input>
+                    <el-input
+                        style="width: 250px"
+                        type="textarea"
+                        show-word-limit
+                        maxlength="300"
+                        v-model="form.gameRule"
+                        autocomplete="off"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="状态" :label-width="formLabelWidth">
                     <el-select v-model="form.status" placeholder="请选择">
                         <el-option
-                                v-for="item in options"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
+                            v-for="item in options"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value"
                         ></el-option>
                     </el-select>
                 </el-form-item>
@@ -350,14 +375,14 @@
                 <!--</el-form-item>-->
             </el-form>
             <el-table
-                    style="margin-top: 20px"
-                    v-if="prizeInfoList.length!=0"
-                    :data="prizeInfoList"
-                    border
-                    class="table"
-                    ref="multipleTable"
-                    header-cell-class-name="table-header"
-                    @selection-change="handleSelectionChange"
+                style="margin-top: 20px"
+                v-if="prizeInfoList.length!=0"
+                :data="prizeInfoList"
+                border
+                class="table"
+                ref="multipleTable"
+                header-cell-class-name="table-header"
+                @selection-change="handleSelectionChange"
             >
                 <el-table-column prop="name" label="奖品等级" width="100">
                     <template slot-scope="scope">{{scope.row.prizeLevel}}</template>
@@ -370,10 +395,10 @@
                         <el-popover placement="right" title trigger="hover">
                             <img style="width: 400px" :src="scope.row.prizePicture" />
                             <img
-                                    slot="reference"
-                                    :src="scope.row.prizePicture"
-                                    :alt="scope.row.prizePicture"
-                                    style="max-height: 50px;max-width: 130px"
+                                slot="reference"
+                                :src="scope.row.prizePicture"
+                                :alt="scope.row.prizePicture"
+                                style="max-height: 50px;max-width: 130px"
                             />
                         </el-popover>
                     </template>
@@ -399,24 +424,24 @@
                 <el-table-column label="操作" width="160" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-button
-                                type="text"
-                                icon="el-icon-edit"
-                                @click="prizeModify(scope.row,scope.$index)"
+                            type="text"
+                            icon="el-icon-edit"
+                            @click="prizeModify(scope.row,scope.$index)"
                         >修改</el-button>
                         <el-button
-                                type="text"
-                                icon="el-icon-delete"
-                                @click="deletePrize(scope.$index)"
-                                class="red"
+                            type="text"
+                            icon="el-icon-delete"
+                            @click="deletePrize(scope.$index)"
+                            class="red"
                         >删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
             <span slot="footer" class="dialog-footer" style="margin-left: 1040px">
                 <el-button
-                        style="margin-top: 10px;float: right"
-                        type="primary"
-                        @click="exChangeChanger"
+                    style="margin-top: 10px;float: right"
+                    type="primary"
+                    @click="exChangeChanger"
                 >确 定</el-button>
             </span>
         </div>
@@ -424,7 +449,13 @@
         <el-dialog :close-on-click-modal="false" title="新增" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
                 <el-form-item :required="true" label="奖品等级" :label-width="formLabelWidth">
-                    <el-input style="width: 250px"  type="number" @blur="match" v-model="form.prizeLevel" autocomplete="off"></el-input>
+                    <el-input
+                        style="width: 250px"
+                        type="number"
+                        @blur="match"
+                        v-model="form.prizeLevel"
+                        autocomplete="off"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="奖品名称" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="form.prizeName" autocomplete="off"></el-input>
@@ -445,7 +476,10 @@
                             将文件拖到此处，或
                             <em>点击上传</em>
                         </div>
-                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过100kb 建议尺寸120*120或按比例上传</div>
+                        <div
+                            class="el-upload__tip"
+                            slot="tip"
+                        >只能上传jpg/png文件，且不超过100kb 建议尺寸120*120或按比例上传</div>
                     </el-upload>
                 </el-form-item>
                 <el-form-item :required="true" label="奖品个数" :label-width="formLabelWidth">
@@ -460,27 +494,37 @@
                 <el-form-item :required="true" label="奖品类型" :label-width="formLabelWidth">
                     <el-select v-model="form.prizeType" placeholder="请选择类型">
                         <el-option
-                                v-for="item in prizeType"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
+                            v-for="item in prizeType"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value"
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item :required="true" v-if="form.prizeType==1" label="选择优惠券" :label-width="formLabelWidth">
+                <el-form-item
+                    :required="true"
+                    v-if="form.prizeType==1"
+                    label="选择优惠券"
+                    :label-width="formLabelWidth"
+                >
                     <el-button type="primary" @click="getAllCoupon">选择优惠券</el-button>
                 </el-form-item>
-                <el-form-item :required="true" v-if="form.prizeType==1" label="所选优惠券：" :label-width="formLabelWidth">
+                <el-form-item
+                    :required="true"
+                    v-if="form.prizeType==1"
+                    label="所选优惠券："
+                    :label-width="formLabelWidth"
+                >
                     <el-input
-                            style="width: 150px"
-                            v-model="couponInfo.couponName"
-                            autocomplete="off"
-                            disabled
+                        style="width: 150px"
+                        v-model="couponInfo.couponName"
+                        autocomplete="off"
+                        disabled
                     ></el-input>&nbsp;&nbsp;&nbsp;&nbsp;
                     <span
-                            v-if="couponInfo.couponName"
-                            style="color:red;cursor: pointer;"
-                            @click="deletCoupon"
+                        v-if="couponInfo.couponName"
+                        style="color:red;cursor: pointer;"
+                        @click="deletCoupon"
                     >删除</span>
                 </el-form-item>
             </el-form>
@@ -493,7 +537,14 @@
         <el-dialog :close-on-click-modal="false" title="编辑" :visible.sync="showModify">
             <el-form ref="form" :model="pForm">
                 <el-form-item label="奖品等级" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" :disabled="true" type="number" @blur="oMatch" v-model="pForm.prizeLevel" autocomplete="off"></el-input>
+                    <el-input
+                        style="width: 250px"
+                        :disabled="true"
+                        type="number"
+                        @blur="oMatch"
+                        v-model="pForm.prizeLevel"
+                        autocomplete="off"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="奖品名称" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="pForm.prizeName" autocomplete="off"></el-input>
@@ -502,10 +553,10 @@
                     <el-popover placement="right" title trigger="hover">
                         <img style="width: 400px" :src="pForm.prizePicture" />
                         <img
-                                slot="reference"
-                                :src="pForm.prizePicture"
-                                :alt="pForm.prizePicture"
-                                style="max-height: 50px;max-width: 130px"
+                            slot="reference"
+                            :src="pForm.prizePicture"
+                            :alt="pForm.prizePicture"
+                            style="max-height: 50px;max-width: 130px"
                         />
                     </el-popover>
                     <el-upload
@@ -523,7 +574,10 @@
                             将文件拖到此处，或
                             <em>点击上传</em>
                         </div>
-                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过100kb 建议尺寸120*120或按比例上传</div>
+                        <div
+                            class="el-upload__tip"
+                            slot="tip"
+                        >只能上传jpg/png文件，且不超过100kb 建议尺寸120*120或按比例上传</div>
                     </el-upload>
                 </el-form-item>
                 <el-form-item :required="true" label="奖品个数" :label-width="formLabelWidth">
@@ -538,32 +592,37 @@
                 <el-form-item :required="true" label="奖品类型" :label-width="formLabelWidth">
                     <el-select v-model="pForm.prizeType" placeholder="请选择类型">
                         <el-option
-                                v-for="item in prizeType"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
+                            v-for="item in prizeType"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value"
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item :required="true" v-if="pForm.prizeType==1" label="选择优惠券" :label-width="formLabelWidth">
+                <el-form-item
+                    :required="true"
+                    v-if="pForm.prizeType==1"
+                    label="选择优惠券"
+                    :label-width="formLabelWidth"
+                >
                     <el-button type="primary" @click="getAllCoupon">选择优惠券</el-button>
                 </el-form-item>
                 <el-form-item
-                        v-if="pForm.prizeType==1"
-                        label="所选优惠券："
-                        :label-width="formLabelWidth"
-                        :required="true"
+                    v-if="pForm.prizeType==1"
+                    label="所选优惠券："
+                    :label-width="formLabelWidth"
+                    :required="true"
                 >
                     <el-input
-                            style="width: 150px"
-                            v-model="couponInfo.couponName"
-                            autocomplete="off"
-                            disabled
+                        style="width: 150px"
+                        v-model="couponInfo.couponName"
+                        autocomplete="off"
+                        disabled
                     ></el-input>&nbsp;&nbsp;&nbsp;&nbsp;
                     <span
-                            v-if="couponInfo.couponName"
-                            style="color:red;cursor: pointer;"
-                            @click="deletCoupon"
+                        v-if="couponInfo.couponName"
+                        style="color:red;cursor: pointer;"
+                        @click="deletCoupon"
                     >删除</span>
                 </el-form-item>
             </el-form>
@@ -657,8 +716,8 @@ export default {
                 }
             ],
             couponInfo: {
-                couponName:'',
-                id:'',
+                couponName: '',
+                id: ''
             },
             prizeInfoList: []
         };
@@ -670,17 +729,17 @@ export default {
         this.getMenu();
     },
     methods: {
-        match(){
-            if(this.form.prizeLevel<1||this.form.prizeLevel>7){
+        match() {
+            if (this.form.prizeLevel < 1 || this.form.prizeLevel > 7) {
                 this.message = '请输入1-7的数字';
-                this.form.prizeLevel='';
+                this.form.prizeLevel = '';
                 this.open();
             }
         },
-        oMatch(){
-            if(this.pForm.prizeLevel<1||this.pForm.prizeLevel>7){
+        oMatch() {
+            if (this.pForm.prizeLevel < 1 || this.pForm.prizeLevel > 7) {
                 this.message = '请输入1-7的数字';
-                this.pForm.prizeLevel='';
+                this.pForm.prizeLevel = '';
                 this.open();
             }
         },
@@ -691,9 +750,9 @@ export default {
             if (!isLt200Kb) {
                 this.message = '图片大小不能超过200kb！';
                 this.open();
-                return false
+                return false;
             }
-            return isLt200Kb
+            return isLt200Kb;
         },
         beforeUploadPrize(file) {
             //上传之前
@@ -702,9 +761,9 @@ export default {
             if (!isLt100Kb) {
                 this.message = '图片大小不能超过100kb！';
                 this.open();
-                return false
+                return false;
             }
-            return isLt100Kb
+            return isLt100Kb;
         },
         unSuccess(data) {
             if (data.status == '-1') {
@@ -722,8 +781,8 @@ export default {
         },
         prizeModify(row, index) {
             console.log(row);
-            this.couponInfo.couponName=row.couponName;
-            this.couponInfo.id=row.couponId;
+            this.couponInfo.couponName = row.couponName;
+            this.couponInfo.id = row.couponId;
             this.oIndex = index;
             this.pForm = row;
             for (let x in this.prizeType) {
@@ -817,13 +876,20 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            if(!this.oForm.gameName||!this.form.imageUrl||!this.oForm.startDate||!this.oForm.endDate||!this.oForm.consumeGold||!this.oForm.status){
+            if (
+                !this.oForm.gameName ||
+                !this.form.imageUrl ||
+                !this.oForm.startDate ||
+                !this.oForm.endDate ||
+                !this.oForm.consumeGold ||
+                !this.oForm.status
+            ) {
                 this.message = '必填项不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
             }
-            if(this.prizeInfoList.length>7||this.prizeInfoList.length<1){
+            if (this.prizeInfoList.length > 7 || this.prizeInfoList.length < 1) {
                 this.message = '奖项数量应设置1-7个！';
                 this.open();
                 loading.close();
@@ -881,13 +947,26 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            if(!this.form.gameName||!this.form.imageUrl||!this.form.startDate||!this.form.endDate||!this.form.consumeGold||!this.form.status){
+            if (
+                !this.form.gameName ||
+                !this.form.imageUrl ||
+                !this.form.startDate ||
+                !this.form.endDate ||
+                !this.form.consumeGold ||
+                !this.form.status
+            ) {
                 this.message = '必填项不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
             }
-            if(this.prizeInfoList.length>7||this.prizeInfoList.length<1){
+            if (this.form.startDate == this.form.endDate) {
+                this.message = '活动开始时间不能等于活动结束时间！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if (this.prizeInfoList.length > 7 || this.prizeInfoList.length < 1) {
                 this.message = '奖项数量应设置1-7个！';
                 this.open();
                 loading.close();
@@ -938,23 +1017,28 @@ export default {
         },
         exChanger() {
             // 新增奖项操作
-            if(this.form.percent>1||this.form.percent<0){
+            if (this.form.percent > 1 || this.form.percent < 0) {
                 this.message = '只能输入0-1的小数';
                 this.open();
-                return
-            }
-            if(!this.form.prizeLevel||!this.form.prizeName||!this.form.image_url||!this.form.prizeNumber
-                ||!this.form.percent||!this.form.expireDay||!this.form.prizeType){
-                this.message = '必填项不能为空，请检查！';
-                this.open();
-                loading.close();
                 return;
             }
-            if(this.form.prizeType==1) {
+            if (
+                !this.form.prizeLevel ||
+                !this.form.prizeName ||
+                !this.form.image_url ||
+                !this.form.prizeNumber ||
+                !this.form.percent ||
+                !this.form.expireDay ||
+                !this.form.prizeType
+            ) {
+                this.message = '必填项不能为空，请检查！';
+                this.open();
+                return;
+            }
+            if (this.form.prizeType == 1) {
                 if (!this.couponInfo.couponName) {
                     this.message = '必填项不能为空，请检查！';
                     this.open();
-                    loading.close();
                     return;
                 }
             }
@@ -983,23 +1067,28 @@ export default {
         },
         sureChanger() {
             // 编辑奖项操作
-            if(this.pForm.percent>1||this.pForm.percent<0){
+            console.log(this.pForm);
+            if (this.pForm.percent > 1 || this.pForm.percent < 0) {
                 this.message = '只能输入0-1的小数';
                 this.open();
-                return
-            }
-            if(!this.pForm.prizeName||!this.form.image_url||!this.pForm.prizeNumber
-                ||!this.pForm.percent||!this.pForm.expireDay||!this.pForm.prizeType){
-                this.message = '必填项不能为空，请检查！';
-                this.open();
-                loading.close();
                 return;
             }
-            if(this.pForm.prizeType==1) {
+            if (
+                !this.pForm.prizeName ||
+                !this.pForm.prizePicture ||
+                !this.pForm.prizeNumber ||
+                !this.pForm.percent ||
+                !this.pForm.expireDay ||
+                !this.pForm.prizeType
+            ) {
+                this.message = '必填项不能为空，请检查！';
+                this.open();
+                return;
+            }
+            if (this.pForm.prizeType == 1) {
                 if (!this.couponInfo.couponName) {
                     this.message = '必填项不能为空，请检查！';
                     this.open();
-                    loading.close();
                     return;
                 }
             }
@@ -1013,8 +1102,8 @@ export default {
                 expireDay: this.pForm.expireDay,
                 couponId: this.couponInfo.id,
                 couponName: this.couponInfo.couponName,
-                hasTheNumber:  this.prizeInfoList[this.oIndex].hasTheNumber,
-                id:  this.prizeInfoList[this.oIndex].id,
+                hasTheNumber: this.prizeInfoList[this.oIndex].hasTheNumber,
+                id: this.prizeInfoList[this.oIndex].id
             };
             this.prizeInfoList[this.oIndex] = onePrize;
             this.pForm.prizeLevel = '';
@@ -1234,14 +1323,14 @@ export default {
 </script>
 
 <style>
-    input::-webkit-outer-spin-button,
-    input::-webkit-inner-spin-button {
-        -webkit-appearance: none;
-    }
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
 
-    input[type='number'] {
-        -moz-appearance: textfield;
-    }
+input[type='number'] {
+    -moz-appearance: textfield;
+}
 </style>
 
 <style scoped>

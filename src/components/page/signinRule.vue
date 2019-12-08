@@ -79,6 +79,8 @@
                             style="width: 250px"
                             v-model="oGoldAward"
                             autocomplete="off"
+                            type="number"
+                            onkeyup="this.value=this.value.replace(/\D/g,'')"
                     ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oContinuousDays==7" label="是否设置连续7天额外奖励" :label-width="formLabelWidth">
@@ -436,7 +438,7 @@
                     target: document.querySelector('.div1')
                 });
                 if(!this.form1.oSignTips){
-                    this.message = '必填项不能为空，请检查！';
+                    this.message = '签到规则说明不能为空！';
                     this.open();
                     loading.close();
                     return;

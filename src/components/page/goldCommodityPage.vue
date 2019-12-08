@@ -914,8 +914,8 @@
                     <el-table-column label="优惠券详情">
                         <template slot-scope="scope">
                             <span
-                                v-for="item in scope.row.couponList"
-                                :key="item"
+                                v-for="(item, index) in scope.row.couponList"
+                                :key="index"
                             >{{item.couponName}}x{{item.number}}&nbsp;&nbsp;&nbsp;&nbsp;</span>
                         </template>
                     </el-table-column>
@@ -1171,6 +1171,8 @@ export default {
                 groupName = '';
             }
             let jsonArr = [];
+            console.log(this.checkedCities)
+            console.log(this.oCheckedCities)
             jsonArr.push({ key: 'cinemaCodes', value: this.checkedCities[0] });
             jsonArr.push({ key: 'groupName', value: groupName });
             jsonArr.push({ key: 'status', value: 1 });
