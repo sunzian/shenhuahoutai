@@ -802,9 +802,15 @@ export default {
                     if (!title) {
                         title = '';
                     }
+                    if (this.oForm.cinemaCodes.length == 0) {
+                        this.message = '请选择影院!';
+                        this.open();
+                        return;
+                    }
+                    let cinemaCodes = this.oForm.cinemaCodes.join(",")
                     let jsonArr = [];
                     jsonArr.push({ key: 'title', value: title });
-                    jsonArr.push({ key: 'cinemaCodes', value: this.oForm.cinemaCodes });
+                    jsonArr.push({ key: 'cinemaCodes', value: cinemaCodes });
                     jsonArr.push({ key: 'pageNo', value: this.query.aPageNo });
                     jsonArr.push({ key: 'pageSize', value: this.query.aPageSize });
                     let sign = md5(preSign(jsonArr));
@@ -847,9 +853,15 @@ export default {
                     if (!filmName) {
                         filmName = '';
                     }
+                    if (this.oForm.cinemaCodes.length == 0) {
+                        this.message = '请选择影院!';
+                        this.open();
+                        return;
+                    }
+                    let cinemaCodes = this.oForm.cinemaCodes.join(",")
                     let jsonArr = [];
                     jsonArr.push({ key: 'filmName', value: filmName });
-                    jsonArr.push({ key: 'cinemaCodes', value: this.oForm.cinemaCodes });
+                    jsonArr.push({ key: 'cinemaCodes', value: cinemaCodes });
                     jsonArr.push({ key: 'pageNo', value: this.query.aPageNo });
                     jsonArr.push({ key: 'pageSize', value: this.query.aPageSize });
                     let sign = md5(preSign(jsonArr));
@@ -892,9 +904,15 @@ export default {
                     if (!name) {
                         name = '';
                     }
+                    if (this.oForm.cinemaCodes.length == 0) {
+                        this.message = '请选择影院!';
+                        this.open();
+                        return;
+                    }
+                    let cinemaCodes = this.oForm.cinemaCodes.join(",")
                     let jsonArr = [];
                     jsonArr.push({ key: 'name', value: name });
-                    jsonArr.push({ key: 'cinemaCodes', value: this.oForm.cinemaCodes });
+                    jsonArr.push({ key: 'cinemaCodes', value: cinemaCodes });
                     jsonArr.push({ key: 'pageNo', value: this.query.aPageNo });
                     jsonArr.push({ key: 'pageSize', value: this.query.aPageSize });
                     let sign = md5(preSign(jsonArr));
@@ -950,9 +968,15 @@ export default {
                     if (!title) {
                         title = '';
                     }
+                    if (this.form.cinemaCodes.length == 0) {
+                        this.message = '请选择影院!';
+                        this.open();
+                        return;
+                    }
+                    let cinemaCodes = this.form.cinemaCodes.join(",")
                     let jsonArr = [];
                     jsonArr.push({ key: 'title', value: title });
-                    jsonArr.push({ key: 'cinemaCode', value: this.form.cinemaCodes });
+                    jsonArr.push({ key: 'cinemaCode', value: cinemaCodes });
                     jsonArr.push({ key: 'pageNo', value: this.query.aPageNo });
                     jsonArr.push({ key: 'pageSize', value: this.query.aPageSize });
                     let sign = md5(preSign(jsonArr));
@@ -995,9 +1019,15 @@ export default {
                     if (!filmName) {
                         filmName = '';
                     }
+                    if (this.form.cinemaCodes.length == 0) {
+                        this.message = '请选择影院!';
+                        this.open();
+                        return;
+                    }
+                    let cinemaCodes = this.form.cinemaCodes.join(",")
                     let jsonArr = [];
                     jsonArr.push({ key: 'filmName', value: filmName });
-                    jsonArr.push({ key: 'cinemaCode', value: this.form.cinemaCodes });
+                    jsonArr.push({ key: 'cinemaCode', value: cinemaCodes });
                     jsonArr.push({ key: 'pageNo', value: this.query.aPageNo });
                     jsonArr.push({ key: 'pageSize', value: this.query.aPageSize });
                     let sign = md5(preSign(jsonArr));
@@ -1040,9 +1070,15 @@ export default {
                     if (!name) {
                         name = '';
                     }
+                    if (this.form.cinemaCodes.length == 0) {
+                        this.message = '请选择影院!';
+                        this.open();
+                        return;
+                    }
+                    let cinemaCodes = this.form.cinemaCodes.join(",")
                     let jsonArr = [];
                     jsonArr.push({ key: 'name', value: name });
-                    jsonArr.push({ key: 'cinemaCode', value: this.form.cinemaCodes });
+                    jsonArr.push({ key: 'cinemaCode', value: cinemaCodes });
                     jsonArr.push({ key: 'pageNo', value: this.query.aPageNo });
                     jsonArr.push({ key: 'pageSize', value: this.query.aPageSize });
                     let sign = md5(preSign(jsonArr));
