@@ -241,14 +241,16 @@
             </el-table>
             <div class="pagination">
                 <el-pagination
-                    background
-                    layout="total, prev, pager, next"
-                    :current-page="query.pageNo"
-                    :page-size="query.pageSize"
-                    :total="query.totalCount"
-                    @current-change="currentChange"
-                    @prev-click="prev"
-                    @next-click="next"
+                        background
+                        @size-change="handleSizeChange"
+                        layout="total, sizes, prev, pager, next, jumper"
+                        :current-page="query.pageNo"
+                        :page-sizes="[10, 15, 20, 30]"
+                        :page-size="query.pageSize"
+                        :total="query.totalCount"
+                        @current-change="currentChange"
+                        @prev-click="prev"
+                        @next-click="next"
                 ></el-pagination>
             </div>
         </div>
@@ -424,14 +426,16 @@
                 </el-table>
                 <div class="pagination">
                     <el-pagination
-                        background
-                        layout="total, prev, pager, next"
-                        :current-page="query.couponPageNo"
-                        :page-size="query.couponPageSize"
-                        :total="query.couponTotalCount"
-                        @current-change="couponCurrentChange"
-                        @prev-click="couponPrev"
-                        @next-click="couponNext"
+                            background
+                            @size-change="couponHandleSizeChange"
+                            layout="total, sizes, prev, pager, next, jumper"
+                            :current-page="query.couponPageNo"
+                            :page-sizes="[10, 15, 20, 30]"
+                            :page-size="query.couponPageSize"
+                            :total="query.couponTotalCount"
+                            @current-change="couponCurrentChange"
+                            @prev-click="couponPrev"
+                            @next-click="couponNext"
                     ></el-pagination>
                 </div>
             </div>
@@ -474,14 +478,16 @@
                 </el-table>
                 <div class="pagination">
                     <el-pagination
-                        background
-                        layout="total, prev, pager, next"
-                        :current-page="query.filmPageNo"
-                        :page-size="query.filmPageSize"
-                        :total="query.filmTotalCount"
-                        @current-change="filmCurrentChange"
-                        @prev-click="filmPrev"
-                        @next-click="filmNext"
+                            background
+                            @size-change="filmHandleSizeChange"
+                            layout="total, sizes, prev, pager, next, jumper"
+                            :current-page="query.filmPageNo"
+                            :page-sizes="[10, 15, 20, 30]"
+                            :page-size="query.filmPageSize"
+                            :total="query.filmTotalCount"
+                            @current-change="filmCurrentChange"
+                            @prev-click="filmPrev"
+                            @next-click="filmNext"
                     ></el-pagination>
                 </div>
             </div>
@@ -1292,13 +1298,15 @@ export default {
         getcouponId(row) {
             return row.id;
         },
-
         currentChange(val) {
             //点击选择具体页数
             this.query.pageNo = val;
             this.Search();
         },
-
+        handleSizeChange(val) {
+            this.query.pageSize=val;
+            this.Search()
+        },
         prev() {
             //分页按钮上一页
             this.query.pageNo--;
@@ -1363,6 +1371,10 @@ export default {
             this.query.filmPageNo = val;
             this.chooseFilm();
         },
+        filmHandleSizeChange(val) {
+            this.query.filmPageSize=val;
+            this.chooseFilm()
+        },
         filmPrev() {
             //分页按钮上一页
             this.query.filmPageNo--;
@@ -1378,6 +1390,10 @@ export default {
             //点击选择具体页数
             this.query.couponPageNo = val;
             this.getAllCoupon();
+        },
+        couponHandleSizeChange(val) {
+            this.query.couponPageSize=val;
+            this.getAllCoupon()
         },
         couponPrev() {
             //分页按钮上一页

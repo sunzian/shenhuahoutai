@@ -142,8 +142,10 @@
             <div class="pagination">
                 <el-pagination
                         background
-                        layout="total, prev, pager, next"
+                        @size-change="handleSizeChange"
+                        layout="total, sizes, prev, pager, next, jumper"
                         :current-page="query.pageNo"
+                        :page-sizes="[10, 15, 20, 30]"
                         :page-size="query.pageSize"
                         :total="query.totalCount"
                         @current-change="currentChange"
@@ -973,12 +975,14 @@
                 <div class="pagination">
                     <el-pagination
                             background
-                            layout="total, prev, pager, next"
+                            @size-change="aHandleSizeChange"
+                            layout="total, sizes, prev, pager, next, jumper"
                             :current-page="query.aPageNo"
+                            :page-sizes="[10, 15, 20, 30]"
                             :page-size="query.aPageSize"
                             :total="query.aTotalCount"
                             @current-change="aCurrentChange"
-                            @prev-click='aPrev'
+                            @prev-click="aPrev"
                             @next-click="aNext"
                     ></el-pagination>
                 </div>
@@ -1026,12 +1030,14 @@
                 <div class="pagination">
                     <el-pagination
                             background
-                            layout="total, prev, pager, next"
+                            @size-change="oHandleSizeChange"
+                            layout="total, sizes, prev, pager, next, jumper"
                             :current-page="query.oPageNo"
+                            :page-sizes="[10, 15, 20, 30]"
                             :page-size="query.oPageSize"
                             :total="query.oTotalCount"
                             @current-change="oCurrentChange"
-                            @prev-click='oPrev'
+                            @prev-click="oPrev"
                             @next-click="oNext"
                     ></el-pagination>
                 </div>
@@ -1076,8 +1082,10 @@
                 <div class="pagination">
                     <el-pagination
                             background
-                            layout="total, prev, pager, next"
+                            @size-change="bHandleSizeChange"
+                            layout="total, sizes, prev, pager, next, jumper"
                             :current-page="query.bPageNo"
+                            :page-sizes="[10, 15, 20, 30]"
                             :page-size="query.bPageSize"
                             :total="query.bTotalCount"
                             @current-change="bCurrentChange"
@@ -3233,6 +3241,10 @@
             handleSelectionChange(val) {
                 this.multipleSelection = val;
             },
+            handleSizeChange(val) {
+                this.query.pageSize=val;
+                this.getMenu()
+            },
             currentChange(val) {
                 //点击选择具体页数
                 this.query.pageNo = val;
@@ -3248,6 +3260,10 @@
                 this.query.pageNo++;
                 this.getMenu();
             },
+            oHandleSizeChange(val) {
+                this.query.oPageSize=val;
+                this.selectSell()
+            },
             oCurrentChange(val) {
                 //点击选择具体页数
                 this.query.oPageNo = val;
@@ -3262,6 +3278,10 @@
                 //分页按钮下一页
                 this.query.oPageNo++;
                 this.selectSell();
+            },
+            bHandleSizeChange(val) {
+                this.query.bPageSize=val;
+                this.changeCoupon()
             },
             bCurrentChange(val) {
                 //点击选择具体页数
@@ -3449,6 +3469,10 @@
                         }
                     )
                 }, 500);
+            },
+            aHandleSizeChange(val) {
+                this.query.aPageSize=val;
+                this.openNext()
             },
             //新增套餐选择卖品页面
             aCurrentChange(val){//点击选择具体页数
