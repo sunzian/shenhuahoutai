@@ -89,14 +89,14 @@
                 <el-table-column prop="sort" label="轮播图类别" width="180">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.category=='1'">卖品首页</el-tag>
-                        <el-tag v-if="scope.row.category=='2'">积分商城首页</el-tag>
+                        <el-tag v-if="scope.row.category=='2'">金币商场首页</el-tag>
                         <el-tag v-if="scope.row.category=='3'">个人中心首页</el-tag>
                         <el-tag v-if="scope.row.category=='4'">支付成功页</el-tag>
-                        <el-tag v-if="scope.row.category=='5'">放映厅首页</el-tag>
+                        <el-tag v-if="scope.row.category=='5'">游戏室首页</el-tag>
                         <el-tag v-if="scope.row.category=='6'">首页广告弹窗</el-tag>
                         <!--<el-tag v-if="scope.row.category=='7'">今日大牌</el-tag>-->
-                        <el-tag v-if="scope.row.category=='8'">签到送积分</el-tag>
-                        <el-tag v-if="scope.row.category=='9'">分享得金币</el-tag>
+                        <el-tag v-if="scope.row.category=='8'">签到送金币</el-tag>
+                        <el-tag v-if="scope.row.category=='9'">邀请好友首页</el-tag>
                         <el-tag v-if="scope.row.category=='10'">积分换金币</el-tag>
                     </template>
                 </el-table-column>

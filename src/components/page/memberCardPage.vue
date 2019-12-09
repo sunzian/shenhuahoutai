@@ -65,7 +65,6 @@
             <el-table
                 :data="tableData"
                 border
-                height="500px"
                 class="table"
                 ref="multipleTable"
                 header-cell-class-name="table-header"

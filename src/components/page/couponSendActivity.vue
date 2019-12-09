@@ -217,20 +217,24 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="发放后多少天之后开始生效：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="生效延迟天数：" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
                         v-model="oForm.validDay"
                         autocomplete="off"
+                        placeholder="自发放之日起计算"
                     ></el-input>
+                    <br>
+                    <span style="font-size:12px;">0：即日生效；1：隔天生效；以此类推</span>
                 </el-form-item>
-                <el-form-item :required="true" label="生效后有效期天数：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="有效期天数：" :label-width="formLabelWidth">
                     <el-input
                             style="width: 250px"
                             min="1"
                             v-model="oForm.overDays"
                             autocomplete="off"
+                            placeholder="自生效之日起计算"
                     ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="设置券包：" :label-width="formLabelWidth">
@@ -362,19 +366,23 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="发放后多少天之后开始生效：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="生效延迟天数：" :label-width="formLabelWidth">
                     <el-input
-                        style="width: 250px"
-                        min="1"
-                        v-model="form.validDay"
-                        autocomplete="off"
+                            style="width: 250px"
+                            min="1"
+                            v-model="form.validDay"
+                            autocomplete="off"
+                            placeholder="自发放之日起计算"
                     ></el-input>
+                    <br>
+                    <span style="font-size:12px;">0：即日生效；1：隔天生效；以此类推</span>
                 </el-form-item>
-                <el-form-item :required="true" label="生效后有效期天数：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="有效期天数：" :label-width="formLabelWidth">
                     <el-input
                             style="width: 250px"
                             v-model="form.overDays"
                             autocomplete="off"
+                            placeholder="自生效之日起计算"
                     ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="设置券包：" :label-width="formLabelWidth">

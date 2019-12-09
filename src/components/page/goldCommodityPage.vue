@@ -3,7 +3,7 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
-                    <i class="el-icon-lx-cascades"></i> 金币商品管理
+                    <i class="el-icon-lx-cascades"></i> 金币商品设置
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
@@ -597,6 +597,14 @@
                 <el-form-item :required="true" label="领取几天后过期" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="form.expireDay" autocomplete="off"></el-input>
                 </el-form-item>
+                <el-form-item
+                        :required="true"
+                        v-if="oEffectiveType==1"
+                        label="领取后几天开始生效"
+                        :label-width="formLabelWidth"
+                >
+                    <el-input style="width: 250px" v-model="oLaterDays" autocomplete="off"></el-input>
+                </el-form-item>
                 <el-form-item :required="true" label="兑换方式" :label-width="formLabelWidth">
                     <el-select v-model="form.changeType" placeholder="请选择兑换方式" @change="change">
                         <el-option
@@ -637,14 +645,6 @@
                             :value="item.value"
                         ></el-option>
                     </el-select>
-                </el-form-item>
-                <el-form-item
-                    :required="true"
-                    v-if="oEffectiveType==1"
-                    label="领取后几天开始生效"
-                    :label-width="formLabelWidth"
-                >
-                    <el-input style="width: 250px" v-model="oLaterDays" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item
                     :required="true"

@@ -902,12 +902,6 @@
                         loading.close();
                         return;
                     }
-                    if(this.oForm.achieveMoney<this.oForm.discountMoney){
-                        this.message = '请输入合理的满减金额！';
-                        this.open();
-                        loading.close();
-                        return;
-                    }
                 }
                 if(!this.oForm.selectFilmType){
                     this.message = '商品类型不能为空，请检查！';
@@ -1365,12 +1359,6 @@
                     }
                     if(this.oDiscountMoney<0||this.oAchieveMoney<0){
                         this.message = '减免金额不能小于0！';
-                        this.open();
-                        loading.close();
-                        return;
-                    }
-                    if(this.oAchieveMoney<this.oDiscountMoney){
-                        this.message = '请输入合理的满减金额！';
                         this.open();
                         loading.close();
                         return;

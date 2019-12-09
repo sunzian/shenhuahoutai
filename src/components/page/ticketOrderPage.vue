@@ -186,7 +186,6 @@
             <el-table
                 :data="tableData"
                 border
-                height="500px"
                 class="table"
                 ref="multipleTable"
                 header-cell-class-name="table-header"
@@ -402,7 +401,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="原价" :label-width="formLabelWidth">
+                <el-form-item label="应付" :label-width="formLabelWidth">
                     <el-input
                         :disabled="true"
                         style="width: 250px"
@@ -410,12 +409,28 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="应付" :label-width="formLabelWidth">
+                <el-form-item label="实付" :label-width="formLabelWidth">
                     <el-input
                         :disabled="true"
                         style="width: 250px"
                         v-model="form.totalActualPrice"
                         autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="票价" :label-width="formLabelWidth">
+                    <el-input
+                            :disabled="true"
+                            style="width: 250px"
+                            v-model="form.totalPrice"
+                            autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="最低票价" :label-width="formLabelWidth">
+                    <el-input
+                            :disabled="true"
+                            style="width: 250px"
+                            v-model="form.totalLowestPrice"
+                            autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="服务费" :label-width="formLabelWidth">

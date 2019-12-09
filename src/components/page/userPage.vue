@@ -44,10 +44,7 @@
                     <template slot-scope="scope">{{scope.row.callNumber}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="影院公司名" width="130">
-                    <template slot-scope="scope">{{scope.row.businessCode}}</template>
-                </el-table-column>
-                <el-table-column prop="memo" label="影院编码" width="110">
-                    <template slot-scope="scope">{{scope.row.cinemaCodes}}</template>
+                    <template slot-scope="scope">{{scope.row.businessName}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="登陆时间" width="160">
                     <template slot-scope="scope">{{scope.row.loginDate}}</template>
