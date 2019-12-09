@@ -62,14 +62,16 @@
             </el-table>
             <div class="pagination">
                 <el-pagination
-                    background
-                    layout="total, prev, pager, next"
-                    :current-page="query.pageNo"
-                    :page-size="query.pageSize"
-                    :total="query.totalCount"
-                    @current-change="currentChange"
-                    @prev-click="prev"
-                    @next-click="next"
+                        background
+                        @size-change="handleSizeChange"
+                        layout="total, sizes, prev, pager, next, jumper"
+                        :current-page="query.pageNo"
+                        :page-sizes="[10, 15, 20, 30]"
+                        :page-size="query.pageSize"
+                        :total="query.totalCount"
+                        @current-change="currentChange"
+                        @prev-click="prev"
+                        @next-click="next"
                 ></el-pagination>
             </div>
         </div>
@@ -514,14 +516,16 @@
                 </el-table>
                 <div class="pagination">
                     <el-pagination
-                        background
-                        layout="total, prev, pager, next"
-                        :current-page="query.filmPageNo"
-                        :page-size="query.filmPageSize"
-                        :total="query.filmTotalCount"
-                        @current-change="aCurrentChange"
-                        @prev-click="aPrev"
-                        @next-click="aNext"
+                            background
+                            @size-change="handleSizeChange"
+                            layout="total, sizes, prev, pager, next, jumper"
+                            :current-page="query.filmPageNo"
+                            :page-sizes="[10, 15, 20, 30]"
+                            :page-size="query.filmPageSize"
+                            :total="query.filmTotalCount"
+                            @current-change="aCurrentChange"
+                            @prev-click="aPrev"
+                            @next-click="aNext"
                     ></el-pagination>
                 </div>
             </div>
@@ -1469,19 +1473,23 @@ export default {
             this.openNext();
         },
         //新增套餐选择卖品页面
+        aHandleSizeChange(val) {
+            this.query.filmPageSize=val;
+            this.openNext()
+        },
         aCurrentChange(val) {
             //点击选择具体页数
-            this.query.pageNo = val;
+            this.query.filmPageNo = val;
             this.openNext();
         },
         aPrev() {
             //分页按钮上一页
-            this.query.pageNo--;
+            this.query.filmPageNo--;
             this.openNext();
         },
         aNext() {
             //分页按钮下一页
-            this.query.pageNo++;
+            this.query.filmPageNo++;
             this.openNext();
         },
         // 添加时间段
@@ -1524,6 +1532,10 @@ export default {
         // 多选操作
         handleSelectionChange(val) {
             this.multipleSelection = val;
+        },
+        handleSizeChange(val) {
+            this.query.pageSize=val;
+            this.getMenu()
         },
         currentChange(val) {
             //点击选择具体页数
