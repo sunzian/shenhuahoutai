@@ -301,7 +301,7 @@
                         format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
                 </el-form-item>
-                <el-form-item :required="true" label="每日时间段：" :label-width="formLabelWidth">
+                <el-form-item label="每日时间段：" :label-width="formLabelWidth">
                     <el-time-picker
                         v-model="oForm.startDay"
                         value-format="HH:mm:ss"
@@ -316,7 +316,7 @@
                     ></el-time-picker>
                     <span style="cursor: pointer;color: blue" @click="addTime">添加</span>
                 </el-form-item>
-                <el-form-item :required="true" label="所选时间段：" :label-width="formLabelWidth" v-if="date.length>0">
+                <el-form-item label="所选时间段：" :label-width="formLabelWidth" v-if="date.length>0">
                     <div v-for="(item, index) in date" :key="index">
                         {{item}}
                         <span
@@ -425,7 +425,7 @@
                         format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
                 </el-form-item>
-                <el-form-item :required="true" label="每日时间段：" :label-width="formLabelWidth">
+                <el-form-item label="每日时间段：" :label-width="formLabelWidth">
                     <el-time-picker
                         v-model="oStartDay"
                         value-format="HH:mm:ss"
@@ -440,7 +440,7 @@
                     ></el-time-picker>
                     <span style="cursor: pointer;color: blue" @click="addTime2">添加</span>
                 </el-form-item>
-                <el-form-item :required="true" label="所选时间段：" :label-width="formLabelWidth" v-if="date.length>0">
+                <el-form-item label="所选时间段：" :label-width="formLabelWidth" v-if="date.length>=1">
                     <div v-for="(item, index) in date" :key="index">
                         {{item}}
                         <span
@@ -679,7 +679,7 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            if(!this.oForm.serviceFeeName||!this.oForm.startDate||!this.oForm.endDate||this.date.length==0||!this.oForm.status){
+            if(!this.oForm.serviceFeeName||!this.oForm.status){
                 this.message = '必填项不能为空，请检查！';
                 this.open();
                 loading.close();
@@ -891,7 +891,6 @@ export default {
                             this.oStatus = '未启用';
                         }
                         this.oCinemaCode = JSON.parse(Decrypt(data.data.data)).cinemaCode;
-                        this.oStartSection = JSON.parse(Decrypt(data.data.data)).startSection;
                         this.oStartDate = JSON.parse(Decrypt(data.data.data)).startDate;
                         this.oScreenType = JSON.parse(Decrypt(data.data.data)).screenType;
                         this.oScreenNames = JSON.parse(Decrypt(data.data.data)).screenNames;
@@ -923,17 +922,20 @@ export default {
                             selectedSell.push({ filmCode: this.oFilmCode[i], filmName: this.oFilmName[i] });
                         }
                         this.selectedSell = selectedSell;
+                        this.oStartSection = JSON.parse(Decrypt(data.data.data)).startSection;
                         this.oEndSection = JSON.parse(Decrypt(data.data.data)).endSection;
                         this.oEndDate = JSON.parse(Decrypt(data.data.data)).endDate;
                         let endList = [];
                         let startList = [];
-                        endList = this.oEndSection.split(',');
-                        startList = this.oStartSection.split(',');
-                        let showTime = [];
-                        for (let i = 0; i < endList.length; i++) {
-                            showTime.push(startList[i] + '至' + endList[i]);
+                        if (this.oStartSection != '' && this.oEndSection != '') {
+                            endList = this.oEndSection.split(',');
+                            startList = this.oStartSection.split(',');
+                            let showTime = [];
+                            for (let i = 0; i < endList.length; i++) {
+                                showTime.push(startList[i] + '至' + endList[i]);
+                            }
+                            this.date = showTime;
                         }
-                        this.date = showTime;
                         this.oId = JSON.parse(Decrypt(data.data.data)).id;
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
@@ -1047,7 +1049,7 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            if(!this.oServiceFeeName||!this.oStartDate||!this.oEndDate||this.date.length==0||!this.oStatus){
+            if(!this.oServiceFeeName||!this.oStatus){
                 this.message = '必填项不能为空，请检查！';
                 this.open();
                 loading.close();

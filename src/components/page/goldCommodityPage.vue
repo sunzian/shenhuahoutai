@@ -274,9 +274,6 @@
                 <el-form-item :required="true" label="库存" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oForm.store" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="领取几天后过期" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="oForm.expireDay" autocomplete="off"></el-input>
-                </el-form-item>
                 <el-form-item :required="true" label="兑换方式" :label-width="formLabelWidth">
                     <el-select v-model="oForm.change_type" placeholder="请选择兑换方式">
                         <el-option
@@ -320,25 +317,17 @@
                 </el-form-item>
                 <el-form-item
                     :required="true"
-                    v-if="oForm.effectiveType==1"
+                    v-if="oForm.effectiveType==1 && oForm.commodity_type!=1"
                     label="领取后几天开始生效"
                     :label-width="formLabelWidth"
                 >
-                    <el-input style="width: 250px" v-model="oForm.laterDays" autocomplete="off"></el-input>
+                    <el-input style="width: 250px" v-model="oForm.laterDays" autocomplete="off" type="number" onkeyup="this.value=this.value.replace(/\D/g,'')"></el-input>
                 </el-form-item>
-                <!-- <el-form-item
-                    :required="true"
-                    v-if="oForm.effectiveType==1"
-                    label="生效后几天过期"
-                    :label-width="formLabelWidth"
-                >
-                    <el-input style="width: 250px" v-model="oForm.expireDay" autocomplete="off"></el-input>
-                </el-form-item> -->
                 <el-form-item
                     :required="true"
                     label="有效期："
                     :label-width="formLabelWidth"
-                    v-if="oForm.effectiveType==2"
+                    v-if="oForm.commodity_type!=1 && oForm.effectiveType==2"
                 >
                     <el-date-picker
                         v-model="oForm.startEffectiveDate"
@@ -354,6 +343,9 @@
                         value-format="yyyy-MM-dd HH:mm:ss"
                         format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
+                </el-form-item>
+                <el-form-item :required="true" label="领取几天后过期" :label-width="formLabelWidth"  v-if="oForm.effectiveType!=2">
+                    <el-input style="width: 250px" v-model="oForm.expireDay" autocomplete="off" type="number" onkeyup="this.value=this.value.replace(/\D/g,'')"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="是否今日大牌" :label-width="formLabelWidth">
                     <el-select v-model="oForm.topStatus" placeholder="请选择">
@@ -594,9 +586,6 @@
                 <el-form-item :required="true" label="库存" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="form.store" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="领取几天后过期" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="form.expireDay" autocomplete="off"></el-input>
-                </el-form-item>
                 <el-form-item :required="true" label="兑换方式" :label-width="formLabelWidth">
                     <el-select v-model="form.changeType" placeholder="请选择兑换方式" @change="change">
                         <el-option
@@ -640,17 +629,17 @@
                 </el-form-item>
                 <el-form-item
                     :required="true"
-                    v-if="oEffectiveType==1"
+                    v-if="oEffectiveType==1 && form.commodityType!=1"
                     label="领取后几天开始生效"
                     :label-width="formLabelWidth"
                 >
-                    <el-input style="width: 250px" v-model="oLaterDays" autocomplete="off"></el-input>
+                    <el-input style="width: 250px" v-model="oLaterDays" autocomplete="off" type="number" onkeyup="this.value=this.value.replace(/\D/g,'')"></el-input>
                 </el-form-item>
                 <el-form-item
                     :required="true"
                     label="有效期："
                     :label-width="formLabelWidth"
-                    v-if="oEffectiveType==2"
+                    v-if="form.commodityType!=1 && oEffectiveType==2"
                 >
                     <el-date-picker
                         v-model="oStartEffectiveDate"
@@ -666,6 +655,9 @@
                         value-format="yyyy-MM-dd HH:mm:ss"
                         format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
+                </el-form-item>
+                <el-form-item :required="true" label="领取几天后过期" :label-width="formLabelWidth" v-if="oEffectiveType!=2">
+                    <el-input style="width: 250px" v-model="form.expireDay" autocomplete="off" type="number" onkeyup="this.value=this.value.replace(/\D/g,'')"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="允许兑换的门店" :label-width="formLabelWidth">
                     <el-checkbox-group v-model="oCheckedCities" :max="1" @change="changeCinema">
@@ -961,6 +953,9 @@ export default {
             oTopstatus: '',
             oRecommendStatus: '',
             oEffectiveType: '',
+            oLaterDays: '',
+            oStartEffectiveDate: '',
+            oEndEffectiveDate: '',
             type: {
                 type: ''
             },
@@ -1006,7 +1001,11 @@ export default {
                 value: '1',
                 commodity_type: '1',
                 details: '',
-                markdown: ''
+                markdown: '',
+                effectiveType: '1',
+                laterDays: '',
+                startEffectiveDate: '',
+                endEffectiveDate: ''
             },
 
             formLabelWidth: '120px',
@@ -1090,7 +1089,7 @@ export default {
             assignType: [
                 {
                     value: '1',
-                    label: '不允许指定日期'
+                    label: '不设置指定日期'
                 },
                 {
                     value: '2',
@@ -1171,8 +1170,6 @@ export default {
                 groupName = '';
             }
             let jsonArr = [];
-            console.log(this.checkedCities)
-            console.log(this.oCheckedCities)
             jsonArr.push({ key: 'cinemaCodes', value: this.checkedCities[0] });
             jsonArr.push({ key: 'groupName', value: groupName });
             jsonArr.push({ key: 'status', value: 1 });
@@ -1339,7 +1336,6 @@ export default {
                 this.checkedCities.length == 0 ||
                 !this.oForm.details ||
                 !this.oForm.store ||
-                !this.oForm.expireDay ||
                 !this.oForm.change_type ||
                 !this.oForm.topStatus ||
                 !this.oForm.recommendStatus ||
@@ -1354,12 +1350,18 @@ export default {
             }
             if (this.oForm.commodity_type != 1) {
                 if (this.oForm.effectiveType == 1) {
-                    if (!this.oForm.laterDays) {
+                    if (this.oForm.laterDays === '') {
                         this.message = '必填项不能为空，请检查！';
                         this.open();
                         loading.close();
                         return;
                     }
+                if (this.oForm.expireDay === '' || this.oForm.expireDay == 0) {
+                    this.message = '过期天数必须大于0！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
                 }
                 if (this.oForm.effectiveType == 2) {
                     if (!this.oForm.startEffectiveDate || !this.oForm.endEffectiveDate) {
@@ -1488,8 +1490,8 @@ export default {
                             this.oForm.memo = '';
                             this.selectedSell = [];
                             this.oForm.store = '';
-                            this.oForm.change_type = '';
-                            this.oForm.effectiveType = '';
+                            this.oForm.change_type = '1';
+                            this.oForm.effectiveType = '1';
                             this.oForm.laterDays = '';
                             this.oForm.expireDay = '';
                             this.oForm.startEffectiveDate = '';
@@ -1803,8 +1805,14 @@ export default {
             }
             if (this.form.commodityType != 1) {
                 if (this.oEffectiveType == 1) {
-                    if (!this.oLaterDays) {
+                    if (this.oLaterDays === '') {
                         this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                    if (this.form.expireDay === '' || this.form.expireDay == 0) {
+                        this.message = '过期天数必须大于0！';
                         this.open();
                         loading.close();
                         return;
@@ -1852,7 +1860,6 @@ export default {
                 }
             }
             setTimeout(() => {
-                console.log(this.form.sort);
                 // console.log(this.from.sort.toString());
                 var jsonArr = [];
                 if (this.oCheckedCities.length == 0) {
@@ -1899,7 +1906,7 @@ export default {
                     if (this.oEffectiveType == 1) {
                         jsonArr.push({ key: 'laterDays', value: this.oLaterDays });
                     }
-                    if (this.form.commodityType == 2) {
+                    if (this.oEffectiveType == 2) {
                         jsonArr.push({ key: 'startEffectiveDate', value: this.oStartEffectiveDate });
                         jsonArr.push({ key: 'endEffectiveDate', value: this.oEndEffectiveDate });
                     }
