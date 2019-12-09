@@ -363,14 +363,16 @@
                 </el-table>
                 <div class="pagination">
                     <el-pagination
-                        background
-                        layout="total, prev, pager, next"
-                        :current-page="query.aPageNo"
-                        :page-size="query.aPageSize"
-                        :total="query.aTotalCount"
-                        @current-change="aCurrentChange"
-                        @prev-click="aPrev"
-                        @next-click="aNext"
+                            background
+                            @size-change="aHandleSizeChange"
+                            layout="total, sizes, prev, pager, next, jumper"
+                            :current-page="query.aPageNo"
+                            :page-sizes="[10, 15, 20, 30]"
+                            :page-size="query.aPageSize"
+                            :total="query.aTotalCount"
+                            @current-change="aCurrentChange"
+                            @prev-click="aPrev"
+                            @next-click="aNext"
                     ></el-pagination>
                 </div>
             </div>
@@ -1101,14 +1103,14 @@ export default {
         handleSelectionChange(val) {
             this.multipleSelection = val;
         },
+        handleSizeChange(val) {
+            this.query.pageSize=val;
+            this.getMenu()
+        },
         currentChange(val) {
             //点击选择具体页数
             this.query.pageNo = val;
             this.getMenu();
-        },
-        handleSizeChange(val) {
-            this.query.pageSize=val;
-            this.getMenu()
         },
         prev() {
             //分页按钮上一页
@@ -1119,6 +1121,10 @@ export default {
             //分页按钮下一页
             this.query.pageNo++;
             this.getMenu();
+        },
+        aHandleSizeChange(val) {
+            this.query.aPageSize=val;
+            this.getAllCoupon()
         },
         aCurrentChange(val) {
             //点击选择具体页数
