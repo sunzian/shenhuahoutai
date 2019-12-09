@@ -113,14 +113,16 @@
             </el-table>
             <div class="pagination">
                 <el-pagination
-                    background
-                    layout="total, prev, pager, next"
-                    :current-page="query.pageNo"
-                    :page-size="query.pageSize"
-                    :total="query.totalCount"
-                    @current-change="currentChange"
-                    @prev-click="prev"
-                    @next-click="next"
+                        background
+                        @size-change="handleSizeChange"
+                        layout="total, sizes, prev, pager, next, jumper"
+                        :current-page="query.pageNo"
+                        :page-sizes="[10, 15, 20, 30]"
+                        :page-size="query.pageSize"
+                        :total="query.totalCount"
+                        @current-change="currentChange"
+                        @prev-click="prev"
+                        @next-click="next"
                 ></el-pagination>
             </div>
         </div>
@@ -605,12 +607,6 @@ export default {
                     loading.close();
                     return;
                 }
-                if(this.oForm.achieveMoney<this.oForm.discountMoney){
-                    this.message = '请输入合理的满减金额！';
-                    this.open();
-                    loading.close();
-                    return;
-                }
                 if(this.oForm.achieveMoney==0&&this.oForm.discountMoney==0){
                     this.message = '请输入合理的满减金额！';
                     this.open();
@@ -954,12 +950,6 @@ export default {
                     loading.close();
                     return;
                 }
-                if(this.oAchieveMoney<this.oDiscountMoney){
-                    this.message = '请输入合理的满减金额！';
-                    this.open();
-                    loading.close();
-                    return;
-                }
                 if(this.oAchieveMoney==0&&this.oDiscountMoney==0){
                     this.message = '请输入合理的满减金额！';
                     this.open();
@@ -1274,6 +1264,10 @@ export default {
         // 多选操作
         handleSelectionChange(val) {
             this.multipleSelection = val;
+        },
+        handleSizeChange(val) {
+            this.query.pageSize=val;
+            this.getMenu()
         },
         currentChange(val) {
             //点击选择具体页数

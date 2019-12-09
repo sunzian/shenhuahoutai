@@ -178,7 +178,7 @@
                 <el-form-item :required="true" label="消耗金币" :label-width="formLabelWidth">
                     <el-input
                          style="width: 250px"
-                         v-model="oForm.consumeGold" 
+                         v-model="oForm.consumeGold"
                          autocomplete="off"
                          type="number"
                          onkeyup="this.value=this.value.replace(/\D/g,'')"
@@ -1119,7 +1119,21 @@ export default {
         },
         deletePrize(index) {
             //删除具体某一奖项
-            this.prizeInfoList.splice(index, 1);
+            this.$confirm('此操作将永久删除该奖项, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                this.prizeInfoList.splice(index, 1);
+                this.$message.error(`删除了`);
+            })
+                .catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
+
         },
         Search() {
             this.query.pageNo = 1;

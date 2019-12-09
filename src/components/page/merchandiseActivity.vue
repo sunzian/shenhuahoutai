@@ -114,8 +114,10 @@
             <div class="pagination">
                 <el-pagination
                         background
-                        layout="total, prev, pager, next"
+                        @size-change="handleSizeChange"
+                        layout="total, sizes, prev, pager, next, jumper"
                         :current-page="query.pageNo"
+                        :page-sizes="[10, 15, 20, 30]"
                         :page-size="query.pageSize"
                         :total="query.totalCount"
                         @current-change="currentChange"
@@ -563,12 +565,14 @@
                 <div class="pagination">
                     <el-pagination
                             background
-                            layout="total, prev, pager, next"
+                            @size-change="aHandleSizeChange"
+                            layout="total, sizes, prev, pager, next, jumper"
                             :current-page="query.aPageNo"
+                            :page-sizes="[10, 15, 20, 30]"
                             :page-size="query.aPageSize"
                             :total="query.aTotalCount"
                             @current-change="aCurrentChange"
-                            @prev-click='aPrev'
+                            @prev-click="aPrev"
                             @next-click="aNext"
                     ></el-pagination>
                 </div>
@@ -898,12 +902,6 @@
                     }
                     if(this.oForm.discountMoney<0||this.oForm.achieveMoney<0){
                         this.message = '减免金额不能小于0！';
-                        this.open();
-                        loading.close();
-                        return;
-                    }
-                    if(this.oForm.achieveMoney<this.oForm.discountMoney){
-                        this.message = '请输入合理的满减金额！';
                         this.open();
                         loading.close();
                         return;
@@ -1369,12 +1367,6 @@
                         loading.close();
                         return;
                     }
-                    if(this.oAchieveMoney<this.oDiscountMoney){
-                        this.message = '请输入合理的满减金额！';
-                        this.open();
-                        loading.close();
-                        return;
-                    }
                 }
                 if(!this.oSelectMerchandiseType){
                     this.message = '商品类型不能为空，请检查！';
@@ -1738,6 +1730,10 @@
                 this.query.pageNo = val;
                 this.getMenu();
             },
+            handleSizeChange(val) {
+                this.query.pageSize=val;
+                this.getMenu()
+            },
             prev() {
                 //分页按钮上一页
                 this.query.pageNo--;
@@ -1829,6 +1825,10 @@
                 }, 500);
             },
             //新增套餐选择卖品页面
+            aHandleSizeChange(val) {
+                this.query.aPageSize=val;
+                this.openNext()
+            },
             aCurrentChange(val){//点击选择具体页数
                 this.query.aPageNo = val;
                 this.openNext()

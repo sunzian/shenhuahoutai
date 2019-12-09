@@ -110,14 +110,16 @@
             </el-table>
             <div class="pagination">
                 <el-pagination
-                    background
-                    layout="total, prev, pager, next"
-                    :current-page="query.pageNo"
-                    :page-size="query.pageSize"
-                    :total="query.totalCount"
-                    @current-change="currentChange"
-                    @prev-click="prev"
-                    @next-click="next"
+                        background
+                        @size-change="handleSizeChange"
+                        layout="total, sizes, prev, pager, next, jumper"
+                        :current-page="query.pageNo"
+                        :page-sizes="[10, 15, 20, 30]"
+                        :page-size="query.pageSize"
+                        :total="query.totalCount"
+                        @current-change="currentChange"
+                        @prev-click="prev"
+                        @next-click="next"
                 ></el-pagination>
             </div>
         </div>
@@ -493,12 +495,14 @@
                 <div class="pagination">
                     <el-pagination
                             background
-                            layout="total, prev, pager, next"
+                            @size-change="aHandleSizeChange"
+                            layout="total, sizes, prev, pager, next, jumper"
                             :current-page="query.aPageNo"
+                            :page-sizes="[10, 15, 20, 30]"
                             :page-size="query.aPageSize"
                             :total="query.aTotalCount"
                             @current-change="aCurrentChange"
-                            @prev-click='aPrev'
+                            @prev-click="aPrev"
                             @next-click="aNext"
                     ></el-pagination>
                 </div>
@@ -1700,6 +1704,10 @@ export default {
         handleSelectionChange(val) {
             this.multipleSelection = val;
         },
+        handleSizeChange(val) {
+            this.query.pageSize=val;
+            this.getMenu()
+        },
         currentChange(val) {
             //点击选择具体页数
             this.query.pageNo = val;
@@ -1714,6 +1722,10 @@ export default {
             //分页按钮下一页
             this.query.pageNo++;
             this.getMenu();
+        },
+        aHandleSizeChange(val) {
+            this.query.aPageSize=val;
+            this.openNext()
         },
         aCurrentChange(val){//点击选择具体页数
             this.query.aPageNo = val;

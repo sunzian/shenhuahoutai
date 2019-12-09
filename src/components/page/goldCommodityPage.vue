@@ -3,7 +3,7 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
-                    <i class="el-icon-lx-cascades"></i> 金币商品管理
+                    <i class="el-icon-lx-cascades"></i> 金币商品设置
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>

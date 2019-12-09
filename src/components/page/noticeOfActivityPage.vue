@@ -62,14 +62,16 @@
             </el-table>
             <div class="pagination">
                 <el-pagination
-                    background
-                    layout="total, prev, pager, next"
-                    :current-page="query.pageNo"
-                    :page-size="query.pageSize"
-                    :total="query.totalCount"
-                    @current-change="currentChange"
-                    @prev-click="prev"
-                    @next-click="next"
+                        background
+                        @size-change="handleSizeChange"
+                        layout="total, sizes, prev, pager, next, jumper"
+                        :current-page="query.pageNo"
+                        :page-sizes="[10, 15, 20, 30]"
+                        :page-size="query.pageSize"
+                        :total="query.totalCount"
+                        @current-change="currentChange"
+                        @prev-click="prev"
+                        @next-click="next"
                 ></el-pagination>
             </div>
         </div>
@@ -157,14 +159,16 @@
             </el-table>
             <div class="pagination">
                 <el-pagination
-                    background
-                    layout="total, prev, pager, next"
-                    :current-page="query.pageNo"
-                    :page-size="query.pageSize"
-                    :total="query.totalCount"
-                    @current-change="currentChange"
-                    @prev-click="prev"
-                    @next-click="next"
+                        background
+                        @size-change="aHandleSizeChange"
+                        layout="total, sizes, prev, pager, next, jumper"
+                        :current-page="query.aPageNo"
+                        :page-sizes="[10, 15, 20, 30]"
+                        :page-size="query.aPageSize"
+                        :total="query.aTotalCount"
+                        @current-change="aCurrentChange"
+                        @prev-click="aPrev"
+                        @next-click="aNext"
                 ></el-pagination>
             </div>
         </div>
@@ -347,7 +351,9 @@ export default {
             message: '', //弹出框消息
             query: {
                 pageNo: 1,
-                pageSize: 15
+                pageSize: 15,
+                aPageNo: 1,
+                aPageSize: 15
             },
             cinemaInfo: [],
             tableData: [],
@@ -824,8 +830,8 @@ export default {
                 jsonArr.push({ key: 'status', value: status });
                 jsonArr.push({ key: 'title', value: title });
                 jsonArr.push({ key: 'cinemaCode', value: this.cinemaCode });
-                jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
-                jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
+                jsonArr.push({ key: 'pageNo', value: this.query.aPageNo });
+                jsonArr.push({ key: 'pageSize', value: this.query.aPageSize });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
                 var params = ParamsAppend(jsonArr);
@@ -837,10 +843,10 @@ export default {
                             var oData = JSON.parse(Decrypt(data.data.data));
                             console.log(oData);
                             this.oTableData = oData.data;
-                            // this.query.pageSize = oData.pageSize;
-                            // this.query.pageNo = oData.pageNo;
-                            this.query.totalCount = oData.totalCount;
-                            this.query.totalPage = oData.totalPage;
+                            this.query.aPageSize = oData.pageSize;
+                            this.query.aPageNo = oData.pageNo;
+                            this.query.aTotalCount = oData.totalCount;
+                            this.query.aTotalPage = oData.totalPage;
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
                             this.open();
@@ -949,6 +955,10 @@ export default {
         handleSelectionChange(val) {
             this.multipleSelection = val;
         },
+        handleSizeChange(val) {
+            this.query.pageSize=val;
+            this.getMenu()
+        },
         currentChange(val) {
             //点击选择具体页数
             this.query.pageNo = val;
@@ -963,6 +973,25 @@ export default {
             //分页按钮下一页
             this.query.pageNo++;
             this.getMenu();
+        },
+        aHandleSizeChange(val) {
+            this.query.aPageSize=val;
+            this.show()
+        },
+        aCurrentChange(val) {
+            //点击选择具体页数
+            this.query.aPageNo = val;
+            this.show();
+        },
+        aPrev() {
+            //分页按钮上一页
+            this.query.aPageNo--;
+            this.show();
+        },
+        aNext() {
+            //分页按钮下一页
+            this.query.aPageNo++;
+            this.show();
         }
     }
 };

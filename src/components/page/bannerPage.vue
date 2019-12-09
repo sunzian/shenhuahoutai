@@ -89,14 +89,14 @@
                 <el-table-column prop="sort" label="轮播图类别" width="180">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.category=='1'">卖品首页</el-tag>
-                        <el-tag v-if="scope.row.category=='2'">积分商城首页</el-tag>
+                        <el-tag v-if="scope.row.category=='2'">金币商场首页</el-tag>
                         <el-tag v-if="scope.row.category=='3'">个人中心首页</el-tag>
                         <el-tag v-if="scope.row.category=='4'">支付成功页</el-tag>
-                        <el-tag v-if="scope.row.category=='5'">放映厅首页</el-tag>
+                        <el-tag v-if="scope.row.category=='5'">游戏室首页</el-tag>
                         <el-tag v-if="scope.row.category=='6'">首页广告弹窗</el-tag>
                         <!--<el-tag v-if="scope.row.category=='7'">今日大牌</el-tag>-->
-                        <el-tag v-if="scope.row.category=='8'">签到送积分</el-tag>
-                        <el-tag v-if="scope.row.category=='9'">分享得金币</el-tag>
+                        <el-tag v-if="scope.row.category=='8'">签到送金币</el-tag>
+                        <el-tag v-if="scope.row.category=='9'">邀请好友首页</el-tag>
                         <el-tag v-if="scope.row.category=='10'">积分换金币</el-tag>
                     </template>
                 </el-table-column>
@@ -139,14 +139,16 @@
             </el-table>
             <div class="pagination">
                 <el-pagination
-                    background
-                    layout="total, prev, pager, next"
-                    :current-page="query.pageNo"
-                    :page-size="query.pageSize"
-                    :total="query.totalCount"
-                    @current-change="currentChange"
-                    @prev-click="prev"
-                    @next-click="next"
+                        background
+                        @size-change="handleSizeChange"
+                        layout="total, sizes, prev, pager, next, jumper"
+                        :current-page="query.pageNo"
+                        :page-sizes="[10, 15, 20, 30]"
+                        :page-size="query.pageSize"
+                        :total="query.totalCount"
+                        @current-change="currentChange"
+                        @prev-click="prev"
+                        @next-click="next"
                 ></el-pagination>
             </div>
         </div>
@@ -456,14 +458,16 @@
                 </el-table>
                 <div class="pagination">
                     <el-pagination
-                        background
-                        layout="total, prev, pager, next"
-                        :current-page="query.aPageNo"
-                        :page-size="query.aPageSize"
-                        :total="query.aTotalCount"
-                        @current-change="aCurrentChange"
-                        @prev-click="aPrev"
-                        @next-click="aNext"
+                            background
+                            @size-change="aHandleSizeChange"
+                            layout="total, sizes, prev, pager, next, jumper"
+                            :current-page="query.aPageNo"
+                            :page-sizes="[10, 15, 20, 30]"
+                            :page-size="query.aPageSize"
+                            :total="query.aTotalCount"
+                            @current-change="aCurrentChange"
+                            @prev-click="aPrev"
+                            @next-click="aNext"
                     ></el-pagination>
                 </div>
             </div>
@@ -515,14 +519,16 @@
                 </el-table>
                 <div class="pagination">
                     <el-pagination
-                        background
-                        layout="total, prev, pager, next"
-                        :current-page="query.aPageNo"
-                        :page-size="query.aPageSize"
-                        :total="query.aTotalCount"
-                        @current-change="aCurrentChange"
-                        @prev-click="aPrev"
-                        @next-click="aNext"
+                            background
+                            @size-change="aHandleSizeChange"
+                            layout="total, sizes, prev, pager, next, jumper"
+                            :current-page="query.aPageNo"
+                            :page-sizes="[10, 15, 20, 30]"
+                            :page-size="query.aPageSize"
+                            :total="query.aTotalCount"
+                            @current-change="aCurrentChange"
+                            @prev-click="aPrev"
+                            @next-click="aNext"
                     ></el-pagination>
                 </div>
             </div>
@@ -564,14 +570,16 @@
                 </el-table>
                 <div class="pagination">
                     <el-pagination
-                        background
-                        layout="total, prev, pager, next"
-                        :current-page="query.aPageNo"
-                        :page-size="query.aPageSize"
-                        :total="query.aTotalCount"
-                        @current-change="aCurrentChange"
-                        @prev-click="aPrev"
-                        @next-click="aNext"
+                            background
+                            @size-change="aHandleSizeChange"
+                            layout="total, sizes, prev, pager, next, jumper"
+                            :current-page="query.aPageNo"
+                            :page-sizes="[10, 15, 20, 30]"
+                            :page-size="query.aPageSize"
+                            :total="query.aTotalCount"
+                            @current-change="aCurrentChange"
+                            @prev-click="aPrev"
+                            @next-click="aNext"
                     ></el-pagination>
                 </div>
             </div>
@@ -1614,6 +1622,10 @@ export default {
             this.query.pageNo = val;
             this.getMenu();
         },
+        handleSizeChange(val) {
+            this.query.pageSize=val;
+            this.getMenu()
+        },
         prev() {
             //分页按钮上一页
             this.query.pageNo--;
@@ -1623,6 +1635,10 @@ export default {
             //分页按钮下一页
             this.query.pageNo++;
             this.getMenu();
+        },
+        aHandleSizeChange(val) {
+            this.query.aPageSize=val;
+            this.openNext()
         },
         aCurrentChange(val) {
             //点击选择具体页数
