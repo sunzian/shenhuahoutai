@@ -94,7 +94,7 @@
                 <el-table-column prop="sort" label="库存" width="70">
                     <template slot-scope="scope">{{scope.row.store}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="已兑换数量" width="70">
+                <el-table-column prop="sort" label="已兑换数量" width="100">
                     <template slot-scope="scope">{{scope.row.alreadyChangedNumber}}</template>
                 </el-table-column>
                 <el-table-column prop="sort" label="兑换方式" width="130">
@@ -271,10 +271,10 @@
                     label="原价"
                     :label-width="formLabelWidth"
                 >
-                    <el-input style="width: 250px" v-model="oForm.originalPrice" autocomplete="off"></el-input>
+                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 250px" v-model="oForm.originalPrice" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="库存" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="oForm.store" autocomplete="off"></el-input>
+                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 250px" v-model="oForm.store" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="兑换方式" :label-width="formLabelWidth">
                     <el-select v-model="oForm.change_type" placeholder="请选择兑换方式">
@@ -290,6 +290,7 @@
                     :required="true"
                     v-if="oForm.change_type==1||oForm.change_type==3"
                     label="所需金币数量"
+                    onkeyup="this.value=this.value.replace(/\D/g,'')"
                     :label-width="formLabelWidth"
                 >
                     <el-input style="width: 250px" v-model="oForm.gold" autocomplete="off"></el-input>
@@ -298,6 +299,7 @@
                     :required="true"
                     v-if="oForm.change_type==2||oForm.change_type==3"
                     label="所需RMB"
+                    onkeyup="this.value=this.value.replace(/\D/g,'')"
                     :label-width="formLabelWidth"
                 >
                     <el-input style="width: 250px" v-model="oForm.money" autocomplete="off"></el-input>
@@ -321,9 +323,10 @@
                     :required="true"
                     v-if="oForm.effectiveType==1 && oForm.commodity_type!=1"
                     label="领取后几天开始生效"
+                    onkeyup="this.value=this.value.replace(/\D/g,'')"
                     :label-width="formLabelWidth"
                 >
-                    <el-input style="width: 250px" v-model="oForm.laterDays" autocomplete="off" type="number" onkeyup="this.value=this.value.replace(/\D/g,'')"></el-input>
+                    <el-input style="width: 250px" v-model="oForm.laterDays" autocomplete="off" onkeyup="this.value=this.value.replace(/\D/g,'')"></el-input>
                 </el-form-item>
                 <el-form-item
                     :required="true"
@@ -347,7 +350,7 @@
                     ></el-date-picker>
                 </el-form-item>
                 <el-form-item :required="true" label="领取几天后过期" :label-width="formLabelWidth"  v-if="oForm.effectiveType!=2">
-                    <el-input style="width: 250px" v-model="oForm.expireDay" autocomplete="off" type="number" onkeyup="this.value=this.value.replace(/\D/g,'')"></el-input>
+                    <el-input style="width: 250px" v-model="oForm.expireDay" autocomplete="off" onkeyup="this.value=this.value.replace(/\D/g,'')"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="是否今日大牌" :label-width="formLabelWidth">
                     <el-select v-model="oForm.topStatus" placeholder="请选择">
@@ -460,7 +463,7 @@
                     label="输入每月几号"
                     :label-width="formLabelWidth"
                 >
-                    <el-input style="width: 250px" v-model="oForm.assign_info" autocomplete="off"></el-input>
+                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 250px" v-model="oForm.assign_info" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item
                     :required="true"
@@ -468,7 +471,7 @@
                     label="输入每月第几周"
                     :label-width="formLabelWidth"
                 >
-                    <el-input style="width: 250px" v-model="oForm.assign_info" autocomplete="off"></el-input>
+                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 250px" v-model="oForm.assign_info" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item
                     :required="true"
@@ -476,7 +479,7 @@
                     label="输入每周几"
                     :label-width="formLabelWidth"
                 >
-                    <el-input style="width: 250px" v-model="oForm.assign_info" autocomplete="off"></el-input>
+                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 250px" v-model="oForm.assign_info" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="是否限制一段时间内可兑换数量" :label-width="formLabelWidth">
                     <el-select v-model="oForm.limit_type" placeholder="请选择限制时间">
@@ -494,12 +497,12 @@
                     :label-width="formLabelWidth"
                     :required="true"
                 >
-                    <el-input style="width: 250px" v-model="oForm.limit_number" autocomplete="off"></el-input>
+                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 250px" v-model="oForm.limit_number" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="排序" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        type="number"
+                        onkeyup="this.value=this.value.replace(/\D/g,'')"
                         v-model="oForm.sort"
                         autocomplete="off"
                     ></el-input>
@@ -583,10 +586,10 @@
                     />
                 </el-form-item>
                 <el-form-item :required="true" label="原价" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="form.originalPrice" autocomplete="off"></el-input>
+                    <el-input style="width: 250px" onkeyup="this.value=this.value.replace(/\D/g,'')" v-model="form.originalPrice" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="库存" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="form.store" autocomplete="off"></el-input>
+                    <el-input style="width: 250px" onkeyup="this.value=this.value.replace(/\D/g,'')"  v-model="form.store" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="兑换方式" :label-width="formLabelWidth">
                     <el-select v-model="form.changeType" placeholder="请选择兑换方式" @change="change">
@@ -604,7 +607,7 @@
                     :label-width="formLabelWidth"
                     :required="true"
                 >
-                    <el-input style="width: 250px" v-model="form.gold" autocomplete="off"></el-input>
+                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')"  style="width: 250px" v-model="form.gold" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item
                     v-if="form.changeType==2||form.changeType==3"
@@ -612,7 +615,7 @@
                     :label-width="formLabelWidth"
                     :required="true"
                 >
-                    <el-input style="width: 250px" v-model="form.money" autocomplete="off"></el-input>
+                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')"  style="width: 250px" v-model="form.money" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item
                     :required="true"
@@ -635,7 +638,7 @@
                     label="领取后几天开始生效"
                     :label-width="formLabelWidth"
                 >
-                    <el-input style="width: 250px" v-model="oLaterDays" autocomplete="off" type="number" onkeyup="this.value=this.value.replace(/\D/g,'')"></el-input>
+                    <el-input style="width: 250px" v-model="oLaterDays" autocomplete="off" onkeyup="this.value=this.value.replace(/\D/g,'')"></el-input>
                 </el-form-item>
                 <el-form-item
                     :required="true"
@@ -659,7 +662,7 @@
                     ></el-date-picker>
                 </el-form-item>
                 <el-form-item :required="true" label="领取几天后过期" :label-width="formLabelWidth" v-if="oEffectiveType!=2">
-                    <el-input style="width: 250px" v-model="form.expireDay" autocomplete="off" type="number" onkeyup="this.value=this.value.replace(/\D/g,'')"></el-input>
+                    <el-input style="width: 250px" v-model="form.expireDay" autocomplete="off" onkeyup="this.value=this.value.replace(/\D/g,'')"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="允许兑换的门店" :label-width="formLabelWidth">
                     <el-checkbox-group v-model="oCheckedCities" :max="1" @change="changeCinema">
@@ -782,7 +785,7 @@
                     :label-width="formLabelWidth"
                     :required="true"
                 >
-                    <el-input style="width: 250px" v-model="form.assignInfo" autocomplete="off"></el-input>
+                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')"  style="width: 250px" v-model="form.assignInfo" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item
                     v-if="form.assignType==4"
@@ -790,7 +793,7 @@
                     :label-width="formLabelWidth"
                     :required="true"
                 >
-                    <el-input style="width: 250px" v-model="form.assignInfo" autocomplete="off"></el-input>
+                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')"  style="width: 250px" v-model="form.assignInfo" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item
                     :required="true"
@@ -798,7 +801,7 @@
                     label="输入每周几"
                     :label-width="formLabelWidth"
                 >
-                    <el-input style="width: 250px" v-model="form.assignInfo" autocomplete="off"></el-input>
+                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')"  style="width: 250px" v-model="form.assignInfo" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="是否限制一段时间内可兑换数量" :label-width="formLabelWidth">
                     <el-select v-model="form.limitType" placeholder="请选择限制时间">
@@ -816,12 +819,12 @@
                     :label-width="formLabelWidth"
                     :required="true"
                 >
-                    <el-input style="width: 250px" v-model="form.limitNumber" autocomplete="off"></el-input>
+                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')"  style="width: 250px" v-model="form.limitNumber" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="排序" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        type="number"
+                        onkeyup="this.value=this.value.replace(/\D/g,'')"
                         v-model="form.sort"
                         autocomplete="off"
                     ></el-input>
@@ -1336,99 +1339,228 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            if (
-                !this.oForm.commodity_type ||
-                !this.oForm.image_url ||
-                this.checkedCities.length == 0 ||
-                !this.oForm.details ||
-                !this.oForm.store ||
-                !this.oForm.change_type ||
-                !this.oForm.topStatus ||
-                !this.oForm.recommendStatus ||
-                !this.oForm.status ||
-                !this.oForm.assign_type ||
-                !this.oForm.limit_type
-            ) {
-                this.message = '必填项不能为空，请检查！';
+            if (!this.oForm.commodity_type) {
+                this.message = '商品类型不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
             }
-            if (this.oForm.commodity_type != 1) {
-                if (this.oForm.effectiveType == 1) {
-                    if (this.oForm.laterDays === '') {
-                        this.message = '必填项不能为空，请检查！';
-                        this.open();
-                        loading.close();
-                        return;
-                    }
-                if (this.oForm.expireDay === '' || this.oForm.expireDay == 0) {
-                    this.message = '过期天数必须大于0！';
+            if(this.oForm.commodity_type==1){
+                if (!this.oForm.name) {
+                    this.message = '商品名称不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
-                }
-                if (this.oForm.effectiveType == 2) {
-                    if (!this.oForm.startEffectiveDate || !this.oForm.endEffectiveDate) {
-                        this.message = '必填项不能为空，请检查！';
-                        this.open();
-                        loading.close();
-                        return;
-                    }
-                }
-            }
-            if (this.oForm.commodity_type == 1) {
-                if (!this.oForm.name || !this.oForm.originalPrice) {
-                    this.message = '必填项不能为空，请检查！';
+                if (!this.oForm.originalPrice) {
+                    this.message = '原价不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
-            }
-            if (this.oForm.commodity_type == 2) {
-                if (this.selectedSell.length == 0) {
-                    this.message = '必填项不能为空，请检查！';
+                if (this.oForm.originalPrice<=0) {
+                    this.message = '原价必须大于0！';
                     this.open();
                     loading.close();
                     return;
                 }
+
             }
-            if (this.oForm.commodity_type == 3) {
-                if (!this.groupName) {
-                    this.message = '必填项不能为空，请检查！';
-                    this.open();
-                    loading.close();
-                    return;
-                }
+            if (!this.oForm.image_url) {
+                this.message = '商品图片不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
             }
-            if (this.oForm.change_type == 1 || this.oForm.change_type == 3) {
+            if (this.checkedCities.length==0) {
+                this.message = '允许兑换的门店不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if (!this.oForm.details) {
+                this.message = '详情不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if (!this.oForm.store) {
+                this.message = '库存不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if (this.oForm.store<0) {
+                this.message = '库存不能小于0，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if (!this.oForm.change_type) {
+                this.message = '兑换方式不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(this.oForm.change_type==1||this.oForm.change_type==3){
                 if (!this.oForm.gold) {
-                    this.message = '必填项不能为空，请检查！';
+                    this.message = '所需金币数量不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if (this.oForm.gold<0) {
+                    this.message = '所需金币数量不能小于0，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
             }
-            if (this.oForm.change_type == 2 || this.oForm.change_type == 3) {
+            if(this.oForm.change_type==2||this.oForm.change_type==3){
                 if (!this.oForm.money) {
-                    this.message = '必填项不能为空，请检查！';
+                    this.message = '所需RMB不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if (this.oForm.money<0) {
+                    this.message = '所需RMB不能小于0，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
             }
-            if (this.oForm.assign_type == 2 || this.oForm.assign_type == 3 || this.oForm.assign_type == 4 || this.oForm.assign_type == 5) {
+            if(this.oForm.commodity_type!=1){
+                if (!this.oForm.effectiveType) {
+                    this.message = '生效方式不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
+            if(this.oForm.effectiveType==1 && this.oForm.commodity_type!=1){
+                if (!this.oForm.laterDays) {
+                    this.message = '领取后几天开始生效不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if (this.oForm.laterDays<0) {
+                    this.message = '领取后几天开始生效不能小于0，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
+            if(this.oForm.commodity_type!=1 && this.oForm.effectiveType==2){
+                if (!this.oForm.startEffectiveDate||!this.oForm.endEffectiveDate) {
+                    this.message = '有效期不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
+            if(this.oForm.effectiveType!=2){
+                if (!this.oForm.expireDay) {
+                    this.message = '领取几天后过期不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if (this.oForm.expireDay<0) {
+                    this.message = '领取几天后过期不能小于0，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
+            if (!this.oForm.topStatus) {
+                this.message = '是否今日大牌不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if (!this.oForm.recommendStatus) {
+                this.message = '是否精品推荐不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if (!this.oForm.status) {
+                this.message = '上架状态不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(this.oForm.commodity_type==2){
+                if (this.selectedSell.length==0) {
+                    this.message = '所选优惠券不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
+            if(this.oForm.commodity_type==3){
+                if (!this.groupName) {
+                    this.message = '所选券包不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
+            if (!this.oForm.assign_type) {
+                this.message = '是否指定日期可以兑换不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(this.oForm.assign_type==2){
                 if (!this.oForm.assign_info) {
-                    this.message = '必填项不能为空，请检查！';
+                    this.message = '指定日期不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
             }
-            if (this.oForm.limit_type == 2 || this.oForm.limit_type == 3 || this.oForm.limit_type == 4) {
+            if(this.oForm.assign_type==3){
+                if (!this.oForm.assign_info) {
+                    this.message = '每月几号不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
+            if(this.oForm.assign_type==4){
+                if (!this.oForm.assign_info) {
+                    this.message = '每月第几周不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
+            if(this.oForm.assign_type==5){
+                if (!this.oForm.assign_info) {
+                    this.message = '每周几不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
+            if (!this.oForm.limit_type) {
+                this.message = '是否限制一段时间内可兑换数量不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(this.oForm.limit_type==2||this.oForm.limit_type==3||this.oForm.limit_type==4){
                 if (!this.oForm.limit_number) {
-                    this.message = '必填项不能为空，请检查！';
+                    this.message = '限制兑换数量不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if (this.oForm.limit_number<=0) {
+                    this.message = '限制兑换数量必须大于0！';
                     this.open();
                     loading.close();
                     return;
@@ -1766,100 +1898,228 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            if (
-                !this.form.commodityType ||
-                !this.form.image_url ||
-                this.oCheckedCities.length == 0 ||
-                !this.form.markdown ||
-                !this.form.store ||
-                !this.form.expireDay ||
-                !this.form.changeType ||
-                !this.oTopstatus ||
-                !this.oRecommendStatus ||
-                !this.form.status ||
-                !this.form.assignType ||
-                !this.form.limitType
-            ) {
-                this.message = '必填项不能为空，请检查！';
+            if (!this.form.commodityType) {
+                this.message = '商品类型不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
             }
-            if (this.form.commodityType == 1) {
-                if (!this.form.name || !this.form.originalPrice) {
-                    this.message = '必填项不能为空，请检查！';
+            if(this.form.commodityType==1){
+                if (!this.form.name) {
+                    this.message = '商品名称不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
-            }
-            if (this.form.commodityType == 2) {
-                if (this.selectedSell.length == 0) {
-                    this.message = '必填项不能为空，请检查！';
+                if (!this.form.originalPrice) {
+                    this.message = '原价不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
-            }
-            if (this.form.commodityType == 3) {
-                if (!this.groupName) {
-                    this.message = '必填项不能为空，请检查！';
+                if (this.form.originalPrice<=0) {
+                    this.message = '原价必须大于0！';
                     this.open();
                     loading.close();
                     return;
                 }
+
             }
-            if (this.form.commodityType != 1) {
-                if (this.oEffectiveType == 1) {
-                    if (this.oLaterDays === '') {
-                        this.message = '必填项不能为空，请检查！';
-                        this.open();
-                        loading.close();
-                        return;
-                    }
-                    if (this.form.expireDay === '' || this.form.expireDay == 0) {
-                        this.message = '过期天数必须大于0！';
-                        this.open();
-                        loading.close();
-                        return;
-                    }
-                }
-                if (this.oEffectiveType == 2) {
-                    if (!this.oStartEffectiveDate || !this.oEndEffectiveDate) {
-                        this.message = '必填项不能为空，请检查！';
-                        this.open();
-                        loading.close();
-                        return;
-                    }
-                }
+            if (!this.form.image_url) {
+                this.message = '商品图片不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
             }
-            if (this.form.changeType == 1 || this.form.changeType == 3) {
+            if (this.oCheckedCities.length==0) {
+                this.message = '允许兑换的门店不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if (!this.form.markdown) {
+                this.message = '详情不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if (!this.form.store) {
+                this.message = '库存不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if (this.form.store<0) {
+                this.message = '库存不能小于0，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if (!this.form.changeType) {
+                this.message = '兑换方式不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(this.form.changeType==1||this.form.changeType==3){
                 if (!this.form.gold) {
-                    this.message = '必填项不能为空，请检查！';
+                    this.message = '所需金币数量不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if (this.form.gold<0) {
+                    this.message = '所需金币数量不能小于0，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
             }
-            if (this.form.changeType == 2 || this.form.changeType == 3) {
+            if(this.form.changeType==2||this.form.changeType==3){
                 if (!this.form.money) {
-                    this.message = '必填项不能为空，请检查！';
+                    this.message = '所需RMB不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if (this.form.money<0) {
+                    this.message = '所需RMB不能小于0，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
             }
-            if (this.form.assignType == 2 || this.form.assignType == 3 || this.form.assignType == 4 || this.form.assignType == 5) {
+            if(this.form.commodityType!=1){
+                if (!this.oEffectiveType) {
+                    this.message = '生效方式不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
+            if(this.oEffectiveType==1 && this.form.commodityType!=1){
+                if (!this.oLaterDays) {
+                    this.message = '领取后几天开始生效不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if (this.oLaterDays<0) {
+                    this.message = '领取后几天开始生效不能小于0，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
+            if(this.form.commodityType!=1 && this.oEffectiveType==2){
+                if (!this.oStartEffectiveDate||!this.oEndEffectiveDate) {
+                    this.message = '有效期不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
+            if(this.oEffectiveType!=2){
+                if (!this.form.expireDay) {
+                    this.message = '领取几天后过期不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if (this.form.expireDay<0) {
+                    this.message = '领取几天后过期不能小于0，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
+            if (!this.oTopstatus) {
+                this.message = '是否今日大牌不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if (!this.oRecommendStatus) {
+                this.message = '是否精品推荐不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if (!this.form.status) {
+                this.message = '上架状态不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(this.form.commodityType==2){
+                if (this.selectedSell.length==0) {
+                    this.message = '所选优惠券不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
+            if(this.form.commodityType==3){
+                if (!this.groupName) {
+                    this.message = '所选券包不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
+            if (!this.form.assignType) {
+                this.message = '是否指定日期可以兑换不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(this.form.assignType==2){
                 if (!this.form.assignInfo) {
-                    this.message = '必填项不能为空，请检查！';
+                    this.message = '指定日期不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
             }
-            if (this.form.limitType == 2 || this.form.limitType == 3 || this.form.limitType == 4) {
+            if(this.form.assignType==3){
+                if (!this.form.assignInfo) {
+                    this.message = '每月几号不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
+            if(this.form.assignType==4){
+                if (!this.form.assignInfo) {
+                    this.message = '每月第几周不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
+            if(this.form.assignType==5){
+                if (!this.form.assignInfo) {
+                    this.message = '每周几不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
+            if (!this.form.limitType) {
+                this.message = '是否限制一段时间内可兑换数量不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(this.form.limitType==2||this.form.limitType==3||this.form.limitType==4){
                 if (!this.form.limitNumber) {
-                    this.message = '必填项不能为空，请检查！';
+                    this.message = '限制兑换数量不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if (this.form.limitNumber<=0) {
+                    this.message = '限制兑换数量必须大于0！';
                     this.open();
                     loading.close();
                     return;
@@ -1868,11 +2128,6 @@ export default {
             setTimeout(() => {
                 // console.log(this.from.sort.toString());
                 var jsonArr = [];
-                if (this.oCheckedCities.length == 0) {
-                    this.message = '请选择影院！';
-                    this.open();
-                    return;
-                }
                 this.form.cinemaCode = this.oCheckedCities.join(',');
                 jsonArr.push({ key: 'id', value: this.form.id });
                 jsonArr.push({ key: 'effectiveType', value: this.oEffectiveType });

@@ -539,44 +539,57 @@ export default {
     },
     methods: {
         updateStatus(index, row){
-            const loading = this.$loading({
-                lock: true,
-                text: 'Loading',
-                spinner: 'el-icon-loading',
-                background: 'rgba(0, 0, 0, 0.7)',
-                target: document.querySelector('.div1')
-            });
-            setTimeout(() => {
-                this.idx = index;
-                this.form = row;
-                var jsonArr = [];
-                jsonArr.push({ key: 'id', value: row.id });
-                let sign = md5(preSign(jsonArr));
-                jsonArr.push({ key: 'sign', value: sign });
-                let params = ParamsAppend(jsonArr);
-                https
-                    .fetchPost('/merchandiseOrder/updateStatusById', params)
-                    .then(data => {
-                        loading.close();
-                        console.log(data);
-                        // console.log(JSON.parse(Decrypt(data.data.data)));
-                        if (data.data.code == 'success') {
-                            this.$message.success(`成功`);
-                            this.getMenu()
-                        } else if (data.data.code == 'nologin') {
-                            this.message = data.data.message;
-                            this.open();
-                            this.$router.push('/login');
-                        } else {
-                            this.message = data.data.message;
-                            this.open();
-                        }
-                    })
-                    .catch(err => {
-                        loading.close();
-                        console.log(err);
+            this.$confirm('此操作将修改卖品状态, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            })
+                .then(() => {
+                    const loading = this.$loading({
+                        lock: true,
+                        text: 'Loading',
+                        spinner: 'el-icon-loading',
+                        background: 'rgba(0, 0, 0, 0.7)',
+                        target: document.querySelector('.div1')
                     });
-            }, 500);
+                    setTimeout(() => {
+                        this.idx = index;
+                        this.form = row;
+                        var jsonArr = [];
+                        jsonArr.push({ key: 'id', value: row.id });
+                        let sign = md5(preSign(jsonArr));
+                        jsonArr.push({ key: 'sign', value: sign });
+                        let params = ParamsAppend(jsonArr);
+                        https
+                            .fetchPost('/merchandiseOrder/updateStatusById', params)
+                            .then(data => {
+                                loading.close();
+                                console.log(data);
+                                // console.log(JSON.parse(Decrypt(data.data.data)));
+                                if (data.data.code == 'success') {
+                                    this.$message.success(`成功`);
+                                    this.getMenu()
+                                } else if (data.data.code == 'nologin') {
+                                    this.message = data.data.message;
+                                    this.open();
+                                    this.$router.push('/login');
+                                } else {
+                                    this.message = data.data.message;
+                                    this.open();
+                                }
+                            })
+                            .catch(err => {
+                                loading.close();
+                                console.log(err);
+                            });
+                    }, 500);
+                })
+                .catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
         },
         addChange(index, row) {
             //是否修改权限

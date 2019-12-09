@@ -79,7 +79,6 @@
                             style="width: 250px"
                             v-model="oGoldAward"
                             autocomplete="off"
-                            type="number"
                             onkeyup="this.value=this.value.replace(/\D/g,'')"
                     ></el-input>
                 </el-form-item>
