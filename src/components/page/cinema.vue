@@ -328,16 +328,6 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <!--<el-form-item :required="true" label="是否开通套餐" :label-width="formLabelWidth">-->
-                    <!--<el-select v-model="oOpenSnackStatus" @change="openServe">-->
-                        <!--<el-option-->
-                            <!--v-for="info in boolean"-->
-                            <!--:key="info.value"-->
-                            <!--:label="info.label"-->
-                            <!--:value="info.value"-->
-                        <!--&gt;</el-option>-->
-                    <!--</el-select>-->
-                <!--</el-form-item>-->
                 <el-form-item label="是否小卖配送" :label-width="formLabelWidth" :required="true">
                     <el-select v-model="oSnackDispatcherStatus" @change="openServe">
                         <el-option
@@ -670,6 +660,38 @@
                 <el-form-item :required="true" label="影院奖品核销码" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oVerificationCode" autocomplete="off"></el-input>
                 </el-form-item>
+                <el-form-item label="小程序分享标题" :label-width="formLabelWidth">
+                    <el-input style="width: 250px" v-model="oMiniShareTitle" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="小程序分享海报" :label-width="formLabelWidth">
+                    <el-popover placement="right" title trigger="hover">
+                        <img style="width: 400px" :src="oMiniSharePosters" />
+                        <img
+                            slot="reference"
+                            :src="oMiniSharePosters"
+                            :alt="oMiniSharePosters"
+                            style="max-height: 50px;max-width: 130px"
+                        />
+                    </el-popover>
+                    <el-upload
+                        :before-upload="beforeUpload"
+                        :data="type"
+                        class="upload-demo"
+                        drag
+                        ref="upload"
+                        action="/api/upload/uploadImage"
+                        :on-success="unSuccess"
+                        multiple
+                        :limit="1"
+                    >
+                        <i class="el-icon-upload"></i>
+                        <div class="el-upload__text">
+                            将文件拖到此处，或
+                            <em>点击上传</em>
+                        </div>
+                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过100kb 建议尺寸540*400或按比例上传</div>
+                    </el-upload>
+                </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false">取 消</el-button>
@@ -689,33 +711,9 @@ export default {
     name: 'basetable',
     data() {
         return {
-            // rules: {
-            //     cinemaCode: [{ required: true, message: '请输入影院编码', trigger: 'blur' }],
-            //     cinemaName: [{ required: true, message: '请输入影院名称', trigger: 'blur' }],
-            //     province: [{ required: true, message: '请输入所在省份', trigger: 'blur' }],
-            //     city: [{ required: true, message: '请输入所在城市', trigger: 'blur' }],
-            //     address: [{ required: true, message: '请输入详细地址', trigger: 'blur' }],
-            //     longitude: [{ required: true, message: '请输入经度', trigger: 'blur' }],
-            //     latitude: [{ required: true, message: '请输入纬度', trigger: 'blur' }],
-            //     serviceMobile: [{ required: true, message: '请输入客服电话', trigger: 'blur' }],
-            //     openSnackStatus: [{ required: true, message: '请选择', trigger: 'change' }],
-            //     snackDispatcherStatus: [{ required: true, message: '请选择', trigger: 'change' }],
-            //     refundable: [{ required: true, message: '请选择', trigger: 'change' }],
-            //     snackBeginTime: [{ required: true, message: '请选择开始时间', trigger: 'blur' }],
-            //     snackEndTime: [{ required: true, message: '请选择结束时间', trigger: 'blur' }],
-            //     openStatus: [{ required: true, message: '请选择', trigger: 'change' }],
-            //     openMemberCardStatus: [{ required: true, message: '请选择', trigger: 'change' }],
-            //     videoStatus: [{ required: true, message: '请选择', trigger: 'change' }],
-            //     memberCardCommonUseStatus: [{ required: true, message: '请选择', trigger: 'change' }],
-            //     miniAppId: [{ required: true, message: '请输入appId', trigger: 'blur' }],
-            //     miniAppSecret: [{ required: true, message: '请输入appSecret', trigger: 'blur' }],
-            //     miniMerchantNo: [{ required: true, message: '请输入商户号', trigger: 'blur' }],
-            //     miniMerchantSecret: [{ required: true, message: '请输入支付密钥', trigger: 'blur' }],
-            //     miniRefundCertificateUrl: [{ required: true, message: '请输入路径', trigger: 'blur' }],
-            //     ticketingSystemAccount: [{ required: true, message: '请输入账号', trigger: 'blur' }],
-            //     ticketingSystemPassword: [{ required: true, message: '请输入密码', trigger: 'blur' }],
-            //     verificationCode: [{ required: true, message: '请输入核销码', trigger: 'blur' }]
-            // },
+            type: {
+                type: ''
+            },
             oInterfaceAddress: '',
             oTicketingSystemType: '',
             oBelongBusinessCode: '',
@@ -771,6 +769,8 @@ export default {
             oTicketingSystemPassword: '',
             oMiniAppId: '',
             oVerificationCode: '',
+            oMiniShareTitle: '',
+            oMiniSharePosters: '',
             oId: '',
             message: '', //弹出框消息
             query: {
@@ -996,6 +996,8 @@ export default {
                         this.oVerificationCode = JSON.parse(Decrypt(data.data.data)).Cinema.verificationCode;
                         this.oMiniAppName = JSON.parse(Decrypt(data.data.data)).Cinema.miniAppName;
                         this.oMiniAppQRCode = JSON.parse(Decrypt(data.data.data)).Cinema.miniAppQRCode;
+                        this.oMiniShareTitle = JSON.parse(Decrypt(data.data.data)).Cinema.miniShareTitle;
+                        this.oMiniSharePosters = JSON.parse(Decrypt(data.data.data)).Cinema.miniSharePosters;
                         this.oId = JSON.parse(Decrypt(data.data.data)).Cinema.id;
                         this.openServe();
                         // 获取所选影院名称
@@ -1116,6 +1118,8 @@ export default {
             jsonArr.push({ key: 'verificationCode', value: this.oVerificationCode });
             jsonArr.push({ key: 'miniAppName', value: this.oMiniAppName });
             jsonArr.push({ key: 'miniAppQRCode', value: this.oMiniAppQRCode });
+            jsonArr.push({ key: 'miniShareTitle', value: this.oMiniShareTitle });
+            jsonArr.push({ key: 'miniSharePosters', value: this.oMiniSharePosters });
             jsonArr.push({ key: 'id', value: this.oId });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
@@ -1195,6 +1199,7 @@ export default {
                     loading.close();
                     if (data.data.code == 'success') {
                         var oData = JSON.parse(Decrypt(data.data.data));
+                        console.log(oData)
                         this.tableData = oData.data;
                         this.query.pageSize = oData.pageSize;
                         this.query.pageNo = oData.pageNo;
@@ -1241,6 +1246,33 @@ export default {
                 dangerouslyUseHTMLString: true
             });
         },
+        beforeUpload(file) {
+            //上传之前
+            this.type.type = EncryptReplace('business');
+            const isLt100Kb = file.size / 1024 < 100;
+            if (!isLt100Kb) {
+                this.message = '图片大小不能超过100kb！';
+                this.open();
+                return false
+            }
+            return isLt100Kb
+        },
+        unSuccess(data) { 
+            //修改上传文件 登录超时
+            if (data.status == '-1') {
+                this.message = data.message;
+                this.open();
+                this.$refs.upload.clearFiles();
+                return;
+            }
+            this.oMiniSharePosters = data.data;
+            if (data.code == 'nologin') {
+                this.$refs.upload.clearFiles();
+                this.message = data.message;
+                this.open();
+                this.$router.push('/login');
+            }
+        },
         // 多选操作
         handleSelectionChange(val) {
             this.multipleSelection = val;
@@ -1267,16 +1299,6 @@ export default {
         openServe(e) {
             // 开通各种服务状态
         },
-        changeGetStatus(item) {
-            if (item == 1) {
-                item = '是';
-                return item;
-            }
-            if (item == 2) {
-                item = '否';
-                return item;
-            }
-        }
     }
 };
 </script>

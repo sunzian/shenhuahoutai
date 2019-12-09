@@ -126,6 +126,11 @@ export default new Router({
                     meta: { title: '会员卡用户' }
                 },
                 {
+                    path: '/userShareRegisterRecordPage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/userShareRegisterRecordPage.vue'),
+                    meta: { title: '用户分享邀请注册记录' }
+                },
+                {
                     path: '/cardConsumePage',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/cardConsumePage.vue'),
                     meta: { title: '会员卡消费记录' }
