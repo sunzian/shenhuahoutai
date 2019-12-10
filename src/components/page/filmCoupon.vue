@@ -48,7 +48,7 @@
                 <el-table-column label="优惠券名称">
                     <template slot-scope="scope">{{scope.row.name}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="优惠券类型" width="120">
+                <el-table-column prop="name" label="优惠券类型" width="110">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.reduceType == 1" type="success">兑换券</el-tag>
                         <el-tag v-else type="danger">代金券</el-tag>
@@ -61,11 +61,17 @@
                 <!-- <el-table-column prop="sort" label="有效天数">
                     <template slot-scope="scope">{{scope.row.publishDate}}</template>
                 </el-table-column>-->
-                <el-table-column prop="sort" label="金额" width="100">
-                    <template slot-scope="scope">{{scope.row.discountMoney}}</template>
+                <el-table-column prop="sort" label="固定金额" width="90">
+                    <template v-if="scope.row.reduceType==1" slot-scope="scope">{{scope.row.discountMoney}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="满多少可用" width="110">
-                    <template slot-scope="scope">{{scope.row.achieveMoney}}</template>
+                <el-table-column prop="sort" label="立减金额" width="90">
+                    <template v-if="scope.row.reduceType==2" slot-scope="scope">{{scope.row.discountMoney}}</template>
+                </el-table-column>
+                <el-table-column prop="sort" label="满多少张数减" width="120">
+                    <template v-if="scope.row.reduceType==3" slot-scope="scope">{{scope.row.achieveMoney}}/{{scope.row.discountMoney}}</template>
+                </el-table-column>
+                <el-table-column prop="sort" label="满多少金额减" width="120">
+                    <template v-if="scope.row.reduceType==4" slot-scope="scope">{{scope.row.achieveMoney}}/{{scope.row.discountMoney}}</template>
                 </el-table-column>
                 <el-table-column prop="sort" label="总库存" width="80">
                     <template slot-scope="scope">{{scope.row.sendNumber}}</template>
@@ -82,7 +88,7 @@
                         <el-tag v-else type="danger">未启用</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" width="200" align="center">
+                <el-table-column label="操作" width="200" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-button
                             type="success"
@@ -222,6 +228,8 @@
                     <el-radio-group v-model="oForm.reduceType" @change="clearDiscountMoney()">
                         <el-radio label="1">固定价格（兑换券）</el-radio>
                         <el-radio label="2">立减（代金券）</el-radio>
+                        <el-radio label="3">满张数减</el-radio>
+                        <el-radio label="4">满金额减</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item
@@ -238,6 +246,20 @@
                     v-if="oForm.reduceType == 2"
                     :required="true"
                 >   立减<el-input placeholder="每张票分别减掉多少" style="width: 150px" v-model="oForm.discountMoney" autocomplete="off"></el-input>元
+                </el-form-item>
+                <el-form-item
+                        label="减免金额："
+                        :label-width="formLabelWidth"
+                        v-if="oForm.reduceType == 3"
+                        :required="true">
+                    满<el-input style="width: 150px" v-model="oForm.achieveMoney" autocomplete="off"></el-input>张减<el-input style="width: 150px" v-model="oForm.discountMoney" autocomplete="off"></el-input>元
+                </el-form-item>
+                <el-form-item
+                        label="减免金额："
+                        :label-width="formLabelWidth"
+                        v-if="oForm.reduceType == 4"
+                        :required="true">
+                    满<el-input style="width: 150px" v-model="oForm.achieveMoney" autocomplete="off"></el-input>元减<el-input style="width: 150px" v-model="oForm.discountMoney" autocomplete="off"></el-input>元
                 </el-form-item>
                 <el-form-item :required="true" label="开启状态：" :label-width="formLabelWidth">
                     <el-select v-model="oForm.status" placeholder="请选择">
@@ -396,6 +418,8 @@
                     <el-radio-group v-model="oReduceType" @change="clearDiscountMoney()">
                         <el-radio label="1">固定价格（兑换券）</el-radio>
                         <el-radio label="2">立减（代金券）</el-radio>
+                        <el-radio label="3">满张数减</el-radio>
+                        <el-radio label="4">满金额减</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item
@@ -412,6 +436,20 @@
                         v-if="oReduceType == 2"
                         :required="true"
                 >   立减<el-input placeholder="每张票分别减掉多少" style="width: 150px" v-model="oDiscountMoney" autocomplete="off"></el-input>元
+                </el-form-item>
+                <el-form-item
+                        label="减免金额："
+                        :label-width="formLabelWidth"
+                        v-if="oReduceType == 3"
+                        :required="true"
+                >   满<el-input style="width: 150px" v-model="oAchieveMoney" autocomplete="off"></el-input>张减<el-input style="width: 150px" v-model="oDiscountMoney" autocomplete="off"></el-input>元
+                </el-form-item>
+                <el-form-item
+                        label="减免金额："
+                        :label-width="formLabelWidth"
+                        v-if="oReduceType == 4"
+                        :required="true"
+                >   满<el-input style="width: 150px" v-model="oAchieveMoney" autocomplete="off"></el-input>元减<el-input style="width: 150px" v-model="oDiscountMoney" autocomplete="off"></el-input>元
                 </el-form-item>
                 <el-form-item :required="true" label="开启状态：" :label-width="formLabelWidth">
                     <el-select v-model="oStatus" placeholder="请选择">
@@ -580,6 +618,7 @@ export default {
             oSelectFilmType: '',
             oScreenName: '',
             oFilmName: '',
+            oAchieveMoney: '',
             oName: '',
             oStartDate: '',
             oEndDate: '',
@@ -688,8 +727,10 @@ export default {
     },
     methods: {
         clearDiscountMoney(){
-            this.oForm.discountMoney=''
-            this.oDiscountMoney=''
+            this.oForm.discountMoney='';
+            this.oForm.achieveMoney='';
+            this.oDiscountMoney='';
+            this.oAchieveMoney=''
         },
         clearFilmList(){
             this.selectedSell=[]
@@ -953,6 +994,56 @@ export default {
                     return;
                 }
             }
+            if(this.oForm.reduceType==3){
+                if(this.oForm.discountMoney>=0||this.oForm.achieveMoney>=0){
+                    if(!this.oForm.achieveMoney){
+                        this.message = '张数不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                    if(!this.oForm.discountMoney){
+                        this.message = '减免金额不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if(this.oForm.discountMoney<0||this.oForm.achieveMoney<0){
+                    this.message = '请输入合理的满减金额以及张数！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if(this.oForm.achieveMoney==0&&this.oForm.discountMoney==0){
+                    this.message = '请输入合理的满减金额以及张数！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
+            if(this.oForm.reduceType==4){
+                if(this.oForm.discountMoney>=0||this.oForm.achieveMoney>=0){
+                    if(!this.oForm.discountMoney||!this.oForm.achieveMoney){
+                        this.message = '减免金额不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if(this.oForm.discountMoney<0||this.oForm.achieveMoney<0){
+                    this.message = '减免金额不能小于0！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if(this.oForm.achieveMoney==0&&this.oForm.discountMoney==0){
+                    this.message = '请输入合理的满减金额！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
             if (!this.oForm.status){
                 this.message = '开启状态不能为空，请检查！';
                 this.open();
@@ -1022,7 +1113,7 @@ export default {
             // jsonArr.push({ key: 'endDate', value: this.oForm.endDate });
             jsonArr.push({ key: 'reduceType', value: this.oForm.reduceType });
             jsonArr.push({ key: 'validPayType', value: this.oForm.validPayType });
-            // jsonArr.push({ key: 'achieveMoney', value: this.oForm.achieveMoney });
+            jsonArr.push({ key: 'achieveMoney', value: this.oForm.achieveMoney });
             jsonArr.push({ key: 'discountMoney', value: this.oForm.discountMoney });
             jsonArr.push({ key: 'status', value: this.oForm.status });
             jsonArr.push({ key: 'holidayValid', value: this.oForm.holidayValid });
@@ -1256,8 +1347,15 @@ export default {
                         if (JSON.parse(Decrypt(data.data.data)).coupon.reduceType == 2) {
                             this.oReduceType = '2';
                         }
+                        if (JSON.parse(Decrypt(data.data.data)).coupon.reduceType == 3) {
+                            this.oReduceType = '3';
+                        }
+                        if (JSON.parse(Decrypt(data.data.data)).coupon.reduceType == 4) {
+                            this.oReduceType = '4';
+                        }
 
                         this.oDiscountMoney = JSON.parse(Decrypt(data.data.data)).coupon.discountMoney;
+                        this.oAchieveMoney = JSON.parse(Decrypt(data.data.data)).coupon.achieveMoney;
                         this.oCouponDesc = JSON.parse(Decrypt(data.data.data)).coupon.couponDesc;
                         this.oSendNumber = JSON.parse(Decrypt(data.data.data)).coupon.sendNumber;
                         this.oId = JSON.parse(Decrypt(data.data.data)).coupon.id;
@@ -1410,6 +1508,56 @@ export default {
                     return;
                 }
             }
+            if(this.oReduceType==3){
+                if(this.oDiscountMoney>=0||this.oAchieveMoney>=0){
+                    if(!this.oAchieveMoney){
+                        this.message = '张数不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                    if(!this.oDiscountMoney){
+                        this.message = '减免金额不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if(this.oDiscountMoney<0||this.oAchieveMoney<0){
+                    this.message = '请输入合理的满减金额以及张数！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if(this.oAchieveMoney==0&&this.oDiscountMoney==0){
+                    this.message = '请输入合理的满减金额以及张数！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
+            if(this.oReduceType==4){
+                if(this.oDiscountMoney>0||this.oAchieveMoney>0){
+                    if(!this.oDiscountMoney||!this.oAchieveMoney){
+                        this.message = '减免金额不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if(this.oDiscountMoney<0||this.oAchieveMoney<0){
+                    this.message = '减免金额不能小于0！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if(this.oAchieveMoney==0&&this.oDiscountMoney==0){
+                    this.message = '请输入合理的满减金额！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
             if (!this.oStatus){
                 this.message = '开启状态不能为空，请检查！';
                 this.open();
@@ -1466,6 +1614,7 @@ export default {
             jsonArr.push({ key: 'selectHallType', value: this.oSelectHallType });
             jsonArr.push({ key: 'screenCode', value: this.oScreenCode.join(',') });
             jsonArr.push({ key: 'discountMoney', value: this.oDiscountMoney });
+            jsonArr.push({ key: 'achieveMoney', value: this.oAchieveMoney });
             // jsonArr.push({ key: 'startDate', value: this.oStartDate });
             // jsonArr.push({ key: 'endDate', value: this.oEndDate });
             jsonArr.push({ key: 'status', value: this.oStatus });

@@ -87,8 +87,14 @@
                         <el-tag v-else-if="scope.row.reduceType == 2" >立减金额</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="sort" label="金额" width="60">
-                    <template slot-scope="scope">{{scope.row.discountMoney}}</template>
+                <el-table-column prop="sort" label="固定金额" width="60">
+                    <template v-if="scope.row.reduceType==1" slot-scope="scope">{{scope.row.discountMoney}}</template>
+                </el-table-column>
+                <el-table-column prop="sort" label="立减金额" width="60">
+                    <template v-if="scope.row.reduceType==2" slot-scope="scope">{{scope.row.discountMoney}}</template>
+                </el-table-column>
+                <el-table-column prop="sort" label="最低票价" width="60">
+                    <template v-if="scope.row.reduceType==3" slot-scope="scope">{{scope.row.discountMoney}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="有效期" width="170">
                     <template slot-scope="scope">{{scope.row.startDate}}至{{scope.row.endDate}}</template>
@@ -246,6 +252,7 @@
                     <el-radio-group v-model="oForm.reduceType" @change="clearDiscountMoney()">
                         <el-radio label="1">固定价格（特惠价格）</el-radio>
                         <el-radio label="2">立减（立减活动）</el-radio>
+                        <el-radio label="3">最低票价</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" label="固定金额：" :label-width="formLabelWidth" v-if="oForm.reduceType == 1">
@@ -253,6 +260,9 @@
                 </el-form-item>
                 <el-form-item :required="true" label="立减金额：" :label-width="formLabelWidth" v-if="oForm.reduceType == 2">
                     减<el-input placeholder="每张票分别减掉多少" style="width: 150px" v-model="oForm.discountMoney" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item :required="true" label="增减金额：" :label-width="formLabelWidth" v-if="oForm.reduceType == 3">
+                    <el-input style="width: 150px" v-model="oForm.discountMoney" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="开启状态：" :label-width="formLabelWidth">
                     <el-select v-model="oForm.status" placeholder="请选择">
@@ -474,6 +484,7 @@
                     <el-radio-group v-model="oReduceType" @change="clearDiscountMoney()">
                         <el-radio label="1">固定价格（特惠价格）</el-radio>
                         <el-radio label="2">立减（立减活动）</el-radio>
+                        <el-radio label="3">最低票价</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" label="固定金额：" :label-width="formLabelWidth" v-if="oReduceType == 1">
@@ -481,6 +492,9 @@
                 </el-form-item>
                 <el-form-item :required="true" label="立减金额：" :label-width="formLabelWidth" v-if="oReduceType == 2">
                     减<el-input placeholder="每张票分别减掉多少" style="width: 150px" v-model="oDiscountMoney" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item :required="true" label="增减金额：" :label-width="formLabelWidth" v-if="oReduceType == 3">
+                    <el-input style="width: 150px" v-model="oDiscountMoney" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="开启状态：" :label-width="formLabelWidth">
                     <el-select v-model="oStatus" placeholder="请选择">

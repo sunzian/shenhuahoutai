@@ -148,6 +148,12 @@
                 <el-table-column prop="name" label="影院编码" width="85">
                     <template slot-scope="scope">{{scope.row.cinemaCode}}</template>
                 </el-table-column>
+                <el-table-column label="备注" width="135">
+                    <template slot-scope="scope">{{scope.row.deliveryMemo}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="送货地址" width="90">
+                    <template slot-scope="scope">{{scope.row.deliveryAddress}}</template>
+                </el-table-column>
                 <el-table-column label="订单号" width="135">
                     <template slot-scope="scope">{{scope.row.submitOrderCode}}</template>
                 </el-table-column>
@@ -205,9 +211,6 @@
                         <el-tag v-if="scope.row.deliveryType=='0'">自取</el-tag>
                         <el-tag v-else-if="scope.row.deliveryType=='1'">送至影厅</el-tag>
                     </template>
-                </el-table-column>
-                <el-table-column prop="memo" label="送货地址" width="90">
-                    <template slot-scope="scope">{{scope.row.deliveryAddress}}</template>
                 </el-table-column>
                 <el-table-column label="操作" align="center" fixed="right">
                     <template slot-scope="scope">
