@@ -661,7 +661,7 @@
                     <el-input style="width: 250px" v-model="oVerificationCode" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="小程序分享标题" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="oMiniShareTitle" autocomplete="off"></el-input>
+                    <el-input style="width: 250px" v-model="oMiniShareTitle" autocomplete="off" placeholder="最多显示8个字"></el-input>
                 </el-form-item>
                 <el-form-item label="小程序分享海报" :label-width="formLabelWidth">
                     <el-popover placement="right" title trigger="hover">

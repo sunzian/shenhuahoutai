@@ -132,7 +132,13 @@
                 <el-form-item :required="true" label="优惠券名称：" :label-width="formLabelWidth">
                     <el-input style="width: 150px" maxlength="15" v-model="oForm.name" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="选择影院：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="通用方式：" :label-width="formLabelWidth">
+                    <el-radio-group v-model="oForm.commonType" @change="selectCommonType">
+                        <el-radio :label="1" :disabled="showCommonType">全部影院</el-radio>
+                        <el-radio :label="2" :disabled="showCommonType">指定影院</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item :required="true" label="选择影院：" :label-width="formLabelWidth" v-if="oForm.commonType == 2">
                     <el-radio-group v-model="oForm.cinemaCode" @change="selectCinema">
                         <el-radio
                             v-for="item in cinemaInfo"
@@ -244,7 +250,13 @@
                 <el-form-item :required="true" label="优惠券名称：" :label-width="formLabelWidth">
                     <el-input style="width: 180px" maxlength="15" v-model="oName" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="选择影院：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="通用方式：" :label-width="formLabelWidth">
+                    <el-radio-group v-model="oCommonType" @change="selectCommonType2">
+                        <el-radio :label="1" disabled>全部影院</el-radio>
+                        <el-radio :label="2" disabled>指定影院</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item :required="true" label="选择影院：" :label-width="formLabelWidth" v-if="oCommonType == 2">
                     <el-radio-group v-model="oCinemaCode" @change="selectCinema">
                         <el-radio
                                 v-for="item in cinemaInfo"
@@ -396,6 +408,8 @@ export default {
             ],
             oCheckedDays:[],
             oMerchandiseName: '',
+            showCommonType: false,
+            oCommonType: '',
             oCinemaCode: '',
             oMerchandiseCode: [],
             oSelectMerchandiseType: '',
@@ -452,6 +466,7 @@ export default {
                 name: '',
                 cinemaName: '',
                 cinemaCode: [],
+                commonType: '1',
                 merchandiseName: '',
                 merchandiseCode: [],
                 checkedDays: [],
@@ -507,12 +522,16 @@ export default {
                 .fetchPost('merchandiseCoupon/merchandiseCouponAddPage', '')
                 .then(data => {
                     loading.close();
-                    console.log(data);
                     if (data.data.code == 'success') {
                         this.dialogFormVisible = true;
                         this.oForm.merchandiseCode = [];
-                        // console.log(this.oForm.cinemaCode);
-                        this.getAllGoods(this.oForm.cinemaCode)
+                        this.getAllGoods();
+                        if (JSON.parse(Decrypt(data.data.data)).adminFlag <= 1) {
+                            this.oForm.commonType = 1
+                        } else {
+                            this.oForm.commonType = 2;
+                            this.showCommonType = true;
+                        }
                         // console.log(this.oForm.checkedDays)
                         // let checkedDays = this.oForm.checkedDays.join(',');
                     } else if (data.data.code == 'nologin') {
@@ -544,11 +563,19 @@ export default {
                 loading.close();
                 return;
             }
-            if (!this.oForm.cinemaCode){
-                this.message = '所选影院不能为空，请检查！';
+            if (!this.oForm.commonType) {
+                this.message = '类型不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
+            }
+            if (this.oForm.commonType == 2) {
+                if (!this.oForm.cinemaCode){
+                    this.message = '所选影院不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
             }
             if (!this.oForm.selectMerchandiseType){
                 this.message = '卖品类型不能为空，请检查！';
@@ -662,6 +689,7 @@ export default {
             }
             var jsonArr = [];
             jsonArr.push({ key: 'name', value: this.oForm.name });
+            jsonArr.push({ key: 'commonType', value: this.oForm.commonType });
             jsonArr.push({ key: 'cinemaCodes', value: this.selectValue });
             jsonArr.push({ key: 'selectMerchandiseType', value: this.oForm.selectMerchandiseType });
             jsonArr.push({ key: 'merchandiseCode', value: this.selectGoodsCode });
@@ -691,6 +719,7 @@ export default {
                             this.dialogFormVisible = false;
                             this.$message.success(`新增成功`);
                             this.oForm.name = '';
+                            this.oForm.commonType = '1';
                             this.oForm.cinemaCode = [];
                             this.cinemaInfo = [];
                             this.oForm.cinemaName = '';
@@ -784,7 +813,6 @@ export default {
                 .fetchPost('merchandiseCoupon/getMerchandiseCouponById', params)
                 .then(data => {
                     loading.close();
-                    console.log(data);
                     console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.editVisible = true;
@@ -797,6 +825,7 @@ export default {
                             this.cinemaInfo.push(cinemaList);
                         }
                         this.oMerchandiseName = JSON.parse(Decrypt(data.data.data)).coupon.merchandiseNames;
+                        this.oCommonType = JSON.parse(Decrypt(data.data.data)).coupon.commonType;
                         this.oCinemaCode = JSON.parse(Decrypt(data.data.data)).coupon.cinemaCodes;
                         this.oName = JSON.parse(Decrypt(data.data.data)).coupon.name;
                         // this.oStartDate = JSON.parse(Decrypt(data.data.data)).coupon.startDate;
@@ -887,11 +916,13 @@ export default {
                 loading.close();
                 return;
             }
-            if (!this.oCinemaCode){
-                this.message = '所选影院不能为空，请检查！';
-                this.open();
-                loading.close();
-                return;
+            if (this.oCommonType == 2) {
+                if (!this.oCinemaCode){
+                    this.message = '所选影院不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
             }
             if (!this.oSelectMerchandiseType){
                 this.message = '卖品类型不能为空，请检查！';
@@ -1000,6 +1031,7 @@ export default {
             }
             var jsonArr = [];
             jsonArr.push({ key: 'name', value: this.oName });
+            jsonArr.push({ key: 'commonType', value: this.oCommonType });
             jsonArr.push({ key: 'cinemaCodes', value: this.oCinemaCode });
             jsonArr.push({ key: 'selectMerchandiseType', value: this.oSelectMerchandiseType });
             jsonArr.push({ key: 'merchandiseCode', value: this.oMerchandiseCode.join(',') });
@@ -1189,6 +1221,20 @@ export default {
                 dangerouslyUseHTMLString: true
             });
         },
+        selectCommonType(val) {
+            if (val == 2) {
+                this.getAllGoods(this.oForm.cinemaCode);
+            } else {
+                this.getAllGoods();
+            }
+        },
+        selectCommonType2(val) {
+            if (val == 2) {
+                this.getAllGoods(this.oCinemaCode);
+            } else {
+                this.getAllGoods();
+            }
+        },
         selectCinema(val) {
             console.log(val);
             this.oMerchandiseCode=[];
@@ -1237,7 +1283,6 @@ export default {
                 .fetchPost('merchandiseCoupon/getMerchandiseByCinemaCode', params)
                 .then(data => {
                     if (data.data.code == 'success') {
-                        // console.log(JSON.parse(Decrypt(data.data.data)));
                         let goods = JSON.parse(Decrypt(data.data.data));
                         this.goodsInfo = [];
                         for (let i = 0; i < goods.length; i++) {
