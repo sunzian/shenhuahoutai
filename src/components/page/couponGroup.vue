@@ -103,7 +103,13 @@
                 <el-form-item :required="true" label="券包名称：" :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oForm.name" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="选择影院：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="通用方式：" :label-width="formLabelWidth">
+                    <el-radio-group v-model="oForm.commonType">
+                        <el-radio :label="1" :disabled="showCommonType">全部影院</el-radio>
+                        <el-radio :label="2" :disabled="showCommonType">指定影院</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item :required="true" label="选择影院：" :label-width="formLabelWidth" v-if="oForm.commonType == 2">
                     <el-radio-group v-model="oForm.cinemaCode" @change="selectCinema">
                         <el-radio
                             v-for="item in cinemaInfo"
@@ -162,7 +168,13 @@
         <!-- 编辑弹出框 -->
         <el-dialog :close-on-click-modal="false" title="详情" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
-                <el-form-item :required="true" label="适用影院名称：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="通用方式：" :label-width="formLabelWidth">
+                    <el-radio-group v-model="oCommonType">
+                        <el-radio :label="1" disabled>全部影院</el-radio>
+                        <el-radio :label="2" disabled>指定影院</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item :required="true" label="适用影院名称：" :label-width="formLabelWidth" v-if="oCommonType == 2">
                     <span>{{oCinemaName}}</span>
                 </el-form-item>
                 <el-form-item :required="true" label="券包名称：" :label-width="formLabelWidth">
@@ -266,6 +278,8 @@ export default {
     name: 'basetable',
     data() {
         return {
+            showCommonType: false,
+            oCommonType: '',
             oCinemaName: '',
             oGroupName: '',
             oMemo: '',
@@ -314,6 +328,7 @@ export default {
             oForm: {
                 name: '',
                 groupName: '',
+                commonType: '1',
                 cinemaName: '',
                 cinemaCode: [],
                 reduceType: '1',
@@ -387,6 +402,7 @@ export default {
                 }
                 let jsonArr = [];
                 jsonArr.push({key:"name",value:name});
+                jsonArr.push({key:"commonType",value:this.oForm.commonType});
                 jsonArr.push({key:"cinemaCode",value:this.oForm.cinemaCode});
                 jsonArr.push({key:"simpleType",value:'1'});
                 jsonArr.push({key:"status",value:'1'});
@@ -398,7 +414,6 @@ export default {
                 var params = ParamsAppend(jsonArr);
                 https.fetchPost('/merchandiseCoupon/getCouponByCinemaCode',params).then((data) => {
                     loading.close();
-                    console.log(data);
                     if(data.data.code=='success') {
                         this.drawer=true;
                         var oData = JSON.parse(Decrypt(data.data.data));
@@ -440,9 +455,15 @@ export default {
                 .then(data => {
                     loading.close();
                     this.selectedSell=[];
-                    console.log(data);
                     if (data.data.code == 'success') {
-                        var oData = JSON.parse(Decrypt(data.data.data));
+                        if (JSON.parse(Decrypt(data.data.data)).adminFlag <= 1) {
+                            this.oForm.commonType = 1
+                        } else {
+                            this.oForm.commonType = 2;
+                            this.showCommonType = true;
+                        }
+                        var oData = JSON.parse(Decrypt(data.data.data)).cinemaList;
+                        console.log(oData)
                         this.cinemaInfo = [];
                         for (let i = 0; i < oData.length; i++) {
                             let cinemaInfo = {};
@@ -486,7 +507,21 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            if(!this.oForm.name||!this.oForm.cinemaCode||!this.selectedSell||!this.oForm.status){
+            if (!this.oForm.commonType) {
+                this.message = '通用方式不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if (this.oForm.commonType == 2) {
+                if (!this.oForm.cinemaCode) {
+                    this.message = '所选影院不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
+            if(!this.oForm.name||!this.selectedSell||!this.oForm.status){
                 this.message = '必填项不能为空，请检查！';
                 this.open();
                 loading.close();
@@ -500,6 +535,7 @@ export default {
             let newCoupon = coupon.join(',');
             jsonArr.push({ key: 'groupName', value: this.oForm.name });
             jsonArr.push({ key: 'couponNumbers', value: newCoupon });
+            jsonArr.push({ key: 'commonType', value: this.oForm.commonType });
             jsonArr.push({ key: 'cinemaCodes', value: this.selectValue });
             jsonArr.push({ key: 'status', value: this.oForm.status });
             jsonArr.push({ key: 'memo', value: this.oForm.memo });
@@ -612,6 +648,7 @@ export default {
                         }
                         // this.couponList = JSON.parse(Decrypt(data.data.data)).couponGroup.couponList;
                         this.oCinemaName = JSON.parse(Decrypt(data.data.data)).couponGroup.cinemaName;
+                        this.oCommonType = JSON.parse(Decrypt(data.data.data)).couponGroup.commonType;
                         this.oForm.cinemaCode = JSON.parse(Decrypt(data.data.data)).couponGroup.cinemaCodes;
                         this.oGroupName = JSON.parse(Decrypt(data.data.data)).couponGroup.groupName;
                         this.oMemo = JSON.parse(Decrypt(data.data.data)).couponGroup.memo;

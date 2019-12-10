@@ -129,7 +129,13 @@
                 <el-form-item :required="true" label="优惠券名称：" :label-width="formLabelWidth">
                     <el-input style="width: 150px" maxlength="15" v-model="oForm.name" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="选择影院：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="通用方式：" :label-width="formLabelWidth">
+                    <el-radio-group v-model="oForm.commonType">
+                        <el-radio :label="1" :disabled="showCommonType">全部影院</el-radio>
+                        <el-radio :label="2" :disabled="showCommonType">指定影院</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item :required="true" label="选择影院：" :label-width="formLabelWidth" v-if="oForm.commonType == 2">
                     <el-radio-group v-model="oForm.cinemaCode" @change="selectCinema">
                         <el-radio
                             v-for="item in cinemaInfo"
@@ -139,7 +145,7 @@
                         >{{item.cinemaName}}</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item :required="true" label="选择影厅：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="选择影厅：" :label-width="formLabelWidth" v-if="oForm.commonType == 2">
                     <el-radio-group v-model="oForm.selectHallType" @change="clearScreenCode()">
                         <el-radio label="0">全部影厅</el-radio>
                         <el-radio label="1">指定影厅参加</el-radio>
@@ -297,7 +303,13 @@
                 <el-form-item :required="true" label="优惠券名称：" :label-width="formLabelWidth">
                     <el-input style="width: 180px"  maxlength="15" v-model="oName" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="选择影院：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="通用方式：" :label-width="formLabelWidth">
+                    <el-radio-group v-model="oCommonType">
+                        <el-radio :label="1" disabled>全部影院</el-radio>
+                        <el-radio :label="2" disabled>指定影院</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item :required="true" label="选择影院：" :label-width="formLabelWidth" v-if="oCommonType == 2">
                     <el-radio-group v-model="oCinemaCode" @change="selectCinema">
                         <el-radio
                                 v-for="item in cinemaInfo"
@@ -307,7 +319,7 @@
                         >{{item.cinemaName}}</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item :required="true" label="选择影厅：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="选择影厅：" :label-width="formLabelWidth" v-if="oCommonType == 2">
                     <el-radio-group v-model="oSelectHallType" @change="clearScreenCode()">
                         <el-radio label="0">全部影厅</el-radio>
                         <el-radio label="1">指定影厅参加</el-radio>
@@ -555,6 +567,8 @@ export default {
                     value:'星期日'
                 },
             ],
+            showCommonType: false,
+            oCommonType: '',
             oCinemaCode:'',
             oSelectHallType:'',
             oScreenCode:[],
@@ -624,6 +638,7 @@ export default {
             ],
             oForm: {
                 name: '',
+                commonType: '1',
                 cinemaName: '',
                 cinemaCode: [],
                 screenName: '',
@@ -789,12 +804,17 @@ export default {
                 .fetchPost('/filmCoupon/filmCouponAddPage', '')
                 .then(data => {
                     loading.close();
-                    console.log(data);
                     if (data.data.code == 'success') {
                         this.dialogFormVisible = true;
                         this.selectedSell=[];
                         this.getAllScreen(this.oForm.cinemaCode);
                         console.log(JSON.parse(Decrypt(data.data.data)));
+                        if (JSON.parse(Decrypt(data.data.data)).adminFlag <= 1) {
+                            this.oForm.commonType = 1
+                        } else {
+                            this.oForm.commonType = 2;
+                            this.showCommonType = true;
+                        }
                         let formats = JSON.parse(Decrypt(data.data.data)).formatList;
                         this.formatList = [];
                         for (let i = 0; i < formats.length; i++) {
@@ -833,24 +853,32 @@ export default {
                 loading.close();
                 return;
             }
-            if (!this.oForm.cinemaCode){
-                this.message = '所选影院不能为空，请检查！';
+            if (!this.oForm.commonType) {
+                this.message = '类型不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
             }
-            if (!this.oForm.selectHallType){
-                this.message = '影厅类型不能为空，请检查！';
-                this.open();
-                loading.close();
-                return;
-            }
-            if(this.oForm.selectHallType==1||this.oForm.selectHallType==2){
-                if(this.oForm.screenCode.length==0){
-                    this.message = '影厅名不能为空，请检查！';
+            if (this.oForm.commonType == 2) {
+                if (!this.oForm.cinemaCode){
+                    this.message = '所选影院不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
+                }
+                if (!this.oForm.selectHallType){
+                    this.message = '影厅类型不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if(this.oForm.selectHallType==1||this.oForm.selectHallType==2){
+                    if(this.oForm.screenCode.length==0){
+                        this.message = '影厅名不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
                 }
             }
             if (!this.oForm.selectFilmFormatType){
@@ -984,6 +1012,7 @@ export default {
             }
             var jsonArr = [];
             jsonArr.push({ key: 'name', value: this.oForm.name });
+            jsonArr.push({ key: 'commonType', value: this.oForm.commonType });
             jsonArr.push({ key: 'cinemaCodes', value: this.selectValue });
             jsonArr.push({ key: 'selectHallType', value: this.oForm.selectHallType });
             jsonArr.push({ key: 'screenCode', value: this.selectScreenCode });
@@ -1013,11 +1042,11 @@ export default {
                     .then(data => {
                         loading.close();
                         //新增
-                        console.log(data);
                         if (data.data.code == 'success') {
                             this.dialogFormVisible = false;
                             this.selectFilm = {};
                             this.oForm.filmName = '';
+                            this.oForm.commonType = '1';
                             this.oForm.selectHallType = '0';
                             this.oForm.selectFilmType = '0';
                             this.oForm.name = '';
@@ -1168,6 +1197,7 @@ export default {
                         this.oCinemaName = JSON.parse(Decrypt(data.data.data)).coupon.cinemaNames;
                         this.oScreenName = JSON.parse(Decrypt(data.data.data)).coupon.screenNames;
                         this.oCinemaCode = JSON.parse(Decrypt(data.data.data)).coupon.cinemaCodes;
+                        this.oCommonType = JSON.parse(Decrypt(data.data.data)).coupon.commonType;
                         this.oFilmFormatName = JSON.parse(Decrypt(data.data.data)).coupon.filmFormatName;
                         this.oName = JSON.parse(Decrypt(data.data.data)).coupon.name;
                         // this.oStartDate = JSON.parse(Decrypt(data.data.data)).coupon.startDate;
@@ -1282,24 +1312,26 @@ export default {
                 loading.close();
                 return;
             }
-            if (!this.oCinemaCode){
-                this.message = '所选影院不能为空，请检查！';
-                this.open();
-                loading.close();
-                return;
-            }
-            if (!this.oSelectHallType){
-                this.message = '影厅类型不能为空，请检查！';
-                this.open();
-                loading.close();
-                return;
-            }
-            if(this.oSelectHallType==1||this.oSelectHallType==2){
-                if(this.oScreenCode.length==0){
-                    this.message = '影厅名不能为空，请检查！';
+            if (this.oCommonType == 2) {
+                if (!this.oCinemaCode){
+                    this.message = '所选影院不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
+                }
+                if (!this.oSelectHallType){
+                    this.message = '影厅类型不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if(this.oSelectHallType==1||this.oSelectHallType==2){
+                    if(this.oScreenCode.length==0){
+                        this.message = '影厅名不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
                 }
             }
             if (!this.oSelectFilmFormatType){
@@ -1419,13 +1451,13 @@ export default {
                 }
 
             }
-            console.log(this.selectedSell);
             let filmCodeList=[];
             for(let x in this.selectedSell){
                 filmCodeList.push(this.selectedSell[x].filmCode)
             }
             var jsonArr = [];
             jsonArr.push({ key: 'name', value: this.oName });
+            jsonArr.push({ key: 'commonType', value: this.oCommonType });
             jsonArr.push({ key: 'cinemaCodes', value: this.oCinemaCode });
             jsonArr.push({ key: 'selectFilmFormatType', value: this.oSelectFilmFormatType });
             jsonArr.push({ key: 'filmCode', value: filmCodeList.join(',') });
