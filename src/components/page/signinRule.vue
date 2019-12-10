@@ -10,21 +10,6 @@
         <!--签到规则页面-->
         <div class="container">
             <el-form ref="form1" :model="form1">
-                <!-- <el-form-item label="连续签到天数" :label-width="formLabelWidth">
-                    <el-input
-                            style="width: 250px"
-                            v-model="form1.days"
-                            autocomplete="off"
-                            :disabled="true"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item :required="true" label="连续签到奖励" :label-width="formLabelWidth">
-                    <el-input
-                            style="width: 250px"
-                            v-model="form1.oGoldAward"
-                            autocomplete="off"
-                    ></el-input>
-                </el-form-item> -->
                 <el-form-item :required="true" label="签到规则说明" :label-width="formLabelWidth">
                     <el-input style="width: 250px;" type="textarea" maxlength="50" show-word-limit v-model="form1.oSignTips" autocomplete="off"></el-input>
                 </el-form-item>
@@ -64,7 +49,7 @@
             </span>
         </div>
         <!-- 新增奖项弹出框 -->
-        <el-dialog :close-on-click-modal="false" title="新增" :visible.sync="editVisible">
+        <el-dialog :close-on-click-modal="false" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
                 <el-form-item label="连续签到天数" :label-width="formLabelWidth">
                     <el-input
@@ -127,10 +112,10 @@
                         <el-radio label="2">实物</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item :required="true" v-if="oExtraPrizeType==1&&oContinuousDays==7" label="选择优惠券" :label-width="formLabelWidth">
+                <el-form-item :required="true" v-if="oExtraPrizeType==1&&oContinuousDays==7&&oExtraFlag==1" label="选择优惠券" :label-width="formLabelWidth">
                     <el-button type="primary" @click="getAllCoupon">选择优惠券</el-button>
                 </el-form-item>
-                <el-form-item :required="true" v-if="oExtraPrizeType==1&&oContinuousDays==7" label="所选优惠券：" :label-width="formLabelWidth">
+                <el-form-item :required="true" v-if="oExtraPrizeType==1&&oContinuousDays==7&&oExtraFlag==1" label="所选优惠券：" :label-width="formLabelWidth">
                     <el-input
                             style="width: 150px"
                             v-model="couponInfo.couponName"
@@ -330,29 +315,53 @@
             },
             exChanger() {
                 if(!this.oGoldAward){
-                    this.message = '必填项不能为空，请检查！';
+                    this.message = '奖励金币数量不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
                 if(this.oContinuousDays==7){
                     if(!this.oExtraFlag){
-                        this.message = '必填项不能为空，请检查！';
+                        this.message = '是否设置连续7天额外奖励不能为空，请检查！';
                         this.open();
                         loading.close();
                         return;
                     }
                 }
                 if(this.oContinuousDays==7&&this.oExtraFlag==1){
-                    if(!this.oExtraPrizeName||!this.oExtraPrizePicture||!this.oExpireDays||!this.oExtraPrizeType){
-                        this.message = '必填项不能为空，请检查！';
+                    if(!this.oExtraPrizeName){
+                        this.message = '额外奖励的礼物名称不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                    if(!this.oExtraPrizePicture){
+                        this.message = '额外奖励的礼物图片不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                    if(!this.oExpireDays){
+                        this.message = '领取后几天过期不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                    if(this.oExpireDays<0){
+                        this.message = '领取后几天过期不能小于0，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                    if(!this.oExtraPrizeType){
+                        this.message = '额外奖励的礼物类型不能为空，请检查！';
                         this.open();
                         loading.close();
                         return;
                     }
                     if(this.oExtraPrizeType==1){
                         if(!this.couponInfo.couponName){
-                            this.message = '必填项不能为空，请检查！';
+                            this.message = '所选优惠券不能为空，请检查！';
                             this.open();
                             loading.close();
                             return;

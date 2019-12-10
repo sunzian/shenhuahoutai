@@ -9,6 +9,7 @@
         </div>
         <div class="container">
             <div class="handle-box">
+                <el-input v-model="query.cinemaCode" placeholder="影院编码" class="handle-input mr10"></el-input>
                 <el-input v-model="query.cinemaName" placeholder="影院名称" class="handle-input mr10"></el-input>
                 <el-select class="mr10" clearable v-model="query.belongBusinessCode" placeholder="关联商家">
                     <el-option
@@ -2222,6 +2223,7 @@ export default {
                 target: document.querySelector('.div1')
             });
             let cinemaName = this.query.cinemaName;
+            let cinemaCode = this.query.cinemaCode;
             let belongBusinessCode = this.query.belongBusinessCode;
             let paymentType = this.query.paymentType;
             let reportedType = this.query.reportedType;
@@ -2230,6 +2232,9 @@ export default {
             let endDate = this.query.endDate;
             if (!cinemaName) {
                 cinemaName = '';
+            }
+            if (!cinemaCode) {
+                cinemaCode = '';
             }
             if (!belongBusinessCode) {
                 belongBusinessCode = '';
@@ -2251,6 +2256,7 @@ export default {
             }
             let jsonArr = [];
             jsonArr.push({ key: 'cinemaName', value: cinemaName });
+            jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
             jsonArr.push({ key: 'belongBusinessCode', value: belongBusinessCode });
             jsonArr.push({ key: 'paymentType', value: paymentType });
             jsonArr.push({ key: 'reportedType', value: reportedType });

@@ -349,8 +349,8 @@
                         format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
                 </el-form-item>
-                <el-form-item :required="true" label="领取几天后过期" :label-width="formLabelWidth"  v-if="oForm.effectiveType!=2">
-                    <el-input style="width: 250px" v-model="oForm.expireDay" autocomplete="off" onkeyup="this.value=this.value.replace(/\D/g,'')"></el-input>
+                <el-form-item :required="true" label="有效期天数" :label-width="formLabelWidth"  v-if="oForm.effectiveType!=2">
+                    <el-input style="width: 250px" placeholder="自领取之日起计算" v-model="oForm.expireDay" autocomplete="off" onkeyup="this.value=this.value.replace(/\D/g,'')"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="是否今日大牌" :label-width="formLabelWidth">
                     <el-select v-model="oForm.topStatus" placeholder="请选择">
@@ -434,7 +434,7 @@
                     >删除</span>
                 </el-form-item>
                 <el-form-item :required="true" label="是否指定日期可以兑换" :label-width="formLabelWidth">
-                    <el-select v-model="oForm.assign_type" placeholder="请选择指定日期">
+                    <el-select v-model="oForm.assign_type" placeholder="请选择指定日期" @change="clearAssignType()">
                         <el-option
                             v-for="item in assignType"
                             :key="item.value"
@@ -463,7 +463,14 @@
                     label="输入每月几号"
                     :label-width="formLabelWidth"
                 >
-                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 250px" v-model="oForm.assign_info" autocomplete="off"></el-input>
+                    <el-select v-model="oForm.assign_info">
+                        <el-option
+                                v-for="item in days"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                        ></el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item
                     :required="true"
@@ -471,7 +478,14 @@
                     label="输入每月第几周"
                     :label-width="formLabelWidth"
                 >
-                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 250px" v-model="oForm.assign_info" autocomplete="off"></el-input>
+                    <el-select v-model="oForm.assign_info">
+                        <el-option
+                                v-for="item in weeks"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                        ></el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item
                     :required="true"
@@ -479,7 +493,14 @@
                     label="输入每周几"
                     :label-width="formLabelWidth"
                 >
-                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 250px" v-model="oForm.assign_info" autocomplete="off"></el-input>
+                    <el-select v-model="oForm.assign_info">
+                        <el-option
+                                v-for="item in dates"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                        ></el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item :required="true" label="是否限制一段时间内可兑换数量" :label-width="formLabelWidth">
                     <el-select v-model="oForm.limit_type" placeholder="请选择限制时间">
@@ -661,8 +682,8 @@
                         format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
                 </el-form-item>
-                <el-form-item :required="true" label="领取几天后过期" :label-width="formLabelWidth" v-if="oEffectiveType!=2">
-                    <el-input style="width: 250px" v-model="form.expireDay" autocomplete="off" onkeyup="this.value=this.value.replace(/\D/g,'')"></el-input>
+                <el-form-item :required="true" label="有效期天数" :label-width="formLabelWidth" v-if="oEffectiveType!=2">
+                    <el-input style="width: 250px" placeholder="自领取之日起计算" v-model="form.expireDay" autocomplete="off" onkeyup="this.value=this.value.replace(/\D/g,'')"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="允许兑换的门店" :label-width="formLabelWidth">
                     <el-checkbox-group v-model="oCheckedCities" :max="1" @change="changeCinema">
@@ -756,7 +777,7 @@
                     >删除</span>
                 </el-form-item>
                 <el-form-item :required="true" label="是否指定日期可以兑换" :label-width="formLabelWidth">
-                    <el-select v-model="form.assignType" placeholder="请选择指定日期">
+                    <el-select v-model="form.assignType" placeholder="请选择指定日期" @change="clearAssignType()">
                         <el-option
                             v-for="item in assignType"
                             :key="item.value"
@@ -785,7 +806,14 @@
                     :label-width="formLabelWidth"
                     :required="true"
                 >
-                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')"  style="width: 250px" v-model="form.assignInfo" autocomplete="off"></el-input>
+                    <el-select v-model="form.assignInfo">
+                        <el-option
+                                v-for="item in days"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                        ></el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item
                     v-if="form.assignType==4"
@@ -793,7 +821,14 @@
                     :label-width="formLabelWidth"
                     :required="true"
                 >
-                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')"  style="width: 250px" v-model="form.assignInfo" autocomplete="off"></el-input>
+                    <el-select v-model="form.assignInfo">
+                        <el-option
+                                v-for="item in weeks"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                        ></el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item
                     :required="true"
@@ -801,7 +836,14 @@
                     label="输入每周几"
                     :label-width="formLabelWidth"
                 >
-                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')"  style="width: 250px" v-model="form.assignInfo" autocomplete="off"></el-input>
+                    <el-select v-model="form.assignInfo">
+                        <el-option
+                                v-for="item in dates"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                        ></el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item :required="true" label="是否限制一段时间内可兑换数量" :label-width="formLabelWidth">
                     <el-select v-model="form.limitType" placeholder="请选择限制时间">
@@ -839,7 +881,7 @@
         <el-dialog :close-on-click-modal="false" title="选择优惠券" :visible.sync="drawer">
             <div class="container">
                 <div class="handle-box">
-                    <el-input v-model="query.name" placeholder="优惠券名称" class="handle-input mr10"></el-input>
+                    <el-input v-model="query.name" placeholder="优惠券名称" class="handle-input mr12"></el-input>
                     <el-button type="primary" icon="el-icon-search" @click="openNext">搜索</el-button>
                 </div>
                 <el-table
@@ -890,7 +932,7 @@
                     <el-input
                         v-model="query.groupName"
                         placeholder="券包名称"
-                        class="handle-input mr10"
+                        class="handle-input mr12"
                     ></el-input>
                     <el-button type="primary" icon="el-icon-search" @click="changeCoupon">搜索</el-button>
                 </div>
@@ -994,7 +1036,8 @@ export default {
                 cinemaCode: [],
                 cinemaCodes: '',
                 details: '',
-                markdown: ''
+                markdown: '',
+                assignInfo:'',
             },
             idx: -1,
             id: -1,
@@ -1014,28 +1057,189 @@ export default {
                 effectiveType: '1',
                 laterDays: '',
                 startEffectiveDate: '',
-                endEffectiveDate: ''
+                endEffectiveDate: '',
+                assign_info:''
             },
 
             formLabelWidth: '120px',
             selectValue: {},
-            options: [
+            days:[
                 {
                     value: '1',
-                    label: '审核中'
+                    label: '1'
                 },
                 {
                     value: '2',
-                    label: '未审核'
+                    label: '2'
                 },
                 {
                     value: '3',
-                    label: '通过'
+                    label: '3'
                 },
                 {
                     value: '4',
-                    label: '审核失败'
-                }
+                    label: '4'
+                },
+                {
+                    value: '5',
+                    label: '5'
+                },
+                {
+                    value: '6',
+                    label: '6'
+                },
+                {
+                    value: '7',
+                    label: '7'
+                },
+                {
+                    value: '8',
+                    label: '8'
+                },
+                {
+                    value: '9',
+                    label: '9'
+                },
+                {
+                    value: '10',
+                    label: '10'
+                },
+                {
+                    value: '11',
+                    label: '11'
+                },
+                {
+                    value: '12',
+                    label: '12'
+                },
+                {
+                    value: '13',
+                    label: '13'
+                },
+                {
+                    value: '14',
+                    label: '14'
+                },
+                {
+                    value: '15',
+                    label: '15'
+                },
+                {
+                    value: '16',
+                    label: '16'
+                },
+                {
+                    value: '17',
+                    label: '17'
+                },
+                {
+                    value: '18',
+                    label: '18'
+                },
+                {
+                    value: '19',
+                    label: '19'
+                },
+                {
+                    value: '20',
+                    label: '20'
+                },
+                {
+                    value: '21',
+                    label: '21'
+                },
+                {
+                    value: '22',
+                    label: '22'
+                },
+                {
+                    value: '23',
+                    label: '23'
+                },
+                {
+                    value: '24',
+                    label: '24'
+                },
+                {
+                    value: '25',
+                    label: '25'
+                },
+                {
+                    value: '26',
+                    label: '26'
+                },
+                {
+                    value: '27',
+                    label: '27'
+                },
+                {
+                    value: '28',
+                    label: '28'
+                },
+                {
+                    value: '29',
+                    label: '29'
+                },
+                {
+                    value: '30',
+                    label: '30'
+                },
+                {
+                    value: '31',
+                    label: '31'
+                },
+            ],
+            weeks:[
+                {
+                    value: '1',
+                    label: '1'
+                },
+                {
+                    value: '2',
+                    label: '2'
+                },
+                {
+                    value: '3',
+                    label: '3'
+                },
+                {
+                    value: '4',
+                    label: '4'
+                },
+                {
+                    value: '5',
+                    label: '5'
+                },
+            ],
+            dates:[
+                {
+                    value: '1',
+                    label: '1'
+                },
+                {
+                    value: '2',
+                    label: '2'
+                },
+                {
+                    value: '3',
+                    label: '3'
+                },
+                {
+                    value: '4',
+                    label: '4'
+                },
+                {
+                    value: '5',
+                    label: '5'
+                },
+                {
+                    value: '6',
+                    label: '6'
+                },
+                {
+                    value: '7',
+                    label: '7'
+                },
             ],
             effectiveType: [
                 {
@@ -1159,6 +1363,10 @@ export default {
         this.getMenu();
     },
     methods: {
+        clearAssignType(){
+            this.oForm.assign_info='';
+            this.form.assignInfo='';
+        },
         deletCoupon() {
             this.groupName = '';
             this.couponId = '';
@@ -1462,13 +1670,13 @@ export default {
             }
             if(this.oForm.effectiveType!=2){
                 if (!this.oForm.expireDay) {
-                    this.message = '领取几天后过期不能为空，请检查！';
+                    this.message = '有效期天数不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
                 if (this.oForm.expireDay<0) {
-                    this.message = '领取几天后过期不能小于0，请检查！';
+                    this.message = '有效期天数不能小于0，请检查！';
                     this.open();
                     loading.close();
                     return;
@@ -2021,13 +2229,13 @@ export default {
             }
             if(this.oEffectiveType!=2){
                 if (!this.form.expireDay) {
-                    this.message = '领取几天后过期不能为空，请检查！';
+                    this.message = '有效期天数不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
                 if (this.form.expireDay<0) {
-                    this.message = '领取几天后过期不能小于0，请检查！';
+                    this.message = '有效期天数不能小于0，请检查！';
                     this.open();
                     loading.close();
                     return;
@@ -2451,6 +2659,10 @@ export default {
 }
 .mr10 {
     width: 16%;
+    margin-right: 10px;
+}
+.mr12 {
+    width: 30%;
     margin-right: 10px;
 }
 </style>

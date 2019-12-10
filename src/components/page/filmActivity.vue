@@ -96,7 +96,8 @@
                 <el-table-column prop="sort" label="状态" width="100">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status == 1" type="success">启用</el-tag>
-                        <el-tag v-else type="danger">未启用</el-tag>
+                        <el-tag v-if="scope.row.status == 0" type="danger">未启用</el-tag>
+                        <el-tag v-if="scope.row.status == 2" type="danger">已过期</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column label="操作" width="200" align="center" fixed="right">
@@ -427,7 +428,7 @@
                 <el-form-item
                         label="所选影片"
                         :label-width="formLabelWidth"
-                        v-if="selectedSell.length>0"
+                        v-if="selectedSell.length>0&&oSelectFilmType != 0"
                         :required="true"
                 >
                     <div v-for="(item, index) in selectedSell" style="margin-bottom: 5px" :key="index">
@@ -1301,6 +1302,7 @@
                         console.log(JSON.parse(Decrypt(data.data.data)));
                         if (data.data.code == 'success') {
                             this.editVisible = true;
+                            this.screenInfo=[];
                             if(JSON.parse(Decrypt(data.data.data)).discountActivity.filmCode&&JSON.parse(Decrypt(data.data.data)).discountActivity.filmName){
                                 let exFilmCodeList=JSON.parse(Decrypt(data.data.data)).discountActivity.filmCode.split(',');
                                 let exFilmNameList=JSON.parse(Decrypt(data.data.data)).discountActivity.filmName.split('|');
