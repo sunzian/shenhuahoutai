@@ -1393,6 +1393,9 @@
                             if (JSON.parse(Decrypt(data.data.data)).discountActivity.reduceType == 2) {
                                 this.oReduceType = '2';
                             }
+                            if (JSON.parse(Decrypt(data.data.data)).discountActivity.reduceType == 3) {
+                                this.oReduceType = '3';
+                            }
                             if (JSON.parse(Decrypt(data.data.data)).discountActivity.limitSingleUnit == '年') {
                                 this.oLimitSingleUnit = '年';
                             }
