@@ -624,14 +624,16 @@
                     https.fetchPost('/cinema/getCinemaInfoByBusinessCode', params).then(data => {
                             loading.close();
                             if (data.data.code == 'success') {
-                                var oData = JSON.parse(Decrypt(data.data.data));
-                                console.log(oData);
-                                // console.log(this.query);
-                                this.tableData = oData.data;
-                                this.query.pageSize = oData.pageSize;
-                                this.query.pageNo = oData.pageNo;
-                                this.query.totalCount = oData.totalCount;
-                                this.query.totalPage = oData.totalPage;
+                                if (data.data && data.data.data) {
+                                    var oData = JSON.parse(Decrypt(data.data.data));
+                                    this.tableData = oData.data;
+                                    this.query.pageSize = oData.pageSize;
+                                    this.query.pageNo = oData.pageNo;
+                                    this.query.totalCount = oData.totalCount;
+                                    this.query.totalPage = oData.totalPage;
+                                } else {
+                                    this.tableData = []
+                                }
                             } else if (data.data.code == 'nologin') {
                                 this.message = data.data.message;
                                 this.open();

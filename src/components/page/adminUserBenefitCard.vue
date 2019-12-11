@@ -509,14 +509,18 @@ export default {
                     .then(data => {
                         loading.close();
                         if (data.data.code == 'success') {
-                            var oData = JSON.parse(Decrypt(data.data.data));
-                            console.log(oData);
-                            this.tableData = oData.pageResult.data;
-                            this.totalData = oData.statistics;
-                            this.query.pageSize = oData.pageResult.pageSize;
-                            this.query.pageNo = oData.pageResult.pageNo;
-                            this.query.totalCount = oData.pageResult.totalCount;
-                            this.query.totalPage = oData.pageResult.totalPage;
+                            if (data.data && data.data.data) {
+                                var oData = JSON.parse(Decrypt(data.data.data));
+                                this.tableData = oData.pageResult.data;
+                                this.totalData = oData.statistics;
+                                this.query.pageSize = oData.pageResult.pageSize;
+                                this.query.pageNo = oData.pageResult.pageNo;
+                                this.query.totalCount = oData.pageResult.totalCount;
+                                this.query.totalPage = oData.pageResult.totalPage;
+                            } else {
+                                this.tableData = [];
+                                this.totalData = [];
+                            }
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
                             this.open();

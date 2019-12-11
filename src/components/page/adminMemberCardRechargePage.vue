@@ -723,13 +723,18 @@ export default {
                         loading.close();
                         console.log(data);
                         if (data.data.code == 'success') {
-                            var oData = JSON.parse(Decrypt(data.data.data));
-                            this.tableData = oData.memberCardRecharge.data;
-                            this.totalData = oData.memberCardStatistics;
-                            this.query.pageSize = oData.memberCardRecharge.pageSize;
-                            this.query.pageNo = oData.memberCardRecharge.pageNo;
-                            this.query.totalCount = oData.memberCardRecharge.totalCount;
-                            this.query.totalPage = oData.memberCardRecharge.totalPage;
+                            if (data.data && data.data.data) {
+                                var oData = JSON.parse(Decrypt(data.data.data));
+                                this.tableData = oData.memberCardRecharge.data;
+                                this.totalData = oData.memberCardStatistics;
+                                this.query.pageSize = oData.memberCardRecharge.pageSize;
+                                this.query.pageNo = oData.memberCardRecharge.pageNo;
+                                this.query.totalCount = oData.memberCardRecharge.totalCount;
+                                this.query.totalPage = oData.memberCardRecharge.totalPage;
+                            } else {
+                                this.tableData = [];
+                                this.totalData = [];
+                            }
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
                             this.open();

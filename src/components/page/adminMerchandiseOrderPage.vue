@@ -609,8 +609,6 @@ export default {
                     .fetchPost('admin/merchandiseOrder/getMerchandiseOrderById', params)
                     .then(data => {
                         loading.close();
-                        console.log(data);
-                        console.log(JSON.parse(Decrypt(data.data.data)));
                         if (data.data.code == 'success') {
                             this.editVisible = true;
                             this.form.id = row.id;
@@ -920,18 +918,19 @@ export default {
                     .fetchPost('/admin/merchandiseOrder/merchandiseOrderPage', params)
                     .then(data => {
                         loading.close();
-                        console.log(data);
                         if (data.data.code == 'success') {
-                            var oData = JSON.parse(Decrypt(data.data.data));
-                            console.log(oData);
-                            // console.log(this.query);
-                            this.tableData = oData.pageResult.data;
-                            this.totalData = oData.totalMerchandiseOrder;
-                            this.query.pageSize = oData.pageResult.pageSize;
-                            this.query.pageNo = oData.pageResult.pageNo;
-                            this.query.totalCount = oData.pageResult.totalCount;
-                            this.query.totalPage = oData.pageResult.totalPage;
-                            this.getAllCinema();
+                            if (data.data && data.data.data) {
+                                var oData = JSON.parse(Decrypt(data.data.data));
+                                this.tableData = oData.pageResult.data;
+                                this.totalData = oData.totalMerchandiseOrder;
+                                this.query.pageSize = oData.pageResult.pageSize;
+                                this.query.pageNo = oData.pageResult.pageNo;
+                                this.query.totalCount = oData.pageResult.totalCount;
+                                this.query.totalPage = oData.pageResult.totalPage;
+                            } else {
+                                this.tableData = [];
+                                this.totalData = [];  
+                            }
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
                             this.open();
