@@ -875,7 +875,6 @@ export default {
                 .fetchPost('/cinema/getCinemaById', params)
                 .then(data => {
                     loading.close();
-                    console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.editVisible = true;
                         this.oCinemaName = JSON.parse(Decrypt(data.data.data)).Cinema.cinemaName;
@@ -1124,13 +1123,10 @@ export default {
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             let params = ParamsAppend(jsonArr);
-            console.log(jsonArr);
             https
                 .fetchPost('/cinema/updateCinemaFromBusiness', params)
                 .then(data => {
                     loading.close();
-                    console.log(data);
-                    // console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.editVisible = false;
                         this.$message.success(`编辑成功`);
@@ -1199,7 +1195,6 @@ export default {
                     loading.close();
                     if (data.data.code == 'success') {
                         var oData = JSON.parse(Decrypt(data.data.data));
-                        console.log(oData)
                         this.tableData = oData.data;
                         this.query.pageSize = oData.pageSize;
                         this.query.pageNo = oData.pageNo;
@@ -1257,7 +1252,7 @@ export default {
             }
             return isLt100Kb
         },
-        unSuccess(data) { 
+        unSuccess(data) {
             //修改上传文件 登录超时
             if (data.status == '-1') {
                 this.message = data.message;

@@ -288,7 +288,6 @@
                 jsonArr.push({ key: 'tradeTicketNum', value: this.oForm.tradeTicketNum });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
-                console.log(jsonArr);
                 let params = ParamsAppend(jsonArr);
                 if (this.dialogFormVisible == true) {
                     https
@@ -360,7 +359,6 @@
                         if (data.data.code == 'success') {
                             var oData = JSON.parse(Decrypt(data.data.data));
                             this.tableData = oData.data;
-                            console.log(this.tableData);
                             this.query.pageSize = oData.pageSize;
                             this.query.pageNo = oData.pageNo;
                             this.query.totalCount = oData.totalCount;

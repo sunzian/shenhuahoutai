@@ -276,11 +276,8 @@
                 setTimeout(() => {
                     https.fetchPost('/user/addAdminPage','').then((data) => {
                         loading.close();
-                        console.log(data);
                         if(data.data.code == 'success'){
                             this.dialogFormVisible = true;
-                            // console.log(JSON.parse(JSON.stringify(JSON.parse(Decrypt(data.data.data)).permissionList).replace(/submenuList/g,'children').replace(/menuName/g,'label')));
-                            console.log(JSON.parse(Decrypt(data.data.data)));
                             this.data=JSON.parse(Decrypt(data.data.data)).permissionList;
                             this.selectList =JSON.parse(Decrypt(data.data.data)).businessInfoList;
                         }else if(data.data.code=='nologin'){
@@ -299,9 +296,6 @@
                 }, 500);
             },
             getCheckedKeys() {//新增数据操作
-                // console.log(this.$refs.tree.getCheckedKeys());
-                // console.log(this.$refs.tree.getHalfCheckedKeys());
-                // console.log(this.$refs.tree.getCheckedKeys().concat(this.$refs.tree.getHalfCheckedKeys()));
                 const loading = this.$loading({
                     lock: true,
                     text: 'Loading',
@@ -325,7 +319,6 @@
                     if(this.dialogFormVisible == true){
                         https.fetchPost('/user/addAdminUser',params).then((data) => {//新增
                             loading.close();
-                            console.log(data);
                             if(data.data.code=='success'){
                                 this.dialogFormVisible = false;
                                 this.$message.success(`新增成功`);
@@ -373,8 +366,6 @@
                             let params = ParamsAppend(jsonArr);
                             https.fetchPost('/user/deleteAdminUser',params).then((data) => {
                                 loading.close();
-                                console.log(data);
-                                // console.log(JSON.parse(Decrypt(data.data.data)));
                                 if(data.data.code=='success'){
                                     this.$message.error(`删除了`);
                                     this.getMenu()
@@ -418,8 +409,6 @@
                     let params = ParamsAppend(jsonArr);
                     https.fetchPost('/user/modifyAdminPage',params).then((data) => {
                         loading.close();
-                        console.log(data);
-                        // console.log(JSON.parse(Decrypt(data.data.data)));
                         if(data.data.code=='success'){
                             this.editVisible = true;
                             this.form.id=row.id;
@@ -470,7 +459,6 @@
             },
             // 修改操作
             exChanger() {
-                // console.log(this.$refs.tree.getCheckedKeys());
                 const loading = this.$loading({
                     lock: true,
                     text: 'Loading',
@@ -491,12 +479,9 @@
                     jsonArr.push({key:"menuIds",value:this.$refs.tree.getCheckedKeys().concat(this.$refs.tree.getHalfCheckedKeys())});
                     let sign =md5(preSign(jsonArr));
                     jsonArr.push({key:"sign",value:sign});
-                    console.log(jsonArr);
                     let params = ParamsAppend(jsonArr);
                     https.fetchPost('/user/modifyAdminUser',params).then((data) => {
                         loading.close();
-                        console.log(data);
-                        // console.log(JSON.parse(Decrypt(data.data.data)));
                         if(data.data.code=='success'){
                             this.editVisible = false;
                             this.$message.success(`编辑成功`);
@@ -549,11 +534,8 @@
                     var params = ParamsAppend(jsonArr);
                     https.fetchPost('/user/businessUserPage',params).then((data) => {
                         loading.close();
-                        // console.log(data);
                         if(data.data.code=='success') {
                             var oData = JSON.parse(Decrypt(data.data.data));
-                            console.log(oData);
-                            // console.log(this.query);
                             this.tableData = oData.data;
                             this.query.pageSize = oData.pageSize;
                             this.query.pageNo = oData.pageNo;

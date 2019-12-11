@@ -1977,7 +1977,7 @@ export default {
                     .fetchPost('goldCommodity/modifyPage', params)
                     .then(data => {
                         loading.close();
-                        console.log(JSON.parse(Decrypt(data.data.data)));
+                        // console.log(JSON.parse(Decrypt(data.data.data)));
                         if (data.data.code == 'success') {
                             this.editVisible = true;
                             //优惠券

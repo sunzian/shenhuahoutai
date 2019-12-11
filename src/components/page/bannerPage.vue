@@ -822,7 +822,6 @@ export default {
                         .fetchPost('/noticeOfActivity/getOnlineStatusByCinemaCode', params)
                         .then(data => {
                             loading.close();
-                            console.log(data);
                             if (data.data.code == 'success') {
                                 this.drawer1 = true;
                                 var oData = JSON.parse(Decrypt(data.data.data));
@@ -873,7 +872,6 @@ export default {
                         .fetchPost('/film/getByCinemaCode', params)
                         .then(data => {
                             loading.close();
-                            console.log(data);
                             if (data.data.code == 'success') {
                                 this.drawer2 = true;
                                 var oData = JSON.parse(Decrypt(data.data.data));
@@ -924,7 +922,6 @@ export default {
                         .fetchPost('/goldCommodity/getByCinemaPage', params)
                         .then(data => {
                             loading.close();
-                            console.log(data);
                             if (data.data.code == 'success') {
                                 this.drawer = true;
                                 var oData = JSON.parse(Decrypt(data.data.data));
@@ -982,20 +979,15 @@ export default {
                     jsonArr.push({ key: 'pageSize', value: this.query.aPageSize });
                     let sign = md5(preSign(jsonArr));
                     jsonArr.push({ key: 'sign', value: sign });
-                    console.log(jsonArr);
                     var params = ParamsAppend(jsonArr);
                     https
                         .fetchPost('/noticeOfActivity/getOnlineStatusByCinemaCode', params)
                         .then(data => {
                             loading.close();
-                            console.log(data);
                             if (data.data.code == 'success') {
                                 this.drawer1 = true;
                                 var oData = JSON.parse(Decrypt(data.data.data));
-                                console.log(oData);
-                                console.log(this.query);
                                 this.goldData = oData.data;
-                                console.log(this.sellTableData);
                                 this.query.aPageSize = oData.pageSize;
                                 this.query.aPageNo = oData.pageNo;
                                 this.query.aTotalCount = oData.totalCount;
@@ -1033,13 +1025,11 @@ export default {
                     jsonArr.push({ key: 'pageSize', value: this.query.aPageSize });
                     let sign = md5(preSign(jsonArr));
                     jsonArr.push({ key: 'sign', value: sign });
-                    console.log(jsonArr);
                     var params = ParamsAppend(jsonArr);
                     https
                         .fetchPost('/film/getByCinemaCode', params)
                         .then(data => {
                             loading.close();
-                            console.log(data);
                             if (data.data.code == 'success') {
                                 this.drawer2 = true;
                                 var oData = JSON.parse(Decrypt(data.data.data));
@@ -1084,20 +1074,15 @@ export default {
                     jsonArr.push({ key: 'pageSize', value: this.query.aPageSize });
                     let sign = md5(preSign(jsonArr));
                     jsonArr.push({ key: 'sign', value: sign });
-                    console.log(jsonArr);
                     var params = ParamsAppend(jsonArr);
                     https
                         .fetchPost('/goldCommodity/getByCinemaPage', params)
                         .then(data => {
                             loading.close();
-                            console.log(data);
                             if (data.data.code == 'success') {
                                 this.drawer = true;
                                 var oData = JSON.parse(Decrypt(data.data.data));
-                                console.log(oData);
-                                console.log(this.query);
                                 this.goldData = oData.data;
-                                console.log(this.sellTableData);
                                 this.query.aPageSize = oData.pageSize;
                                 this.query.aPageNo = oData.pageNo;
                                 this.query.aTotalCount = oData.totalCount;
@@ -1132,12 +1117,11 @@ export default {
                     .fetchPost('/banner/addPage', '')
                     .then(data => {
                         loading.close();
-                        console.log(JSON.parse(Decrypt(data.data.data)));
-                        this.businessOptiones = JSON.parse(Decrypt(data.data.data));
-                        this.cinemaList = JSON.parse(Decrypt(data.data.data)).cinemaList;
                         // this.oForm.cinemaCode = JSON.parse(Decrypt(data.data.data)).cinemaList[0].cinemaCode;
                         // this.oForm.cinemaCode = cinemaCode;
                         if (data.data.code == 'success') {
+                            this.businessOptiones = JSON.parse(Decrypt(data.data.data));
+                            this.cinemaList = JSON.parse(Decrypt(data.data.data)).cinemaList;
                             this.dialogFormVisible = true;
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
@@ -1279,8 +1263,6 @@ export default {
                             .fetchPost('/banner/deleteBanner', params)
                             .then(data => {
                                 loading.close();
-                                console.log(data);
-                                // console.log(JSON.parse(Decrypt(data.data.data)));
                                 if (data.data.code == 'success') {
                                     this.$message.error(`删除了`);
                                     this.getMenu();
@@ -1327,7 +1309,6 @@ export default {
                     .fetchPost('/banner/modifyPage', params)
                     .then(data => {
                         loading.close();
-                        console.log(JSON.parse(Decrypt(data.data.data)));
                         if (data.data.code == 'success') {
                             this.editVisible = true;
                             let oIndex = 0; //轮播图级别下拉选显示对应的选项
@@ -1454,8 +1435,6 @@ export default {
                     .fetchPost('/banner/updateById', params)
                     .then(data => {
                         loading.close();
-                        console.log(data);
-                        // console.log(JSON.parse(Decrypt(data.data.data)));
                         if (data.data.code == 'success') {
                             this.editVisible = false;
                             this.$refs.download.clearFiles(); //清除已上传文件
@@ -1558,7 +1537,6 @@ export default {
                         loading.close();
                         if (data.data.code == 'success') {
                             var oData = JSON.parse(Decrypt(data.data.data));
-                            console.log(oData);
                             this.tableData = oData.data;
                             this.query.pageSize = oData.pageSize;
                             this.query.pageNo = oData.pageNo;

@@ -104,12 +104,10 @@
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
                 let params = ParamsAppend(jsonArr);
-                console.log(jsonArr);
                 setTimeout(() => {
                     https.fetchPost('/goldAcquireRule/updateGoldAcquireRule', params)
                         .then(data => {
                                 loading.close();
-                                console.log(data);
                                 if (data.data.code == 'success') {
                                     this.$message.success(`成功`);
                                     this.getMenu();
@@ -140,7 +138,6 @@
                 setTimeout(() => {
                     https.fetchPost('goldAcquireRule/page','').then((data) => {
                         loading.close();
-                        console.log(data);
                         if (data.data.code == 'success') {
                             this.oForm = JSON.parse(Decrypt(data.data.data));
                         } else if (data.data.code == 'nologin') {

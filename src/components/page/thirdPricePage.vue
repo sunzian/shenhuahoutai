@@ -579,7 +579,6 @@ export default {
                 .fetchPost('/thirdPrice/getThirdPriceById', params)
                 .then(data => {
                     loading.close();
-                    console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.editVisible = true;
                         this.oCinemaName = JSON.parse(Decrypt(data.data.data)).cinemaName;
@@ -625,8 +624,6 @@ export default {
                 .fetchPost('/thirdPrice/updateThirdPrice', params)
                 .then(data => {
                     loading.close();
-                    console.log(data);
-                    // console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.editVisible = false;
                         this.$message.success(`编辑成功`);

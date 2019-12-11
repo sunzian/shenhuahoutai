@@ -499,7 +499,6 @@ export default {
                         loading.close();
                         if (data.data.code == 'success') {
                             var oData = JSON.parse(Decrypt(data.data.data));
-                            console.log(oData);
                             this.tableData = oData.memberCardConsume.data;
                             this.totalData = oData.memberCardStatistics;
                             this.query.pageSize = oData.memberCardConsume.pageSize;

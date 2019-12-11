@@ -526,7 +526,6 @@ export default {
                     .fetchPost('/merchandiseCombo/addPage', '')
                     .then(data => {
                         loading.close();
-                        console.log(data);
                         if (data.data.code == 'success') {
                             this.selectedSell = [];
                             this.oForm.image_url = '';
@@ -578,14 +577,12 @@ export default {
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
                 let params = ParamsAppend(jsonArr);
-                // console.log(params);
                 if (this.dialogFormVisible == true) {
                     https
                         .fetchPost('/merchandiseCombo/addMerchandiseCombo', params)
                         .then(data => {
                             loading.close();
                             //新增
-                            // console.log(data);
                             if (data.data.code == 'success') {
                                 this.dialogFormVisible = false;
                                 this.$message.success(`新增成功`);
@@ -612,7 +609,6 @@ export default {
         },
         one(a) {
             //获取卖品绑定的value值
-            // console.log(a);
             this.oForm.merchandiseCode = a;
         },
         sureNext() {
@@ -652,12 +648,9 @@ export default {
                     .fetchPost('/merchandise/list', params)
                     .then(data => {
                         loading.close();
-                        console.log(data);
                         if (data.data.code == 'success') {
                             this.drawer = true;
                             var oData = JSON.parse(Decrypt(data.data.data));
-                            console.log(oData);
-                            // console.log(this.query);
                             this.sellTableData = oData.data;
                             this.query.pageSize = oData.pageSize;
                             this.query.pageNo = oData.pageNo;
@@ -751,7 +744,6 @@ export default {
                     .fetchPost('/merchandiseCombo/modifyPage', params)
                     .then(data => {
                         loading.close();
-                        console.log(JSON.parse(Decrypt(data.data.data)));
                         if (data.data.code == 'success') {
                             if (this.$refs.download){
                                 this.$refs.download.clearFiles();
@@ -820,15 +812,11 @@ export default {
                 jsonArr.push({ key: 'status', value: this.form.status });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
-                console.log(jsonArr);
                 let params = ParamsAppend(jsonArr);
-                console.log(params);
                 https
                     .fetchPost('/merchandiseCombo/modifyMerchandiseCombo', params)
                     .then(data => {
                         loading.close();
-                        console.log(data);
-                        // console.log(JSON.parse(Decrypt(data.data.data)));
                         if (data.data.code == 'success') {
                             this.editVisible = false;
                             this.selectedSell = [];
@@ -878,11 +866,8 @@ export default {
                     .fetchPost('/cinema/myCinemaPage', params)
                     .then(data => {
                         loading.close();
-                        console.log(data);
                         if (data.data.code == 'success') {
                             var oData = JSON.parse(Decrypt(data.data.data));
-                            console.log(oData);
-                            // console.log(this.query);
                             this.tableData = oData.data;
                             this.query.pageSize = oData.pageSize;
                             this.query.pageNo = oData.pageNo;
@@ -939,11 +924,8 @@ export default {
                     .fetchPost('/merchandiseCombo/list', params)
                     .then(data => {
                         loading.close();
-                        console.log(data);
                         if (data.data.code == 'success') {
                             var oData = JSON.parse(Decrypt(data.data.data));
-                            console.log(oData);
-                            // // console.log(this.query);
                             this.oTableData = oData.data;
                             this.query.pageSize = oData.pageSize;
                             this.query.pageNo = oData.pageNo;
@@ -993,7 +975,6 @@ export default {
                     .fetchPost('/merchandiseCombo/list', params)
                     .then(data => {
                         loading.close();
-                        console.log(data);
                         if (data.data.code == 'success') {
                             var oData = JSON.parse(Decrypt(data.data.data));
                             this.oTableData = oData.data;

@@ -873,7 +873,7 @@ export default {
                 .then(data => {
                     console.log(data);
                     loading.close();
-                    console.log(JSON.parse(Decrypt(data.data.data)));
+                    // console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.editVisible = true;
                         this.oArea = JSON.parse(Decrypt(data.data.data)).area;

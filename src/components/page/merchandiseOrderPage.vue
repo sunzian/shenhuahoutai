@@ -567,8 +567,6 @@ export default {
                             .fetchPost('/merchandiseOrder/updateStatusById', params)
                             .then(data => {
                                 loading.close();
-                                console.log(data);
-                                // console.log(JSON.parse(Decrypt(data.data.data)));
                                 if (data.data.code == 'success') {
                                     this.$message.success(`成功`);
                                     this.getMenu()
@@ -615,8 +613,6 @@ export default {
                     .fetchPost('/merchandiseOrder/getMerchandiseOrderById', params)
                     .then(data => {
                         loading.close();
-                        console.log(data);
-                        console.log(JSON.parse(Decrypt(data.data.data)));
                         if (data.data.code == 'success') {
                             this.editVisible = true;
                             this.form.id = row.id;
@@ -845,7 +841,6 @@ export default {
                     .fetchPost('/merchandiseOrder/merchandiseOrderPage', params)
                     .then(data => {
                         loading.close();
-                        console.log(data);
                         if (data.data.code == 'success') {
                             var oData = JSON.parse(Decrypt(data.data.data));
                             console.log(oData);

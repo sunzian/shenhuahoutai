@@ -443,7 +443,7 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            if(this.oForm.cinemaCode.length==0){
+            if(this.oForm.cinemaCode.length==0&&this.oForm.commonType==2){
                 this.message = '请先选择影院！';
                 this.open();
                 loading.close();

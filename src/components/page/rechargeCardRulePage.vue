@@ -579,8 +579,8 @@ export default {
             });
             https.fetchPost('/rechargeCardRule/addPage', '').then(data => {
                     loading.close();
-                    this.cinemaInfo = JSON.parse(Decrypt(data.data.data));
                     if (data.data.code == 'success') {
+                        this.cinemaInfo = JSON.parse(Decrypt(data.data.data));
                         this.cardList=[];
                         for (let key in this.oForm) {
                             this.oForm[key] = '';
@@ -665,7 +665,6 @@ export default {
             if (this.dialogFormVisible == true) {
                 https.fetchPost('/rechargeCardRule/addRechargeCardRule', params).then(data => {
                         loading.close();
-                            console.log(data);
                         if (data.data.code == 'success') {
                             this.dialogFormVisible = false;
                             this.$message.success(`新增成功`);
@@ -702,14 +701,6 @@ export default {
                     });
                     this.idx = index;
                     this.form = row;
-                    let name = this.query.name;
-                    let status = this.query.status;
-                    if (!name) {
-                        name = '';
-                    }
-                    if (!status) {
-                        status = '';
-                    }
                     let jsonArr = [];
                     jsonArr.push({ key: 'id', value: row.id });
                     let sign = md5(preSign(jsonArr));
@@ -754,8 +745,6 @@ export default {
             });
             this.idx = index;
             this.form = row;
-
-            console.log(this.form.cinemaCode);
             let jsonArr1 = [];
             jsonArr1.push({ key: 'pageNo', value: this.query.pageNo });
             jsonArr1.push({ key: 'pageSize', value: this.query.pageSize });
@@ -769,7 +758,6 @@ export default {
                 if (data.data.code == 'success') {
                     var res = JSON.parse(Decrypt(data.data.data));
                     this.cardList = res;
-                    console.log(this.cardList)
                 } else if (data.data.code == 'nologin') {
                     this.message = data.data.message;
                     this.open();
@@ -791,9 +779,7 @@ export default {
             let params = ParamsAppend(jsonArr);
             https.fetchPost('/rechargeCardRule/modifyPage', params).then(data => {
                     loading.close();
-                    console.log(data);
                     if (data.data.code == 'success') {
-                        console.log(JSON.parse(Decrypt(data.data.data)));
                         this.editVisible = true;
                         this.oCinemaName = JSON.parse(Decrypt(data.data.data)).rechargeCardRules.cinemaName;
                         this.oCinemaCode = JSON.parse(Decrypt(data.data.data)).rechargeCardRules.cinemaCode;
@@ -979,8 +965,6 @@ export default {
             let params = ParamsAppend(jsonArr);
             https.fetchPost('/rechargeCardRule/modifyRechargeCardRule', params).then(data => {
                     loading.close();
-                    console.log(data);
-                    // console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.editVisible = false;
                         this.$message.success(`编辑成功`);
@@ -1177,7 +1161,6 @@ export default {
             https.fetchPost('/cinema/getAllCinema').then(data => {
                     if (data.data.code == 'success') {
                         var res = JSON.parse(Decrypt(data.data.data));
-                        console.log(res);
                         this.cinemaInfo = res;
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
@@ -1217,14 +1200,12 @@ export default {
                 .then(data => {
                     if (data.data.code == 'success') {
                         var res = JSON.parse(Decrypt(data.data.data));
-                        console.log(res);
                         if (res.data.length == 0) {
                             this.message = '暂无券包';
                             this.open();
                             return;
                         }
                         this.couponList = res.data;
-                        console.log(this.couponList);
                         this.query.pageSize = res.pageSize;
                         this.query.pageNo = res.pageNo;
                         this.query.totalCount = res.totalCount;
@@ -1263,7 +1244,6 @@ export default {
                 .then(data => {
                     if (data.data.code == 'success') {
                         var res = JSON.parse(Decrypt(data.data.data));
-                        console.log(res);
                         if (res.data.length == 0) {
                             this.message = '暂无券包';
                             this.open();
@@ -1302,7 +1282,6 @@ export default {
                     if (data.data.code == 'success') {
                         var res = JSON.parse(Decrypt(data.data.data));
                         this.cardList = res;
-                        console.log(this.cardList)
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();

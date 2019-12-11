@@ -456,7 +456,7 @@ export default {
                     .then(data => {
                         loading.close();
                         console.log(data);
-                        console.log(JSON.parse(Decrypt(data.data.data)));
+                        // console.log(JSON.parse(Decrypt(data.data.data)));
                         if (data.data.code == 'success') {
                             this.editVisible = true;
                             this.form.typeName = JSON.parse(Decrypt(data.data.data)).typeName;

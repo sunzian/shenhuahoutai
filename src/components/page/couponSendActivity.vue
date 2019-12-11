@@ -440,12 +440,12 @@
                     <el-pagination
                         background
                         layout="total, prev, pager, next"
-                        :current-page="query.pageNo"
-                        :page-size="query.pageSize"
-                        :total="query.totalCount"
-                        @current-change="currentChange"
-                        @prev-click="prev"
-                        @next-click="next"
+                        :current-page="query.aPageNo"
+                        :page-size="query.aPageSize"
+                        :total="query.aTotalCount"
+                        @current-change="aCurrentChange"
+                        @prev-click="aPrev"
+                        @next-click="aNext"
                     ></el-pagination>
                 </div>
             </div>
@@ -489,7 +489,9 @@ export default {
             message: '', //弹出框消息
             query: {
                 pageNo: 1,
-                pageSize: 15
+                pageSize: 15,
+                aPageNo: 1,
+                aPageSize: 15
             },
             options: [
                 {
@@ -1120,6 +1122,25 @@ export default {
             this.query.pageNo++;
             this.getMenu();
         },
+        aCurrentChange(val) {
+            //点击选择具体页数
+            this.query.aPageNo = val;
+            this.getAllCoupon();
+        },
+        aHandleSizeChange(val) {
+            this.query.aPageSize=val;
+            this.getAllCoupon()
+        },
+        aPrev() {
+            //分页按钮上一页
+            this.query.aPageNo--;
+            this.getAllCoupon();
+        },
+        aNext() {
+            //分页按钮下一页
+            this.query.aPageNo++;
+            this.getAllCoupon();
+        },
         deletCoupon() {
             this.groupName = '';
             this.couponId = '';
@@ -1163,11 +1184,14 @@ export default {
                 return;
             }
             let jsonArr = [];
+            jsonArr.push({ key: 'pageNo', value: this.query.aPageNo });
+            jsonArr.push({ key: 'pageSize', value: this.query.aPageSize });
             jsonArr.push({ key: 'cinemaCodes', value: this.oForm.cinemaCode });
             jsonArr.push({ key: 'status', value: 1 });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             var params = ParamsAppend(jsonArr);
+            console.log(jsonArr);
             https
                 .fetchPost('/couponGroup/couponGroupPage', params)
                 .then(data => {
@@ -1179,7 +1203,11 @@ export default {
                             return;
                         }
                         this.couponList = res.data;
-                        console.log(this.couponList);
+                        console.log(res);
+                        this.query.aPageSize = res.pageSize;
+                        this.query.aPageNo = res.pageNo;
+                        this.query.aTotalCount = res.totalCount;
+                        this.query.aTotalPage = res.totalPage
                         this.drawer = true;
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;

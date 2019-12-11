@@ -489,8 +489,8 @@ export default {
                 .then(data => {
                     this.cardList = [];
                     loading.close();
-                    this.cinemaInfo = JSON.parse(Decrypt(data.data.data));
                     if (data.data.code == 'success') {
+                        this.cinemaInfo = JSON.parse(Decrypt(data.data.data));
                         for (let key in this.oForm) {
                             this.oForm[key] = '';
                         }
@@ -551,14 +551,12 @@ export default {
             console.log(jsonArr);
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
-            console.log(jsonArr);
             let params = ParamsAppend(jsonArr);
             if (this.dialogFormVisible == true) {
                 https
                     .fetchPost('/openCardRule/addOpenCardRule', params)
                     .then(data => {
                         loading.close();
-                        console.log(data);
                         if (data.data.code == 'success') {
                             this.dialogFormVisible = false;
                             this.$message.success(`新增成功`);
@@ -648,9 +646,7 @@ export default {
                 .fetchPost('/openCardRule/modifyPage', params)
                 .then(data => {
                     loading.close();
-                    console.log(data);
                     if (data.data.code == 'success') {
-                        console.log(JSON.parse(Decrypt(data.data.data)));
                         // JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.cinemaCode
                         // this.oForm.cinemaCode=JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.cinemaCode
                         // this.getAllCinemaCard();
@@ -803,14 +799,11 @@ export default {
             jsonArr.push({ key: 'id', value: this.oId });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
-            console.log(jsonArr);
             let params = ParamsAppend(jsonArr);
             https
                 .fetchPost('/openCardRule/modifyOpenCardRule', params)
                 .then(data => {
                     loading.close();
-                    console.log(data);
-                    // console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.editVisible = false;
                         this.$message.success(`编辑成功`);
@@ -890,7 +883,6 @@ export default {
             jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
-            console.log(jsonArr);
             var params = ParamsAppend(jsonArr);
             https
                 .fetchPost('/openCardRule/openPage', params)
@@ -899,7 +891,6 @@ export default {
                     if (data.data.code == 'success') {
                         var oData = JSON.parse(Decrypt(data.data.data));
                         this.tableData = oData.data;
-                        console.log(this.tableData);
                         this.query.pageSize = oData.pageSize;
                         this.query.pageNo = oData.pageNo;
                         this.query.totalCount = oData.totalCount;
@@ -1016,7 +1007,6 @@ export default {
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             var params = ParamsAppend(jsonArr);
-            console.log(jsonArr);
             https
                 .fetchPost('/couponGroup/couponGroupPage', params)
                 .then(data => {
@@ -1029,7 +1019,6 @@ export default {
                             return;
                         }
                         this.couponList = res.data;
-                        console.log(this.couponList);
                         this.query.pageSize = res.pageSize;
                         this.query.pageNo = res.pageNo;
                         this.query.totalCount = res.totalCount;
@@ -1056,7 +1045,6 @@ export default {
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             var params = ParamsAppend(jsonArr);
-            console.log(jsonArr);
             https
                 .fetchPost('/couponGroup/couponGroupPage', params)
                 .then(data => {

@@ -75,7 +75,6 @@ export default {
                 if(data.data.code == 'success'){
                     this.$router.push('/login');
                 }
-                // console.log(data.data.code)
             }).catch(err=>{
                     console.log(err)
                 }

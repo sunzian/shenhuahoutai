@@ -280,8 +280,6 @@ export default {
                 .fetchPost('/role/deleteRole', params)
                 .then(data => {
                     loading.close();
-                    // console.log(data);
-                    // console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.$message.error(`删除了`);
                         this.getMenu();

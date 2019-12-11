@@ -197,10 +197,6 @@
                     let params = ParamsAppend(jsonArr);
                     https.fetchPost('/role/viewRolePermission',params).then((data) => {
                         loading.close();
-                        console.log(data);
-                        if(data.data.data){
-                            console.log(JSON.parse(Decrypt(data.data.data)));
-                        }
                         if(data.data.code=='success'){
                             this.viewVisible = true
                             this.expandedKeys = JSON.parse(Decrypt(data.data.data)).openPermissionIds
@@ -241,8 +237,6 @@
                     let params = ParamsAppend(jsonArr);
                     https.fetchPost('/role/permissionForRolePage',params).then((data) => {
                         loading.close();
-                        console.log(data);
-                        console.log(JSON.parse(Decrypt(data.data.data)));
                         if(data.data.code=='success'){
                             this.editVisible = true;
                             this.expandedKeys = JSON.parse(Decrypt(data.data.data)).openPermissionIds
@@ -296,8 +290,6 @@
                     let params = ParamsAppend(jsonArr);
                     https.fetchPost('/role/permissionForRole',params).then((data) => {
                         loading.close();
-                        console.log(data);
-                        // console.log(JSON.parse(Decrypt(data.data.data)));
                         if(data.data.code=='success'){
                             this.editVisible = false;
                             this.$message.success(`编辑成功`);
@@ -348,11 +340,8 @@
                     var params = ParamsAppend(jsonArr);
                     https.fetchPost('/role/rolePermission',params).then((data) => {
                         loading.close();
-                        // console.log(data);
                         if(data.data.code=='success') {
                             var oData = JSON.parse(Decrypt(data.data.data));
-                            console.log(oData);
-                            // console.log(this.query);
                             this.tableData = oData.pageResult.data;
                             this.query.pageSize = oData.pageResult.pageSize;
                             this.query.pageNo = oData.pageResult.pageNo;

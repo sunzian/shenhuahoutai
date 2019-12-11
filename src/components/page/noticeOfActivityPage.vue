@@ -619,8 +619,6 @@ export default {
                             .fetchPost('/noticeOfActivity/deleteNoticeOfActivity', params)
                             .then(data => {
                                 loading.close();
-                                console.log(data);
-                                // console.log(JSON.parse(Decrypt(data.data.data)));
                                 if (data.data.code == 'success') {
                                     this.$message.error(`删除了`);
                                     this.show();
@@ -667,7 +665,6 @@ export default {
                     .fetchPost('/noticeOfActivity/modifyPage', params)
                     .then(data => {
                         loading.close();
-                        console.log(JSON.parse(Decrypt(data.data.data)));
                         if (data.data.code == 'success') {
                             this.editVisible = true;
                             this.oCinemaCode = JSON.parse(Decrypt(data.data.data)).cinemaCodes;
@@ -720,13 +717,11 @@ export default {
                 jsonArr.push({ key: 'id', value: this.oId });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
-                console.log(jsonArr);
                 let params = ParamsAppend(jsonArr);
                 https
                     .fetchPost('/noticeOfActivity/updateNoticeOfActivityById', params)
                     .then(data => {
                         loading.close();
-                        console.log(data);
                         if (data.data.code == 'success') {
                             this.editVisible = false;
                             this.$refs.upload.clearFiles(); //清除已上传文件
@@ -841,7 +836,6 @@ export default {
                         loading.close();
                         if (data.data.code == 'success') {
                             var oData = JSON.parse(Decrypt(data.data.data));
-                            console.log(oData);
                             this.oTableData = oData.data;
                             this.query.aPageSize = oData.pageSize;
                             this.query.aPageNo = oData.pageNo;
@@ -892,7 +886,6 @@ export default {
                     loading.close();
                     if (data.data.code == 'success') {
                         var oData = JSON.parse(Decrypt(data.data.data));
-                        console.log(oData);
                         this.tableData = oData.data;
                         this.query.totalCount = oData.totalCount;
                         this.query.totalPage = oData.totalPage;

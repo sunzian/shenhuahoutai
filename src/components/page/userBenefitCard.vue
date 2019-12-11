@@ -315,7 +315,6 @@ export default {
                         loading.close();
                         if (data.data.code == 'success') {
                             var oData = JSON.parse(Decrypt(data.data.data));
-                            console.log(oData);
                             this.editVisible = true;
                             this.form = oData;
                             if (oData.status == 1) {
@@ -427,7 +426,6 @@ export default {
                 jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
-                console.log(jsonArr)
                 var params = ParamsAppend(jsonArr);
                 https
                     .fetchPost('/userBenefitCard/list', params)
@@ -435,7 +433,6 @@ export default {
                         loading.close();
                         if (data.data.code == 'success') {
                             var oData = JSON.parse(Decrypt(data.data.data));
-                            console.log(oData);
                             this.tableData = oData.pageResult.data;
                             this.totalData = oData.statistics;
                             this.query.pageSize = oData.pageResult.pageSize;

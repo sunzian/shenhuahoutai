@@ -441,8 +441,6 @@
                         .fetchPost('/user/updateUserPassword', params)
                         .then(data => {
                             loading.close();
-                            console.log(data);
-                            // console.log(JSON.parse(Decrypt(data.data.data)));
                             if (data.data.code == 'success') {
                                 this.$message.success(`密码修改成功`);
                                 this.getMenu();
@@ -620,8 +618,6 @@
                             let params = ParamsAppend(jsonArr);
                             https.fetchPost('/user/deleteUser',params).then((data) => {
                                 loading.close();
-                                console.log(data);
-                                // console.log(JSON.parse(Decrypt(data.data.data)));
                                 if (data.data.code == 'success') {
                                     this.$message.error(`删除了`);
                                     this.getMenu();
@@ -667,8 +663,6 @@
                     .fetchPost('/user/modifyPage', params)
                     .then(data => {
                         loading.close();
-                        console.log(data);
-                        console.log(JSON.parse(Decrypt(data.data.data)));
                         if (data.data.code == 'success') {
                             this.editVisible = true;
                             this.form.id = row.id;
@@ -737,8 +731,6 @@
                     let params = ParamsAppend(jsonArr);
                     https.fetchPost('/user/modifyUser',params).then((data) => {
                         loading.close();
-                        console.log(data);
-                        // console.log(JSON.parse(Decrypt(data.data.data)));
                         if (data.data.code == 'success') {
                             this.$message.success(`编辑成功`);
                             this.getMenu();

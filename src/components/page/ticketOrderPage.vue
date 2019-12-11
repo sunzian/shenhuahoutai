@@ -683,8 +683,6 @@ export default {
                     .fetchPost('/ticketOrder/getOrderById', params)
                     .then(data => {
                         loading.close();
-                        console.log(data);
-                        console.log(JSON.parse(Decrypt(data.data.data)));
                         if (data.data.code == 'success') {
                             this.editVisible = true;
                             this.form.id = row.id;
@@ -936,7 +934,6 @@ export default {
                     .fetchPost('/ticketOrder/ticketOrderPage', params)
                     .then(data => {
                         loading.close();
-                        console.log(data);
                         if (data.data.code == 'success') {
                             var oData = JSON.parse(Decrypt(data.data.data));
                             console.log(oData);

@@ -254,10 +254,8 @@
                 let params = ParamsAppend(jsonArr);
                 https.fetchPost('/dataStatistics/getConsumeStatistics',params).then(data => {
                     loading.close();
-                    // console.log(data);
                     if (data.data.code == 'success') {
                         var oData = JSON.parse(Decrypt(data.data.data));
-                        console.log(oData);
                         this.tableData=oData.consumeStatisticsList
                         this.opinionData=oData.diagram
                         this.$nextTick(function() {
@@ -288,11 +286,8 @@
                 });
                 https.fetchPost('/cinema/getAllCinema','').then(data => {
                     loading.close();
-                    // console.log(data);
                     if (data.data.code == 'success') {
                         var oData = JSON.parse(Decrypt(data.data.data));
-                        console.log(oData[0].cinemaCode);
-                        console.log(oData);
                         this.cinemas=oData
                         this.firstCinema=oData[0].cinemaCode
                         this.value1=oData[0].cinemaName
@@ -321,18 +316,14 @@
                 });
                 https.fetchPost('/dataStatistics/getUserStatistics','').then(data => {
                     loading.close();
-                    // console.log(data);
                     if (data.data.code == 'success') {
                         var oData = JSON.parse(Decrypt(data.data.data));
-                        // console.log(oData);
                         this.form=oData
                     } else if (data.data.code == 'nologin') {
-                        console.log(1);
                         this.message = data.data.message;
                         this.open();
                         this.$router.push('/login');
                     } else {
-                        console.log(2);
                         this.message = data.data.message;
                         this.open();
                     }
@@ -353,10 +344,8 @@
                 });
                 https.fetchPost('/dataStatistics/getCinemaStatistics','').then(data => {
                     loading.close();
-                    // console.log(data);
                     if (data.data.code == 'success') {
                         var oData = JSON.parse(Decrypt(data.data.data));
-                        // console.log(oData);
                         this.oForm=oData
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
@@ -388,10 +377,8 @@
                 let params = ParamsAppend(jsonArr);
                 https.fetchPost('/dataStatistics/getCinemaStatistics',params).then(data => {
                     loading.close();
-                    // console.log(data);
                     if (data.data.code == 'success') {
                         var oData = JSON.parse(Decrypt(data.data.data));
-                        // console.log(oData);
                         this.aForm=oData
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
@@ -418,10 +405,8 @@
                 });
                 https.fetchPost('/dataStatistics/getBenefitCardStatistics','').then(data => {
                     loading.close();
-                    // console.log(data);
                     if (data.data.code == 'success') {
                         var oData = JSON.parse(Decrypt(data.data.data));
-                        // console.log(oData);
                         this.benForm=oData
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
@@ -458,10 +443,8 @@
                 let params = ParamsAppend(jsonArr);
                 https.fetchPost('/dataStatistics/getConsumeStatistics',params).then(data => {
                     loading.close();
-                    console.log(data);
                     if (data.data.code == 'success') {
                         var oData = JSON.parse(Decrypt(data.data.data));
-                        console.log(oData);
                         this.tableData=oData.consumeStatisticsList
                         this.opinionData=oData.diagram
                         this.$nextTick(function() {
@@ -502,10 +485,8 @@
                 let params = ParamsAppend(jsonArr);
                 https.fetchPost('/dataStatistics/getConsumeStatistics',params).then(data => {
                     loading.close();
-                    console.log(data);
                     if (data.data.code == 'success') {
                         var oData = JSON.parse(Decrypt(data.data.data));
-                        console.log(oData);
                         this.tableData=oData.consumeStatisticsList
                         this.opinionData=oData.diagram
                         this.$nextTick(function() {
@@ -546,10 +527,8 @@
                 let params = ParamsAppend(jsonArr);
                 https.fetchPost('/dataStatistics/getConsumeStatistics',params).then(data => {
                     loading.close();
-                    console.log(data);
                     if (data.data.code == 'success') {
                         var oData = JSON.parse(Decrypt(data.data.data));
-                        console.log(oData);
                         this.tableData=oData.consumeStatisticsList
                         this.opinionData=oData.diagram
                         this.$nextTick(function() {
@@ -590,10 +569,8 @@
                 let params = ParamsAppend(jsonArr);
                 https.fetchPost('/dataStatistics/getConsumeStatistics',params).then(data => {
                     loading.close();
-                    console.log(data);
                     if (data.data.code == 'success') {
                         var oData = JSON.parse(Decrypt(data.data.data));
-                        console.log(oData);
                         this.tableData=oData.consumeStatisticsList
                         this.opinionData=oData.diagram
                         this.$nextTick(function() {
@@ -624,7 +601,6 @@
                 });
                 https.fetchPost('/dataStatistics/refreshStatisticsData','').then(data => {
                     loading.close();
-                    // console.log(data);
                     if (data.data.code == 'success') {
                         this.getMenu();
                         this.getMenu1();

@@ -550,7 +550,6 @@ export default {
             jsonArr.push({ key: 'type', value: this.oForm.type });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
-            console.log(jsonArr);
             let params = ParamsAppend(jsonArr);
             if (this.dialogFormVisible == true) {
                 https
@@ -558,7 +557,6 @@ export default {
                     .then(data => {
                         loading.close();
                         //新增
-                        console.log(data);
                         if (data.data.code == 'success') {
                             this.dialogFormVisible = false;
                             this.$refs.download.clearFiles();
@@ -641,8 +639,6 @@ export default {
                 .fetchPost('chatroomAwards/updateAwardsPage', params)
                 .then(data => {
                     loading.close();
-                    console.log(data);
-                    console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.oCinemaName = JSON.parse(Decrypt(data.data.data)).cinemaName;
                         this.oName = JSON.parse(Decrypt(data.data.data)).name;
@@ -670,7 +666,6 @@ export default {
                 });
         },
         show(row) {
-            // console.log(row);
             this.showSell = false;
             //是否拥有权限
             const loading = this.$loading({
@@ -696,7 +691,6 @@ export default {
                     loading.close();
                     if (data.data.code == 'success') {
                         var oData = JSON.parse(Decrypt(data.data.data));
-                        console.log(oData);
                         this.tableData = oData.data;
                         this.query.pageSize = oData.pageSize;
                         this.query.pageNo = oData.pageNo;
@@ -749,7 +743,6 @@ export default {
                     loading.close();
                     if (data.data.code == 'success') {
                         var oData = JSON.parse(Decrypt(data.data.data));
-                        console.log(oData);
                         this.tableData = oData.data;
                         this.query.pageSize = oData.pageSize;
                         this.query.pageNo = oData.pageNo;
@@ -803,13 +796,11 @@ export default {
             jsonArr.push({ key: 'id', value: this.oId });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
-            console.log(jsonArr);
             let params = ParamsAppend(jsonArr);
             https
                 .fetchPost('chatroomAwards/updateAwards', params)
                 .then(data => {
                     loading.close();
-                    // console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.editVisible = false;
                         this.$message.success(`编辑成功`);
@@ -850,13 +841,11 @@ export default {
             jsonArr.push({ key: 'status', value: status });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
-            console.log(jsonArr);
             let params = ParamsAppend(jsonArr);
             https
                 .fetchPost('couponGroup/updateStatusById', params)
                 .then(data => {
                     loading.close();
-                    // console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.$message.success(`修改成功`);
                         this.getMenu();
@@ -904,7 +893,6 @@ export default {
                     loading.close();
                     if (data.data.code == 'success') {
                         var oData = JSON.parse(Decrypt(data.data.data));
-                        console.log(oData);
                         this.tableData = oData.data;
                         this.query.pageSize = oData.pageSize;
                         this.query.pageNo = oData.pageNo;
@@ -939,7 +927,6 @@ export default {
             this.selectValue = val;
         },
         selectDay(val) {
-            // console.log(val)
             this.checkedDays = val.join(',');
         },
         // 获取所有影院
@@ -1012,7 +999,6 @@ export default {
             jsonArr.push({ key: 'pageSize', value: this.query.aPageSize });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
-            console.log(jsonArr);
             var params = ParamsAppend(jsonArr);
             https
                 .fetchPost('merchandiseCoupon/getCouponByCinemaCode', params)
@@ -1091,7 +1077,6 @@ export default {
         },
         unSuccess(data) {
             //修改上传文件 登录超时
-            // console.log(data);
             this.form.image_url = data.data;
             if (data.code == 'nologin') {
                 this.message = data.message;

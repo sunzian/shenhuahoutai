@@ -788,8 +788,6 @@
                     this.dateInfo.push(this.value1);
                     this.startArr.push(this.value1[0])
                     this.endArr.push(this.value1[1])
-                    console.log(this.startArr.join(','));
-                    console.log(this.endArr.join(','));
                 }
             },
             deletTime(index) {
@@ -808,12 +806,9 @@
                 });
                 https.fetchPost('/merchandiseDiscountActivity/addPage', '').then(data => {
                     loading.close();
-                    console.log(data);
                     if (data.data.code == 'success') {
                         this.selectedSell=[];
-                        // console.log(this.cinemaInfo);
                         this.oForm.code = this.cinemaInfo[0].cinemaCode;
-                        console.log(JSON.parse(Decrypt(data.data.data)));
                         // let formats = JSON.parse(Decrypt(data.data.data)).formatList;
                         // this.formatList = [];
                         // for (let i = 0; i < formats.length; i++) {
@@ -839,11 +834,9 @@
                     });
             },
             addRole() {//新增按钮操作
-                console.log(this.selectedSell);
                 for(let x in this.selectedSell){
                     this.merSelect.push(this.selectedSell[x].merchandiseCode)
                 }
-                console.log(this.merSelect.join(','));
                 const loading = this.$loading({
                     lock: true,
                     text: 'Loading',
@@ -1049,12 +1042,10 @@
                 }
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
-                console.log(jsonArr);
                 let params = ParamsAppend(jsonArr);
                 if (this.dialogFormVisible == true) {
                     https.fetchPost('/merchandiseDiscountActivity/addActivity', params).then(data => {//新增
                         loading.close();
-                        console.log(data);
                         if (data.data.code == 'success') {
                             this.dialogFormVisible = false;
                             this.$message.success(`新增成功`);
@@ -1167,7 +1158,6 @@
                 let params = ParamsAppend(jsonArr);
                 https.fetchPost('/filmDiscountActivity/getTimesById', params).then(data => { //查询可用时间段
                     loading.close();
-                    console.log(data);
                     this.dateInfo=[];
                     this.startArr=[];
                     this.endArr=[];
@@ -1181,9 +1171,6 @@
                         this.startArr.push(this.dateInfo[x][0])
                         this.endArr.push(this.dateInfo[x][1]);
                     }
-                    console.log(this.startArr.join(','));
-                    console.log(this.endArr.join(','));
-                    console.log(this.dateInfo);
 
                 }).catch(err => {
                     loading.close();
@@ -1191,8 +1178,6 @@
                 });
                 https.fetchPost('/merchandiseDiscountActivity/getActivityById', params).then(data => {
                     loading.close();
-                    console.log(data);
-                    console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.editVisible = true;
                         this.oName = JSON.parse(Decrypt(data.data.data)).name;
@@ -1224,7 +1209,6 @@
                                 json.merchandiseCode=exFilmCodeList[x];
                                 this.selectedSell.push(json)
                             }
-                            console.log(this.selectedSell);
                         }
                         this.oStartDate = JSON.parse(Decrypt(data.data.data)).startDate;
                         this.oEndDate = JSON.parse(Decrypt(data.data.data)).endDate;
@@ -1503,11 +1487,9 @@
                 jsonArr.push({ key: 'id', value: this.form.id });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
-                console.log(jsonArr);
                 let params = ParamsAppend(jsonArr);
                 https.fetchPost('merchandiseDiscountActivity/updateById', params).then(data => {
                     loading.close();
-                    // console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.editVisible = false;
                         this.$message.success(`编辑成功`);
@@ -1560,12 +1542,9 @@
                         jsonArr.push({ key: 'status', value: status });
                         let sign = md5(preSign(jsonArr));
                         jsonArr.push({ key: 'sign', value: sign });
-                        console.log(jsonArr);
                         let params = ParamsAppend(jsonArr);
                         https.fetchPost('/merchandiseDiscountActivity/updateStatusById', params).then(data => {
                             loading.close();
-                            console.log(data);
-                            // console.log(JSON.parse(Decrypt(data.data.data)));
                             if (data.data.code == 'success') {
                                 this.$message.success(`修改成功`);
                                 this.getMenu();
@@ -1590,10 +1569,6 @@
                 });
             },
             Search() {
-                console.log(this.query.reduceType);
-                console.log(this.query.status);
-                console.log(this.query.cinemaCode);
-                console.log(this.query.name);
                 this.query.pageNo = 1;
                 this.getMenu();
             },
@@ -1620,14 +1595,11 @@
                 // jsonArr.push({ key: 'filmName', value: name });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
-                console.log(jsonArr);
                 var params = ParamsAppend(jsonArr);
                 https.fetchPost('/merchandiseDiscountActivity/page', params).then(data => {
                     loading.close();
                     if (data.data.code == 'success') {
                         var oData = JSON.parse(Decrypt(data.data.data));
-                        console.log(oData);
-                        // console.log(oData.pageResult);
                         this.cinemaInfo = [];
                         for (let i = 0; i < oData.cinemaList.length; i++) {
                             let cinemaList = {};
@@ -1635,7 +1607,6 @@
                             cinemaList.cinemaName = oData.cinemaList[i].cinemaName;
                             this.cinemaInfo.push(cinemaList);
                         }
-                        console.log(this.cinemaInfo);
                         this.oForm.cinemaCode = this.cinemaInfo[0].cinemaCode;
                         this.selectValue = this.cinemaInfo[0].cinemaCode;
                         this.tableData = oData.pageResult.data;
@@ -1664,26 +1635,19 @@
                 });
             },
             selectCinema(val) {
-                console.log(1);
                 this.selectedSell=[];
-                console.log(val);
                 // let selectValue = val.join(',');
                 this.selectValue = val;
                 this.getAllScreen(val);
             },
             selectScreens(val) {
-                // console.log(val)
                 let selectValue = val.join(',');
                 this.selectScreenCode = selectValue;
-                console.log(selectValue);
             },
             selectFormat(val) {
-                // console.log(val)
                 this.selectFormatCode = val.join(',');
-                console.log(this.selectFormatCode);
             },
             selectDay(val) {
-                // console.log(val)
                 this.checkedDays = val.join(',');
             },
             // 获取所选影院影厅
@@ -1699,7 +1663,6 @@
                 var params = ParamsAppend(jsonArr);
                 https.fetchPost('filmCoupon/getScreenInfoByCinemaCode', params).then(data => {
                     if (data.data.code == 'success') {
-                        console.log(JSON.parse(Decrypt(data.data.data)));
                         let screens = JSON.parse(Decrypt(data.data.data));
                         this.screenInfo = [];
                         for (let i = 0; i < screens.length; i++) {
@@ -1745,7 +1708,6 @@
                 this.getMenu();
             },
             one(a){//获取卖品绑定的value值
-                console.log(a);
                 this.oForm.filmCode =a
             },
             sureNext() {
@@ -1769,7 +1731,6 @@
                     }
 
                 }
-                console.log(this.selectedSell);
                 this.drawer = false;
             },
             openNext() {
@@ -1797,12 +1758,9 @@
                     var params = ParamsAppend(jsonArr);
                     https.fetchPost('/merchandise/list',params).then((data) => {
                         loading.close();
-                        console.log(data);
                         if(data.data.code=='success') {
                             this.drawer=true;
                             var oData = JSON.parse(Decrypt(data.data.data));
-                            console.log(oData);
-                            // console.log(this.query);
                             this.sellTableData = oData.data;
                             this.query.aPageSize = oData.pageSize;
                             this.query.aPageNo = oData.pageNo;

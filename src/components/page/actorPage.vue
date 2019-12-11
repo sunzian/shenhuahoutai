@@ -360,7 +360,7 @@ export default {
             https.fetchPost('/actor/getActorById', params).then(data => {
                     // console.log(data)
                     loading.close();
-                    console.log(JSON.parse(Decrypt(data.data.data)));
+                    // console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.editVisible = true;
                         this.oName = JSON.parse(Decrypt(data.data.data)).name;

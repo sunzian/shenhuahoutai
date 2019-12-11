@@ -174,7 +174,7 @@
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" label="权益类型：" :label-width="formLabelWidth">
-                    <el-radio-group v-model="oForm.cardType">
+                    <el-radio-group v-model="oForm.cardType" @change="clearCardType()">
                         <el-radio label="1">优惠活动</el-radio>
                         <el-radio label="2">赠送券包</el-radio>
                     </el-radio-group>
@@ -566,7 +566,7 @@
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" label="权益类型：" :label-width="formLabelWidth">
-                    <el-radio-group v-model="oCardType">
+                    <el-radio-group v-model="oCardType" @change="clearCardType()">
                         <el-radio label="1">优惠活动</el-radio>
                         <el-radio label="2">赠送券包</el-radio>
                     </el-radio-group>
@@ -1336,6 +1336,26 @@
             this.getMenu();
         },
         methods: {
+            clearCardType(){
+                this.oForm.isFilmJoin='';
+                this.clearFilmJoin();
+                this.oForm.isMerchandiseJoin='';
+                this.clearMerchandiseJoin();
+                this.oForm.validPayType='';
+                this.oForm.isHolidayValid='';
+                this.dateInfo=[];
+                this.oForm.validWeekDay=[];
+                this.oForm.isCouponTogether='';
+                this.oForm.couponSimpleDesc='';
+                this.groupName='';
+                this.oIsFilmJoin='';
+                this.oIsMerchandiseJoin='';
+                this.oCouponSimpleDesc='';
+                this.oValidPayType='';
+                this.oIsHolidayValid='';
+                this.oCheckedDays=[];
+                this.oIsCouponTogether='';
+            },
             clearIsLimitFilm(){
                 this.oForm.limitFilmUnit='';
                 this.oForm.numberFilm='';
@@ -1450,7 +1470,6 @@
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
                 var params = ParamsAppend(jsonArr);
-                console.log(jsonArr);
                 https.fetchPost('/couponGroup/couponGroupPage', params).then(data => {
                     if (data.data.code == 'success') {
                         var res = JSON.parse(Decrypt(data.data.data));
@@ -1502,9 +1521,6 @@
                     this.startArr.push(this.value1[0])
                     this.endArr.push(this.value1[1])
                     this.value1='';
-                    console.log(this.dateInfo);
-                    console.log(this.startArr);
-                    console.log(this.endArr);
                 }
             },
             deletTime(index) {
@@ -2095,7 +2111,6 @@
                 if (this.dialogFormVisible == true) {
                     https.fetchPost('/benefitCard/addBenefit', params).then(data => {//新增
                         loading.close();
-                        console.log(data);
                         if (data.data.code == 'success') {
                             this.dialogFormVisible = false;
                             this.$message.success(`新增成功`);
@@ -2236,9 +2251,6 @@
                         this.startArr.push(this.dateInfo[x][0])
                         this.endArr.push(this.dateInfo[x][1]);
                     }
-                    console.log(this.startArr.join(','));
-                    console.log(this.endArr.join(','));
-                    console.log(this.dateInfo);
 
                 }).catch(err => {
                     loading.close();
@@ -2246,8 +2258,6 @@
                 });
                 https.fetchPost('/benefitCard/getBenefitById', params).then(data => {
                     loading.close();
-                    console.log(data);
-                    console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.editVisible = true;
                         //电影
@@ -2274,7 +2284,6 @@
                                 json.merchandiseCode=exFilmCodeList[x];
                                 this.oSelectedSell.push(json)
                             }
-                            console.log(this.oSelectedSell);
                         }
                         let formats = JSON.parse(Decrypt(data.data.data)).formatList;
                         this.formatList = [];
@@ -3011,7 +3020,6 @@
                 jsonArr.push({ key: 'id', value: this.form.id });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
-                console.log(jsonArr);
                 let params = ParamsAppend(jsonArr);
                 https.fetchPost('/benefitCard/updateBenefitById', params).then(data => {
                     loading.close();

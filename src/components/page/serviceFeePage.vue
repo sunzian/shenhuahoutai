@@ -767,7 +767,6 @@ export default {
             jsonArr.push({ key: 'cinemaCode', value: this.cinemaCode });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
-            console.log(jsonArr);
             let params = ParamsAppend(jsonArr);
             if (this.dialogFormVisible == true) {
                 https
@@ -884,7 +883,6 @@ export default {
                 .fetchPost('/serviceFee/modifyServiceFeePage', params)
                 .then(data => {
                     loading.close();
-                    console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.editVisible = true;
                         this.getAllScreen();
@@ -1024,7 +1022,6 @@ export default {
                     if (data.data.code == 'success') {
                         this.showSell = false;
                         var oData = JSON.parse(Decrypt(data.data.data));
-                        console.log(oData);
                         this.tableData = oData.data;
                         this.query.pageSize = oData.pageSize;
                         this.query.pageNo = oData.pageNo;
@@ -1161,7 +1158,6 @@ export default {
             jsonArr.push({ key: 'id', value: this.oId });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
-            console.log(jsonArr);
             let params = ParamsAppend(jsonArr);
             https
                 .fetchPost('/serviceFee/modifyServiceFee', params)
@@ -1232,13 +1228,11 @@ export default {
             jsonArr.push({ key: 'status', value: status });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
-            console.log(jsonArr);
             let params = ParamsAppend(jsonArr);
             https
                 .fetchPost('couponGroup/updateStatusById', params)
                 .then(data => {
                     loading.close();
-                    // console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.$message.success(`修改成功`);
                         this.getMenu();
@@ -1290,7 +1284,6 @@ export default {
                     loading.close();
                     if (data.data.code == 'success') {
                         var oData = JSON.parse(Decrypt(data.data.data));
-                        console.log(oData);
                         this.tableData = oData.data;
                         this.query.pageSize = oData.pageSize;
                         this.query.pageNo = oData.pageNo;
@@ -1402,7 +1395,6 @@ export default {
             if (this.sellIndex >= 0) {
                 this.selectedSell.push(this.sellTableData[this.sellIndex]);
                 this.drawer = false;
-                console.log(this.selectedSell);
             }
         },
         deletCoupon() {

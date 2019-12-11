@@ -323,8 +323,6 @@
                         let params = ParamsAppend(jsonArr);
                         https.fetchPost('/memberCardLevel/modifyCardStatus', params).then(data => {
                             loading.close();
-                            console.log(data);
-                            // console.log(JSON.parse(Decrypt(data.data.data)));
                             if (data.data.code == 'success') {
                                 this.$message.success(`修改成功`);
                                 this.show();
@@ -366,8 +364,6 @@
                         setTimeout(() => {
                             this.idx = index;
                             this.form = row;
-                            let name = this.query.name;
-                            let status = this.query.status;
                             let jsonArr = [];
                             jsonArr.push({ key: 'id', value: row.id });
                             let sign = md5(preSign(jsonArr));
@@ -377,8 +373,6 @@
                                 .fetchPost('goldCommodity/deleteById', params)
                                 .then(data => {
                                     loading.close();
-                                    // console.log(data);
-                                    // console.log(JSON.parse(Decrypt(data.data.data)));
                                     if (data.data.code == 'success') {
                                         this.$message.error(`删除了`);
                                         this.getMenu();
@@ -423,8 +417,6 @@
                     let params = ParamsAppend(jsonArr);
                     https.fetchPost('/memberCardLevel/modifyPage', params).then(data => {
                             loading.close();
-                            console.log(data);
-                            console.log(JSON.parse(Decrypt(data.data.data)));
                             if (data.data.code == 'success') {
                                 this.editVisible = true;
                                 this.form.name = JSON.parse(Decrypt(data.data.data)).levelName;
@@ -468,13 +460,9 @@
                     jsonArr.push({ key: 'rechargeRuleCode', value: ''});
                     let sign = md5(preSign(jsonArr));
                     jsonArr.push({ key: 'sign', value: sign });
-                    console.log(jsonArr);
                     let params = ParamsAppend(jsonArr);
-                    console.log(params);
                     https.fetchPost('/memberCardLevel/modify', params).then(data => {
                             loading.close();
-                            console.log(data);
-                            // console.log(JSON.parse(Decrypt(data.data.data)));
                             if (data.data.code == 'success') {
                                 this.editVisible = false;
                                 this.$message.success(`编辑成功`);
@@ -524,11 +512,8 @@
                     var params = ParamsAppend(jsonArr);
                     https.fetchPost('/memberCardLevel/list', params).then(data => {
                         loading.close();
-                        console.log(data);
                         if (data.data.code == 'success') {
                             var oData = JSON.parse(Decrypt(data.data.data));
-                            console.log(oData);
-                            // // console.log(this.query);
                             this.oTableData = oData.data;
                             this.query.pageSize = oData.pageSize;
                             this.query.pageNo = oData.pageNo;
@@ -577,11 +562,8 @@
                     var params = ParamsAppend(jsonArr);
                     https.fetchPost('/cinema/myCinemaPage', params).then(data => {
                             loading.close();
-                            console.log(data);
                             if (data.data.code == 'success') {
                                 var oData = JSON.parse(Decrypt(data.data.data));
-                                console.log(oData);
-                                // console.log(this.query);
                                 this.tableData = oData.data;
                                 this.query.pageSize = oData.pageSize;
                                 this.query.pageNo = oData.pageNo;
@@ -623,11 +605,8 @@
                         .fetchPost('/merchandise/list', params)
                         .then(data => {
                             loading.close();
-                            console.log(data);
                             if (data.data.code == 'success') {
                                 var oData = JSON.parse(Decrypt(data.data.data));
-                                console.log(oData);
-                                // // console.log(this.query);
                                 this.oTableData = oData.data;
                                 this.query.pageSize = oData.pageSize;
                                 this.query.pageNo = oData.pageNo;
@@ -673,7 +652,6 @@
                         .fetchPost('/memberCardLevel/list', params)
                         .then(data => {
                             loading.close();
-                            console.log(data);
                             if (data.data.code == 'success') {
                                 var oData = JSON.parse(Decrypt(data.data.data));
                                 console.log(oData);
@@ -718,7 +696,6 @@
                         .fetchPost('/memberCardLevel/queryCardLevel', params)
                         .then(data => {
                             loading.close();
-                            console.log(data);
                             if (data.data.code == 'success') {
                                 this.$message.success(`获取成功`);
                                 this.getMenu();

@@ -738,7 +738,6 @@ export default {
                 https.fetchPost('/merchandiseCoupon/getCouponByCinemaCode', params).then(data => {
                         if (data.data.code == 'success') {
                             var res = JSON.parse(Decrypt(data.data.data));
-                            console.log(res);
                             this.couponInfo = res.pageResult.data;
                             this.query.couponPageSize = res.pageResult.pageSize;
                             this.query.couponPageNo = res.pageResult.pageNo;
@@ -910,7 +909,6 @@ export default {
             jsonArr.push({ key: 'messageContent', value: this.couponForm.messageContent });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
-            console.log(jsonArr);
             var params = ParamsAppend(jsonArr);
             https
                 .fetchPost('/batchSendCoupon/batchSendCoupon', params)
@@ -1090,14 +1088,12 @@ export default {
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
                 var params = ParamsAppend(jsonArr);
-                console.log(jsonArr);
                 https
                     .fetchPost('/batchSendCoupon/searchUser', params)
                     .then(data => {
                         loading.close();
                         if (data.data.code == 'success') {
                             var oData = JSON.parse(Decrypt(data.data.data));
-                            console.log(oData);
                             this.tableData = oData.data;
                             this.query.pageSize = oData.pageSize;
                             this.query.pageNo = oData.pageNo;
@@ -1210,7 +1206,6 @@ export default {
                         if (data.data.code == 'success') {
                             this.seenFilmList = true;
                             var oData = JSON.parse(Decrypt(data.data.data));
-                            console.log(oData);
                             this.seenFilmData = oData.data;
                             this.query.filmPageSize = oData.pageSize;
                             this.query.filmPageNo = oData.pageNo;
@@ -1247,7 +1242,7 @@ export default {
                     .then(data => {
                         loading.close();
                         if (data.data.code == 'success') {
-                            console.log(data);
+
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
                             this.open();

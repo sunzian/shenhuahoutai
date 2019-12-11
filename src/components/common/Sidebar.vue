@@ -64,15 +64,12 @@ export default {
     },
     mounted() {
         https.fetchPost('/admin/getMenus','').then((data) => {//获取菜单栏
-            // console.log(data.data.code)
             if(data.data.code=='nologin'){
                 this.$router.push('/login');
             }
            else if(data.data.code == 'success'){
                 let menus=Decrypt(data.data.data)//返回的数据进行解密
-                // console.log(menus);
                 this.menuList =JSON.parse(menus)
-                // console.log(this.menuList);
             }
         }).catch(err=>{
                 console.log(err)

@@ -261,7 +261,7 @@
                 <el-form-item :required="true" label="立减金额：" :label-width="formLabelWidth" v-if="oForm.reduceType == 2">
                     减<el-input placeholder="每张票分别减掉多少" style="width: 150px" v-model="oForm.discountMoney" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="增减金额：" :label-width="formLabelWidth" v-if="oForm.reduceType == 3">
+                <el-form-item :required="true" label="增减金额：" :label-width="formLabelWidth" v-if="oForm.reduceType == 4">
                     <el-input style="width: 150px" v-model="oForm.discountMoney" autocomplete="off"></el-input>&nbsp;&nbsp;
                     <span style="color: #ccc;">在最低票价基础上加减多少金额 如果是减金额则填负数</span>
                 </el-form-item>
@@ -494,7 +494,7 @@
                 <el-form-item :required="true" label="立减金额：" :label-width="formLabelWidth" v-if="oReduceType == 2">
                     减<el-input placeholder="每张票分别减掉多少" style="width: 150px" v-model="oDiscountMoney" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="增减金额：" :label-width="formLabelWidth" v-if="oReduceType == 3">
+                <el-form-item :required="true" label="增减金额：" :label-width="formLabelWidth" v-if="oReduceType == 4">
                     <el-input style="width: 150px" v-model="oDiscountMoney" autocomplete="off"></el-input>&nbsp;&nbsp;
                     <span style="color: #ccc;">在最低票价基础上加减多少金额 如果是减金额则填负数</span>
                 </el-form-item>
@@ -1315,7 +1315,7 @@
                 https.fetchPost('/filmDiscountActivity/getActivityById', params).then(data => {
                         loading.close();
                         console.log(data);
-                        console.log(JSON.parse(Decrypt(data.data.data)));
+                        // console.log(JSON.parse(Decrypt(data.data.data)));
                         if (data.data.code == 'success') {
                             this.editVisible = true;
                             this.screenInfo=[];
@@ -1397,6 +1397,9 @@
                             }
                             if (JSON.parse(Decrypt(data.data.data)).discountActivity.reduceType == 3) {
                                 this.oReduceType = '3';
+                            }
+                            if (JSON.parse(Decrypt(data.data.data)).discountActivity.reduceType == 4) {
+                                this.oReduceType = '4';
                             }
                             if (JSON.parse(Decrypt(data.data.data)).discountActivity.limitSingleUnit == '年') {
                                 this.oLimitSingleUnit = '年';
@@ -1797,9 +1800,9 @@
                 jsonArr.push({ key: 'name', value: this.query.name });
                 jsonArr.push({ key: 'status', value: this.query.status });
                 jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
+                jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
                 jsonArr.push({ key: 'reduceType', value: this.query.reduceType });
                 jsonArr.push({ key: 'cinemaCode', value: this.query.cinemaCode });
-                jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
                 // jsonArr.push({ key: 'filmName', value: name });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });

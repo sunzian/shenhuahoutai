@@ -202,7 +202,6 @@ export default {
             setTimeout(() => {
                 https.fetchPost('/role/addPage','').then((data) => {
                     loading.close();
-                    console.log(data);
                     if(data.data.code == 'success'){
                         this.dialogFormVisible = true
                     }else if(data.data.code=='nologin'){
@@ -239,7 +238,6 @@ export default {
                 if(this.dialogFormVisible == true){
                     https.fetchPost('/role/addRole',params).then((data) => {//新增
                         loading.close();
-                        // console.log(data);
                         if(data.data.code=='success'){
                             this.dialogFormVisible = false
                             this.$message.success(`新增成功`);
@@ -297,8 +295,6 @@ export default {
                         let params = ParamsAppend(jsonArr);
                         https.fetchPost('/role/deleteRole',params).then((data) => {
                             loading.close();
-                            // console.log(data);
-                            // console.log(JSON.parse(Decrypt(data.data.data)));
                             if(data.data.code=='success'){
                                 this.$message.error(`删除了`);
                                 this.getMenu()
@@ -341,8 +337,6 @@ export default {
                 let params = ParamsAppend(jsonArr);
                 https.fetchPost('/role/modifyPage',params).then((data) => {
                     loading.close();
-                    // console.log(data);
-                    console.log(JSON.parse(Decrypt(data.data.data)));
                     if(data.data.code=='success'){
                         this.editVisible = true;
                         this.oName=JSON.parse(Decrypt(data.data.data)).roleName;
@@ -390,13 +384,9 @@ export default {
                 jsonArr.push({key:"status",value:this.selectValue});
                 let sign =md5(preSign(jsonArr));
                 jsonArr.push({key:"sign",value:sign});
-                console.log(jsonArr);
                 let params = ParamsAppend(jsonArr);
-                console.log(params);
                 https.fetchPost('/role/modifyRole',params).then((data) => {
                     loading.close();
-                    // console.log(data);
-                    // console.log(JSON.parse(Decrypt(data.data.data)));
                     if(data.data.code=='success'){
                         this.editVisible = false;
                         this.$message.success(`编辑成功`);
@@ -449,8 +439,6 @@ export default {
                     loading.close();
                     if(data.data.code=='success') {
                         var oData = JSON.parse(Decrypt(data.data.data));
-                        // console.log(oData);
-                        // console.log(this.query);
                         this.tableData = oData.data;
                         this.query.pageSize = oData.pageSize;
                         this.query.pageNo = oData.pageNo;

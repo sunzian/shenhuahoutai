@@ -1904,7 +1904,7 @@ export default {
                 .fetchPost('/cinema/getCinemaById', params)
                 .then(data => {
                     loading.close();
-                    console.log(JSON.parse(Decrypt(data.data.data)));
+                    // console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.editVisible = true;
                         this.oCinemaName = JSON.parse(Decrypt(data.data.data)).Cinema.cinemaName;
