@@ -10,6 +10,10 @@
         <div class="container">
             <div class="handle-box">
                 <el-input v-model="query.name" placeholder="影片名称" class="handle-input mr10"></el-input>
+                <el-select clearable v-model="query.status" placeholder="状态" class="mr10">
+                    <el-option key="1" label="显示" value="1"></el-option>
+                    <el-option key="0" label="未显示" value="0"></el-option>
+                </el-select>
                 <el-button style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
                 <el-button
                     type="primary"
@@ -1042,6 +1046,7 @@ export default {
             jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
             jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
             jsonArr.push({ key: 'filmName', value: name });
+            jsonArr.push({ key: 'status', value: status });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             var params = ParamsAppend(jsonArr);
@@ -1441,9 +1446,5 @@ export default {
     .mr10 {
         width: 16%;
         margin-right: 10px;
-    }
-    li {
-        width: 300px;
-        height: 170px;
     }
 </style>

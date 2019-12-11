@@ -421,6 +421,14 @@
                                 v-else-if="scope.row.reduceType == 2 && scope.row.couponType == 1"
                                 type="success"
                             >减{{scope.row.discountMoney}}元</el-tag>
+                            <el-tag
+                                    v-else-if="scope.row.reduceType == 3 && scope.row.couponType == 1"
+                                    type="success"
+                            >满{{scope.row.achieveMoney}}张减{{scope.row.discountMoney}}元</el-tag>
+                            <el-tag
+                                    v-else-if="scope.row.reduceType == 4 && scope.row.couponType == 1"
+                                    type="success"
+                            >满{{scope.row.achieveMoney}}减{{scope.row.discountMoney}}元</el-tag>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -730,6 +738,7 @@ export default {
                 https.fetchPost('/merchandiseCoupon/getCouponByCinemaCode', params).then(data => {
                         if (data.data.code == 'success') {
                             var res = JSON.parse(Decrypt(data.data.data));
+                            console.log(res);
                             this.couponInfo = res.pageResult.data;
                             this.query.couponPageSize = res.pageResult.pageSize;
                             this.query.couponPageNo = res.pageResult.pageNo;

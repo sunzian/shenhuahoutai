@@ -490,11 +490,11 @@
                 <el-form-item :required="true" label="奖品个数" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="form.prizeNumber" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="奖品概率（小数）" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="form.percent" autocomplete="off"></el-input>
+                <el-form-item :required="true" label="奖品概率" :label-width="formLabelWidth">
+                    <el-input placeholder="大于0小于1之间的小数" style="width: 250px" v-model="form.percent" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="过期天数" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="form.expireDay" autocomplete="off"></el-input>
+                    <el-input placeholder="中奖后奖品过期天数" style="width: 250px" v-model="form.expireDay" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="奖品类型" :label-width="formLabelWidth">
                     <el-select v-model="form.prizeType" placeholder="请选择类型">
@@ -588,11 +588,11 @@
                 <el-form-item :required="true" label="奖品个数" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="pForm.prizeNumber" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="奖品概率（小数）" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="pForm.percent" autocomplete="off"></el-input>
+                <el-form-item :required="true" label="奖品概率" :label-width="formLabelWidth">
+                    <el-input placeholder="大于0小于1之间的小数" style="width: 250px" v-model="pForm.percent" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="过期天数" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="pForm.expireDay" autocomplete="off"></el-input>
+                    <el-input placeholder="中奖后奖品过期天数" style="width: 250px" v-model="pForm.expireDay" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="奖品类型" :label-width="formLabelWidth">
                     <el-select v-model="pForm.prizeType" placeholder="请选择类型">

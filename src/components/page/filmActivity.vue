@@ -252,7 +252,7 @@
                     <el-radio-group v-model="oForm.reduceType" @change="clearDiscountMoney()">
                         <el-radio label="1">固定价格（特惠价格）</el-radio>
                         <el-radio label="2">立减（立减活动）</el-radio>
-                        <el-radio label="3">最低票价</el-radio>
+                        <el-radio label="4">最低票价结算</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" label="固定金额：" :label-width="formLabelWidth" v-if="oForm.reduceType == 1">
@@ -262,7 +262,8 @@
                     减<el-input placeholder="每张票分别减掉多少" style="width: 150px" v-model="oForm.discountMoney" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="增减金额：" :label-width="formLabelWidth" v-if="oForm.reduceType == 3">
-                    <el-input style="width: 150px" v-model="oForm.discountMoney" autocomplete="off"></el-input>
+                    <el-input style="width: 150px" v-model="oForm.discountMoney" autocomplete="off"></el-input>&nbsp;&nbsp;
+                    <span style="color: #ccc;">在最低票价基础上加减多少金额 如果是减金额则填负数</span>
                 </el-form-item>
                 <el-form-item :required="true" label="开启状态：" :label-width="formLabelWidth">
                     <el-select v-model="oForm.status" placeholder="请选择">
@@ -484,7 +485,7 @@
                     <el-radio-group v-model="oReduceType" @change="clearDiscountMoney()">
                         <el-radio label="1">固定价格（特惠价格）</el-radio>
                         <el-radio label="2">立减（立减活动）</el-radio>
-                        <el-radio label="3">最低票价</el-radio>
+                        <el-radio label="4">最低票价结算</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" label="固定金额：" :label-width="formLabelWidth" v-if="oReduceType == 1">
@@ -494,7 +495,8 @@
                     减<el-input placeholder="每张票分别减掉多少" style="width: 150px" v-model="oDiscountMoney" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="增减金额：" :label-width="formLabelWidth" v-if="oReduceType == 3">
-                    <el-input style="width: 150px" v-model="oDiscountMoney" autocomplete="off"></el-input>
+                    <el-input style="width: 150px" v-model="oDiscountMoney" autocomplete="off"></el-input>&nbsp;&nbsp;
+                    <span style="color: #ccc;">在最低票价基础上加减多少金额 如果是减金额则填负数</span>
                 </el-form-item>
                 <el-form-item :required="true" label="开启状态：" :label-width="formLabelWidth">
                     <el-select v-model="oStatus" placeholder="请选择">
@@ -1538,7 +1540,7 @@
                     return;
                 }
                 if(this.oReduceType==1){
-                    if(this.oDiscountMoney>=0){
+                    if(this.oDiscountMoney>0){
                         if(!this.oDiscountMoney){
                             this.message = '固定金额不能为空，请检查！';
                             this.open();

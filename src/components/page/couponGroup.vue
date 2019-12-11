@@ -139,7 +139,14 @@
                         >
                         </el-input>
                         &nbsp;&nbsp;&nbsp;&nbsp;
-                        数量：{{item.num}}
+                        数量：
+                        <el-input
+                            style="width: 150px"
+                            v-model="item.num"
+                            autocomplete="off"
+                            :value="item.num"
+                            @input="changeInput($event)"
+                    ></el-input>
                         <span
                                 style="color:red;cursor: pointer;"
                                 @click="deleteSell(index)"
@@ -169,12 +176,12 @@
         <el-dialog :close-on-click-modal="false" title="详情" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
                 <el-form-item :required="true" label="通用方式：" :label-width="formLabelWidth">
-                    <el-radio-group v-model="oCommonType">
+                    <el-radio-group v-model="oForm.commonType">
                         <el-radio :label="1" disabled>全部影院</el-radio>
                         <el-radio :label="2" disabled>指定影院</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item :required="true" label="适用影院名称：" :label-width="formLabelWidth" v-if="oCommonType == 2">
+                <el-form-item :required="true" label="适用影院名称：" :label-width="formLabelWidth" v-if="oForm.commonType == 2">
                     <span>{{oCinemaName}}</span>
                 </el-form-item>
                 <el-form-item :required="true" label="券包名称：" :label-width="formLabelWidth">
@@ -200,7 +207,13 @@
                         >
                         </el-input>
                         &nbsp;&nbsp;&nbsp;&nbsp;
-                        每人发放数量：{{item.num}}
+                        每人发放数量：<el-input
+                            style="width: 150px"
+                            v-model="item.num"
+                            autocomplete="off"
+                            :value="item.num"
+                            @input="changeInput($event)"
+                    ></el-input>
                         <span
                                 style="color:red;cursor: pointer;"
                                 @click="deleteSell(index)"
@@ -230,18 +243,45 @@
                         ref="multipleTable"
                         header-cell-class-name="table-header"
                         @selection-change="handleSelectionChange"
+                        :row-key="getFilmId"
                 >
-                    <el-table-column label="操作" width="100" align="center">
-                        <template slot-scope="scope">
-                            <el-radio v-model="id" :label="scope.$index" @change.native="getCurrentRow(scope.$index)">&nbsp;</el-radio>
-                        </template>
-                    </el-table-column>
+                    <el-table-column type="selection" :reserve-selection="true" width="55"></el-table-column>
+                    <!--<el-table-column label="操作" width="100" align="center">-->
+                        <!--<template slot-scope="scope">-->
+                            <!--<el-radio v-model="id" :label="scope.$index" @change.native="getCurrentRow(scope.$index)">&nbsp;</el-radio>-->
+                        <!--</template>-->
+                    <!--</el-table-column>-->
                     <el-table-column prop="sort" label="优惠券名称">
                         <template slot-scope="scope">{{scope.row.name}}</template>
                     </el-table-column>
-                    <el-table-column prop="sort" label="每人发放数量">
+                    <el-table-column label="优惠券类型" prop="sort">
                         <template slot-scope="scope">
-                            <el-input placeholder="输入数量" v-model="scope.row.num"></el-input>
+                            <el-tag v-if="scope.row.couponType == 1" type="success">影票优惠券</el-tag>
+                            <el-tag v-else-if="scope.row.couponType == 2" type="success">卖品优惠券</el-tag>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="sort" label="优惠金额">
+                        <template slot-scope="scope">
+                            <el-tag
+                                    v-if="scope.row.reduceType == 1"
+                                    type="success"
+                            >固定{{scope.row.discountMoney}}元</el-tag>
+                            <el-tag
+                                    v-else-if="scope.row.reduceType == 2 && scope.row.couponType == 2"
+                                    type="success"
+                            >满{{scope.row.achieveMoney}}减{{scope.row.discountMoney}}</el-tag>
+                            <el-tag
+                                    v-else-if="scope.row.reduceType == 2 && scope.row.couponType == 1"
+                                    type="success"
+                            >减{{scope.row.discountMoney}}元</el-tag>
+                            <el-tag
+                                    v-else-if="scope.row.reduceType == 3 && scope.row.couponType == 1"
+                                    type="success"
+                            >满{{scope.row.achieveMoney}}张减{{scope.row.discountMoney}}元</el-tag>
+                            <el-tag
+                                    v-else-if="scope.row.reduceType == 4 && scope.row.couponType == 1"
+                                    type="success"
+                            >满{{scope.row.achieveMoney}}减{{scope.row.discountMoney}}元</el-tag>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -358,6 +398,12 @@ export default {
         this.getMenu();
     },
     methods: {
+        changeInput() {
+            this.$forceUpdate();
+        },
+        getFilmId(row) {
+            return row.id;
+        },
         deleteSell(index) {
             console.log(index);
             this.selectedSell.splice(index, 1);
@@ -366,25 +412,28 @@ export default {
             this.ticketIds =a
         },
         sureNext() {
-            if(this.sellIndex>=0){
-                // this.selectedSell=[]
-                if(!this.sellTableData[this.sellIndex].num){
-                    this.message = '请填写每人发放数量！';
-                    this.open();
-                    loading.close();
-                    return;
-                }
-                else {
-                    this.selectedSell.push(this.sellTableData[this.sellIndex]);
-                }
-
-            }
+            // if(this.sellIndex>=0){
+            //     // this.selectedSell=[]
+            //     if(!this.sellTableData[this.sellIndex].num){
+            //         this.message = '请填写每人发放数量！';
+            //         this.open();
+            //         loading.close();
+            //         return;
+            //     }
+            //     else {
+            //         this.selectedSell.push(this.sellTableData[this.sellIndex]);
+            //     }
+            //
+            // }
+            // console.log(this.selectedSell);
+            let selectedSell = [];
+            this.selectedSell = selectedSell.concat(this.multipleSelection);
             console.log(this.selectedSell);
             this.drawer = false;
         },
-        getCurrentRow(index){//优惠券弹出框index
-            this.sellIndex=index;
-        },
+        // getCurrentRow(index){//优惠券弹出框index
+        //     this.sellIndex=index;
+        // },
         openNext() {
             //获取优惠券列表
             const loading = this.$loading({
@@ -394,6 +443,12 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
+            if(this.oForm.cinemaCode.length==0){
+                this.message = '请先选择影院！';
+                this.open();
+                loading.close();
+                return;
+            }
             setTimeout(() => {
                 let name=this.query.name;
                 if(!name){
@@ -647,7 +702,7 @@ export default {
                         }
                         // this.couponList = JSON.parse(Decrypt(data.data.data)).couponGroup.couponList;
                         this.oCinemaName = JSON.parse(Decrypt(data.data.data)).couponGroup.cinemaName;
-                        this.oCommonType = JSON.parse(Decrypt(data.data.data)).couponGroup.commonType;
+                        this.oForm.commonType = JSON.parse(Decrypt(data.data.data)).couponGroup.commonType;
                         this.oForm.cinemaCode = JSON.parse(Decrypt(data.data.data)).couponGroup.cinemaCodes;
                         this.oGroupName = JSON.parse(Decrypt(data.data.data)).couponGroup.groupName;
                         this.oMemo = JSON.parse(Decrypt(data.data.data)).couponGroup.memo;
@@ -940,6 +995,7 @@ export default {
         },
         // 多选操作
         handleSelectionChange(val) {
+            console.log(val);
             this.multipleSelection = val;
         },
         handleSizeChange(val) {
