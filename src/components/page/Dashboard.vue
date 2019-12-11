@@ -14,23 +14,23 @@
                     <div style="float: left;"><b>昨日</b></div>
                     <!--<div style="float: right"><b>平台排名</b>&nbsp;<b class="red">2</b></div>-->
                     <div class="clear"></div>
-                    <div style="background: #EFEDED;width: 45%;float: left;text-align: center;margin-top: 1.7%;height: 110px;line-height: 45px;margin-left: 4.5%">
+                    <div style="width: 45%;float: left;text-align: center;margin-top: 1.7%;height: 110px;line-height: 45px;margin-left: 4.5%">
                         <div class="grid-num blue" style="margin-top: 4%">{{aForm.totalFilmIncome}}</div>
                         <div>票房收入</div>
                     </div>
-                    <div style="background: #D3D1D1;width: 45%;float: left;text-align: center;margin-top: 1.7%;height: 110px;line-height: 45px">
+                    <div style="width: 45%;float: left;text-align: center;margin-top: 1.7%;height: 110px;line-height: 45px">
                         <div class="grid-num blue" style="margin-top: 4%">{{aForm.totalTicketNumber}}</div>
                         <div>人次</div>
                     </div>
-                    <div style="background: #FCE3E3;width: 30%;float: left;text-align: center;margin-top: 1.7%;height: 110px;line-height: 45px;margin-left:  4.5%">
+                    <div style="width: 30%;float: left;text-align: center;margin-top: 1.7%;height: 110px;line-height: 45px;margin-left:  4.5%">
                         <div class="grid-num blue" style="margin-top: 4%">{{aForm.totalMerchandiseIncome}}</div>
                         <div>卖品收入</div>
                     </div>
-                    <div style="background: #D9E4E9;width: 30%;float: left;text-align: center;margin-top: 1.7%;height: 110px;line-height: 45px">
+                    <div style="width: 30%;float: left;text-align: center;margin-top: 1.7%;height: 110px;line-height: 45px">
                         <div class="grid-num blue" style="margin-top: 4%">{{aForm.totalMemberCardIncome}}</div>
                         <div>会员卡收入</div>
                     </div>
-                    <div style="background: #CFDEC6;width: 30%;float: left;text-align: center;margin-top: 1.7%;height: 110px;line-height: 45px">
+                    <div style="width: 30%;float: left;text-align: center;margin-top: 1.7%;height: 110px;line-height: 45px">
                         <div class="grid-num blue" style="margin-top: 4%">{{aForm.totalServiceChargeIncome}}</div>
                         <div>服务费收入</div>
                     </div>

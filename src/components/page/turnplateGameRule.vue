@@ -193,7 +193,7 @@
                         style="width: 250px;"
                         type="textarea"
                         show-word-limit
-                        :rows="4"
+                        rows="6"
                         maxlength="300"
                         v-model="oForm.gameRule"
                         autocomplete="off"
@@ -280,7 +280,7 @@
             <span slot="footer" class="dialog-footer" style="margin-left: 1040px">
                 <!--<el-button @click="addShow = false,showSell=true">取 消</el-button>-->
                 <el-button
-                    style="margin-top: 10px;float: right"
+                    style="margin-top: 5px;float: right"
                     type="primary"
                     @click="exAddChanger"
                 >确 定</el-button>
@@ -352,12 +352,13 @@
                     ></el-date-picker>
                 </el-form-item>
                 <el-form-item :required="true" label="消耗金币" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="form.consumeGold" autocomplete="off"></el-input>
+                    <el-input style="width: 250px " onkeyup="this.value=this.value.replace(/\D/g,'')" v-model="form.consumeGold" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="抽奖规则说明" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         type="textarea"
+                        rows="6"
                         show-word-limit
                         maxlength="300"
                         v-model="form.gameRule"
@@ -375,7 +376,7 @@
                     </el-select>
                 </el-form-item>
                 <!--<el-form-item label="添加奖项" :label-width="formLabelWidth">-->
-                <el-button style="float: right" type="primary" @click="changePrize">添加奖项</el-button>
+                <el-button style="margin-top:-35px;float: right" type="primary" @click="changePrize">添加奖项</el-button>
                 <!--</el-form-item>-->
             </el-form>
             <el-table
@@ -443,7 +444,7 @@
             </el-table>
             <span slot="footer" class="dialog-footer" style="margin-left: 1040px">
                 <el-button
-                    style="margin-top: 10px;float: right"
+                    style="margin-top: 5px;float: right"
                     type="primary"
                     @click="exChangeChanger"
                 >确 定</el-button>
@@ -880,15 +881,44 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            if (
-                !this.oForm.gameName ||
-                !this.form.imageUrl ||
-                !this.oForm.startDate ||
-                !this.oForm.endDate ||
-                !this.oForm.consumeGold ||
-                !this.oForm.status
-            ) {
-                this.message = '必填项不能为空，请检查！';
+            if (!this.oForm.gameName) {
+                this.message = '游戏名称不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if (!this.form.imageUrl) {
+                this.message = '大转盘背景图不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if (!this.oForm.startDate) {
+                this.message = '活动开始时间不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if (!this.oForm.endDate) {
+                this.message = '活动结束时间不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if ( !this.oForm.consumeGold) {
+                this.message = '消耗金币不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if (!this.oForm.status) {
+                this.message = '状态不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if (this.oForm.startDate == this.oForm.endDate) {
+                this.message = '活动开始时间不能等于活动结束时间！';
                 this.open();
                 loading.close();
                 return;
@@ -951,15 +981,38 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            if (
-                !this.form.gameName ||
-                !this.form.imageUrl ||
-                !this.form.startDate ||
-                !this.form.endDate ||
-                !this.form.consumeGold ||
-                !this.form.status
-            ) {
-                this.message = '必填项不能为空，请检查！';
+            if (!this.form.gameName) {
+                this.message = '游戏名称不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if (!this.form.imageUrl) {
+                this.message = '大转盘背景图不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if (!this.form.startDate) {
+                this.message = '活动开始时间不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if (!this.form.endDate) {
+                this.message = '活动结束时间不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if ( !this.form.consumeGold) {
+                this.message = '消耗金币不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if (!this.form.status) {
+                this.message = '状态不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
@@ -1026,22 +1079,54 @@ export default {
                 this.open();
                 return;
             }
-            if (
-                !this.form.prizeLevel ||
-                !this.form.prizeName ||
-                !this.form.image_url ||
-                !this.form.prizeNumber ||
-                !this.form.percent ||
-                !this.form.expireDay ||
-                !this.form.prizeType
-            ) {
-                this.message = '必填项不能为空，请检查！';
+            if (!this.form.prizeLevel) {
+                this.message = '奖品等级不能为空，请检查！';
+                this.open();
+                return;
+            }
+            if (!this.form.prizeName) {
+                this.message = '奖品名称不能为空，请检查！';
+                this.open();
+                return;
+            }
+            if (!this.form.image_url) {
+                this.message = '奖品图片不能为空，请检查！';
+                this.open();
+                return;
+            }
+            if (!this.form.prizeNumber) {
+                this.message = '奖品个数不能为空，请检查！';
+                this.open();
+                return;
+            }
+            if (this.form.prizeNumber<=0) {
+                this.message = '奖品个数必须大于0，请检查！';
+                this.open();
+                return;
+            }
+            if (!this.form.percent) {
+                this.message = '奖品概率不能为空，请检查！';
+                this.open();
+                return;
+            }
+            if (!this.form.expireDay) {
+                this.message = '过期天数不能为空，请检查！';
+                this.open();
+                return;
+            }
+            if (this.form.expireDay<0) {
+                this.message = '过期天数不能小于0，请检查！';
+                this.open();
+                return;
+            }
+            if (!this.form.prizeType) {
+                this.message = '奖品类型不能为空，请检查！';
                 this.open();
                 return;
             }
             if (this.form.prizeType == 1) {
                 if (!this.couponInfo.couponName) {
-                    this.message = '必填项不能为空，请检查！';
+                    this.message = '所选优惠券不能为空，请检查！';
                     this.open();
                     return;
                 }
@@ -1077,21 +1162,49 @@ export default {
                 this.open();
                 return;
             }
-            if (
-                !this.pForm.prizeName ||
-                !this.pForm.prizePicture ||
-                !this.pForm.prizeNumber ||
-                !this.pForm.percent ||
-                !this.pForm.expireDay ||
-                !this.pForm.prizeType
-            ) {
-                this.message = '必填项不能为空，请检查！';
+            if (!this.pForm.prizeName) {
+                this.message = '奖品名称不能为空，请检查！';
+                this.open();
+                return;
+            }
+            if (!this.pForm.prizePicture) {
+                this.message = '奖品图片不能为空，请检查！';
+                this.open();
+                return;
+            }
+            if (!this.pForm.prizeNumber) {
+                this.message = '奖品个数不能为空，请检查！';
+                this.open();
+                return;
+            }
+            if (this.pForm.prizeNumber<=0) {
+                this.message = '奖品个数必须大于0，请检查！';
+                this.open();
+                return;
+            }
+            if (!this.pForm.percent) {
+                this.message = '奖品概率不能为空，请检查！';
+                this.open();
+                return;
+            }
+            if (!this.pForm.expireDay) {
+                this.message = '过期天数不能为空，请检查！';
+                this.open();
+                return;
+            }
+            if (this.pForm.expireDay<0) {
+                this.message = '过期天数不能小于0，请检查！';
+                this.open();
+                return;
+            }
+            if (!this.pForm.prizeType) {
+                this.message = '奖品类型不能为空，请检查！';
                 this.open();
                 return;
             }
             if (this.pForm.prizeType == 1) {
                 if (!this.couponInfo.couponName) {
-                    this.message = '必填项不能为空，请检查！';
+                    this.message = '所选优惠券不能为空，请检查！';
                     this.open();
                     return;
                 }

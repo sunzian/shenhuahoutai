@@ -35,6 +35,12 @@
                     autocomplete="off"
                     class="mr10"
                 ></el-input>
+                <el-input
+                        placeholder="会员卡号"
+                        v-model="query.cardNo"
+                        autocomplete="off"
+                        class="mr10"
+                ></el-input>
                 <el-select
                     clearable
                     v-model="query.payWay"
@@ -202,6 +208,9 @@
                 </el-table-column>
                 <el-table-column prop="memo" label="影片名称" width="100">
                     <template slot-scope="scope">{{scope.row.filmName}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="会员卡号" width="110">
+                    <template slot-scope="scope">{{scope.row.cardNo}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="手机号码" width="110">
                     <template slot-scope="scope">{{scope.row.mobile}}</template>
@@ -763,10 +772,14 @@ export default {
                 let orderStatus = this.query.orderStatus;
                 let startDate = this.query.startDate;
                 let endDate = this.query.endDate;
+                let cardNo= this.query.cardNo;
                 let sessionStartDate = this.query.sessionStartDate;
                 let sessionEndDate = this.query.sessionEndDate;
                 if (!cinemaCode) {
                     cinemaCode = '';
+                }
+                if (!cardNo) {
+                    cardNo = '';
                 }
                 if (!orderNo) {
                     orderNo = '';
@@ -797,10 +810,11 @@ export default {
                 }
                 let jsonArr = [];
                 jsonArr.push({ key: 'tableName', value: "ticket_order" });
-                jsonArr.push({ key: 'exportKeysJson', value: "['id','cinemaCode','orderNo','submitOrderCode','sessionTime','mobile','filmName','seatName','number','totalOriginalPrice','totalPrice','totalServiceFee','totalPlatHandFee','totalCinemaAllowance','totalLowestPrice','totalActivityDiscount','totalCouponDiscount','totalActualPrice','totalReportPrice','totalSubmitPrice','chPayStatus','chPayWay','payTime','chOrderStatus','submitTime','openCardCinemaName','bindCardCinemaName','chActivityType','activityName','userCouponName','printNo','submitMessage','cancelTime','totalRefundHandFee','refundReason','tradeNo']"});
-                jsonArr.push({ key: 'exportTitlesJson', value:"['ID','影院编码','本地单号','售票系统单号','场次时间','手机号','影片名称','座位','数量','应付','票价','服务费','代售费','影院补贴','最低票价','活动优惠','优惠券优惠','实付','上报金额','回传金额','支付状态','支付方式','支付时间','订单状态','下单时间','开卡影院','消费影院','活动类型','活动名称','优惠券名称','取票码','下单失败原因','退票时间','退票手续费','退款原因','支付交易号']" });
+                jsonArr.push({ key: 'exportKeysJson', value: "['id','cinemaCode','orderNo','submitOrderCode','sessionTime','cardNo','mobile','filmName','seatName','number','totalOriginalPrice','totalPrice','totalServiceFee','totalPlatHandFee','totalCinemaAllowance','totalLowestPrice','totalActivityDiscount','totalCouponDiscount','totalActualPrice','totalReportPrice','totalSubmitPrice','chPayStatus','chPayWay','payTime','chOrderStatus','submitTime','openCardCinemaName','bindCardCinemaName','chActivityType','activityName','userCouponName','printNo','submitMessage','cancelTime','totalRefundHandFee','refundReason','tradeNo']"});
+                jsonArr.push({ key: 'exportTitlesJson', value:"['ID','影院编码','本地单号','售票系统单号','场次时间','会员卡号','手机号','影片名称','座位','数量','应付','票价','服务费','代售费','影院补贴','最低票价','活动优惠','优惠券优惠','实付','上报金额','回传金额','支付状态','支付方式','支付时间','订单状态','下单时间','开卡影院','消费影院','活动类型','活动名称','优惠券名称','取票码','下单失败原因','退票时间','退票手续费','退款原因','支付交易号']" });
                 jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
                 jsonArr.push({ key: 'orderNo', value: orderNo });
+                jsonArr.push({ key: 'cardNo', value: cardNo });
                 jsonArr.push({ key: 'mobile', value: mobile });
                 jsonArr.push({ key: 'payWay', value: payWay });
                 jsonArr.push({ key: 'payStatus', value: payStatus });
@@ -862,8 +876,12 @@ export default {
                 let sessionStartDate = this.query.sessionStartDate;
                 let sessionEndDate = this.query.sessionEndDate;
                 let filmName = this.query.filmName;
+                let cardNo = this.query.cardNo;
                 if (!filmName) {
                     filmName = '';
+                }
+                if (!cardNo) {
+                    cardNo = '';
                 }
                 if (!cinemaCode) {
                     cinemaCode = '';
@@ -897,6 +915,7 @@ export default {
                 }
                 let jsonArr = [];
                 jsonArr.push({ key: 'filmName', value: filmName });
+                jsonArr.push({ key: 'cardNo', value: cardNo });
                 jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
                 jsonArr.push({ key: 'submitOrderCode', value: submitOrderCode });
                 jsonArr.push({ key: 'mobile', value: mobile });

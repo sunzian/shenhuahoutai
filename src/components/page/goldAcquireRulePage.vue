@@ -85,8 +85,14 @@
                     background: 'rgba(0, 0, 0, 0.7)',
                     target: document.querySelector('.div1')
                 });
-                if(!this.oForm.miniRegisterNumber||!this.oForm.pointChangePercent){
-                    this.message = '必填项不能为空，请检查！';
+                if(!this.oForm.miniRegisterNumber){
+                    this.message = '邀请注册获得金币数量不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if(!this.oForm.pointChangePercent){
+                    this.message = '积分兑换金币数量不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
