@@ -1205,22 +1205,25 @@ export default {
                 .then(data => {
                     loading.close();
                     if (data.data.code == 'success') {
-                        var oData = JSON.parse(Decrypt(data.data.data));
-                        console.log(oData);
-                        this.cinemaInfo = [];
-                        for (let i = 0; i < oData.cinemaList.length; i++) {
-                            let cinemaList = {};
-                            cinemaList.cinemaCode = oData.cinemaList[i].cinemaCode;
-                            cinemaList.cinemaName = oData.cinemaList[i].cinemaName;
-                            this.cinemaInfo.push(cinemaList);
+                        if (data.data && data.data.data) {
+                            var oData = JSON.parse(Decrypt(data.data.data));
+                            this.cinemaInfo = [];
+                            for (let i = 0; i < oData.cinemaList.length; i++) {
+                                let cinemaList = {};
+                                cinemaList.cinemaCode = oData.cinemaList[i].cinemaCode;
+                                cinemaList.cinemaName = oData.cinemaList[i].cinemaName;
+                                this.cinemaInfo.push(cinemaList);
+                            }
+                            this.oForm.cinemaCode = this.cinemaInfo[0].cinemaCode;
+                            this.selectValue = this.cinemaInfo[0].cinemaCode;
+                            this.tableData = oData.pageResult.data;
+                            this.query.pageSize = oData.pageResult.pageSize;
+                            this.query.pageNo = oData.pageResult.pageNo;
+                            this.query.totalCount = oData.pageResult.totalCount;
+                            this.query.totalPage = oData.pageResult.totalPage;
+                        } else {
+                            this.tableData = [];
                         }
-                        this.oForm.cinemaCode = this.cinemaInfo[0].cinemaCode;
-                        this.selectValue = this.cinemaInfo[0].cinemaCode;
-                        this.tableData = oData.pageResult.data;
-                        this.query.pageSize = oData.pageResult.pageSize;
-                        this.query.pageNo = oData.pageResult.pageNo;
-                        this.query.totalCount = oData.pageResult.totalCount;
-                        this.query.totalPage = oData.pageResult.totalPage;
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();

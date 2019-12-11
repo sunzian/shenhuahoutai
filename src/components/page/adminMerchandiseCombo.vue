@@ -1049,12 +1049,16 @@ export default {
                         loading.close();
                         console.log(data);
                         if (data.data.code == 'success') {
-                            var oData = JSON.parse(Decrypt(data.data.data));
-                            this.oTableData = oData.data;
-                            this.query.pageSize = oData.pageSize;
-                            this.query.pageNo = oData.pageNo;
-                            this.query.totalCount = oData.totalCount;
-                            this.query.totalPage = oData.totalPage;
+                            if (data.data && data.data.data) {
+                                var oData = JSON.parse(Decrypt(data.data.data));
+                                this.oTableData = oData.data;
+                                this.query.pageSize = oData.pageSize;
+                                this.query.pageNo = oData.pageNo;
+                                this.query.totalCount = oData.totalCount;
+                                this.query.totalPage = oData.totalPage;
+                            } else {
+                                this.oTableData = [];
+                            }
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
                             this.open();

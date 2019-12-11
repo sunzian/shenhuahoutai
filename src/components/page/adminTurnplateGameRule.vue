@@ -1234,8 +1234,6 @@ export default {
                         if (data.data.code == 'success') {
                             if (data.data && data.data.data) {
                                 var oData = JSON.parse(Decrypt(data.data.data));
-                                console.log(oData);
-                                // console.log(this.query);
                                 this.tableData = oData.data;
                                 this.query.pageSize = oData.pageSize;
                                 this.query.pageNo = oData.pageNo;
@@ -1243,10 +1241,6 @@ export default {
                                 this.query.totalPage = oData.totalPage;
                             } else {
                                 this.tableData = [];
-                                this.query.pageSize = 15;
-                                this.query.pageNo = 1;
-                                this.query.totalCount = 0;
-                                this.query.totalPage = 0;
                             }
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;

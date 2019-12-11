@@ -854,13 +854,16 @@ export default {
                     .then(data => {
                         loading.close();
                         if (data.data.code == 'success') {
-                            var oData = JSON.parse(Decrypt(data.data.data));
-                            console.log(oData);
-                            this.oTableData = oData.data;
-                            this.query.aPageSize = oData.pageSize;
-                            this.query.aPageNo = oData.pageNo;
-                            this.query.aTotalCount = oData.totalCount;
-                            this.query.aTotalPage = oData.totalPage;
+                            if (data.data && data.data.data) {
+                                var oData = JSON.parse(Decrypt(data.data.data));
+                                this.oTableData = oData.data;
+                                this.query.pageSize = oData.pageSize;
+                                this.query.pageNo = oData.pageNo;
+                                this.query.totalCount = oData.totalCount;
+                                this.query.totalPage = oData.totalPage;
+                            } else {
+                                this.oTableData = [];
+                            }
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
                             this.open();
