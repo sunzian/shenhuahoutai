@@ -9,6 +9,19 @@
         </div>
         <div class="container">
             <div class="handle-box">
+                <el-select
+                    v-model="query.businessCode"
+                    placeholder="请选择商家"
+                    class="mr10"
+                    @change="changeBusiness"
+                >
+                    <el-option
+                        v-for="item in businessInfo"
+                        :key="item.businessCode"
+                        :label="item.businessName"
+                        :value="item.businessCode"
+                    ></el-option>
+                </el-select>
                 <el-select clearable v-model="query.cinemaCode" placeholder="请选择影院" class="handle-input mr10">
                     <el-option
                         v-for="item in cinemaData"
@@ -23,12 +36,12 @@
                     <el-option key="0" label="未启用" value="0"></el-option>
                 </el-select>
                 <el-button style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
-                <el-button
+                <!-- <el-button
                     type="primary"
                     @click="addPage"
                     icon="el-icon-circle-plus-outline"
                     style="float: right;margin-top: 10px"
-                >生成券包</el-button>
+                >生成券包</el-button> -->
             </div>
             <el-table
                 :data="tableData"
@@ -56,7 +69,7 @@
                         <el-tag v-else type="danger">未启用</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" width="240" align="center">
+                <!-- <el-table-column label="操作" width="240" align="center">
                     <template slot-scope="scope">
                         <el-button
                             type="success"
@@ -80,7 +93,7 @@
                             @click="delChange(scope.$index, scope.row)"
                         >删除</el-button>
                     </template>
-                </el-table-column>
+                </el-table-column> -->
             </el-table>
             <div class="pagination">
                 <el-pagination
@@ -344,6 +357,7 @@ export default {
             selectScreenCode: {},
             selectGroup: {},
             cinemaInfo: [],
+            businessInfo: [],
             cinemaData: [],
             screenInfo: [],
             couponList: [],
@@ -355,6 +369,7 @@ export default {
     },
     created() {},
     mounted() {
+        this.getAllBusiness();
         this.getMenu();
     },
     methods: {
@@ -363,6 +378,7 @@ export default {
             this.selectedSell.splice(index, 1);
         },
         one(a){//获取影片绑定的value值
+            console.log(a);
             this.ticketIds =a
         },
         sureNext() {
@@ -798,9 +814,14 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
+            setTimeout(() => {
+            let businessCode = this.query.businessCode;
             let cinemaCode = this.query.cinemaCode;
             let groupName = this.query.groupName;
             let status = this.query.status;
+            if (!businessCode) {
+                businessCode = '';
+            }
             if (!groupName) {
                 groupName = '';
             }
@@ -811,6 +832,7 @@ export default {
                 status = '';
             }
             let jsonArr = [];
+            jsonArr.push({ key: 'businessCode', value: businessCode });
             jsonArr.push({ key: 'groupName', value: groupName });
             jsonArr.push({ key: 'status', value: status });
             jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
@@ -821,18 +843,20 @@ export default {
             console.log(jsonArr)
             var params = ParamsAppend(jsonArr);
             https
-                .fetchPost('couponGroup/couponGroupPage', params)
+                .fetchPost('/admin/couponGroup/couponGroupPage', params)
                 .then(data => {
                     loading.close();
                     if (data.data.code == 'success') {
-                        var oData = JSON.parse(Decrypt(data.data.data));
-                        console.log(oData);
-                        this.tableData = oData.data;
-                        this.query.pageSize = oData.pageSize;
-                        this.query.pageNo = oData.pageNo;
-                        this.query.totalCount = oData.totalCount;
-                        this.query.totalPage = oData.totalPage;
-                        this.getAllCinema();
+                        if (data.data && data.data.data) {
+                            var oData = JSON.parse(Decrypt(data.data.data));
+                            this.tableData = oData.data;
+                            this.query.pageSize = oData.pageSize;
+                            this.query.pageNo = oData.pageNo;
+                            this.query.totalCount = oData.totalCount;
+                            this.query.totalPage = oData.totalPage;
+                        } else {
+                            this.tableData = []
+                        }
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
@@ -846,6 +870,7 @@ export default {
                     loading.close();
                     console.log(err);
                 });
+                },1000)
         },
         open() {
             //信息提示弹出框
@@ -863,14 +888,23 @@ export default {
             this.checkedDays = val.join(',');
         },
         // 获取所有影院
-        getAllCinema() {
+        getAllBusiness() {
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
             https
-                .fetchPost('/cinema/getAllCinema')
+                .fetchPost('/businessInfo/getBusinessList')
                 .then(data => {
+                    loading.close();
                     if (data.data.code == 'success') {
                         var res = JSON.parse(Decrypt(data.data.data));
-                        console.log(res);
-                        this.cinemaData = res;
+                        this.businessInfo = res;
+                        this.query.businessCode = res[0].businessCode;
+                        this.getAllCinema();
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
@@ -881,6 +915,51 @@ export default {
                     }
                 })
                 .catch(err => {
+                    loading.close();
+                    console.log(err);
+                });
+        },
+        changeBusiness(val) {
+            this.query.businessCode = val;
+            this.getAllCinema();
+            this.$forceUpdate();
+        },
+        // 获取所有影院
+        getAllCinema() {
+            if (!this.query.businessCode) {
+                return;
+            }
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
+            var jsonArr = [];
+            jsonArr.push({ key: 'businessCode', value: this.query.businessCode });
+            let sign = md5(preSign(jsonArr));
+            jsonArr.push({ key: 'sign', value: sign });
+            let params = ParamsAppend(jsonArr);
+            https
+                .fetchPost('/cinema/getCinemaListByBusinessCode', params)
+                .then(data => {
+                    loading.close();
+                    if (data.data.code == 'success') {
+                        var res = JSON.parse(Decrypt(data.data.data));
+                        this.cinemaData = res;
+                        console.log(res);
+                    } else if (data.data.code == 'nologin') {
+                        this.message = data.data.message;
+                        this.open();
+                        this.$router.push('/login');
+                    } else {
+                        this.message = data.data.message;
+                        this.open();
+                    }
+                })
+                .catch(err => {
+                    loading.close();
                     console.log(err);
                 });
         },

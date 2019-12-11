@@ -124,14 +124,16 @@
             </el-table>
             <div class="pagination">
                 <el-pagination
-                    background
-                    layout="total, prev, pager, next"
-                    :current-page="query.pageNo"
-                    :page-size="query.pageSize"
-                    :total="query.totalCount"
-                    @current-change="currentChange"
-                    @prev-click="prev"
-                    @next-click="next"
+                        background
+                        @size-change="handleSizeChange"
+                        layout="total, sizes, prev, pager, next, jumper"
+                        :current-page="query.pageNo"
+                        :page-sizes="[10, 15, 20, 30]"
+                        :page-size="query.pageSize"
+                        :total="query.totalCount"
+                        @current-change="currentChange"
+                        @prev-click="prev"
+                        @next-click="next"
                 ></el-pagination>
             </div>
         </div>
@@ -1123,6 +1125,10 @@ export default {
                         message: '已取消'
                     });
                 });
+        },
+        handleSizeChange(val) {
+            this.query.pageSize=val;
+            this.getMenu()
         },
         // 多选操作
         handleSelectionChange(val) {

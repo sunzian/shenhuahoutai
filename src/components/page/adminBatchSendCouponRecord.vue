@@ -37,21 +37,21 @@
                     class="mr10"
                 ></el-input>
                 <el-date-picker
-                        v-model="query.startDate"
-                        type="datetime"
-                        class="mr10"
-                        value-format="yyyy-MM-dd HH:mm:ss"
-                        format="yyyy-MM-dd HH:mm:ss"
-                        default-time="06:00:00"
-                        placeholder="发放开始时间（起）"
+                    v-model="query.startDate"
+                    type="datetime"
+                    class="mr10"
+                    value-format="yyyy-MM-dd HH:mm:ss"
+                    format="yyyy-MM-dd HH:mm:ss"
+                    default-time="06:00:00"
+                    placeholder="发放开始时间（起）"
                 ></el-date-picker>
                 <el-date-picker
-                        v-model="query.endDate"
-                        type="datetime"
-                        class="mr10"
-                        value-format="yyyy-MM-dd HH:mm:ss"
-                        format="yyyy-MM-dd HH:mm:ss"
-                        placeholder="发放结束时间（止）"
+                    v-model="query.endDate"
+                    type="datetime"
+                    class="mr10"
+                    value-format="yyyy-MM-dd HH:mm:ss"
+                    format="yyyy-MM-dd HH:mm:ss"
+                    placeholder="发放结束时间（止）"
                 ></el-date-picker>
                 <!-- <el-select
                     clearable
@@ -61,7 +61,7 @@
                 >
                     <el-option key="1" label="优惠券" value="1"></el-option>
                     <el-option key="2" label="实物" value="2"></el-option>
-                </el-select> -->
+                </el-select>-->
                 <el-button
                     type="primary"
                     icon="el-icon-search"
@@ -88,7 +88,7 @@
                         <el-tag v-if="scope.row.customerType=='1'">优惠券</el-tag>
                         <el-tag v-else-if="scope.row.customerType=='1'">实物</el-tag>
                     </template>
-                </el-table-column> -->
+                </el-table-column>-->
                 <el-table-column prop="memo" label="发放人数" align="center" width="120">
                     <template slot-scope="scope">{{scope.row.customNumber}}</template>
                 </el-table-column>
@@ -102,8 +102,10 @@
             <div class="pagination">
                 <el-pagination
                     background
-                    layout="total, prev, pager, next"
+                    @size-change="handleSizeChange"
+                    layout="total, sizes, prev, pager, next, jumper"
                     :current-page="query.pageNo"
+                    :page-sizes="[10, 15, 20, 30]"
                     :page-size="query.pageSize"
                     :total="query.totalCount"
                     @current-change="currentChange"
@@ -364,13 +366,16 @@ export default {
                     .then(data => {
                         loading.close();
                         if (data.data.code == 'success') {
-                            var oData = JSON.parse(Decrypt(data.data.data));
-                            console.log(oData);
-                            this.tableData = oData.data;
-                            this.query.pageSize = oData.pageSize;
-                            this.query.pageNo = oData.pageNo;
-                            this.query.totalCount = oData.totalCount;
-                            this.query.totalPage = oData.totalPage;
+                            if (data.data && data.data.data) {
+                                var oData = JSON.parse(Decrypt(data.data.data));
+                                this.tableData = oData.data;
+                                this.query.pageSize = oData.pageSize;
+                                this.query.pageNo = oData.pageNo;
+                                this.query.totalCount = oData.totalCount;
+                                this.query.totalPage = oData.totalPage;
+                            } else {
+                                this.tableData = []
+                            }
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
                             this.open();
@@ -391,6 +396,10 @@ export default {
             this.$alert(this.message, '信息提示', {
                 dangerouslyUseHTMLString: true
             });
+        },
+        handleSizeChange(val) {
+            this.query.pageSize=val;
+            this.getMenu()
         },
         // 多选操作
         handleSelectionChange(val) {
@@ -416,18 +425,18 @@ export default {
 </script>
 
 <style scoped>
-    .handle-box {
-        width: 100%;
-        margin-bottom: 20px;
-        font-size: 14px;
-    }
-    .table {
-        width: 100%;
-        font-size: 14px;
-    }
-    .mr10 {
-        width: 16%;
-        margin-right: 10px;
-    }
+.handle-box {
+    width: 100%;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+.table {
+    width: 100%;
+    font-size: 14px;
+}
+.mr10 {
+    width: 16%;
+    margin-right: 10px;
+}
 </style>
 

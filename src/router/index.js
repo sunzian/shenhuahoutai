@@ -76,6 +76,11 @@ export default new Router({
                     meta: { title: '金币商城订单' }
                 },
                 {
+                    path: '/adminNoticeOfActivityPage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/adminNoticeOfActivityPage.vue'),
+                    meta: { title: '轮播图文章管理' }
+                },
+                {
                     path: '/noticeOfActivityPage',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/noticeOfActivityPage.vue'),
                     meta: { title: '轮播图文章管理' }
@@ -88,6 +93,11 @@ export default new Router({
                 {
                     path: '/goldAcquireRulePage',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/goldAcquireRulePage.vue'),
+                    meta: { title: '金币获取规则设置' }
+                },
+                {
+                    path: '/adminGoldAcquireRulePage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/adminGoldAcquireRulePage.vue'),
                     meta: { title: '金币获取规则设置' }
                 },
                 {
@@ -106,6 +116,11 @@ export default new Router({
                     meta: { title: '影厅管理' }
                 },
                 {
+                    path: '/adminScreenInfoPage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/adminScreenInfoPage.vue'),
+                    meta: { title: '影厅管理' }
+                },
+                {
                     path: '/filmPage',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/filmPage.vue'),
                     meta: { title: '影片信息维护' }
@@ -113,6 +128,11 @@ export default new Router({
                 {
                     path: '/merchandiseCoupon',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/merchandiseCoupon.vue'),
+                    meta: { title: '卖品优惠券管理' }
+                },
+                {
+                    path: '/adminMerchandiseCoupon',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/adminMerchandiseCoupon.vue'),
                     meta: { title: '卖品优惠券管理' }
                 },
                 {
@@ -146,6 +166,11 @@ export default new Router({
                     meta: { title: '会员积分兑换金币记录' }
                 },
                 {
+                    path: '/adminCreditsExchangeRecordPage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/adminCreditsExchangeRecordPage.vue'),
+                    meta: { title: '会员积分兑换金币记录' }
+                },
+                {
                     path: '/chatroomUserGetRecord',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/chatroomUserGetRecord.vue'),
                     meta: { title: '放映厅领取记录' }
@@ -168,6 +193,11 @@ export default new Router({
                 {
                     path: '/turplateDrawLogPage',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/turplateDrawLogPage.vue'),
+                    meta: { title: '金币转盘记录列表' }
+                },
+                {
+                    path: '/adminTurplateDrawLogPage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/adminTurplateDrawLogPage.vue'),
                     meta: { title: '金币转盘记录列表' }
                 },
                 {
@@ -216,6 +246,11 @@ export default new Router({
                     meta: { title: '网络代售服务费' }
                 },
                 {
+                    path: '/adminServiceFeePage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/adminServiceFeePage.vue'),
+                    meta: { title: '网络代售服务费' }
+                },
+                {
                     path: '/cinemaTicketNumRecords',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/cinemaTicketNumRecords.vue'),
                     meta: { title: '影院购票充值' }
@@ -226,9 +261,19 @@ export default new Router({
                     meta: { title: '卖品送餐通知' }
                 },
                 {
+                    path: '/adminFilmCoupon',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/adminFilmCoupon.vue'),
+                    meta: { title: '影票优惠券管理' }
+                },
+                {
                     path: '/filmCoupon',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/filmCoupon.vue'),
                     meta: { title: '影票优惠券管理' }
+                },
+                {
+                    path: '/adminCouponGroup',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/adminCouponGroup.vue'),
+                    meta: { title: '券包管理' }
                 },
                 {
                     path: '/couponGroup',
@@ -238,6 +283,11 @@ export default new Router({
                 {
                     path: '/chatroomAwards',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/chatroomAwards.vue'),
+                    meta: { title: '放映厅奖品设置' }
+                },
+                {
+                    path: '/adminChatroomAwards',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/adminChatroomAwards.vue'),
                     meta: { title: '放映厅奖品设置' }
                 },
                 {
@@ -251,8 +301,18 @@ export default new Router({
                     meta: { title: '排期管理' }
                 },
                 {
+                    path: '/adminSessionInfoPage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/adminSessionInfoPage.vue'),
+                    meta: { title: '排期管理' }
+                },
+                {
                     path: '/thirdPricePage',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/thirdPricePage.vue'),
+                    meta: { title: '三方比价' }
+                },
+                {
+                    path: '/adminThirdPricePage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/adminThirdPricePage.vue'),
                     meta: { title: '三方比价' }
                 },
                 {
@@ -301,6 +361,11 @@ export default new Router({
                     meta: { title: '轮播图管理' }
                 },
                 {
+                    path: '/adminBannerPage',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/adminBannerPage.vue'),
+                    meta: { title: '轮播图管理' }
+                },
+                {
                     path: '/cardOpenRulesPage',
                     component: () => import(/* webpackChunkName: "table" */ '../components/page/cardOpenRulesPage.vue'),
                     meta: { title: '开卡规则管理' }
@@ -316,8 +381,18 @@ export default new Router({
                     meta: { title: '金币商品管理' }
                 },
                 {
+                    path: '/adminGoldCommodityPage',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/adminGoldCommodityPage.vue'),
+                    meta: { title: '金币商品管理' }
+                },
+                {
                     path: '/merchandise',
                     component: () => import(/* webpackChunkName: "table" */ '../components/page/merchandise.vue'),
+                    meta: { title: '卖品信息' }
+                },
+                {
+                    path: '/adminMerchandise',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/adminMerchandise.vue'),
                     meta: { title: '卖品信息' }
                 },
                 {
@@ -326,14 +401,34 @@ export default new Router({
                     meta: { title: '卖品分类' }
                 },
                 {
+                    path: '/adminMerchandiseType',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/adminMerchandiseType.vue'),
+                    meta: { title: '卖品分类' }
+                },
+                {
                     path: '/merchandiseCombo',
                     component: () => import(/* webpackChunkName: "table" */ '../components/page/merchandiseCombo.vue'),
+                    meta: { title: '卖品套餐' }
+                },
+                {
+                    path: '/adminMerchandiseCombo',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/adminMerchandiseCombo.vue'),
                     meta: { title: '卖品套餐' }
                 },
                 {
                     path: '/filmActivity',
                     component: () => import(/* webpackChunkName: "table" */ '../components/page/filmActivity.vue'),
                     meta: { title: '影票活动管理' }
+                },
+                {
+                    path: '/adminFilmActivity',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/adminFilmActivity.vue'),
+                    meta: { title: '影票活动管理' }
+                },
+                {
+                    path: '/adminMerchandiseActivity',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/adminMerchandiseActivity.vue'),
+                    meta: { title: '卖品活动管理' }
                 },
                 {
                     path: '/merchandiseActivity',
@@ -356,9 +451,24 @@ export default new Router({
                     meta: { title: '送券活动管理' }
                 },
                 {
+                    path: '/adminCouponSendActivity',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/adminCouponSendActivity.vue'),
+                    meta: { title: '送券活动管理' }
+                },
+                {
                     path: '/turnplateGameRule',
                     component: () => import(/* webpackChunkName: "table" */ '../components/page/turnplateGameRule.vue'),
                     meta: { title: '大转盘游戏管理' }
+                },
+                {
+                    path: '/adminTurnplateGameRule',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/adminTurnplateGameRule.vue'),
+                    meta: { title: '大转盘游戏管理' }
+                },
+                {
+                    path: '/adminSigninRule',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/adminSigninRule.vue'),
+                    meta: { title: '签到规则' }
                 },
                 {
                     path: '/signinRule',
