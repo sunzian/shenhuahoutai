@@ -3,7 +3,7 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
-                    <i class="el-icon-lx-cascades"></i> 放映厅发放记录
+                    <i class="el-icon-lx-cascades"></i> 金币转盘记录列表
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
@@ -31,19 +31,34 @@
                     ></el-option>
                 </el-select>
                 <el-input
-                    placeholder="礼物名称"
-                    v-model="query.name"
+                    placeholder="手机号码"
+                    v-model="query.userMobile"
                     autocomplete="off"
                     class="mr10"
                 ></el-input>
+                <el-input
+                        placeholder="奖品名称"
+                        v-model="query.prizeName"
+                        autocomplete="off"
+                        class="mr10"
+                ></el-input>
                 <el-select
                     clearable
-                    v-model="query.giftType"
-                    placeholder="礼物类型"
+                    v-model="query.prizeType"
+                    placeholder="奖品类型"
                     class="handle-select mr10"
                 >
                     <el-option key="1" label="优惠券" value="1"></el-option>
                     <el-option key="2" label="实物" value="2"></el-option>
+                </el-select>
+                <el-select
+                    clearable
+                    v-model="query.prizeStatus"
+                    placeholder="中奖状态"
+                    class="handle-select mr10"
+                >
+                    <el-option key="1" label="未中奖" value="0"></el-option>
+                    <el-option key="2" label="中奖" value="1"></el-option>
                 </el-select>
                 <el-button
                     type="primary"
@@ -63,22 +78,28 @@
                 <el-table-column prop="name" label="影院名称">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="礼物名称">
-                    <template slot-scope="scope">{{scope.row.name}}</template>
+                <el-table-column prop="memo" label="奖品名称">
+                    <template slot-scope="scope">{{scope.row.prizeName}}</template>
                 </el-table-column>
-                <el-table-column label="礼物类型" align="center" width="130">
+                <el-table-column prop="memo" label="用户手机号" width="160">
+                    <template slot-scope="scope">{{scope.row.userMobile}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="消耗金币" width="100">
+                    <template slot-scope="scope">{{scope.row.reduceNumber}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="中奖状态" width="100">
                     <template slot-scope="scope">
-                        <el-tag v-if="scope.row.giftType=='1'">优惠券</el-tag>
-                        <el-tag v-else-if="scope.row.giftType=='2'">实物</el-tag>
+                        <el-tag v-if="scope.row.prizeStatus=='0'">未中奖</el-tag>
+                        <el-tag v-else-if="scope.row.prizeStatus=='1'">中奖</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="memo" label="发放数量" width="130">
-                    <template slot-scope="scope">{{scope.row.number}}</template>
+                <el-table-column label="奖品类型" align="center" width="100">
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row.prizeType=='1'">优惠券</el-tag>
+                        <el-tag v-else-if="scope.row.prizeType=='2'">实物</el-tag>
+                    </template>
                 </el-table-column>
-                <el-table-column prop="memo" label="发放人">
-                    <template slot-scope="scope">{{scope.row.sendPhone}}</template>
-                </el-table-column>
-                <el-table-column label="发放时间" align="center">
+                <el-table-column prop="memo" label="抽奖时间">
                     <template slot-scope="scope">{{scope.row.createDate}}</template>
                 </el-table-column>
             </el-table>
@@ -191,6 +212,54 @@ export default {
         this.getMenu();
     },
     methods: {
+        addChange(index, row) {
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
+            setTimeout(() => {
+                var jsonArr = [];
+                jsonArr.push({ key: 'id', value: row.id });
+                let sign = md5(preSign(jsonArr));
+                jsonArr.push({ key: 'sign', value: sign });
+                let params = ParamsAppend(jsonArr);
+                https
+                    .fetchPost('/memberCardConsume/getMemberCardConsumeById', params)
+                    .then(data => {
+                        loading.close();
+                        if (data.data.code == 'success') {
+                            var oData = JSON.parse(Decrypt(data.data.data));
+                            console.log(oData);
+                            this.editVisible = true;
+                            this.form = oData;
+                            if (oData.status == 1) {
+                                this.form.status = '成功';
+                            } else if (oData.status == 2) {
+                                this.form.status = '失败';
+                            }
+                            if (oData.orderType == 1) {
+                                this.form.orderType = '购票';
+                            } else if (oData.orderType == 2) {
+                                this.form.orderType = '卖品';
+                            }
+                        } else if (data.data.code == 'nologin') {
+                            this.message = data.data.message;
+                            this.open();
+                            this.$router.push('/login');
+                        } else {
+                            this.message = data.data.message;
+                            this.open();
+                        }
+                    })
+                    .catch(err => {
+                        loading.close();
+                        console.log(err);
+                    });
+            }, 500);
+        },
         Search() {
             this.query.pageNo = 1;
             this.getMenu();
@@ -280,48 +349,54 @@ export default {
                 target: document.querySelector('.div1')
             });
             setTimeout(() => {
-                let cinemaCode = this.query.cinemaCode;
                 let businessCode = this.query.businessCode;
-                let name = this.query.name;
-                let giftType = this.query.giftType;
+                let cinemaCode = this.query.cinemaCode;
+                let userMobile = this.query.userMobile;
+                let prizeType = this.query.prizeType;
+                let prizeStatus = this.query.prizeStatus;
+                let prizeName = this.query.prizeName;
                 if (!cinemaCode) {
                     cinemaCode = '';
                 }
                 if (!businessCode) {
                     businessCode = '';
                 }
-                if (!name) {
-                    name = '';
+                if (!userMobile) {
+                    userMobile = '';
                 }
-                if (!giftType) {
-                    giftType = '';
+                if (!prizeType) {
+                    prizeType = '';
+                }
+                if (!prizeStatus) {
+                    prizeStatus = '';
+                }
+                if (!prizeName) {
+                    prizeName = '';
                 }
                 let jsonArr = [];
-                jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
                 jsonArr.push({ key: 'businessCode', value: businessCode });
+                jsonArr.push({ key: 'prizeName', value: prizeName });
+                jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
                 jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
                 jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
-                jsonArr.push({ key: 'name', value: name });
-                jsonArr.push({ key: 'giftType', value: giftType });
+                jsonArr.push({ key: 'userMobile', value: userMobile });
+                jsonArr.push({ key: 'prizeType', value: prizeType });
+                jsonArr.push({ key: 'prizeStatus', value: prizeStatus });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
-                console.log(jsonArr)
                 var params = ParamsAppend(jsonArr);
                 https
-                    .fetchPost('/admin/chatroomSendRecords/list', params)
+                    .fetchPost('/admin/turplateDrawLog/page', params)
                     .then(data => {
                         loading.close();
                         if (data.data.code == 'success') {
-                            if (data.data && data.data.data) {
-                                var oData = JSON.parse(Decrypt(data.data.data));
-                                this.tableData = oData.data;
-                                this.query.pageSize = oData.pageSize;
-                                this.query.pageNo = oData.pageNo;
-                                this.query.totalCount = oData.totalCount;
-                                this.query.totalPage = oData.totalPage;
-                            } else {
-                                this.tableData = [];
-                            }
+                            var oData = JSON.parse(Decrypt(data.data.data));
+                            console.log(oData);
+                            this.tableData = oData.data;
+                            this.query.pageSize = oData.pageSize;
+                            this.query.pageNo = oData.pageNo;
+                            this.query.totalCount = oData.totalCount;
+                            this.query.totalPage = oData.totalPage;
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
                             this.open();
@@ -343,13 +418,13 @@ export default {
                 dangerouslyUseHTMLString: true
             });
         },
-        handleSizeChange(val) {
-            this.query.pageSize=val;
-            this.getMenu()
-        },
         // 多选操作
         handleSelectionChange(val) {
             this.multipleSelection = val;
+        },
+        handleSizeChange(val) {
+            this.query.pageSize=val;
+            this.getMenu()
         },
         currentChange(val) {
             //点击选择具体页数

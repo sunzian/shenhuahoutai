@@ -10,6 +10,19 @@
         <div class="container">
             <div class="handle-box">
                 <el-select
+                    v-model="query.businessCode"
+                    placeholder="请选择商家"
+                    class="mr10"
+                    @change="changeBusiness"
+                >
+                    <el-option
+                        v-for="item in businessInfo"
+                        :key="item.businessCode"
+                        :label="item.businessName"
+                        :value="item.businessCode"
+                    ></el-option>
+                </el-select>
+                <el-select
                     clearable
                     v-model="query.cinemaCode"
                     placeholder="请选择影院"
@@ -47,7 +60,7 @@
                     <!--<el-option key="7" label="今日大牌" value="7"></el-option>-->
                     <el-option key="8" label="签到送金币" value="8"></el-option>
                     <el-option key="9" label="邀请好友首页" value="9"></el-option>
-                    <!-- <el-option key="10" label="积分换金币" value="10"></el-option> -->
+                    <el-option key="10" label="积分换金币" value="10"></el-option>
                 </el-select>
                 <el-button
                     style="margin-top: 10px;width: 90px;"
@@ -55,12 +68,12 @@
                     icon="el-icon-search"
                     @click="Search"
                 >搜索</el-button>
-                <el-button
+                <!-- <el-button
                     type="primary"
                     @click="addPage"
                     icon="el-icon-circle-plus-outline"
                     style="float: right;margin-top: 10px"
-                >新增</el-button>
+                >新增</el-button> -->
             </div>
             <el-table
                 :data="tableData"
@@ -121,7 +134,7 @@
                         <el-tag v-if="scope.row.redirectType=='4'">不跳转</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" width="180" align="center" fixed="right">
+                <!-- <el-table-column label="操作" width="180" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-button
                             type="text"
@@ -135,7 +148,7 @@
                             @click="delChange(scope.$index, scope.row)"
                         >删除</el-button>
                     </template>
-                </el-table-column>
+                </el-table-column> -->
             </el-table>
             <div class="pagination">
                 <el-pagination
@@ -731,11 +744,13 @@ export default {
             goType: '',
             goldData: [],
             selectedSell: [],
-            sellIndex: ''
+            sellIndex: '',
+            businessInfo: []
         };
     },
     created() {},
     mounted() {
+        this.getAllBusiness();
         this.getMenu();
     },
     methods: {
@@ -1532,10 +1547,14 @@ export default {
             });
             setTimeout(() => {
                 let status = this.query.status;
+                let businessCode = this.query.businessCode;
                 let cinemaCode = this.query.cinemaCode;
                 let category = this.query.category;
                 if (!status) {
                     status = '';
+                }
+                if (!businessCode) {
+                    businessCode = '';
                 }
                 if (!cinemaCode) {
                     cinemaCode = '';
@@ -1544,6 +1563,7 @@ export default {
                     category = '';
                 }
                 let jsonArr = [];
+                jsonArr.push({ key: 'businessCode', value: businessCode });
                 jsonArr.push({ key: 'status', value: status });
                 jsonArr.push({ key: 'cinemaCodes', value: cinemaCode });
                 jsonArr.push({ key: 'category', value: category });
@@ -1553,18 +1573,20 @@ export default {
                 jsonArr.push({ key: 'sign', value: sign });
                 var params = ParamsAppend(jsonArr);
                 https
-                    .fetchPost('/banner/bannerPage', params)
+                    .fetchPost('/admin/banner/bannerPage', params)
                     .then(data => {
                         loading.close();
                         if (data.data.code == 'success') {
-                            var oData = JSON.parse(Decrypt(data.data.data));
-                            console.log(oData);
-                            this.tableData = oData.data;
-                            this.query.pageSize = oData.pageSize;
-                            this.query.pageNo = oData.pageNo;
-                            this.query.totalCount = oData.totalCount;
-                            this.query.totalPage = oData.totalPage;
-                            this.getAllCinema();
+                            if (data.data && data.data.data) {
+                                var oData = JSON.parse(Decrypt(data.data.data));
+                                this.tableData = oData.data;
+                                this.query.pageSize = oData.pageSize;
+                                this.query.pageNo = oData.pageNo;
+                                this.query.totalCount = oData.totalCount;
+                                this.query.totalPage = oData.totalPage;
+                            } else {
+                                this.tableData = []
+                            }
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
                             this.open();
@@ -1578,7 +1600,7 @@ export default {
                         loading.close();
                         console.log(err);
                     });
-            }, 500);
+            }, 1000);
         },
         open() {
             //信息提示弹出框
@@ -1592,15 +1614,23 @@ export default {
         changeCinema2(val) {
             this.form.cinemaCodes = val;
         },
-        // 获取所有影院
-        getAllCinema() {
+        getAllBusiness() {
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
             https
-                .fetchPost('/cinema/getAllCinema')
+                .fetchPost('/businessInfo/getBusinessList')
                 .then(data => {
+                    loading.close();
                     if (data.data.code == 'success') {
                         var res = JSON.parse(Decrypt(data.data.data));
-                        console.log(res);
-                        this.cinemaInfo = res;
+                        this.businessInfo = res;
+                        this.query.businessCode = res[0].businessCode;
+                        this.getAllCinema();
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
@@ -1611,6 +1641,51 @@ export default {
                     }
                 })
                 .catch(err => {
+                    loading.close();
+                    console.log(err);
+                });
+        },
+        changeBusiness(val) {
+            this.query.businessCode = val;
+            this.getAllCinema();
+            this.$forceUpdate();
+        },
+        // 获取所有影院
+        getAllCinema() {
+            if (!this.query.businessCode) {
+                return;
+            }
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
+            var jsonArr = [];
+            jsonArr.push({ key: 'businessCode', value: this.query.businessCode });
+            let sign = md5(preSign(jsonArr));
+            jsonArr.push({ key: 'sign', value: sign });
+            let params = ParamsAppend(jsonArr);
+            https
+                .fetchPost('/cinema/getCinemaListByBusinessCode', params)
+                .then(data => {
+                    loading.close();
+                    if (data.data.code == 'success') {
+                        var res = JSON.parse(Decrypt(data.data.data));
+                        this.cinemaInfo = res;
+                        console.log(res);
+                    } else if (data.data.code == 'nologin') {
+                        this.message = data.data.message;
+                        this.open();
+                        this.$router.push('/login');
+                    } else {
+                        this.message = data.data.message;
+                        this.open();
+                    }
+                })
+                .catch(err => {
+                    loading.close();
                     console.log(err);
                 });
         },
