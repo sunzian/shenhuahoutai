@@ -882,16 +882,75 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            if(!this.form.name||!this.oActivityImageUrl||!this.form.cinemaCode||!this.form.type||!this.form.startDate||!this.form.endDate||!this.form.status
-                ||!this.form.isLimitTotal||!this.form.validDay||!this.form.overDays||!this.groupName){
-                this.message = '必填项不能为空，请检查！';
+            if(!this.form.name){
+                this.message = '活动名称不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.oActivityImageUrl){
+                this.message = '活动图片不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.form.cinemaCode){
+                this.message = '所选影院不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.form.type){
+                this.message = '送券活动类型不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.form.startDate){
+                this.message = '活动开始时间不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.form.endDate){
+                this.message = '活动结束时间不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.form.status){
+                this.message = '开启状态不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.form.isLimitTotal){
+                this.message = '是否限制总数不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.form.validDay){
+                this.message = '生效延迟天数不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.form.overDays){
+                this.message = '有效期天数不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.groupName){
+                this.message = '所选券包不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
             }
             if(this.form.isLimitTotal==1) {
                 if (!this.form.totalNumber) {
-                    this.message = '必填项不能为空，请检查！';
+                    this.message = '限购总数不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
