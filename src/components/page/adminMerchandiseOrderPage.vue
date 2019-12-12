@@ -833,11 +833,11 @@ export default {
                 loading.close();
             }, 1500);
         },
-        changeBusiness() {
-            this.query.businessCode = val;
-            this.getAllCinema();
-            this.$forceUpdate();
-        },
+        // changeBusiness() {
+        //     this.query.businessCode = val;
+        //     this.getAllCinema();
+        //     this.$forceUpdate();
+        // },
         getMenu() {
             //获取菜单栏
             const loading = this.$loading({

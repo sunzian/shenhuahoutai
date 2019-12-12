@@ -18,8 +18,8 @@
                     ></el-option>
                 </el-select>
                 <el-input
-                    placeholder="用户名称"
-                    v-model="query.userName"
+                    placeholder="用户手机号"
+                    v-model="query.userMobile"
                     autocomplete="off"
                     class="mr10"
                 ></el-input>
@@ -81,6 +81,9 @@
                 </el-table-column>
                 <el-table-column prop="name" label="用户名称" width="100">
                     <template slot-scope="scope">{{scope.row.userName}}</template>
+                </el-table-column>
+                <el-table-column prop="name" label="用户手机号" width="100">
+                    <template slot-scope="scope">{{scope.row.userMobile}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="优惠券名称" width="260">
                     <template slot-scope="scope">{{scope.row.couponName}}</template>
@@ -528,7 +531,7 @@ export default {
             setTimeout(() => {
                 let cinemaCode = this.query.cinemaCode;
                 let orderNo = this.query.orderNo;
-                let userName = this.query.userName;
+                let userMobile = this.query.userMobile;
                 let status = this.query.status;
                 let getType = this.query.getType;
                 let couponName = this.query.couponName;
@@ -541,8 +544,8 @@ export default {
                 if (!orderNo) {
                     orderNo = '';
                 }
-                if (!userName) {
-                    userName = '';
+                if (!userMobile) {
+                    userMobile = '';
                 }
                 if (!status) {
                     status = '';
@@ -556,11 +559,12 @@ export default {
                 jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
                 jsonArr.push({ key: 'orderNum', value: orderNo });
                 jsonArr.push({ key: 'couponName', value: couponName });
-                jsonArr.push({ key: 'userName', value: userName });
+                jsonArr.push({ key: 'userMobile', value: userMobile });
                 jsonArr.push({ key: 'status', value: status });
                 jsonArr.push({ key: 'getType', value: getType });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
+                console.log(jsonArr)
                 var params = ParamsAppend(jsonArr);
                 https
                     .fetchPost('/userCoupon/page', params)
