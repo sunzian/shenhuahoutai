@@ -684,43 +684,81 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            if(!this.oForm.serviceFeeName||!this.oForm.status){
-                this.message = '必填项不能为空，请检查！';
+            if(!this.oForm.serviceFeeName){
+                this.message = '服务费规则名称不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
             }
-            if(this.oForm.memberServiceFee!=0) {
-                if (!this.oForm.memberServiceFee) {
-                    this.message = '必填项不能为空，请检查！';
-                    this.open();
-                    loading.close();
-                    return;
-                }
-            }
-            if(this.oForm.thirdServiceFee!=0) {
-                if (!this.oForm.thirdServiceFee) {
-                    this.message = '必填项不能为空，请检查！';
-                    this.open();
-                    loading.close();
-                    return;
-                }
+            if(!this.oForm.selectHallType){
+                this.message = '选择影厅不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
             }
             if(this.oForm.selectHallType==2){
                 if(this.oForm.screenCode.length==0){
-                    this.message = '必填项不能为空，请检查！';
+                    this.message = '所选影厅不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
             }
+            if(!this.oForm.selectFilmType){
+                this.message = '选择影片不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
             if(this.oForm.selectFilmType==2){
                 if(this.selectedSell.length==0){
-                    this.message = '必填项不能为空，请检查！';
+                    this.message = '所选影片不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
+            }
+            if(!this.oForm.startDate){
+                this.message = '开始时间不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.oForm.endDate){
+                this.message = '结束时间不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.oForm.status){
+                this.message = '开启状态不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if (!this.oForm.thirdServiceFee&&this.oForm.thirdServiceFee!=0) {
+                    this.message = '第三方支付代售费不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+            }
+            if (this.oForm.thirdServiceFee<0) {
+                this.message = '第三方支付代售费不能小于0，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if (!this.oForm.memberServiceFee&&this.oForm.memberServiceFee!=0) {
+                this.message = '会员卡第三方支付代售费不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if (this.oForm.memberServiceFee<0) {
+                this.message = '会员卡支付代售费不能小于0，请检查！';
+                this.open();
+                loading.close();
+                return;
             }
             var jsonArr = [];
             jsonArr.push({ key: 'serviceFeeName', value: this.oForm.serviceFeeName });
@@ -1051,44 +1089,90 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            if(!this.oServiceFeeName||!this.oStatus){
-                this.message = '必填项不能为空，请检查！';
+            if(!this.oServiceFeeName){
+                this.message = '服务费规则名称不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
             }
-            if(this.oThirdServiceFee!=0){
-                if(!this.oThirdServiceFee){
-                    this.message = '必填项不能为空，请检查！';
-                    this.open();
-                    loading.close();
-                    return;
-                }
-            }
-            if(this.oMemberServiceFee!=0){
-                if(!this.oMemberServiceFee){
-                    this.message = '必填项不能为空，请检查！';
-                    this.open();
-                    loading.close();
-                    return;
-                }
+            if(!this.oScreenType){
+                this.message = '选择影厅不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
             }
             if(this.oScreenType==2){
                 if(this.oScreenCode.length==0){
-                    this.message = '必填项不能为空，请检查！';
+                    this.message = '所选影厅不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
+            }
+            if(!this.oFilmType){
+                this.message = '选择影片不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
             }
             if(this.oFilmType==2){
                 if(this.selectedSell.length==0){
-                    this.message = '必填项不能为空，请检查！';
+                    this.message = '所选影片不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
             }
+            if(!this.oStartDate){
+                this.message = '开始时间不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.oEndDate){
+                this.message = '结束时间不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.oStatus){
+                this.message = '开启状态不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if (!this.oThirdServiceFee&&this.oThirdServiceFee!=0) {
+                this.message = '第三方支付代售费不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if (this.oThirdServiceFee<0) {
+                this.message = '第三方支付代售费不能小于0，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if (!this.oMemberServiceFee&&this.oMemberServiceFee!=0) {
+                this.message = '会员卡第三方支付代售费不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if (this.oMemberServiceFee<0) {
+                this.message = '会员卡支付代售费不能小于0，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            // if(this.oFilmType==2){
+            //     if(this.selectedSell.length==0){
+            //         this.message = '必填项不能为空，请检查！';
+            //         this.open();
+            //         loading.close();
+            //         return;
+            //     }
+            // }
             var jsonArr = [];
             if (this.oScreenType == 2) {
                 for (let i = 0; i < this.selectScreenCode.length; i++) {

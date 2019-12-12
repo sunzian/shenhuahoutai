@@ -1592,7 +1592,7 @@ export default {
                 loading.close();
                 return;
             }
-            if (!this.oForm.store) {
+            if (!this.oForm.store&&this.oForm.store!=0) {
                 this.message = '库存不能为空，请检查！';
                 this.open();
                 loading.close();
@@ -2151,7 +2151,7 @@ export default {
                 loading.close();
                 return;
             }
-            if (!this.form.store) {
+            if (!this.form.store&&this.form.store!=0) {
                 this.message = '库存不能为空，请检查！';
                 this.open();
                 loading.close();

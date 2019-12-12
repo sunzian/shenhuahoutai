@@ -223,7 +223,7 @@
                 <el-table-column prop="memo" label="会员卡号" width="110">
                     <template slot-scope="scope">{{scope.row.cardNo}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="手机号码" width="110">
+                <el-table-column prop="memo" label="用户手机号" width="110">
                     <template slot-scope="scope">{{scope.row.mobile}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="票数" width="50">
@@ -262,7 +262,7 @@
                 <!--<el-table-column prop="memo" label="上报金额" width="80">-->
                     <!--<template slot-scope="scope">{{scope.row.totalReportPrice}}</template>-->
                 <!--</el-table-column>-->
-                <el-table-column prop="memo" label="支付时间" width="100">
+                <el-table-column prop="memo" label="交易时间" width="100">
                     <template slot-scope="scope">{{scope.row.payTime}}</template>
                 </el-table-column>
                 <el-table-column label="支付方式" align="center" width="80">
@@ -359,12 +359,20 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="手机号" :label-width="formLabelWidth">
+                <el-form-item label="用户手机号" :label-width="formLabelWidth">
                     <el-input
                         :disabled="true"
                         style="width: 250px"
                         v-model="form.mobile"
                         autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="订单手机号" :label-width="formLabelWidth">
+                    <el-input
+                            :disabled="true"
+                            style="width: 250px"
+                            v-model="form.submitPhone"
+                            autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="影院编码" :label-width="formLabelWidth">
