@@ -789,6 +789,11 @@ export default {
 
         changeInput() {
             this.$forceUpdate();
+            let couponData = [];
+            for (let i = 0; i < this.couponList.length; i++) {
+                couponData.push(this.couponList[i].id + '=' + this.couponList[i].count);
+            }
+            this.excelCouponForm.couponInfo = couponData.join(',');
         },
 
         // 发放优惠券
@@ -886,8 +891,6 @@ export default {
                 jsonArr.push({ key: 'overDays', value: this.couponForm.overDays });
             }
             if (this.couponForm.effectiveTimeType == 2) {
-                this.couponForm.startDate += " 00:00:00";
-                this.couponForm.endDate += " 23:59:59"
                 jsonArr.push({ key: 'startDate', value: this.couponForm.startDate });
                 jsonArr.push({ key: 'endDate', value: this.couponForm.endDate });
             }
@@ -957,9 +960,6 @@ export default {
                     this.message = '请填写时间段';
                     this.open();
                     return;
-                } else {
-                    this.excelCouponForm.startDate += " 00:00:00";
-                    this.excelCouponForm.endDate += " 23:59:59";
                 }
             }
             if (this.hasExcel == false) {
