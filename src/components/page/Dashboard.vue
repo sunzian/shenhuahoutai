@@ -91,7 +91,7 @@
                     <div class="grid-num blue" style="float: right;width: 45%;font-size: 18px;margin-top: 3%">{{form.totalRegisterMemberUser}}</div>
                     <div class="clear"></div>
                     <div class="grid-num" style="float: left;width: 45%;font-size: 18px;margin-top: 3%">
-                        <span>转化率</span>
+                        <span>转化率</span>&nbsp;
                         <span class="red">{{form.percentConversion}}%</span>
                     </div>
                 </div>
@@ -100,7 +100,7 @@
                     <div class="grid-num red" style="float: right;width: 45%;font-size: 18px;margin-top: 3%">{{form.totalMemberUserBalance}}</div>
                     <div class="clear"></div>
                     <div class="grid-num" style="float: left;width: 45%;font-size: 18px;margin-top: 3%">
-                        <span>消费占比</span>
+                        <span>消费占比</span>&nbsp;
                         <span class="red">{{form.consumptionRate}}%</span>
                     </div>
                 </div>
@@ -117,7 +117,7 @@
                     <div class="grid-num blue" style="float: right;width: 45%;font-size: 18px;margin-top: 3%">{{benForm.totalBenefitCardUser}}</div>
                     <div class="clear"></div>
                     <div class="grid-num" style="float: left;width: 45%;font-size: 18px;margin-top: 3%">
-                        <span>转化率</span>
+                        <span>转化率</span>&nbsp;
                         <span class="red">{{benForm.percentConversion}}%</span>
                     </div>
                 </div>
@@ -126,7 +126,7 @@
                     <div class="grid-num red" style="float: right;width: 45%;font-size: 18px;margin-top: 3%">{{benForm.totalBenefitCardPrice}}</div>
                     <div class="clear"></div>
                     <div class="grid-num" style="float: left;width: 45%;font-size: 18px;margin-top: 3%">
-                        <span>消费占比</span>
+                        <span>消费占比</span>&nbsp;
                         <span class="red">{{benForm.consumptionRate}}%</span>
                     </div>
                 </div>

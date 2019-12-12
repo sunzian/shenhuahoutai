@@ -9,7 +9,7 @@
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-select clearable v-model="query.cinemaCode" placeholder="请选择影院" class="mr10">
+                <el-select style="margin-top: 10px" clearable v-model="query.cinemaCode" placeholder="请选择影院" class="mr10">
                     <el-option
                         v-for="item in cinemaInfo"
                         :key="item.cinemaCode"
@@ -18,30 +18,35 @@
                     ></el-option>
                 </el-select>
                 <el-input
+                        style="margin-top: 10px"
                         placeholder="卖品名称"
                         v-model="query.merNames"
                         autocomplete="off"
                         class="mr10"
                 ></el-input>
                 <el-input
+                        style="margin-top: 10px"
                     placeholder="订单号"
                     v-model="query.submitOrderCode"
                     autocomplete="off"
                     class="mr10"
                 ></el-input>
                 <el-input
+                        style="margin-top: 10px"
                     placeholder="手机号"
                     v-model="query.mobile"
                     autocomplete="off"
                     class="mr10"
                 ></el-input>
                 <el-input
+                        style="margin-top: 10px"
                     placeholder="取货码"
                     v-model="query.printNo"
                     autocomplete="off"
                     class="mr10"
                 ></el-input>
                 <el-select
+                        style="margin-top: 10px"
                         clearable
                         v-model="query.deliveryType"
                         placeholder="取货方式"
@@ -51,6 +56,7 @@
                     <el-option key="1" label="送至影厅" value="1"></el-option>
                 </el-select>
                 <el-select
+                        style="margin-top: 10px"
                     clearable
                     v-model="query.payWay"
                     placeholder="支付方式"
@@ -61,6 +67,7 @@
                 </el-select>
                 <el-select
                     clearable
+                    style="margin-top: 10px"
                     v-model="query.payStatus"
                     placeholder="支付状态"
                     class="handle-select mr10"
@@ -71,6 +78,7 @@
                 </el-select>
                 <el-select
                     clearable
+                    style="margin-top: 10px"
                     v-model="query.submitStatus"
                     placeholder="下单状态"
                     class="handle-select mr10"
@@ -81,6 +89,7 @@
                 <el-date-picker
                     v-model="query.startDate"
                     type="datetime"
+                    style="margin-top: 10px"
                     value-format="yyyy-MM-dd HH:mm:ss"
                     format="yyyy-MM-dd HH:mm:ss"
                     class="mr10"
@@ -89,6 +98,7 @@
                 <el-date-picker
                     v-model="query.endDate"
                     type="datetime"
+                    style="margin-top: 10px"
                     value-format="yyyy-MM-dd HH:mm:ss"
                     format="yyyy-MM-dd HH:mm:ss"
                     placeholder="支付结束时间（止）"

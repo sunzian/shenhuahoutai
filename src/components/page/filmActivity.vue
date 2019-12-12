@@ -94,7 +94,7 @@
                     <template v-if="scope.row.reduceType==2" slot-scope="scope">{{scope.row.discountMoney}}</template>
                 </el-table-column>
                 <el-table-column prop="sort" label="最低票价" width="60">
-                    <template v-if="scope.row.reduceType==3" slot-scope="scope">{{scope.row.discountMoney}}</template>
+                    <template v-if="scope.row.reduceType==4" slot-scope="scope">{{scope.row.discountMoney}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="有效期" width="170">
                     <template slot-scope="scope">{{scope.row.startDate}}至{{scope.row.endDate}}</template>

@@ -574,7 +574,7 @@
                             v-model="item.count"
                             autocomplete="off"
                             :value="item.count"
-                            @input="changeInput($event)"
+                            @input="f($event)"
                         ></el-input>
                         <span style="color:red;cursor: pointer;" @click="deleteCoupon(index)">删除</span>
                     </div>
@@ -808,6 +808,11 @@ export default {
                 this.open();
                 return;
             }
+            if (this.couponForm.effectiveTimeType == 1 && this.couponForm.overDays <=0) {
+                this.message = '天数必须大于0';
+                this.open();
+                return;
+            }
             if (this.couponForm.effectiveTimeType == 2) {
                 if (this.couponForm.startDate == '' || this.couponForm.endDate == '') {
                     this.message = '请填写时间段';
@@ -952,6 +957,11 @@ export default {
             }
             if (this.excelCouponForm.effectiveTimeType == 1 && this.excelCouponForm.overDays == '') {
                 this.message = '请填写天数';
+                this.open();
+                return;
+            }
+            if (this.excelCouponForm.effectiveTimeType == 1 && this.excelCouponForm.overDays <=0) {
+                this.message = '天数必须大于0';
                 this.open();
                 return;
             }
