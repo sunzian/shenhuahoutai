@@ -60,6 +60,8 @@
                     <el-option key="7" label="会员卡注册送券" value="7"></el-option>
                     <el-option key="8" label="会员卡充值送券" value="8"></el-option>
                     <el-option key="9" label="权益卡券包" value="9"></el-option>
+                    <el-option key="9" label="员工推荐充值赠送" value="10"></el-option>
+                    <el-option key="9" label="绑定售票系统的券" value="11"></el-option>
                 </el-select>
                 <el-button
                     type="primary"
@@ -118,6 +120,8 @@
                         <el-tag v-else-if="scope.row.getType=='7'">会员卡注册送券</el-tag>
                         <el-tag v-else-if="scope.row.getType=='8'">会员卡充值送券</el-tag>
                         <el-tag v-else-if="scope.row.getType=='9'">权益卡券包</el-tag>
+                        <el-tag v-else-if="scope.row.getType=='10'">员工推荐充值赠送</el-tag>
+                        <el-tag v-else-if="scope.row.getType=='11'">绑定售票系统的券</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column label="使用订单号" align="center" width="260">

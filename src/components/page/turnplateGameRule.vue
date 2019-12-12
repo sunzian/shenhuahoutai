@@ -470,13 +470,17 @@
         <el-dialog :close-on-click-modal="false" title="新增" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
                 <el-form-item :required="true" label="奖品等级" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 250px"
-                        type="number"
-                        @blur="match"
+                    <el-select
                         v-model="form.prizeLevel"
-                        autocomplete="off"
-                    ></el-input>
+                        placeholder="请选择奖品等级"
+                    >
+                    <el-option
+                        v-for="item in levelInfo"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                    ></el-option>
+                </el-select>
                 </el-form-item>
                 <el-form-item :required="true" label="奖品名称" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="form.prizeName" autocomplete="off"></el-input>
@@ -507,7 +511,7 @@
                     <el-input style="width: 250px" v-model="form.prizeNumber" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="奖品概率" :label-width="formLabelWidth">
-                    <el-input placeholder="大于0小于1之间的小数" style="width: 250px" v-model="form.percent" autocomplete="off"></el-input>
+                    <el-input placeholder="大于0小于100的数字" style="width: 250px" v-model="form.percent" autocomplete="off"></el-input>%
                 </el-form-item>
                 <el-form-item :required="true" label="过期天数" :label-width="formLabelWidth">
                     <el-input placeholder="中奖后奖品过期天数" style="width: 250px" v-model="form.expireDay" autocomplete="off"></el-input>
@@ -558,14 +562,17 @@
         <el-dialog :close-on-click-modal="false" title="编辑" :visible.sync="showModify">
             <el-form ref="form" :model="pForm">
                 <el-form-item label="奖品等级" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 250px"
-                        :disabled="true"
-                        type="number"
-                        @blur="oMatch"
+                    <el-select
                         v-model="pForm.prizeLevel"
-                        autocomplete="off"
-                    ></el-input>
+                        placeholder="请选择奖品等级"
+                    >
+                    <el-option
+                        v-for="item in levelInfo"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                    ></el-option>
+                </el-select>
                 </el-form-item>
                 <el-form-item :required="true" label="奖品名称" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="pForm.prizeName" autocomplete="off"></el-input>
@@ -605,7 +612,7 @@
                     <el-input style="width: 250px" v-model="pForm.prizeNumber" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="奖品概率" :label-width="formLabelWidth">
-                    <el-input placeholder="大于0小于1之间的小数" style="width: 250px" v-model="pForm.percent" autocomplete="off"></el-input>
+                    <el-input placeholder="大于0小于100的数字" style="width: 250px" v-model="pForm.percent" autocomplete="off"></el-input>%
                 </el-form-item>
                 <el-form-item :required="true" label="过期天数" :label-width="formLabelWidth">
                     <el-input placeholder="中奖后奖品过期天数" style="width: 250px" v-model="pForm.expireDay" autocomplete="off"></el-input>
@@ -735,6 +742,36 @@ export default {
                 {
                     value: '2',
                     label: '实物'
+                }
+            ],
+            levelInfo: [
+                {
+                    value: '1',
+                    label: '一等奖'
+                },
+                {
+                    value: '2',
+                    label: '二等奖'
+                },
+                {
+                    value: '3',
+                    label: '三等奖'
+                },
+                {
+                    value: '4',
+                    label: '四等奖'
+                },
+                {
+                    value: '5',
+                    label: '五等奖'
+                },
+                {
+                    value: '6',
+                    label: '六等奖'
+                },
+                {
+                    value: '7',
+                    label: '七等奖'
                 }
             ],
             couponInfo: {
@@ -1127,8 +1164,8 @@ export default {
         },
         exChanger() {
             // 新增奖项操作
-            if (this.form.percent > 1 || this.form.percent < 0) {
-                this.message = '只能输入0-1的小数';
+            if (this.form.percent > 100 || this.form.percent < 0) {
+                this.message = '只能输入0-100的数字';
                 this.open();
                 return;
             }
@@ -1210,8 +1247,8 @@ export default {
         sureChanger() {
             // 编辑奖项操作
             console.log(this.pForm);
-            if (this.pForm.percent > 1 || this.pForm.percent < 0) {
-                this.message = '只能输入0-1的小数';
+            if (this.pForm.percent > 100 || this.pForm.percent < 0) {
+                this.message = '只能输入0-100的小数';
                 this.open();
                 return;
             }
