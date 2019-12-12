@@ -640,6 +640,7 @@ export default {
     },
     mounted() {
         this.getMenu();
+        this.getAllCinema();
     },
     methods: {
         addPage() {
@@ -1335,12 +1336,11 @@ export default {
                     loading.close();
                     if (data.data.code == 'success') {
                         let cinemas = JSON.parse(Decrypt(data.data.data));
-                        this.cinemaData = cinemas;
                         for (let i = 0; i < cinemas.length; i++) {
                             let cinemaInfo = {};
-                            cinemaInfo.label = cinemas[i].cinemaName;
-                            cinemaInfo.value = cinemas[i].cinemaCode;
-                            this.cinemaInfo.push(cinemaInfo);
+                            cinemaInfo.cinemaName = cinemas[i].cinemaName;
+                            cinemaInfo.cinemaCode = cinemas[i].cinemaCode;
+                            this.cinemaData.push(cinemaInfo);
                         }
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;

@@ -9,6 +9,22 @@
         </div>
         <!--影院信息展示页面-->
         <div class="container" v-if="showSell">
+            <div class="handle-box">
+                <el-select
+                    clearable
+                    v-model="query.cinemaCode"
+                    placeholder="请选择影院"
+                    class="handle-input mr10"
+                >
+                    <el-option
+                        v-for="item in cinemaInfo"
+                        :key="item.cinemaCode"
+                        :label="item.cinemaName"
+                        :value="item.cinemaCode"
+                    ></el-option>
+                </el-select>
+                <el-button style="margin-top: 10px;width: 90px;"  type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
+            </div>
             <el-table
                 :data="tableData"
                 border
@@ -301,7 +317,8 @@ export default {
             state: '',
             timeout: null,
             selectFilm: {},
-            filmInfo: []
+            filmInfo: [],
+            cinemaInfo: []
         };
     },
     created() {
@@ -309,6 +326,7 @@ export default {
     },
     mounted() {
         this.getMenu();
+        this.getAllCinema();
     },
     methods: {
         delChange(index, row) {
@@ -528,6 +546,41 @@ export default {
                     });
                 loading.close();
             }, 500);
+        },
+        // 获取所有影院
+        getAllCinema() {
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
+            https
+                .fetchPost('/cinema/getAllCinema', '')
+                .then(data => {
+                    loading.close();
+                    if (data.data.code == 'success') {
+                        let cinemas = JSON.parse(Decrypt(data.data.data));
+                        for (let i = 0; i < cinemas.length; i++) {
+                            let cinemaInfo = {};
+                            cinemaInfo.cinemaName = cinemas[i].cinemaName;
+                            cinemaInfo.cinemaCode = cinemas[i].cinemaCode;
+                            this.cinemaInfo.push(cinemaInfo);
+                        }
+                    } else if (data.data.code == 'nologin') {
+                        this.message = data.data.message;
+                        this.open();
+                        this.$router.push('/login');
+                    } else {
+                        this.message = data.data.message;
+                        this.open();
+                    }
+                })
+                .catch(err => {
+                    loading.close();
+                    console.log(err);
+                });
         },
         refresh() {
             //刷新卖品页面
