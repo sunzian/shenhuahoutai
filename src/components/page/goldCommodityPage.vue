@@ -606,7 +606,7 @@
                         @imgDel="$imgDel"
                     />
                 </el-form-item>
-                <el-form-item :required="true" label="原价" :label-width="formLabelWidth">
+                <el-form-item v-if="form.commodityType==1" :required="true" label="原价" :label-width="formLabelWidth">
                     <el-input style="width: 250px" onkeyup="this.value=this.value.replace(/\D/g,'')" v-model="form.originalPrice" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="库存" :label-width="formLabelWidth">
@@ -1611,28 +1611,28 @@ export default {
                 return;
             }
             if(this.oForm.change_type==1||this.oForm.change_type==3){
-                if (!this.oForm.gold) {
+                if (!this.oForm.gold&&this.oForm.gold!=0) {
                     this.message = '所需金币数量不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
-                if (this.oForm.gold<0) {
-                    this.message = '所需金币数量不能小于0，请检查！';
+                if (this.oForm.gold<=0) {
+                    this.message = '所需金币数量必须大于0，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
             }
             if(this.oForm.change_type==2||this.oForm.change_type==3){
-                if (!this.oForm.money) {
+                if (!this.oForm.money&&this.oForm.money!=0) {
                     this.message = '所需RMB不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
-                if (this.oForm.money<0) {
-                    this.message = '所需RMB不能小于0，请检查！';
+                if (this.oForm.money<=0) {
+                    this.message = '所需RMB必须大于0，请检查！';
                     this.open();
                     loading.close();
                     return;
@@ -2170,28 +2170,28 @@ export default {
                 return;
             }
             if(this.form.changeType==1||this.form.changeType==3){
-                if (!this.form.gold) {
+                if (!this.form.gold&&this.form.gold!=0) {
                     this.message = '所需金币数量不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
-                if (this.form.gold<0) {
-                    this.message = '所需金币数量不能小于0，请检查！';
+                if (this.form.gold<=0) {
+                    this.message = '所需金币数量必须大于0，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
             }
             if(this.form.changeType==2||this.form.changeType==3){
-                if (!this.form.money) {
+                if (!this.form.money&&this.form.money!=0) {
                     this.message = '所需RMB不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
-                if (this.form.money<0) {
-                    this.message = '所需RMB不能小于0，请检查！';
+                if (this.form.money<=0) {
+                    this.message = '所需RMB必须大于0，请检查！';
                     this.open();
                     loading.close();
                     return;
@@ -2228,7 +2228,7 @@ export default {
                 }
             }
             if(this.oEffectiveType!=2){
-                if (!this.form.expireDay) {
+                if (!this.form.expireDay&&this.form.expireDay!=0) {
                     this.message = '有效期天数不能为空，请检查！';
                     this.open();
                     loading.close();
