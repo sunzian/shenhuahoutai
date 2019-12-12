@@ -611,7 +611,7 @@
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false">取 消</el-button>
-                <el-button @click="exChanger">确 定</el-button>
+                <el-button type="primary" @click="exChanger">确 定</el-button>
             </span>
         </el-dialog>
         <!--新增抽屉弹出框-->

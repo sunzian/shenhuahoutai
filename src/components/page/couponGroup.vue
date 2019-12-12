@@ -233,7 +233,7 @@
         <el-dialog :close-on-click-modal="false" title="选择优惠券" :visible.sync="drawer">
             <div class="container">
                 <div class="handle-box">
-                    <el-input v-model="query.name" placeholder="优惠券名称" class="handle-input mr10"></el-input>
+                    <el-input v-model="query.name" placeholder="优惠券名称" class="handle-input mr12"></el-input>
                     <el-button type="primary" icon="el-icon-search" @click="openNext">搜索</el-button>
                 </div>
                 <el-table
@@ -1050,6 +1050,10 @@ export default {
     }
     .mr10 {
         width: 16%;
+        margin-right: 10px;
+    }
+    .mr12 {
+        width: 30%;
         margin-right: 10px;
     }
 </style>
