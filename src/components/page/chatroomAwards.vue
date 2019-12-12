@@ -175,7 +175,7 @@
             </div>
         </div>
         <!--新增弹出框-->
-        <el-dialog :close-on-click-modal="false" :visible.sync="dialogFormVisible">
+        <el-dialog :close-on-click-modal="false" title="新增" :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
                 <el-form-item :required="true" label="礼品类型：" :label-width="formLabelWidth">
                     <el-select v-model="oForm.type" placeholder="请选择">
@@ -226,13 +226,13 @@
                     </el-upload>
                 </el-form-item>
                 <el-form-item :required="true" label="每组发放数量：" :label-width="formLabelWidth">
-                    <el-input style="width: 150px" v-model="oForm.singleNumber" autocomplete="off"></el-input>
+                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 150px" v-model="oForm.singleNumber" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="发放组数：" :label-width="formLabelWidth">
-                    <el-input style="width: 150px" v-model="oForm.groupNumber" autocomplete="off"></el-input>
+                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 150px" v-model="oForm.groupNumber" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="领取后多少天过期：" :label-width="formLabelWidth">
-                    <el-input style="width: 150px" v-model="oForm.overDays" autocomplete="off"></el-input>
+                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 150px" v-model="oForm.overDays" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="是否限制用户每月领取数量：" :label-width="formLabelWidth" >
                     <el-select v-model="oForm.limitStatus" placeholder="请选择">
@@ -247,6 +247,7 @@
                 <el-form-item :required="true" label="用户单月领取张数限制：" :label-width="formLabelWidth" v-if="oForm.limitStatus == 2">
                     <el-input
                         style="width: 150px"
+                        onkeyup="this.value=this.value.replace(/\D/g,'')"
                         v-model="oForm.singleLimitNumber"
                         autocomplete="off"
                     ></el-input>
@@ -287,13 +288,13 @@
                     </el-popover>
                 </el-form-item>
                 <el-form-item :required="true" label="发放组数：" :label-width="formLabelWidth">
-                    <el-input style="width: 75px" v-model="oGroupNumber" autocomplete="off"></el-input>
+                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 75px" v-model="oGroupNumber" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="每组发放数量：" :label-width="formLabelWidth">
-                    <el-input style="width: 75px" v-model="oSingleNumber" autocomplete="off"></el-input>
+                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 75px" v-model="oSingleNumber" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="领取后多少天过期：" :label-width="formLabelWidth">
-                    <el-input style="width: 75px" v-model="oOverDays" autocomplete="off"></el-input>
+                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 75px" v-model="oOverDays" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="是否限制用户每月领取数量：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oLimitStatus">
@@ -302,7 +303,7 @@
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" label="用户单月领取张数限制：" :label-width="formLabelWidth" v-if="oLimitStatus == 2">
-                    <el-input style="width: 75px" v-model="oSingleLimitNumber" autocomplete="off"></el-input>
+                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 75px" v-model="oSingleLimitNumber" autocomplete="off"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -502,15 +503,15 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            if(!this.oForm.type||!this.oForm.image_url||!this.oForm.singleNumber||!this.oForm.groupNumber||!this.oForm.overDays||!this.oForm.limitStatus){
-                this.message = '必填项不能为空，请检查！';
+            if(!this.oForm.type){
+                this.message = '礼品类型不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
             }
             if(this.oForm.type==2) {
                 if (!this.oForm.name) {
-                    this.message = '必填项不能为空，请检查！';
+                    this.message = '礼品名称不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
@@ -518,15 +519,69 @@ export default {
             }
             if(this.oForm.type==1) {
                 if (!this.couponInfo.couponName) {
-                    this.message = '必填项不能为空，请检查！';
+                    this.message = '所选优惠券不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
             }
+            if(!this.oForm.image_url){
+                this.message = '礼品图片不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.oForm.singleNumber&&this.oForm.singleNumber!=0){
+                this.message = '每组发放数量不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(this.oForm.singleNumber<=0){
+                this.message = '每组发放数量必须大于0，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.oForm.groupNumber&&this.oForm.groupNumber!=0){
+                this.message = '发放组数不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(this.oForm.groupNumber<=0){
+                this.message = '发放组数必须大于0，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.oForm.overDays&&this.oForm.overDays!=0){
+                this.message = '领取后多少天过期不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(this.oForm.overDays<=0){
+                this.message = '领取后多少天过期必须大于0，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.oForm.limitStatus){
+                this.message = '是否限制用户每月领取数量不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
             if(this.oForm.limitStatus == 2) {
-                if (!this.oForm.singleLimitNumber) {
-                    this.message = '必填项不能为空，请检查！';
+                if (!this.oForm.singleLimitNumber&&this.oForm.singleLimitNumber!=0) {
+                    this.message = '用户单月领取张数限制不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if(this.oForm.singleLimitNumber<=0){
+                    this.message = '用户单月领取张数限制必须大于0，请检查！';
                     this.open();
                     loading.close();
                     return;
@@ -771,15 +826,51 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            if(!this.oGroupNumber||!this.oSingleNumber||!this.oOverDays){
-                this.message = '必填项不能为空，请检查！';
+            if(!this.oGroupNumber&&this.oGroupNumber!=0){
+                this.message = '发放组数不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(this.oGroupNumber<=0){
+                this.message = '发放组数必须大于0，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.oSingleNumber&&this.oSingleNumber!=0){
+                this.message = '每组发放数量不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(this.oSingleNumber<=0){
+                this.message = '每组发放数量必须大于0，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.oOverDays&&this.oOverDays!=0){
+                this.message = '领取后多少天过期不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(this.oOverDays<=0){
+                this.message = '领取后多少天过期必须大于0，请检查！';
                 this.open();
                 loading.close();
                 return;
             }
             if(this.oLimitStatus==2) {
-                if (!this.oSingleLimitNumber) {
-                    this.message = '必填项不能为空，请检查！';
+                if (!this.oSingleLimitNumber&&this.oSingleLimitNumber!=0) {
+                    this.message = '用户单月领取张数限制不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if(this.oSingleLimitNumber<=0){
+                    this.message = '用户单月领取张数限制必须大于0，请检查！';
                     this.open();
                     loading.close();
                     return;

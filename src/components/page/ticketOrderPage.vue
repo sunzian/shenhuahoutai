@@ -9,7 +9,7 @@
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-select clearable v-model="query.cinemaCode" placeholder="请选择影院" class="mr10">
+                <el-select style="margin-top: 10px" clearable v-model="query.cinemaCode" placeholder="请选择影院" class="mr10">
                     <el-option
                         v-for="item in cinemaInfo"
                         :key="item.cinemaCode"
@@ -22,29 +22,34 @@
                         v-model="query.filmName"
                         autocomplete="off"
                         class="mr10"
+                        style="margin-top: 10px"
                 ></el-input>
                 <el-input
                     placeholder="订单号"
                     v-model="query.submitOrderCode"
                     autocomplete="off"
                     class="mr10"
+                    style="margin-top: 10px"
                 ></el-input>
                 <el-input
                     placeholder="手机号"
                     v-model="query.mobile"
                     autocomplete="off"
                     class="mr10"
+                    style="margin-top: 10px"
                 ></el-input>
                 <el-input
                         placeholder="会员卡号"
                         v-model="query.cardNo"
                         autocomplete="off"
                         class="mr10"
+                        style="margin-top: 10px"
                 ></el-input>
                 <el-select
                     clearable
                     v-model="query.payWay"
                     placeholder="支付方式"
+                    style="margin-top: 10px"
                     class="handle-select mr10"
                 >
                     <el-option key="0" label="微信" value="0"></el-option>
@@ -54,6 +59,7 @@
                     clearable
                     v-model="query.payStatus"
                     placeholder="支付状态"
+                    style="margin-top: 10px"
                     class="handle-select mr10"
                 >
                     <el-option key="1" label="支付成功" value="1"></el-option>
@@ -64,6 +70,7 @@
                     clearable
                     v-model="query.orderStatus"
                     placeholder="订单状态"
+                    style="margin-top: 10px"
                     class="handle-select mr10"
                 >
                     <el-option key="4" label="未取票" value="4"></el-option>
@@ -78,6 +85,7 @@
                     v-model="query.startDate"
                     type="datetime"
                     class="mr10"
+                    style="margin-top: 10px"
                     value-format="yyyy-MM-dd HH:mm:ss"
                     format="yyyy-MM-dd HH:mm:ss"
                     default-time="06:00:00"
@@ -87,6 +95,7 @@
                     v-model="query.endDate"
                     type="datetime"
                     class="mr10"
+                    style="margin-top: 10px"
                     value-format="yyyy-MM-dd HH:mm:ss"
                     format="yyyy-MM-dd HH:mm:ss"
                     placeholder="支付结束时间（止）"
@@ -95,6 +104,7 @@
                     v-model="query.sessionStartDate"
                     type="datetime"
                     class="mr10"
+                    style="margin-top: 10px"
                     value-format="yyyy-MM-dd HH:mm:ss"
                     format="yyyy-MM-dd HH:mm:ss"
                     default-time="06:00:00"
@@ -104,6 +114,7 @@
                     v-model="query.sessionEndDate"
                     type="datetime"
                     class="mr10"
+                    style="margin-top: 10px"
                     value-format="yyyy-MM-dd HH:mm:ss"
                     format="yyyy-MM-dd HH:mm:ss"
                     placeholder="场次结束时间（止）"

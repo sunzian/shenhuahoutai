@@ -574,7 +574,7 @@
                             v-model="item.count"
                             autocomplete="off"
                             :value="item.count"
-                            @input="changeInput($event)"
+                            @input="f($event)"
                         ></el-input>
                         <span style="color:red;cursor: pointer;" @click="deleteCoupon(index)">删除</span>
                     </div>
