@@ -436,6 +436,7 @@ export default {
     created() {},
     mounted() {
         this.getMenu();
+        this.getAllCinema();
     },
     methods: {
         addChange(index, row) {
@@ -500,6 +501,7 @@ export default {
                 .then(data => {
                     if (data.data.code == 'success') {
                         var res = JSON.parse(Decrypt(data.data.data));
+                        res.unshift({cinemaName:'全部影院',cinemaCode: '0'})
                         this.cinemaInfo = res;
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
@@ -571,7 +573,6 @@ export default {
                             this.query.pageNo = oData.pageNo;
                             this.query.totalCount = oData.totalCount;
                             this.query.totalPage = oData.totalPage;
-                            this.getAllCinema();
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
                             this.open();
