@@ -357,6 +357,7 @@
                                 autocomplete="off"
                                 :value="item.count"
                                 style="width: 30%;"
+                                onkeyup="this.value=this.value.replace(/\D/g,'')"
                                 @input="changeInput($event)"
                             ></el-input>
                             <span style="color:red;cursor: pointer;" @click="deleteCoupon(index)">删除</span>
@@ -574,7 +575,8 @@
                             v-model="item.count"
                             autocomplete="off"
                             :value="item.count"
-                            @input="f($event)"
+                            onkeyup="this.value=this.value.replace(/\D/g,'')"
+                            @input="changeInput($event)"
                         ></el-input>
                         <span style="color:red;cursor: pointer;" @click="deleteCoupon(index)">删除</span>
                     </div>
@@ -803,6 +805,13 @@ export default {
                 this.open();
                 return;
             }
+            for (let i = 0;i < this.couponList.length;i ++) {
+                if (this.couponList[i].count > 20) {
+                    this.message = '每种优惠券单次发放数量不能大于20张！';
+                    this.open();
+                    return;
+                }
+            }
             if (this.couponForm.effectiveTimeType == 1 && this.couponForm.overDays == '') {
                 this.message = '请填写天数';
                 this.open();
@@ -954,6 +963,13 @@ export default {
                 this.message = '请选择优惠券';
                 this.open();
                 return;
+            }
+            for (let i = 0;i < this.couponList.length;i ++) {
+                if (this.couponList[i].count > 20) {
+                    this.message = '每种优惠券单次发放数量不能大于20张！';
+                    this.open();
+                    return;
+                }
             }
             if (this.excelCouponForm.effectiveTimeType == 1 && this.excelCouponForm.overDays == '') {
                 this.message = '请填写天数';

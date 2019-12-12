@@ -581,6 +581,14 @@ export default {
                 loading.close();
                 return;
             }
+            for (let i = 0;i < this.selectedSell.length;i ++) {
+                if (this.selectedSell[i].num > 20) {
+                    this.message = '每种优惠券单次设置数量不能大于20张！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
             var jsonArr = [];
             let coupon = [];
             for (let i = 0; i < this.selectedSell.length; i++) {
@@ -736,6 +744,14 @@ export default {
                 this.open();
                 loading.close();
                 return;
+            }
+            for (let i = 0;i < this.selectedSell.length;i ++) {
+                if (this.selectedSell[i].num > 20) {
+                    this.message = '每种优惠券单次设置数量不能大于20张！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
             }
             var jsonArr = [];
             let coupon = [];
