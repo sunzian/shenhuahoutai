@@ -34,6 +34,7 @@
                 <el-select clearable v-model="query.reduceType" placeholder="优惠方式" class="handle-select mr10">
                     <el-option key="1" label="特惠活动" value="1"></el-option>
                     <el-option key="2" label="立减活动" value="2"></el-option>
+                    <el-option key="4" label="最低票价结算" value="4"></el-option>
                 </el-select>
                 <el-select clearable v-model="query.status" placeholder="状态" class="handle-select mr10">
                     <el-option key="1" label="启用" value="1"></el-option>
@@ -98,6 +99,7 @@
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.reduceType == 1">特惠价格</el-tag>
                         <el-tag v-else-if="scope.row.reduceType == 2" >立减金额</el-tag>
+                        <el-tag v-else-if="scope.row.reduceType == 4" >最低票价结算</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column prop="sort" label="固定金额" width="60">
@@ -106,7 +108,7 @@
                 <el-table-column prop="sort" label="立减金额" width="60">
                     <template v-if="scope.row.reduceType==2" slot-scope="scope">{{scope.row.discountMoney}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="最低票价" width="60">
+                <el-table-column prop="sort" label="最低票价结算" width="60">
                     <template v-if="scope.row.reduceType==4" slot-scope="scope">{{scope.row.discountMoney}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="有效期" width="170">

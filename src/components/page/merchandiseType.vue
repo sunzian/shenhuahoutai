@@ -351,14 +351,19 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
+            if(!this.oForm.name){
+                this.message = '分类名称不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.oForm.image_url){
+                this.message = '分类图片不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
             setTimeout(() => {
-
-                if(!this.oForm.image_url||!this.oForm.name){
-                    this.message = '必填项不能为空，请检查！';
-                    this.open();
-                    loading.close();
-                    return;
-                }
                 var jsonArr = [];
                 jsonArr.push({ key: 'cinemaCode', value: this.cinemaCode });
                 jsonArr.push({ key: 'typeName', value: this.oForm.name });
@@ -504,16 +509,22 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
+            if (!this.form.image_url) {
+                this.form.image_url = this.form.imageUrl;
+            }
+            if(!this.form.typeName){
+                this.message = '分类名称不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.form.imageUrl){
+                this.message = '分类图片不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
             setTimeout(() => {
-                if (!this.form.image_url) {
-                    this.form.image_url = this.form.imageUrl;
-                }
-                if(!this.form.imageUrl||!this.form.typeName){
-                    this.message = '必填项不能为空，请检查！';
-                    this.open();
-                    loading.close();
-                    return;
-                }
                 var jsonArr = [];
                 jsonArr.push({ key: 'id', value: this.form.id });
                 jsonArr.push({ key: 'showSeqNo', value: this.form.showSeqNo });

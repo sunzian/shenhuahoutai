@@ -130,6 +130,7 @@
                         class="upload-demo"
                         drag
                         :limit="1"
+                        :on-exceed="exceed"
                         action="/api/upload/uploadImage"
                         :on-success="onSuccess"
                         multiple
@@ -279,6 +280,7 @@
                         ref="upload"
                         class="upload-demo"
                         drag
+                        :on-exceed="exceed"
                         :limit="1"
                         action="/api/upload/uploadImage"
                         :on-success="unSuccess"
@@ -560,6 +562,13 @@ export default {
         this.getMenu();
     },
     methods: {
+        exceed(data){
+            console.log(data);
+            if(data.length==1){
+                this.message = '只能上传一张图片，如需重新上传请删除第一张图！';
+                this.open();
+            }
+        },
         beforeUpload(file) {
             //上传之前
             this.imgType.type = EncryptReplace('activity');
@@ -1269,12 +1278,17 @@ export default {
         },
         // 获取所有券包
         getAllCoupon() {
+            let couponName=this.couponName;
+            if(!couponName){
+                couponName=''
+            }
             if (!this.oForm.cinemaCode || this.oForm.cinemaCode == '') {
                 this.message = '请选择影院';
                 this.open();
                 return;
             }
             let jsonArr = [];
+            jsonArr.push({ key: 'groupName', value: couponName });
             jsonArr.push({ key: 'pageNo', value: this.query.aPageNo });
             jsonArr.push({ key: 'pageSize', value: this.query.aPageSize });
             jsonArr.push({ key: 'cinemaCodes', value: this.oForm.cinemaCode });
@@ -1287,6 +1301,7 @@ export default {
                 .fetchPost('/couponGroup/couponGroupPage', params)
                 .then(data => {
                     if (data.data.code == 'success') {
+                        this.couponName='';
                         var res = JSON.parse(Decrypt(data.data.data));
                         if (res.data.length == 0) {
                             this.message = '暂无券包';

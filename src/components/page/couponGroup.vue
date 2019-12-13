@@ -743,8 +743,14 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            if(!this.oGroupName||!this.selectedSell){
-                this.message = '必填项不能为空，请检查！';
+            if(!this.oGroupName){
+                this.message = '券包名称不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.selectedSell){
+                this.message = '所选优惠券不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;

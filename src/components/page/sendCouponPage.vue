@@ -289,6 +289,10 @@
                             <div class="el-upload__text">
                                 <em>点击上传</em>
                             </div>
+                            <div
+                                    class="el-upload__tip"
+                                    slot="tip"
+                            >上传模板只能是 xls、xlsx格式!</div>
                         </el-upload>
                     </el-form-item>
                     <el-form-item :required="true" label="选择有效时间类型：" :label-width="formLabelWidth">
@@ -319,13 +323,15 @@
                         ></el-date-picker>
                     </el-form-item>
                     <el-form-item
-                        label="领取后几天过期："
+                        label="有效期天数："
                         :label-width="formLabelWidth"
                         v-if="excelCouponForm.effectiveTimeType == 1"
                         :required="true"
                     >
                         <el-input
                             style="width: 150px"
+                            placeholder="自领取之日起计算"
+                            onkeyup="this.value=this.value.replace(/\D/g,'')"
                             v-model="excelCouponForm.overDays"
                             autocomplete="off"
                         ></el-input>天
@@ -541,12 +547,12 @@
                     ></el-date-picker>
                 </el-form-item>
                 <el-form-item
-                    label="领取后几天过期："
+                    label="有效期天数："
                     :label-width="formLabelWidth"
                     v-if="couponForm.effectiveTimeType == 1"
                     :required="true"
                 >
-                    <el-input style="width: 150px" v-model="couponForm.overDays" autocomplete="off"></el-input>天
+                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" placeholder="自领取之日起计算" style="width: 150px" v-model="couponForm.overDays" autocomplete="off"></el-input>天
                 </el-form-item>
                 <el-form-item :required="true" label="选择优惠券：" :label-width="formLabelWidth">
                     <el-button @click="getAllCoupon">选择优惠券</el-button>
@@ -813,12 +819,12 @@ export default {
                 }
             }
             if (this.couponForm.effectiveTimeType == 1 && this.couponForm.overDays == '') {
-                this.message = '请填写天数';
+                this.message = '请填写有效期天数';
                 this.open();
                 return;
             }
             if (this.couponForm.effectiveTimeType == 1 && this.couponForm.overDays <=0) {
-                this.message = '天数必须大于0';
+                this.message = '有效期天数必须大于0';
                 this.open();
                 return;
             }
@@ -972,12 +978,12 @@ export default {
                 }
             }
             if (this.excelCouponForm.effectiveTimeType == 1 && this.excelCouponForm.overDays == '') {
-                this.message = '请填写天数';
+                this.message = '请填写有效期天数';
                 this.open();
                 return;
             }
             if (this.excelCouponForm.effectiveTimeType == 1 && this.excelCouponForm.overDays <=0) {
-                this.message = '天数必须大于0';
+                this.message = '有效期天数必须大于0';
                 this.open();
                 return;
             }
@@ -1175,8 +1181,8 @@ export default {
         },
 
         beforeExcel(file) {
-            const extension = file.name.split(".")[1] === "xls";
-            const extension2 = file.name.split(".")[1] === "xlsx";
+            const extension = file.name.split(".")[file.name.split(".").length-1] === "xls";
+            const extension2 = file.name.split(".")[file.name.split(".").length-1] === "xlsx";
             const isLt2M = file.size / 1024 / 1024 < 10;
             if (!extension && !extension2) {
                 this.message = '上传模板只能是 xls、xlsx格式!';
