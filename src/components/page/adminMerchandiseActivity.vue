@@ -68,7 +68,7 @@
                 <el-table-column label="活动名称">
                     <template slot-scope="scope">{{scope.row.name}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="有效期" width="320">
+                <el-table-column prop="memo" label="活动有效期" width="320">
                     <template slot-scope="scope">{{scope.row.startDate}}至{{scope.row.endDate}}</template>
                 </el-table-column>
                 <el-table-column prop="sort" label="限购总数" width="130">
@@ -201,7 +201,7 @@
                         >删除</span>
                     </div>
                 </el-form-item>
-                <el-form-item :required="true" label="有效期：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="活动有效期：" :label-width="formLabelWidth">
                     <el-date-picker
                             v-model="oForm.startDate"
                             type="datetime"

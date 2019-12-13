@@ -516,6 +516,12 @@ export default {
         },
         delChange(index, row) {
             //删除数据
+            this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            })
+                .then(() => {
             const loading = this.$loading({
                 lock: true,
                 text: 'Loading',
@@ -557,6 +563,13 @@ export default {
                 .catch(err => {
                     loading.close();
                     console.log(err);
+                });
+                })
+                .catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
                 });
         },
         addChange(index, row) {

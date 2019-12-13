@@ -98,7 +98,7 @@
                 <el-table-column prop="sort" label="最低票价结算" width="60">
                     <template v-if="scope.row.reduceType==4" slot-scope="scope">{{scope.row.discountMoney}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="有效期" width="170">
+                <el-table-column prop="memo" label="活动有效期" width="170">
                     <template slot-scope="scope">{{scope.row.startDate}}至{{scope.row.endDate}}</template>
                 </el-table-column>
                 <el-table-column prop="sort" label="状态" width="100">
@@ -227,7 +227,7 @@
                         >删除</span>
                     </div>
                 </el-form-item>
-                <el-form-item :required="true" label="有效期：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="活动有效期：" :label-width="formLabelWidth">
                     <el-date-picker
                             v-model="oForm.startDate"
                             type="datetime"
@@ -460,7 +460,7 @@
                         >删除</span>
                     </div>
                 </el-form-item>
-                <el-form-item :required="true" label="有效期：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="活动有效期：" :label-width="formLabelWidth">
                     <el-date-picker
                             v-model="oStartDate"
                             type="datetime"
