@@ -760,6 +760,8 @@
                         style="width: 250px;"
                         v-model="addServiceName"
                         autocomplete="off"
+                        maxlength="8"
+                        show-word-limit
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="特色服务内容" :label-width="formLabelWidth">
@@ -791,6 +793,8 @@
                         style="width: 250px;"
                         v-model="editServiceName"
                         autocomplete="off"
+                        maxlength="8"
+                        show-word-limit
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="特色服务内容" :label-width="formLabelWidth">
