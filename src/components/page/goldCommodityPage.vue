@@ -22,6 +22,7 @@
                         :value="item.cinemaCode"
                     ></el-option>
                 </el-select>
+                <el-input v-model="query.name" placeholder="商品名称" class="handle-input mr10"></el-input>
                 <el-select
                     clearable
                     v-model="query.status"
@@ -50,6 +51,14 @@
                     <el-option key="1" label="实物" value="1"></el-option>
                     <el-option key="2" label="优惠券" value="2"></el-option>
                     <el-option key="3" label="券包" value="3"></el-option>
+                </el-select>
+                <el-select clearable v-model="query.topStatus" placeholder="是否今日大牌" class="handle-select mr10">
+                    <el-option key="1" label="否" value="1"></el-option>
+                    <el-option key="2" label="是" value="2"></el-option>
+                </el-select>
+                <el-select clearable v-model="query.recommendStatus" placeholder="是否精品推荐" class="handle-select mr10">
+                    <el-option key="1" label="否" value="1"></el-option>
+                    <el-option key="2" label="是" value="2"></el-option>
                 </el-select>
                 <el-button
                     style="margin-top: 10px;width: 90px;"
@@ -221,6 +230,7 @@
                         drag
                         :limit="1"
                         ref="upload"
+                        :on-exceed="exceed"
                         action="/api/upload/uploadImage"
                         :on-success="onSuccess"
                         multiple
@@ -271,7 +281,7 @@
                     label="原价"
                     :label-width="formLabelWidth"
                 >
-                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 250px" v-model="oForm.originalPrice" autocomplete="off"></el-input>
+                    <el-input style="width: 250px" v-model="oForm.originalPrice" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="库存" :label-width="formLabelWidth">
                     <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 250px" v-model="oForm.store" autocomplete="off"></el-input>
@@ -290,19 +300,17 @@
                     :required="true"
                     v-if="oForm.change_type==1||oForm.change_type==3"
                     label="所需金币数量"
-                    onkeyup="this.value=this.value.replace(/\D/g,'')"
                     :label-width="formLabelWidth"
                 >
-                    <el-input style="width: 250px" v-model="oForm.gold" autocomplete="off"></el-input>
+                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 250px" v-model="oForm.gold" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item
                     :required="true"
                     v-if="oForm.change_type==2||oForm.change_type==3"
                     label="所需RMB"
-                    onkeyup="this.value=this.value.replace(/\D/g,'')"
                     :label-width="formLabelWidth"
                 >
-                    <el-input style="width: 250px" v-model="oForm.money" autocomplete="off"></el-input>
+                    <el-input  onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 250px" v-model="oForm.money" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item
                     :required="true"
@@ -323,7 +331,6 @@
                     :required="true"
                     v-if="oForm.effectiveType==1 && oForm.commodity_type!=1"
                     label="领取后几天开始生效"
-                    onkeyup="this.value=this.value.replace(/\D/g,'')"
                     :label-width="formLabelWidth"
                 >
                     <el-input style="width: 250px" v-model="oForm.laterDays" autocomplete="off" onkeyup="this.value=this.value.replace(/\D/g,'')"></el-input>
@@ -553,7 +560,7 @@
                     :label-width="formLabelWidth"
                     :required="true"
                 >
-                    <el-input style="width: 250px" v-model="form.name" autocomplete="off"></el-input>
+                    <el-input style="width: 250px" v-model="oName" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="商品图片" :label-width="formLabelWidth">
                     <el-popover placement="right" title trigger="hover">
@@ -572,6 +579,8 @@
                         drag
                         action="/api/upload/uploadImage"
                         ref="download"
+                        :limit="1"
+                        :on-exceed="exceed"
                         :on-success="unSuccess"
                         multiple
                     >
@@ -607,7 +616,7 @@
                     />
                 </el-form-item>
                 <el-form-item v-if="form.commodityType==1" :required="true" label="原价" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" onkeyup="this.value=this.value.replace(/\D/g,'')" v-model="form.originalPrice" autocomplete="off"></el-input>
+                    <el-input style="width: 250px" v-model="form.originalPrice" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="库存" :label-width="formLabelWidth">
                     <el-input style="width: 250px" onkeyup="this.value=this.value.replace(/\D/g,'')"  v-model="form.store" autocomplete="off"></el-input>
@@ -1038,6 +1047,9 @@ export default {
                 details: '',
                 markdown: '',
                 assignInfo:'',
+                gold:'',
+                money:'',
+                store:'',
             },
             idx: -1,
             id: -1,
@@ -1058,7 +1070,10 @@ export default {
                 laterDays: '',
                 startEffectiveDate: '',
                 endEffectiveDate: '',
-                assign_info:''
+                assign_info:'',
+                gold:'',
+                money:'',
+                store:'',
             },
 
             formLabelWidth: '120px',
@@ -1363,6 +1378,13 @@ export default {
         this.getMenu();
     },
     methods: {
+        exceed(data){
+            console.log(data);
+            if(data.length==1){
+                this.message = '只能上传一张图片，如需重新上传请删除第一张图！';
+                this.open();
+            }
+        },
         clearAssignType(){
             this.oForm.assign_info='';
             this.form.assignInfo='';
@@ -1592,7 +1614,7 @@ export default {
                 loading.close();
                 return;
             }
-            if (!this.oForm.store) {
+            if (!this.oForm.store&&this.oForm.store!=0) {
                 this.message = '库存不能为空，请检查！';
                 this.open();
                 loading.close();
@@ -1993,7 +2015,7 @@ export default {
                                 json.name = name;
                                 this.selectedSell.push(json);
                             }
-                            this.form.name = JSON.parse(Decrypt(data.data.data)).goldCommodity.name;
+                            this.oName = JSON.parse(Decrypt(data.data.data)).goldCommodity.name;
                             this.form.image_url = JSON.parse(Decrypt(data.data.data)).goldCommodity.imageUrl;
                             this.form.memo = JSON.parse(Decrypt(data.data.data)).goldCommodity.memo;
                             this.form.store = JSON.parse(Decrypt(data.data.data)).goldCommodity.store;
@@ -2113,7 +2135,7 @@ export default {
                 return;
             }
             if(this.form.commodityType==1){
-                if (!this.form.name) {
+                if (!this.oName) {
                     this.message = '商品名称不能为空，请检查！';
                     this.open();
                     loading.close();
@@ -2151,7 +2173,7 @@ export default {
                 loading.close();
                 return;
             }
-            if (!this.form.store) {
+            if (!this.form.store&&this.form.store!=0) {
                 this.message = '库存不能为空，请检查！';
                 this.open();
                 loading.close();
@@ -2369,7 +2391,7 @@ export default {
                 if (this.form.commodityType == 3) {
                     jsonArr.push({ key: 'name', value: this.groupName });
                 } else {
-                    jsonArr.push({ key: 'name', value: this.form.name });
+                    jsonArr.push({ key: 'name', value: this.oName });
                 }
                 if (this.form.commodityType != 1) {
                     if (this.oEffectiveType == 1) {
@@ -2429,6 +2451,9 @@ export default {
                 let status = this.query.status;
                 let changeType = this.query.changeType;
                 let commodityType = this.query.commodityType;
+                let topStatus = this.query.topStatus;
+                let recommendStatus = this.query.recommendStatus;
+                let name = this.query.name;
                 if (!cinemaCodes) {
                     cinemaCodes = '';
                 }
@@ -2441,7 +2466,19 @@ export default {
                 if (!commodityType) {
                     commodityType = '';
                 }
+                if (!topStatus) {
+                    topStatus = '';
+                }
+                if (!recommendStatus) {
+                    recommendStatus = '';
+                }
+                if (!name) {
+                    name = '';
+                }
                 let jsonArr = [];
+                jsonArr.push({ key: 'name', value: name });
+                jsonArr.push({ key: 'recommendStatus', value: recommendStatus });
+                jsonArr.push({ key: 'topStatus', value: topStatus });
                 jsonArr.push({ key: 'cinemaCodes', value: cinemaCodes });
                 jsonArr.push({ key: 'status', value: status });
                 jsonArr.push({ key: 'changeType', value: changeType });

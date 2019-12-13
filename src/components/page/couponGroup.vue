@@ -246,11 +246,6 @@
                         :row-key="getFilmId"
                 >
                     <el-table-column type="selection" :reserve-selection="true" width="55"></el-table-column>
-                    <!--<el-table-column label="操作" width="100" align="center">-->
-                        <!--<template slot-scope="scope">-->
-                            <!--<el-radio v-model="id" :label="scope.$index" @change.native="getCurrentRow(scope.$index)">&nbsp;</el-radio>-->
-                        <!--</template>-->
-                    <!--</el-table-column>-->
                     <el-table-column prop="sort" label="优惠券名称">
                         <template slot-scope="scope">{{scope.row.name}}</template>
                     </el-table-column>
@@ -431,9 +426,6 @@ export default {
             console.log(this.selectedSell);
             this.drawer = false;
         },
-        // getCurrentRow(index){//优惠券弹出框index
-        //     this.sellIndex=index;
-        // },
         openNext() {
             //获取优惠券列表
             const loading = this.$loading({
@@ -561,6 +553,12 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
+            if(!this.oForm.name){
+                this.message = '券包名称不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
             if (!this.oForm.commonType) {
                 this.message = '通用方式不能为空，请检查！';
                 this.open();
@@ -575,8 +573,14 @@ export default {
                     return;
                 }
             }
-            if(!this.oForm.name||!this.selectedSell||!this.oForm.status){
-                this.message = '必填项不能为空，请检查！';
+            if (!this.selectedSell) {
+                this.message = '所选优惠券不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if (!this.oForm.status) {
+                this.message = '开启状态不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
@@ -739,8 +743,14 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            if(!this.oGroupName||!this.selectedSell){
-                this.message = '必填项不能为空，请检查！';
+            if(!this.oGroupName){
+                this.message = '券包名称不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.selectedSell){
+                this.message = '所选优惠券不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;

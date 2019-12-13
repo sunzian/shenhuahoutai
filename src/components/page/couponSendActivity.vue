@@ -129,6 +129,8 @@
                         ref="download"
                         class="upload-demo"
                         drag
+                        :limit="1"
+                        :on-exceed="exceed"
                         action="/api/upload/uploadImage"
                         :on-success="onSuccess"
                         multiple
@@ -278,6 +280,8 @@
                         ref="upload"
                         class="upload-demo"
                         drag
+                        :on-exceed="exceed"
+                        :limit="1"
                         action="/api/upload/uploadImage"
                         :on-success="unSuccess"
                         multiple
@@ -558,6 +562,13 @@ export default {
         this.getMenu();
     },
     methods: {
+        exceed(data){
+            console.log(data);
+            if(data.length==1){
+                this.message = '只能上传一张图片，如需重新上传请删除第一张图！';
+                this.open();
+            }
+        },
         beforeUpload(file) {
             //上传之前
             this.imgType.type = EncryptReplace('activity');
@@ -655,20 +666,91 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            if(!this.oForm.name||!this.oActivityImageUrl||!this.oForm.cinemaCode||!this.oForm.startDate||!this.oForm.endDate||!this.oForm.status
-                ||!this.oForm.isLimitTotal||!this.oForm.validDay||!this.oForm.overDays||!this.groupName){
-                this.message = '必填项不能为空，请检查！';
+            if(!this.oForm.name){
+                this.message = '活动名称不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.oActivityImageUrl){
+                this.message = '活动图片不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.oForm.cinemaCode){
+                this.message = '所选影院不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.oForm.startDate){
+                this.message = '活动开始时间不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.oForm.endDate){
+                this.message = '活动结束时间不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.oForm.status){
+                this.message = '开启状态不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.oForm.isLimitTotal){
+                this.message = '是否限制总数不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
             }
             if(this.oForm.isLimitTotal==1) {
-                if (!this.oForm.totalNumber) {
-                    this.message = '必填项不能为空，请检查！';
+                if (!this.oForm.totalNumber&&this.oForm.totalNumber!=0) {
+                    this.message = '限购总数不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
+                if (this.oForm.totalNumber<=0) {
+                    this.message = '限购总数必须大于0，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
+            if(!this.oForm.validDay&&this.oForm.validDay!=0){
+                this.message = '生效延迟天数不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(this.oForm.validDay<0){
+                this.message = '生效延迟天数不能小于0，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.oForm.overDays&&this.oForm.overDays!=0){
+                this.message = '有效期天数不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if (this.oForm.overDays<=0) {
+                this.message = '有效期天数必须大于0，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.groupName){
+                this.message = '所选券包不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
             }
             var jsonArr = [];
             jsonArr.push({ key: 'cinemaCode', value: this.oForm.cinemaCode });
@@ -932,14 +1014,40 @@ export default {
                 loading.close();
                 return;
             }
-            if(!this.form.validDay){
+            if(this.form.isLimitTotal==1) {
+                if (!this.form.totalNumber&&this.form.totalNumber!=0) {
+                    this.message = '限购总数不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if(this.form.totalNumber<=0){
+                    this.message = '限购总数必须大于0，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
+            if(!this.form.validDay&&this.form.validDay!=0){
                 this.message = '生效延迟天数不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
             }
-            if(!this.form.overDays){
+            if(this.form.validDay<0){
+                this.message = '生效延迟天数不能小于0，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.form.overDays&&this.form.overDays!=0){
                 this.message = '有效期天数不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(this.form.overDays<=0){
+                this.message = '有效期天数必须大于0，请检查！';
                 this.open();
                 loading.close();
                 return;
@@ -949,14 +1057,6 @@ export default {
                 this.open();
                 loading.close();
                 return;
-            }
-            if(this.form.isLimitTotal==1) {
-                if (!this.form.totalNumber) {
-                    this.message = '限购总数不能为空，请检查！';
-                    this.open();
-                    loading.close();
-                    return;
-                }
             }
             var jsonArr = [];
             jsonArr.push({ key: 'cinemaCode', value: this.form.cinemaCode });
@@ -1178,12 +1278,17 @@ export default {
         },
         // 获取所有券包
         getAllCoupon() {
+            let couponName=this.couponName;
+            if(!couponName){
+                couponName=''
+            }
             if (!this.oForm.cinemaCode || this.oForm.cinemaCode == '') {
                 this.message = '请选择影院';
                 this.open();
                 return;
             }
             let jsonArr = [];
+            jsonArr.push({ key: 'groupName', value: couponName });
             jsonArr.push({ key: 'pageNo', value: this.query.aPageNo });
             jsonArr.push({ key: 'pageSize', value: this.query.aPageSize });
             jsonArr.push({ key: 'cinemaCodes', value: this.oForm.cinemaCode });
@@ -1196,6 +1301,7 @@ export default {
                 .fetchPost('/couponGroup/couponGroupPage', params)
                 .then(data => {
                     if (data.data.code == 'success') {
+                        this.couponName='';
                         var res = JSON.parse(Decrypt(data.data.data));
                         if (res.data.length == 0) {
                             this.message = '暂无券包';
