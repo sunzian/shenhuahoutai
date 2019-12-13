@@ -154,7 +154,7 @@
                     <el-input
                         style="width: 250px"
                         min="1"
-                        v-model="oForm.ruleName"
+                        v-model.trim="oForm.ruleName"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
@@ -162,6 +162,7 @@
                     <el-input
                         style="width: 250px"
                         min="1"
+                        onkeyup="this.value=this.value.replace(/\D/g,'')"
                         v-model="oForm.rechargeAmount"
                         autocomplete="off"
                     ></el-input>
@@ -184,6 +185,7 @@
                 >
                     <el-input
                         style="width: 250px"
+                        onkeyup="this.value=this.value.replace(/\D/g,'')"
                         min="1"
                         v-model="oForm.givenMoney"
                         autocomplete="off"
@@ -211,7 +213,7 @@
                     >删除</span>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oForm.givenType == 3 || oForm.givenType == 4" label="优惠券领取后过期天数：" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model.trim="oForm.overDays" autocomplete="off"></el-input>
+                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 250px" v-model.trim="oForm.overDays" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="优惠描述：" :label-width="formLabelWidth">
                     <el-input
@@ -257,7 +259,7 @@
             </span>
         </el-dialog>
         <!-- 编辑弹出框 -->
-        <el-dialog :close-on-click-modal="false" title="价格设置" :visible.sync="editVisible">
+        <el-dialog :close-on-click-modal="false" title="编辑规则" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
                 <el-form-item :required="true" label="影院名称：" :label-width="formLabelWidth">
                     <el-input
@@ -278,12 +280,13 @@
                     </el-checkbox-group>
                 </el-form-item>
                 <el-form-item :required="true" label="充值规则名称：" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="oRuleName" autocomplete="off"></el-input>
+                    <el-input style="width: 250px" v-model.trim="oRuleName" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="充值金额(起充金额)：" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
+                        onkeyup="this.value=this.value.replace(/\D/g,'')"
                         v-model="oRechargeAmount"
                         autocomplete="off"
                     ></el-input>
@@ -304,7 +307,7 @@
                     v-if="oGivenType == 2 || oGivenType == 4 || oGivenType == '赠送金额' || oGivenType == '两者都送'"
                     :required="true"
                 >
-                    <el-input style="width: 250px" min="1" v-model="oGivenMoney" autocomplete="off"></el-input>
+                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 250px" min="1" v-model="oGivenMoney" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item
                     label="已设券包："
@@ -322,7 +325,7 @@
                     <el-button type="primary" @click="changeCoupon">更换券包</el-button>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oGivenType == 3 || oGivenType == 4 || oGivenType == '赠送券包' || oGivenType == '两者都送'" label="优惠券领取后过期天数：" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" min="1" v-model.trim="oOverDays" autocomplete="off"></el-input>
+                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 250px" min="1" v-model.trim="oOverDays" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="优惠描述：" :label-width="formLabelWidth">
                     <el-input style="width: 250px" type="textarea" :maxlength="10" show-word-limit
@@ -364,7 +367,7 @@
         <el-dialog :close-on-click-modal="false" title="选择优惠券" :visible.sync="drawer">
             <div class="container">
                 <div class="handle-box">
-                    <el-input v-model="couponName" placeholder="券包名称" class="handle-input mr10"></el-input>
+                    <el-input v-model="couponName" placeholder="券包名称" class="handle-input mr12"></el-input>
                     <el-button type="primary" icon="el-icon-search" @click="getAllCoupon">搜索</el-button>
                 </div>
                 <el-table
@@ -414,7 +417,7 @@
         <el-dialog :close-on-click-modal="false" title="选择优惠券" :visible.sync="exDrawer">
             <div class="container">
                 <div class="handle-box">
-                    <el-input v-model="couponName" placeholder="券包名称" class="handle-input mr10"></el-input>
+                    <el-input v-model="couponName" placeholder="券包名称" class="handle-input mr12"></el-input>
                     <el-button type="primary" icon="el-icon-search" @click="changeCoupon">搜索</el-button>
                 </div>
                 <el-table
@@ -612,32 +615,117 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            if(!this.oForm.cinemaName||!this.oForm.levelCode||!this.oForm.ruleName||!this.oForm.rechargeAmount||!this.oForm.givenType||!this.oForm.startDate||!this.oForm.endDate||!this.oForm.status){
-                this.message = '必填项不能为空，请检查！';
+            if(!this.oForm.cinemaName){
+                this.message = '影院名称不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
-            }else if(this.oForm.givenMoney==2){
+            }
+            if(!this.oForm.levelCode){
+                this.message = '会员卡名称不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.oForm.ruleName){
+                this.message = '充值规则名称不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.oForm.rechargeAmount){
+                this.message = '充值金额不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(this.oForm.rechargeAmount<=0){
+                this.message = '充值金额必须大于0，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.oForm.givenType){
+                this.message = '赠送类型不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(this.oForm.givenType==2){
                 if(!this.oForm.givenMoney){
-                    this.message = '必填项不能为空，请检查！';
+                    this.message = '赠送金额不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
-            }else if(this.oForm.givenMoney==3){
-                if(!this.groupName||!this.oForm.overDays){
-                    this.message = '必填项不能为空，请检查！';
+                if(this.oForm.givenMoney<=0){
+                    this.message = '赠送金额必须大于0，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
-            } else if(this.oForm.givenMoney==4){
-                if(!this.oForm.givenMoney||!this.groupName||!this.oForm.overDays){
-                    this.message = '必填项不能为空，请检查！';
+            }else if(this.oForm.givenType==3){
+                if(!this.groupName){
+                    this.message = '所选券包不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
+                if(!this.oForm.overDays){
+                    this.message = '优惠券领取后过期天数不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if(this.oForm.overDays<=0){
+                    this.message = '优惠券领取后过期天数必须大于0，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            } else if(this.oForm.givenType==4){
+                if(!this.oForm.givenMoney){
+                    this.message = '赠送金额不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if(this.oForm.givenMoney<=0){
+                    this.message = '赠送金额必须大于0，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if(!this.groupName){
+                    this.message = '所选券包不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if(!this.oForm.overDays){
+                    this.message = '优惠券领取后过期天数不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if(this.oForm.overDays<=0){
+                    this.message = '优惠券领取后过期天数必须大于0，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
+            if(!this.oForm.startDate||!this.oForm.endDate){
+                this.message = '有效期不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.oForm.status){
+                this.message = '状态不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
             }
             var jsonArr = [];
             if (this.couponId != '') {
@@ -838,32 +926,117 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            if(!this.oCinemaName||!this.oForm.levelCode||!this.oRechargeAmount||!this.oRuleName||!this.oGivenType||!this.oStartDate||!this.oEndDate||!this.oStatus){
-                this.message = '必填项不能为空，请检查！';
+            if(!this.oCinemaName){
+                this.message = '影院名称不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
-            }else if(this.oGivenType==2){
+            }
+            if(!this.oForm.levelCode){
+                this.message = '会员卡名称不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.oRuleName){
+                this.message = '充值规则名称不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.oRechargeAmount){
+                this.message = '充值金额不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(this.oRechargeAmount<=0){
+                this.message = '充值金额必须大于0，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.oGivenType){
+                this.message = '赠送类型不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(this.oGivenType==2){
                 if(!this.oGivenMoney){
-                    this.message = '必填项不能为空，请检查！';
+                    this.message = '赠送金额不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if(this.oGivenMoney<=0){
+                    this.message = '赠送金额必须大于0，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
             }else if(this.oGivenType==3){
-                if(!this.groupName||!this.oOverDays){
-                    this.message = '必填项不能为空，请检查！';
+                if(!this.groupName){
+                    this.message = '所选券包不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if(!this.oOverDays){
+                    this.message = '优惠券领取后过期天数不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if(this.oOverDays<=0){
+                    this.message = '优惠券领取后过期天数必须大于0，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
             } else if(this.oGivenType==4){
-                if(!this.oGivenMoney||!this.groupName ||!this.oOverDays){
-                    this.message = '必填项不能为空，请检查！';
+                if(!this.oGivenMoney){
+                    this.message = '赠送金额不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
+                if(this.oGivenMoney<=0){
+                    this.message = '赠送金额必须大于0，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if(!this.groupName){
+                    this.message = '所选券包不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if(!this.oOverDays){
+                    this.message = '优惠券领取后过期天数不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if(this.oOverDays<=0){
+                    this.message = '优惠券领取后过期天数必须大于0，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
+            if(!this.oStartDate||!this.oEndDate){
+                this.message = '有效期不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.oStatus){
+                this.message = '状态不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
             }
             var jsonArr = [];
             if (this.oGivenType == '不赠送') {
@@ -875,31 +1048,11 @@ export default {
                 jsonArr.push({ key: 'givenType', value: 2 });
                 this.couponId = '';
                 this.groupName = '';
-                if (this.oGivenMoney == '') {
-                    alert("请输入赠送金额")
-                    loading.close();
-                    return;
-                }
             } else if (this.oGivenType == '赠送券包') {
                 jsonArr.push({ key: 'givenType', value: 3 });
                 this.oGivenMoney = '';
-                if (this.couponId == '' || !this.couponId) {
-                    alert("请选择券包")
-                    loading.close();
-                    return;
-                }
             } else if (this.oGivenType == '两者都送') {
                 jsonArr.push({ key: 'givenType', value: 4 });
-                if (this.oGivenMoney == '') {
-                    alert("请输入赠送金额")
-                    loading.close();
-                    return;
-                }
-                if (this.couponId == '' || !this.couponId) {
-                    alert("请选择券包")
-                    loading.close();
-                    return;
-                }
             } else {
                 jsonArr.push({ key: 'givenType', value: this.oGivenType });
             }
@@ -910,32 +1063,10 @@ export default {
             }
             if (this.oGivenType == 3) {
                 this.oGivenMoney = '';
-                if (this.couponId == '' || !this.couponId) {
-                    alert("请选择券包")
-                    loading.close();
-                    return;
-                }
             }
             if (this.oGivenType == 2) {
                 this.couponId = '';
                 this.groupName = '';
-                if (this.oGivenMoney == '') {
-                    alert("请输入赠送金额")
-                    loading.close();
-                    return;
-                }
-            }
-            if (this.oGivenType == 4) {
-                if (this.oGivenMoney == '') {
-                    alert("请输入赠送金额")
-                    loading.close();
-                    return;
-                }
-                if (this.couponId == '' || !this.couponId) {
-                    alert("请选择券包")
-                    loading.close();
-                    return;
-                }
             }
             if (this.oStatus == '启用') {
                 jsonArr.push({ key: 'status', value: 1 });
@@ -1177,7 +1308,7 @@ export default {
         },
         // 获取所有券包
         getAllCoupon() {
-            let couponName=this.query.couponName;
+            let couponName=this.couponName;
             if(!couponName){
                 couponName=''
             }
@@ -1199,6 +1330,7 @@ export default {
                 .fetchPost('/couponGroup/couponGroupPage', params)
                 .then(data => {
                     if (data.data.code == 'success') {
+                        this.couponName='';
                         var res = JSON.parse(Decrypt(data.data.data));
                         if (res.data.length == 0) {
                             this.message = '暂无券包';
@@ -1226,12 +1358,12 @@ export default {
         },
         // 更换券包
         changeCoupon() {
-            let couponName=this.query.couponName;
+            let couponName=this.couponName;
             if(!couponName){
                 couponName=''
             }
             let jsonArr = [];
-            jsonArr.push({ key: 'groupName', value: this.couponName });
+            jsonArr.push({ key: 'groupName', value: couponName });
             jsonArr.push({ key: 'cinemaCodes', value: this.oCinemaCode });
             jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
             jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
@@ -1243,6 +1375,7 @@ export default {
                 .fetchPost('/couponGroup/couponGroupPage', params)
                 .then(data => {
                     if (data.data.code == 'success') {
+                        this.couponName='';
                         var res = JSON.parse(Decrypt(data.data.data));
                         if (res.data.length == 0) {
                             this.message = '暂无券包';
@@ -1311,6 +1444,10 @@ export default {
     }
     .mr10 {
         width: 16%;
+        margin-right: 10px;
+    }
+    .mr12 {
+        width: 30%;
         margin-right: 10px;
     }
 </style>

@@ -298,7 +298,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="有效期：" :label-width="formLabelWidth" prop="date1">
+                <el-form-item :required="true" label="有效期：" :label-width="formLabelWidth">
                     <el-date-picker
                         v-model="oStartDate"
                         type="datetime"
@@ -334,7 +334,7 @@
         <el-dialog :close-on-click-modal="false" title="选择优惠券" :visible.sync="drawer">
             <div class="container">
                 <div class="handle-box">
-                    <el-input v-model="couponName" placeholder="券包名称" class="handle-input mr10"></el-input>
+                    <el-input v-model="couponName" placeholder="券包名称" class="handle-input mr12"></el-input>
                     <el-button type="primary" icon="el-icon-search" @click="getAllCoupon">搜索</el-button>
                 </div>
                 <el-table
@@ -422,7 +422,7 @@ export default {
                 },
                 {
                     value: '2',
-                    label: '禁用'
+                    label: '未启用'
                 }
             ],
             type: [
@@ -653,7 +653,7 @@ export default {
                         this.editVisible = true;
                         this.cardList = JSON.parse(Decrypt(data.data.data)).cardLevelList;
                         this.oCinemaName = JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.cinemaName;
-                        this.oCinemaCode = JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.cinemaCode;
+                        this.oForm.cinemaCode = JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.cinemaCode;
                         for (let x in JSON.parse(Decrypt(data.data.data)).cardLevelList) {
                             if (JSON.parse(Decrypt(data.data.data)).cardLevelList[x].levelCode == JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.cardLevelCode) {
                                 this.oCardLevelName = JSON.parse(Decrypt(data.data.data)).cardLevelList[x].levelCode;
@@ -788,7 +788,7 @@ export default {
                 jsonArr.push({ key: 'givenCouponGroupId', value: this.couponId });
             }
             jsonArr.push({ key: 'ruleName', value: this.oRuleName });
-            jsonArr.push({ key: 'cinemaCode', value: this.oCinemaCode });
+            jsonArr.push({ key: 'cinemaCode', value: this.oForm.cinemaCode });
             jsonArr.push({ key: 'startDate', value: this.oStartDate });
             jsonArr.push({ key: 'endDate', value: this.oEndDate });
             jsonArr.push({ key: 'rechargeAmount', value: '0' });
@@ -799,6 +799,7 @@ export default {
             jsonArr.push({ key: 'id', value: this.oId });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
+            console.log(jsonArr);
             let params = ParamsAppend(jsonArr);
             https
                 .fetchPost('/openCardRule/modifyOpenCardRule', params)
@@ -1011,6 +1012,7 @@ export default {
                 .fetchPost('/couponGroup/couponGroupPage', params)
                 .then(data => {
                     if (data.data.code == 'success') {
+                        this.couponName='';
                         var res = JSON.parse(Decrypt(data.data.data));
                         if (res.data.length == 0) {
                             this.message = '暂无券包';
@@ -1121,6 +1123,10 @@ export default {
 }
 .mr10 {
     width: 16%;
+    margin-right: 10px;
+}
+.mr12 {
+    width: 30%;
     margin-right: 10px;
 }
 </style>

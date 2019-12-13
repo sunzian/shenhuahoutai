@@ -195,6 +195,8 @@
                         class="upload-demo"
                         ref="upload"
                         drag
+                        :limit="1"
+                        :on-exceed="exceed"
                         action="/api/upload/uploadImage"
                         :on-success="onSuccess"
                         multiple
@@ -260,81 +262,6 @@
                 <el-button type="primary" @click="addRole">确 定</el-button>
             </div>
         </el-dialog>
-        <!--新增抽屉弹出框-->
-        <el-dialog :close-on-click-modal="false" title="选择卖品" :visible.sync="drawer">
-            <div class="container">
-                <div class="handle-box">
-                    <el-input v-model="query.name" placeholder="角色名" class="handle-input mr10"></el-input>
-                    <el-select
-                        clearable
-                        v-model="query.status"
-                        placeholder="状态"
-                        class="handle-select mr10"
-                    >
-                        <el-option key="1" label="审核中" value="1"></el-option>
-                        <el-option key="2" label="未审核" value="2"></el-option>
-                        <el-option key="3" label="通过" value="3"></el-option>
-                        <el-option key="4" label="审核失败" value="4"></el-option>
-                    </el-select>
-                    <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
-                </div>
-                <el-table
-                    :data="sellTableData"
-                    border
-                    class="table"
-                    ref="multipleTable"
-                    header-cell-class-name="table-header"
-                    @selection-change="handleSelectionChange"
-                >
-                    <el-table-column label="操作" width="100" align="center">
-                        <template slot-scope="scope">
-                            <el-radio
-                                v-model="id"
-                                :label="scope.$index"
-                                @change.native="getCurrentRow(scope.$index)"
-                            >&nbsp;</el-radio>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="name" label="图片">
-                        <template slot-scope="scope">
-                            <el-popover placement="right" title trigger="hover">
-                                <img style="width:400px" :src="scope.row.merchandisePic" />
-                                <img
-                                    slot="reference"
-                                    :src="scope.row.merchandisePic"
-                                    :alt="scope.row.merchandisePic"
-                                    style="max-height: 50px;max-width: 130px"
-                                />
-                            </el-popover>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="sort" label="卖品名称" width="150">
-                        <template slot-scope="scope">{{scope.row.merchandiseName}}</template>
-                    </el-table-column>
-                    <el-table-column prop="sort" label="卖品价格" width="150">
-                        <template slot-scope="scope">{{scope.row.standardPrice}}</template>
-                    </el-table-column>
-                </el-table>
-                <div class="pagination">
-                    <el-pagination
-                            background
-                            @size-change="aHandleSizeChange"
-                            layout="total, sizes, prev, pager, next, jumper"
-                            :current-page="query.pageNo"
-                            :page-sizes="[10, 15, 20, 30]"
-                            :page-size="query.pageSize"
-                            :total="query.totalCount"
-                            @current-change="aCurrentChange"
-                            @prev-click="aPrev"
-                            @next-click="aNext"
-                    ></el-pagination>
-                </div>
-            </div>
-            <div slot="footer" class="dialog-footer">
-                <el-button @click="drawer = false">取 消</el-button>
-                <el-button type="primary" @click="sureNext">确 定</el-button>
-            </div>
-        </el-dialog>
         <!-- 编辑弹出框 -->
         <el-dialog :close-on-click-modal="false" title="编辑" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
@@ -357,6 +284,8 @@
                         class="upload-demo"
                         ref="download"
                         drag
+                        :limit="1"
+                        :on-exceed="exceed"
                         action="/api/upload/uploadImage"
                         :on-success="unSuccess"
                         multiple
@@ -421,6 +350,81 @@
                 <el-button @click="editVisible = false">取 消</el-button>
                 <el-button type="primary" @click="exChanger">确 定</el-button>
             </span>
+        </el-dialog>
+        <!--新增抽屉弹出框-->
+        <el-dialog :close-on-click-modal="false" title="选择卖品" :visible.sync="drawer">
+            <div class="container">
+                <div class="handle-box">
+                    <el-input v-model="query.name" placeholder="角色名" class="handle-input mr10"></el-input>
+                    <el-select
+                            clearable
+                            v-model="query.status"
+                            placeholder="状态"
+                            class="handle-select mr10"
+                    >
+                        <el-option key="1" label="审核中" value="1"></el-option>
+                        <el-option key="2" label="未审核" value="2"></el-option>
+                        <el-option key="3" label="通过" value="3"></el-option>
+                        <el-option key="4" label="审核失败" value="4"></el-option>
+                    </el-select>
+                    <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
+                </div>
+                <el-table
+                        :data="sellTableData"
+                        border
+                        class="table"
+                        ref="multipleTable"
+                        header-cell-class-name="table-header"
+                        @selection-change="handleSelectionChange"
+                >
+                    <el-table-column label="操作" width="100" align="center">
+                        <template slot-scope="scope">
+                            <el-radio
+                                    v-model="id"
+                                    :label="scope.$index"
+                                    @change.native="getCurrentRow(scope.$index)"
+                            >&nbsp;</el-radio>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="name" label="图片">
+                        <template slot-scope="scope">
+                            <el-popover placement="right" title trigger="hover">
+                                <img style="width:400px" :src="scope.row.merchandisePic" />
+                                <img
+                                        slot="reference"
+                                        :src="scope.row.merchandisePic"
+                                        :alt="scope.row.merchandisePic"
+                                        style="max-height: 50px;max-width: 130px"
+                                />
+                            </el-popover>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="sort" label="卖品名称" width="150">
+                        <template slot-scope="scope">{{scope.row.merchandiseName}}</template>
+                    </el-table-column>
+                    <el-table-column prop="sort" label="卖品价格" width="150">
+                        <template slot-scope="scope">{{scope.row.standardPrice}}</template>
+                    </el-table-column>
+                </el-table>
+                <div class="pagination">
+                    <el-pagination
+                            background
+                            @size-change="aHandleSizeChange"
+                            layout="total, sizes, prev, pager, next, jumper"
+                            :current-page="query.pageNo"
+                            :page-sizes="[10, 15, 20, 30]"
+                            :page-size="query.pageSize"
+                            :total="query.totalCount"
+                            @current-change="aCurrentChange"
+                            @prev-click="aPrev"
+                            @next-click="aNext"
+                    ></el-pagination>
+                </div>
+            </div>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="drawer = false">取 消</el-button>
+                <el-button type="primary" @click="sureNext">确 定</el-button>
+            </div>
         </el-dialog>
     </div>
 </template>
@@ -523,6 +527,13 @@ export default {
         this.getAllCinema();
     },
     methods: {
+        exceed(data){
+            console.log(data);
+            if(data.length==1){
+                this.message = '只能上传一张图片，如需重新上传请删除第一张图！';
+                this.open();
+            }
+        },
         deleteSell(index) {
             this.selectedSell.splice(index, 1);
             this.oForm.originalPrice=''
@@ -576,13 +587,37 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
+            if(!this.oForm.comboName){
+                this.message = '套餐名称不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.oForm.image_url){
+                this.message = '套餐图片不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(this.selectedSell.length==0){
+                this.message = '所选商品不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.oForm.comboType){
+                this.message = '套餐类型不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.oForm.status){
+                this.message = '套餐状态不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
             setTimeout(() => {
-                if(!this.oForm.comboName||!this.oForm.image_url||!this.selectedSell||!this.oForm.comboType||!this.oForm.status){
-                    this.message = '必填项不能为空，请检查！';
-                    this.open();
-                    loading.close();
-                    return;
-                }
                 var jsonArr = [];
                 jsonArr.push({ key: 'cinemaCode', value: this.cinemaCode });
                 jsonArr.push({ key: 'comboName', value: this.oForm.comboName });
@@ -808,16 +843,40 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
+            if (!this.form.image_url) {
+                this.form.image_url = this.form.imageUrl;
+            }
+            if(!this.form.comboName){
+                this.message = '套餐名称不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.form.image_url){
+                this.message = '套餐图片不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(this.selectedSell.length==0){
+                this.message = '所选商品不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.form.comboType){
+                this.message = '套餐类型不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.form.status){
+                this.message = '套餐状态不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
             setTimeout(() => {
-                if (!this.form.image_url) {
-                    this.form.image_url = this.form.imageUrl;
-                }
-                if(!this.form.comboName||!this.form.image_url||!this.selectedSell||!this.form.comboType||!this.form.status){
-                    this.message = '必填项不能为空，请检查！';
-                    this.open();
-                    loading.close();
-                    return;
-                }
                 var jsonArr = [];
                 jsonArr.push({ key: 'id', value: this.form.id });
                 jsonArr.push({ key: 'cinemaCode', value: this.cinemaCode });
