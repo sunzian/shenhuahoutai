@@ -798,6 +798,7 @@ export default {
                     .then(data => {
                         loading.close();
                         if (data.data.code == 'success') {
+                            console.log(JSON.parse(Decrypt(data.data.data)));
                             if (this.$refs.download){
                                 this.$refs.download.clearFiles();
                             }

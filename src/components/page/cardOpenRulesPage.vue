@@ -520,14 +520,57 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            if(!this.oForm.cinemaName||!this.oForm.levelName||!this.oForm.ruleName||!this.oForm.givenType||!this.oForm.startDate||!this.oForm.endDate||!this.oForm.status){
-                this.message = '必填项不能为空，请检查！';
+            if(!this.oForm.cinemaName){
+                this.message = '影院名称不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
-            }else if(this.oForm.givenType==3){
-                if(!this.groupName ||!this.oForm.overDays){
-                    this.message = '必填项不能为空，请检查！';
+            }
+            if(!this.oForm.levelName){
+                this.message = '会员卡名称不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.oForm.ruleName){
+                this.message = '开卡规则名称不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.oForm.givenType){
+                this.message = '赠送类型不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.oForm.startDate||!this.oForm.endDate){
+                this.message = '有效期不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.oForm.status){
+                this.message = '状态不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(this.oForm.givenType==3){
+                if(!this.groupName){
+                    this.message = '所选券包不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if(!this.oForm.overDays){
+                    this.message = '领取后过期天数不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if(this.oForm.overDays<=0){
+                    this.message = '领取后过期天数必须大于0，请检查！';
                     this.open();
                     loading.close();
                     return;
@@ -712,14 +755,57 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            if(!this.oCinemaName||!this.oCardLevelName||!this.oRuleName||!this.oGivenType||!this.oStartDate||!this.oEndDate||!this.oStatus){
-                this.message = '必填项不能为空，请检查！';
+            if(!this.oCinemaName){
+                this.message = '影院名称不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
-            }else if(this.oGivenType==3){
-                if(!this.groupName ||!this.oOverDays){
-                    this.message = '必填项不能为空，请检查！';
+            }
+            if(!this.oCardLevelName){
+                this.message = '会员卡名称不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.oRuleName){
+                this.message = '开卡规则名称不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.oGivenType){
+                this.message = '赠送类型不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.oStartDate||!this.oEndDate){
+                this.message = '有效期不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.oStartDate){
+                this.message = '状态不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(this.oGivenType==3){
+                if(!this.groupName){
+                    this.message = '所选券包不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if(!this.oOverDays){
+                    this.message = '领取后过期天数不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if(this.oOverDays<=0){
+                    this.message = '领取后过期天数必须大于0，请检查！';
                     this.open();
                     loading.close();
                     return;
