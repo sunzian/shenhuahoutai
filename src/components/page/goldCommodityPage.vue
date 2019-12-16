@@ -224,25 +224,21 @@
                 </el-form-item>
                 <el-form-item :required="true" label="商品图片" :label-width="formLabelWidth">
                     <el-upload
-                        :before-upload="beforeUpload"
-                        :data="type"
-                        class="upload-demo"
-                        drag
-                        :limit="1"
-                        ref="upload"
-                        :on-exceed="exceed"
-                        action="/api/upload/uploadImage"
-                        :on-success="onSuccess"
-                        multiple
+                            class="upload-demo"
+                            action="/api/upload/uploadImage"
+                            :before-upload="beforeUpload"
+                            :data="type"
+                            :limit="1"
+                            :on-exceed="exceed"
+                            ref="download"
+                            :on-success="onSuccess"
+                            :file-list="fileList"
+                            list-type="picture"
                     >
-                        <i class="el-icon-upload"></i>
-                        <div class="el-upload__text">
-                            将文件拖到此处，或
-                            <em>点击上传</em>
-                        </div>
+                        <el-button size="small" type="primary">点击上传</el-button>
                         <div
-                            class="el-upload__tip"
-                            slot="tip"
+                                slot="tip"
+                                class="el-upload__tip"
                         >只能上传jpg/png文件，且不超过200kb 建议尺寸200*200或按比例上传</div>
                     </el-upload>
                 </el-form-item>
@@ -564,11 +560,11 @@
                 </el-form-item>
                 <el-form-item :required="true" label="商品图片" :label-width="formLabelWidth">
                     <el-popover placement="right" title trigger="hover">
-                        <img :src="form.image_url" />
+                        <img :src="oImageUrl" />
                         <img
                             slot="reference"
-                            :src="form.image_url"
-                            :alt="form.image_url"
+                            :src="oImageUrl"
+                            :alt="oImageUrl"
                             style="max-height: 50px;max-width: 130px"
                         />
                     </el-popover>
@@ -1008,6 +1004,7 @@ export default {
     data() {
         return {
             content: '',
+            oImageUrl: '',
             editorOption: {},
             img_file: {},
             oTopstatus: '',
@@ -1029,6 +1026,7 @@ export default {
                 bPageNo: 1,
                 bPageSize: 15
             },
+            fileList: [],
             tableData: [],
             multipleSelection: [],
             delList: [],
@@ -1542,6 +1540,7 @@ export default {
                         loading.close();
                         // console.log(data);
                         if (data.data.code == 'success') {
+                            this.fileList = [];
                             console.log(JSON.parse(Decrypt(data.data.data)));
                             this.cities = JSON.parse(Decrypt(data.data.data));
                             this.dialogFormVisible = true;
@@ -2016,7 +2015,7 @@ export default {
                                 this.selectedSell.push(json);
                             }
                             this.oName = JSON.parse(Decrypt(data.data.data)).goldCommodity.name;
-                            this.form.image_url = JSON.parse(Decrypt(data.data.data)).goldCommodity.imageUrl;
+                            this.oImageUrl = JSON.parse(Decrypt(data.data.data)).goldCommodity.imageUrl;
                             this.form.memo = JSON.parse(Decrypt(data.data.data)).goldCommodity.memo;
                             this.form.store = JSON.parse(Decrypt(data.data.data)).goldCommodity.store;
                             this.form.expireDay = JSON.parse(Decrypt(data.data.data)).goldCommodity.expireDay;
@@ -2155,7 +2154,7 @@ export default {
                 }
 
             }
-            if (!this.form.image_url) {
+            if (!this.oImageUrl) {
                 this.message = '商品图片不能为空，请检查！';
                 this.open();
                 loading.close();
@@ -2228,7 +2227,7 @@ export default {
                 }
             }
             if(this.oEffectiveType==1 && this.form.commodityType!=1){
-                if (!this.oLaterDays) {
+                if (!this.oLaterDays&&this.oLaterDays!=0) {
                     this.message = '领取后几天开始生效不能为空，请检查！';
                     this.open();
                     loading.close();
@@ -2361,7 +2360,7 @@ export default {
                 this.form.cinemaCode = this.oCheckedCities.join(',');
                 jsonArr.push({ key: 'id', value: this.form.id });
                 jsonArr.push({ key: 'effectiveType', value: this.oEffectiveType });
-                jsonArr.push({ key: 'imageUrl', value: this.form.image_url });
+                jsonArr.push({ key: 'imageUrl', value: this.oImageUrl });
                 jsonArr.push({ key: 'memo', value: this.form.memo });
                 jsonArr.push({ key: 'store', value: this.form.store });
                 jsonArr.push({ key: 'alredyChangedNumber', value: this.form.alredyChangedNumber });
@@ -2571,7 +2570,7 @@ export default {
                 this.$refs.download.clearFiles();
                 return;
             }
-            this.form.image_url = data.data;
+            this.oImageUrl = data.data;
             if (data.code == 'nologin') {
                 this.message = data.message;
                 this.open();

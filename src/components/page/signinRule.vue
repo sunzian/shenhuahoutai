@@ -81,12 +81,23 @@
                     ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oExtraFlag==1&&oContinuousDays==7" label="额外奖励的礼物图片" :label-width="formLabelWidth">
+                    <el-popover placement="right" title trigger="hover">
+                        <img :src="oExtraPrizePicture" />
+                        <img
+                                slot="reference"
+                                :src="oExtraPrizePicture"
+                                :alt="oExtraPrizePicture"
+                                style="max-height: 50px;max-width: 130px"
+                        />
+                    </el-popover>
                     <el-upload
                             :before-upload="beforeUpload"
                             :data="type"
                             class="upload-demo"
                             ref="download"
                             drag
+                            :limit="1"
+                            :on-exceed="exceed"
                             action="/api/upload/uploadImage"
                             :on-success="unSuccess"
                             multiple
@@ -134,6 +145,7 @@
                 <el-button type="primary" @click="exChanger">确 定</el-button>
             </span>
         </el-dialog>
+        <!--选择优惠券弹窗-->
         <el-dialog :close-on-click-modal="false" title="选择优惠券" :visible.sync="drawer">
             <div class="container">
                 <div class="handle-box">
@@ -274,6 +286,13 @@
             this.getMenu();
         },
         methods: {
+            exceed(data){
+                console.log(data);
+                if(data.length==1){
+                    this.message = '只能上传一张图片，如需重新上传请删除第一张图！';
+                    this.open();
+                }
+            },
             beforeUpload() {
                 //上传之前
                 this.type.type = EncryptReplace('activity');

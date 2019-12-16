@@ -206,7 +206,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="有效期：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="规则有效期：" :label-width="formLabelWidth">
                     <el-date-picker
                         v-model="oForm.startDate"
                         type="datetime"
@@ -298,7 +298,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="有效期：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="规则有效期：" :label-width="formLabelWidth">
                     <el-date-picker
                         v-model="oStartDate"
                         type="datetime"
@@ -545,7 +545,7 @@ export default {
                 return;
             }
             if(!this.oForm.startDate||!this.oForm.endDate){
-                this.message = '有效期不能为空，请检查！';
+                this.message = '规则有效期不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
@@ -780,7 +780,7 @@ export default {
                 return;
             }
             if(!this.oStartDate||!this.oEndDate){
-                this.message = '有效期不能为空，请检查！';
+                this.message = '规则有效期不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;

@@ -123,6 +123,15 @@
                     <el-input style="width: 250px" min="1" v-model="oForm.name" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="活动图片：" :label-width="formLabelWidth">
+                    <el-popover placement="right" title trigger="hover">
+                        <img style="width: 400px" :src="oActivityImageUrl" />
+                        <img
+                                slot="reference"
+                                :src="oActivityImageUrl"
+                                :alt="oActivityImageUrl"
+                                style="max-height: 50px;max-width: 130px"
+                        />
+                    </el-popover>
                     <el-upload
                         :before-upload="beforeUpload"
                         :data="imgType"

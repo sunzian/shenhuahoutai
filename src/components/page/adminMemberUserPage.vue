@@ -123,7 +123,7 @@
                         <el-tag v-else-if="scope.row.miniRegisterStatus=='2'" type="success">已注册</el-tag>
                     </template>
                 </el-table-column> -->
-                <el-table-column prop="memo" label="注册影院">
+                <el-table-column prop="memo" label="注册影院" width="160">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="注册时间" width="160">

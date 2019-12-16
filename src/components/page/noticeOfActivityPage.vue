@@ -194,12 +194,22 @@
                     ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="封面图片" :label-width="formLabelWidth">
+                    <el-popover placement="right" title trigger="hover">
+                        <img style="width: 400px" :src="oForm.imageUrl" />
+                        <img
+                                slot="reference"
+                                :src="oForm.imageUrl"
+                                :alt="oForm.imageUrl"
+                                style="max-height: 50px;max-width: 130px"
+                        />
+                    </el-popover>
                     <el-upload
                         :before-upload="beforeUpload"
                         :data="type"
                         class="upload-demo"
                         drag
                         :limit="1"
+                        :on-exceed="exceed"
                         ref="download"
                         action="/api/upload/uploadImage"
                         :on-success="onSuccess"
@@ -273,6 +283,7 @@
                         class="upload-demo"
                         drag
                         :limit="1"
+                        :on-exceed="exceed"
                         ref="upload"
                         action="/api/upload/uploadImage"
                         :on-success="unSuccess"
@@ -483,6 +494,13 @@ export default {
         this.getAllCinema();
     },
     methods: {
+        exceed(data){
+            console.log(data);
+            if(data.length==1){
+                this.message = '只能上传一张图片，如需重新上传请删除第一张图！';
+                this.open();
+            }
+        },
         addPage() {
             //获取新增按钮权限
             const loading = this.$loading({

@@ -156,31 +156,23 @@
                     <el-input style="width: 250px" v-model="oForm.name" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="分类图片" :label-width="formLabelWidth">
-                    <el-popover placement="right" title trigger="hover">
-                        <img style="width: 400px" :src="oForm.image_url" />
-                        <img
-                            slot="reference"
-                            :src="oForm.image_url"
-                            :alt="oForm.image_url"
-                            style="max-height: 50px;max-width: 130px"
-                        />
-                    </el-popover>
                     <el-upload
-                        :before-upload="beforeUpload"
-                        :data="type"
-                        class="upload-demo"
-                        drag
-                        ref="download"
-                        action="/api/upload/uploadImage"
-                        :on-success="onSuccess"
-                        multiple
+                            class="upload-demo"
+                            action="/api/upload/uploadImage"
+                            :before-upload="beforeUpload"
+                            :data="type"
+                            :limit="1"
+                            :on-exceed="exceed"
+                            ref="download"
+                            :on-success="onSuccess"
+                            :file-list="fileList"
+                            list-type="picture"
                     >
-                        <i class="el-icon-upload"></i>
-                        <div class="el-upload__text">
-                            将文件拖到此处，或
-                            <em>点击上传</em>
-                        </div>
-                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过50kb 建议尺寸120*120或按比例上传</div>
+                        <el-button size="small" type="primary">点击上传</el-button>
+                        <div
+                                slot="tip"
+                                class="el-upload__tip"
+                        >只能上传jpg/png文件，且不超过50kb 建议尺寸120*120或按比例上传</div>
                     </el-upload>
                 </el-form-item>
                 <el-form-item label="排序" :label-width="formLabelWidth">
@@ -200,11 +192,11 @@
                 </el-form-item>
                 <el-form-item :required="true" label="分类图片" :label-width="formLabelWidth">
                     <el-popover placement="right" title trigger="hover">
-                        <img style="width: 400px" :src="form.imageUrl" />
+                        <img style="width: 400px" :src="oImageUrl" />
                         <img
                             slot="reference"
-                            :src="form.imageUrl"
-                            :alt="form.imageUrl"
+                            :src="oImageUrl"
+                            :alt="oImageUrl"
                             style="max-height: 50px;max-width: 130px"
                         />
                     </el-popover>
@@ -213,6 +205,8 @@
                         :data="type"
                         class="upload-demo"
                         drag
+                        :limit="1"
+                        :on-exceed="exceed"
                         ref="upload"
                         action="/api/upload/uploadImage"
                         :on-success="unSuccess"
@@ -248,7 +242,7 @@ export default {
     name: 'basetable',
     data() {
         return {
-            selectValue: [],
+            fileList: [],
             showSell: true, //卖品信息页面是否展示开关
             type: {
                 type: ''
@@ -292,6 +286,7 @@ export default {
             value: '',
             restaurants: [],
             state: '',
+            oImageUrl: '',
             timeout: null,
             selectFilm: {},
             filmInfo: [],
@@ -306,6 +301,13 @@ export default {
         this.getAllCinema();
     },
     methods: {
+        exceed(data){
+            console.log(data);
+            if(data.length==1){
+                this.message = '只能上传一张图片，如需重新上传请删除第一张图！';
+                this.open();
+            }
+        },
         addPage() {
             //获取新增按钮权限
             const loading = this.$loading({
@@ -323,6 +325,7 @@ export default {
                         console.log(data);
                         if (data.data.code == 'success') {
                             this.oForm = [];
+                            this.fileList = [];
                             if (this.$refs.download) {
                                 this.$refs.download.clearFiles();
                             }
@@ -483,7 +486,7 @@ export default {
                         if (data.data.code == 'success') {
                             this.editVisible = true;
                             this.form.typeName = JSON.parse(Decrypt(data.data.data)).typeName;
-                            this.form.imageUrl = JSON.parse(Decrypt(data.data.data)).typePic;
+                            this.oImageUrl = JSON.parse(Decrypt(data.data.data)).typePic;
                             this.form.showSeqNo = JSON.parse(Decrypt(data.data.data)).showSeqNo;
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
@@ -509,16 +512,13 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            if (!this.form.image_url) {
-                this.form.image_url = this.form.imageUrl;
-            }
             if(!this.form.typeName){
                 this.message = '分类名称不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
             }
-            if(!this.form.imageUrl){
+            if(!this.oImageUrl){
                 this.message = '分类图片不能为空，请检查！';
                 this.open();
                 loading.close();
@@ -528,7 +528,7 @@ export default {
                 var jsonArr = [];
                 jsonArr.push({ key: 'id', value: this.form.id });
                 jsonArr.push({ key: 'showSeqNo', value: this.form.showSeqNo });
-                jsonArr.push({ key: 'typePic', value: this.form.image_url });
+                jsonArr.push({ key: 'typePic', value: this.oImageUrl});
                 jsonArr.push({ key: 'typeName', value: this.form.typeName });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
@@ -791,7 +791,7 @@ export default {
                 this.$refs.upload.clearFiles();
                 return;
             }
-            this.form.image_url = data.data;
+            this.oImageUrl = data.data;
             if (data.code == 'nologin') {
                 this.message = data.message;
                 this.open();

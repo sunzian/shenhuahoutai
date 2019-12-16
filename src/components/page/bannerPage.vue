@@ -214,12 +214,22 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item :required="true" label="图片地址" :label-width="formLabelWidth">
+                    <el-popover placement="right" title trigger="hover">
+                        <img style="width: 400px" :src="oForm.imageUrl" />
+                        <img
+                                slot="reference"
+                                :src="oForm.imageUrl"
+                                :alt="oForm.imageUrl"
+                                style="max-height: 50px;max-width: 130px"
+                        />
+                    </el-popover>
                     <el-upload
                         :before-upload="beforeUpload"
                         :data="type"
                         class="upload-demo"
                         drag
-                        :limit="8"
+                        :limit="1"
+                        :on-exceed="exceed"
                         ref="upload"
                         action="/api/upload/uploadImage"
                         :on-success="onSuccess"
@@ -353,7 +363,8 @@
                     <el-upload
                         :before-upload="beforeUpload"
                         :data="type"
-                        :limit="8"
+                        :limit="1"
+                        :on-exceed="exceed"
                         ref="download"
                         class="upload-demo"
                         drag
@@ -649,6 +660,7 @@ export default {
                 value: '',
                 statusValue: '',
                 cinemaCode: '',
+                imageUrl: '',
                 cinemaCodes: []
             },
             formLabelWidth: '120px',
@@ -739,6 +751,13 @@ export default {
         this.getMenu();
     },
     methods: {
+        exceed(data){
+            console.log(data);
+            if(data.length==1){
+                this.message = '只能上传一张图片，如需重新上传请删除第一张图！';
+                this.open();
+            }
+        },
         addType() {
             this.oForm.goType = '';
             this.oForm.redirectGoal = '';
@@ -805,6 +824,7 @@ export default {
                     console.log(this.oForm.cinemaCodes)
                     if (this.oForm.cinemaCodes.length == 0) {
                         this.message = '请选择影院!';
+                        loading.close();
                         this.open();
                         return;
                     }
@@ -855,6 +875,7 @@ export default {
                     }
                     if (this.oForm.cinemaCodes.length == 0) {
                         this.message = '请选择影院!';
+                        loading.close();
                         this.open();
                         return;
                     }
@@ -905,6 +926,7 @@ export default {
                     }
                     if (this.oForm.cinemaCodes.length == 0) {
                         this.message = '请选择影院!';
+                        loading.close();
                         this.open();
                         return;
                     }
@@ -968,6 +990,7 @@ export default {
                     }
                     if (this.form.cinemaCodes.length == 0) {
                         this.message = '请选择影院!';
+                        loading.close();
                         this.open();
                         return;
                     }
@@ -1014,6 +1037,7 @@ export default {
                     }
                     if (this.form.cinemaCodes.length == 0) {
                         this.message = '请选择影院!';
+                        loading.close();
                         this.open();
                         return;
                     }
@@ -1063,6 +1087,7 @@ export default {
                     }
                     if (this.form.cinemaCodes.length == 0) {
                         this.message = '请选择影院!';
+                        loading.close();
                         this.open();
                         return;
                     }
@@ -1384,7 +1409,7 @@ export default {
                 !this.changeStartTime ||
                 !this.changeEndTime ||
                 !this.oBannerType ||
-                !this.form.imageUrl ||
+                !this.imageUrl ||
                 !this.oTabType
             ) {
                 this.message = '必填项不能为空，请检查！';
@@ -1420,7 +1445,7 @@ export default {
                 jsonArr.push({ key: 'cinemaCodes', value: cinemaCodes });
                 jsonArr.push({ key: 'status', value: this.form.status });
                 jsonArr.push({ key: 'startDate', value: this.changeStartTime });
-                jsonArr.push({ key: 'imageUrl', value: this.form.imageUrl });
+                jsonArr.push({ key: 'imageUrl', value: this.imageUrl });
                 jsonArr.push({ key: 'endDate', value: this.changeEndTime });
                 jsonArr.push({ key: 'memo', value: this.form.memo });
                 jsonArr.push({ key: 'sort', value: this.form.sort });
@@ -1489,7 +1514,7 @@ export default {
                 this.$refs.download.clearFiles();
                 return;
             }
-            this.form.imageUrl = data.data;
+            this.imageUrl = data.data;
             if (data.code == 'nologin') {
                 this.message = data.message;
                 this.open();

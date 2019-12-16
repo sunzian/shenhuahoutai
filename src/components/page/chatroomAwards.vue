@@ -213,6 +213,7 @@
                         :before-upload="beforeUpload"
                         :data="type"
                         :limit="1"
+                        :on-exceed="exceed"
                         ref="download"
                         :on-success="onSuccess"
                         :file-list="fileList"
@@ -478,6 +479,13 @@ export default {
         this.getMenu();
     },
     methods: {
+        exceed(data){
+            console.log(data);
+            if(data.length==1){
+                this.message = '只能上传一张图片，如需重新上传请删除第一张图！';
+                this.open();
+            }
+        },
         addPage() {
             this.dialogFormVisible = true;
             this.oForm.name = '';
