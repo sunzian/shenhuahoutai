@@ -798,7 +798,6 @@ export default {
                                 merchandiseName:(JSON.parse(Decrypt(data.data.data))).merchandiseName,
                                 merchandiseCode:(JSON.parse(Decrypt(data.data.data))).merchandiseSet
                             };
-                            this.selectedSell.push(json);
                             if (this.$refs.download){
                                 this.$refs.download.clearFiles();
                             }
@@ -820,6 +819,10 @@ export default {
                                     break;
                                 }
                             }
+                            if(this.selectedSell[0]){
+                                return
+                            }
+                            this.selectedSell.push(json);
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
                             this.open();

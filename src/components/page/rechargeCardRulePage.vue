@@ -162,7 +162,6 @@
                     <el-input
                         style="width: 250px"
                         min="1"
-                        onkeyup="this.value=this.value.replace(/\D/g,'')"
                         v-model="oForm.rechargeAmount"
                         autocomplete="off"
                     ></el-input>
@@ -185,7 +184,6 @@
                 >
                     <el-input
                         style="width: 250px"
-                        onkeyup="this.value=this.value.replace(/\D/g,'')"
                         min="1"
                         v-model="oForm.givenMoney"
                         autocomplete="off"
@@ -286,7 +284,6 @@
                     <el-input
                         style="width: 250px"
                         min="1"
-                        onkeyup="this.value=this.value.replace(/\D/g,'')"
                         v-model="oRechargeAmount"
                         autocomplete="off"
                     ></el-input>
@@ -307,7 +304,7 @@
                     v-if="oGivenType == 2 || oGivenType == 4 || oGivenType == '赠送金额' || oGivenType == '两者都送'"
                     :required="true"
                 >
-                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 250px" min="1" v-model="oGivenMoney" autocomplete="off"></el-input>
+                    <el-input style="width: 250px" min="1" v-model="oGivenMoney" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item
                     label="已设券包："

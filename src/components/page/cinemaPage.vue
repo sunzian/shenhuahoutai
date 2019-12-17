@@ -144,17 +144,17 @@
                         <el-tag v-else type="danger">否</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="time" label="到期时间">
-                    <template slot-scope="scope">{{scope.row.expireDate}}</template>
-                </el-table-column>
-                <el-table-column prop="time" label="剩余张数">
-                    <template slot-scope="scope">{{scope.row.remainTicketsNumber}}</template>
-                </el-table-column>
                 <el-table-column prop="string" label="费用支付类型">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.paymentType == 1" type="info">包年</el-tag>
                         <el-tag v-else type="info">按票收费</el-tag>
                     </template>
+                </el-table-column>
+                <el-table-column prop="time" label="到期时间">
+                    <template slot-scope="scope">{{scope.row.expireDate}}</template>
+                </el-table-column>
+                <el-table-column prop="time" label="剩余张数">
+                    <template slot-scope="scope">{{scope.row.remainTicketsNumber}}</template>
                 </el-table-column>
                 <el-table-column prop="string" label="票价上报方式">
                     <template slot-scope="scope">

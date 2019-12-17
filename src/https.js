@@ -95,21 +95,27 @@ export function exportMethod(data) {
         headers: {'Content-Type': 'application/json'},
         responseType: 'blob'
     }).then((res) => {
-        const link = document.createElement('a')
-        let blob = new Blob([res.data], {type: 'application/vnd.ms-excel'})
-        link.style.display = 'none'
-        link.href = URL.createObjectURL(blob)
+        // console.log(res.data.type);
+        if(res.data.type=='application/json'){
+            alert('您没有该权限!');
+            return
+        }
+        const link = document.createElement('a');
+        let blob = new Blob([res.data], {type: 'application/vnd.ms-excel'});
+        link.style.display = 'none';
+        link.href = URL.createObjectURL(blob);
 
         // link.download = res.headers['content-disposition'] //下载后文件名
-        link.download = data.fileName //下载的文件名
-        document.body.appendChild(link)
-        link.click()
+        link.download = data.fileName;//下载的文件名
+        document.body.appendChild(link);
+        link.click();
         document.body.removeChild(link)
-    }).catch(error => {
+    })
+        .catch(error => {
         this.$Notice.error({
             title: '错误',
             desc: '网络连接错误'
-        })
+        });
         console.log(error)
     })
 }

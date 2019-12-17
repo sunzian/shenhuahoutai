@@ -442,11 +442,11 @@
                 <el-form-item :required="true" label="有效期数量" :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oForm.number" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="支付类型" :label-width="formLabelWidth" v-if="oForm.cardType==1">
+                <el-form-item :required="true" label="可用支付方式" :label-width="formLabelWidth" v-if="oForm.cardType==1">
                     <el-radio-group v-model="oForm.validPayType">
-                        <el-radio label="0">全部</el-radio>
-                        <el-radio label="1">仅非会员卡支付</el-radio>
-                        <el-radio label="2">仅会员卡支付</el-radio>
+                        <el-radio label="0">全部可用</el-radio>
+                        <el-radio label="1">仅非会员卡支付可用</el-radio>
+                        <el-radio label="2">仅会员卡支付可用</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" label="节假日可用" :label-width="formLabelWidth" v-if="oForm.cardType==1">
@@ -834,11 +834,11 @@
                 <el-form-item :required="true" label="有效期数量" :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oNumber" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="支付类型" :label-width="formLabelWidth" v-if="oCardType==1">
+                <el-form-item :required="true" label="可用支付方式" :label-width="formLabelWidth" v-if="oCardType==1">
                     <el-radio-group v-model="oValidPayType">
-                        <el-radio label="0">全部</el-radio>
-                        <el-radio label="1">仅非会员卡支付</el-radio>
-                        <el-radio label="2">仅会员卡支付</el-radio>
+                        <el-radio label="0">全部可用</el-radio>
+                        <el-radio label="1">仅非会员卡支付可用</el-radio>
+                        <el-radio label="2">仅会员卡支付可用</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" label="节假日可用" :label-width="formLabelWidth" v-if="oCardType==1">
@@ -1667,7 +1667,7 @@
                         return;
                     }
                     if(!this.oForm.validPayType){
-                        this.message = '支付类型不能为空，请检查！';
+                        this.message = '可用支付方式不能为空，请检查！';
                         this.open();
                         loading.close();
                         return;
@@ -2580,7 +2580,7 @@
                         return;
                     }
                     if(!this.oValidPayType){
-                        this.message = '支付类型不能为空，请检查！';
+                        this.message = '可用支付方式不能为空，请检查！';
                         this.open();
                         loading.close();
                         return;

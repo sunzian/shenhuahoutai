@@ -128,23 +128,17 @@
                 <!--<el-tag v-else type="danger">否</el-tag>-->
                 <!--</template>-->
                 <!--</el-table-column>-->
-                <!--<el-table-column prop="string" label="费用支付类型">-->
-                <!--<template slot-scope="scope">-->
-                <!--<el-tag v-if="scope.row.paymentType == 1" type="info">包年</el-tag>-->
-                <!--<el-tag v-else type="info">按票收费</el-tag>-->
-                <!--</template>-->
-                <!--</el-table-column>-->
+                <el-table-column label="费用支付类型" width="120" align="center">
+                <template slot-scope="scope">
+                <el-tag v-if="scope.row.paymentType == 1" type="info">包年</el-tag>
+                <el-tag v-else type="info">按票收费</el-tag>
+                </template>
+                </el-table-column>
                 <el-table-column prop="number" label="剩余票数" width="90">
-                    <template
-                        v-if="scope.row.paymentType == 2"
-                        slot-scope="scope"
-                    >{{scope.row.remainTicketsNumber}}</template>
+                    <template slot-scope="scope">{{scope.row.remainTicketsNumber}}</template>
                 </el-table-column>
                 <el-table-column prop="time" label="到期时间" width="150">
-                    <template
-                        v-if="scope.row.paymentType == 1"
-                        slot-scope="scope"
-                    >{{scope.row.expireDate}}</template>
+                    <template slot-scope="scope">{{scope.row.expireDate}}</template>
                 </el-table-column>
                 <!--<el-table-column prop="string" label="票价上报方式">-->
                 <!--<template slot-scope="scope">-->
@@ -264,7 +258,7 @@
                     ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="影院联系人电话" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="oConcatMobile" autocomplete="off"></el-input>
+                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 250px" v-model="oConcatMobile" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item
                     :required="true"
@@ -272,7 +266,7 @@
                     label="客服电话"
                     :label-width="formLabelWidth"
                 >
-                    <el-input style="width: 250px" v-model="oServiceMobile" autocomplete="off"></el-input>
+                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 250px" v-model="oServiceMobile" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="开场前的购票时间限制（分钟）" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oBuyMinutesLimit" autocomplete="off"></el-input>
@@ -304,12 +298,12 @@
                         autocomplete="off"
                         type="textarea"
                         maxlength="2000"
+                        :rows="6"
                         show-word-limit
                     ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="购票提示" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" type="textarea" v-model="oBuyTicketHint" maxlength="100"
-                              show-word-limit autocomplete="off"></el-input>
+                    <el-input style="width: 250px" type="textarea" :rows="3" v-model="oBuyTicketHint" maxlength="100" show-word-limit autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="权益卡协议" :label-width="formLabelWidth">
                     <el-input
@@ -318,6 +312,7 @@
                             v-model="oEquityCardAgreement"
                             autocomplete="off"
                             maxlength="1000"
+                            :rows="6"
                             show-word-limit
                     ></el-input>
                 </el-form-item>
@@ -1178,26 +1173,85 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            if (
-                !this.oConcatName ||
-                !this.oConcatMobile ||
-                !this.oServiceMobile ||
-                !this.oMembershipServiceAgreement ||
-                !this.oBuyTicketHint ||
-                !this.oEquityCardAgreement ||
-                !this.oSnackDispatcherStatus ||
-                !this.oRefundable ||
-                !this.oSnackBeginTime ||
-                !this.oSnackEndTime ||
-                !this.oOpenMemberCardStatus ||
-                // !this.oMemberCardCommonUseStatus ||
-                !this.oVerificationCode
-            ) {
-                this.message = '必填项不能为空，请检查！';
+            if (!this.oConcatName) {
+                this.message = '影院联系人姓名不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
             }
+            if (!this.oConcatMobile) {
+                this.message = '影院联系人电话不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if (this.oConcatMobile.length!=11) {
+                this.message = '请输入正确的影院联系人电话！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if (!this.oServiceMobile) {
+                this.message = '客服电话不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if (!this.oMembershipServiceAgreement) {
+                this.message = '影院会员服务协议不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if (!this.oBuyTicketHint) {
+                this.message = '购票提示不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if (!this.oEquityCardAgreement) {
+                this.message = '权益卡协议不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if (!this.oSnackDispatcherStatus) {
+                this.message = '是否小卖配送不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if (!this.oRefundable) {
+                this.message = '是否可退票不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if (!this.oSnackBeginTime) {
+                this.message = '卖品显示开始时间不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if (!this.oSnackEndTime) {
+                this.message = '卖品显示结束时间不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if (!this.oOpenMemberCardStatus) {
+                this.message = '是否开通会员卡功能不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if (!this.oVerificationCode) {
+                this.message = '影院奖品核销码不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            // !this.oMemberCardCommonUseStatus ||
             var jsonArr = [];
             // jsonArr.push({ key: 'specialServiceJson', value: JSON.stringify(this.serveData) });
             jsonArr.push({ key: 'cinemaName', value: this.oCinemaName });

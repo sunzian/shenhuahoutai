@@ -204,11 +204,11 @@
                             format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
                 </el-form-item>
-                <el-form-item :required="true" label="支付类型：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="可用支付方式：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.validPayType">
-                        <el-radio label="0">全部</el-radio>
-                        <el-radio label="1">仅非会员卡支付</el-radio>
-                        <el-radio label="2">仅会员卡支付</el-radio>
+                        <el-radio label="0">全部可用</el-radio>
+                        <el-radio label="1">仅非会员卡支付可用</el-radio>
+                        <el-radio label="2">仅会员卡支付可用</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" label="开启状态：" :label-width="formLabelWidth">
@@ -404,11 +404,11 @@
                             format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
                 </el-form-item>
-                <el-form-item :required="true" label="支付类型：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="可用支付方式：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oValidPayType">
-                        <el-radio label="0">全部</el-radio>
-                        <el-radio label="1">仅非会员卡支付</el-radio>
-                        <el-radio label="2">仅会员卡支付</el-radio>
+                        <el-radio label="0">全部可用</el-radio>
+                        <el-radio label="1">仅非会员卡支付可用</el-radio>
+                        <el-radio label="2">仅会员卡支付可用</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" label="开启状态：" :label-width="formLabelWidth">
@@ -921,7 +921,7 @@
                     return;
                 }
                 if(!this.oForm.validPayType){
-                    this.message = '支付类型不能为空，请检查！';
+                    this.message = '可用支付方式不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
@@ -1374,7 +1374,7 @@
                     return;
                 }
                 if(!this.oValidPayType){
-                    this.message = '支付类型不能为空，请检查！';
+                    this.message = '可用支付方式不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;

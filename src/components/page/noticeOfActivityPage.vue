@@ -545,8 +545,32 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            if(!this.oForm.title||!this.summary||!this.imageUrl||!this.oForm.content||!this.oForm.status){
-                this.message = '必填项不能为空，请检查！';
+            if(!this.oForm.title){
+                this.message = '标题不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.summary){
+                this.message = '概述不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.imageUrl){
+                this.message = '封面图片不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.oForm.content){
+                this.message = '内容不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.oForm.status){
+                this.message = '上线状态不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
@@ -717,8 +741,32 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            if(!this.oTitle||!this.oSummary||!this.oImageUrl||!this.oContent||!this.oStatus){
-                this.message = '必填项不能为空，请检查！';
+            if(!this.oTitle){
+                this.message = '标题不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.oSummary){
+                this.message = '概述不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.oImageUrl){
+                this.message = '封面图片不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.oContent){
+                this.message = '内容不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.oStatus){
+                this.message = '上线状态不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;

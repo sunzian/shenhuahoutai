@@ -841,7 +841,6 @@ export default {
                 jsonArr.push({ key: 'sessionStartDate', value: sessionStartDate });
                 jsonArr.push({ key: 'sessionEndDate', value: sessionEndDate });
                 var params = ParamsAppend(jsonArr);
-                console.log(jsonArr);
                 let myObj = {
                     method: 'get',
                     url: '/exportExcel/ticketOrder',
