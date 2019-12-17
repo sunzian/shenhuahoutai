@@ -182,11 +182,22 @@
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="会员卡图片" :label-width="formLabelWidth">
+                    <el-popover placement="right" title trigger="hover">
+                        <img style="width: 400px" :src="oImage" />
+                        <img
+                                slot="reference"
+                                :src="oImage"
+                                :alt="oImage"
+                                style="max-height: 50px;max-width: 130px"
+                        />
+                    </el-popover>
                     <el-upload
                             :before-upload="beforeUpload"
                             :data="type"
                             class="upload-demo"
                             drag
+                            :limit="1"
+                            :on-exceed="exceed"
                             ref="download"
                             action="/api/upload/uploadImage"
                             :on-success="unSuccess"
@@ -268,10 +279,11 @@
                 form: {
                     memo: '',
                     sort: '',
-                    id: ''
+                    id: '',
                 },
                 idx: -1,
                 id: -1,
+                oImage: '',
                 dialogFormVisible: false,
                 formLabelWidth: '120px',
                 selectValue: {},
@@ -303,6 +315,13 @@
             this.getAllCinema();
         },
         methods: {
+            exceed(data){
+                console.log(data);
+                if(data.length==1){
+                    this.message = '只能上传一张图片，如需重新上传请删除第一张图！';
+                    this.open();
+                }
+            },
             // 修改状态
             changeStatus(index, row) {
                 if(row.status==2){
@@ -436,9 +455,10 @@
                     https.fetchPost('/memberCardLevel/modifyPage', params).then(data => {
                             loading.close();
                             if (data.data.code == 'success') {
+                                console.log(JSON.parse(Decrypt(data.data.data)));
                                 this.editVisible = true;
                                 this.form.name = JSON.parse(Decrypt(data.data.data)).levelName;
-                                this.form.imageUrl = JSON.parse(Decrypt(data.data.data)).cardPicture;
+                                this.oImage = JSON.parse(Decrypt(data.data.data)).cardPicture;
                                 this.form.standardPrice = JSON.parse(Decrypt(data.data.data)).cardCostFee;
                                 this.form.settlePrice = JSON.parse(Decrypt(data.data.data)).memberFee;
                                 this.form.cardNo = JSON.parse(Decrypt(data.data.data)).cardNo;
@@ -467,12 +487,9 @@
                     target: document.querySelector('.div1')
                 });
                 setTimeout(() => {
-                    if (!this.form.image_url) {
-                        this.form.image_url = this.form.imageUrl;
-                    }
                     var jsonArr = [];
                     jsonArr.push({ key: 'id', value: this.form.id });
-                    jsonArr.push({ key: 'cardPicture', value: this.form.image_url });
+                    jsonArr.push({ key: 'cardPicture', value: this.oImage });
                     jsonArr.push({ key: 'cardNo', value: this.form.cardNo });
                     jsonArr.push({ key: 'openRuleCode', value: '' });
                     jsonArr.push({ key: 'rechargeRuleCode', value: ''});
@@ -779,13 +796,14 @@
                 return isLt200Kb
             },
             unSuccess(data) {
+                console.log(data);
                 if (data.status == '-1') {
                     this.message=data.message;
                     this.open();
                     this.$refs.download.clearFiles();
                     return
                 }
-                this.form.image_url = data.data;
+                this.oImage= data.data;
                 if (data.code == 'nologin') {
                     this.message = data.message;
                     this.open();

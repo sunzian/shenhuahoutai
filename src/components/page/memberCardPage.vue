@@ -44,6 +44,12 @@
                     style="margin-top: 10px;width: 90px;"
                     @click="Search"
                 >搜索</el-button>
+                <el-button
+                        type="primary"
+                        @click="derive"
+                        icon="el-icon-circle-plus-outline"
+                        style="float: right;margin-top: 10px"
+                >导出</el-button>
             </div>
             <div class="handle-box">
                 余额：
@@ -419,6 +425,51 @@ export default {
         this.getMenu();
     },
     methods: {
+        derive(){
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
+            setTimeout(() => {
+                let cinemaCode = this.query.cinemaCode;
+                let orderNo = this.query.orderNo;
+                let mobile = this.query.mobile;
+                let payWay = this.query.payWay;
+                if (!cinemaCode) {
+                    cinemaCode = '';
+                }
+                if (!orderNo) {
+                    orderNo = '';
+                }
+                if (!mobile) {
+                    mobile = '';
+                }
+                if (!payWay) {
+                    payWay = '';
+                }
+                let jsonArr = [];
+                jsonArr.push({ key: 'tableName', value: "third_party_member_card" });
+                jsonArr.push({ key: 'exportKeysJson', value: "['id','openCardCinemaCode','openCardCinemaName','bindCardCinemaCode','bindCardCinemaName','cardNo','levelCode','levelName','userMobile','userName','cnSex','balance','creditsAmount','cnBindStatus','bindUserMobile','cnOffOrOnLine']"});
+                jsonArr.push({ key: 'exportTitlesJson', value:"['ID','开卡影院编码','开卡影院名称','绑卡影院编码','绑卡影院名称','卡号','卡等级编号','卡等级名称','卡用户手机号','用户名','性别','余额','积分','绑定状态','绑卡手机号','是否线上卡']" });
+                jsonArr.push({ key: 'openCardCinemaCode', value: cinemaCode });
+                jsonArr.push({ key: 'bindStatus', value: payWay });
+                jsonArr.push({ key: 'cardNo', value: orderNo });
+                jsonArr.push({ key: 'userMobile', value: mobile });
+                var params = ParamsAppend(jsonArr);
+                console.log(jsonArr);
+                let myObj = {
+                    method: 'get',
+                    url: 'exportExcel/thirdPartyMemberCard',
+                    fileName: '会员卡用户列表统计',
+                    params: params
+                };
+                https.exportMethod(myObj);
+                loading.close();
+            }, 1500);
+        },
         addChange(index, row) {
             this.$confirm('此操作将解绑会员卡, 是否继续?', '提示', {
                 confirmButtonText: '确定',

@@ -224,25 +224,21 @@
                 </el-form-item>
                 <el-form-item :required="true" label="商品图片" :label-width="formLabelWidth">
                     <el-upload
-                        :before-upload="beforeUpload"
-                        :data="type"
-                        class="upload-demo"
-                        drag
-                        :limit="1"
-                        ref="upload"
-                        :on-exceed="exceed"
-                        action="/api/upload/uploadImage"
-                        :on-success="onSuccess"
-                        multiple
+                            class="upload-demo"
+                            action="/api/upload/uploadImage"
+                            :before-upload="beforeUpload"
+                            :data="type"
+                            :limit="1"
+                            :on-exceed="exceed"
+                            ref="download"
+                            :on-success="onSuccess"
+                            :file-list="fileList"
+                            list-type="picture"
                     >
-                        <i class="el-icon-upload"></i>
-                        <div class="el-upload__text">
-                            将文件拖到此处，或
-                            <em>点击上传</em>
-                        </div>
+                        <el-button size="small" type="primary">点击上传</el-button>
                         <div
-                            class="el-upload__tip"
-                            slot="tip"
+                                slot="tip"
+                                class="el-upload__tip"
                         >只能上传jpg/png文件，且不超过200kb 建议尺寸200*200或按比例上传</div>
                     </el-upload>
                 </el-form-item>
@@ -256,13 +252,14 @@
                         >{{city.cinemaName}}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
-                <el-form-item label="兑换须知" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="兑换须知" :label-width="formLabelWidth">
                     <el-input
                         style="width: 360px"
                         type="textarea"
                         show-word-limit
-                        maxlength="100"
+                        maxlength="200"
                         v-model="oForm.memo"
+                        placeholder="1.可领取时间段2.领取地址3.其他注意事项"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
@@ -281,7 +278,7 @@
                     label="原价"
                     :label-width="formLabelWidth"
                 >
-                    <el-input style="width: 250px" v-model="oForm.originalPrice" autocomplete="off"></el-input>
+                    <el-input style="width: 250px" v-model.trim="oForm.originalPrice" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="库存" :label-width="formLabelWidth">
                     <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 250px" v-model="oForm.store" autocomplete="off"></el-input>
@@ -302,7 +299,7 @@
                     label="所需金币数量"
                     :label-width="formLabelWidth"
                 >
-                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 250px" v-model="oForm.gold" autocomplete="off"></el-input>
+                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 250px" v-model.trim="oForm.gold" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item
                     :required="true"
@@ -310,7 +307,7 @@
                     label="所需RMB"
                     :label-width="formLabelWidth"
                 >
-                    <el-input  onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 250px" v-model="oForm.money" autocomplete="off"></el-input>
+                    <el-input  onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 250px" v-model.trim="oForm.money" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item
                     :required="true"
@@ -357,7 +354,7 @@
                     ></el-date-picker>
                 </el-form-item>
                 <el-form-item :required="true" label="有效期天数" :label-width="formLabelWidth"  v-if="oForm.effectiveType!=2">
-                    <el-input style="width: 250px" placeholder="自领取之日起计算" v-model="oForm.expireDay" autocomplete="off" onkeyup="this.value=this.value.replace(/\D/g,'')"></el-input>
+                    <el-input style="width: 250px" placeholder="自领取之日起计算" v-model.trim="oForm.expireDay" autocomplete="off" onkeyup="this.value=this.value.replace(/\D/g,'')"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="是否今日大牌" :label-width="formLabelWidth">
                     <el-select v-model="oForm.topStatus" placeholder="请选择">
@@ -564,11 +561,11 @@
                 </el-form-item>
                 <el-form-item :required="true" label="商品图片" :label-width="formLabelWidth">
                     <el-popover placement="right" title trigger="hover">
-                        <img :src="form.image_url" />
+                        <img :src="oImageUrl" />
                         <img
                             slot="reference"
-                            :src="form.image_url"
-                            :alt="form.image_url"
+                            :src="oImageUrl"
+                            :alt="oImageUrl"
                             style="max-height: 50px;max-width: 130px"
                         />
                     </el-popover>
@@ -595,12 +592,13 @@
                         >只能上传jpg/png文件，且不超过200kb 建议尺寸200*200或按比例上传</div>
                     </el-upload>
                 </el-form-item>
-                <el-form-item label="兑换须知" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="兑换须知" :label-width="formLabelWidth">
                     <el-input
                         style="width: 360px"
                         type="textarea"
                         show-word-limit
-                        maxlength="100"
+                        maxlength="200"
+                        placeholder="1.可领取时间段2.领取地址3.其他注意事项"
                         v-model="form.memo"
                         autocomplete="off"
                     ></el-input>
@@ -616,7 +614,7 @@
                     />
                 </el-form-item>
                 <el-form-item v-if="form.commodityType==1" :required="true" label="原价" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="form.originalPrice" autocomplete="off"></el-input>
+                    <el-input style="width: 250px" v-model.trim="form.originalPrice" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="库存" :label-width="formLabelWidth">
                     <el-input style="width: 250px" onkeyup="this.value=this.value.replace(/\D/g,'')"  v-model="form.store" autocomplete="off"></el-input>
@@ -637,7 +635,7 @@
                     :label-width="formLabelWidth"
                     :required="true"
                 >
-                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')"  style="width: 250px" v-model="form.gold" autocomplete="off"></el-input>
+                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')"  style="width: 250px" v-model.trim="form.gold" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item
                     v-if="form.changeType==2||form.changeType==3"
@@ -645,7 +643,7 @@
                     :label-width="formLabelWidth"
                     :required="true"
                 >
-                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')"  style="width: 250px" v-model="form.money" autocomplete="off"></el-input>
+                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')"  style="width: 250px" v-model.trim="form.money" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item
                     :required="true"
@@ -692,7 +690,7 @@
                     ></el-date-picker>
                 </el-form-item>
                 <el-form-item :required="true" label="有效期天数" :label-width="formLabelWidth" v-if="oEffectiveType!=2">
-                    <el-input style="width: 250px" placeholder="自领取之日起计算" v-model="form.expireDay" autocomplete="off" onkeyup="this.value=this.value.replace(/\D/g,'')"></el-input>
+                    <el-input style="width: 250px" placeholder="自领取之日起计算" v-model.trim="form.expireDay" autocomplete="off" onkeyup="this.value=this.value.replace(/\D/g,'')"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="允许兑换的门店" :label-width="formLabelWidth">
                     <el-checkbox-group v-model="oCheckedCities" :max="1" @change="changeCinema">
@@ -1008,6 +1006,7 @@ export default {
     data() {
         return {
             content: '',
+            oImageUrl: '',
             editorOption: {},
             img_file: {},
             oTopstatus: '',
@@ -1029,6 +1028,7 @@ export default {
                 bPageNo: 1,
                 bPageSize: 15
             },
+            fileList: [],
             tableData: [],
             multipleSelection: [],
             delList: [],
@@ -1542,6 +1542,7 @@ export default {
                         loading.close();
                         // console.log(data);
                         if (data.data.code == 'success') {
+                            this.fileList = [];
                             console.log(JSON.parse(Decrypt(data.data.data)));
                             this.cities = JSON.parse(Decrypt(data.data.data));
                             this.dialogFormVisible = true;
@@ -1633,7 +1634,7 @@ export default {
                 return;
             }
             if(this.oForm.change_type==1||this.oForm.change_type==3){
-                if (!this.oForm.gold&&this.oForm.gold!=0) {
+                if (!this.oForm.gold&&this.oForm.gold!=0||(this.oForm.gold=='')) {
                     this.message = '所需金币数量不能为空，请检查！';
                     this.open();
                     loading.close();
@@ -1691,14 +1692,14 @@ export default {
                 }
             }
             if(this.oForm.effectiveType!=2){
-                if (!this.oForm.expireDay) {
-                    this.message = '有效期天数不能为空，请检查！';
+                if (this.oForm.expireDay<1) {
+                    this.message = '有效期天数不能小于1，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
-                if (this.oForm.expireDay<0) {
-                    this.message = '有效期天数不能小于0，请检查！';
+                if (!this.oForm.expireDay||this.oForm.expireDay=='') {
+                    this.message = '有效期天数不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
@@ -2016,7 +2017,7 @@ export default {
                                 this.selectedSell.push(json);
                             }
                             this.oName = JSON.parse(Decrypt(data.data.data)).goldCommodity.name;
-                            this.form.image_url = JSON.parse(Decrypt(data.data.data)).goldCommodity.imageUrl;
+                            this.oImageUrl = JSON.parse(Decrypt(data.data.data)).goldCommodity.imageUrl;
                             this.form.memo = JSON.parse(Decrypt(data.data.data)).goldCommodity.memo;
                             this.form.store = JSON.parse(Decrypt(data.data.data)).goldCommodity.store;
                             this.form.expireDay = JSON.parse(Decrypt(data.data.data)).goldCommodity.expireDay;
@@ -2155,7 +2156,7 @@ export default {
                 }
 
             }
-            if (!this.form.image_url) {
+            if (!this.oImageUrl) {
                 this.message = '商品图片不能为空，请检查！';
                 this.open();
                 loading.close();
@@ -2192,7 +2193,7 @@ export default {
                 return;
             }
             if(this.form.changeType==1||this.form.changeType==3){
-                if (!this.form.gold&&this.form.gold!=0) {
+                if (!this.form.gold&&this.form.gold!=0||(this.form.gold=='')) {
                     this.message = '所需金币数量不能为空，请检查！';
                     this.open();
                     loading.close();
@@ -2228,7 +2229,7 @@ export default {
                 }
             }
             if(this.oEffectiveType==1 && this.form.commodityType!=1){
-                if (!this.oLaterDays) {
+                if (!this.oLaterDays&&this.oLaterDays!=0) {
                     this.message = '领取后几天开始生效不能为空，请检查！';
                     this.open();
                     loading.close();
@@ -2250,14 +2251,14 @@ export default {
                 }
             }
             if(this.oEffectiveType!=2){
-                if (!this.form.expireDay&&this.form.expireDay!=0) {
-                    this.message = '有效期天数不能为空，请检查！';
+                if (this.form.expireDay<1) {
+                    this.message = '有效期天数不能小于1，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
-                if (this.form.expireDay<0) {
-                    this.message = '有效期天数不能小于0，请检查！';
+                if (!this.form.expireDay||this.form.expireDay=='') {
+                    this.message = '有效期天数不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
@@ -2361,7 +2362,7 @@ export default {
                 this.form.cinemaCode = this.oCheckedCities.join(',');
                 jsonArr.push({ key: 'id', value: this.form.id });
                 jsonArr.push({ key: 'effectiveType', value: this.oEffectiveType });
-                jsonArr.push({ key: 'imageUrl', value: this.form.image_url });
+                jsonArr.push({ key: 'imageUrl', value: this.oImageUrl });
                 jsonArr.push({ key: 'memo', value: this.form.memo });
                 jsonArr.push({ key: 'store', value: this.form.store });
                 jsonArr.push({ key: 'alredyChangedNumber', value: this.form.alredyChangedNumber });
@@ -2571,7 +2572,7 @@ export default {
                 this.$refs.download.clearFiles();
                 return;
             }
-            this.form.image_url = data.data;
+            this.oImageUrl = data.data;
             if (data.code == 'nologin') {
                 this.message = data.message;
                 this.open();

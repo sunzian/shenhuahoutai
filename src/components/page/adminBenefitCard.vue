@@ -718,7 +718,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="可用时间段：" :label-width="formLabelWidth" v-if="oForm.cardType==1">
+                <el-form-item label="影票可用时间段：" :label-width="formLabelWidth" v-if="oForm.cardType==1">
                     <el-time-picker
                         is-range
                         type="date"
@@ -1333,7 +1333,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="可用时间段：" :label-width="formLabelWidth" v-if="oCardType==1">
+                <el-form-item label="影票可用时间段：" :label-width="formLabelWidth" v-if="oCardType==1">
                     <el-time-picker
                         is-range
                         type="date"

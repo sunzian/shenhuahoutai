@@ -554,9 +554,50 @@
                     background: 'rgba(0, 0, 0, 0.7)',
                     target: document.querySelector('.div1')
                 });
-            if(!this.oForm.userName||!this.oForm.userPass||!this.oForm.realName||!this.oForm.callNumber||!this.checkedCities
-                ||!this.selectList.id){
-                this.message = '必填项不能为空，请检查！';
+            if(!this.oForm.userName){
+                this.message = '用户名不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.oForm.userPass){
+                this.message = '密码不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.oForm.value){
+                this.message = '状态不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.oForm.realName){
+                this.message = '真实姓名不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.oForm.callNumber){
+                this.message = '呼叫号码不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(this.oForm.callNumber.length!=11){
+                this.message = '请输入正确的呼叫号码！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(this.checkedCities.length==0){
+                this.message = '所选影院不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.selectList.id){
+                this.message = '角色不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
@@ -581,6 +622,14 @@
                         if (data.data.code == 'success') {
                             this.dialogFormVisible = false;
                             this.oForm.value='1';
+                            this.oForm.userName='';
+                            this.oForm.userPass='';
+                            this.oForm.memo='';
+                            this.oForm.realName='';
+                            this.oForm.callNumber='';
+                            this.oForm.selectList=[];
+                            this.checkedCities=[];
+                            this.data=[];
                             this.getMenu();
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
@@ -709,8 +758,38 @@
                     background: 'rgba(0, 0, 0, 0.7)',
                     target: document.querySelector('.div1')
                 });
-            if(!this.userName||!this.form.realName||!this.form.callNumber||!this.oCheckedCities){
-                this.message = '必填项不能为空，请检查！';
+            if(!this.userName){
+                this.message = '用户名不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.selectValue){
+                this.message = '状态不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.form.realName){
+                this.message = '真实姓名不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.form.callNumber){
+                this.message = '呼叫号码不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(this.form.callNumber.length!=11){
+                this.message = '请输入正确的呼叫号码！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(this.oCheckedCities.length==0){
+                this.message = '所选影院不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;

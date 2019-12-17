@@ -123,6 +123,15 @@
                     <el-input style="width: 250px" min="1" v-model="oForm.name" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="活动图片：" :label-width="formLabelWidth">
+                    <el-popover placement="right" title trigger="hover">
+                        <img style="width: 400px" :src="oActivityImageUrl" />
+                        <img
+                                slot="reference"
+                                :src="oActivityImageUrl"
+                                :alt="oActivityImageUrl"
+                                style="max-height: 50px;max-width: 130px"
+                        />
+                    </el-popover>
                     <el-upload
                         :before-upload="beforeUpload"
                         :data="imgType"
@@ -412,7 +421,7 @@
         <el-dialog :close-on-click-modal="false" title="选择优惠券" :visible.sync="drawer">
             <div class="container">
                 <div class="handle-box">
-                    <el-input v-model="couponName" placeholder="券包名称" class="handle-input mr10"></el-input>
+                    <el-input v-model="couponName" placeholder="券包名称" class="handle-input mr12"></el-input>
                     <el-button type="primary" icon="el-icon-search" @click="getAllCoupon">搜索</el-button>
                 </div>
                 <el-table
@@ -538,6 +547,7 @@ export default {
             dialogFormVisible: false,
             oForm: {
                 cinemaName: '',
+                cinemaCode: '',
                 levelCode: '',
                 ruleName: '', // 规则名称
                 rechargeAmount: '', // 充值金额
@@ -639,6 +649,8 @@ export default {
                         }
                         this.couponId = '';
                         this.groupName = '';
+                        this.oActivityImageUrl = '';
+                        this.oForm.cinemaCode='';
                         if (this.$refs.download) {
                             this.$refs.download.clearFiles(); //清除已上传文件
                         }
@@ -864,6 +876,7 @@ export default {
             });
             this.idx = index;
             this.form = row;
+            this.oForm.cinemaCode=row.cinemaCode
             var jsonArr = [];
             jsonArr.push({ key: 'id', value: row.id });
             let sign = md5(preSign(jsonArr));
@@ -1407,6 +1420,10 @@ export default {
     }
     .mr10 {
         width: 16%;
+        margin-right: 10px;
+    }
+    .mr12 {
+        width: 30%;
         margin-right: 10px;
     }
 </style>

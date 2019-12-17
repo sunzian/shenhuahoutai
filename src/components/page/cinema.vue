@@ -56,6 +56,17 @@
                     <el-option key="1" label="标准价格上报" value="1"></el-option>
                     <el-option key="2" label="优惠后价格上报" value="2"></el-option>
                 </el-select>
+                <el-select
+                        clearable
+                        v-model="query.orderNumber"
+                        placeholder="排序规则"
+                        class="handle-select mr10"
+                >
+                    <el-option key="1" label="到期时间升序" value="1"></el-option>
+                    <el-option key="2" label="到期时间降序" value="2"></el-option>
+                    <el-option key="3" label="按剩余票数升序" value="3"></el-option>
+                    <el-option key="4" label="按剩余票数降序" value="4"></el-option>
+                </el-select>
                 <el-button
                     style="margin-top: 10px;width: 90px;"
                     type="primary"
@@ -75,7 +86,7 @@
                 <el-table-column prop="code" label="影院编码" fixed width="140">
                     <template slot-scope="scope">{{scope.row.cinemaCode}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="影院名称" fixed>
+                <el-table-column prop="name" label="影院名称" fixed width="180">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
                 <el-table-column prop="booleans" label="是否支持自主退票" align="center" width="160">
@@ -117,23 +128,17 @@
                 <!--<el-tag v-else type="danger">否</el-tag>-->
                 <!--</template>-->
                 <!--</el-table-column>-->
-                <!--<el-table-column prop="string" label="费用支付类型">-->
-                <!--<template slot-scope="scope">-->
-                <!--<el-tag v-if="scope.row.paymentType == 1" type="info">包年</el-tag>-->
-                <!--<el-tag v-else type="info">按票收费</el-tag>-->
-                <!--</template>-->
-                <!--</el-table-column>-->
+                <el-table-column label="费用支付类型" width="120" align="center">
+                <template slot-scope="scope">
+                <el-tag v-if="scope.row.paymentType == 1" type="info">包年</el-tag>
+                <el-tag v-else type="info">按票收费</el-tag>
+                </template>
+                </el-table-column>
                 <el-table-column prop="number" label="剩余票数" width="90">
-                    <template
-                        v-if="scope.row.paymentType == 2"
-                        slot-scope="scope"
-                    >{{scope.row.remainTicketsNumber}}</template>
+                    <template slot-scope="scope">{{scope.row.remainTicketsNumber}}</template>
                 </el-table-column>
                 <el-table-column prop="time" label="到期时间" width="150">
-                    <template
-                        v-if="scope.row.paymentType == 1"
-                        slot-scope="scope"
-                    >{{scope.row.expireDate}}</template>
+                    <template slot-scope="scope">{{scope.row.expireDate}}</template>
                 </el-table-column>
                 <!--<el-table-column prop="string" label="票价上报方式">-->
                 <!--<template slot-scope="scope">-->
@@ -253,7 +258,7 @@
                     ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="影院联系人电话" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="oConcatMobile" autocomplete="off"></el-input>
+                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 250px" v-model="oConcatMobile" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item
                     :required="true"
@@ -261,7 +266,7 @@
                     label="客服电话"
                     :label-width="formLabelWidth"
                 >
-                    <el-input style="width: 250px" v-model="oServiceMobile" autocomplete="off"></el-input>
+                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 250px" v-model="oServiceMobile" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="开场前的购票时间限制（分钟）" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oBuyMinutesLimit" autocomplete="off"></el-input>
@@ -293,12 +298,12 @@
                         autocomplete="off"
                         type="textarea"
                         maxlength="2000"
+                        :rows="6"
                         show-word-limit
                     ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="购票提示" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" type="textarea" v-model="oBuyTicketHint" maxlength="100"
-                              show-word-limit autocomplete="off"></el-input>
+                    <el-input style="width: 250px" type="textarea" :rows="3" v-model="oBuyTicketHint" maxlength="100" show-word-limit autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="权益卡协议" :label-width="formLabelWidth">
                     <el-input
@@ -307,6 +312,7 @@
                             v-model="oEquityCardAgreement"
                             autocomplete="off"
                             maxlength="1000"
+                            :rows="6"
                             show-word-limit
                     ></el-input>
                 </el-form-item>
@@ -683,6 +689,7 @@
                         :on-success="unSuccess"
                         multiple
                         :limit="1"
+                        :on-exceed="exceed"
                     >
                         <i class="el-icon-upload"></i>
                         <div class="el-upload__text">
@@ -692,127 +699,127 @@
                         <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过100kb 建议尺寸540*400或按比例上传</div>
                     </el-upload>
                 </el-form-item>
-                <el-form-item label="影院公告" :label-width="formLabelWidth">
-                    <el-input
-                            style="width: 250px"
-                            type="textarea"
-                            v-model="oNotice"
-                            autocomplete="off"
-                            maxlength="300"
-                            show-word-limit
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="特色服务" :label-width="formLabelWidth">
-                    <el-button @click="serveInfo = true">编辑服务</el-button>
-                </el-form-item>
+                <!--<el-form-item label="影院公告" :label-width="formLabelWidth">-->
+                    <!--<el-input-->
+                            <!--style="width: 250px"-->
+                            <!--type="textarea"-->
+                            <!--v-model="oNotice"-->
+                            <!--autocomplete="off"-->
+                            <!--maxlength="300"-->
+                            <!--show-word-limit-->
+                    <!--&gt;</el-input>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item label="特色服务" :label-width="formLabelWidth">-->
+                    <!--<el-button @click="serveInfo = true">编辑服务</el-button>-->
+                <!--</el-form-item>-->
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false">取 消</el-button>
                 <el-button type="primary" @click="exChanger">确 定</el-button>
             </span>
         </el-dialog>
-        <!-- 查看特色服务 -->
-        <el-dialog title="特色服务" :visible.sync="serveInfo">
-            <div class="handle-box">
-                <el-button
-                    type="primary"
-                    @click="addServeInfo = true"
-                    icon="el-icon-circle-plus-outline"
-                    style="float: right;margin-top: 10px"
-                >新增服务</el-button>
-            </div>
-            <el-table :data="serveData">
-                <el-table-column label="特色服务名称" width="150">
-                    <template slot-scope="scope">{{scope.row.serviceName}}</template>
-                </el-table-column>
-                <el-table-column label="特色服务内容">
-                    <template slot-scope="scope">{{scope.row.serviceDetail}}</template>
-                </el-table-column>
-                <el-table-column label="操作" width="100" align="center">
-                    <template slot-scope="scope">
-                        <el-button
-                            type="text"
-                            icon="el-icon-edit"
-                            @click="editServe(scope)"
-                        >编辑</el-button>
-                        <el-button
-                            type="text"
-                            icon="el-icon-delete"
-                            @click="deleteServe(scope)"
-                        >删除</el-button>
-                    </template>
-                </el-table-column>
-            </el-table>
-            <span slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="serveInfo = false">确 定</el-button>
-            </span>
-        </el-dialog>
-        <!-- 新增特色服务 -->
-        <el-dialog
-            width="30%"
-            top="30vh"
-            :close-on-click-modal="false"
-            :visible.sync="addServeInfo"
-            >
-            <el-form>
-                <el-form-item label="特色服务名称" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 250px;"
-                        v-model="addServiceName"
-                        autocomplete="off"
-                        maxlength="8"
-                        show-word-limit
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="特色服务内容" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 250px;"
-                        type="textarea"
-                        v-model="addServiceDetail"
-                        autocomplete="off"
-                        maxlength="100"
-                        show-word-limit
-                    ></el-input>
-                </el-form-item>
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="addServeInfo = false">取 消</el-button>
-                <el-button type="primary" @click="sureAddServe">确 定</el-button>
-            </span>
-        </el-dialog>
-        <!-- 编辑特色服务 -->
-        <el-dialog
-            width="30%"
-            top="30vh"
-            :close-on-click-modal="false"
-            :visible.sync="editServeInfo"
-            >
-            <el-form>
-                <el-form-item label="特色服务名称" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 250px;"
-                        v-model="editServiceName"
-                        autocomplete="off"
-                        maxlength="8"
-                        show-word-limit
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="特色服务内容" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 250px;"
-                        type="textarea"
-                        v-model="editServiceDetail"
-                        autocomplete="off"
-                        maxlength="100"
-                        show-word-limit
-                    ></el-input>
-                </el-form-item>
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="editServeInfo = false">取 消</el-button>
-                <el-button type="primary" @click="sureEditServe">确 定</el-button>
-            </span>
-        </el-dialog>
+        <!--&lt;!&ndash; 查看特色服务 &ndash;&gt;-->
+        <!--<el-dialog title="特色服务" :visible.sync="serveInfo">-->
+            <!--<div class="handle-box">-->
+                <!--<el-button-->
+                    <!--type="primary"-->
+                    <!--@click="addServeInfo = true"-->
+                    <!--icon="el-icon-circle-plus-outline"-->
+                    <!--style="float: right;margin-top: 10px"-->
+                <!--&gt;新增服务</el-button>-->
+            <!--</div>-->
+            <!--<el-table :data="serveData">-->
+                <!--<el-table-column label="特色服务名称" width="150">-->
+                    <!--<template slot-scope="scope">{{scope.row.serviceName}}</template>-->
+                <!--</el-table-column>-->
+                <!--<el-table-column label="特色服务内容">-->
+                    <!--<template slot-scope="scope">{{scope.row.serviceDetail}}</template>-->
+                <!--</el-table-column>-->
+                <!--<el-table-column label="操作" width="100" align="center">-->
+                    <!--<template slot-scope="scope">-->
+                        <!--<el-button-->
+                            <!--type="text"-->
+                            <!--icon="el-icon-edit"-->
+                            <!--@click="editServe(scope)"-->
+                        <!--&gt;编辑</el-button>-->
+                        <!--<el-button-->
+                            <!--type="text"-->
+                            <!--icon="el-icon-delete"-->
+                            <!--@click="deleteServe(scope)"-->
+                        <!--&gt;删除</el-button>-->
+                    <!--</template>-->
+                <!--</el-table-column>-->
+            <!--</el-table>-->
+            <!--<span slot="footer" class="dialog-footer">-->
+                <!--<el-button type="primary" @click="serveInfo = false">确 定</el-button>-->
+            <!--</span>-->
+        <!--</el-dialog>-->
+        <!--&lt;!&ndash; 新增特色服务 &ndash;&gt;-->
+        <!--<el-dialog-->
+            <!--width="30%"-->
+            <!--top="30vh"-->
+            <!--:close-on-click-modal="false"-->
+            <!--:visible.sync="addServeInfo"-->
+            <!--&gt;-->
+            <!--<el-form>-->
+                <!--<el-form-item label="特色服务名称" :label-width="formLabelWidth">-->
+                    <!--<el-input-->
+                        <!--style="width: 250px;"-->
+                        <!--v-model="addServiceName"-->
+                        <!--autocomplete="off"-->
+                        <!--maxlength="8"-->
+                        <!--show-word-limit-->
+                    <!--&gt;</el-input>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item label="特色服务内容" :label-width="formLabelWidth">-->
+                    <!--<el-input-->
+                        <!--style="width: 250px;"-->
+                        <!--type="textarea"-->
+                        <!--v-model="addServiceDetail"-->
+                        <!--autocomplete="off"-->
+                        <!--maxlength="100"-->
+                        <!--show-word-limit-->
+                    <!--&gt;</el-input>-->
+                <!--</el-form-item>-->
+            <!--</el-form>-->
+            <!--<span slot="footer" class="dialog-footer">-->
+                <!--<el-button type="primary" @click="addServeInfo = false">取 消</el-button>-->
+                <!--<el-button type="primary" @click="sureAddServe">确 定</el-button>-->
+            <!--</span>-->
+        <!--</el-dialog>-->
+        <!--&lt;!&ndash; 编辑特色服务 &ndash;&gt;-->
+        <!--<el-dialog-->
+            <!--width="30%"-->
+            <!--top="30vh"-->
+            <!--:close-on-click-modal="false"-->
+            <!--:visible.sync="editServeInfo"-->
+            <!--&gt;-->
+            <!--<el-form>-->
+                <!--<el-form-item label="特色服务名称" :label-width="formLabelWidth">-->
+                    <!--<el-input-->
+                        <!--style="width: 250px;"-->
+                        <!--v-model="editServiceName"-->
+                        <!--autocomplete="off"-->
+                        <!--maxlength="8"-->
+                        <!--show-word-limit-->
+                    <!--&gt;</el-input>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item label="特色服务内容" :label-width="formLabelWidth">-->
+                    <!--<el-input-->
+                        <!--style="width: 250px;"-->
+                        <!--type="textarea"-->
+                        <!--v-model="editServiceDetail"-->
+                        <!--autocomplete="off"-->
+                        <!--maxlength="100"-->
+                        <!--show-word-limit-->
+                    <!--&gt;</el-input>-->
+                <!--</el-form-item>-->
+            <!--</el-form>-->
+            <!--<span slot="footer" class="dialog-footer">-->
+                <!--<el-button type="primary" @click="editServeInfo = false">取 消</el-button>-->
+                <!--<el-button type="primary" @click="sureEditServe">确 定</el-button>-->
+            <!--</span>-->
+        <!--</el-dialog>-->
     </div>
 </template>
 
@@ -897,7 +904,7 @@ export default {
             oVerificationCode: '',
             oMiniShareTitle: '',
             oMiniSharePosters: '',
-            oNotice: '',
+            // oNotice: '',
             oId: '',
             message: '', //弹出框消息
             query: {
@@ -917,7 +924,7 @@ export default {
             businessInfo: [], //关联商家信息
             form: [],
             tableData: [],
-            serveData: [],
+            // serveData: [],
             multipleSelection: [],
             delList: [],
             cinemaInfo: [],
@@ -983,6 +990,13 @@ export default {
         this.getMenu();
     },
     methods: {
+        exceed(data){
+            console.log(data);
+            if(data.length==1){
+                this.message = '只能上传一张图片，如需重新上传请删除第一张图！';
+                this.open();
+            }
+        },
         addChange(index, row) {
             //是否拥有修改权限
             const loading = this.$loading({
@@ -1004,8 +1018,9 @@ export default {
                 .then(data => {
                     loading.close();
                     if (data.data.code == 'success') {
+                        console.log(JSON.parse(Decrypt(data.data.data)));
                         this.editVisible = true;
-                        this.serveData = JSON.parse(Decrypt(data.data.data)).cinemaSpecialService.serviceDetailList;
+                        // this.serveData = JSON.parse(Decrypt(data.data.data)).cinemaSpecialService.serviceDetailList;
                         this.oCinemaName = JSON.parse(Decrypt(data.data.data)).Cinema.cinemaName;
                         this.oBelongBusinessCode = JSON.parse(Decrypt(data.data.data)).Cinema.belongBusinessCode;
                         this.oMiniAppName = JSON.parse(Decrypt(data.data.data)).Cinema.miniAppName;
@@ -1126,7 +1141,7 @@ export default {
                         this.oMiniAppQRCode = JSON.parse(Decrypt(data.data.data)).Cinema.miniAppQRCode;
                         this.oMiniShareTitle = JSON.parse(Decrypt(data.data.data)).Cinema.miniShareTitle;
                         this.oMiniSharePosters = JSON.parse(Decrypt(data.data.data)).Cinema.miniSharePosters;
-                        this.oNotice = JSON.parse(Decrypt(data.data.data)).cinemaSpecialService.notice;
+                        // this.oNotice = JSON.parse(Decrypt(data.data.data)).cinemaSpecialService.notice;
                         this.oId = JSON.parse(Decrypt(data.data.data)).Cinema.id;
                         this.openServe();
                         // 获取所选影院名称
@@ -1158,28 +1173,87 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            if (
-                !this.oConcatName ||
-                !this.oConcatMobile ||
-                !this.oServiceMobile ||
-                !this.oMembershipServiceAgreement ||
-                !this.oBuyTicketHint ||
-                !this.oEquityCardAgreement ||
-                !this.oSnackDispatcherStatus ||
-                !this.oRefundable ||
-                !this.oSnackBeginTime ||
-                !this.oSnackEndTime ||
-                !this.oOpenMemberCardStatus ||
-                // !this.oMemberCardCommonUseStatus ||
-                !this.oVerificationCode
-            ) {
-                this.message = '必填项不能为空，请检查！';
+            if (!this.oConcatName) {
+                this.message = '影院联系人姓名不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
             }
+            if (!this.oConcatMobile) {
+                this.message = '影院联系人电话不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if (this.oConcatMobile.length!=11) {
+                this.message = '请输入正确的影院联系人电话！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if (!this.oServiceMobile) {
+                this.message = '客服电话不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if (!this.oMembershipServiceAgreement) {
+                this.message = '影院会员服务协议不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if (!this.oBuyTicketHint) {
+                this.message = '购票提示不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if (!this.oEquityCardAgreement) {
+                this.message = '权益卡协议不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if (!this.oSnackDispatcherStatus) {
+                this.message = '是否小卖配送不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if (!this.oRefundable) {
+                this.message = '是否可退票不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if (!this.oSnackBeginTime) {
+                this.message = '卖品显示开始时间不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if (!this.oSnackEndTime) {
+                this.message = '卖品显示结束时间不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if (!this.oOpenMemberCardStatus) {
+                this.message = '是否开通会员卡功能不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if (!this.oVerificationCode) {
+                this.message = '影院奖品核销码不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            // !this.oMemberCardCommonUseStatus ||
             var jsonArr = [];
-            jsonArr.push({ key: 'specialServiceJson', value: JSON.stringify(this.serveData) });
+            // jsonArr.push({ key: 'specialServiceJson', value: JSON.stringify(this.serveData) });
             jsonArr.push({ key: 'cinemaName', value: this.oCinemaName });
             jsonArr.push({ key: 'cinemaCode', value: this.oCinemaCode });
             jsonArr.push({ key: 'province', value: this.oProvince });
@@ -1250,7 +1324,7 @@ export default {
             jsonArr.push({ key: 'miniAppQRCode', value: this.oMiniAppQRCode });
             jsonArr.push({ key: 'miniShareTitle', value: this.oMiniShareTitle });
             jsonArr.push({ key: 'miniSharePosters', value: this.oMiniSharePosters });
-            jsonArr.push({ key: 'notice', value: this.oNotice });
+            // jsonArr.push({ key: 'notice', value: this.oNotice });
             jsonArr.push({ key: 'id', value: this.oId });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
@@ -1291,12 +1365,16 @@ export default {
                 target: document.querySelector('.div1')
             });
             let cinemaCode = this.query.cinemaCode;
+            let orderNumber = this.query.orderNumber;
             let startDate = this.query.startDate;
             let endDate = this.query.endDate;
             let reportedType = this.query.reportedType;
             let paymentType = this.query.paymentType;
             if (!cinemaCode) {
                 cinemaCode = '';
+            }
+            if (!orderNumber) {
+                orderNumber = '';
             }
             if (!startDate) {
                 startDate = '';
@@ -1312,6 +1390,7 @@ export default {
             }
             let jsonArr = [];
             jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
+            jsonArr.push({ key: 'orderNumber', value: orderNumber });
             jsonArr.push({ key: 'startDate', value: startDate });
             jsonArr.push({ key: 'endDate', value: endDate });
             jsonArr.push({ key: 'reportedType', value: reportedType });
@@ -1400,44 +1479,44 @@ export default {
                 this.$router.push('/login');
             }
         },
-        sureAddServe() {
-            if (this.addServiceName == '' || this.addServiceDetail == '') {
-                this.message = '请填写服务名称或内容';
-                this.open();
-                return
-            } else {
-                let serve = {};
-                serve.serviceName = this.addServiceName;
-                serve.serviceDetail = this.addServiceDetail;
-                serve.id = '';
-                this.serveData.push(serve)
-                this.addServeInfo = false;
-                this.addServiceName = '';
-                this.addServiceDetail = '';
-            }
-        },
-        sureEditServe () {
-            if (this.editServiceName == '' || this.editServiceDetail == '') {
-                this.message = '请填写服务名称或内容';
-                this.open();
-                return
-            } else {
-                this.serveData[this.serveIndex].serviceName = this.editServiceName;
-                this.serveData[this.serveIndex].serviceDetail = this.editServiceDetail;
-                this.editServeInfo = false;
-                this.editServiceName = '';
-                this.editServiceDetail = '';
-            }
-        },
-        editServe(val) {
-            this.editServiceName = val.row.serviceName;
-            this.editServiceDetail = val.row.serviceDetail;
-            this.serveIndex = val.$index;
-            this.editServeInfo = true;
-        },
-        deleteServe(val) {
-            this.serveData.splice(val.$index,1)
-        },
+        // sureAddServe() {
+        //     if (this.addServiceName == '' || this.addServiceDetail == '') {
+        //         this.message = '请填写服务名称或内容';
+        //         this.open();
+        //         return
+        //     } else {
+        //         let serve = {};
+        //         serve.serviceName = this.addServiceName;
+        //         serve.serviceDetail = this.addServiceDetail;
+        //         serve.id = '';
+        //         this.serveData.push(serve)
+        //         this.addServeInfo = false;
+        //         this.addServiceName = '';
+        //         this.addServiceDetail = '';
+        //     }
+        // },
+        // sureEditServe () {
+        //     if (this.editServiceName == '' || this.editServiceDetail == '') {
+        //         this.message = '请填写服务名称或内容';
+        //         this.open();
+        //         return
+        //     } else {
+        //         this.serveData[this.serveIndex].serviceName = this.editServiceName;
+        //         this.serveData[this.serveIndex].serviceDetail = this.editServiceDetail;
+        //         this.editServeInfo = false;
+        //         this.editServiceName = '';
+        //         this.editServiceDetail = '';
+        //     }
+        // },
+        // editServe(val) {
+        //     this.editServiceName = val.row.serviceName;
+        //     this.editServiceDetail = val.row.serviceDetail;
+        //     this.serveIndex = val.$index;
+        //     this.editServeInfo = true;
+        // },
+        // deleteServe(val) {
+        //     this.serveData.splice(val.$index,1)
+        // },
         // 多选操作
         handleSelectionChange(val) {
             this.multipleSelection = val;

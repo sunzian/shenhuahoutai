@@ -53,6 +53,17 @@
                         format="yyyy-MM-dd"
                         placeholder="结束时间（止）">
                 </el-date-picker>
+                <el-select
+                        clearable
+                        v-model="query.orderNumber"
+                        placeholder="排序规则"
+                        class="handle-select mr10"
+                >
+                    <el-option key="1" label="到期时间升序" value="1"></el-option>
+                    <el-option key="2" label="到期时间降序" value="2"></el-option>
+                    <el-option key="3" label="按剩余票数升序" value="3"></el-option>
+                    <el-option key="4" label="按剩余票数降序" value="4"></el-option>
+                </el-select>
                 <el-button style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
                 <el-button
                     type="primary"
@@ -70,10 +81,10 @@
                 header-cell-class-name="table-header"
                 @selection-change="handleSelectionChange"
             >
-                <el-table-column prop="code" label="影院编码" fixed>
+                <el-table-column prop="code" label="影院编码" fixed width="140">
                     <template slot-scope="scope">{{scope.row.cinemaCode}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="影院名称" fixed>
+                <el-table-column prop="name" label="影院名称" fixed width="180">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
                 <!-- <el-table-column prop="time" label="开场前的购票时间限制">
@@ -133,17 +144,17 @@
                         <el-tag v-else type="danger">否</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="time" label="到期时间">
-                    <template slot-scope="scope">{{scope.row.expireDate}}</template>
-                </el-table-column>
-                <el-table-column prop="time" label="剩余张数">
-                    <template slot-scope="scope">{{scope.row.remainTicketsNumber}}</template>
-                </el-table-column>
                 <el-table-column prop="string" label="费用支付类型">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.paymentType == 1" type="info">包年</el-tag>
                         <el-tag v-else type="info">按票收费</el-tag>
                     </template>
+                </el-table-column>
+                <el-table-column prop="time" label="到期时间">
+                    <template slot-scope="scope">{{scope.row.expireDate}}</template>
+                </el-table-column>
+                <el-table-column prop="time" label="剩余张数">
+                    <template slot-scope="scope">{{scope.row.remainTicketsNumber}}</template>
                 </el-table-column>
                 <el-table-column prop="string" label="票价上报方式">
                     <template slot-scope="scope">
@@ -2223,6 +2234,7 @@ export default {
                 target: document.querySelector('.div1')
             });
             let cinemaName = this.query.cinemaName;
+            let orderNumber = this.query.orderNumber;
             let cinemaCode = this.query.cinemaCode;
             let belongBusinessCode = this.query.belongBusinessCode;
             let paymentType = this.query.paymentType;
@@ -2232,6 +2244,9 @@ export default {
             let endDate = this.query.endDate;
             if (!cinemaName) {
                 cinemaName = '';
+            }
+            if (!orderNumber) {
+                orderNumber = '';
             }
             if (!cinemaCode) {
                 cinemaCode = '';
@@ -2256,6 +2271,7 @@ export default {
             }
             let jsonArr = [];
             jsonArr.push({ key: 'cinemaName', value: cinemaName });
+            jsonArr.push({ key: 'orderNumber', value: orderNumber });
             jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
             jsonArr.push({ key: 'belongBusinessCode', value: belongBusinessCode });
             jsonArr.push({ key: 'paymentType', value: paymentType });

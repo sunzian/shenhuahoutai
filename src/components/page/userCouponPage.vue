@@ -84,7 +84,7 @@
                 <el-table-column prop="name" label="用户名称" width="100">
                     <template slot-scope="scope">{{scope.row.userName}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="用户手机号" width="100">
+                <el-table-column prop="name" label="用户手机号" width="120">
                     <template slot-scope="scope">{{scope.row.userMobile}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="优惠券名称" width="260">

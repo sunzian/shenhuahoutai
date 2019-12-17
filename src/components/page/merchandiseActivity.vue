@@ -204,11 +204,11 @@
                             format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
                 </el-form-item>
-                <el-form-item :required="true" label="支付类型：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="可用支付方式：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.validPayType">
-                        <el-radio label="0">全部</el-radio>
-                        <el-radio label="1">仅非会员卡支付</el-radio>
-                        <el-radio label="2">仅会员卡支付</el-radio>
+                        <el-radio label="0">全部可用</el-radio>
+                        <el-radio label="1">仅非会员卡支付可用</el-radio>
+                        <el-radio label="2">仅会员卡支付可用</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" label="开启状态：" :label-width="formLabelWidth">
@@ -364,7 +364,7 @@
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oSelectMerchandiseType != 0" label="选择商品" :label-width="formLabelWidth">
-                    <el-button type="primary" @click="openNext">点击选择</el-button>
+                    <el-button type="primary" @click="openNext1">点击选择</el-button>
                 </el-form-item>
                 <el-form-item
                         label="所选商品"
@@ -404,11 +404,11 @@
                             format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
                 </el-form-item>
-                <el-form-item :required="true" label="支付类型：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="可用支付方式：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oValidPayType">
-                        <el-radio label="0">全部</el-radio>
-                        <el-radio label="1">仅非会员卡支付</el-radio>
-                        <el-radio label="2">仅会员卡支付</el-radio>
+                        <el-radio label="0">全部可用</el-radio>
+                        <el-radio label="1">仅非会员卡支付可用</el-radio>
+                        <el-radio label="2">仅会员卡支付可用</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" label="开启状态：" :label-width="formLabelWidth">
@@ -921,7 +921,7 @@
                     return;
                 }
                 if(!this.oForm.validPayType){
-                    this.message = '支付类型不能为空，请检查！';
+                    this.message = '可用支付方式不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
@@ -1180,6 +1180,7 @@
                     loading.close();
                     if (data.data.code == 'success') {
                         this.editVisible = true;
+                        console.log(JSON.parse(Decrypt(data.data.data)));
                         this.oName = JSON.parse(Decrypt(data.data.data)).name;
                         this.oCinemaCode = JSON.parse(Decrypt(data.data.data)).cinemaCode;
                         if (JSON.parse(Decrypt(data.data.data)).reduceType == 1) {
@@ -1373,7 +1374,7 @@
                     return;
                 }
                 if(!this.oValidPayType){
-                    this.message = '支付类型不能为空，请检查！';
+                    this.message = '可用支付方式不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
@@ -1487,6 +1488,7 @@
                 jsonArr.push({ key: 'id', value: this.form.id });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
+                console.log(jsonArr);
                 let params = ParamsAppend(jsonArr);
                 https.fetchPost('merchandiseDiscountActivity/updateById', params).then(data => {
                     loading.close();
@@ -1778,6 +1780,55 @@
                     }).catch(err=>{
                         loading.close();
                         console.log(err)
+                        }
+                    )
+                }, 500);
+            },
+            openNext1() {
+                //获取商品列表
+                const loading = this.$loading({
+                    lock: true,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)',
+                    target: document.querySelector('.div1')
+                });
+                setTimeout(() => {
+                    let jsonArr = [];
+                    let merchandiseName = this.query.merchandiseName;
+                    if(!merchandiseName){
+                        merchandiseName=''
+                    }
+                    jsonArr.push({key:"merchandiseName",value:merchandiseName});
+                    jsonArr.push({key:"pageNo",value:this.query.aPageNo});
+                    jsonArr.push({key:"pageSize",value:this.query.aPageSize});
+                    jsonArr.push({key:"merchandiseStatus",value:1});
+                    jsonArr.push({key:"cinemaCode",value:this.oCinemaCode});
+                    let sign =md5(preSign(jsonArr));
+                    jsonArr.push({key:"sign",value:sign});
+                    var params = ParamsAppend(jsonArr);
+                    https.fetchPost('/merchandise/list',params).then((data) => {
+                        loading.close();
+                        if(data.data.code=='success') {
+                            this.drawer=true;
+                            var oData = JSON.parse(Decrypt(data.data.data));
+                            this.sellTableData = oData.data;
+                            this.query.aPageSize = oData.pageSize;
+                            this.query.aPageNo = oData.pageNo;
+                            this.query.aTotalCount = oData.totalCount;
+                            this.query.aTotalPage = oData.totalPage
+                        }else if(data.data.code=='nologin'){
+                            this.message=data.data.message
+                            this.open()
+                            this.$router.push('/login');
+                        }else{
+                            this.message=data.data.message
+                            this.open()
+                        }
+
+                    }).catch(err=>{
+                            loading.close();
+                            console.log(err)
                         }
                     )
                 }, 500);

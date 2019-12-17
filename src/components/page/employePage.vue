@@ -222,7 +222,7 @@
             </div>
         </el-dialog>
         <!-- 编辑弹出框 -->
-        <el-dialog :close-on-click-modal="false" title="详情" :visible.sync="editVisible">
+        <el-dialog :close-on-click-modal="false" title="编辑" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
                 <el-form-item :required="true" label="员工名称：" :label-width="formLabelWidth">
                     <el-input
@@ -523,14 +523,32 @@ export default {
                 target: document.querySelector('.div1')
             });
             if(!this.oForm.name){
-                this.message = '必填项不能为空，请检查！';
+                this.message = '员工名称不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(this.oForm.employeeMobile.length!=11){
+                this.message = '请输入正确的员工手机号码！';
                 this.open();
                 loading.close();
                 return;
             }
             if(this.oForm.couponGroupStatus==1){
-                if(!this.oForm.overDays||!this.groupName){
-                    this.message = '必填项不能为空，请检查！';
+                if(!this.groupName){
+                    this.message = '所选券包不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if(this.oForm.overDays<1){
+                    this.message = '领取后几天过期必须大于1，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if(!this.oForm.overDays||this.oForm.overDays==''){
+                    this.message = '领取后几天过期不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
@@ -729,14 +747,32 @@ export default {
                 target: document.querySelector('.div1')
             });
             if(!this.oName){
-                this.message = '必填项不能为空，请检查！';
+                this.message = '员工名称不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(this.oEmployeeMobile.length!=11){
+                this.message = '请输入正确的员工手机号码！';
                 this.open();
                 loading.close();
                 return;
             }
             if(this.oCouponGroupStatus==1){
-                if(!this.oOverDays||!this.groupName){
-                    this.message = '必填项不能为空，请检查！';
+                if(!this.groupName){
+                    this.message = '所选券包不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if(this.oOverDays<1){
+                    this.message = '领取后几天过期必须大于1，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if(!this.oOverDays||this.oOverDays==''){
+                    this.message = '领取后几天过期不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;

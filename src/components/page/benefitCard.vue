@@ -265,7 +265,7 @@
                     <el-input style="width: 150px" v-model="oForm.discountMoneyFilm" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="折扣" :label-width="formLabelWidth" v-if="oForm.reduceTypeFilm == 3&&oForm.cardType==1&&oForm.isFilmJoin==1">
-                    <el-input style="width: 150px" v-model="oForm.discountMoneyFilm" autocomplete="off"></el-input>%
+                    <el-input placeholder="若打95折优惠结算就填写95" style="width: 250px" v-model="oForm.discountMoneyFilm" autocomplete="off"></el-input>%
                 </el-form-item>
                 <el-form-item :required="true" v-if="oForm.isFilmJoin==1&&oForm.cardType==1"  label="是否限制每部影片购买数量" :label-width="formLabelWidth">
                     <el-select v-model="oForm.isLimitEachFilm" placeholder="请选择" @change="clearIsLimitEachFilm()">
@@ -301,6 +301,32 @@
                 <el-form-item :required="true" label="限购张数" v-if="oForm.isLimitFilm==1&&oForm.cardType==1&&oForm.isFilmJoin==1" :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oForm.numberFilm" autocomplete="off"></el-input>
                 </el-form-item>
+                <el-form-item label="影票可用时间段" :label-width="formLabelWidth" v-if="oForm.cardType==1&&oForm.isFilmJoin==1">
+                    <el-time-picker
+                            is-range
+                            type="date"
+                            format="HH:mm:ss"
+                            value-format="HH:mm:ss"
+                            v-model="value1"
+                            range-separator="至"
+                            start-placeholder="开始时间"
+                            end-placeholder="结束时间"
+                            placeholder="选择时间范围">
+                    </el-time-picker>
+                    <span style="cursor: pointer;color: blue" @click="addTime">添加</span>
+                </el-form-item>
+                <el-form-item
+                        label="所选时间段"
+                        :label-width="formLabelWidth"
+                        v-if="dateInfo.length>0&&oForm.cardType==1&&oForm.isFilmJoin==1">
+                    <div v-for="(item, index) in dateInfo" :key="index">
+                        {{item}}
+                        <span
+                                style="color:red;cursor: pointer;"
+                                @click="deletTime(index)"
+                        >删除</span>
+                    </div>
+                </el-form-item>
                 <el-form-item :required="true" v-if="oForm.cardType==1" label="卖品是否参与" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.isMerchandiseJoin" @change="clearMerchandiseJoin()">
                         <el-radio label="1">参加</el-radio>
@@ -327,7 +353,7 @@
                     <el-input style="width: 150px" v-model="oForm.discountMoneyMerchandise" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="折扣" :label-width="formLabelWidth" v-if="oForm.reduceTypeMerchandise == 3&&oForm.cardType==1&&oForm.isMerchandiseJoin==1">
-                    <el-input style="width: 150px" v-model="oForm.discountMoneyMerchandise" autocomplete="off"></el-input>%
+                    <el-input placeholder="若打95折优惠结算就填写95" style="width: 250px" v-model="oForm.discountMoneyMerchandise" autocomplete="off"></el-input>%
                 </el-form-item>
                 <el-form-item :required="true" v-if="oForm.isMerchandiseJoin==1&&oForm.cardType==1"  label="选择商品" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.selectMerchandiseType" @change="clearMerchandiseType()">
@@ -416,11 +442,11 @@
                 <el-form-item :required="true" label="有效期数量" :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oForm.number" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="支付类型" :label-width="formLabelWidth" v-if="oForm.cardType==1">
+                <el-form-item :required="true" label="可用支付方式" :label-width="formLabelWidth" v-if="oForm.cardType==1">
                     <el-radio-group v-model="oForm.validPayType">
-                        <el-radio label="0">全部</el-radio>
-                        <el-radio label="1">仅非会员卡支付</el-radio>
-                        <el-radio label="2">仅会员卡支付</el-radio>
+                        <el-radio label="0">全部可用</el-radio>
+                        <el-radio label="1">仅非会员卡支付可用</el-radio>
+                        <el-radio label="2">仅会员卡支付可用</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" label="节假日可用" :label-width="formLabelWidth" v-if="oForm.cardType==1">
@@ -432,32 +458,6 @@
                                 :value="item.value"
                         ></el-option>
                     </el-select>
-                </el-form-item>
-                <el-form-item label="可用时间段" :label-width="formLabelWidth" v-if="oForm.cardType==1">
-                    <el-time-picker
-                            is-range
-                            type="date"
-                            format="HH:mm:ss"
-                            value-format="HH:mm:ss"
-                            v-model="value1"
-                            range-separator="至"
-                            start-placeholder="开始时间"
-                            end-placeholder="结束时间"
-                            placeholder="选择时间范围">
-                    </el-time-picker>
-                    <span style="cursor: pointer;color: blue" @click="addTime">添加</span>
-                </el-form-item>
-                <el-form-item
-                        label="所选时间段"
-                        :label-width="formLabelWidth"
-                        v-if="dateInfo.length>0&&oForm.cardType==1">
-                    <div v-for="(item, index) in dateInfo" :key="index">
-                        {{item}}
-                        <span
-                                style="color:red;cursor: pointer;"
-                                @click="deletTime(index)"
-                        >删除</span>
-                    </div>
                 </el-form-item>
                 <el-form-item label="星期几不可用" :label-width="formLabelWidth" v-if="oForm.cardType==1">
                     <el-checkbox-group :max="6" v-model="oForm.validWeekDay" @change="selectDay">
@@ -657,7 +657,7 @@
                     <el-input style="width: 150px" v-model="oDiscountMoneyFilm" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="折扣" :label-width="formLabelWidth" v-if="oReduceTypeFilm == 3&&oCardType==1&&oIsFilmJoin==1">
-                    <el-input style="width: 150px" v-model="oDiscountMoneyFilm" autocomplete="off"></el-input>%
+                    <el-input  placeholder="若打95折优惠结算就填写95" style="width: 250px" v-model="oDiscountMoneyFilm" autocomplete="off"></el-input>%
                 </el-form-item>
                 <el-form-item :required="true" v-if="oIsFilmJoin==1&&oCardType==1"  label="是否限制每部影片购买数量" :label-width="formLabelWidth">
                     <el-select v-model="oIsLimitEachFilm" placeholder="请选择" @change="clearIsLimitEachFilm()">
@@ -693,6 +693,32 @@
                 <el-form-item :required="true" label="限购张数" v-if="oIsLimitFilm==1&&oCardType==1&&oIsFilmJoin==1" :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oNumberFilm" autocomplete="off"></el-input>
                 </el-form-item>
+                <el-form-item label="影票可用时间段" :label-width="formLabelWidth" v-if="oCardType==1&&oIsFilmJoin==1">
+                    <el-time-picker
+                            is-range
+                            type="date"
+                            format="HH:mm:ss"
+                            value-format="HH:mm:ss"
+                            v-model="value1"
+                            range-separator="至"
+                            start-placeholder="开始时间"
+                            end-placeholder="结束时间"
+                            placeholder="选择时间范围">
+                    </el-time-picker>
+                    <span style="cursor: pointer;color: blue" @click="addTime">添加</span>
+                </el-form-item>
+                <el-form-item
+                        label="所选时间段"
+                        :label-width="formLabelWidth"
+                        v-if="dateInfo.length>0&&oCardType==1&&oIsFilmJoin==1">
+                    <div v-for="(item, index) in dateInfo" :key="index">
+                        {{item}}
+                        <span
+                                style="color:red;cursor: pointer;"
+                                @click="deletTime(index)"
+                        >删除</span>
+                    </div>
+                </el-form-item>
                 <el-form-item :required="true" v-if="oCardType==1" label="卖品是否参与" :label-width="formLabelWidth">
                     <el-radio-group v-model="oIsMerchandiseJoin" @change="clearMerchandiseJoin()">
                         <el-radio label="1">参加</el-radio>
@@ -719,7 +745,7 @@
                     <el-input style="width: 150px" v-model="oDiscountMoneyMerchandise" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="折扣" :label-width="formLabelWidth" v-if="oIsMerchandiseJoin==1&&oReduceTypeMerchandise == 3&&oCardType==1">
-                    <el-input style="width: 150px" v-model="oDiscountMoneyMerchandise" autocomplete="off"></el-input>%
+                    <el-input  placeholder="若打95折优惠结算就填写95" style="width: 250px" v-model="oDiscountMoneyMerchandise" autocomplete="off"></el-input>%
                 </el-form-item>
                 <el-form-item :required="true" v-if="oIsMerchandiseJoin==1&&oCardType==1"  label="选择商品" :label-width="formLabelWidth">
                     <el-radio-group v-model="oSelectMerchandiseType" @change="clearMerchandiseType()">
@@ -808,11 +834,11 @@
                 <el-form-item :required="true" label="有效期数量" :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oNumber" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="支付类型" :label-width="formLabelWidth" v-if="oCardType==1">
+                <el-form-item :required="true" label="可用支付方式" :label-width="formLabelWidth" v-if="oCardType==1">
                     <el-radio-group v-model="oValidPayType">
-                        <el-radio label="0">全部</el-radio>
-                        <el-radio label="1">仅非会员卡支付</el-radio>
-                        <el-radio label="2">仅会员卡支付</el-radio>
+                        <el-radio label="0">全部可用</el-radio>
+                        <el-radio label="1">仅非会员卡支付可用</el-radio>
+                        <el-radio label="2">仅会员卡支付可用</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" label="节假日可用" :label-width="formLabelWidth" v-if="oCardType==1">
@@ -824,32 +850,6 @@
                                 :value="item.value"
                         ></el-option>
                     </el-select>
-                </el-form-item>
-                <el-form-item label="可用时间段" :label-width="formLabelWidth" v-if="oCardType==1">
-                    <el-time-picker
-                            is-range
-                            type="date"
-                            format="HH:mm:ss"
-                            value-format="HH:mm:ss"
-                            v-model="value1"
-                            range-separator="至"
-                            start-placeholder="开始时间"
-                            end-placeholder="结束时间"
-                            placeholder="选择时间范围">
-                    </el-time-picker>
-                    <span style="cursor: pointer;color: blue" @click="addTime">添加</span>
-                </el-form-item>
-                <el-form-item
-                        label="所选时间段"
-                        :label-width="formLabelWidth"
-                        v-if="dateInfo.length>0&&oCardType==1">
-                    <div v-for="(item, index) in dateInfo" :key="index">
-                        {{item}}
-                        <span
-                                style="color:red;cursor: pointer;"
-                                @click="deletTime(index)"
-                        >删除</span>
-                    </div>
                 </el-form-item>
                 <el-form-item label="星期几不可用" :label-width="formLabelWidth" v-if="oCardType==1">
                     <el-checkbox-group :max="6" v-model="oCheckedDays" @change="selectDay">
@@ -1667,7 +1667,7 @@
                         return;
                     }
                     if(!this.oForm.validPayType){
-                        this.message = '支付类型不能为空，请检查！';
+                        this.message = '可用支付方式不能为空，请检查！';
                         this.open();
                         loading.close();
                         return;
@@ -2580,7 +2580,7 @@
                         return;
                     }
                     if(!this.oValidPayType){
-                        this.message = '支付类型不能为空，请检查！';
+                        this.message = '可用支付方式不能为空，请检查！';
                         this.open();
                         loading.close();
                         return;

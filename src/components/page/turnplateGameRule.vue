@@ -146,11 +146,11 @@
                 </el-form-item>
                 <el-form-item :required="true" label="大转盘背景图" :label-width="formLabelWidth">
                     <el-popover placement="right" title trigger="hover">
-                        <img style="width: 400px" :src="this.form.imageUrl" />
+                        <img style="width: 400px" :src="this.oImageUrl" />
                         <img
                             slot="reference"
-                            :src="this.form.imageUrl"
-                            :alt="this.form.imageUrl"
+                            :src="this.oImageUrl"
+                            :alt="this.oImageUrl"
                             style="max-height: 50px;max-width: 130px"
                         />
                     </el-popover>
@@ -160,6 +160,8 @@
                         class="upload-demo"
                         ref="upload"
                         drag
+                        :limit="1"
+                        :on-exceed="exceed"
                         action="/api/upload/uploadImage"
                         :on-success="unSuccess"
                         multiple
@@ -318,11 +320,11 @@
                 </el-form-item>
                 <el-form-item :required="true" label="大转盘背景图" :label-width="formLabelWidth">
                     <el-popover placement="right" title trigger="hover">
-                        <img style="width: 400px" :src="this.form.imageUrl" />
+                        <img style="width: 400px" :src="this.oImageUrl" />
                         <img
                             slot="reference"
-                            :src="this.form.imageUrl"
-                            :alt="this.form.imageUrl"
+                            :src="this.oImageUrl"
+                            :alt="this.oImageUrl"
                             style="max-height: 50px;max-width: 130px"
                         />
                     </el-popover>
@@ -332,6 +334,8 @@
                         class="upload-demo"
                         ref="download"
                         drag
+                        :limit="1"
+                        :on-exceed="exceed"
                         action="/api/upload/uploadImage"
                         :on-success="unSuccess"
                         multiple
@@ -487,23 +491,21 @@
                 </el-form-item>
                 <el-form-item :required="true" label="奖品图片" :label-width="formLabelWidth">
                     <el-upload
-                        :before-upload="beforeUploadPrize"
-                        :data="type"
-                        class="upload-demo"
-                        drag
-                        ref="download"
-                        action="/api/upload/uploadImage"
-                        :on-success="onSuccess"
-                        multiple
+                            class="upload-demo"
+                            action="/api/upload/uploadImage"
+                            :before-upload="beforeUploadPrize"
+                            :data="type"
+                            :limit="1"
+                            :on-exceed="exceed"
+                            ref="download"
+                            :on-success="onSuccess"
+                            :file-list="fileList"
+                            list-type="picture"
                     >
-                        <i class="el-icon-upload"></i>
-                        <div class="el-upload__text">
-                            将文件拖到此处，或
-                            <em>点击上传</em>
-                        </div>
+                        <el-button size="small" type="primary">点击上传</el-button>
                         <div
-                            class="el-upload__tip"
-                            slot="tip"
+                                slot="tip"
+                                class="el-upload__tip"
                         >只能上传jpg/png文件，且不超过100kb 建议尺寸120*120或按比例上传</div>
                     </el-upload>
                 </el-form-item>
@@ -592,6 +594,8 @@
                         :data="type"
                         class="upload-demo"
                         drag
+                        :limit="1"
+                        :on-exceed="exceed"
                         ref="snload"
                         action="/api/upload/uploadImage"
                         :on-success="snSuccess"
@@ -677,6 +681,7 @@ export default {
             changeShow: false,
             drawer: false,
             couponName: '',
+            fileList: [],
             sellTableData: [],
             cinemaInfo: [],
             showSell: true, //卖品信息页面是否展示开关
@@ -789,6 +794,13 @@ export default {
         this.getAllCinema();
     },
     methods: {
+        exceed(data){
+            console.log(data);
+            if(data.length==1){
+                this.message = '只能上传一张图片，如需重新上传请删除第一张图！';
+                this.open();
+            }
+        },
         match() {
             if (this.form.prizeLevel < 1 || this.form.prizeLevel > 7) {
                 this.message = '请输入1-7的数字';
@@ -832,7 +844,7 @@ export default {
                 this.$refs.download.clearFiles();
                 return;
             }
-            this.form.imageUrl = data.data;
+            this.oImageUrl = data.data;
             if (data.code == 'nologin') {
                 this.message = data.message;
                 this.open();
@@ -959,6 +971,7 @@ export default {
                 this.message = '奖项数量最多添加8个';
                 this.open();
             } else {
+                this.fileList=[];
                 this.editVisible = true;
             }
         },
@@ -977,7 +990,7 @@ export default {
                 loading.close();
                 return;
             }
-            if (!this.form.imageUrl) {
+            if (!this.oImageUrl) {
                 this.message = '大转盘背景图不能为空，请检查！';
                 this.open();
                 loading.close();
@@ -1024,7 +1037,7 @@ export default {
                 jsonArr.push({ key: 'cinemaCode', value: this.cinemaCode });
                 jsonArr.push({ key: 'gameName', value: this.oForm.gameName });
                 jsonArr.push({ key: 'startDate', value: this.oForm.startDate });
-                jsonArr.push({ key: 'imageUrl', value: this.form.imageUrl });
+                jsonArr.push({ key: 'imageUrl', value: this.oImageUrl });
                 jsonArr.push({ key: 'endDate', value: this.oForm.endDate });
                 jsonArr.push({ key: 'status', value: this.oForm.status });
                 jsonArr.push({ key: 'prizeNumber', value: this.prizeInfoList.length });
@@ -1077,7 +1090,7 @@ export default {
                 loading.close();
                 return;
             }
-            if (!this.form.imageUrl) {
+            if (!this.oImageUrl) {
                 this.message = '大转盘背景图不能为空，请检查！';
                 this.open();
                 loading.close();
@@ -1124,7 +1137,7 @@ export default {
                 jsonArr.push({ key: 'cinemaCode', value: this.cinemaCode });
                 jsonArr.push({ key: 'gameName', value: this.form.gameName });
                 jsonArr.push({ key: 'startDate', value: this.form.startDate });
-                jsonArr.push({ key: 'imageUrl', value: this.form.imageUrl });
+                jsonArr.push({ key: 'imageUrl', value: this.oImageUrl });
                 jsonArr.push({ key: 'endDate', value: this.form.endDate });
                 jsonArr.push({ key: 'status', value: this.form.status });
                 jsonArr.push({ key: 'prizeNumber', value: this.prizeInfoList.length });

@@ -176,11 +176,11 @@
                 </el-form-item>
                 <el-form-item label="商品图片" :label-width="formLabelWidth">
                     <el-popover placement="right" title trigger="hover">
-                        <img style="width:400px" :src="form.imageUrl" />
+                        <img style="width:400px" :src="oImageUrl" />
                         <img
                             slot="reference"
-                            :src="form.imageUrl"
-                            :alt="form.imageUrl"
+                            :src="oImageUrl"
+                            :alt="oImageUrl"
                             style="max-height: 50px;max-width: 130px"
                         />
                     </el-popover>
@@ -189,6 +189,8 @@
                         :data="type"
                         class="upload-demo"
                         drag
+                        :limit="1"
+                        :on-exceed="exceed"
                         ref="upload"
                         action="/api/upload/uploadImage"
                         :on-success="unSuccess"
@@ -276,6 +278,7 @@ export default {
                 type: ''
             },
             oName: '',
+            oImageUrl: '',
             oMerchandiseStatus: '',
             message: '', //弹出框消息
             query: {
@@ -329,6 +332,13 @@ export default {
         this.getAllCinema();
     },
     methods: {
+        exceed(data){
+            console.log(data);
+            if(data.length==1){
+                this.message = '只能上传一张图片，如需重新上传请删除第一张图！';
+                this.open();
+            }
+        },
         delChange(index, row) {
             //删除数据
             this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
@@ -409,7 +419,7 @@ export default {
                         if (data.data.code == 'success') {
                             this.editVisible = true;
                             this.form.name = JSON.parse(Decrypt(data.data.data)).merchandise.merchandiseName;
-                            this.form.imageUrl = JSON.parse(Decrypt(data.data.data)).merchandise.merchandisePic;
+                            this.oImageUrl = JSON.parse(Decrypt(data.data.data)).merchandise.merchandisePic;
                             this.form.merchandiseDesc = JSON.parse(Decrypt(data.data.data)).merchandise.merchandiseDesc;
                             this.form.standardPrice = JSON.parse(Decrypt(data.data.data)).merchandise.standardPrice;
                             this.form.settlePrice = JSON.parse(Decrypt(data.data.data)).merchandise.settlePrice;
@@ -450,9 +460,6 @@ export default {
                 target: document.querySelector('.div1')
             });
             setTimeout(() => {
-                if (!this.form.image_url) {
-                    this.form.image_url = this.form.imageUrl;
-                }
                 if(!this.oMerchandiseStatus){
                     this.message = '必填项不能为空，请检查！';
                     this.open();
@@ -464,7 +471,7 @@ export default {
                 jsonArr.push({ key: 'showSeqNo', value: this.form.showSeqNo });
                 jsonArr.push({ key: 'merchandiseDesc', value: this.form.merchandiseDesc });
                 jsonArr.push({ key: 'stockCount', value: this.form.stockCount });
-                jsonArr.push({ key: 'merchandisePic', value: this.form.image_url });
+                jsonArr.push({ key: 'merchandisePic', value: this.oImageUrl });
                 jsonArr.push({ key: 'typeCode', value: this.form.typeCode });
                 jsonArr.push({ key: 'merchandiseStatus', value: this.oMerchandiseStatus });
                 let sign = md5(preSign(jsonArr));
@@ -748,7 +755,7 @@ export default {
         onSuccess(data) {
             //上传文件 登录超时
             // console.log(data);
-            this.form.image_url = data.data;
+            this.oImageUrl = data.data;
             if (data.code == 'nologin') {
                 this.message = data.message;
                 this.open();
@@ -763,7 +770,7 @@ export default {
                 this.$refs.upload.clearFiles();
                 return;
             }
-            this.form.image_url = data.data;
+            this.oImageUrl = data.data;
             if (data.code == 'nologin') {
                 this.$refs.upload.clearFiles();
                 this.message = data.message;

@@ -194,12 +194,22 @@
                     ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="封面图片" :label-width="formLabelWidth">
+                    <el-popover placement="right" title trigger="hover">
+                        <img style="width: 400px" :src="oForm.imageUrl" />
+                        <img
+                                slot="reference"
+                                :src="oForm.imageUrl"
+                                :alt="oForm.imageUrl"
+                                style="max-height: 50px;max-width: 130px"
+                        />
+                    </el-popover>
                     <el-upload
                         :before-upload="beforeUpload"
                         :data="type"
                         class="upload-demo"
                         drag
                         :limit="1"
+                        :on-exceed="exceed"
                         ref="download"
                         action="/api/upload/uploadImage"
                         :on-success="onSuccess"
@@ -273,6 +283,7 @@
                         class="upload-demo"
                         drag
                         :limit="1"
+                        :on-exceed="exceed"
                         ref="upload"
                         action="/api/upload/uploadImage"
                         :on-success="unSuccess"
@@ -483,6 +494,13 @@ export default {
         this.getAllCinema();
     },
     methods: {
+        exceed(data){
+            console.log(data);
+            if(data.length==1){
+                this.message = '只能上传一张图片，如需重新上传请删除第一张图！';
+                this.open();
+            }
+        },
         addPage() {
             //获取新增按钮权限
             const loading = this.$loading({
@@ -527,8 +545,32 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            if(!this.oForm.title||!this.summary||!this.imageUrl||!this.oForm.content||!this.oForm.status){
-                this.message = '必填项不能为空，请检查！';
+            if(!this.oForm.title){
+                this.message = '标题不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.summary){
+                this.message = '概述不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.imageUrl){
+                this.message = '封面图片不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.oForm.content){
+                this.message = '内容不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.oForm.status){
+                this.message = '上线状态不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
@@ -699,8 +741,32 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            if(!this.oTitle||!this.oSummary||!this.oImageUrl||!this.oContent||!this.oStatus){
-                this.message = '必填项不能为空，请检查！';
+            if(!this.oTitle){
+                this.message = '标题不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.oSummary){
+                this.message = '概述不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.oImageUrl){
+                this.message = '封面图片不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.oContent){
+                this.message = '内容不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.oStatus){
+                this.message = '上线状态不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;

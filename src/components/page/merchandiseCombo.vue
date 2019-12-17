@@ -180,33 +180,23 @@
                     <el-input style="width: 250px" v-model="oForm.comboName" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="套餐图片" :label-width="formLabelWidth">
-                    <el-popover placement="right" title trigger="hover">
-                        <img style="width: 400px" :src="oForm.image_url" />
-                        <img
-                            slot="reference"
-                            :src="oForm.image_url"
-                            :alt="oForm.image_url"
-                            style="max-height: 50px;max-width: 130px"
-                        />
-                    </el-popover>
                     <el-upload
-                        :before-upload="beforeUpload"
-                        :data="type"
-                        class="upload-demo"
-                        ref="upload"
-                        drag
-                        :limit="1"
-                        :on-exceed="exceed"
-                        action="/api/upload/uploadImage"
-                        :on-success="onSuccess"
-                        multiple
+                            class="upload-demo"
+                            action="/api/upload/uploadImage"
+                            :before-upload="beforeUpload"
+                            :data="type"
+                            :limit="1"
+                            :on-exceed="exceed"
+                            ref="download"
+                            :on-success="onSuccess"
+                            :file-list="fileList"
+                            list-type="picture"
                     >
-                        <i class="el-icon-upload"></i>
-                        <div class="el-upload__text">
-                            将文件拖到此处，或
-                            <em>点击上传</em>
-                        </div>
-                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过200kb 建议尺寸300*240或按比例上传</div>
+                        <el-button size="small" type="primary">点击上传</el-button>
+                        <div
+                                slot="tip"
+                                class="el-upload__tip"
+                        >只能上传jpg/png文件，且不超过200kb 建议尺寸300*240或按比例上传</div>
                     </el-upload>
                 </el-form-item>
                 <el-form-item :required="true" label="选择商品" :label-width="formLabelWidth">
@@ -270,11 +260,11 @@
                 </el-form-item>
                 <el-form-item :required="true" label="套餐图片" :label-width="formLabelWidth">
                     <el-popover placement="right" title trigger="hover">
-                        <img style="width: 400px" :src="form.imageUrl" />
+                        <img style="width: 400px" :src="oImageUrl" />
                         <img
                             slot="reference"
-                            :src="form.imageUrl"
-                            :alt="form.imageUrl"
+                            :src="oImageUrl"
+                            :alt="oImageUrl"
                             style="max-height: 50px;max-width: 130px"
                         />
                     </el-popover>
@@ -441,7 +431,7 @@ export default {
         return {
             sellIndex: '', //被选中的index值
             selectedSell: [], //被选中商品
-            selectValue: [],
+            fileList: [],
             drawer: false, //新增抽屉弹出框
             showSell: true, //卖品信息页面是否展示开关
             type: {
@@ -461,7 +451,8 @@ export default {
                 type: [],
                 resource: '',
                 desc: '',
-                value: '1'
+                value: '1',
+                merchandiseCode: '',
             },
             tableData: [],
             oTableData: [],
@@ -512,6 +503,7 @@ export default {
             value: '',
             restaurants: [],
             state: '',
+            oImageUrl: '',
             timeout: null,
             selectFilm: {},
             filmInfo: [],
@@ -557,6 +549,7 @@ export default {
                         loading.close();
                         if (data.data.code == 'success') {
                             this.selectedSell = [];
+                            this.fileList = [];
                             this.oForm.image_url = '';
                             if (this.$refs.upload) {
                                 this.$refs.upload.clearFiles();
@@ -670,6 +663,7 @@ export default {
                 this.selectedSell.push(this.sellTableData[this.sellIndex]);
             }
             this.oForm.originalPrice=this.sellTableData[this.sellIndex].settlePrice;
+            console.log(this.selectedSell);
             this.drawer = false;
         },
         openNext() {     //获取商品列表
@@ -798,12 +792,18 @@ export default {
                     .then(data => {
                         loading.close();
                         if (data.data.code == 'success') {
+                            this.oForm.merchandiseCode=(JSON.parse(Decrypt(data.data.data))).merchandiseSet;
+                            console.log(this.oForm.merchandiseCode);
+                            let json ={
+                                merchandiseName:(JSON.parse(Decrypt(data.data.data))).merchandiseName,
+                                merchandiseCode:(JSON.parse(Decrypt(data.data.data))).merchandiseSet
+                            };
                             if (this.$refs.download){
                                 this.$refs.download.clearFiles();
                             }
                             this.editVisible = true;
                             // this.form.typeName=JSON.parse(Decrypt(data.data.data)).typeName;
-                            // this.form.imageUrl=JSON.parse(Decrypt(data.data.data)).imageUrl;
+                            this.oImageUrl=JSON.parse(Decrypt(data.data.data)).imageUrl;
                             // this.form.showSeqNo=JSON.parse(Decrypt(data.data.data)).showSeqNo;
                             //套餐类型下拉选显示对应的选项
                             for (let x in this.showTypes) {
@@ -819,6 +819,10 @@ export default {
                                     break;
                                 }
                             }
+                            if(this.selectedSell[0]){
+                                return
+                            }
+                            this.selectedSell.push(json);
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
                             this.open();
@@ -836,6 +840,7 @@ export default {
         },
         // 编辑操作
         exChanger() {
+            console.log(this.selectedSell);
             const loading = this.$loading({
                 lock: true,
                 text: 'Loading',
@@ -843,16 +848,13 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            if (!this.form.image_url) {
-                this.form.image_url = this.form.imageUrl;
-            }
             if(!this.form.comboName){
                 this.message = '套餐名称不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
             }
-            if(!this.form.image_url){
+            if(!this.oImageUrl){
                 this.message = '套餐图片不能为空，请检查！';
                 this.open();
                 loading.close();
@@ -881,15 +883,16 @@ export default {
                 jsonArr.push({ key: 'id', value: this.form.id });
                 jsonArr.push({ key: 'cinemaCode', value: this.cinemaCode });
                 jsonArr.push({ key: 'comboName', value: this.form.comboName });
-                jsonArr.push({ key: 'imageUrl', value: this.form.image_url });
+                jsonArr.push({ key: 'imageUrl', value: this.oImageUrl });
                 jsonArr.push({ key: 'showSeqNo', value: this.form.showSeqNo });
                 jsonArr.push({ key: 'comboType', value: this.form.comboType });
-                jsonArr.push({ key: 'merchandiseSet', value: this.form.merchandiseSet });
+                jsonArr.push({ key: 'merchandiseSet', value: this.selectedSell[0].merchandiseCode });
                 jsonArr.push({ key: 'originalPrice', value: this.form.originalPrice });
                 jsonArr.push({ key: 'status', value: this.form.status });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
                 let params = ParamsAppend(jsonArr);
+                console.log(jsonArr);
                 https
                     .fetchPost('/merchandiseCombo/modifyMerchandiseCombo', params)
                     .then(data => {
@@ -1143,7 +1146,7 @@ export default {
                 this.$refs.download.clearFiles();
                 return;
             }
-            this.form.image_url = data.data;
+            this.oImageUrl = data.data;
             if (data.code == 'nologin') {
                 this.message = data.message;
                 this.open();

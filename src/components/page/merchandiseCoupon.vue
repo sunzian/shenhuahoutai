@@ -165,11 +165,11 @@
                         >{{item.merchandiseName}}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
-                <el-form-item :required="true" label="支付类型：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="可用支付方式：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.validPayType">
-                        <el-radio label="0">全部</el-radio>
-                        <el-radio label="1">仅非会员卡支付</el-radio>
-                        <el-radio label="2">仅会员卡支付</el-radio>
+                        <el-radio label="0">全部可用</el-radio>
+                        <el-radio label="1">仅非会员卡支付可用</el-radio>
+                        <el-radio label="2">仅会员卡支付可用</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" label="优惠方式：" :label-width="formLabelWidth">
@@ -179,12 +179,12 @@
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oForm.reduceType == 1" label="固定金额：" :label-width="formLabelWidth">
-                    <el-input placeholder="所选卖品以此价格结算" style="width: 150px" v-model="oForm.discountMoney" autocomplete="off"></el-input>
+                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" placeholder="所选卖品以此价格结算" style="width: 150px" v-model="oForm.discountMoney" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oForm.reduceType==2" label="减免金额：" :label-width="formLabelWidth">
                     满
-                    <el-input style="width: 150px" v-model="oForm.achieveMoney" autocomplete="off"></el-input>减
-                    <el-input style="width: 150px" v-model="oForm.discountMoney" autocomplete="off"></el-input>
+                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 150px" v-model="oForm.achieveMoney" autocomplete="off"></el-input>减
+                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 150px" v-model="oForm.discountMoney" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="开启状态：" :label-width="formLabelWidth">
                     <el-select v-model="oForm.status" placeholder="请选择">
@@ -283,11 +283,11 @@
                         >{{item.merchandiseName}}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
-                <el-form-item :required="true" label="支付类型：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="可用支付方式：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oValidPayType">
-                        <el-radio label="0">全部</el-radio>
-                        <el-radio label="1">仅非会员卡支付</el-radio>
-                        <el-radio label="2">仅会员卡支付</el-radio>
+                        <el-radio label="0">全部可用</el-radio>
+                        <el-radio label="1">仅非会员卡支付可用</el-radio>
+                        <el-radio label="2">仅会员卡支付可用</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" label="优惠方式：" :label-width="formLabelWidth">
@@ -297,12 +297,12 @@
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oReduceType == 1" label="固定金额：" :label-width="formLabelWidth">
-                    <el-input placeholder="所选卖品以此价格结算" style="width: 150px" v-model="oDiscountMoney" autocomplete="off"></el-input>
+                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" placeholder="所选卖品以此价格结算" style="width: 150px" v-model="oDiscountMoney" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oReduceType==2" label="减免金额：" :label-width="formLabelWidth">
                     满
-                    <el-input style="width: 150px" v-model="oAchieveMoney" autocomplete="off"></el-input>减
-                    <el-input style="width: 150px" v-model="oDiscountMoney" autocomplete="off"></el-input>
+                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 150px" v-model="oAchieveMoney" autocomplete="off"></el-input>减
+                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 150px" v-model="oDiscountMoney" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="开启状态：" :label-width="formLabelWidth">
                     <el-select v-model="oStatus" placeholder="请选择">
@@ -593,7 +593,7 @@ export default {
                 }
             }
             if (!this.oForm.validPayType){
-                this.message = '支付类型不能为空，请检查！';
+                this.message = '可用支付方式不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
@@ -606,18 +606,18 @@ export default {
             }
             if(this.oForm.reduceType==1){
                 if(this.oForm.discountMoney>=0){
+                    if(this.oForm.discountMoney<0){
+                        this.message = '固定金额不能小于0！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
                     if(!this.oForm.discountMoney){
                         this.message = '固定金额不能为空，请检查！';
                         this.open();
                         loading.close();
                         return;
                     }
-                }
-                if(this.oForm.discountMoney<0){
-                    this.message = '固定金额不能小于0！';
-                    this.open();
-                    loading.close();
-                    return;
                 }
             }
             if(this.oForm.reduceType==2){
@@ -940,7 +940,7 @@ export default {
                 }
             }
             if (!this.oValidPayType){
-                this.message = '支付类型不能为空，请检查！';
+                this.message = '可用支付方式不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
