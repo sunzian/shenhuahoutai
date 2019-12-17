@@ -321,6 +321,11 @@ export default new Router({
                     meta: { title: '充值规则管理' }
                 },
                 {
+                    path: '/cinemaPartnerPage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/cinemaPartnerPage.vue'),
+                    meta: { title: '充值规则管理' }
+                },
+                {
                     path: '/adminRechargeCardRulePage',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/adminRechargeCardRulePage.vue'),
                     meta: { title: '充值规则管理' }

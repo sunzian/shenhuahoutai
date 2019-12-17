@@ -526,6 +526,7 @@ export default {
                         this.dialogFormVisible = true;
                         this.oForm.merchandiseCode = [];
                         this.getAllGoods();
+                        console.log(JSON.parse(Decrypt(data.data.data)))
                         if (JSON.parse(Decrypt(data.data.data)).adminFlag <= 1) {
                             this.oForm.commonType = 1
                         } else {

@@ -122,7 +122,7 @@
                 <el-button
                     type="primary"
                     icon="el-icon-search"
-                    style="margin-top: 10px;width: 90px;"
+                    style="float: right;margin-top: 10px;width: 90px;"
                     @click="Search"
                     class="mr10"
                 >搜索</el-button>
@@ -130,7 +130,7 @@
                         type="primary"
                         @click="derive"
                         icon="el-icon-circle-plus-outline"
-                        style="float: right;margin-top: 10px"
+                        style="float: right;margin-right:10px;margin-top: 10px"
                 >导出</el-button>
             </div>
             <div class="handle-box">
@@ -617,13 +617,13 @@
                     ></el-input>
                 </el-form-item>
                 <!--<el-form-item label="退款状态" :label-width="formLabelWidth">-->
-                    <!--<el-input-->
+                <!--<el-input-->
                         <!--:disabled="true"-->
                         <!--style="width: 250px"-->
                         <!--v-model="form.refundStatus"-->
                         <!--autocomplete="off"-->
-                    <!--&gt;</el-input>-->
-                <!--</el-form-item>-->
+                <!--&gt;</el-input>-->
+            <!--</el-form-item>-->
                 <el-form-item label="退款失败原因" :label-width="formLabelWidth">
                     <el-input
                         :disabled="true"
@@ -775,7 +775,7 @@ export default {
             });
             setTimeout(() => {
                 let cinemaCode = this.query.cinemaCode;
-                let orderNo = this.query.orderNo;
+                let submitOrderCode = this.query.submitOrderCode;
                 let mobile = this.query.mobile;
                 let payWay = this.query.payWay;
                 let payStatus = this.query.payStatus;
@@ -791,8 +791,8 @@ export default {
                 if (!cardNo) {
                     cardNo = '';
                 }
-                if (!orderNo) {
-                    orderNo = '';
+                if (!submitOrderCode) {
+                    submitOrderCode = '';
                 }
                 if (!mobile) {
                     mobile = '';
@@ -823,7 +823,7 @@ export default {
                 jsonArr.push({ key: 'exportKeysJson', value: "['id','cinemaCode','orderNo','submitOrderCode','sessionTime','cardNo','mobile','filmName','seatName','number','totalOriginalPrice','totalPrice','totalServiceFee','totalPlatHandFee','totalCinemaAllowance','totalLowestPrice','totalActivityDiscount','totalCouponDiscount','totalActualPrice','totalReportPrice','totalSubmitPrice','chPayStatus','chPayWay','payTime','chOrderStatus','submitTime','openCardCinemaName','bindCardCinemaName','chActivityType','activityName','userCouponName','printNo','submitMessage','cancelTime','totalRefundHandFee','refundReason','tradeNo']"});
                 jsonArr.push({ key: 'exportTitlesJson', value:"['ID','影院编码','本地单号','售票系统单号','场次时间','会员卡号','手机号','影片名称','座位','数量','应付','票价','服务费','代售费','影院补贴','最低票价','活动优惠','优惠券优惠','实付','上报金额','回传金额','支付状态','支付方式','支付时间','订单状态','下单时间','开卡影院','消费影院','活动类型','活动名称','优惠券名称','取票码','下单失败原因','退票时间','退票手续费','退款原因','支付交易号']" });
                 jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
-                jsonArr.push({ key: 'orderNo', value: orderNo });
+                jsonArr.push({ key: 'submitOrderCode', value: submitOrderCode });
                 jsonArr.push({ key: 'cardNo', value: cardNo });
                 jsonArr.push({ key: 'mobile', value: mobile });
                 jsonArr.push({ key: 'payWay', value: payWay });

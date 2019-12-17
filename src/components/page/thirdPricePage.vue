@@ -46,7 +46,7 @@
                     @click="thirdPrice"
                     style="float: right;margin-top: 10px"
                     icon="el-icon-circle-plus-outline"
-                >批量修改</el-button>
+                >批量修改第三方价格</el-button>
                 <el-button
                     type="primary"
                     @click="updatePage"

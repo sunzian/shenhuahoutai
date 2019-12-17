@@ -49,7 +49,7 @@
                     placeholder="放映结束时间（止）"
                 ></el-date-picker>
                 <el-button
-                    style="margin-top: 10px;width: 90px;"
+                    style="float: right;margin-top: 10px;width: 90px;"
                     type="primary"
                     icon="el-icon-search"
                     @click="Search"
@@ -57,7 +57,7 @@
                 <el-button
                     type="primary"
                     @click="showPoster"
-                    style="float: right;margin-top: 10px"
+                    style="float: right;margin-right:10px;margin-top: 10px"
                     icon="el-icon-circle-plus-outline"
                 >生成影讯</el-button>
                 <el-button
@@ -1216,7 +1216,7 @@ export default {
     font-size: 14px;
 }
 .mr10 {
-    width: 16%;
+    width: 18%;
     margin-right: 10px;
 }
 #posterHtml {

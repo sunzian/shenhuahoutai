@@ -227,6 +227,19 @@
                 <el-form-item v-if="oForm.commodity_type==4" :required="true" label="选择商户" :label-width="formLabelWidth">
                     <el-button size="small" type="primary" @click="getPartner()">点击选择</el-button>
                 </el-form-item>
+                <el-form-item
+                        v-if="partnerCode&&oForm.commodity_type==4"
+                        label="所选商户："
+                        :label-width="formLabelWidth"
+                        :required="true"
+                >
+                    <el-input style="width: 150px" v-model="partnerName" autocomplete="off" disabled></el-input>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <span
+                            v-if="partnerName"
+                            style="color:red;cursor: pointer;"
+                            @click="deletPartner"
+                    >删除</span>
+                </el-form-item>
                 <el-form-item v-if="oForm.commodity_type==4" :required="true" label="领取方式" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.pickupType">
                         <el-radio label="1">到影院领取</el-radio>
@@ -550,6 +563,16 @@
         <!-- 编辑弹出框 -->
         <el-dialog :close-on-click-modal="false" title="编辑" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
+                <el-form-item :required="true" label="允许兑换的门店" :label-width="formLabelWidth">
+                    <el-checkbox-group v-model="oCheckedCities" @change="changeCinema">
+                        <el-checkbox
+                                v-for="city in oCities"
+                                :label="city.cinemaCode"
+                                :key="city.cinemaCode"
+                                :value="city.cinemaCode"
+                        >{{city.cinemaName}}</el-checkbox>
+                    </el-checkbox-group>
+                </el-form-item>
                 <el-form-item :required="true" label="商品类型" :label-width="formLabelWidth">
                     <el-select v-model="form.commodityType" placeholder="商品类型" :disabled="true">
                         <el-option
@@ -567,6 +590,28 @@
                     :required="true"
                 >
                     <el-input style="width: 250px" v-model="oName" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item v-if="form.commodityType==4" :required="true" label="选择商户" :label-width="formLabelWidth">
+                    <el-button size="small" type="primary" @click="getPartner()">点击选择</el-button>
+                </el-form-item>
+                <el-form-item
+                        v-if="partnerCode&&form.commodityType==4"
+                        label="所选商户："
+                        :label-width="formLabelWidth"
+                        :required="true"
+                >
+                    <el-input style="width: 150px" v-model="partnerName" autocomplete="off" disabled></el-input>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <span
+                            v-if="partnerName"
+                            style="color:red;cursor: pointer;"
+                            @click="deletPartner"
+                    >删除</span>
+                </el-form-item>
+                <el-form-item v-if="form.commodityType==4" :required="true" label="领取方式" :label-width="formLabelWidth">
+                    <el-radio-group v-model="form.pickupType">
+                        <el-radio label="1">到影院领取</el-radio>
+                        <el-radio label="2">到商户门店领取</el-radio>
+                    </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" label="商品图片" :label-width="formLabelWidth">
                     <el-popover placement="right" title trigger="hover">
@@ -700,16 +745,6 @@
                 </el-form-item>
                 <el-form-item :required="true" label="有效期天数" :label-width="formLabelWidth" v-if="oEffectiveType!=2">
                     <el-input style="width: 250px" placeholder="自领取之日起计算" v-model.trim="form.expireDay" autocomplete="off" onkeyup="this.value=this.value.replace(/\D/g,'')"></el-input>
-                </el-form-item>
-                <el-form-item :required="true" label="允许兑换的门店" :label-width="formLabelWidth">
-                    <el-checkbox-group v-model="oCheckedCities" :max="1" @change="changeCinema">
-                        <el-checkbox
-                            v-for="city in oCities"
-                            :label="city.cinemaCode"
-                            :key="city.cinemaCode"
-                            :value="city.cinemaCode"
-                        >{{city.cinemaName}}</el-checkbox>
-                    </el-checkbox-group>
                 </el-form-item>
                 <el-form-item :required="true" label="是否今日大牌" :label-width="formLabelWidth">
                     <el-select v-model="oTopstatus" placeholder="请选择">
@@ -1018,19 +1053,14 @@
                 >
                     <el-table-column label="操作" width="100" align="center">
                         <template slot-scope="scope">
-                            <el-radio v-model="couponId" :label="scope.row.id">&nbsp;</el-radio>
+                            <el-radio v-model="partnerCode" :label="scope.row.partnerCode">&nbsp;</el-radio>
                         </template>
                     </el-table-column>
                     <el-table-column label="商户名称" width="150">
-                        <template slot-scope="scope">{{scope.row.groupName}}</template>
+                        <template slot-scope="scope">{{scope.row.partnerName}}</template>
                     </el-table-column>
-                    <el-table-column label="优惠券详情">
-                        <template slot-scope="scope">
-                            <span
-                                    v-for="(item, index) in scope.row.couponList"
-                                    :key="index"
-                            >{{item.couponName}}x{{item.number}}&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                        </template>
+                    <el-table-column label="门店地址">
+                        <template slot-scope="scope">{{scope.row.address}}</template>
                     </el-table-column>
                 </el-table>
                 <div class="pagination">
@@ -1050,7 +1080,7 @@
             </div>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="drawerPartner = false">取 消</el-button>
-                <el-button type="primary">确 定</el-button>
+                <el-button type="primary" @click="surePartner(partnerCode)">确 定</el-button>
             </div>
         </el-dialog>
     </div>
@@ -1071,6 +1101,8 @@ export default {
     data() {
         return {
             content: '',
+            partnerName: '',
+            partnerCode: '',
             oImageUrl: '',
             editorOption: {},
             img_file: {},
@@ -1450,6 +1482,15 @@ export default {
         this.getMenu();
     },
     methods: {
+        surePartner(id){
+            this.partnerCode = id;
+            for (let i = 0; i < this.partnerList.length; i++) {
+                if (this.partnerList[i].partnerCode == this.partnerCode) {
+                    this.partnerName = this.partnerList[i].partnerName;
+                }
+            }
+            this.drawerPartner = false;
+        },
         getPartner(){
             let partnerName = this.query.partnerName;
             if (!partnerName) {
@@ -1470,16 +1511,17 @@ export default {
                     if (data.data.code == 'success') {
                         var res = JSON.parse(Decrypt(data.data.data));
                         console.log(res);
+                        this.query.partnerName='';
                         // if (res.data.length == 0) {
                         //     this.message = '暂无券包';
                         //     this.open();
                         //     return;
                         // }
                         this.partnerList = res.data;
-                        this.query.bPageSize = res.pageSize;
-                        this.query.bPageNo = res.pageNo;
-                        this.query.bTotalCount = res.totalCount;
-                        this.query.bTotalPage = res.totalPage;
+                        // this.query.bPageSize = res.pageSize;
+                        // this.query.bPageNo = res.pageNo;
+                        // this.query.bTotalCount = res.totalCount;
+                        // this.query.bTotalPage = res.totalPage;
                         this.drawerPartner = true;
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
@@ -1504,6 +1546,10 @@ export default {
         clearAssignType(){
             this.oForm.assign_info='';
             this.form.assignInfo='';
+        },
+        deletPartner() {
+            this.partnerCode = '';
+            this.partnerName = '';
         },
         deletCoupon() {
             this.groupName = '';
@@ -1692,7 +1738,7 @@ export default {
                 loading.close();
                 return;
             }
-            if(this.oForm.commodity_type==1){
+            if(this.oForm.commodity_type==1||this.oForm.commodity_type==4){
                 if (!this.oForm.name) {
                     this.message = '商品名称不能为空，请检查！';
                     this.open();
@@ -1711,7 +1757,20 @@ export default {
                     loading.close();
                     return;
                 }
-
+            }
+            if(this.oForm.commodity_type==4){
+                if (!this.partnerCode) {
+                    this.message = '所选商户不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if (!this.oForm.pickupType) {
+                    this.message = '领取方式不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
             }
             if (!this.oForm.image_url) {
                 this.message = '商品图片不能为空，请检查！';
@@ -1721,6 +1780,12 @@ export default {
             }
             if (this.checkedCities.length==0) {
                 this.message = '允许兑换的门店不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if (!this.oForm.memo) {
+                this.message = '兑换须知不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
@@ -1749,7 +1814,7 @@ export default {
                 loading.close();
                 return;
             }
-            if(this.oForm.change_type==1||this.oForm.change_type==3){
+            if(this.oForm.change_type==1&&this.oForm.change_type==3){
                 if (!this.oForm.gold&&this.oForm.gold!=0||(this.oForm.gold=='')) {
                     this.message = '所需金币数量不能为空，请检查！';
                     this.open();
@@ -1777,7 +1842,7 @@ export default {
                     return;
                 }
             }
-            if(this.oForm.commodity_type!=1){
+            if(this.oForm.commodity_type!=1&&this.oForm.commodity_type!=4){
                 if (!this.oForm.effectiveType) {
                     this.message = '生效方式不能为空，请检查！';
                     this.open();
@@ -1785,7 +1850,7 @@ export default {
                     return;
                 }
             }
-            if(this.oForm.effectiveType==1 && this.oForm.commodity_type!=1){
+            if(this.oForm.effectiveType==1 &&this.oForm.commodity_type!=1&&this.oForm.commodity_type!=4){
                 if (!this.oForm.laterDays) {
                     this.message = '领取后几天开始生效不能为空，请检查！';
                     this.open();
@@ -1799,7 +1864,7 @@ export default {
                     return;
                 }
             }
-            if(this.oForm.commodity_type!=1 && this.oForm.effectiveType==2){
+            if(this.oForm.commodity_type!=1&&this.oForm.commodity_type!=4 && this.oForm.effectiveType==2){
                 if (!this.oForm.startEffectiveDate||!this.oForm.endEffectiveDate) {
                     this.message = '有效期不能为空，请检查！';
                     this.open();
@@ -1942,6 +2007,10 @@ export default {
             jsonArr.push({ key: 'recommendStatus', value: this.oForm.recommendStatus });
             jsonArr.push({ key: 'expireDay', value: this.oForm.expireDay });
             jsonArr.push({ key: 'sort', value: this.oForm.sort });
+            if (this.oForm.commodity_type == 4) {
+                jsonArr.push({ key: 'partnerCode', value: this.partnerCode });
+                jsonArr.push({ key: 'pickupType', value: this.oForm.pickupType });
+            }
             if (this.oForm.commodity_type == 3) {
                 jsonArr.push({ key: 'ticketIds', value: this.couponId });
                 jsonArr.push({ key: 'name', value: this.groupName });
@@ -2120,6 +2189,7 @@ export default {
                         if (data.data.code == 'success') {
                             this.editVisible = true;
                             //优惠券
+                            console.log(JSON.parse(Decrypt(data.data.data)));
                             if (
                                 JSON.parse(Decrypt(data.data.data)).goldCommodity.ticketIds &&
                                 JSON.parse(Decrypt(data.data.data)).goldCommodity.name
@@ -2133,6 +2203,14 @@ export default {
                                 this.selectedSell.push(json);
                             }
                             this.oName = JSON.parse(Decrypt(data.data.data)).goldCommodity.name;
+                            this.partnerCode = JSON.parse(Decrypt(data.data.data)).goldCommodity.partnerCode;
+                            this.partnerName = JSON.parse(Decrypt(data.data.data)).goldCommodity.partnerName;
+                            if (JSON.parse(Decrypt(data.data.data)).goldCommodity.pickupType == 1) {
+                                this.form.pickupType = '1';
+                            }
+                            if (JSON.parse(Decrypt(data.data.data)).goldCommodity.pickupType == 2) {
+                                this.form.pickupType = '2';
+                            }
                             this.oImageUrl = JSON.parse(Decrypt(data.data.data)).goldCommodity.imageUrl;
                             this.form.memo = JSON.parse(Decrypt(data.data.data)).goldCommodity.memo;
                             this.form.store = JSON.parse(Decrypt(data.data.data)).goldCommodity.store;
@@ -2251,7 +2329,7 @@ export default {
                 loading.close();
                 return;
             }
-            if(this.form.commodityType==1){
+            if(this.form.commodityType==1||this.form.commodityType==4){
                 if (!this.oName) {
                     this.message = '商品名称不能为空，请检查！';
                     this.open();
@@ -2272,6 +2350,20 @@ export default {
                 }
 
             }
+            if(this.form.commodityType==4){
+                if (!this.partnerCode) {
+                    this.message = '所选商户不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if (!this.form.pickupType) {
+                    this.message = '领取方式不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
             if (!this.oImageUrl) {
                 this.message = '商品图片不能为空，请检查！';
                 this.open();
@@ -2280,6 +2372,12 @@ export default {
             }
             if (this.oCheckedCities.length==0) {
                 this.message = '允许兑换的门店不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if (!this.form.memo) {
+                this.message = '兑换须知不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
@@ -2336,7 +2434,7 @@ export default {
                     return;
                 }
             }
-            if(this.form.commodityType!=1){
+            if(this.form.commodityType!=1&&this.form.commodityType!=4){
                 if (!this.oEffectiveType) {
                     this.message = '生效方式不能为空，请检查！';
                     this.open();
@@ -2344,7 +2442,7 @@ export default {
                     return;
                 }
             }
-            if(this.oEffectiveType==1 && this.form.commodityType!=1){
+            if(this.oEffectiveType==1 && this.form.commodityType!=1&&this.form.commodityType!=4){
                 if (!this.oLaterDays&&this.oLaterDays!=0) {
                     this.message = '领取后几天开始生效不能为空，请检查！';
                     this.open();
@@ -2358,7 +2456,7 @@ export default {
                     return;
                 }
             }
-            if(this.form.commodityType!=1 && this.oEffectiveType==2){
+            if(this.form.commodityType!=1 && this.oEffectiveType==2&&this.form.commodityType!=4){
                 if (!this.oStartEffectiveDate||!this.oEndEffectiveDate) {
                     this.message = '有效期不能为空，请检查！';
                     this.open();
@@ -2499,6 +2597,10 @@ export default {
                 jsonArr.push({ key: 'topStatus', value: this.oTopstatus });
                 jsonArr.push({ key: 'recommendStatus', value: this.oRecommendStatus });
                 jsonArr.push({ key: 'sort', value: this.form.sort });
+                if (this.form.commodityType == 4) {
+                    jsonArr.push({ key: 'partnerCode', value: this.partnerCode });
+                    jsonArr.push({ key: 'pickupType', value: this.form.pickupType });
+                }
                 if (this.form.commodityType == 2) {
                     jsonArr.push({ key: 'ticketIds', value: this.ticketIds });
                 }
