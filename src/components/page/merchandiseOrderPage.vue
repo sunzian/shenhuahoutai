@@ -228,7 +228,7 @@
                             type="text"
                             icon="el-icon-delete"
                             class="red"
-                            v-if="scope.row.payStatus=='1'"
+                            v-if="scope.row.payStatus=='1'&&scope.row.refundStatus=='0'"
                             @click="refundGoods(scope.$index, scope.row)"
                         >退款</el-button>
                         <el-button

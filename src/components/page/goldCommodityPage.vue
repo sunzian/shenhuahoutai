@@ -204,19 +204,38 @@
         <!--新增弹出框-->
         <el-dialog :close-on-click-modal="false" title="新增商品" :visible.sync="dialogFormVisible">
             <el-form v-model="oForm">
+                <el-form-item :required="true" label="允许兑换的门店" :label-width="formLabelWidth">
+                    <el-checkbox-group v-model="checkedCities" @change="getCinemaCode">
+                        <el-checkbox
+                                v-for="city in cities"
+                                :label="city.cinemaCode"
+                                :key="city.cinemaCode"
+                                :value="city.cinemaCode"
+                        >{{city.cinemaName}}</el-checkbox>
+                    </el-checkbox-group>
+                </el-form-item>
                 <el-form-item :required="true" label="商品类型" :label-width="formLabelWidth">
                     <el-select v-model="oForm.commodity_type" placeholder="请选择商品类型">
                         <el-option
-                            v-for="item in commodityType"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value"
+                                v-for="item in commodityType"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
                         ></el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item v-if="oForm.commodity_type==4" :required="true" label="选择商户" :label-width="formLabelWidth">
+                    <el-button size="small" type="primary" @click="getPartner()">点击选择</el-button>
+                </el-form-item>
+                <el-form-item v-if="oForm.commodity_type==4" :required="true" label="领取方式" :label-width="formLabelWidth">
+                    <el-radio-group v-model="oForm.pickupType">
+                        <el-radio label="1">到影院领取</el-radio>
+                        <el-radio label="2">到商户门店领取</el-radio>
+                    </el-radio-group>
+                </el-form-item>
                 <el-form-item
                     :required="true"
-                    v-if="oForm.commodity_type==1"
+                    v-if="oForm.commodity_type==1||oForm.commodity_type==4"
                     label="商品名称"
                     :label-width="formLabelWidth"
                 >
@@ -242,16 +261,6 @@
                         >只能上传jpg/png文件，且不超过200kb 建议尺寸200*200或按比例上传</div>
                     </el-upload>
                 </el-form-item>
-                <el-form-item :required="true" label="允许兑换的门店" :label-width="formLabelWidth">
-                    <el-checkbox-group v-model="checkedCities" :max="1" @change="getCinemaCode">
-                        <el-checkbox
-                            v-for="city in cities"
-                            :label="city.cinemaCode"
-                            :key="city.cinemaCode"
-                            :value="city.cinemaCode"
-                        >{{city.cinemaName}}</el-checkbox>
-                    </el-checkbox-group>
-                </el-form-item>
                 <el-form-item :required="true" label="兑换须知" :label-width="formLabelWidth">
                     <el-input
                         style="width: 360px"
@@ -274,7 +283,7 @@
                 </el-form-item>
                 <el-form-item
                     :required="true"
-                    v-if="oForm.commodity_type==1"
+                    v-if="oForm.commodity_type==1||oForm.commodity_type==4"
                     label="原价"
                     :label-width="formLabelWidth"
                 >
@@ -313,7 +322,7 @@
                     :required="true"
                     label="生效方式"
                     :label-width="formLabelWidth"
-                    v-if="oForm.commodity_type!=1"
+                    v-if="oForm.commodity_type!=1||oForm.commodity_type!=4"
                 >
                     <el-select v-model="oForm.effectiveType" placeholder="请选择生效方式">
                         <el-option
@@ -326,7 +335,7 @@
                 </el-form-item>
                 <el-form-item
                     :required="true"
-                    v-if="oForm.effectiveType==1 && oForm.commodity_type!=1"
+                    v-if="oForm.effectiveType==1 && oForm.commodity_type!=1&&oForm.commodity_type!=4"
                     label="领取后几天开始生效"
                     :label-width="formLabelWidth"
                 >
@@ -336,7 +345,7 @@
                     :required="true"
                     label="有效期："
                     :label-width="formLabelWidth"
-                    v-if="oForm.commodity_type!=1 && oForm.effectiveType==2"
+                    v-if="oForm.commodity_type!=1 && oForm.effectiveType==2&&oForm.commodity_type!=4"
                 >
                     <el-date-picker
                         v-model="oForm.startEffectiveDate"
@@ -988,6 +997,62 @@
                 <el-button type="primary" @click="sureAdd(couponId)">确 定</el-button>
             </div>
         </el-dialog>
+        <!-- 选择商户弹出窗 -->
+        <el-dialog :close-on-click-modal="false" title="选择商户" :visible.sync="drawerPartner">
+            <div class="container">
+                <div class="handle-box">
+                    <el-input
+                            v-model="query.partnerName"
+                            placeholder="商户名称"
+                            class="handle-input mr12"
+                    ></el-input>
+                    <el-button type="primary" icon="el-icon-search" @click="getPartner">搜索</el-button>
+                </div>
+                <el-table
+                        :data="partnerList"
+                        border
+                        class="table"
+                        ref="multipleTable"
+                        header-cell-class-name="table-header"
+                        @selection-change="handleSelectionChange"
+                >
+                    <el-table-column label="操作" width="100" align="center">
+                        <template slot-scope="scope">
+                            <el-radio v-model="couponId" :label="scope.row.id">&nbsp;</el-radio>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="商户名称" width="150">
+                        <template slot-scope="scope">{{scope.row.groupName}}</template>
+                    </el-table-column>
+                    <el-table-column label="优惠券详情">
+                        <template slot-scope="scope">
+                            <span
+                                    v-for="(item, index) in scope.row.couponList"
+                                    :key="index"
+                            >{{item.couponName}}x{{item.number}}&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        </template>
+                    </el-table-column>
+                </el-table>
+                <div class="pagination">
+                    <el-pagination
+                            background
+                            @size-change="bHandleSizeChange"
+                            layout="total, sizes, prev, pager, next, jumper"
+                            :current-page="query.bPageNo"
+                            :page-sizes="[10, 15, 20, 30]"
+                            :page-size="query.bPageSize"
+                            :total="query.bTotalCount"
+                            @current-change="bCurrentChange"
+                            @prev-click="bPrev"
+                            @next-click="bNext"
+                    ></el-pagination>
+                </div>
+            </div>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="drawerPartner = false">取 消</el-button>
+                <el-button type="primary">确 定</el-button>
+            </div>
+        </el-dialog>
     </div>
 </template>
 
@@ -1030,9 +1095,11 @@ export default {
             },
             fileList: [],
             tableData: [],
+            partnerList: [],
             multipleSelection: [],
             delList: [],
             editVisible: false,
+            drawerPartner: false,
             checkedCities: [],
             oCheckedCities: [],
             cities: [], //增加页面影院
@@ -1058,6 +1125,7 @@ export default {
                 name: '',
                 memo: '',
                 sort: '',
+                pickupType: '1',
                 delivery: false,
                 type: [],
                 resource: '',
@@ -1312,6 +1380,10 @@ export default {
                 {
                     value: '3',
                     label: '券包'
+                },
+                {
+                    value: '4',
+                    label: '商品'
                 }
             ],
             assignType: [
@@ -1378,6 +1450,50 @@ export default {
         this.getMenu();
     },
     methods: {
+        getPartner(){
+            let partnerName = this.query.partnerName;
+            if (!partnerName) {
+                partnerName = '';
+            }
+            let jsonArr = [];
+            jsonArr.push({ key: 'cinemaCodes', value: this.checkedCities });
+            jsonArr.push({ key: 'partnerName', value: partnerName });
+            jsonArr.push({ key: 'pageNo', value: this.query.bPageNo });
+            jsonArr.push({ key: 'pageSize', value: this.query.bPageSize });
+            let sign = md5(preSign(jsonArr));
+            jsonArr.push({ key: 'sign', value: sign });
+            var params = ParamsAppend(jsonArr);
+            console.log(jsonArr);
+            https
+                .fetchPost('/cinemaPartner/getPartnerPage', params)
+                .then(data => {
+                    if (data.data.code == 'success') {
+                        var res = JSON.parse(Decrypt(data.data.data));
+                        console.log(res);
+                        // if (res.data.length == 0) {
+                        //     this.message = '暂无券包';
+                        //     this.open();
+                        //     return;
+                        // }
+                        this.partnerList = res.data;
+                        this.query.bPageSize = res.pageSize;
+                        this.query.bPageNo = res.pageNo;
+                        this.query.bTotalCount = res.totalCount;
+                        this.query.bTotalPage = res.totalPage;
+                        this.drawerPartner = true;
+                    } else if (data.data.code == 'nologin') {
+                        this.message = data.data.message;
+                        this.open();
+                        this.$router.push('/login');
+                    } else {
+                        this.message = data.data.message;
+                        this.open();
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        },
         exceed(data){
             console.log(data);
             if(data.length==1){
@@ -1692,14 +1808,14 @@ export default {
                 }
             }
             if(this.oForm.effectiveType!=2){
-                if (this.oForm.expireDay<1) {
-                    this.message = '有效期天数不能小于1，请检查！';
+                if (!this.oForm.expireDay||this.oForm.expireDay=='') {
+                    this.message = '有效期天数不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
-                if (!this.oForm.expireDay||this.oForm.expireDay=='') {
-                    this.message = '有效期天数不能为空，请检查！';
+                if (this.oForm.expireDay<1) {
+                    this.message = '有效期天数不能小于1，请检查！';
                     this.open();
                     loading.close();
                     return;
@@ -1853,7 +1969,7 @@ export default {
                         //新增
                         console.log(data);
                         if (data.data.code == 'success') {
-                            this.$refs.upload.clearFiles(); //清除已上传文件
+                            // this.$refs.upload.clearFiles(); //清除已上传文件
                             this.oForm.name = '';
                             this.oForm.image_url = '';
                             this.oForm.memo = '';
@@ -2251,14 +2367,14 @@ export default {
                 }
             }
             if(this.oEffectiveType!=2){
-                if (this.form.expireDay<1) {
-                    this.message = '有效期天数不能小于1，请检查！';
+                if (!this.form.expireDay||this.form.expireDay=='') {
+                    this.message = '有效期天数不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
-                if (!this.form.expireDay||this.form.expireDay=='') {
-                    this.message = '有效期天数不能为空，请检查！';
+                if (this.form.expireDay<1) {
+                    this.message = '有效期天数不能小于1，请检查！';
                     this.open();
                     loading.close();
                     return;

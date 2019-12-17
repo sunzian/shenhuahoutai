@@ -314,7 +314,7 @@
                             type="text"
                             icon="el-icon-delete"
                             class="red"
-                            v-if="scope.row.payStatus=='1'"
+                            v-if="scope.row.payStatus=='1'&&scope.row.refundStatus=='0'"
                             @click="refundTicket(scope.$index, scope.row)"
                         >退款</el-button>
                         <el-button
@@ -527,14 +527,6 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="最低价" :label-width="formLabelWidth">
-                    <el-input
-                        :disabled="true"
-                        style="width: 250px"
-                        v-model="form.totalLowestPrice"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
                 <el-form-item label="回传金额" :label-width="formLabelWidth">
                     <el-input
                         :disabled="true"
@@ -600,14 +592,14 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="退票状态" :label-width="formLabelWidth">
-                    <el-input
-                        :disabled="true"
-                        style="width: 250px"
-                        v-model="form.cancelStatus"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
+                <!--<el-form-item label="退票状态" :label-width="formLabelWidth">-->
+                    <!--<el-input-->
+                        <!--:disabled="true"-->
+                        <!--style="width: 250px"-->
+                        <!--v-model="form.cancelStatus"-->
+                        <!--autocomplete="off"-->
+                    <!--&gt;</el-input>-->
+                <!--</el-form-item>-->
                 <el-form-item label="退票时间" :label-width="formLabelWidth">
                     <el-input
                         :disabled="true"
@@ -624,14 +616,14 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="退款状态" :label-width="formLabelWidth">
-                    <el-input
-                        :disabled="true"
-                        style="width: 250px"
-                        v-model="form.refundStatus"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
+                <!--<el-form-item label="退款状态" :label-width="formLabelWidth">-->
+                    <!--<el-input-->
+                        <!--:disabled="true"-->
+                        <!--style="width: 250px"-->
+                        <!--v-model="form.refundStatus"-->
+                        <!--autocomplete="off"-->
+                    <!--&gt;</el-input>-->
+                <!--</el-form-item>-->
                 <el-form-item label="退款失败原因" :label-width="formLabelWidth">
                     <el-input
                         :disabled="true"
@@ -704,6 +696,7 @@ export default {
                         loading.close();
                         if (data.data.code == 'success') {
                             this.editVisible = true;
+                            console.log(JSON.parse(Decrypt(data.data.data)));
                             this.form.id = row.id;
                             this.form = JSON.parse(Decrypt(data.data.data));
                             if (JSON.parse(Decrypt(data.data.data)).payWay == 0) {

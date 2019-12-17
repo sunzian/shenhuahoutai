@@ -477,7 +477,7 @@
         <el-dialog :close-on-click-modal="false" title="选择影片" :visible.sync="drawer">
             <div class="container">
                 <div class="handle-box">
-                    <el-input v-model="query.filmName" placeholder="影片名" class="handle-input mr10"></el-input>
+                    <el-input v-model="query.filmName" placeholder="影片名" class="handle-input mr12"></el-input>
                     <el-button type="primary" icon="el-icon-search" @click="searchFilm">搜索</el-button>
                 </div>
                 <el-table
@@ -488,30 +488,22 @@
                     header-cell-class-name="table-header"
                     @selection-change="handleSelectionChange"
                 >
-                    <el-table-column label="操作" width="100" align="center">
+                    <el-table-column label="操作" width="50" align="center">
                         <template slot-scope="scope">
-                            <el-radio
-                                v-model="id"
-                                :label="scope.$index"
-                                @change.native="getCurrentRow(scope.$index)"
-                            >&nbsp;</el-radio>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="name" label="图片">
-                        <template slot-scope="scope">
-                            <el-popover placement="right" title trigger="hover">
-                                <img style="width:400px" :src="scope.row.image" />
-                                <img
-                                    slot="reference"
-                                    :src="scope.row.image"
-                                    :alt="scope.row.image"
-                                    style="max-height: 50px;max-width: 130px"
-                                />
-                            </el-popover>
+                            <el-radio v-model="id" :label="scope.$index" @change.native="getCurrentRow(scope.$index)">&nbsp;</el-radio>
                         </template>
                     </el-table-column>
                     <el-table-column prop="sort" label="影片名称">
                         <template slot-scope="scope">{{scope.row.filmName}}</template>
+                    </el-table-column>
+                    <el-table-column prop="sort" label="上映时间" width="160">
+                        <template slot-scope="scope">{{scope.row.publishDate}}</template>
+                    </el-table-column>
+                    <el-table-column prop="sort" label="制式" width="80">
+                        <template slot-scope="scope">{{scope.row.dimensional}}</template>
+                    </el-table-column>
+                    <el-table-column prop="sort" label="语言" width="80">
+                        <template slot-scope="scope">{{scope.row.language}}</template>
                     </el-table-column>
                 </el-table>
                 <div class="pagination">
@@ -623,7 +615,7 @@ export default {
             },
             sellTableData: [],
             selectedSell: [],
-            formLabelWidth: '120px',
+            formLabelWidth: '160px',
             selectValue: {},
             selectScreenCode: [],
             selectGroup: {},
@@ -1642,8 +1634,8 @@ export default {
         width: 100%;
         font-size: 14px;
     }
-    .mr10 {
-        width: 16%;
+    .mr12 {
+        width: 30%;
         margin-right: 10px;
     }
 </style>

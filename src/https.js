@@ -25,8 +25,10 @@ axios.interceptors.response.use((res) =>{
         return Promise.resolve(res);
     }
     return res;
-}, (error) => {
+},
+    (error) => {
     console.log('网络异常');
+    console.log(error);
     return Promise.reject(error);
 });
 

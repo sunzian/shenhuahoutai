@@ -113,70 +113,6 @@
                 ></el-pagination>
             </div>
         </div>
-        <!--新增弹出框-->
-        <el-dialog :close-on-click-modal="false" title="获取排期" :visible.sync="dialogFormVisible">
-            <el-form :model="oForm">
-                <el-form-item label="影院名称">
-                    <el-select v-model="oForm.cinemaName" placeholder="请选择">
-                        <el-option
-                            v-for="info in cinemaInfo"
-                            :key="info.cinemaCode"
-                            :value="info.cinemaName"
-                            :label="info.cinemaName"
-                        ></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="影厅名称">
-                    <el-input
-                        style="width: 250px"
-                        min="1"
-                        v-model="oForm.filmName"
-                        autocomplete="off"
-                        disabled
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="影片名称">
-                    <el-input
-                        style="width: 250px"
-                        min="1"
-                        v-model="oForm.filmName"
-                        autocomplete="off"
-                        disabled
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="平台名称">
-                    <el-input
-                        style="width: 250px"
-                        min="1"
-                        v-model="oForm.filmName"
-                        autocomplete="off"
-                        disabled
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="放映时间">
-                    <el-input
-                        style="width: 250px"
-                        min="1"
-                        v-model="oForm.filmName"
-                        autocomplete="off"
-                        disabled
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="第三方售价">
-                    <el-input
-                        style="width: 250px"
-                        min="1"
-                        v-model="oForm.filmName"
-                        autocomplete="off"
-                        disabled
-                    ></el-input>
-                </el-form-item>
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogFormVisible = false">取 消</el-button>
-                <el-button type="primary" @click="addRole">确 定</el-button>
-            </span>
-        </el-dialog>
         <!-- 编辑弹出框 -->
         <el-dialog :close-on-click-modal="false" title="价格设置" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
@@ -397,6 +333,12 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
+            if(this.manySettlePrice<0){
+                this.message = '第三方售价必须大于0';
+                this.open();
+                loading.close();
+                return;
+            }
             var jsonArr = [];
             jsonArr.push({ key: 'id', value: this.selectId });
             jsonArr.push({ key: 'cinemaCode', value: this.selectCodes });
@@ -417,88 +359,6 @@ export default {
                             this.manySettlePrice = '';
                             this.getMenu();
                             this.drawer = false;
-                        } else if (data.data.code == 'nologin') {
-                            this.message = data.data.message;
-                            this.open();
-                            this.$router.push('/login');
-                        } else {
-                            this.message = data.data.message;
-                            this.open();
-                        }
-                    })
-                    .catch(err => {
-                        loading.close();
-                        console.log(err);
-                    });
-            }
-        },
-        addPage() {
-            //获取新增按钮权限
-            const loading = this.$loading({
-                lock: true,
-                text: 'Loading',
-                spinner: 'el-icon-loading',
-                background: 'rgba(0, 0, 0, 0.7)',
-                target: document.querySelector('.div1')
-            });
-            https
-                .fetchPost('/thirdPrice/updateThirdPrice', '')
-                .then(data => {
-                    loading.close();
-                    // console.log(data);
-                    if (data.data.code == 'success') {
-                        this.dialogFormVisible = true;
-                        this.getAllCinema();
-                    } else if (data.data.code == 'nologin') {
-                        this.message = data.data.message;
-                        this.open();
-                        this.$router.push('/login');
-                    } else {
-                        this.message = data.data.message;
-                        this.open();
-                    }
-                })
-                .catch(err => {
-                    loading.close();
-                    console.log(err);
-                });
-        },
-        addRole() {
-            //新增按钮操作
-            const loading = this.$loading({
-                lock: true,
-                text: 'Loading',
-                spinner: 'el-icon-loading',
-                background: 'rgba(0, 0, 0, 0.7)',
-                target: document.querySelector('.div1')
-            });
-            //获取所选影院编码
-            for (let i = 0; i < this.cinemaInfo.length; i++) {
-                if (this.cinemaInfo[i].cinemaName == this.oForm.cinemaName) {
-                    this.oForm.cinemaCode = this.cinemaInfo[i].cinemaCode;
-                }
-            }
-            var jsonArr = [];
-            jsonArr.push({ key: 'cinemaCode', value: this.oForm.cinemaCode });
-            jsonArr.push({ key: 'startDate', value: this.oForm.startDate });
-            jsonArr.push({ key: 'endtDate', value: this.oForm.endDate });
-            let sign = md5(preSign(jsonArr));
-            jsonArr.push({ key: 'sign', value: sign });
-            console.log(jsonArr);
-            let params = ParamsAppend(jsonArr);
-            if (this.dialogFormVisible == true) {
-                https
-                    .fetchPost('/sessionInfo/updateSessionInfo', params)
-                    .then(data => {
-                        loading.close();
-                        console.log(data);
-                        if (data.data.code == 'success') {
-                            this.dialogFormVisible = false;
-                            this.$message.success(`获取成功`);
-                            for (let key in this.oForm) {
-                                this.oForm[key] = '';
-                            }
-                            this.getMenu();
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
                             this.open();
@@ -625,6 +485,12 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
+            if(this.oSettlePrice<0){
+                this.message = '第三方售价必须大于0';
+                this.open();
+                loading.close();
+                return;
+            }
             var jsonArr = [];
             jsonArr.push({ key: 'cinemaCode', value: this.oCinemaCode });
             jsonArr.push({ key: 'settlePrice', value: this.oSettlePrice });

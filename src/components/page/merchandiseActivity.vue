@@ -1339,7 +1339,7 @@
                 }
                 if(this.oReduceType==2){
                     if(this.oDiscountMoney>=0||this.oAchieveMoney>=0){
-                        if(!this.oDiscountMoney||!this.oAchieveMoney){
+                        if((!this.oDiscountMoney&&this.oDiscountMoney!=0)||(!this.oAchieveMoney&&this.oAchieveMoney!=0)){
                             this.message = '减免金额不能为空，请检查！';
                             this.open();
                             loading.close();

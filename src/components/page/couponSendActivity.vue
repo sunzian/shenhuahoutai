@@ -119,10 +119,10 @@
         <!--新增弹出框-->
         <el-dialog :close-on-click-modal="false" title="设置活动" :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
-                <el-form-item :required="true" label="活动名称：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="活动名称" :label-width="formLabelWidth">
                     <el-input style="width: 250px" min="1" v-model="oForm.name" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="活动图片：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="活动图片" :label-width="formLabelWidth">
                     <el-popover placement="right" title trigger="hover">
                         <img style="width: 400px" :src="oActivityImageUrl" />
                         <img
@@ -155,7 +155,7 @@
                         >只能上传jpg/png文件，且不超过200kb 建议尺寸150*150或按比例上传</div>
                     </el-upload>
                 </el-form-item>
-                <el-form-item :required="true" label="选择影院：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="选择影院" :label-width="formLabelWidth">
                     <el-select v-model="oForm.cinemaCode" placeholder="请选择" @change="getCardInfo">
                         <el-option
                             v-for="info in cinemaList"
@@ -165,7 +165,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <!--<el-form-item label="送券活动类型：" :label-width="formLabelWidth">-->
+                <!--<el-form-item label="送券活动类型" :label-width="formLabelWidth">-->
                 <!--<el-select v-model="oForm.type" placeholder="请选择" @change="getCardInfo">-->
                 <!--<el-option-->
                 <!--v-for="info in type"-->
@@ -193,7 +193,7 @@
                         placeholder="选择日期时间"
                     ></el-date-picker>
                 </el-form-item>
-                <el-form-item :required="true" label="开启状态：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="开启状态" :label-width="formLabelWidth">
                     <el-select v-model="oForm.status" placeholder="请选择">
                         <el-option
                             v-for="item in options"
@@ -203,7 +203,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item :required="true" label="是否限制总数：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="是否限制总数" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.isLimitTotal">
                         <el-radio label="0">不限制</el-radio>
                         <el-radio label="1">限制</el-radio>
@@ -211,7 +211,7 @@
                 </el-form-item>
                 <el-form-item
                     v-if="oForm.isLimitTotal==1"
-                    label="限购总数："
+                    label="限购总数"
                     :label-width="formLabelWidth"
                     :required="true"
                 >
@@ -222,15 +222,18 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="活动描述：" :label-width="formLabelWidth">
+                <el-form-item label="活动描述" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
+                        type="textarea"
+                        show-word-limit
+                        maxlength="200"
                         v-model="oForm.activityDesc"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="生效延迟天数：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="生效延迟天数" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -241,7 +244,7 @@
                     <br>
                     <span style="font-size:12px;">0：即日生效；1：隔天生效；以此类推</span>
                 </el-form-item>
-                <el-form-item :required="true" label="有效期天数：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="有效期天数" :label-width="formLabelWidth">
                     <el-input
                             style="width: 250px"
                             min="1"
@@ -250,10 +253,10 @@
                             placeholder="自生效之日起计算"
                     ></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="设置券包：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="设置券包" :label-width="formLabelWidth">
                     <el-button type="primary" @click="getAllCoupon">选择券包</el-button>
                 </el-form-item>
-                <el-form-item :required="true" v-if="couponId" label="所选券包：" :label-width="formLabelWidth">
+                <el-form-item :required="true" v-if="couponId" label="所选券包" :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="groupName" autocomplete="off" disabled></el-input>&nbsp;&nbsp;&nbsp;&nbsp;
                     <span
                         v-if="groupName"
@@ -270,10 +273,10 @@
         <!-- 编辑弹出框 -->
         <el-dialog :close-on-click-modal="false" title="价格设置" :visible.sync="editVisible">
             <el-form :model="form">
-                <el-form-item :required="true" label="活动名称：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="活动名称" :label-width="formLabelWidth">
                     <el-input style="width: 250px" min="1" v-model="form.name" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="活动图片：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="活动图片" :label-width="formLabelWidth">
                     <el-popover placement="right" title trigger="hover">
                         <img style="width: 400px" :src="oActivityImageUrl" />
                         <img
@@ -306,7 +309,7 @@
                         >只能上传jpg/png文件，且不超过200kb 建议尺寸150*150或按比例上传</div>
                     </el-upload>
                 </el-form-item>
-                <el-form-item :required="true" label="选择影院：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="选择影院" :label-width="formLabelWidth">
                     <el-select v-model="form.cinemaCode" placeholder="请选择" @change="getCardInfo">
                         <el-option
                             v-for="info in cinemaList"
@@ -316,7 +319,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item :required="true" label="送券活动类型：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="送券活动类型" :label-width="formLabelWidth">
                     <el-select v-model="form.type" placeholder="请选择" @change="getCardInfo">
                         <el-option
                             v-for="info in type"
@@ -344,7 +347,7 @@
                         placeholder="选择日期时间"
                     ></el-date-picker>
                 </el-form-item>
-                <el-form-item :required="true" label="开启状态：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="开启状态" :label-width="formLabelWidth">
                     <el-select v-model="form.status" placeholder="请选择">
                         <el-option
                             v-for="item in options"
@@ -354,7 +357,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item :required="true" label="是否限制总数：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="是否限制总数" :label-width="formLabelWidth">
                     <el-radio-group v-model="form.isLimitTotal">
                         <el-radio label="0">不限制</el-radio>
                         <el-radio label="1">限制</el-radio>
@@ -362,7 +365,7 @@
                 </el-form-item>
                 <el-form-item
                     v-if="form.isLimitTotal==1"
-                    label="限购总数："
+                    label="限购总数"
                     :label-width="formLabelWidth"
                     :required="true"
                 >
@@ -373,15 +376,18 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="活动描述：" :label-width="formLabelWidth">
+                <el-form-item label="活动描述" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
+                        type="textarea"
+                        show-word-limit
+                        maxlength="200"
                         v-model="form.activityDesc"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="生效延迟天数：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="生效延迟天数" :label-width="formLabelWidth">
                     <el-input
                             style="width: 250px"
                             min="1"
@@ -392,7 +398,7 @@
                     <br>
                     <span style="font-size:12px;">0：即日生效；1：隔天生效；以此类推</span>
                 </el-form-item>
-                <el-form-item :required="true" label="有效期天数：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="有效期天数" :label-width="formLabelWidth">
                     <el-input
                             style="width: 250px"
                             v-model="form.overDays"
@@ -400,10 +406,10 @@
                             placeholder="自生效之日起计算"
                     ></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="设置券包：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="设置券包" :label-width="formLabelWidth">
                     <el-button type="primary" @click="changeCoupon">选择券包</el-button>
                 </el-form-item>
-                <el-form-item :required="true" v-if="couponId" label="所选券包：" :label-width="formLabelWidth">
+                <el-form-item :required="true" v-if="couponId" label="所选券包" :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="groupName" autocomplete="off" disabled></el-input>&nbsp;&nbsp;&nbsp;&nbsp;
                     <span
                         v-if="groupName"

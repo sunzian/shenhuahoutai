@@ -159,7 +159,7 @@
         <!--编辑弹出框-->
         <el-dialog :close-on-click-modal="false" title="编辑活动" :visible.sync="showActivity">
             <el-form :model="activityForm">
-                <el-form-item label="活动类型" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="活动类型" :label-width="formLabelWidth">
                     <el-select v-model="activityForm.activityType" clearable placeholder="请选择">
                         <el-option
                             v-for="item in options"
@@ -169,7 +169,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="活动说明" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="活动说明" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         v-model="activityForm.activityDesc"
@@ -591,6 +591,18 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
+            if(!this.activityForm.activityType){
+                this.message = '活动类型不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.activityForm.activityDesc){
+                this.message = '活动说明不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
             var jsonArr = [];
             if (this.activityForm.activityType == '见面会') {
                 this.activityForm.activityType = '1'
@@ -616,8 +628,7 @@ export default {
                         this.activityForm.activityType = '';
                         this.activityForm.activityDesc = '';
                         this.showActivity = false;
-                        this.message = '编辑成功！';
-                        this.open();
+                        this.$message.success(`编辑成功`);
                         this.getMenu();
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;

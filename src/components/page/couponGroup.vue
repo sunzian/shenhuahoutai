@@ -130,7 +130,7 @@
                 >
                     <div v-for="(item, index) in selectedSell" style="margin-bottom: 5px" :key="index">
                         <el-input
-                                style="width: 250px"
+                                style="width: 200px"
                                 v-model="item.name"
                                 autocomplete="off"
                                 :value="item.id"
@@ -139,9 +139,9 @@
                         >
                         </el-input>
                         &nbsp;&nbsp;&nbsp;&nbsp;
-                        数量：
+                        每人发放数量：
                         <el-input
-                            style="width: 150px"
+                            style="width: 70px"
                             v-model="item.num"
                             autocomplete="off"
                             :value="item.num"
@@ -198,7 +198,7 @@
                 >
                     <div v-for="(item, index) in selectedSell" style="margin-bottom: 5px" :key="index">
                         <el-input
-                                style="width: 250px"
+                                style="width: 200px"
                                 v-model="item.name"
                                 autocomplete="off"
                                 :value="item.id"
@@ -208,7 +208,7 @@
                         </el-input>
                         &nbsp;&nbsp;&nbsp;&nbsp;
                         每人发放数量：<el-input
-                            style="width: 150px"
+                            style="width: 70px"
                             v-model="item.num"
                             autocomplete="off"
                             :value="item.num"
