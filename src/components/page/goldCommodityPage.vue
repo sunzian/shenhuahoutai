@@ -249,7 +249,7 @@
                         :label-width="formLabelWidth"
                         :required="true"
                 >
-                    <el-input style="width: 150px" v-model="partnerName" autocomplete="off" disabled></el-input>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <el-input style="width: 250px" v-model="partnerName" autocomplete="off" disabled></el-input>&nbsp;&nbsp;&nbsp;&nbsp;
                     <span
                             v-if="partnerName"
                             style="color:red;cursor: pointer;"
@@ -616,7 +616,7 @@
                         :label-width="formLabelWidth"
                         :required="true"
                 >
-                    <el-input style="width: 150px" v-model="partnerName" autocomplete="off" disabled></el-input>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <el-input style="width: 250px" v-model="partnerName" autocomplete="off" disabled></el-input>&nbsp;&nbsp;&nbsp;&nbsp;
                     <span
                             v-if="partnerName"
                             style="color:red;cursor: pointer;"
