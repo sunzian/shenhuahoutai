@@ -81,7 +81,6 @@
             </div>
             <el-table
                 :data="tableData"
-                height="500"
                 border
                 class="table"
                 ref="multipleTable"
@@ -740,7 +739,6 @@ export default {
                     });
                 });
         },
-
         sureThirdPrice() {
             //提交确认批量修改
             const loading = this.$loading({

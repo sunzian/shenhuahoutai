@@ -721,7 +721,7 @@ export default {
             });
             setTimeout(() => {
                 let cinemaCode = this.query.cinemaCode;
-                let orderNo = this.query.orderNo;
+                let submitOrderCode = this.query.submitOrderCode;
                 let mobile = this.query.mobile;
                 let payWay = this.query.payWay;
                 let payStatus = this.query.payStatus;
@@ -731,8 +731,8 @@ export default {
                 if (!cinemaCode) {
                     cinemaCode = '';
                 }
-                if (!orderNo) {
-                    orderNo = '';
+                if (!submitOrderCode) {
+                    submitOrderCode = '';
                 }
                 if (!mobile) {
                     mobile = '';
@@ -757,7 +757,7 @@ export default {
                 jsonArr.push({ key: 'exportKeysJson', value: "['id','cinemaCode','orderNo','userName','mobile','merNames','totalOriginalPrice','totalActivityDiscount','totalCouponDiscount','totalActualPrice','chPayStatus','chPayWay','payTime','chSubmitStatus','submitTime','chDeliveryType','submitOrderCode','printNo','userCouponName','deliveryAddress','chActivityType','activityName','tradeNo','deliveryMemo','chCancelStatus','refundReason','refundTime','submitMessage']"});
                 jsonArr.push({ key: 'exportTitlesJson', value:"['ID','影院编码','本地单号','用户','手机号','卖品内容','总原价','活动优惠金额','优惠券优惠金额','实付金额','支付状态','支付方式','支付时间','下单状态','下单时间','取货方式','系统单号','取货码','优惠券名称','送货地址','活动类型','活动名称','支付交易号','备注','退卖品状态','退款原因','退款时间','下单失败原因']" });
                 jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
-                jsonArr.push({ key: 'orderNo', value: orderNo });
+                jsonArr.push({ key: 'submitOrderCode', value: submitOrderCode });
                 jsonArr.push({ key: 'mobile', value: mobile });
                 jsonArr.push({ key: 'payWay', value: payWay });
                 jsonArr.push({ key: 'printNo', value: printNo });

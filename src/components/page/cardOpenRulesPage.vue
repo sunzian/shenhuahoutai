@@ -35,9 +35,9 @@
                         class="handle-select mr10"
                 >
                     <el-option key="1" label="不赠送" value="1"></el-option>
-                    <el-option key="2" label="赠送RMB" value="2"></el-option>
+                    <!--<el-option key="2" label="赠送RMB" value="2"></el-option>-->
                     <el-option key="3" label="赠送券包" value="3"></el-option>
-                    <el-option key="4" label="两者都送" value="4"></el-option>
+                    <!--<el-option key="4" label="两者都送" value="4"></el-option>-->
                 </el-select>
                 <el-select
                     clearable

@@ -35,6 +35,12 @@
                     autocomplete="off"
                     class="mr10"
                 ></el-input>
+                <el-input
+                        placeholder="后台发放批次编号"
+                        v-model="query.sendCode"
+                        autocomplete="off"
+                        class="mr10"
+                ></el-input>
                 <el-select
                     clearable
                     v-model="query.status"
@@ -60,8 +66,8 @@
                     <el-option key="7" label="会员卡注册送券" value="7"></el-option>
                     <el-option key="8" label="会员卡充值送券" value="8"></el-option>
                     <el-option key="9" label="权益卡券包" value="9"></el-option>
-                    <el-option key="9" label="员工推荐充值赠送" value="10"></el-option>
-                    <el-option key="9" label="绑定售票系统的券" value="11"></el-option>
+                    <el-option key="10" label="员工推荐充值赠送" value="10"></el-option>
+                    <el-option key="11" label="绑定售票系统的券" value="11"></el-option>
                 </el-select>
                 <el-button
                     type="primary"
@@ -69,6 +75,12 @@
                     style="margin-top: 10px;width: 90px;"
                     @click="Search"
                 >搜索</el-button>
+                <el-button
+                        type="primary"
+                        @click="delAllcoupon"
+                        style="float: right;margin-top: 10px"
+                        icon="el-icon-circle-plus-outline"
+                >批量删除优惠券</el-button>
             </div>
             <el-table
                 :data="tableData"
@@ -78,6 +90,7 @@
                 header-cell-class-name="table-header"
                 @selection-change="handleSelectionChange"
             >
+                <el-table-column type="selection" width="55"></el-table-column>
                 <el-table-column label="优惠券所属影院" width="190">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
@@ -87,8 +100,11 @@
                 <el-table-column prop="name" label="用户手机号" width="120">
                     <template slot-scope="scope">{{scope.row.userMobile}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="优惠券名称" width="260">
+                <el-table-column prop="memo" label="优惠券名称" width="220">
                     <template slot-scope="scope">{{scope.row.couponName}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="后台发放批次编号" width="180">
+                    <template slot-scope="scope">{{scope.row.sendCode}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="领取时间" width="160">
                     <template slot-scope="scope">{{scope.row.createDate}}</template>
@@ -109,7 +125,7 @@
                         <el-tag v-else-if="scope.row.status=='3'">已过期</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="memo" label="领取类型" width="160">
+                <el-table-column prop="memo" label="领取类型" width="100">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.getType=='1'">注册送券</el-tag>
                         <el-tag v-else-if="scope.row.getType=='2'">聊天室领取</el-tag>
@@ -124,18 +140,18 @@
                         <el-tag v-else-if="scope.row.getType=='11'">绑定售票系统的券</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="使用订单号" align="center" width="260">
+                <el-table-column label="使用订单号" align="center" width="200">
                     <template slot-scope="scope">{{scope.row.orderNum}}</template>
                 </el-table-column>
-                <!-- <el-table-column label="操作" align="center" fixed="right">
+              <el-table-column label="操作" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-button
                             type="text"
                             icon="el-icon-setting"
-                            @click="addChange(scope.$index, scope.row)"
-                        >解绑</el-button>
+                            @click="delChange(scope.$index, scope.row)"
+                        >删除</el-button>
                     </template>
-                </el-table-column> -->
+                </el-table-column>
             </el-table>
             <div class="pagination">
                 <el-pagination
@@ -446,13 +462,7 @@ export default {
         this.getAllCinema();
     },
     methods: {
-        addChange(index, row) {
-            this.$confirm('此操作将解绑会员卡, 是否继续?', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-            })
-                .then(() => {
+        delAllcoupon() {
                     const loading = this.$loading({
                         lock: true,
                         text: 'Loading',
@@ -460,42 +470,87 @@ export default {
                         background: 'rgba(0, 0, 0, 0.7)',
                         target: document.querySelector('.div1')
                     });
-                    setTimeout(() => {
-                        this.idx = index;
-                        this.form = row;
-                        var jsonArr = [];
-                        jsonArr.push({ key: 'id', value: row.id });
-                        let sign = md5(preSign(jsonArr));
-                        jsonArr.push({ key: 'sign', value: sign });
-                        let params = ParamsAppend(jsonArr);
-                        https
-                            .fetchPost('/memberCard/unbindMemberCard', params)
-                            .then(data => {
-                                loading.close();
-                                if (data.data.code == 'success') {
-                                    this.message = '解绑成功！';
-                                    this.open();
-                                    this.getMenu();
-                                } else if (data.data.code == 'nologin') {
-                                    this.message = data.data.message;
-                                    this.open();
-                                    this.$router.push('/login');
-                                } else {
-                                    this.message = data.data.message;
-                                    this.open();
-                                }
-                            })
-                            .catch(err => {
-                                loading.close();
-                                console.log(err);
-                            });
-                    }, 500);
+                    let couponArr=[];
+                    for(let x in this.multipleSelection){
+                        couponArr.push(this.multipleSelection[x].id)
+                    }
+                    console.log(couponArr.join(','));
+                    let deleteType='';
+                    if(this.multipleSelection.length==15){
+                        deleteType=2
+                    }else{
+                        deleteType=1
+                    }
+                    var jsonArr = [];
+                    jsonArr.push({ key: 'deleteType', value: deleteType });
+                    jsonArr.push({ key: 'ids', value: couponArr.join(',') });
+                    jsonArr.push({ key: 'cinemaCode', value: this.query.cinemaCode });
+                    jsonArr.push({ key: 'userMobile', value: this.query.userMobile });
+                    jsonArr.push({ key: 'status', value: this.query.status });
+                    jsonArr.push({ key: 'getType', value: this.query.getType});
+                    jsonArr.push({ key: 'orderNum', value: this.query.orderNo});
+                    jsonArr.push({ key: 'couponName', value: this.query.couponName});
+                    jsonArr.push({ key: 'sendCode', value: this.query.sendCode});
+                    let sign = md5(preSign(jsonArr));
+                    jsonArr.push({ key: 'sign', value: sign });
+            console.log(jsonArr);
+            let params = ParamsAppend(jsonArr);
+                    https
+                        .fetchPost('/userCoupon/deleteUserCouponBatch', params)
+                        .then(data => {
+                            loading.close();
+                            if (data.data.code == 'success') {
+                                this.$message.success(`删除成功`);
+                                this.getMenu();
+                            } else if (data.data.code == 'nologin') {
+                                this.message = data.data.message;
+                                this.open();
+                                this.$router.push('/login');
+                            } else {
+                                this.message = data.data.message;
+                                this.open();
+                            }
+                        })
+                        .catch(err => {
+                            loading.close();
+                            console.log(err);
+                        });
+        },
+        delChange(index, row) {
+            //删除数据
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
+            this.idx = index;
+            this.form = row;
+            let jsonArr = [];
+            jsonArr.push({ key: 'id', value: row.id });
+            let sign = md5(preSign(jsonArr));
+            jsonArr.push({ key: 'sign', value: sign });
+            let params = ParamsAppend(jsonArr);
+            https
+                .fetchDelete('/userCoupon/deleteUserCoupon', params)
+                .then(data => {
+                    loading.close();
+                    if (data.data.code == 'success') {
+                        this.$message.error(`删除了`);
+                        this.getMenu();
+                    } else if (data.data.code == 'nologin') {
+                        this.message = data.data.message;
+                        this.open();
+                        this.$router.push('/login');
+                    } else {
+                        this.message = data.data.message;
+                        this.open();
+                    }
                 })
-                .catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: '已取消解绑'
-                    });
+                .catch(err => {
+                    loading.close();
+                    console.log(err);
                 });
         },
         Search() {
@@ -534,6 +589,7 @@ export default {
             });
             setTimeout(() => {
                 let cinemaCode = this.query.cinemaCode;
+                let sendCode = this.query.sendCode;
                 let orderNo = this.query.orderNo;
                 let userMobile = this.query.userMobile;
                 let status = this.query.status;
@@ -541,6 +597,9 @@ export default {
                 let couponName = this.query.couponName;
                 if (!cinemaCode) {
                     cinemaCode = '';
+                }
+                if (!sendCode) {
+                    sendCode = '';
                 }
                 if (!couponName) {
                     couponName = '';
@@ -565,10 +624,11 @@ export default {
                 jsonArr.push({ key: 'couponName', value: couponName });
                 jsonArr.push({ key: 'userMobile', value: userMobile });
                 jsonArr.push({ key: 'status', value: status });
+                jsonArr.push({ key: 'sendCode', value: sendCode });
                 jsonArr.push({ key: 'getType', value: getType });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
-                console.log(jsonArr)
+                console.log(jsonArr);
                 var params = ParamsAppend(jsonArr);
                 https
                     .fetchPost('/userCoupon/page', params)
@@ -576,6 +636,7 @@ export default {
                         loading.close();
                         if (data.data.code == 'success') {
                             var oData = JSON.parse(Decrypt(data.data.data));
+                            console.log(oData);
                             this.tableData = oData.data;
                             this.query.pageSize = oData.pageSize;
                             this.query.pageNo = oData.pageNo;
@@ -604,6 +665,7 @@ export default {
         },
         // 多选操作
         handleSelectionChange(val) {
+            console.log(val);
             this.multipleSelection = val;
         },
         handleSizeChange(val) {
