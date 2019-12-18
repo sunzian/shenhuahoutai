@@ -1272,17 +1272,13 @@ export default {
     left: 241px;
     top: 53px;
     width: 400px;
-    overflow: hidden;
-	text-overflow: ellipsis;
-	display: -webkit-box;
-	-webkit-line-clamp: 2;
-	-webkit-box-orient: vertical;
 }
 .poster-dimensional {
     display: inline;
     border:1px solid red;
     color: red;
     font-size: 18px;
+    white-space: nowrap;
 }
 .poster-area {
     color: rgba(136, 136, 136, 1);
