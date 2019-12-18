@@ -319,10 +319,11 @@ export default {
                 let cinemaCode = this.query.cinemaCode;
                 let consumeCinemaCode = this.query.consumeCinemaCode;
                 let orderType = this.query.orderType;
-                let cardNo = this.query.cardNo;
+                let orderNo = this.query.orderNo;
                 let mobilePhone = this.query.mobilePhone;
                 let startDate = this.query.startDate;
                 let endDate = this.query.endDate;
+                let status = this.query.status;
                 if (!orderType) {
                     orderType = '';
                 }
@@ -332,8 +333,8 @@ export default {
                 if (!cinemaCode) {
                     cinemaCode = '';
                 }
-                if (!cardNo) {
-                    cardNo = '';
+                if (!orderNo) {
+                    orderNo = '';
                 }
                 if (!mobilePhone) {
                     mobilePhone = '';
@@ -344,17 +345,21 @@ export default {
                 if (!endDate) {
                     endDate = '';
                 }
+                if (!status) {
+                    status = '';
+                }
                 let jsonArr = [];
                 jsonArr.push({ key: 'tableName', value: "member_card_consume" });
                 jsonArr.push({ key: 'exportKeysJson', value: "['id','cinemaCode','cinemaName','consumeCinemaCode','consumeCinemaName','cardNo','userName','mobilePhone','consumeAmount','consumeDetail','chStatus','orderCode','chOrderType','consumeTime','errorMessage','userName','orderCode']"});
                 jsonArr.push({ key: 'exportTitlesJson', value:"['ID','开卡影院编码','开卡影院名称','消费影院编码','消费影院名称','消费卡号','会员卡所属用户','消费手机号','消费金额','消费明细','支付状态','订单号','订单类型','消费时间','接口调用结果','会员卡所属用户','订单号']" });
                 jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
                 jsonArr.push({ key: 'consumeCinemaCode', value: consumeCinemaCode });
-                jsonArr.push({ key: 'cardNo', value: cardNo });
+                jsonArr.push({ key: 'cardNo', value: orderNo });
                 jsonArr.push({ key: 'mobilePhone', value: mobilePhone });
                 jsonArr.push({ key: 'orderType', value: orderType });
                 jsonArr.push({ key: 'startDate', value: startDate });
                 jsonArr.push({ key: 'endDate', value: endDate });
+                jsonArr.push({ key: 'status', value: status });
                 var params = ParamsAppend(jsonArr);
                 console.log(jsonArr);
                 let myObj = {

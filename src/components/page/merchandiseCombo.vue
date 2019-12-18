@@ -792,6 +792,7 @@ export default {
                     .then(data => {
                         loading.close();
                         if (data.data.code == 'success') {
+                            this.selectedSell=[];
                             this.oForm.merchandiseCode=(JSON.parse(Decrypt(data.data.data))).merchandiseSet;
                             console.log(this.oForm.merchandiseCode);
                             let json ={
