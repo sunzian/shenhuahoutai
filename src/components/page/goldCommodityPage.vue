@@ -351,7 +351,7 @@
                     :required="true"
                     label="生效方式"
                     :label-width="formLabelWidth"
-                    v-if="oForm.commodity_type!=1||oForm.commodity_type!=4"
+                    v-if="oForm.commodity_type!=1&&oForm.commodity_type!=4"
                 >
                     <el-select v-model="oForm.effectiveType" placeholder="请选择生效方式">
                         <el-option
@@ -719,7 +719,7 @@
                     :required="true"
                     label="生效方式"
                     :label-width="formLabelWidth"
-                    v-if="form.commodityType!=1"
+                    v-if="form.commodityType!=1&&form.commodityType!=4"
                 >
                     <el-select v-model="oEffectiveType" placeholder="请选择生效方式">
                         <el-option
@@ -732,7 +732,7 @@
                 </el-form-item>
                 <el-form-item
                     :required="true"
-                    v-if="oEffectiveType==1 && form.commodityType!=1"
+                    v-if="oEffectiveType==1 && form.commodityType!=1&&form.commodityType!=4"
                     label="领取后几天开始生效"
                     :label-width="formLabelWidth"
                 >
@@ -742,7 +742,7 @@
                     :required="true"
                     label="有效期："
                     :label-width="formLabelWidth"
-                    v-if="form.commodityType!=1 && oEffectiveType==2"
+                    v-if="form.commodityType!=1 && oEffectiveType==2&&form.commodityType!=4"
                 >
                     <el-date-picker
                         v-model="oStartEffectiveDate"
