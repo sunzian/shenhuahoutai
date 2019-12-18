@@ -29,7 +29,7 @@
                     class="handle-select mr10"
                 >
                     <el-option key="1" label="启用" value="1"></el-option>
-                    <el-option key="2" label="作废" value="2"></el-option>
+                    <el-option key="2" label="停用" value="2"></el-option>
                 </el-select>
                 <el-input
                     placeholder="商户名称"
@@ -85,7 +85,7 @@
                 <el-table-column prop="sort" label="是否显示" width="120">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status=='1'">启用</el-tag>
-                        <el-tag v-else-if="scope.row.status=='2'">作废</el-tag>
+                        <el-tag v-else-if="scope.row.status=='2'">停用</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column prop="sort" label="门店电话" width="220">
@@ -155,6 +155,7 @@
                         maxlength="30"
                         v-model="oForm.storeMobile"
                         autocomplete="off"
+                        onkeyup="this.value=this.value.replace(/[^0-9-]+/,'')"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="联系人" :label-width="formLabelWidth" :required="true">
@@ -171,6 +172,7 @@
                         maxlength="30"
                         v-model="oForm.concatMobile"
                         autocomplete="off"
+                        onkeyup="this.value=this.value.replace(/\D/g,'')"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="门店地址" :label-width="formLabelWidth" :required="true">
@@ -216,9 +218,10 @@
                         maxlength="8"
                         v-model="oForm.verifyCode"
                         autocomplete="off"
+                        onkeyup="value=value.replace(/[^\w\.\/]/ig,'')"
                     ></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="是否启用" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="状态" :label-width="formLabelWidth">
                     <el-select v-model="oForm.status" placeholder="选择是否启用">
                         <el-option
                             v-for="item in showStatus"
@@ -236,9 +239,9 @@
         </el-dialog>
         <!-- 编辑弹出框 -->
         <el-dialog :close-on-click-modal="false" title="编辑" :visible.sync="editVisible">
-            <el-form ref="form" :model="form">
+            <el-form ref="form" :model="changeForm">
                 <el-form-item :required="true" label="适用影院" :label-width="formLabelWidth">
-                    <el-checkbox-group v-model="form.cinemaCodes" @change="changeCinema2">
+                    <el-checkbox-group v-model="changeForm.cinemaCodes" @change="changeCinema2">
                         <el-checkbox
                             v-for="item in cinemaInfo"
                             :key="item.cinemaCode"
@@ -251,7 +254,7 @@
                     <el-input
                         style="width: 250px"
                         maxlength="30"
-                        v-model="form.partnerName"
+                        v-model="changeForm.partnerName"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
@@ -259,15 +262,16 @@
                     <el-input
                         style="width: 250px"
                         maxlength="30"
-                        v-model="form.storeMobile"
+                        v-model="changeForm.storeMobile"
                         autocomplete="off"
+                        onkeyup="this.value=this.value.replace(/[^0-9-]+/,'')"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="联系人" :label-width="formLabelWidth" :required="true">
                     <el-input
                         style="width: 250px"
                         maxlength="30"
-                        v-model="form.concatName"
+                        v-model="changeForm.concatName"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
@@ -275,22 +279,23 @@
                     <el-input
                         style="width: 250px"
                         maxlength="30"
-                        v-model="form.concatMobile"
+                        v-model="changeForm.concatMobile"
                         autocomplete="off"
+                        onkeyup="this.value=this.value.replace(/\D/g,'')"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="门店地址" :label-width="formLabelWidth" :required="true">
                     <el-input
                         style="width: 250px"
                         maxlength="200"
-                        v-model="form.address"
+                        v-model="changeForm.address"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="营业开始时间" :label-width="formLabelWidth">
                     <el-time-picker
                         style="width: 200px"
-                        v-model="form.beginTime"
+                        v-model="changeForm.beginTime"
                         type="datetime"
                         value-format="HH:mm"
                         format="HH:mm"
@@ -300,7 +305,7 @@
                 <el-form-item label="营业结束时间" :label-width="formLabelWidth">
                     <el-time-picker
                         style="width: 200px"
-                        v-model="form.endTime"
+                        v-model="changeForm.endTime"
                         type="datetime"
                         value-format="HH:mm"
                         format="HH:mm"
@@ -312,7 +317,7 @@
                         style="width: 250px"
                         type="textarea"
                         maxlength="200"
-                        v-model="form.memo"
+                        v-model="changeForm.memo"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
@@ -320,12 +325,13 @@
                     <el-input
                         style="width: 250px"
                         maxlength="8"
-                        v-model="form.verifyCode"
+                        v-model="changeForm.verifyCode"
                         autocomplete="off"
+                        onkeyup="value=value.replace(/[^\w\.\/]/ig,'')"
                     ></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="是否启用" :label-width="formLabelWidth">
-                    <el-select v-model="form.status" placeholder="选择是否启用">
+                <el-form-item :required="true" label="状态" :label-width="formLabelWidth">
+                    <el-select v-model="changeForm.status" placeholder="选择是否启用">
                         <el-option
                             v-for="item in showStatus"
                             :key="item.value"
@@ -380,7 +386,7 @@ export default {
             drawer1: false,
             drawer2: false,
             pageTotal: 0,
-            form: {
+            changeForm: {
                 partnerName: '',
                 memo: '',
                 storeMobile: '',
@@ -432,7 +438,7 @@ export default {
                 },
                 {
                     value: '2',
-                    label: '作废'
+                    label: '停用'
                 }
             ],
             businessOptiones: [],
@@ -621,7 +627,7 @@ export default {
                     });
                     setTimeout(() => {
                         this.idx = index;
-                        this.form = row;
+                        this.changeForm = row;
                         let jsonArr = [];
                         jsonArr.push({ key: 'id', value: row.id });
                         let sign = md5(preSign(jsonArr));
@@ -667,7 +673,7 @@ export default {
             });
             setTimeout(() => {
                 this.idx = index;
-                this.form = row;
+                // this.changeForm = row;
                 var jsonArr = [];
                 jsonArr.push({ key: 'id', value: row.id });
                 let sign = md5(preSign(jsonArr));
@@ -679,7 +685,6 @@ export default {
                         loading.close();
                         if (data.data.code == 'success') {
                             this.editVisible = true;
-                            console.log(JSON.parse(Decrypt(data.data.data)))
                             let index = 0; //是否显示下拉选显示对应的选项
                             for (let i in this.showStatus) {
                                 if (this.options[i].value == JSON.parse(Decrypt(data.data.data)).status) {
@@ -687,18 +692,18 @@ export default {
                                     break;
                                 }
                             }
-                            this.form.status = this.showStatus[index].value;
-                            this.form.cinemaCodes = JSON.parse(Decrypt(data.data.data)).cinemaCodes.split(",");
-                            this.form.partnerName = JSON.parse(Decrypt(data.data.data)).partnerName;
-                            this.form.storeMobile = JSON.parse(Decrypt(data.data.data)).storeMobile;
-                            this.form.concatName = JSON.parse(Decrypt(data.data.data)).concatName;
-                            this.form.concatMobile = JSON.parse(Decrypt(data.data.data)).concatMobile;
-                            this.form.address = JSON.parse(Decrypt(data.data.data)).address;
-                            this.form.beginTime = JSON.parse(Decrypt(data.data.data)).beginTime;
-                            this.form.endTime = JSON.parse(Decrypt(data.data.data)).endTime;
-                            this.form.memo = JSON.parse(Decrypt(data.data.data)).memo;
-                            this.form.verifyCode = JSON.parse(Decrypt(data.data.data)).verifyCode;
-                            this.form.id = JSON.parse(Decrypt(data.data.data)).id;
+                            this.changeForm.status = this.showStatus[index].value;
+                            this.changeForm.cinemaCodes = JSON.parse(Decrypt(data.data.data)).cinemaCodes.split(",");
+                            this.changeForm.partnerName = JSON.parse(Decrypt(data.data.data)).partnerName;
+                            this.changeForm.storeMobile = JSON.parse(Decrypt(data.data.data)).storeMobile;
+                            this.changeForm.concatName = JSON.parse(Decrypt(data.data.data)).concatName;
+                            this.changeForm.concatMobile = JSON.parse(Decrypt(data.data.data)).concatMobile;
+                            this.changeForm.address = JSON.parse(Decrypt(data.data.data)).address;
+                            this.changeForm.beginTime = JSON.parse(Decrypt(data.data.data)).beginTime;
+                            this.changeForm.endTime = JSON.parse(Decrypt(data.data.data)).endTime;
+                            this.changeForm.memo = JSON.parse(Decrypt(data.data.data)).memo;
+                            this.changeForm.verifyCode = JSON.parse(Decrypt(data.data.data)).verifyCode;
+                            this.changeForm.id = JSON.parse(Decrypt(data.data.data)).id;
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
                             this.open();
@@ -723,69 +728,69 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            if (this.form.cinemaCodes.length == 0) {
+            if (this.changeForm.cinemaCodes.length == 0) {
                 this.message = '请选择影院！';
                 this.open();
                 loading.close();
                 return;
             }
-            if (this.form.partnerName == '') {
+            if (this.changeForm.partnerName == '') {
                 this.message = '商户名称不能为空！';
                 this.open();
                 loading.close();
                 return;
             }
-            if (this.form.storeMobile == '') {
+            if (this.changeForm.storeMobile == '') {
                 this.message = '门店电话不能为空！';
                 this.open();
                 loading.close();
                 return;
             }
-            if (this.form.concatName == '') {
+            if (this.changeForm.concatName == '') {
                 this.message = '联系人不能为空！';
                 this.open();
                 loading.close();
                 return;
             }
-            if (this.form.concatMobile == '') {
+            if (this.changeForm.concatMobile == '') {
                 this.message = '联系人电话不能为空！';
                 this.open();
                 loading.close();
                 return;
             }
-            if (this.form.address == '') {
+            if (this.changeForm.address == '') {
                 this.message = '门店地址不能为空！';
                 this.open();
                 loading.close();
                 return;
             }
-            if (this.form.verifyCode == '') {
+            if (this.changeForm.verifyCode == '') {
                 this.message = '核销码不能为空！';
                 this.open();
                 loading.close();
                 return;
             }
-            if (this.form.status == '') {
+            if (this.changeForm.status == '') {
                 this.message = '状态不能为空！';
                 this.open();
                 loading.close();
                 return;
             }
             setTimeout(() => {
-                let cinemaCodes = this.form.cinemaCodes.join(",")
+                let cinemaCodes = this.changeForm.cinemaCodes.join(",")
                 var jsonArr = [];
-                jsonArr.push({ key: 'partnerName', value: this.form.partnerName });
+                jsonArr.push({ key: 'partnerName', value: this.changeForm.partnerName });
                 jsonArr.push({ key: 'cinemaCodes', value: cinemaCodes });
-                jsonArr.push({ key: 'status', value: this.form.status });
-                jsonArr.push({ key: 'storeMobile', value: this.form.storeMobile });
-                jsonArr.push({ key: 'concatName', value: this.form.concatName });
-                jsonArr.push({ key: 'concatMobile', value: this.form.concatMobile });
-                jsonArr.push({ key: 'address', value: this.form.address });
-                jsonArr.push({ key: 'beginTime', value: this.form.beginTime });
-                jsonArr.push({ key: 'endTime', value: this.form.endTime });
-                jsonArr.push({ key: 'memo', value: this.form.memo });
-                jsonArr.push({ key: 'verifyCode', value: this.form.verifyCode });
-                jsonArr.push({ key: 'id', value: this.form.id });
+                jsonArr.push({ key: 'status', value: this.changeForm.status });
+                jsonArr.push({ key: 'storeMobile', value: this.changeForm.storeMobile });
+                jsonArr.push({ key: 'concatName', value: this.changeForm.concatName });
+                jsonArr.push({ key: 'concatMobile', value: this.changeForm.concatMobile });
+                jsonArr.push({ key: 'address', value: this.changeForm.address });
+                jsonArr.push({ key: 'beginTime', value: this.changeForm.beginTime });
+                jsonArr.push({ key: 'endTime', value: this.changeForm.endTime });
+                jsonArr.push({ key: 'memo', value: this.changeForm.memo });
+                jsonArr.push({ key: 'verifyCode', value: this.changeForm.verifyCode });
+                jsonArr.push({ key: 'id', value: this.changeForm.id });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
                 console.log(jsonArr);
@@ -900,7 +905,7 @@ export default {
             this.oForm.cinemaCodes = val;
         },
         changeCinema2(val) {
-            this.form.cinemaCodes = val;
+            this.changeForm.cinemaCodes = val;
         },
         // 获取所有影院
         getAllCinema() {

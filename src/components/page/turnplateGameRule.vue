@@ -144,7 +144,7 @@
                 <el-form-item :required="true" label="游戏名称" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oForm.gameName" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="大转盘背景图" :label-width="formLabelWidth">
+                <el-form-item label="大转盘背景图" :label-width="formLabelWidth">
                     <el-popover placement="right" title trigger="hover">
                         <img style="width: 400px" :src="this.oImageUrl" />
                         <img
@@ -318,7 +318,7 @@
                 <el-form-item :required="true" label="游戏名称" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="form.gameName" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="大转盘背景图" :label-width="formLabelWidth">
+                <el-form-item label="大转盘背景图" :label-width="formLabelWidth">
                     <el-popover placement="right" title trigger="hover">
                         <img style="width: 400px" :src="this.oImageUrl" />
                         <img
@@ -990,12 +990,12 @@ export default {
                 loading.close();
                 return;
             }
-            if (!this.oImageUrl) {
-                this.message = '大转盘背景图不能为空，请检查！';
-                this.open();
-                loading.close();
-                return;
-            }
+            // if (!this.oImageUrl) {
+            //     this.message = '大转盘背景图不能为空，请检查！';
+            //     this.open();
+            //     loading.close();
+            //     return;
+            // }
             if (!this.oForm.startDate) {
                 this.message = '活动开始时间不能为空，请检查！';
                 this.open();
@@ -1090,12 +1090,12 @@ export default {
                 loading.close();
                 return;
             }
-            if (!this.oImageUrl) {
-                this.message = '大转盘背景图不能为空，请检查！';
-                this.open();
-                loading.close();
-                return;
-            }
+            // if (!this.oImageUrl) {
+            //     this.message = '大转盘背景图不能为空，请检查！';
+            //     this.open();
+            //     loading.close();
+            //     return;
+            // }
             if (!this.form.startDate) {
                 this.message = '活动开始时间不能为空，请检查！';
                 this.open();
@@ -1442,6 +1442,7 @@ export default {
                                 console.log('新增');
                                 this.showSell = false;
                                 this.addShow = true;
+                                this.oImageUrl = '';
                             } else {
                                 //编辑
                                 console.log('编辑');
@@ -1450,6 +1451,7 @@ export default {
                                 console.log(JSON.parse(Decrypt(data.data.data)));
                                 this.form = JSON.parse(Decrypt(data.data.data));
                                 this.prizeInfoList = JSON.parse(Decrypt(data.data.data)).prizeInfoList;
+                                this.oImageUrl = JSON.parse(Decrypt(data.data.data)).imageUrl;
                                 //兑换方式下拉选显示对应的选项
                                 //   console.log(typeof JSON.parse(Decrypt(data.data.data)).goldCommodity.changeType);
                                 for (let x in this.options) {

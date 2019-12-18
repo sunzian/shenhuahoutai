@@ -683,7 +683,7 @@
                         @imgDel="$imgDel"
                     />
                 </el-form-item>
-                <el-form-item v-if="form.commodityType==1" :required="true" label="原价" :label-width="formLabelWidth">
+                <el-form-item v-if="form.commodityType==1 || form.commodityType==4" :required="true" label="原价" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model.trim="form.originalPrice" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="库存" :label-width="formLabelWidth">
@@ -2486,7 +2486,7 @@ export default {
                 }
             }
             if(this.oEffectiveType==1 && this.form.commodityType!=1&&this.form.commodityType!=4){
-                if (!this.oLaterDays&&this.oLaterDays!=0) {
+                if (!this.oLaterDays) {
                     this.message = '领取后几天开始生效不能为空，请检查！';
                     this.open();
                     loading.close();
