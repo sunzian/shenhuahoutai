@@ -77,12 +77,12 @@
         </div>
         <div class="container" v-if="!showSell">
             <div class="handle-box">
-                <el-input placeholder="服务费规则名称" class="mr10" v-model="query.serviceFeeName" autocomplete="off"></el-input>
                 <el-select
                     clearable
                     v-model="query.screenType"
                     placeholder="影厅类型"
                     class="handle-select mr10"
+                    style="margin-left:10px"
                 >
                     <el-option key="1" label="全部影厅" value="1"></el-option>
                     <el-option key="2" label="部分影厅" value="2"></el-option>
@@ -92,6 +92,7 @@
                     v-model="query.filmType"
                     placeholder="影片类型"
                     class="handle-select mr10"
+                    style="margin-left:10px"
                 >
                     <el-option key="1" label="全部影片" value="1"></el-option>
                     <el-option key="2" label="部分影片" value="2"></el-option>
@@ -101,6 +102,7 @@
                     v-model="query.status"
                     placeholder="状态"
                     class="handle-select mr10"
+                    style="margin-left:10px"
                 >
                     <el-option key="1" label="启用" value="1"></el-option>
                     <el-option key="2" label="未启用" value="2"></el-option>
@@ -109,6 +111,7 @@
                     v-model="query.minStartDate"
                     type="datetime"
                     class="mr10"
+                    style="margin-left:10px"
                     value-format="yyyy-MM-dd HH:mm:ss"
                     format="yyyy-MM-dd HH:mm:ss"
                     placeholder="开始时间（起）"
@@ -117,6 +120,7 @@
                     v-model="query.maxStartDate"
                     type="datetime"
                     class="mr10"
+                    style="margin-left:10px"
                     value-format="yyyy-MM-dd HH:mm:ss"
                     format="yyyy-MM-dd HH:mm:ss"
                     placeholder="开始时间（止）"
@@ -125,6 +129,7 @@
                     v-model="query.minEndDate"
                     type="datetime"
                     class="mr10"
+                    style="margin-left:10px"
                     value-format="yyyy-MM-dd HH:mm:ss"
                     format="yyyy-MM-dd HH:mm:ss"
                     placeholder="结束时间（起）"
@@ -133,11 +138,19 @@
                     v-model="query.maxEndDate"
                     type="datetime"
                     class="mr10"
+                    style="margin-left:10px"
                     value-format="yyyy-MM-dd HH:mm:ss"
                     format="yyyy-MM-dd HH:mm:ss"
                     placeholder="结束时间（止）"
                 ></el-date-picker>
-                <el-button style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="searchEmployee">搜索</el-button>
+                <el-input
+                    placeholder="服务费规则名称"
+                    v-model="query.serviceFeeName"
+                    autocomplete="off"
+                    class="mr10"
+                    style="width: 22%;margin-left:10px"
+                ></el-input>
+                <el-button style="margin-top: 10px;width: 90px;margin-left: 10px;" type="primary" icon="el-icon-search" @click="searchEmployee">搜索</el-button>
                 <el-button
                     type="primary"
                     @click="back"

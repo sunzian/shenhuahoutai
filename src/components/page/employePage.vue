@@ -424,7 +424,6 @@ export default {
     },
     mounted() {
         this.getMenu();
-        this.getAllCinema();
     },
     methods: {
         deletCoupon() {
@@ -875,18 +874,14 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            let name = this.query.name;
-            let status = this.query.status;
-            if (!name) {
-                name = '';
-            }
-            if (!status) {
-                status = '';
+            let cinemaCode = this.query.cinemaCode;
+            if (!cinemaCode) {
+                cinemaCode = '';
             }
             let jsonArr = [];
             jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
             jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
-            jsonArr.push({ key: 'cinemaCode', value: name });
+            jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             var params = ParamsAppend(jsonArr);
@@ -896,12 +891,12 @@ export default {
                     loading.close();
                     if (data.data.code == 'success') {
                         var oData = JSON.parse(Decrypt(data.data.data));
-                        console.log(oData);
                         this.tableData = oData.data;
                         // this.query.pageSize = oData.pageSize;
                         // this.query.pageNo = oData.pageNo;
                         this.query.totalCount = oData.totalCount;
                         this.query.totalPage = oData.totalPage;
+                        this.getAllCinema();
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
@@ -984,12 +979,13 @@ export default {
                     loading.close();
                     if (data.data.code == 'success') {
                         let cinemas = JSON.parse(Decrypt(data.data.data));
-                        for (let i = 0; i < cinemas.length; i++) {
-                            let cinemaInfo = {};
-                            cinemaInfo.label = cinemas[i].cinemaName;
-                            cinemaInfo.value = cinemas[i].cinemaCode;
-                            this.cinemaInfo.push(cinemaInfo);
-                        }
+                        // for (let i = 0; i < cinemas.length; i++) {
+                        //     let cinemaInfo = {};
+                        //     cinemaInfo.label = cinemas[i].cinemaName;
+                        //     cinemaInfo.value = cinemas[i].cinemaCode;
+                        //     this.cinemaInfo.push(cinemaInfo);
+                        // }
+                        this.cinemaInfo = cinemas;
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
