@@ -57,10 +57,10 @@
                     <el-option key="2" label="优惠后价格上报" value="2"></el-option>
                 </el-select>
                 <el-select
-                        clearable
-                        v-model="query.orderNumber"
-                        placeholder="排序规则"
-                        class="handle-select mr10"
+                    clearable
+                    v-model="query.orderNumber"
+                    placeholder="排序规则"
+                    class="handle-select mr10"
                 >
                     <el-option key="1" label="到期时间升序" value="1"></el-option>
                     <el-option key="2" label="到期时间降序" value="2"></el-option>
@@ -129,10 +129,10 @@
                 <!--</template>-->
                 <!--</el-table-column>-->
                 <el-table-column label="费用支付类型" width="120" align="center">
-                <template slot-scope="scope">
-                <el-tag v-if="scope.row.paymentType == 1" type="info">包年</el-tag>
-                <el-tag v-else type="info">按票收费</el-tag>
-                </template>
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row.paymentType == 1" type="info">包年</el-tag>
+                        <el-tag v-else type="info">按票收费</el-tag>
+                    </template>
                 </el-table-column>
                 <el-table-column prop="number" label="剩余票数" width="90">
                     <template slot-scope="scope">{{scope.row.remainTicketsNumber}}</template>
@@ -176,16 +176,16 @@
             </el-table>
             <div class="pagination">
                 <el-pagination
-                        background
-                        @size-change="handleSizeChange"
-                        layout="total, sizes, prev, pager, next, jumper"
-                        :current-page="query.pageNo"
-                        :page-sizes="[10, 15, 20, 30]"
-                        :page-size="query.pageSize"
-                        :total="query.totalCount"
-                        @current-change="currentChange"
-                        @prev-click="prev"
-                        @next-click="next"
+                    background
+                    @size-change="handleSizeChange"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :current-page="query.pageNo"
+                    :page-sizes="[10, 15, 20, 30]"
+                    :page-size="query.pageSize"
+                    :total="query.totalCount"
+                    @current-change="currentChange"
+                    @prev-click="prev"
+                    @next-click="next"
                 ></el-pagination>
             </div>
         </div>
@@ -258,7 +258,12 @@
                     ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="影院联系人电话" :label-width="formLabelWidth">
-                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 250px" v-model="oConcatMobile" autocomplete="off"></el-input>
+                    <el-input
+                        onkeyup="this.value=this.value.replace(/\D/g,'')"
+                        style="width: 250px"
+                        v-model="oConcatMobile"
+                        autocomplete="off"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item
                     :required="true"
@@ -266,7 +271,16 @@
                     label="客服电话"
                     :label-width="formLabelWidth"
                 >
+<<<<<<< HEAD
                     <el-input style="width: 250px" v-model="oServiceMobile" autocomplete="off"></el-input>
+=======
+                    <el-input
+                        onkeyup="this.value=this.value.replace(/\D/g,'')"
+                        style="width: 250px"
+                        v-model="oServiceMobile"
+                        autocomplete="off"
+                    ></el-input>
+>>>>>>> a3ed88d8535bd1774547ce08aa069e8e4d300f30
                 </el-form-item>
                 <el-form-item label="开场前的购票时间限制（分钟）" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oBuyMinutesLimit" autocomplete="off"></el-input>
@@ -303,17 +317,25 @@
                     ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="购票提示" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" type="textarea" :rows="3" v-model="oBuyTicketHint" maxlength="100" show-word-limit autocomplete="off"></el-input>
+                    <el-input
+                        style="width: 250px"
+                        type="textarea"
+                        :rows="3"
+                        v-model="oBuyTicketHint"
+                        maxlength="100"
+                        show-word-limit
+                        autocomplete="off"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="权益卡协议" :label-width="formLabelWidth">
                     <el-input
-                            style="width: 250px"
-                            type="textarea"
-                            v-model="oEquityCardAgreement"
-                            autocomplete="off"
-                            maxlength="1000"
-                            :rows="6"
-                            show-word-limit
+                        style="width: 250px"
+                        type="textarea"
+                        v-model="oEquityCardAgreement"
+                        autocomplete="off"
+                        maxlength="1000"
+                        :rows="6"
+                        show-word-limit
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="金币活动描述 " :label-width="formLabelWidth">
@@ -568,14 +590,14 @@
                 <!--</el-select>-->
                 <!--</el-form-item>-->
                 <!--<el-form-item :required="true" label="会员卡是否门店通用" :label-width="formLabelWidth">-->
-                    <!--<el-select v-model="oMemberCardCommonUseStatus" @change="openServe">-->
-                        <!--<el-option-->
-                            <!--v-for="info in boolean"-->
-                            <!--:key="info.value"-->
-                            <!--:label="info.label"-->
-                            <!--:value="info.value"-->
-                        <!--&gt;</el-option>-->
-                    <!--</el-select>-->
+                <!--<el-select v-model="oMemberCardCommonUseStatus" @change="openServe">-->
+                <!--<el-option-->
+                <!--v-for="info in boolean"-->
+                <!--:key="info.value"-->
+                <!--:label="info.label"-->
+                <!--:value="info.value"-->
+                <!--&gt;</el-option>-->
+                <!--</el-select>-->
                 <!--</el-form-item>-->
                 <el-form-item label="小程序名称" :label-width="formLabelWidth">
                     <el-input
@@ -667,7 +689,13 @@
                     <el-input style="width: 250px" v-model="oVerificationCode" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="小程序分享标题" :label-width="formLabelWidth">
-                    <el-input maxlength="25" style="width: 250px" v-model="oMiniShareTitle" autocomplete="off" placeholder="最多显示25个字"></el-input>
+                    <el-input
+                        maxlength="25"
+                        style="width: 250px"
+                        v-model="oMiniShareTitle"
+                        autocomplete="off"
+                        placeholder="最多显示25个字"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item label="小程序分享海报" :label-width="formLabelWidth">
                     <el-popover placement="right" title trigger="hover">
@@ -696,17 +724,20 @@
                             将文件拖到此处，或
                             <em>点击上传</em>
                         </div>
-                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过100kb 建议尺寸540*400或按比例上传</div>
+                        <div
+                            class="el-upload__tip"
+                            slot="tip"
+                        >只能上传jpg/png文件，且不超过100kb 建议尺寸540*400或按比例上传</div>
                     </el-upload>
                 </el-form-item>
                 <el-form-item label="影院公告" :label-width="formLabelWidth">
                     <el-input
-                            style="width: 250px"
-                            type="textarea"
-                            v-model="oNotice"
-                            autocomplete="off"
-                            maxlength="300"
-                            show-word-limit
+                        style="width: 250px"
+                        type="textarea"
+                        v-model="oNotice"
+                        autocomplete="off"
+                        maxlength="300"
+                        show-word-limit
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="特色服务" :label-width="formLabelWidth">
@@ -737,16 +768,8 @@
                 </el-table-column>
                 <el-table-column label="操作" width="100" align="center">
                     <template slot-scope="scope">
-                        <el-button
-                            type="text"
-                            icon="el-icon-edit"
-                            @click="editServe(scope)"
-                        >编辑</el-button>
-                        <el-button
-                            type="text"
-                            icon="el-icon-delete"
-                            @click="deleteServe(scope)"
-                        >删除</el-button>
+                        <el-button type="text" icon="el-icon-edit" @click="editServe(scope)">编辑</el-button>
+                        <el-button type="text" icon="el-icon-delete" @click="deleteServe(scope)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -760,7 +783,7 @@
             top="30vh"
             :close-on-click-modal="false"
             :visible.sync="addServeInfo"
-            >
+        >
             <el-form>
                 <el-form-item label="特色服务名称" :label-width="formLabelWidth">
                     <el-input
@@ -793,7 +816,7 @@
             top="30vh"
             :close-on-click-modal="false"
             :visible.sync="editServeInfo"
-            >
+        >
             <el-form>
                 <el-form-item label="特色服务名称" :label-width="formLabelWidth">
                     <el-input
@@ -841,7 +864,7 @@ export default {
             addServeInfo: false,
             serveForm: {
                 serviceName: '',
-                serviceDetail: '',
+                serviceDetail: ''
             },
             addServiceName: '',
             addServiceDetail: '',
@@ -990,9 +1013,9 @@ export default {
         this.getMenu();
     },
     methods: {
-        exceed(data){
+        exceed(data) {
             console.log(data);
-            if(data.length==1){
+            if (data.length == 1) {
                 this.message = '只能上传一张图片，如需重新上传请删除第一张图！';
                 this.open();
             }
@@ -1020,7 +1043,13 @@ export default {
                     if (data.data.code == 'success') {
                         console.log(JSON.parse(Decrypt(data.data.data)));
                         this.editVisible = true;
-                        this.serveData = JSON.parse(Decrypt(data.data.data)).cinemaSpecialService.serviceDetailList;
+                        if (
+                            JSON.parse(Decrypt(data.data.data)) &&
+                            JSON.parse(Decrypt(data.data.data)).cinemaSpecialService &&
+                            JSON.parse(Decrypt(data.data.data)).cinemaSpecialService.serviceDetailList
+                        ) {
+                            this.serveData = JSON.parse(Decrypt(data.data.data)).cinemaSpecialService.serviceDetailList;
+                        }
                         this.oCinemaName = JSON.parse(Decrypt(data.data.data)).Cinema.cinemaName;
                         this.oBelongBusinessCode = JSON.parse(Decrypt(data.data.data)).Cinema.belongBusinessCode;
                         this.oMiniAppName = JSON.parse(Decrypt(data.data.data)).Cinema.miniAppName;
@@ -1185,7 +1214,7 @@ export default {
                 loading.close();
                 return;
             }
-            if (this.oConcatMobile.length!=11) {
+            if (this.oConcatMobile.length != 11) {
                 this.message = '请输入正确的影院联系人电话！';
                 this.open();
                 loading.close();
@@ -1459,9 +1488,9 @@ export default {
             if (!isLt100Kb) {
                 this.message = '图片大小不能超过100kb！';
                 this.open();
-                return false
+                return false;
             }
-            return isLt100Kb
+            return isLt100Kb;
         },
         unSuccess(data) {
             //修改上传文件 登录超时
@@ -1483,23 +1512,23 @@ export default {
             if (this.addServiceName == '' || this.addServiceDetail == '') {
                 this.message = '请填写服务名称或内容';
                 this.open();
-                return
+                return;
             } else {
                 let serve = {};
                 serve.serviceName = this.addServiceName;
                 serve.serviceDetail = this.addServiceDetail;
                 serve.id = '';
-                this.serveData.push(serve)
+                this.serveData.push(serve);
                 this.addServeInfo = false;
                 this.addServiceName = '';
                 this.addServiceDetail = '';
             }
         },
-        sureEditServe () {
+        sureEditServe() {
             if (this.editServiceName == '' || this.editServiceDetail == '') {
                 this.message = '请填写服务名称或内容';
                 this.open();
-                return
+                return;
             } else {
                 this.serveData[this.serveIndex].serviceName = this.editServiceName;
                 this.serveData[this.serveIndex].serviceDetail = this.editServiceDetail;
@@ -1515,15 +1544,15 @@ export default {
             this.editServeInfo = true;
         },
         deleteServe(val) {
-            this.serveData.splice(val.$index,1)
+            this.serveData.splice(val.$index, 1);
         },
         // 多选操作
         handleSelectionChange(val) {
             this.multipleSelection = val;
         },
         handleSizeChange(val) {
-            this.query.pageSize=val;
-            this.getMenu()
+            this.query.pageSize = val;
+            this.getMenu();
         },
         currentChange(val) {
             //点击选择具体页数
@@ -1542,7 +1571,7 @@ export default {
         },
         openServe(e) {
             // 开通各种服务状态
-        },
+        }
     }
 };
 </script>
