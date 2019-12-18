@@ -221,7 +221,7 @@
         <el-dialog :close-on-click-modal="false" title="新增商品" :visible.sync="dialogFormVisible">
             <el-form v-model="oForm">
                 <el-form-item :required="true" label="允许兑换的门店" :label-width="formLabelWidth">
-                    <el-checkbox-group v-model="checkedCities" @change="getCinemaCode">
+                    <el-checkbox-group v-model="oCheckedCities" @change="getCinemaCode">
                         <el-checkbox
                                 v-for="city in cities"
                                 :label="city.cinemaCode"
@@ -1085,13 +1085,13 @@
                             background
                             @size-change="bHandleSizeChange"
                             layout="total, sizes, prev, pager, next, jumper"
-                            :current-page="query.bPageNo"
+                            :current-page="query.oPageNo"
                             :page-sizes="[10, 15, 20, 30]"
-                            :page-size="query.bPageSize"
-                            :total="query.bTotalCount"
-                            @current-change="bCurrentChange"
-                            @prev-click="bPrev"
-                            @next-click="bNext"
+                            :page-size="query.oPageSize"
+                            :total="query.oTotalCount"
+                            @current-change="oCurrentChange"
+                            @prev-click="oPrev"
+                            @next-click="oNext"
                     ></el-pagination>
                 </div>
             </div>
@@ -1140,7 +1140,9 @@ export default {
                 aPageNo: 1,
                 aPageSize: 15,
                 bPageNo: 1,
-                bPageSize: 15
+                bPageSize: 15,
+                oPageNo: 1,
+                oPageSize: 15
             },
             fileList: [],
             tableData: [],
@@ -1545,15 +1547,20 @@ export default {
                 });
         },
         getPartner(){
+            if(this.oCheckedCities.length==0){
+                this.message = '请选择允许兑换的门店！';
+                this.open();
+                return;
+            }
             let partnerName = this.query.partnerName;
             if (!partnerName) {
                 partnerName = '';
             }
             let jsonArr = [];
-            jsonArr.push({ key: 'cinemaCodes', value: this.checkedCities });
+            jsonArr.push({ key: 'cinemaCodes', value: this.oCheckedCities });
             jsonArr.push({ key: 'partnerName', value: partnerName });
-            jsonArr.push({ key: 'pageNo', value: this.query.bPageNo });
-            jsonArr.push({ key: 'pageSize', value: this.query.bPageSize });
+            jsonArr.push({ key: 'pageNo', value: this.query.oPageNo });
+            jsonArr.push({ key: 'pageSize', value: this.query.oPageSize });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             var params = ParamsAppend(jsonArr);
@@ -1565,6 +1572,10 @@ export default {
                         console.log(res);
                         this.query.partnerName='';
                         this.partnerList = res.data;
+                        this.query.oPageSize = res.pageSize;
+                        this.query.oPageNo = res.pageNo;
+                        this.query.oTotalCount = res.totalCount;
+                        this.query.oTotalPage = res.totalPage;
                         this.drawerPartner = true;
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
@@ -1613,7 +1624,7 @@ export default {
                 groupName = '';
             }
             let jsonArr = [];
-            jsonArr.push({ key: 'cinemaCodes', value: this.checkedCities[0] });
+            jsonArr.push({ key: 'cinemaCodes', value: this.oCheckedCities[0] });
             jsonArr.push({ key: 'groupName', value: groupName });
             jsonArr.push({ key: 'status', value: 1 });
             jsonArr.push({ key: 'pageNo', value: this.query.bPageNo });
@@ -1659,7 +1670,7 @@ export default {
             this.ticketIds = a;
         },
         getCinemaCode(val) {
-            this.checkedCities = val;
+            this.oCheckedCities = val;
             this.partnerName = '';
             this.partnerCode = '';
         },
@@ -1690,7 +1701,7 @@ export default {
                 }
                 let jsonArr = [];
                 jsonArr.push({ key: 'name', value: name });
-                jsonArr.push({ key: 'cinemaCode', value: this.checkedCities[0] });
+                jsonArr.push({ key: 'cinemaCode', value: this.oCheckedCities[0] });
                 // jsonArr.push({ key: 'simpleType', value: '1' });
                 // jsonArr.push({ key: 'status', value: '1' });
                 jsonArr.push({ key: 'pageNo', value: this.query.aPageNo });
@@ -1820,7 +1831,7 @@ export default {
                 loading.close();
                 return;
             }
-            if (this.checkedCities.length==0) {
+            if (this.oCheckedCities.length==0) {
                 this.message = '允许兑换的门店不能为空，请检查！';
                 this.open();
                 loading.close();
@@ -2035,7 +2046,7 @@ export default {
             jsonArr.push({ key: 'changeType', value: this.oForm.change_type });
             jsonArr.push({ key: 'gold', value: this.oForm.gold });
             jsonArr.push({ key: 'money', value: this.oForm.money });
-            jsonArr.push({ key: 'cinemaCodes', value: this.checkedCities });
+            jsonArr.push({ key: 'cinemaCodes', value: this.oCheckedCities });
             jsonArr.push({ key: 'status', value: this.oForm.status });
             jsonArr.push({ key: 'commodityType', value: this.oForm.commodity_type });
             jsonArr.push({ key: 'assignType', value: this.oForm.assign_type });
@@ -2093,7 +2104,7 @@ export default {
                             this.oForm.endEffectiveDate = '';
                             this.oForm.gold = '';
                             this.oForm.money = '';
-                            this.checkedCities = [];
+                            this.oCheckedCities = [];
                             this.oForm.status = '';
                             this.oForm.commodity_type = '';
                             this.oForm.ticketIds = '';
@@ -2917,6 +2928,21 @@ export default {
             this.query.bPageNo++;
             this.changeCoupon();
         },
+            oCurrentChange(val) {
+    //点击选择具体页数
+    this.query.oPageNo = val;
+    this.getPartner();
+},
+oPrev() {
+    //分页按钮上一页
+    this.query.oPageNo--;
+    this.getPartner();
+},
+oNext() {
+    //分页按钮下一页
+    this.query.oPageNo++;
+    this.getPartner();
+},
         $imgAdd(pos, $file) {
             const isLt2M = $file.size / 1024 < 300;
             if (!isLt2M) {
