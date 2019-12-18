@@ -267,7 +267,7 @@
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" label="选择商品：" :label-width="formLabelWidth">
-                    <el-radio-group v-model="oSelectMerchandiseType" @change="clearMerchandiseCode()">
+                    <el-radio-group v-model="oSelectMerchandiseType" @change="clearMerchandiseCode2()">
                         <el-radio label="0">全部商品</el-radio>
                         <el-radio label="1">部分商品</el-radio>
                         <el-radio label="2">排除商品</el-radio>
@@ -508,6 +508,12 @@ export default {
         clearMerchandiseCode(){
             this.oForm.merchandiseCode=[];
             this.oMerchandiseCode=[];
+            this.getAllGoods(this.oForm.cinemaCode);
+        },
+        clearMerchandiseCode2(){
+            this.oForm.merchandiseCode=[];
+            this.oMerchandiseCode=[];
+            this.getAllGoods(this.oCinemaCode);
         },
         addPage() {
             //获取新增按钮权限
@@ -526,7 +532,6 @@ export default {
                         this.dialogFormVisible = true;
                         this.oForm.merchandiseCode = [];
                         this.getAllGoods();
-                        console.log(JSON.parse(Decrypt(data.data.data)))
                         if (JSON.parse(Decrypt(data.data.data)).adminFlag <= 1) {
                             this.oForm.commonType = 1
                         } else {
@@ -1178,7 +1183,6 @@ export default {
             jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
-            console.log(jsonArr);
             var params = ParamsAppend(jsonArr);
             https
                 .fetchPost('merchandiseCoupon/merchandiseCouponPage', params)

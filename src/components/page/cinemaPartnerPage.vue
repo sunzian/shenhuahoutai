@@ -388,6 +388,7 @@ export default {
             pageTotal: 0,
             changeForm: {
                 partnerName: '',
+                partnerCode: '',
                 memo: '',
                 storeMobile: '',
                 concatName: '',
@@ -695,6 +696,7 @@ export default {
                             this.changeForm.status = this.showStatus[index].value;
                             this.changeForm.cinemaCodes = JSON.parse(Decrypt(data.data.data)).cinemaCodes.split(",");
                             this.changeForm.partnerName = JSON.parse(Decrypt(data.data.data)).partnerName;
+                            this.changeForm.partnerCode = JSON.parse(Decrypt(data.data.data)).partnerCode;
                             this.changeForm.storeMobile = JSON.parse(Decrypt(data.data.data)).storeMobile;
                             this.changeForm.concatName = JSON.parse(Decrypt(data.data.data)).concatName;
                             this.changeForm.concatMobile = JSON.parse(Decrypt(data.data.data)).concatMobile;
@@ -780,6 +782,7 @@ export default {
                 let cinemaCodes = this.changeForm.cinemaCodes.join(",")
                 var jsonArr = [];
                 jsonArr.push({ key: 'partnerName', value: this.changeForm.partnerName });
+                jsonArr.push({ key: 'partnerCode', value: this.changeForm.partnerCode });
                 jsonArr.push({ key: 'cinemaCodes', value: cinemaCodes });
                 jsonArr.push({ key: 'status', value: this.changeForm.status });
                 jsonArr.push({ key: 'storeMobile', value: this.changeForm.storeMobile });
