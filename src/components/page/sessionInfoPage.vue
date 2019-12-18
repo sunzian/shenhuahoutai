@@ -372,9 +372,9 @@
                         <img :src="'data:image/png;base64,'+item.image" class="poster-img" />
                         <span class="poster-filmName">
                             {{item.filmName}}
-                            <span
-                                style="display: inline;border:1px solid red;color: red;font-size: 18px;"
-                            >{{item.dimensional}}</span>
+                            <span class="poster-dimensional">
+                                {{item.dimensional}}
+                            </span>
                         </span>
                         <span
                             class="poster-area"
@@ -1273,20 +1273,32 @@ export default {
     position: absolute;
     left: 241px;
     top: 53px;
+    width: 400px;
+    overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+}
+.poster-dimensional {
+    display: inline;
+    border:1px solid red;
+    color: red;
+    font-size: 18px;
 }
 .poster-area {
     color: rgba(136, 136, 136, 1);
     font-size: 22px;
     position: absolute;
     left: 241px;
-    top: 123px;
+    top: 135px;
 }
 .poster-actor {
     color: rgba(136, 136, 136, 1);
     font-size: 24px;
     position: absolute;
     left: 241px;
-    top: 155px;
+    top: 165px;
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
@@ -1295,7 +1307,7 @@ export default {
 }
 .poster-sessionList {
     position: relative;
-    margin-top: -90px;
+    margin-top: -75px;
     display: flex;
     flex-wrap: wrap;
 }
