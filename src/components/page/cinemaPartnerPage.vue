@@ -76,7 +76,10 @@
                 header-cell-class-name="table-header"
                 @selection-change="handleSelectionChange"
             >
-                <el-table-column label="影院名称" width="300">
+                <el-table-column prop="sort" label="商户名称" width="220">
+                    <template slot-scope="scope">{{scope.row.partnerName}}</template>
+                </el-table-column>
+                <el-table-column label="所属影院名称" width="300">
                     <template slot-scope="scope">{{scope.row.cinemaNames}}</template>
                 </el-table-column>
                 <el-table-column prop="sort" label="是否显示" width="120">
@@ -84,9 +87,6 @@
                         <el-tag v-if="scope.row.status=='1'">启用</el-tag>
                         <el-tag v-else-if="scope.row.status=='2'">作废</el-tag>
                     </template>
-                </el-table-column>
-                <el-table-column prop="sort" label="商户名称" width="220">
-                    <template slot-scope="scope">{{scope.row.partnerName}}</template>
                 </el-table-column>
                 <el-table-column prop="sort" label="门店电话" width="220">
                     <template slot-scope="scope">{{scope.row.storeMobile}}</template>
@@ -140,16 +140,6 @@
                             :value="item.cinemaCode"
                         >{{item.cinemaName}}</el-checkbox>
                     </el-checkbox-group>
-                </el-form-item>
-                <el-form-item :required="true" label="是否启用" :label-width="formLabelWidth">
-                    <el-select v-model="oForm.status" placeholder="选择是否启用">
-                        <el-option
-                            v-for="item in showStatus"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value"
-                        ></el-option>
-                    </el-select>
                 </el-form-item>
                 <el-form-item :required="true" label="商户名称" :label-width="formLabelWidth">
                     <el-input
@@ -228,6 +218,16 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
+                <el-form-item :required="true" label="是否启用" :label-width="formLabelWidth">
+                    <el-select v-model="oForm.status" placeholder="选择是否启用">
+                        <el-option
+                            v-for="item in showStatus"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="cancelAdd">取 消</el-button>
@@ -246,16 +246,6 @@
                             :value="item.cinemaCode"
                         >{{item.cinemaName}}</el-checkbox>
                     </el-checkbox-group>
-                </el-form-item>
-                <el-form-item :required="true" label="是否启用" :label-width="formLabelWidth">
-                    <el-select v-model="form.status" placeholder="选择是否启用">
-                        <el-option
-                            v-for="item in showStatus"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value"
-                        ></el-option>
-                    </el-select>
                 </el-form-item>
                 <el-form-item :required="true" label="商户名称" :label-width="formLabelWidth">
                     <el-input
@@ -333,6 +323,16 @@
                         v-model="form.verifyCode"
                         autocomplete="off"
                     ></el-input>
+                </el-form-item>
+                <el-form-item :required="true" label="是否启用" :label-width="formLabelWidth">
+                    <el-select v-model="form.status" placeholder="选择是否启用">
+                        <el-option
+                            v-for="item in showStatus"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value"
+                        ></el-option>
+                    </el-select>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">

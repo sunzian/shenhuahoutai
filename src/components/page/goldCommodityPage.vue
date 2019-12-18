@@ -14,12 +14,26 @@
                     v-model="query.cinemaCode"
                     placeholder="请选择影院"
                     class="handle-input mr10"
+                    @change="changeSearchCinema"
                 >
                     <el-option
                         v-for="item in cinemaInfo"
                         :key="item.cinemaCode"
                         :label="item.cinemaName"
                         :value="item.cinemaCode"
+                    ></el-option>
+                </el-select>
+                <el-select
+                    clearable
+                    v-model="query.partnerCode"
+                    placeholder="请选择商家"
+                    class="handle-input mr10"
+                >
+                    <el-option
+                        v-for="item in partnerInfo"
+                        :key="item.partnerCode"
+                        :label="item.partnerName"
+                        :value="item.partnerCode"
                     ></el-option>
                 </el-select>
                 <el-input v-model="query.name" placeholder="商品名称" class="handle-input mr10"></el-input>
@@ -51,6 +65,7 @@
                     <el-option key="1" label="实物" value="1"></el-option>
                     <el-option key="2" label="优惠券" value="2"></el-option>
                     <el-option key="3" label="券包" value="3"></el-option>
+                    <el-option key="4" label="商品" value="4"></el-option>
                 </el-select>
                 <el-select clearable v-model="query.topStatus" placeholder="是否今日大牌" class="handle-select mr10">
                     <el-option key="1" label="否" value="1"></el-option>
@@ -133,6 +148,7 @@
                         <el-tag v-if="scope.row.commodityType=='1'">实物</el-tag>
                         <el-tag v-else-if="scope.row.commodityType=='2'">优惠券</el-tag>
                         <el-tag v-else-if="scope.row.commodityType=='3'">券包</el-tag>
+                        <el-tag v-else-if="scope.row.commodityType=='4'">商品</el-tag>
                     </template>
                 </el-table-column>
                 <!-- <el-table-column prop="sort" label="优惠券名称" width="130">
@@ -584,7 +600,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item
-                    v-if="form.commodityType==1"
+                    v-if="form.commodityType==1 || form.commodityType==4"
                     label="商品名称"
                     :label-width="formLabelWidth"
                     :required="true"
@@ -1040,6 +1056,7 @@
                             v-model="query.partnerName"
                             placeholder="商户名称"
                             class="handle-input mr12"
+                            @input="changePartnerName($event)"
                     ></el-input>
                     <el-button type="primary" icon="el-icon-search" @click="getPartner">搜索</el-button>
                 </div>
@@ -1468,6 +1485,7 @@ export default {
             cinemaInfo: [],
             sellTableData: [],
             selectedSell: [],
+            partnerInfo: [],
             drawer: false, //选择优惠券弹出框,
             ticketIds: '',
             couponList: [],
@@ -1491,6 +1509,41 @@ export default {
             }
             this.drawerPartner = false;
         },
+        changePartnerName(e) {
+            this.$forceUpdate();
+        },
+        changeSearchCinema(val) {
+            this.getSearchPartner(val);
+        },
+        getSearchPartner(val){
+            let cinemaCode = val;
+            if (!cinemaCode) {
+                cinemaCode = '';
+            }
+            let jsonArr = [];
+            jsonArr.push({ key: 'cinemaCodes', value: cinemaCode });
+            let sign = md5(preSign(jsonArr));
+            jsonArr.push({ key: 'sign', value: sign });
+            var params = ParamsAppend(jsonArr);
+            https
+                .fetchPost('/cinemaPartner/getPartnerPage', params)
+                .then(data => {
+                    if (data.data.code == 'success') {
+                        var res = JSON.parse(Decrypt(data.data.data));
+                        this.partnerInfo = res.data;
+                    } else if (data.data.code == 'nologin') {
+                        this.message = data.data.message;
+                        this.open();
+                        this.$router.push('/login');
+                    } else {
+                        this.message = data.data.message;
+                        this.open();
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        },
         getPartner(){
             let partnerName = this.query.partnerName;
             if (!partnerName) {
@@ -1504,7 +1557,6 @@ export default {
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             var params = ParamsAppend(jsonArr);
-            console.log(jsonArr);
             https
                 .fetchPost('/cinemaPartner/getPartnerPage', params)
                 .then(data => {
@@ -1512,16 +1564,7 @@ export default {
                         var res = JSON.parse(Decrypt(data.data.data));
                         console.log(res);
                         this.query.partnerName='';
-                        // if (res.data.length == 0) {
-                        //     this.message = '暂无券包';
-                        //     this.open();
-                        //     return;
-                        // }
                         this.partnerList = res.data;
-                        // this.query.bPageSize = res.pageSize;
-                        // this.query.bPageNo = res.pageNo;
-                        // this.query.bTotalCount = res.totalCount;
-                        // this.query.bTotalPage = res.totalPage;
                         this.drawerPartner = true;
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
@@ -1537,7 +1580,6 @@ export default {
                 });
         },
         exceed(data){
-            console.log(data);
             if(data.length==1){
                 this.message = '只能上传一张图片，如需重新上传请删除第一张图！';
                 this.open();
@@ -1579,7 +1621,6 @@ export default {
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             var params = ParamsAppend(jsonArr);
-            console.log(jsonArr);
             https
                 .fetchPost('/couponGroup/couponGroupPage', params)
                 .then(data => {
@@ -1619,7 +1660,8 @@ export default {
         },
         getCinemaCode(val) {
             this.checkedCities = val;
-            console.log(this.checkedCities);
+            this.partnerName = '';
+            this.partnerCode = '';
         },
         getCurrentRow(index) {
             //优惠券弹出框index
@@ -2034,10 +2076,9 @@ export default {
                 https
                     .fetchPost('/goldCommodity/addGoldCommodity', params)
                     .then(data => {
-                        loading.close();
                         //新增
-                        console.log(data);
                         if (data.data.code == 'success') {
+                            loading.close();
                             // this.$refs.upload.clearFiles(); //清除已上传文件
                             this.oForm.name = '';
                             this.oForm.image_url = '';
@@ -2052,7 +2093,7 @@ export default {
                             this.oForm.endEffectiveDate = '';
                             this.oForm.gold = '';
                             this.oForm.money = '';
-                            this.oForm.checkedCities = '';
+                            this.checkedCities = [];
                             this.oForm.status = '';
                             this.oForm.commodity_type = '';
                             this.oForm.ticketIds = '';
@@ -2070,10 +2111,12 @@ export default {
                             this.$message.success(`新增成功`);
                             this.getMenu();
                         } else if (data.data.code == 'nologin') {
+                            loading.close();
                             this.message = data.data.message;
                             this.open();
                             this.$router.push('/login');
                         } else {
+                            loading.close();
                             this.message = data.data.message;
                             this.open();
                         }
@@ -2667,6 +2710,7 @@ export default {
             });
             setTimeout(() => {
                 let cinemaCodes = this.query.cinemaCode;
+                let partnerCode = this.query.partnerCode;
                 let status = this.query.status;
                 let changeType = this.query.changeType;
                 let commodityType = this.query.commodityType;
@@ -2675,6 +2719,9 @@ export default {
                 let name = this.query.name;
                 if (!cinemaCodes) {
                     cinemaCodes = '';
+                }
+                if (!partnerCode) {
+                    partnerCode = '';
                 }
                 if (!status) {
                     status = '';
@@ -2699,6 +2746,7 @@ export default {
                 jsonArr.push({ key: 'recommendStatus', value: recommendStatus });
                 jsonArr.push({ key: 'topStatus', value: topStatus });
                 jsonArr.push({ key: 'cinemaCodes', value: cinemaCodes });
+                jsonArr.push({ key: 'partnerCode', value: partnerCode });
                 jsonArr.push({ key: 'status', value: status });
                 jsonArr.push({ key: 'changeType', value: changeType });
                 jsonArr.push({ key: 'commodityType', value: commodityType });
@@ -2713,7 +2761,6 @@ export default {
                         loading.close();
                         if (data.data.code == 'success') {
                             var oData = JSON.parse(Decrypt(data.data.data));
-                            console.log(oData)
                             this.tableData = oData.data;
                             this.query.pageSize = oData.pageSize;
                             this.query.pageNo = oData.pageNo;
@@ -2799,6 +2846,8 @@ export default {
         },
         changeCinema(val) {
             this.oCheckedCities = val;
+            this.partnerCode = '';
+            this.partnerName = '';
         },
         open() {
             //信息提示弹出框
