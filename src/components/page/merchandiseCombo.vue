@@ -9,22 +9,22 @@
         </div>
         <!--影院信息展示页面-->
         <div class="container" v-if="showSell">
-            <div class="handle-box">
-                <el-select
-                    clearable
-                    v-model="query.cinemaCode"
-                    placeholder="请选择影院"
-                    class="handle-input mr10"
-                >
-                    <el-option
-                        v-for="item in cinemaInfo"
-                        :key="item.cinemaCode"
-                        :label="item.cinemaName"
-                        :value="item.cinemaCode"
-                    ></el-option>
-                </el-select>
-                <el-button style="margin-top: 10px;width: 90px;"  type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
-            </div>
+            <!--<div class="handle-box">-->
+                <!--<el-select-->
+                    <!--clearable-->
+                    <!--v-model="query.cinemaCode"-->
+                    <!--placeholder="请选择影院"-->
+                    <!--class="handle-input mr10"-->
+                <!--&gt;-->
+                    <!--<el-option-->
+                        <!--v-for="item in cinemaInfo"-->
+                        <!--:key="item.cinemaCode"-->
+                        <!--:label="item.cinemaName"-->
+                        <!--:value="item.cinemaCode"-->
+                    <!--&gt;</el-option>-->
+                <!--</el-select>-->
+                <!--<el-button style="margin-top: 10px;width: 90px;"  type="primary" icon="el-icon-search" @click="Search">搜索</el-button>-->
+            <!--</div>-->
             <el-table
                 :data="tableData"
                 border

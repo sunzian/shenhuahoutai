@@ -959,7 +959,7 @@ export default {
                 loading.close();
                 return;
             }
-            if(this.oGivenType==2){
+            if(this.oGivenType=='赠送金额'){
                 if(!this.oGivenMoney){
                     this.message = '赠送金额不能为空，请检查！';
                     this.open();

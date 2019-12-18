@@ -463,7 +463,17 @@ export default {
     },
     methods: {
         delAllcoupon() {
-                    const loading = this.$loading({
+            if(!this.multipleSelection||this.multipleSelection.length==0){
+                this.message = '请先勾选需要删除的优惠券！';
+                this.open();
+                return;
+            }
+            this.$confirm('此操作将永久删除优惠券, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                const loading = this.$loading({
                         lock: true,
                         text: 'Loading',
                         spinner: 'el-icon-loading',
@@ -493,8 +503,8 @@ export default {
                     jsonArr.push({ key: 'sendCode', value: this.query.sendCode});
                     let sign = md5(preSign(jsonArr));
                     jsonArr.push({ key: 'sign', value: sign });
-            console.log(jsonArr);
-            let params = ParamsAppend(jsonArr);
+                    console.log(jsonArr);
+                    let params = ParamsAppend(jsonArr);
                     https
                         .fetchPost('/userCoupon/deleteUserCouponBatch', params)
                         .then(data => {
@@ -515,9 +525,21 @@ export default {
                             loading.close();
                             console.log(err);
                         });
+            })
+                .catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
         },
         delChange(index, row) {
             //删除数据
+            this.$confirm('此操作将永久删除该优惠券, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
             const loading = this.$loading({
                 lock: true,
                 text: 'Loading',
@@ -551,6 +573,13 @@ export default {
                 .catch(err => {
                     loading.close();
                     console.log(err);
+                });
+            })
+                .catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
                 });
         },
         Search() {

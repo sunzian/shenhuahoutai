@@ -551,13 +551,13 @@ export default {
                 loading.close();
                 return;
             }
-            if(!this.summary){
+            if(!this.oForm.summary){
                 this.message = '概述不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
             }
-            if(!this.imageUrl){
+            if(!this.oForm.imageUrl){
                 this.message = '封面图片不能为空，请检查！';
                 this.open();
                 loading.close();
