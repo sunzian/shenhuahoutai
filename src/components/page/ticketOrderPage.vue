@@ -120,18 +120,18 @@
                     placeholder="场次结束时间（止）"
                 ></el-date-picker>
                 <el-button
-                    type="primary"
-                    icon="el-icon-search"
-                    style="float: right;margin-top: 10px;width: 90px;"
-                    @click="Search"
-                    class="mr10"
-                >搜索</el-button>
-                <el-button
                         type="primary"
                         @click="derive"
                         icon="el-icon-circle-plus-outline"
                         style="float: right;margin-right:10px;margin-top: 10px"
                 >导出</el-button>
+                <el-button
+                        type="primary"
+                        icon="el-icon-search"
+                        style="float: right;margin-top: 10px;width: 90px;"
+                        @click="Search"
+                        class="mr10"
+                >搜索</el-button>
             </div>
             <div class="handle-box">
                 票数：
@@ -241,11 +241,11 @@
                 <el-table-column prop="memo" label="票价" width="70">
                     <template slot-scope="scope">{{scope.row.totalPrice}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="最低票价" width="80">
-                    <template slot-scope="scope">{{scope.row.totalLowestPrice}}</template>
-                </el-table-column>
-                <el-table-column prop="memo" label="回传金额" width="80">
-                    <template slot-scope="scope">{{scope.row.totalSubmitPrice}}</template>
+                <!--<el-table-column prop="memo" label="最低票价" width="80">-->
+                    <!--<template slot-scope="scope">{{scope.row.totalLowestPrice}}</template>-->
+                <!--</el-table-column>-->
+                <el-table-column prop="memo" label="上报金额" width="80">
+                    <template slot-scope="scope">{{scope.row.totalReportPrice}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="服务费" width="70">
                     <template slot-scope="scope">{{scope.row.totalServiceFee}}</template>
