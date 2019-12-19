@@ -272,7 +272,6 @@
                     :label-width="formLabelWidth"
                 >
                     <el-input
-                        onkeyup="this.value=this.value.replace(/\D/g,'')"
                         style="width: 250px"
                         v-model="oServiceMobile"
                         autocomplete="off"

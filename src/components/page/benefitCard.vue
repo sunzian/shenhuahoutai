@@ -186,7 +186,7 @@
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oForm.isFilmJoin==1&&oForm.cardType==1" label="影票权益说明" :label-width="formLabelWidth">
-                  <el-input v-model="oForm.filmSimpleDesc" maxlength="200" show-word-limit type="textarea"></el-input>
+                  <el-input placeholder="如：适用的影厅，制式，影片以及优惠的方式，限制数量和可用时间段等说明。方便用户了解使用规则。" :rows="3" v-model="oForm.filmSimpleDesc" maxlength="200" show-word-limit type="textarea"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oForm.isFilmJoin==1&&oForm.cardType==1" label="选择影厅" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.selectHallType" @change="clearScreenCode()">
@@ -578,7 +578,7 @@
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oIsFilmJoin==1&&oCardType==1" label="影票权益说明" :label-width="formLabelWidth">
-                    <el-input v-model="oFilmSimpleDesc"  maxlength="200" show-word-limit type="textarea"></el-input>
+                    <el-input placeholder="如：适用的影厅，制式，影片以及优惠的方式，限制数量和可用时间段等说明。方便用户了解使用规则。" :rows="3" v-model="oFilmSimpleDesc"  maxlength="200" show-word-limit type="textarea"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oIsFilmJoin==1&&oCardType==1" label="选择影厅" :label-width="formLabelWidth">
                     <el-radio-group v-model="oSelectHallType" @change="clearScreenCode()">
