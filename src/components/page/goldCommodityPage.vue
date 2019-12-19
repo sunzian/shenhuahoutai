@@ -265,7 +265,7 @@
                     :required="true"
                 >
                     <el-input
-                        style="width: 250px"
+                        style="width: 280px"
                         v-model="partnerName"
                         autocomplete="off"
                         disabled
@@ -691,7 +691,7 @@
                     :required="true"
                 >
                     <el-input
-                        style="width: 250px"
+                        style="width: 280px"
                         v-model="partnerName"
                         autocomplete="off"
                         disabled
@@ -2224,7 +2224,6 @@ export default {
                         //新增
                         if (data.data.code == 'success') {
                             loading.close();
-                            // this.$refs.upload.clearFiles(); //清除已上传文件
                             this.oForm.name = '';
                             this.oForm.image_url = '';
                             this.oForm.memo = '';
@@ -2252,6 +2251,7 @@ export default {
                             this.oForm.topStatus = '';
                             this.oForm.recommendStatus = '';
                             this.oForm.sort = '';
+                            this.partnerCode = '';
                             this.dialogFormVisible = false;
                             this.$message.success(`新增成功`);
                             this.getMenu();
