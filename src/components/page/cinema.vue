@@ -271,16 +271,12 @@
                     label="客服电话"
                     :label-width="formLabelWidth"
                 >
-<<<<<<< HEAD
-                    <el-input style="width: 250px" v-model="oServiceMobile" autocomplete="off"></el-input>
-=======
                     <el-input
                         onkeyup="this.value=this.value.replace(/\D/g,'')"
                         style="width: 250px"
                         v-model="oServiceMobile"
                         autocomplete="off"
                     ></el-input>
->>>>>>> a3ed88d8535bd1774547ce08aa069e8e4d300f30
                 </el-form-item>
                 <el-form-item label="开场前的购票时间限制（分钟）" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oBuyMinutesLimit" autocomplete="off"></el-input>
