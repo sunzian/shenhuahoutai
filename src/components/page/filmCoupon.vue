@@ -1077,14 +1077,14 @@ export default {
                     return;
                 }
             }
-            if(this.oForm.reduceType==1&&this.oForm.discountMoney==0){
-                if(this.oForm.validPayType==0||this.oForm.validPayType==2){
-                    this.message = '优惠券0元固定价格的时候只能选择非会员支付！';
-                    this.open();
-                    loading.close();
-                    return;
-                }
-            }
+            // if(this.oForm.reduceType==1&&this.oForm.discountMoney==0){
+            //     if(this.oForm.validPayType==0||this.oForm.validPayType==2){
+            //         this.message = '优惠券0元固定价格的时候只能选择非会员支付！';
+            //         this.open();
+            //         loading.close();
+            //         return;
+            //     }
+            // }
             if (this.oForm.cinemaCode == true) {
                 this.oForm.cinemaCode = this.cinemaInfo[0].cinemaCode;
             }
@@ -1617,15 +1617,15 @@ export default {
                     return;
                 }
             }
-            if(this.oReduceType==1&&this.oDiscountMoney==0){
-                if(this.oValidPayType==0||this.oValidPayType==2){
-                    this.message = '优惠券0元固定价格的时候只能选择非会员支付！';
-                    this.open();
-                    loading.close();
-                    return;
-                }
-
-            }
+            // if(this.oReduceType==1&&this.oDiscountMoney==0){
+            //     if(this.oValidPayType==0||this.oValidPayType==2){
+            //         this.message = '优惠券0元固定价格的时候只能选择非会员支付！';
+            //         this.open();
+            //         loading.close();
+            //         return;
+            //     }
+            //
+            // }
             let filmCodeList=[];
             for(let x in this.selectedSell){
                 filmCodeList.push(this.selectedSell[x].filmCode)

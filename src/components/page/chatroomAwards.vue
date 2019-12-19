@@ -206,26 +206,26 @@
                         @click="deletCoupon"
                     >删除</span>
                 </el-form-item>
-                <el-form-item :required="true" label="礼品图片" :label-width="formLabelWidth">
-                    <el-upload
-                        class="upload-demo"
-                        action="/api/upload/uploadImage"
-                        :before-upload="beforeUpload"
-                        :data="type"
-                        :limit="1"
-                        :on-exceed="exceed"
-                        ref="download"
-                        :on-success="onSuccess"
-                        :file-list="fileList"
-                        list-type="picture"
-                    >
-                        <el-button size="small" type="primary">点击上传</el-button>
-                        <div
-                            slot="tip"
-                            class="el-upload__tip"
-                        >只能上传jpg/png文件，且不超过200kb 建议尺寸150*150或按比例上传</div>
-                    </el-upload>
-                </el-form-item>
+                <!--<el-form-item :required="true" label="礼品图片" :label-width="formLabelWidth">-->
+                    <!--<el-upload-->
+                        <!--class="upload-demo"-->
+                        <!--action="/api/upload/uploadImage"-->
+                        <!--:before-upload="beforeUpload"-->
+                        <!--:data="type"-->
+                        <!--:limit="1"-->
+                        <!--:on-exceed="exceed"-->
+                        <!--ref="download"-->
+                        <!--:on-success="onSuccess"-->
+                        <!--:file-list="fileList"-->
+                        <!--list-type="picture"-->
+                    <!--&gt;-->
+                        <!--<el-button size="small" type="primary">点击上传</el-button>-->
+                        <!--<div-->
+                            <!--slot="tip"-->
+                            <!--class="el-upload__tip"-->
+                        <!--&gt;只能上传jpg/png文件，且不超过200kb 建议尺寸150*150或按比例上传</div>-->
+                    <!--</el-upload>-->
+                <!--</el-form-item>-->
                 <el-form-item :required="true" label="每组发放数量：" :label-width="formLabelWidth">
                     <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 150px" v-model="oForm.singleNumber" autocomplete="off"></el-input>
                 </el-form-item>
@@ -411,7 +411,7 @@ export default {
             type: {
                 type: ''
             },
-            fileList: [],
+            // fileList: [],
             message: '', //弹出框消息
             query: {
                 pageNo: 1,
@@ -479,13 +479,13 @@ export default {
         this.getMenu();
     },
     methods: {
-        exceed(data){
-            console.log(data);
-            if(data.length==1){
-                this.message = '只能上传一张图片，如需重新上传请删除第一张图！';
-                this.open();
-            }
-        },
+        // exceed(data){
+        //     console.log(data);
+        //     if(data.length==1){
+        //         this.message = '只能上传一张图片，如需重新上传请删除第一张图！';
+        //         this.open();
+        //     }
+        // },
         addPage() {
             this.dialogFormVisible = true;
             this.oForm.name = '';
@@ -494,7 +494,7 @@ export default {
             this.oForm.singleNumber = '';
             this.oForm.overDays = '';
             this.cinemaInfo = [];
-            this.fileList = [];
+            // this.fileList = [];
             this.oForm.type = '';
             this.oForm.limitStatus = '';
             this.oForm.groupNumber = '';
@@ -533,12 +533,12 @@ export default {
                     return;
                 }
             }
-            if(!this.oForm.image_url){
-                this.message = '礼品图片不能为空，请检查！';
-                this.open();
-                loading.close();
-                return;
-            }
+            // if(!this.oForm.image_url){
+            //     this.message = '礼品图片不能为空，请检查！';
+            //     this.open();
+            //     loading.close();
+            //     return;
+            // }
             if(!this.oForm.singleNumber&&this.oForm.singleNumber!=0){
                 this.message = '每组发放数量不能为空，请检查！';
                 this.open();
@@ -599,10 +599,15 @@ export default {
             if (this.oForm.limitStatus == 2) {
                 jsonArr.push({ key: 'monthLimitNumber', value: this.oForm.singleLimitNumber });
             }
-            jsonArr.push({ key: 'imageUrl', value: this.oForm.image_url });
             if (this.oForm.type == 1) {
                 // jsonArr.push({ key: 'imageUrl', value: this.couponInfo.imgUrl });
                 jsonArr.push({ key: 'couponId', value: this.couponInfo.id });
+                jsonArr.push({ key: 'imageUrl', value: 'https://wanht.oss-cn-hangzhou.aliyuncs.com/images/defaultbanner/defaultYHQ.jpg' });
+            }
+            if (this.oForm.type == 2) {
+                // jsonArr.push({ key: 'imageUrl', value: this.couponInfo.imgUrl });
+                jsonArr.push({ key: 'couponId', value: this.couponInfo.id });
+                jsonArr.push({ key: 'imageUrl', value: 'https://wanht.oss-cn-hangzhou.aliyuncs.com/images/defaultbanner/defaultSW.jpg' });
             }
             jsonArr.push({ key: 'name', value: this.oForm.name });
             jsonArr.push({ key: 'cinemaCode', value: this.cinemaCode });
@@ -622,7 +627,7 @@ export default {
                         //新增
                         if (data.data.code == 'success') {
                             this.dialogFormVisible = false;
-                            this.$refs.download.clearFiles();
+                            // this.$refs.download.clearFiles();
                             this.$message.success(`新增成功`);
                             this.couponInfo={};
                             this.show(this.cinemaCode);
@@ -1148,41 +1153,32 @@ export default {
             this.selectGroup = {};
             this.selectGroup = item;
         },
-        beforeUpload(file) {
-            //上传之前
-            this.type.type = EncryptReplace('activity');
-            const isLt200Kb = file.size / 1024 < 200;
-            if (!isLt200Kb) {
-                this.message = '图片大小不能超过200kb！';
-                this.open();
-                return false
-            }
-            return isLt200Kb
-        },
-        onSuccess(data) {
-            //上传文件 登录超时
-            if (data.status == '-1') {
-                this.message = data.message;
-                this.open();
-                this.$refs.download.clearFiles();
-                return;
-            }
-            this.oForm.image_url = data.data;
-            if (data.code == 'nologin') {
-                this.message = data.message;
-                this.open();
-                this.$router.push('/login');
-            }
-        },
-        unSuccess(data) {
-            //修改上传文件 登录超时
-            this.form.image_url = data.data;
-            if (data.code == 'nologin') {
-                this.message = data.message;
-                this.open();
-                this.$router.push('/login');
-            }
-        },
+        // beforeUpload(file) {
+        //     //上传之前
+        //     this.type.type = EncryptReplace('activity');
+        //     const isLt200Kb = file.size / 1024 < 200;
+        //     if (!isLt200Kb) {
+        //         this.message = '图片大小不能超过200kb！';
+        //         this.open();
+        //         return false
+        //     }
+        //     return isLt200Kb
+        // },
+        // onSuccess(data) {
+        //     //上传文件 登录超时
+        //     if (data.status == '-1') {
+        //         this.message = data.message;
+        //         this.open();
+        //         this.$refs.download.clearFiles();
+        //         return;
+        //     }
+        //     this.oForm.image_url = data.data;
+        //     if (data.code == 'nologin') {
+        //         this.message = data.message;
+        //         this.open();
+        //         this.$router.push('/login');
+        //     }
+        // },
         // 多选操作
         handleSelectionChange(val) {
             this.multipleSelection = val;
