@@ -67,11 +67,21 @@
                     <el-option key="3" label="券包" value="3"></el-option>
                     <el-option key="4" label="商品" value="4"></el-option>
                 </el-select>
-                <el-select clearable v-model="query.topStatus" placeholder="是否今日大牌" class="handle-select mr10">
+                <el-select
+                    clearable
+                    v-model="query.topStatus"
+                    placeholder="是否今日大牌"
+                    class="handle-select mr10"
+                >
                     <el-option key="1" label="否" value="1"></el-option>
                     <el-option key="2" label="是" value="2"></el-option>
                 </el-select>
-                <el-select clearable v-model="query.recommendStatus" placeholder="是否精品推荐" class="handle-select mr10">
+                <el-select
+                    clearable
+                    v-model="query.recommendStatus"
+                    placeholder="是否精品推荐"
+                    class="handle-select mr10"
+                >
                     <el-option key="1" label="否" value="1"></el-option>
                     <el-option key="2" label="是" value="2"></el-option>
                 </el-select>
@@ -204,16 +214,16 @@
             </el-table>
             <div class="pagination">
                 <el-pagination
-                        background
-                        @size-change="handleSizeChange"
-                        layout="total, sizes, prev, pager, next, jumper"
-                        :current-page="query.pageNo"
-                        :page-sizes="[10, 15, 20, 30]"
-                        :page-size="query.pageSize"
-                        :total="query.totalCount"
-                        @current-change="currentChange"
-                        @prev-click="prev"
-                        @next-click="next"
+                    background
+                    @size-change="handleSizeChange"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :current-page="query.pageNo"
+                    :page-sizes="[10, 15, 20, 30]"
+                    :page-size="query.pageSize"
+                    :total="query.totalCount"
+                    @current-change="currentChange"
+                    @prev-click="prev"
+                    @next-click="next"
                 ></el-pagination>
             </div>
         </div>
@@ -223,40 +233,55 @@
                 <el-form-item :required="true" label="允许兑换的门店" :label-width="formLabelWidth">
                     <el-checkbox-group v-model="oCheckedCities" @change="getCinemaCode">
                         <el-checkbox
-                                v-for="city in cities"
-                                :label="city.cinemaCode"
-                                :key="city.cinemaCode"
-                                :value="city.cinemaCode"
+                            v-for="city in cities"
+                            :label="city.cinemaCode"
+                            :key="city.cinemaCode"
+                            :value="city.cinemaCode"
                         >{{city.cinemaName}}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
                 <el-form-item :required="true" label="商品类型" :label-width="formLabelWidth">
                     <el-select v-model="oForm.commodity_type" placeholder="请选择商品类型">
                         <el-option
-                                v-for="item in commodityType"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
+                            v-for="item in commodityType"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value"
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item v-if="oForm.commodity_type==4" :required="true" label="选择商户" :label-width="formLabelWidth">
+                <el-form-item
+                    v-if="oForm.commodity_type==4"
+                    :required="true"
+                    label="选择商户"
+                    :label-width="formLabelWidth"
+                >
                     <el-button size="small" type="primary" @click="getPartner()">点击选择</el-button>
                 </el-form-item>
                 <el-form-item
-                        v-if="partnerCode&&oForm.commodity_type==4"
-                        label="所选商户："
-                        :label-width="formLabelWidth"
-                        :required="true"
+                    v-if="partnerCode&&oForm.commodity_type==4"
+                    label="所选商户："
+                    :label-width="formLabelWidth"
+                    :required="true"
                 >
-                    <el-input style="width: 250px" v-model="partnerName" autocomplete="off" disabled></el-input>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <el-input
+                        style="width: 250px"
+                        v-model="partnerName"
+                        autocomplete="off"
+                        disabled
+                    ></el-input>&nbsp;&nbsp;&nbsp;&nbsp;
                     <span
-                            v-if="partnerName"
-                            style="color:red;cursor: pointer;"
-                            @click="deletPartner"
+                        v-if="partnerName"
+                        style="color:red;cursor: pointer;"
+                        @click="deletPartner"
                     >删除</span>
                 </el-form-item>
-                <el-form-item v-if="oForm.commodity_type==4" :required="true" label="领取方式" :label-width="formLabelWidth">
+                <el-form-item
+                    v-if="oForm.commodity_type==4"
+                    :required="true"
+                    label="领取方式"
+                    :label-width="formLabelWidth"
+                >
                     <el-radio-group v-model="oForm.pickupType">
                         <el-radio label="1">到影院领取</el-radio>
                         <el-radio label="2">到商户门店领取</el-radio>
@@ -272,21 +297,21 @@
                 </el-form-item>
                 <el-form-item :required="true" label="商品图片" :label-width="formLabelWidth">
                     <el-upload
-                            class="upload-demo"
-                            action="/api/upload/uploadImage"
-                            :before-upload="beforeUpload"
-                            :data="type"
-                            :limit="1"
-                            :on-exceed="exceed"
-                            ref="download"
-                            :on-success="onSuccess"
-                            :file-list="fileList"
-                            list-type="picture"
+                        class="upload-demo"
+                        action="/api/upload/uploadImage"
+                        :before-upload="beforeUpload"
+                        :data="type"
+                        :limit="1"
+                        :on-exceed="exceed"
+                        ref="download"
+                        :on-success="onSuccess"
+                        :file-list="fileList"
+                        list-type="picture"
                     >
                         <el-button size="small" type="primary">点击上传</el-button>
                         <div
-                                slot="tip"
-                                class="el-upload__tip"
+                            slot="tip"
+                            class="el-upload__tip"
                         >只能上传jpg/png文件，且不超过200kb 建议尺寸200*200或按比例上传</div>
                     </el-upload>
                 </el-form-item>
@@ -316,10 +341,19 @@
                     label="原价"
                     :label-width="formLabelWidth"
                 >
-                    <el-input style="width: 250px" v-model.trim="oForm.originalPrice" autocomplete="off"></el-input>
+                    <el-input
+                        style="width: 250px"
+                        v-model.trim="oForm.originalPrice"
+                        autocomplete="off"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="库存" :label-width="formLabelWidth">
-                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 250px" v-model="oForm.store" autocomplete="off"></el-input>
+                    <el-input
+                        onkeyup="this.value=this.value.replace(/\D/g,'')"
+                        style="width: 250px"
+                        v-model="oForm.store"
+                        autocomplete="off"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="兑换方式" :label-width="formLabelWidth">
                     <el-select v-model="oForm.change_type" placeholder="请选择兑换方式">
@@ -337,7 +371,12 @@
                     label="所需金币数量"
                     :label-width="formLabelWidth"
                 >
-                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 250px" v-model.trim="oForm.gold" autocomplete="off"></el-input>
+                    <el-input
+                        onkeyup="this.value=this.value.replace(/\D/g,'')"
+                        style="width: 250px"
+                        v-model.trim="oForm.gold"
+                        autocomplete="off"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item
                     :required="true"
@@ -345,7 +384,12 @@
                     label="所需RMB"
                     :label-width="formLabelWidth"
                 >
-                    <el-input  onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 250px" v-model.trim="oForm.money" autocomplete="off"></el-input>
+                    <el-input
+                        onkeyup="this.value=this.value.replace(/\D/g,'')"
+                        style="width: 250px"
+                        v-model.trim="oForm.money"
+                        autocomplete="off"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item
                     :required="true"
@@ -368,7 +412,12 @@
                     label="领取后几天开始生效"
                     :label-width="formLabelWidth"
                 >
-                    <el-input style="width: 250px" v-model="oForm.laterDays" autocomplete="off" onkeyup="this.value=this.value.replace(/\D/g,'')"></el-input>
+                    <el-input
+                        style="width: 250px"
+                        v-model="oForm.laterDays"
+                        autocomplete="off"
+                        onkeyup="this.value=this.value.replace(/\D/g,'')"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item
                     :required="true"
@@ -391,8 +440,19 @@
                         format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
                 </el-form-item>
-                <el-form-item :required="true" label="有效期天数" :label-width="formLabelWidth"  v-if="oForm.effectiveType!=2">
-                    <el-input style="width: 250px" placeholder="自领取之日起计算" v-model.trim="oForm.expireDay" autocomplete="off" onkeyup="this.value=this.value.replace(/\D/g,'')"></el-input>
+                <el-form-item
+                    :required="true"
+                    label="有效期天数"
+                    :label-width="formLabelWidth"
+                    v-if="oForm.effectiveType!=2"
+                >
+                    <el-input
+                        style="width: 250px"
+                        placeholder="自领取之日起计算"
+                        v-model.trim="oForm.expireDay"
+                        autocomplete="off"
+                        onkeyup="this.value=this.value.replace(/\D/g,'')"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="是否今日大牌" :label-width="formLabelWidth">
                     <el-select v-model="oForm.topStatus" placeholder="请选择">
@@ -476,7 +536,11 @@
                     >删除</span>
                 </el-form-item>
                 <el-form-item :required="true" label="是否指定日期可以兑换" :label-width="formLabelWidth">
-                    <el-select v-model="oForm.assign_type" placeholder="请选择指定日期" @change="clearAssignType()">
+                    <el-select
+                        v-model="oForm.assign_type"
+                        placeholder="请选择指定日期"
+                        @change="clearAssignType()"
+                    >
                         <el-option
                             v-for="item in assignType"
                             :key="item.value"
@@ -507,10 +571,10 @@
                 >
                     <el-select v-model="oForm.assign_info">
                         <el-option
-                                v-for="item in days"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
+                            v-for="item in days"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value"
                         ></el-option>
                     </el-select>
                 </el-form-item>
@@ -522,10 +586,10 @@
                 >
                     <el-select v-model="oForm.assign_info">
                         <el-option
-                                v-for="item in weeks"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
+                            v-for="item in weeks"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value"
                         ></el-option>
                     </el-select>
                 </el-form-item>
@@ -537,10 +601,10 @@
                 >
                     <el-select v-model="oForm.assign_info">
                         <el-option
-                                v-for="item in dates"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
+                            v-for="item in dates"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value"
                         ></el-option>
                     </el-select>
                 </el-form-item>
@@ -560,7 +624,12 @@
                     :label-width="formLabelWidth"
                     :required="true"
                 >
-                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 250px" v-model="oForm.limit_number" autocomplete="off"></el-input>
+                    <el-input
+                        onkeyup="this.value=this.value.replace(/\D/g,'')"
+                        style="width: 250px"
+                        v-model="oForm.limit_number"
+                        autocomplete="off"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item label="排序" :label-width="formLabelWidth">
                     <el-input
@@ -582,10 +651,10 @@
                 <el-form-item :required="true" label="允许兑换的门店" :label-width="formLabelWidth">
                     <el-checkbox-group v-model="oCheckedCities" @change="changeCinema">
                         <el-checkbox
-                                v-for="city in oCities"
-                                :label="city.cinemaCode"
-                                :key="city.cinemaCode"
-                                :value="city.cinemaCode"
+                            v-for="city in oCities"
+                            :label="city.cinemaCode"
+                            :key="city.cinemaCode"
+                            :value="city.cinemaCode"
                         >{{city.cinemaName}}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
@@ -607,23 +676,38 @@
                 >
                     <el-input style="width: 250px" v-model="oName" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item v-if="form.commodityType==4" :required="true" label="选择商户" :label-width="formLabelWidth">
+                <el-form-item
+                    v-if="form.commodityType==4"
+                    :required="true"
+                    label="选择商户"
+                    :label-width="formLabelWidth"
+                >
                     <el-button size="small" type="primary" @click="getPartner()">点击选择</el-button>
                 </el-form-item>
                 <el-form-item
-                        v-if="partnerCode&&form.commodityType==4"
-                        label="所选商户："
-                        :label-width="formLabelWidth"
-                        :required="true"
+                    v-if="partnerCode&&form.commodityType==4"
+                    label="所选商户："
+                    :label-width="formLabelWidth"
+                    :required="true"
                 >
-                    <el-input style="width: 250px" v-model="partnerName" autocomplete="off" disabled></el-input>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <el-input
+                        style="width: 250px"
+                        v-model="partnerName"
+                        autocomplete="off"
+                        disabled
+                    ></el-input>&nbsp;&nbsp;&nbsp;&nbsp;
                     <span
-                            v-if="partnerName"
-                            style="color:red;cursor: pointer;"
-                            @click="deletPartner"
+                        v-if="partnerName"
+                        style="color:red;cursor: pointer;"
+                        @click="deletPartner"
                     >删除</span>
                 </el-form-item>
-                <el-form-item v-if="form.commodityType==4" :required="true" label="领取方式" :label-width="formLabelWidth">
+                <el-form-item
+                    v-if="form.commodityType==4"
+                    :required="true"
+                    label="领取方式"
+                    :label-width="formLabelWidth"
+                >
                     <el-radio-group v-model="form.pickupType">
                         <el-radio label="1">到影院领取</el-radio>
                         <el-radio label="2">到商户门店领取</el-radio>
@@ -683,11 +767,25 @@
                         @imgDel="$imgDel"
                     />
                 </el-form-item>
-                <el-form-item v-if="form.commodityType==1 || form.commodityType==4" :required="true" label="原价" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model.trim="form.originalPrice" autocomplete="off"></el-input>
+                <el-form-item
+                    v-if="form.commodityType==1 || form.commodityType==4"
+                    :required="true"
+                    label="原价"
+                    :label-width="formLabelWidth"
+                >
+                    <el-input
+                        style="width: 250px"
+                        v-model.trim="form.originalPrice"
+                        autocomplete="off"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="库存" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" onkeyup="this.value=this.value.replace(/\D/g,'')"  v-model="form.store" autocomplete="off"></el-input>
+                    <el-input
+                        style="width: 250px"
+                        onkeyup="this.value=this.value.replace(/\D/g,'')"
+                        v-model="form.store"
+                        autocomplete="off"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="兑换方式" :label-width="formLabelWidth">
                     <el-select v-model="form.changeType" placeholder="请选择兑换方式" @change="change">
@@ -705,7 +803,12 @@
                     :label-width="formLabelWidth"
                     :required="true"
                 >
-                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')"  style="width: 250px" v-model.trim="form.gold" autocomplete="off"></el-input>
+                    <el-input
+                        onkeyup="this.value=this.value.replace(/\D/g,'')"
+                        style="width: 250px"
+                        v-model.trim="form.gold"
+                        autocomplete="off"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item
                     v-if="form.changeType==2||form.changeType==3"
@@ -713,7 +816,12 @@
                     :label-width="formLabelWidth"
                     :required="true"
                 >
-                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')"  style="width: 250px" v-model.trim="form.money" autocomplete="off"></el-input>
+                    <el-input
+                        onkeyup="this.value=this.value.replace(/\D/g,'')"
+                        style="width: 250px"
+                        v-model.trim="form.money"
+                        autocomplete="off"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item
                     :required="true"
@@ -736,7 +844,12 @@
                     label="领取后几天开始生效"
                     :label-width="formLabelWidth"
                 >
-                    <el-input style="width: 250px" v-model="oLaterDays" autocomplete="off" onkeyup="this.value=this.value.replace(/\D/g,'')"></el-input>
+                    <el-input
+                        style="width: 250px"
+                        v-model="oLaterDays"
+                        autocomplete="off"
+                        onkeyup="this.value=this.value.replace(/\D/g,'')"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item
                     :required="true"
@@ -759,8 +872,19 @@
                         format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
                 </el-form-item>
-                <el-form-item :required="true" label="有效期天数" :label-width="formLabelWidth" v-if="oEffectiveType!=2">
-                    <el-input style="width: 250px" placeholder="自领取之日起计算" v-model.trim="form.expireDay" autocomplete="off" onkeyup="this.value=this.value.replace(/\D/g,'')"></el-input>
+                <el-form-item
+                    :required="true"
+                    label="有效期天数"
+                    :label-width="formLabelWidth"
+                    v-if="oEffectiveType!=2"
+                >
+                    <el-input
+                        style="width: 250px"
+                        placeholder="自领取之日起计算"
+                        v-model.trim="form.expireDay"
+                        autocomplete="off"
+                        onkeyup="this.value=this.value.replace(/\D/g,'')"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="是否今日大牌" :label-width="formLabelWidth">
                     <el-select v-model="oTopstatus" placeholder="请选择">
@@ -844,7 +968,11 @@
                     >删除</span>
                 </el-form-item>
                 <el-form-item :required="true" label="是否指定日期可以兑换" :label-width="formLabelWidth">
-                    <el-select v-model="form.assignType" placeholder="请选择指定日期" @change="clearAssignType()">
+                    <el-select
+                        v-model="form.assignType"
+                        placeholder="请选择指定日期"
+                        @change="clearAssignType()"
+                    >
                         <el-option
                             v-for="item in assignType"
                             :key="item.value"
@@ -875,10 +1003,10 @@
                 >
                     <el-select v-model="form.assignInfo">
                         <el-option
-                                v-for="item in days"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
+                            v-for="item in days"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value"
                         ></el-option>
                     </el-select>
                 </el-form-item>
@@ -890,10 +1018,10 @@
                 >
                     <el-select v-model="form.assignInfo">
                         <el-option
-                                v-for="item in weeks"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
+                            v-for="item in weeks"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value"
                         ></el-option>
                     </el-select>
                 </el-form-item>
@@ -905,10 +1033,10 @@
                 >
                     <el-select v-model="form.assignInfo">
                         <el-option
-                                v-for="item in dates"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
+                            v-for="item in dates"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value"
                         ></el-option>
                     </el-select>
                 </el-form-item>
@@ -928,7 +1056,12 @@
                     :label-width="formLabelWidth"
                     :required="true"
                 >
-                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')"  style="width: 250px" v-model="form.limitNumber" autocomplete="off"></el-input>
+                    <el-input
+                        onkeyup="this.value=this.value.replace(/\D/g,'')"
+                        style="width: 250px"
+                        v-model="form.limitNumber"
+                        autocomplete="off"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item label="排序" :label-width="formLabelWidth">
                     <el-input
@@ -974,16 +1107,16 @@
                 </el-table>
                 <div class="pagination">
                     <el-pagination
-                            background
-                            @size-change="aHandleSizeChange"
-                            layout="total, sizes, prev, pager, next, jumper"
-                            :current-page="query.aPageNo"
-                            :page-sizes="[10, 15, 20, 30]"
-                            :page-size="query.aPageSize"
-                            :total="query.aTotalCount"
-                            @current-change="aCurrentChange"
-                            @prev-click="aPrev"
-                            @next-click="aNext"
+                        background
+                        @size-change="aHandleSizeChange"
+                        layout="total, sizes, prev, pager, next, jumper"
+                        :current-page="query.aPageNo"
+                        :page-sizes="[10, 15, 20, 30]"
+                        :page-size="query.aPageSize"
+                        :total="query.aTotalCount"
+                        @current-change="aCurrentChange"
+                        @prev-click="aPrev"
+                        @next-click="aNext"
                     ></el-pagination>
                 </div>
             </div>
@@ -1030,16 +1163,16 @@
                 </el-table>
                 <div class="pagination">
                     <el-pagination
-                            background
-                            @size-change="bHandleSizeChange"
-                            layout="total, sizes, prev, pager, next, jumper"
-                            :current-page="query.bPageNo"
-                            :page-sizes="[10, 15, 20, 30]"
-                            :page-size="query.bPageSize"
-                            :total="query.bTotalCount"
-                            @current-change="bCurrentChange"
-                            @prev-click="bPrev"
-                            @next-click="bNext"
+                        background
+                        @size-change="bHandleSizeChange"
+                        layout="total, sizes, prev, pager, next, jumper"
+                        :current-page="query.bPageNo"
+                        :page-sizes="[10, 15, 20, 30]"
+                        :page-size="query.bPageSize"
+                        :total="query.bTotalCount"
+                        @current-change="bCurrentChange"
+                        @prev-click="bPrev"
+                        @next-click="bNext"
                     ></el-pagination>
                 </div>
             </div>
@@ -1053,20 +1186,20 @@
             <div class="container">
                 <div class="handle-box">
                     <el-input
-                            v-model="query.partnerName"
-                            placeholder="商户名称"
-                            class="handle-input mr12"
-                            @input="changePartnerName($event)"
+                        v-model="query.partnerName"
+                        placeholder="商户名称"
+                        class="handle-input mr12"
+                        @input="changePartnerName($event)"
                     ></el-input>
                     <el-button type="primary" icon="el-icon-search" @click="getPartner">搜索</el-button>
                 </div>
                 <el-table
-                        :data="partnerList"
-                        border
-                        class="table"
-                        ref="multipleTable"
-                        header-cell-class-name="table-header"
-                        @selection-change="handleSelectionChange"
+                    :data="partnerList"
+                    border
+                    class="table"
+                    ref="multipleTable"
+                    header-cell-class-name="table-header"
+                    @selection-change="handleSelectionChange"
                 >
                     <el-table-column label="操作" width="100" align="center">
                         <template slot-scope="scope">
@@ -1082,16 +1215,16 @@
                 </el-table>
                 <div class="pagination">
                     <el-pagination
-                            background
-                            @size-change="bHandleSizeChange"
-                            layout="total, sizes, prev, pager, next, jumper"
-                            :current-page="query.oPageNo"
-                            :page-sizes="[10, 15, 20, 30]"
-                            :page-size="query.oPageSize"
-                            :total="query.oTotalCount"
-                            @current-change="oCurrentChange"
-                            @prev-click="oPrev"
-                            @next-click="oNext"
+                        background
+                        @size-change="bHandleSizeChange"
+                        layout="total, sizes, prev, pager, next, jumper"
+                        :current-page="query.oPageNo"
+                        :page-sizes="[10, 15, 20, 30]"
+                        :page-size="query.oPageSize"
+                        :total="query.oTotalCount"
+                        @current-change="oCurrentChange"
+                        @prev-click="oPrev"
+                        @next-click="oNext"
                     ></el-pagination>
                 </div>
             </div>
@@ -1164,10 +1297,10 @@ export default {
                 cinemaCodes: '',
                 details: '',
                 markdown: '',
-                assignInfo:'',
-                gold:'',
-                money:'',
-                store:'',
+                assignInfo: '',
+                gold: '',
+                money: '',
+                store: ''
             },
             idx: -1,
             id: -1,
@@ -1189,15 +1322,15 @@ export default {
                 laterDays: '',
                 startEffectiveDate: '',
                 endEffectiveDate: '',
-                assign_info:'',
-                gold:'',
-                money:'',
-                store:'',
+                assign_info: '',
+                gold: '',
+                money: '',
+                store: ''
             },
 
             formLabelWidth: '120px',
             selectValue: {},
-            days:[
+            days: [
                 {
                     value: '1',
                     label: '1'
@@ -1321,9 +1454,9 @@ export default {
                 {
                     value: '31',
                     label: '31'
-                },
+                }
             ],
-            weeks:[
+            weeks: [
                 {
                     value: '1',
                     label: '1'
@@ -1343,9 +1476,9 @@ export default {
                 {
                     value: '5',
                     label: '5'
-                },
+                }
             ],
-            dates:[
+            dates: [
                 {
                     value: '1',
                     label: '1'
@@ -1373,7 +1506,7 @@ export default {
                 {
                     value: '7',
                     label: '7'
-                },
+                }
             ],
             effectiveType: [
                 {
@@ -1502,7 +1635,7 @@ export default {
         this.getMenu();
     },
     methods: {
-        surePartner(id){
+        surePartner(id) {
             this.partnerCode = id;
             for (let i = 0; i < this.partnerList.length; i++) {
                 if (this.partnerList[i].partnerCode == this.partnerCode) {
@@ -1515,9 +1648,10 @@ export default {
             this.$forceUpdate();
         },
         changeSearchCinema(val) {
+            this.partnerInfo = [];
             this.getSearchPartner(val);
         },
-        getSearchPartner(val){
+        getSearchPartner(val) {
             let cinemaCode = val;
             if (!cinemaCode) {
                 cinemaCode = '';
@@ -1528,7 +1662,7 @@ export default {
             jsonArr.push({ key: 'sign', value: sign });
             var params = ParamsAppend(jsonArr);
             https
-                .fetchPost('/cinemaPartner/getPartnerPage', params)
+                .fetchPost('/cinemaPartner/page', params)
                 .then(data => {
                     if (data.data.code == 'success') {
                         var res = JSON.parse(Decrypt(data.data.data));
@@ -1546,8 +1680,8 @@ export default {
                     console.log(err);
                 });
         },
-        getPartner(){
-            if(this.oCheckedCities.length==0){
+        getPartner() {
+            if (this.oCheckedCities.length == 0) {
                 this.message = '请选择允许兑换的门店！';
                 this.open();
                 return;
@@ -1570,7 +1704,7 @@ export default {
                     if (data.data.code == 'success') {
                         var res = JSON.parse(Decrypt(data.data.data));
                         console.log(res);
-                        this.query.partnerName='';
+                        this.query.partnerName = '';
                         this.partnerList = res.data;
                         this.query.oPageSize = res.pageSize;
                         this.query.oPageNo = res.pageNo;
@@ -1590,15 +1724,15 @@ export default {
                     console.log(err);
                 });
         },
-        exceed(data){
-            if(data.length==1){
+        exceed(data) {
+            if (data.length == 1) {
                 this.message = '只能上传一张图片，如需重新上传请删除第一张图！';
                 this.open();
             }
         },
-        clearAssignType(){
-            this.oForm.assign_info='';
-            this.form.assignInfo='';
+        clearAssignType() {
+            this.oForm.assign_info = '';
+            this.form.assignInfo = '';
         },
         deletPartner() {
             this.partnerCode = '';
@@ -1791,7 +1925,7 @@ export default {
                 loading.close();
                 return;
             }
-            if(this.oForm.commodity_type==1||this.oForm.commodity_type==4){
+            if (this.oForm.commodity_type == 1 || this.oForm.commodity_type == 4) {
                 if (!this.oForm.name) {
                     this.message = '商品名称不能为空，请检查！';
                     this.open();
@@ -1804,14 +1938,14 @@ export default {
                     loading.close();
                     return;
                 }
-                if (this.oForm.originalPrice<=0) {
+                if (this.oForm.originalPrice <= 0) {
                     this.message = '原价必须大于0！';
                     this.open();
                     loading.close();
                     return;
                 }
             }
-            if(this.oForm.commodity_type==4){
+            if (this.oForm.commodity_type == 4) {
                 if (!this.partnerCode) {
                     this.message = '所选商户不能为空，请检查！';
                     this.open();
@@ -1831,7 +1965,7 @@ export default {
                 loading.close();
                 return;
             }
-            if (this.oCheckedCities.length==0) {
+            if (this.oCheckedCities.length == 0) {
                 this.message = '允许兑换的门店不能为空，请检查！';
                 this.open();
                 loading.close();
@@ -1849,13 +1983,13 @@ export default {
                 loading.close();
                 return;
             }
-            if (!this.oForm.store&&this.oForm.store!=0) {
+            if (!this.oForm.store && this.oForm.store != 0) {
                 this.message = '库存不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
             }
-            if (this.oForm.store<0) {
+            if (this.oForm.store < 0) {
                 this.message = '库存不能小于0，请检查！';
                 this.open();
                 loading.close();
@@ -1867,35 +2001,35 @@ export default {
                 loading.close();
                 return;
             }
-            if(this.oForm.change_type==1&&this.oForm.change_type==3){
-                if (!this.oForm.gold&&this.oForm.gold!=0||(this.oForm.gold=='')) {
+            if (this.oForm.change_type == 1 && this.oForm.change_type == 3) {
+                if ((!this.oForm.gold && this.oForm.gold != 0) || this.oForm.gold == '') {
                     this.message = '所需金币数量不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
-                if (this.oForm.gold<=0) {
+                if (this.oForm.gold <= 0) {
                     this.message = '所需金币数量必须大于0，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
             }
-            if(this.oForm.change_type==2||this.oForm.change_type==3){
-                if (!this.oForm.money&&this.oForm.money!=0) {
+            if (this.oForm.change_type == 2 || this.oForm.change_type == 3) {
+                if (!this.oForm.money && this.oForm.money != 0) {
                     this.message = '所需RMB不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
-                if (this.oForm.money<=0) {
+                if (this.oForm.money <= 0) {
                     this.message = '所需RMB必须大于0，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
             }
-            if(this.oForm.commodity_type!=1&&this.oForm.commodity_type!=4){
+            if (this.oForm.commodity_type != 1 && this.oForm.commodity_type != 4) {
                 if (!this.oForm.effectiveType) {
                     this.message = '生效方式不能为空，请检查！';
                     this.open();
@@ -1903,36 +2037,36 @@ export default {
                     return;
                 }
             }
-            if(this.oForm.effectiveType==1 &&this.oForm.commodity_type!=1&&this.oForm.commodity_type!=4){
+            if (this.oForm.effectiveType == 1 && this.oForm.commodity_type != 1 && this.oForm.commodity_type != 4) {
                 if (!this.oForm.laterDays) {
                     this.message = '领取后几天开始生效不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
-                if (this.oForm.laterDays<0) {
+                if (this.oForm.laterDays < 0) {
                     this.message = '领取后几天开始生效不能小于0，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
             }
-            if(this.oForm.commodity_type!=1&&this.oForm.commodity_type!=4 && this.oForm.effectiveType==2){
-                if (!this.oForm.startEffectiveDate||!this.oForm.endEffectiveDate) {
+            if (this.oForm.commodity_type != 1 && this.oForm.commodity_type != 4 && this.oForm.effectiveType == 2) {
+                if (!this.oForm.startEffectiveDate || !this.oForm.endEffectiveDate) {
                     this.message = '有效期不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
             }
-            if(this.oForm.effectiveType!=2){
-                if (!this.oForm.expireDay||this.oForm.expireDay=='') {
+            if (this.oForm.effectiveType != 2) {
+                if (!this.oForm.expireDay || this.oForm.expireDay == '') {
                     this.message = '有效期天数不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
-                if (this.oForm.expireDay<1) {
+                if (this.oForm.expireDay < 1) {
                     this.message = '有效期天数不能小于1，请检查！';
                     this.open();
                     loading.close();
@@ -1957,15 +2091,15 @@ export default {
                 loading.close();
                 return;
             }
-            if(this.oForm.commodity_type==2){
-                if (this.selectedSell.length==0) {
+            if (this.oForm.commodity_type == 2) {
+                if (this.selectedSell.length == 0) {
                     this.message = '所选优惠券不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
             }
-            if(this.oForm.commodity_type==3){
+            if (this.oForm.commodity_type == 3) {
                 if (!this.groupName) {
                     this.message = '所选券包不能为空，请检查！';
                     this.open();
@@ -1979,7 +2113,7 @@ export default {
                 loading.close();
                 return;
             }
-            if(this.oForm.assign_type==2){
+            if (this.oForm.assign_type == 2) {
                 if (!this.oForm.assign_info) {
                     this.message = '指定日期不能为空，请检查！';
                     this.open();
@@ -1987,7 +2121,7 @@ export default {
                     return;
                 }
             }
-            if(this.oForm.assign_type==3){
+            if (this.oForm.assign_type == 3) {
                 if (!this.oForm.assign_info) {
                     this.message = '每月几号不能为空，请检查！';
                     this.open();
@@ -1995,7 +2129,7 @@ export default {
                     return;
                 }
             }
-            if(this.oForm.assign_type==4){
+            if (this.oForm.assign_type == 4) {
                 if (!this.oForm.assign_info) {
                     this.message = '每月第几周不能为空，请检查！';
                     this.open();
@@ -2003,7 +2137,7 @@ export default {
                     return;
                 }
             }
-            if(this.oForm.assign_type==5){
+            if (this.oForm.assign_type == 5) {
                 if (!this.oForm.assign_info) {
                     this.message = '每周几不能为空，请检查！';
                     this.open();
@@ -2017,14 +2151,14 @@ export default {
                 loading.close();
                 return;
             }
-            if(this.oForm.limit_type==2||this.oForm.limit_type==3||this.oForm.limit_type==4){
+            if (this.oForm.limit_type == 2 || this.oForm.limit_type == 3 || this.oForm.limit_type == 4) {
                 if (!this.oForm.limit_number) {
                     this.message = '限制兑换数量不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
-                if (this.oForm.limit_number<=0) {
+                if (this.oForm.limit_number <= 0) {
                     this.message = '限制兑换数量必须大于0！';
                     this.open();
                     loading.close();
@@ -2322,14 +2456,14 @@ export default {
                             }
 
                             //生效方式下拉选显示对应的选项
-                              console.log(typeof JSON.parse(Decrypt(data.data.data)).goldCommodity.effectiveType);
+                            console.log(typeof JSON.parse(Decrypt(data.data.data)).goldCommodity.effectiveType);
                             for (let x in this.effectiveType) {
                                 if (this.effectiveType[x].value == JSON.parse(Decrypt(data.data.data)).goldCommodity.effectiveType) {
                                     this.oEffectiveType = this.effectiveType[x].value;
                                     break;
                                 }
                             }
-                            console.log(this.oEffectiveType)
+                            console.log(this.oEffectiveType);
                             //上架状态下拉选显示对应的选项
                             for (let x in this.showStatus) {
                                 if (this.showStatus[x].value == JSON.parse(Decrypt(data.data.data)).goldCommodity.status) {
@@ -2383,7 +2517,7 @@ export default {
                 loading.close();
                 return;
             }
-            if(this.form.commodityType==1||this.form.commodityType==4){
+            if (this.form.commodityType == 1 || this.form.commodityType == 4) {
                 if (!this.oName) {
                     this.message = '商品名称不能为空，请检查！';
                     this.open();
@@ -2396,15 +2530,14 @@ export default {
                     loading.close();
                     return;
                 }
-                if (this.form.originalPrice<=0) {
+                if (this.form.originalPrice <= 0) {
                     this.message = '原价必须大于0！';
                     this.open();
                     loading.close();
                     return;
                 }
-
             }
-            if(this.form.commodityType==4){
+            if (this.form.commodityType == 4) {
                 if (!this.partnerCode) {
                     this.message = '所选商户不能为空，请检查！';
                     this.open();
@@ -2424,7 +2557,7 @@ export default {
                 loading.close();
                 return;
             }
-            if (this.oCheckedCities.length==0) {
+            if (this.oCheckedCities.length == 0) {
                 this.message = '允许兑换的门店不能为空，请检查！';
                 this.open();
                 loading.close();
@@ -2442,13 +2575,13 @@ export default {
                 loading.close();
                 return;
             }
-            if (!this.form.store&&this.form.store!=0) {
+            if (!this.form.store && this.form.store != 0) {
                 this.message = '库存不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
             }
-            if (this.form.store<0) {
+            if (this.form.store < 0) {
                 this.message = '库存不能小于0，请检查！';
                 this.open();
                 loading.close();
@@ -2460,35 +2593,35 @@ export default {
                 loading.close();
                 return;
             }
-            if(this.form.changeType==1||this.form.changeType==3){
-                if (!this.form.gold&&this.form.gold!=0||(this.form.gold=='')) {
+            if (this.form.changeType == 1 || this.form.changeType == 3) {
+                if ((!this.form.gold && this.form.gold != 0) || this.form.gold == '') {
                     this.message = '所需金币数量不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
-                if (this.form.gold<=0) {
+                if (this.form.gold <= 0) {
                     this.message = '所需金币数量必须大于0，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
             }
-            if(this.form.changeType==2||this.form.changeType==3){
-                if (!this.form.money&&this.form.money!=0) {
+            if (this.form.changeType == 2 || this.form.changeType == 3) {
+                if (!this.form.money && this.form.money != 0) {
                     this.message = '所需RMB不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
-                if (this.form.money<=0) {
+                if (this.form.money <= 0) {
                     this.message = '所需RMB必须大于0，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
             }
-            if(this.form.commodityType!=1&&this.form.commodityType!=4){
+            if (this.form.commodityType != 1 && this.form.commodityType != 4) {
                 if (!this.oEffectiveType) {
                     this.message = '生效方式不能为空，请检查！';
                     this.open();
@@ -2496,36 +2629,36 @@ export default {
                     return;
                 }
             }
-            if(this.oEffectiveType==1 && this.form.commodityType!=1&&this.form.commodityType!=4){
-                if (!this.oLaterDays) {
+            if (this.oEffectiveType == 1 && this.form.commodityType != 1 && this.form.commodityType != 4) {
+                if (!this.oLaterDays && this.oLaterDays != 0) {
                     this.message = '领取后几天开始生效不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
-                if (this.oLaterDays<0) {
+                if (this.oLaterDays < 0) {
                     this.message = '领取后几天开始生效不能小于0，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
             }
-            if(this.form.commodityType!=1 && this.oEffectiveType==2&&this.form.commodityType!=4){
-                if (!this.oStartEffectiveDate||!this.oEndEffectiveDate) {
+            if (this.form.commodityType != 1 && this.oEffectiveType == 2 && this.form.commodityType != 4) {
+                if (!this.oStartEffectiveDate || !this.oEndEffectiveDate) {
                     this.message = '有效期不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
             }
-            if(this.oEffectiveType!=2){
-                if (!this.form.expireDay||this.form.expireDay=='') {
+            if (this.oEffectiveType != 2) {
+                if (!this.form.expireDay || this.form.expireDay == '') {
                     this.message = '有效期天数不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
-                if (this.form.expireDay<1) {
+                if (this.form.expireDay < 1) {
                     this.message = '有效期天数不能小于1，请检查！';
                     this.open();
                     loading.close();
@@ -2550,15 +2683,15 @@ export default {
                 loading.close();
                 return;
             }
-            if(this.form.commodityType==2){
-                if (this.selectedSell.length==0) {
+            if (this.form.commodityType == 2) {
+                if (this.selectedSell.length == 0) {
                     this.message = '所选优惠券不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
             }
-            if(this.form.commodityType==3){
+            if (this.form.commodityType == 3) {
                 if (!this.groupName) {
                     this.message = '所选券包不能为空，请检查！';
                     this.open();
@@ -2572,7 +2705,7 @@ export default {
                 loading.close();
                 return;
             }
-            if(this.form.assignType==2){
+            if (this.form.assignType == 2) {
                 if (!this.form.assignInfo) {
                     this.message = '指定日期不能为空，请检查！';
                     this.open();
@@ -2580,7 +2713,7 @@ export default {
                     return;
                 }
             }
-            if(this.form.assignType==3){
+            if (this.form.assignType == 3) {
                 if (!this.form.assignInfo) {
                     this.message = '每月几号不能为空，请检查！';
                     this.open();
@@ -2588,7 +2721,7 @@ export default {
                     return;
                 }
             }
-            if(this.form.assignType==4){
+            if (this.form.assignType == 4) {
                 if (!this.form.assignInfo) {
                     this.message = '每月第几周不能为空，请检查！';
                     this.open();
@@ -2596,7 +2729,7 @@ export default {
                     return;
                 }
             }
-            if(this.form.assignType==5){
+            if (this.form.assignType == 5) {
                 if (!this.form.assignInfo) {
                     this.message = '每周几不能为空，请检查！';
                     this.open();
@@ -2610,14 +2743,14 @@ export default {
                 loading.close();
                 return;
             }
-            if(this.form.limitType==2||this.form.limitType==3||this.form.limitType==4){
+            if (this.form.limitType == 2 || this.form.limitType == 3 || this.form.limitType == 4) {
                 if (!this.form.limitNumber) {
                     this.message = '限制兑换数量不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
-                if (this.form.limitNumber<=0) {
+                if (this.form.limitNumber <= 0) {
                     this.message = '限制兑换数量必须大于0！';
                     this.open();
                     loading.close();
@@ -2871,8 +3004,8 @@ export default {
             this.multipleSelection = val;
         },
         handleSizeChange(val) {
-            this.query.pageSize=val;
-            this.getMenu()
+            this.query.pageSize = val;
+            this.getMenu();
         },
         currentChange(val) {
             //点击选择具体页数
@@ -2890,8 +3023,8 @@ export default {
             this.getMenu();
         },
         aHandleSizeChange(val) {
-            this.query.aPageSize=val;
-            this.openNext()
+            this.query.aPageSize = val;
+            this.openNext();
         },
         aPrev() {
             //分页按钮上一页
@@ -2910,8 +3043,8 @@ export default {
             this.openNext();
         },
         bHandleSizeChange(val) {
-            this.query.bPageSize=val;
-            this.changeCoupon()
+            this.query.bPageSize = val;
+            this.changeCoupon();
         },
         bCurrentChange(val) {
             //点击选择具体页数
@@ -2928,21 +3061,21 @@ export default {
             this.query.bPageNo++;
             this.changeCoupon();
         },
-            oCurrentChange(val) {
-    //点击选择具体页数
-    this.query.oPageNo = val;
-    this.getPartner();
-},
-oPrev() {
-    //分页按钮上一页
-    this.query.oPageNo--;
-    this.getPartner();
-},
-oNext() {
-    //分页按钮下一页
-    this.query.oPageNo++;
-    this.getPartner();
-},
+        oCurrentChange(val) {
+            //点击选择具体页数
+            this.query.oPageNo = val;
+            this.getPartner();
+        },
+        oPrev() {
+            //分页按钮上一页
+            this.query.oPageNo--;
+            this.getPartner();
+        },
+        oNext() {
+            //分页按钮下一页
+            this.query.oPageNo++;
+            this.getPartner();
+        },
         $imgAdd(pos, $file) {
             const isLt2M = $file.size / 1024 < 300;
             if (!isLt2M) {
