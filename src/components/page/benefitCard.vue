@@ -2651,7 +2651,7 @@
                             return;
                         }else if(this.oReduceTypeFilm==1){
                             if(this.oDiscountMoneyFilm>=0){
-                                if(!this.oDiscountMoneyFilm){
+                                if(!this.oDiscountMoneyFilm&&this.oDiscountMoneyFilm!=0){
                                     this.message = '固定金额不能为空，请检查！';
                                     this.open();
                                     loading.close();
