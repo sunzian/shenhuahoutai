@@ -345,19 +345,8 @@
         <el-dialog :close-on-click-modal="false" title="选择卖品" :visible.sync="drawer">
             <div class="container">
                 <div class="handle-box">
-                    <el-input v-model="query.name" placeholder="角色名" class="handle-input mr10"></el-input>
-                    <el-select
-                            clearable
-                            v-model="query.status"
-                            placeholder="状态"
-                            class="handle-select mr10"
-                    >
-                        <el-option key="1" label="审核中" value="1"></el-option>
-                        <el-option key="2" label="未审核" value="2"></el-option>
-                        <el-option key="3" label="通过" value="3"></el-option>
-                        <el-option key="4" label="审核失败" value="4"></el-option>
-                    </el-select>
-                    <el-button type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
+                    <el-input v-model="query.merchandiseName" placeholder="卖品名称" class="handle-input mr12"></el-input>
+                    <el-button type="primary" icon="el-icon-search" @click="openNext">搜索</el-button>
                 </div>
                 <el-table
                         :data="sellTableData"
@@ -440,6 +429,7 @@ export default {
             oName: '',
             message: '', //弹出框消息
             query: {
+                merchandiseName:'',
                 pageNo: 1,
                 pageSize: 15
             },
@@ -675,16 +665,12 @@ export default {
                 target: document.querySelector('.div1')
             });
             setTimeout(() => {
-                let name = this.query.name;
-                let status = this.query.status;
-                if (!name) {
-                    name = '';
-                }
-                if (!status) {
-                    status = '';
+                let merchandiseName = this.query.merchandiseName;
+                if (!merchandiseName) {
+                    merchandiseName = '';
                 }
                 let jsonArr = [];
-                // jsonArr.push({key:"roleName",value:name});
+                jsonArr.push({key:"merchandiseName",value:merchandiseName});
                 jsonArr.push({key:"cinemaCode",value:this.oCinemaCode});
                 jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
                 jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
@@ -697,6 +683,7 @@ export default {
                         loading.close();
                         if (data.data.code == 'success') {
                             this.drawer = true;
+                            this.query.merchandiseName='';
                             var oData = JSON.parse(Decrypt(data.data.data));
                             this.sellTableData = oData.data;
                             this.query.pageSize = oData.pageSize;
@@ -1240,6 +1227,10 @@ export default {
     }
     .mr10 {
         width: 16%;
+        margin-right: 10px;
+    }
+    .mr12 {
+        width: 30%;
         margin-right: 10px;
     }
 </style>
