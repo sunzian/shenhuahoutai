@@ -3,39 +3,12 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
-                    <i class="el-icon-lx-cascades"></i> 金币商品设置
+                    <i class="el-icon-lx-cascades"></i> 金币商品列表
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-select
-                    clearable
-                    v-model="query.cinemaCode"
-                    placeholder="请选择影院"
-                    class="handle-input mr10"
-                    @change="changeSearchCinema"
-                >
-                    <el-option
-                        v-for="item in cinemaInfo"
-                        :key="item.cinemaCode"
-                        :label="item.cinemaName"
-                        :value="item.cinemaCode"
-                    ></el-option>
-                </el-select>
-                <el-select
-                    clearable
-                    v-model="query.partnerCode"
-                    placeholder="请选择商户"
-                    class="handle-input mr10"
-                >
-                    <el-option
-                        v-for="item in partnerInfo"
-                        :key="item.partnerCode"
-                        :label="item.partnerName"
-                        :value="item.partnerCode"
-                    ></el-option>
-                </el-select>
                 <el-input v-model="query.name" placeholder="商品名称" class="handle-input mr10"></el-input>
                 <el-select
                     clearable
@@ -91,12 +64,12 @@
                     icon="el-icon-search"
                     @click="Search"
                 >搜索</el-button>
-                <el-button
+                <!-- <el-button
                     type="primary"
                     @click="addPage"
                     icon="el-icon-circle-plus-outline"
                     style="float: right;margin-top: 10px"
-                >新增</el-button>
+                >新增</el-button> -->
             </div>
             <el-table
                 :data="tableData"
@@ -161,42 +134,7 @@
                         <el-tag v-else-if="scope.row.commodityType=='4'">商品</el-tag>
                     </template>
                 </el-table-column>
-                <!-- <el-table-column prop="sort" label="优惠券名称" width="130">
-                    <template slot-scope="scope">{{scope.row.ticketNames}}</template>
-                </el-table-column>-->
-                <!-- <el-table-column prop="sort" label="是否指定日期可以兑换" width="160">
-                    <template slot-scope="scope">
-                        <el-tag v-if="scope.row.assignType=='0'"
-                        >不允许指定日期</el-tag>
-                        <el-tag v-else-if="scope.row.assignType=='1'"
-                        >指定日期</el-tag>
-                        <el-tag v-else-if="scope.row.assignType=='2'"
-                        >指定每月几号</el-tag>
-                        <el-tag v-else-if="scope.row.assignType=='3'"
-                        >指定每月第几周</el-tag>
-                        <el-tag v-else-if="scope.row.assignType=='4'"
-                        >指定每周几</el-tag>
-                    </template>
-                </el-table-column>-->
-                <!-- <el-table-column prop="sort" label="对应上方参数的具体日期信息" width="160">
-                    <template slot-scope="scope">{{scope.row.assignInfo}}</template>
-                </el-table-column>-->
-                <!-- <el-table-column prop="sort" label="是否限制一段时间内可兑换数量" width="160">
-                    <template slot-scope="scope">
-                        <el-tag v-if="scope.row.limitType=='0'"
-                        >不限制</el-tag>
-                        <el-tag v-else-if="scope.row.limitType=='1'"
-                        >限制每年可兑换数量</el-tag>
-                        <el-tag v-else-if="scope.row.limitType=='2'"
-                        >限制每月可兑换数量</el-tag>
-                        <el-tag v-else-if="scope.row.limitType=='3'"
-                        >限制每周可兑换数量</el-tag>
-                    </template>
-                </el-table-column>-->
-                <!-- <el-table-column prop="sort" label="对应上方的限制兑换数量" width="160">
-                    <template slot-scope="scope">{{scope.row.limitNumber}}</template>
-                </el-table-column>-->
-                <el-table-column label="操作" width="140" align="center" fixed="right">
+                <!-- <el-table-column label="操作" width="140" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-button
                             type="text"
@@ -210,7 +148,7 @@
                             @click="delChange(scope.$index, scope.row)"
                         >删除</el-button>
                     </template>
-                </el-table-column>
+                </el-table-column> -->
             </el-table>
             <div class="pagination">
                 <el-pagination
@@ -2853,20 +2791,12 @@ export default {
                 target: document.querySelector('.div1')
             });
             setTimeout(() => {
-                let cinemaCodes = this.query.cinemaCode;
-                let partnerCode = this.query.partnerCode;
                 let status = this.query.status;
                 let changeType = this.query.changeType;
                 let commodityType = this.query.commodityType;
                 let topStatus = this.query.topStatus;
                 let recommendStatus = this.query.recommendStatus;
                 let name = this.query.name;
-                if (!cinemaCodes) {
-                    cinemaCodes = '';
-                }
-                if (!partnerCode) {
-                    partnerCode = '';
-                }
                 if (!status) {
                     status = '';
                 }
@@ -2889,8 +2819,6 @@ export default {
                 jsonArr.push({ key: 'name', value: name });
                 jsonArr.push({ key: 'recommendStatus', value: recommendStatus });
                 jsonArr.push({ key: 'topStatus', value: topStatus });
-                jsonArr.push({ key: 'cinemaCodes', value: cinemaCodes });
-                jsonArr.push({ key: 'partnerCode', value: partnerCode });
                 jsonArr.push({ key: 'status', value: status });
                 jsonArr.push({ key: 'changeType', value: changeType });
                 jsonArr.push({ key: 'commodityType', value: commodityType });
@@ -2900,7 +2828,7 @@ export default {
                 jsonArr.push({ key: 'sign', value: sign });
                 var params = ParamsAppend(jsonArr);
                 https
-                    .fetchPost('/goldCommodity/goldCommodityPage', params)
+                    .fetchPost('/cinemaPartner/goldCommodityPage', params)
                     .then(data => {
                         loading.close();
                         if (data.data.code == 'success') {
@@ -2910,7 +2838,6 @@ export default {
                             this.query.pageNo = oData.pageNo;
                             this.query.totalCount = oData.totalCount;
                             this.query.totalPage = oData.totalPage;
-                            this.getAllCinema();
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
                             this.open();

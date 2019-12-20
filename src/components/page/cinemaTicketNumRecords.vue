@@ -16,11 +16,18 @@
                     placeholder="请选择交易方式"
                     class="handle-input mr10"
                 >
-                    <el-option key="1" label="主动充值" value="1"></el-option>
+                    <el-option key="1" label="充值张数" value="1"></el-option>
                     <el-option key="2" label="购票扣除" value="2"></el-option>
                     <el-option key="3" label="退票返回" value="3"></el-option>
+                    <el-option key="4" label="充值金额" value="4"></el-option>
                 </el-select>
                 <el-button style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
+                <el-button
+                        type="primary"
+                        @click="addPrice"
+                        icon="el-icon-circle-plus-outline"
+                        style="float: right;margin-top: 10px"
+                >充值购票金额</el-button>
                 <el-button
                         type="primary"
                         @click="addPage"
@@ -89,11 +96,20 @@
                 <el-table-column prop="name" label="影院出票总量">
                     <template slot-scope="scope">{{scope.row.totalSaleTicketNumber}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="充值张数">
+                <el-table-column prop="name" label="第三方支付出票数">
+                    <template slot-scope="scope">{{scope.row.thirdTicketNumber}}</template>
+                </el-table-column>
+                <el-table-column prop="name" label="会员卡支付出票数">
+                    <template slot-scope="scope">{{scope.row.memberCardTicketNumber}}</template>
+                </el-table-column>
+                <el-table-column prop="name" label="交易张数">
                     <template slot-scope="scope">{{scope.row.tradeTicketNum}}</template>
                 </el-table-column>
                 <el-table-column prop="name" label="剩余张数">
                     <template slot-scope="scope">{{scope.row.remainTicketsNumber}}</template>
+                </el-table-column>
+                <el-table-column prop="name" label="剩余购票金额">
+                    <template slot-scope="scope">{{scope.row.remainTicketPrice}}</template>
                 </el-table-column>
                 <el-table-column prop="sort" label="交易时间" >
                     <template slot-scope="scope">{{scope.row.tradeTime}}</template>
@@ -116,7 +132,7 @@
             </div>
         </div>
         <!--新增弹出框-->
-        <el-dialog :close-on-click-modal="false" title="充值" :visible.sync="dialogFormVisible">
+        <el-dialog :close-on-click-modal="false" title="充值张数" :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
                 <el-form-item label="选择影院：" :label-width="formLabelWidth">
                     <el-select v-model="oForm.cinemaCode" placeholder="请选择">
@@ -128,7 +144,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="充值张数：" :label-width="formLabelWidth">
+                <el-form-item label="交易张数：" :label-width="formLabelWidth">
                     <el-input style="width: 200px" min="1" v-model="oForm.tradeTicketNum" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="充值明细：" :label-width="formLabelWidth">
@@ -138,6 +154,31 @@
             <span slot="footer" class="dialog-footer">
                 <el-button @click="cancel">取 消</el-button>
                 <el-button type="primary" @click="addRole">确 定</el-button>
+            </span>
+        </el-dialog>
+        <!--新增弹出框-->
+        <el-dialog :close-on-click-modal="false" title="充值金额" :visible.sync="dialogFormVisible2">
+            <el-form :model="pForm">
+                <el-form-item label="选择影院：" :label-width="formLabelWidth">
+                    <el-select v-model="pForm.cinemaCode" placeholder="请选择">
+                        <el-option
+                                v-for="info in cinemaInfo"
+                                :key="info.cinemaCode"
+                                :value="info.cinemaCode"
+                                :label="info.cinemaName"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="交易金额：" :label-width="formLabelWidth">
+                    <el-input style="width: 200px" min="1" v-model="pForm.tradeTicketPrice" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="充值明细：" :label-width="formLabelWidth">
+                    <el-input style="width: 200px" type="textarea" min="1" maxlength="200" show-word-limit v-model="pForm.tradeDetail" autocomplete="off"></el-input>
+                </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="cancel2">取 消</el-button>
+                <el-button type="primary" @click="addRole2">确 定</el-button>
             </span>
         </el-dialog>
     </div>
@@ -208,10 +249,17 @@
                 id: -1,
                 couponId: '',
                 dialogFormVisible: false,
+                dialogFormVisible2: false,
                 oForm: {
                     cinemaName: '',
                     cinemaCode: '',
                     tradeTicketNum: '',
+                    tradeDetail: '',
+                },
+                pForm: {
+                    cinemaName: '',
+                    cinemaCode: '',
+                    tradeTicketPrice: '',
                     tradeDetail: '',
                 },
                 formLabelWidth: '160px',
@@ -256,6 +304,35 @@
                     console.log(err);
                 });
             },
+            addPrice() {
+                //获取新增按钮权限
+                const loading = this.$loading({
+                    lock: true,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)',
+                    target: document.querySelector('.div1')
+                });
+                https.fetchPost('/cinemaTicketNumRecords/addPage ', '')
+                .then(data => {
+                    loading.close();
+                    if (data.data.code == 'success') {
+                        this.dialogFormVisible2 = true;
+                        this.getAllCinema();
+                    } else if (data.data.code == 'nologin') {
+                        this.message = data.data.message;
+                        this.open();
+                        this.$router.push('/login');
+                    } else {
+                        this.message = data.data.message;
+                        this.open();
+                    }
+                })
+                .catch(err => {
+                    loading.close();
+                    console.log(err);
+                });
+            },
             addRole() {
                 //新增按钮操作
                 const loading = this.$loading({
@@ -269,11 +346,13 @@
                 if (!this.oForm.cinemaCode) {
                     this.message = '请选择影院';
                     this.open();
+                    loading.close();
                     return;
                 }
                 if (!this.oForm.tradeTicketNum) {
                     this.message = '请输入数量';
                     this.open();
+                    loading.close();
                     return;
                 }
                 let cinemaName = ''
@@ -296,7 +375,7 @@
                             loading.close();
                             if (data.data.code == 'success') {
                                 this.dialogFormVisible = false;
-                                this.$message.success(`新增成功`);
+                                this.$message.success(`充值成功`);
                                 this.oForm.cinemaCode = '';
                                 this.oForm.tradeDetail = '';
                                 this.oForm.tradeTicketNum = '';
@@ -316,18 +395,71 @@
                         });
                 }
             },
+            addRole2() {
+                //新增按钮操作
+                const loading = this.$loading({
+                    lock: true,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)',
+                    target: document.querySelector('.div1')
+                });
+                var jsonArr = [];
+                if (!this.pForm.cinemaCode) {
+                    this.message = '请选择影院';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if (!this.pForm.tradeTicketPrice) {
+                    this.message = '请输入金额';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                let cinemaName = ''
+                for (let i = 0; i < this.cinemaInfo.length; i ++) {
+                    if (this.cinemaInfo[i].cinemaCode == this.pForm.cinemaCode) {
+                        cinemaName = this.cinemaInfo[i].cinemaName
+                    }
+                }
+                jsonArr.push({ key: 'cinemaName', value:  cinemaName});
+                jsonArr.push({ key: 'cinemaCode', value: this.pForm.cinemaCode });
+                jsonArr.push({ key: 'tradeDetail', value: this.pForm.tradeDetail });
+                jsonArr.push({ key: 'tradeTicketPrice', value: this.pForm.tradeTicketPrice });
+                let sign = md5(preSign(jsonArr));
+                jsonArr.push({ key: 'sign', value: sign });
+                let params = ParamsAppend(jsonArr);
+                if (this.dialogFormVisible2 == true) {
+                    https
+                        .fetchPost('/cinemaTicketNumRecords/updateRemainTicketPrice', params)
+                        .then(data => {
+                            loading.close();
+                            if (data.data.code == 'success') {
+                                this.dialogFormVisible2 = false;
+                                this.$message.success(`充值成功`);
+                                this.pForm.cinemaCode = '';
+                                this.pForm.tradeDetail = '';
+                                this.pForm.tradeTicketPrice = '';
+                                this.getMenu();
+                            } else if (data.data.code == 'nologin') {
+                                this.message = data.data.message;
+                                this.open();
+                                this.$router.push('/login');
+                            } else {
+                                this.message = data.data.message;
+                                this.open();
+                            }
+                        })
+                        .catch(err => {
+                            loading.close();
+                            console.log(err);
+                        });
+                }
+            },
             Search() {
                 this.query.pageNo = 1;
                 this.getMenu();
-            },
-            getCinemaCode(e) {
-                //获取所选影院编码
-                for (let i = 0; i < this.cinemaInfo.length; i++) {
-                    if (this.cinemaInfo[i].cinemaName == e) {
-                        this.oForm.cinemaCode = this.cinemaInfo[i].cinemaCode;
-                    }
-                }
-                this.getAllCinemaCard();
             },
             getMenu() {
                 //获取菜单栏
@@ -390,7 +522,31 @@
                     type: 'warning'
                 })
                     .then(() => {
+                        this.oForm.tradeTicketNum = '';
+                        this.oForm.tradeDetail = '';
+                        this.oForm.cinemaName = '';
+                        this.oForm.cinemaCode = '';
                         this.dialogFormVisible = false;
+                    })
+                    .catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '已取消'
+                        });
+                    });
+            },
+            cancel2() {
+                this.$confirm('该操作将清空页面数据, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                })
+                    .then(() => {
+                        this.pForm.tradeTicketNum = '';
+                        this.pForm.tradeDetail = '';
+                        this.pForm.cinemaName = '';
+                        this.pForm.cinemaCode = '';
+                        this.dialogFormVisible2 = false;
                     })
                     .catch(() => {
                         this.$message({

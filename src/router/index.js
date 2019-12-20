@@ -356,6 +356,21 @@ export default new Router({
                     meta: { title: '角色管理' }
                 },
                 {
+                    path: '/partnerUserPage',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/partnerUserPage.vue'),
+                    meta: { title: '商户账号设置' }
+                },
+                {
+                    path: '/partnerCommodityPage',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/partnerCommodityPage.vue'),
+                    meta: { title: '商户金币商品设置' }
+                },
+                {
+                    path: '/partnerCommodityOrderPage',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/partnerCommodityOrderPage.vue'),
+                    meta: { title: '商户金币商城订单' }
+                },
+                {
                     path: '/userPage',
                     component: () => import(/* webpackChunkName: "table" */ '../components/page/userPage.vue'),
                     meta: { title: '用户管理' }

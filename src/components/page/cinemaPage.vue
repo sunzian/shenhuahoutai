@@ -156,6 +156,9 @@
                 <el-table-column prop="time" label="剩余张数">
                     <template slot-scope="scope">{{scope.row.remainTicketsNumber}}</template>
                 </el-table-column>
+                <el-table-column prop="time" label="剩余金额">
+                    <template slot-scope="scope">{{scope.row.remainTicketPrice}}</template>
+                </el-table-column>
                 <el-table-column prop="string" label="票价上报方式">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.reportedType == 1" type="info">标准价格上报</el-tag>
@@ -608,6 +611,20 @@
                             value-format="yyyy-MM-dd HH:mm:ss"
                             v-model="oForm.expireDate"
                             placeholder="选择日期时间"></el-date-picker>
+                </el-form-item>
+                <el-form-item label="第三方支付购票收费" :label-width="formLabelWidth">
+                    <el-input
+                        style="width: 250px"
+                        v-model="oForm.thirdPartyPayFee"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="会员卡支付购票收费" :label-width="formLabelWidth">
+                    <el-input
+                        style="width: 250px"
+                        v-model="oForm.memberCardPayFee"
+                        autocomplete="off"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item prop="reportedType" label="票价上报方式" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.reportedType">
@@ -1183,7 +1200,7 @@
                         <el-radio label="2">按票收费</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item v-if="oPaymentType==2" label="可售票数余额" :label-width="formLabelWidth">
+                <el-form-item v-if="oPaymentType==2" label="剩余张数" :label-width="formLabelWidth">
                     <el-input
                             style="width: 250px"
                             v-model="oRemainTicketsNumber"
@@ -1198,6 +1215,28 @@
                             value-format="yyyy-MM-dd HH:mm:ss"
                             v-model="oExpireDate"
                             placeholder="选择日期时间"></el-date-picker>
+                </el-form-item>
+                <el-form-item label="剩余购票金额" :label-width="formLabelWidth">
+                    <el-input
+                            style="width: 250px"
+                            v-model="oRemainTicketPrice"
+                            autocomplete="off"
+                            :disabled="true"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="第三方支付购票收费" :label-width="formLabelWidth">
+                    <el-input
+                        style="width: 250px"
+                        v-model="oThirdPartyPayFee"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="会员卡支付购票收费" :label-width="formLabelWidth">
+                    <el-input
+                        style="width: 250px"
+                        v-model="oMemberCardPayFee"
+                        autocomplete="off"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item prop="reportedType" label="票价上报方式" :label-width="formLabelWidth">
                     <el-radio-group v-model="oReportedType">
@@ -1482,6 +1521,9 @@ export default {
             oGoldActivityMemo: '',
             // oOpenSnackStatus: '',
             oRemainTicketsNumber: '',
+            oRemainTicketPrice: '',
+            oThirdPartyPayFee: '',
+            oMemberCardPayFee: '',
             oSnackDispatcherStatus: '',
             oRefundable: '',
             oSnackBeginTime: '',
@@ -1566,6 +1608,8 @@ export default {
                 memberCardPayCommissionFee: '',
                 membershipServiceAgreement: '',
                 buyTicketHint: '',
+                memberCardPayFee: '',
+                thirdPartyPayFee: '',
                 // openSnackStatus: '',
                 snackDispatcherStatus: '',
                 refundable: '',
@@ -1745,6 +1789,8 @@ export default {
             jsonArr.push({ key: 'ticketingSystemPassword', value: this.oForm.ticketingSystemPassword });
             jsonArr.push({ key: 'miniAppId', value: this.oForm.miniAppId });
             jsonArr.push({ key: 'miniAppSecret', value: this.oForm.miniAppSecret });
+            jsonArr.push({ key: 'thirdPartyPayFee', value: this.oForm.thirdPartyPayFee });
+            jsonArr.push({ key: 'memberCardPayFee', value: this.oForm.memberCardPayFee });
             jsonArr.push({ key: 'interfaceAddress', value: this.oForm.interfaceAddress });
             jsonArr.push({ key: 'memberInterfaceAddress', value: this.oForm.memberInterfaceAddress });
             jsonArr.push({ key: 'verificationCode', value: this.oForm.verificationCode });
@@ -1782,6 +1828,8 @@ export default {
                             this.oForm.concatMobile = '';
                             this.oForm.serviceMobile = '';
                             this.oForm.screenCount = '';
+                            this.oForm.thirdPartyPayFee = '';
+                            this.oForm.memberCardPayFee = '';
                             this.oForm.ticketSystemCode = '';
                             this.oForm.comparePriceCode = '';
                             this.oForm.buyMinutesLimit = '';
@@ -1951,6 +1999,9 @@ export default {
                         this.oReportedType = JSON.parse(Decrypt(data.data.data)).Cinema.reportedType;
                         this.oBelongBusinessCode = JSON.parse(Decrypt(data.data.data)).Cinema.belongBusinessCode;
                         this.oRemainTicketsNumber = JSON.parse(Decrypt(data.data.data)).Cinema.remainTicketsNumber;
+                        this.oRemainTicketPrice = JSON.parse(Decrypt(data.data.data)).Cinema.remainTicketPrice;
+                        this.oMemberCardPayFee = JSON.parse(Decrypt(data.data.data)).Cinema.memberCardPayFee;
+                        this.oThirdPartyPayFee = JSON.parse(Decrypt(data.data.data)).Cinema.thirdPartyPayFee;
                         this.oEquityCardAgreement = JSON.parse(Decrypt(data.data.data)).Cinema.equityCardAgreement;
                         for (let x in this.boolean) {
                             if (this.boolean[x].value == JSON.parse(Decrypt(data.data.data)).Cinema.memberCardCommonUseStatus) {
@@ -2168,6 +2219,8 @@ export default {
             jsonArr.push({ key: 'memberInterfaceAddress', value: this.oMemberInterfaceAddress });
             jsonArr.push({ key: 'verificationCode', value: this.oVerificationCode });
             jsonArr.push({ key: 'mtxPayType', value: this.oMtxPayType });
+            jsonArr.push({ key: 'thirdPartyPayFee', value: this.oThirdPartyPayFee });
+            jsonArr.push({ key: 'memberCardPayFee', value: this.oMemberCardPayFee });
             jsonArr.push({ key: 'miniAppName', value: this.oMiniAppName });
             jsonArr.push({ key: 'miniAppQRCode', value: this.oMiniAppQRCode });
             jsonArr.push({ key: 'id', value: this.oId });
