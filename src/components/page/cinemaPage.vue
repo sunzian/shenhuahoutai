@@ -2176,27 +2176,13 @@ export default {
             jsonArr.push({ key: 'equityCardAgreement', value: this.oEquityCardAgreement });
             jsonArr.push({ key: 'ticketingSystemTypeVersion', value: this.oTicketingSystemTypeVersion });
             let messageInfos = [];
-            if (this.oMessageType1) {
                 messageInfos.push({ 'messageType':  1 , 'content': this.oMessageType1 });
-            }
-            if (this.oMessageType2) {
                 messageInfos.push({ 'messageType': 2 ,  'content': this.oMessageType2 });
-            }
-            if (this.oMessageType3) {
                 messageInfos.push({ 'messageType': 3 , 'content': this.oMessageType3 });
-            }
-            if (this.oMessageType4) {
                 messageInfos.push({ 'messageType': 4 , 'content': this.oMessageType4 });
-            }
-            if (this.oMessageType5) {
                 messageInfos.push({ 'messageType': 5 , 'content': this.oMessageType5 });
-            }
-            if (this.oMessageType6) {
                 messageInfos.push({ 'messageType': 6 , 'content': this.oMessageType6 });
-            }
-            if (messageInfos.length>0) {
-                jsonArr.push({ key: 'messageInfos', value: JSON.stringify(messageInfos)})
-            }
+                jsonArr.push({ key: 'messageInfos', value: JSON.stringify(messageInfos)});
             jsonArr.push({ key: 'messagePlatformAccount', value: this.oMessagePlatformAccount });
             jsonArr.push({ key: 'messagePlatformPassword', value: this.oMessagePlatformPassword });
             jsonArr.push({ key: 'messagePlatformSignId', value: this.oMessagePlatformSignId });
