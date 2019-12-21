@@ -60,11 +60,11 @@
                 </el-table-column>
                 <el-table-column label="操作"  align="center"  fixed="right" width="200">
                     <template slot-scope="scope">
-                        <!-- <el-button
+                        <el-button
                             type="text"
                             icon="el-icon-setting"
                             @click="UserPassword(scope.$index, scope.row)"
-                        >密码设置</el-button> -->
+                        >密码设置</el-button>
                         <el-button
                             v-if="scope.row.adminFlag !='1'"
                             type="text"
@@ -424,7 +424,7 @@
                 this.idx = index;
                 this.form = row;
                 https
-                    .fetchPost('/user/updateUserPasswordPage', '')
+                    .fetchPost('/cinemaPartner/updateUserPasswordPage', '')
                     .then(data => {
                         loading.close();
                         console.log(data);
@@ -473,7 +473,7 @@
                     let params = ParamsAppend(jsonArr);
                     this.passShow = false;
                     https
-                        .fetchPost('/user/updateUserPassword', params)
+                        .fetchPost('/cinemaPartner/updateUserPassword', params)
                         .then(data => {
                             loading.close();
                             if (data.data.code == 'success') {
