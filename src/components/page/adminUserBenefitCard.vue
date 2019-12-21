@@ -13,6 +13,7 @@
                     v-model="query.businessCode"
                     placeholder="请选择商家"
                     class="mr10"
+                    style="margin-top: 10px;"
                     @change="changeBusiness"
                 >
                     <el-option
@@ -22,7 +23,13 @@
                         :value="item.businessCode"
                     ></el-option>
                 </el-select>
-                <el-select clearable v-model="query.cinemaCode" placeholder="请选择影院" class="mr10">
+                <el-select
+                    clearable
+                    v-model="query.cinemaCode"
+                    placeholder="请选择影院"
+                    class="mr10"
+                    style="margin-top: 10px;"
+                >
                     <el-option
                         v-for="item in cinemaInfo"
                         :key="item.cinemaCode"
@@ -35,34 +42,32 @@
                     v-model="query.userName"
                     autocomplete="off"
                     class="mr10"
+                    style="margin-top: 10px;"
                 ></el-input>
-                <el-input
-                    placeholder="手机号"
-                    v-model="query.phone"
-                    autocomplete="off"
-                    class="mr10"
-                ></el-input>
+                <el-input placeholder="手机号" v-model="query.phone" autocomplete="off" class="mr10"></el-input>
                 <el-input
                     placeholder="权益卡名称"
                     v-model="query.benefitName"
                     autocomplete="off"
                     class="mr10"
+                    style="margin-top: 10px;"
                 ></el-input>
                 <el-input
                     placeholder="订单号"
                     v-model="query.orderNumber"
                     autocomplete="off"
                     class="mr10"
+                    style="margin-top: 10px;"
                 ></el-input>
                 <el-select
                     clearable
                     v-model="query.benefitStatus"
                     placeholder="权益卡状态"
                     class="handle-select mr10"
+                    style="margin-top: 10px;"
                 >
                     <el-option key="0" label="失效" value="0"></el-option>
                     <el-option key="1" label="正常" value="1"></el-option>
-                    <!--<el-option key="2" label="作废" value="2"></el-option>-->
                     <el-option key="3" label="过期" value="3"></el-option>
                     <el-option key="4" label="续卡" value="4"></el-option>
                 </el-select>
@@ -71,27 +76,49 @@
                     v-model="query.payStatus"
                     placeholder="支付状态"
                     class="handle-select mr10"
+                    style="margin-top: 10px;"
                 >
                     <el-option key="0" label="未支付" value="0"></el-option>
                     <el-option key="1" label="已支付" value="1"></el-option>
                     <el-option key="2" label="支付失败" value="2"></el-option>
                 </el-select>
                 <el-date-picker
-                        v-model="query.startTime"
-                        type="datetime"
-                        class="mr10"
-                        value-format="yyyy-MM-dd HH:mm:ss"
-                        format="yyyy-MM-dd HH:mm:ss"
-                        default-time="06:00:00"
-                        placeholder="有效期开始时间（起）"
+                    v-model="query.startTime"
+                    type="datetime"
+                    class="mr10"
+                    style="margin-top: 10px;"
+                    value-format="yyyy-MM-dd HH:mm:ss"
+                    format="yyyy-MM-dd HH:mm:ss"
+                    default-time="06:00:00"
+                    placeholder="有效期开始时间（起）"
                 ></el-date-picker>
                 <el-date-picker
-                        v-model="query.endTime"
-                        type="datetime"
-                        class="mr10"
-                        value-format="yyyy-MM-dd HH:mm:ss"
-                        format="yyyy-MM-dd HH:mm:ss"
-                        placeholder="有效期结束时间（止）"
+                    v-model="query.endTime"
+                    type="datetime"
+                    class="mr10"
+                    style="margin-top: 10px;"
+                    value-format="yyyy-MM-dd HH:mm:ss"
+                    format="yyyy-MM-dd HH:mm:ss"
+                    placeholder="有效期结束时间（止）"
+                ></el-date-picker>
+                <el-date-picker
+                    v-model="query.payStartTime"
+                    type="datetime"
+                    class="mr10"
+                    style="margin-top: 10px;"
+                    value-format="yyyy-MM-dd HH:mm:ss"
+                    format="yyyy-MM-dd HH:mm:ss"
+                    default-time="06:00:00"
+                    placeholder="支付开始时间（起）"
+                ></el-date-picker>
+                <el-date-picker
+                    v-model="query.payEndTime"
+                    type="datetime"
+                    class="mr10"
+                    style="margin-top: 10px;"
+                    value-format="yyyy-MM-dd HH:mm:ss"
+                    format="yyyy-MM-dd HH:mm:ss"
+                    placeholder="支付结束时间（止）"
                 ></el-date-picker>
                 <el-button
                     type="primary"
@@ -146,6 +173,9 @@
                 <el-table-column prop="memo" label="累计优惠金额">
                     <template slot-scope="scope">{{scope.row.totalDiscountMoney}}</template>
                 </el-table-column>
+                <el-table-column prop="memo" label="支付时间" width="160">
+                    <template slot-scope="scope">{{scope.row.payTime}}</template>
+                </el-table-column>
                 <el-table-column prop="memo" label="生效时间" width="160">
                     <template slot-scope="scope">{{scope.row.startDate}}</template>
                 </el-table-column>
@@ -184,94 +214,6 @@
                 ></el-pagination>
             </div>
         </div>
-        <!-- 详情弹出框 -->
-        <el-dialog :close-on-click-modal="false" title="详情" :visible.sync="editVisible">
-            <el-form ref="form" :model="form">
-                <el-form-item label="开卡影院名称" :label-width="formLabelWidth">
-                    <el-input
-                        :disabled="true"
-                        style="width: 250px"
-                        v-model="form.cinemaName"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="消费影院名称" :label-width="formLabelWidth">
-                    <el-input
-                        :disabled="true"
-                        style="width: 250px"
-                        v-model="form.consumeCinemaName"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="卡号" :label-width="formLabelWidth">
-                    <el-input
-                        :disabled="true"
-                        style="width: 250px"
-                        v-model="form.cardNo"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="手机号" :label-width="formLabelWidth">
-                    <el-input
-                        :disabled="true"
-                        style="width: 250px"
-                        v-model="form.mobilePhone"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="消费金额" :label-width="formLabelWidth">
-                    <el-input
-                        :disabled="true"
-                        style="width: 250px"
-                        v-model="form.consumeAmount"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="消费明细" :label-width="formLabelWidth">
-                    <el-input
-                        :disabled="true"
-                        style="width: 250px"
-                        v-model="form.consumeDetail"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="交易状态" :label-width="formLabelWidth">
-                    <el-input
-                        :disabled="true"
-                        style="width: 250px"
-                        v-model="form.status"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="接口返回错误描述" :label-width="formLabelWidth">
-                    <el-input
-                        :disabled="true"
-                        style="width: 250px"
-                        v-model="form.errorMessage"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="订单类型" :label-width="formLabelWidth">
-                    <el-input
-                        :disabled="true"
-                        style="width: 250px"
-                        v-model="form.orderType"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="消费时间" :label-width="formLabelWidth">
-                    <el-input
-                        :disabled="true"
-                        style="width: 250px"
-                        v-model="form.consumeTime"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="editVisible = false">确 定</el-button>
-            </span>
-        </el-dialog>
     </div>
 </template>
 
@@ -457,6 +399,8 @@ export default {
                 let phone = this.query.phone;
                 let startTime = this.query.startTime;
                 let endTime = this.query.endTime;
+                let payStartTime = this.query.payStartTime;
+                let payEndTime = this.query.payEndTime;
                 if (!businessCode) {
                     businessCode = '';
                 }
@@ -487,9 +431,17 @@ export default {
                 if (!endTime) {
                     endTime = '';
                 }
+                if (!payStartTime) {
+                    payStartTime = '';
+                }
+                if (!payEndTime) {
+                    payEndTime = '';
+                }
                 let jsonArr = [];
                 jsonArr.push({ key: 'startTime', value: startTime });
                 jsonArr.push({ key: 'endTime', value: endTime });
+                jsonArr.push({ key: 'payStartTime', value: payStartTime });
+                jsonArr.push({ key: 'payEndTime', value: payEndTime });
                 jsonArr.push({ key: 'businessCode', value: businessCode });
                 jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
                 jsonArr.push({ key: 'userName', value: userName });
@@ -502,7 +454,7 @@ export default {
                 jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
-                console.log(jsonArr)
+                console.log(jsonArr);
                 var params = ParamsAppend(jsonArr);
                 https
                     .fetchPost('/admin/userBenefitCard/list', params)
@@ -543,8 +495,8 @@ export default {
             });
         },
         handleSizeChange(val) {
-            this.query.pageSize=val;
-            this.getMenu()
+            this.query.pageSize = val;
+            this.getMenu();
         },
         // 多选操作
         handleSelectionChange(val) {
@@ -570,18 +522,18 @@ export default {
 </script>
 
 <style scoped>
-    .handle-box {
-        width: 100%;
-        margin-bottom: 20px;
-        font-size: 14px;
-    }
-    .table {
-        width: 100%;
-        font-size: 14px;
-    }
-    .mr10 {
-        width: 16%;
-        margin-right: 10px;
-    }
+.handle-box {
+    width: 100%;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+.table {
+    width: 100%;
+    font-size: 14px;
+}
+.mr10 {
+    width: 16%;
+    margin-right: 10px;
+}
 </style>
 
