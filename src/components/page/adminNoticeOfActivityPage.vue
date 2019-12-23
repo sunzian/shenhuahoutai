@@ -890,13 +890,18 @@ export default {
             });
             setTimeout(() => {
             let businessCode = this.query.businessCode;
+            let cinemaCode = this.query.name;
             if (!businessCode) {
                 businessCode = '';
+            }
+            if (!cinemaCode) {
+                cinemaCode = '';
             }
             let jsonArr = [];
             jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
             jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
             jsonArr.push({ key: 'businessCode', value: businessCode });
+            jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             console.log(jsonArr)
@@ -958,6 +963,8 @@ export default {
                 });
         },
         changeBusiness(val) {
+            this.query.name = '';
+            this.cinemaInfo = '';
             this.query.businessCode = val;
             this.getAllCinema();
             this.$forceUpdate();
@@ -985,11 +992,17 @@ export default {
                     loading.close();
                     if (data.data.code == 'success') {
                         let cinemas = JSON.parse(Decrypt(data.data.data));
-                        for (let i = 0; i < cinemas.length; i++) {
-                            let cinemaInfo = {};
-                            cinemaInfo.label = cinemas[i].cinemaName;
-                            cinemaInfo.value = cinemas[i].cinemaCode;
-                            this.cinemaInfo.push(cinemaInfo);
+                        if (cinemas.length > 0) {
+                            this.cinemaInfo = [];
+                            for (let i = 0; i < cinemas.length; i++) {
+                                let cinemaInfo = {};
+                                cinemaInfo.label = cinemas[i].cinemaName;
+                                cinemaInfo.value = cinemas[i].cinemaCode;
+                                this.cinemaInfo.push(cinemaInfo);
+                            }
+                        } else {
+                            this.query.name = '';
+                            this.cinemaInfo = [];
                         }
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;

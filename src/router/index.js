@@ -26,6 +26,11 @@ export default new Router({
                     meta: { title: '商家账号管理' }
                 },
                 {
+                    path: '/partnerUserInfoPage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/partnerUserInfoPage.vue'),
+                    meta: { title: '商家账号管理' }
+                },
+                {
                     path: '/ticketOrderPage',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/ticketOrderPage.vue'),
                     meta: { title: '影票订单' }
@@ -323,7 +328,12 @@ export default new Router({
                 {
                     path: '/cinemaPartnerPage',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/cinemaPartnerPage.vue'),
-                    meta: { title: '充值规则管理' }
+                    meta: { title: '合作商家设置' }
+                },
+                {
+                    path: '/partnerCinemaPartnerPage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/partnerCinemaPartnerPage.vue'),
+                    meta: { title: '合作商家设置' }
                 },
                 {
                     path: '/adminRechargeCardRulePage',

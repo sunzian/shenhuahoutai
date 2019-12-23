@@ -59,20 +59,20 @@
                 <el-table-column prop="memo" label="奖励金币数量">
                     <template slot-scope="scope">{{scope.row.goldAward}}</template>
                 </el-table-column>
-                <!-- <el-table-column label="操作" width="180" align="center" fixed="right">
+                <el-table-column label="操作" width="180" align="center" fixed="right">
                     <template slot-scope="scope">
-                        <el-button v-if="!scope.row.id"
+                        <el-button v-if="scope.row.continuousDays == 7"
                                 type="text"
                                 icon="el-icon-circle-plus-outline"
                                 @click="addChange(scope.$index, scope.row)"
-                        >新增</el-button>
-                        <el-button v-if="scope.row.id"
+                        >查看详情</el-button>
+                        <!-- <el-button v-if="scope.row.id"
                                 type="text"
                                 icon="el-icon-circle-plus-outline"
                                 @click="addChange(scope.$index, scope.row)"
-                        >编辑</el-button>
+                        >编辑</el-button> -->
                     </template>
-                </el-table-column> -->
+                </el-table-column>
             </el-table>
             <!-- <span slot="footer" class="dialog-footer" style="float:right;margin-top: -10px">
                 <el-button style="float: right;margin-top: 10px;" type="primary" @click="exAddChanger">确 定</el-button>
@@ -95,23 +95,26 @@
                             v-model="oGoldAward"
                             autocomplete="off"
                             onkeyup="this.value=this.value.replace(/\D/g,'')"
+                            :disabled="true"
                     ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oContinuousDays==7" label="是否设置连续7天额外奖励" :label-width="formLabelWidth">
-                    <el-radio-group v-model="oExtraFlag">
+                    <el-radio-group v-model="oExtraFlag" :disabled="true">
                         <el-radio label="1">是</el-radio>
                         <el-radio label="2">否</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item :required="true" v-if="oExtraFlag==1&&oContinuousDays==7" label="额外奖励的礼物名称" :label-width="formLabelWidth">
+                <el-form-item :required="true" v-if="oExtraFlag==1&&oContinuousDays==7" label="额外奖励的礼物名称" :label-width="formLabelWidth" >
                     <el-input
                             style="width: 250px"
                             v-model="oExtraPrizeName"
                             autocomplete="off"
+                            :disabled="true"
                     ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oExtraFlag==1&&oContinuousDays==7" label="额外奖励的礼物图片" :label-width="formLabelWidth">
-                    <el-upload
+                    <img style="width: 400px" :src="oExtraPrizePicture" />
+                    <!-- <el-upload
                             :before-upload="beforeUpload"
                             :data="type"
                             class="upload-demo"
@@ -120,43 +123,45 @@
                             action="/api/upload/uploadImage"
                             :on-success="unSuccess"
                             multiple
-                    >
-                        <i class="el-icon-upload"></i>
-                        <div class="el-upload__text">
+                    > -->
+                        <!-- <i class="el-icon-upload"></i> -->
+                        <!-- <div class="el-upload__text">
                             将文件拖到此处，或
                             <em>点击上传</em>
-                        </div>
-                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过200kb 建议尺寸150*150或按比例上传</div>
-                    </el-upload>
+                        </div> -->
+                        <!-- <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过200kb 建议尺寸150*150或按比例上传</div> -->
+                    <!-- </el-upload> -->
                 </el-form-item>
                 <el-form-item :required="true" v-if="oExtraFlag==1&&oContinuousDays==7" label="领取后几天过期" :label-width="formLabelWidth">
                     <el-input
                             style="width: 250px"
                             v-model="oExpireDays"
                             autocomplete="off"
+                            :disabled="true"
                     ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oExtraFlag==1&&oContinuousDays==7" label="额外奖励的礼物类型" :label-width="formLabelWidth">
-                    <el-radio-group v-model="oExtraPrizeType">
+                    <el-radio-group v-model="oExtraPrizeType" :disabled="true">
                         <el-radio label="1">优惠券</el-radio>
                         <el-radio label="2">实物</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item :required="true" v-if="oExtraPrizeType==1&&oContinuousDays==7" label="选择优惠券" :label-width="formLabelWidth">
-                    <el-button type="primary" @click="getAllCoupon">选择优惠券</el-button>
-                </el-form-item>
+                <!-- <el-form-item :required="true" v-if="oExtraPrizeType==1&&oContinuousDays==7" label="选择优惠券" :label-width="formLabelWidth">
+                    <el-button type="primary" @click="getAllCoupon" >选择优惠券</el-button>
+                </el-form-item> -->
                 <el-form-item :required="true" v-if="oExtraPrizeType==1&&oContinuousDays==7" label="所选优惠券：" :label-width="formLabelWidth">
                     <el-input
                             style="width: 150px"
                             v-model="couponInfo.couponName"
                             autocomplete="off"
                             disabled
-                    ></el-input>&nbsp;&nbsp;&nbsp;&nbsp;
-                    <span
+                    ></el-input>
+                    <!-- &nbsp;&nbsp;&nbsp;&nbsp; -->
+                    <!-- <span
                             v-if="couponInfo.couponName"
                             style="color:red;cursor: pointer;"
                             @click="deletCoupon"
-                    >删除</span>
+                    >删除</span> -->
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">

@@ -200,6 +200,9 @@
                         if (data.data.code == 'success') {
                             if (data.data && data.data.data) {
                                 this.oForm = JSON.parse(Decrypt(data.data.data));
+                            } else {
+                                this.oForm.miniRegisterNumber = '';
+                                this.oForm.pointChangePercent = '';
                             }
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;

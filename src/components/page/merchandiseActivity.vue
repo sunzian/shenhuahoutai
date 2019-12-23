@@ -11,7 +11,7 @@
             <div class="handle-box">
                 <el-select clearable v-model="query.reduceType" placeholder="优惠方式" class="handle-select mr10">
                     <el-option key="1" label="特惠活动" value="1"></el-option>
-                    <el-option key="2" label="立减活动" value="2"></el-option>
+                    <el-option key="2" label="满减活动" value="2"></el-option>
                 </el-select>
                 <el-select clearable v-model="query.status" placeholder="状态" class="handle-select mr10">
                     <el-option key="1" label="启用" value="1"></el-option>

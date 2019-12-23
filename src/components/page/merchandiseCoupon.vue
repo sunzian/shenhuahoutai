@@ -508,12 +508,20 @@ export default {
         clearMerchandiseCode(){
             this.oForm.merchandiseCode=[];
             this.oMerchandiseCode=[];
-            this.getAllGoods(this.oForm.cinemaCode);
+            if (this.oForm.commonType == 1) {
+                this.getAllGoods();
+            } else {
+                this.getAllGoods(this.oForm.cinemaCode);
+            }
         },
         clearMerchandiseCode2(){
             this.oForm.merchandiseCode=[];
             this.oMerchandiseCode=[];
-            this.getAllGoods(this.oCinemaCode);
+            if (this.oCommonType == 1) {
+                this.getAllGoods();
+            } else {
+                this.getAllGoods(this.oCinemaCode);
+            }
         },
         addPage() {
             //获取新增按钮权限
