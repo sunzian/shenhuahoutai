@@ -354,7 +354,9 @@ export default {
                 type: ''
             },
             imageUrl: '',
-            editorOption: {},
+            editorOption: {
+                placeholder: "请在这里输入"
+            },
             changeStartTime: '',
             showSell: true,
             changeEndTime: '',

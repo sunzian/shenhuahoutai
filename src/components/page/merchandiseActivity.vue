@@ -666,7 +666,8 @@
                     pageNo: 1,
                     pageSize: 15,
                     aPageNo: 1,
-                    aPageSize: 15
+                    aPageSize: 15,
+                    merchandiseName:'',
                 },
                 restaurants: [],
                 merSelect:[],
@@ -1763,6 +1764,7 @@
                         if(data.data.code=='success') {
                             this.drawer=true;
                             var oData = JSON.parse(Decrypt(data.data.data));
+                            this.query.merchandiseName='';
                             this.sellTableData = oData.data;
                             this.query.aPageSize = oData.pageSize;
                             this.query.aPageNo = oData.pageNo;

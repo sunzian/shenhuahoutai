@@ -791,7 +791,7 @@ export default {
                 loading.close();
                 return;
             }
-            if(this.oGivenType==3){
+            if(this.oGivenType=='赠送券包'){
                 if(!this.groupName){
                     this.message = '所选券包不能为空，请检查！';
                     this.open();

@@ -195,11 +195,11 @@
                 </el-form-item>
                 <el-form-item :required="true" label="封面图片" :label-width="formLabelWidth">
                     <el-popover placement="right" title trigger="hover">
-                        <img style="width: 400px" :src="oForm.imageUrl" />
+                        <img style="width: 400px" :src="ImageUrl" />
                         <img
                                 slot="reference"
-                                :src="oForm.imageUrl"
-                                :alt="oForm.imageUrl"
+                                :src="ImageUrl"
+                                :alt="ImageUrl"
                                 style="max-height: 50px;max-width: 130px"
                         />
                     </el-popover>
@@ -352,7 +352,10 @@ export default {
                 type: ''
             },
             imageUrl: '',
-            editorOption: {},
+            ImageUrl: '',
+            editorOption: {
+                placeholder: "请在这里输入"
+            },
             changeStartTime: '',
             showSell: true,
             changeEndTime: '',
@@ -557,7 +560,7 @@ export default {
                 loading.close();
                 return;
             }
-            if(!this.oForm.imageUrl){
+            if(!this.ImageUrl){
                 this.message = '封面图片不能为空，请检查！';
                 this.open();
                 loading.close();
@@ -584,7 +587,7 @@ export default {
                 jsonArr.push({ key: 'cinemaCodes', value: this.cinemaCode });
                 jsonArr.push({ key: 'title', value: this.oForm.title });
                 jsonArr.push({ key: 'summary', value: this.oForm.summary });
-                jsonArr.push({ key: 'imageUrl', value: this.oForm.imageUrl });
+                jsonArr.push({ key: 'imageUrl', value: this.ImageUrl });
                 jsonArr.push({ key: 'status', value: this.oForm.status });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
@@ -605,7 +608,7 @@ export default {
                                 this.oForm.title = '';
                                 this.oForm.summary = '';
                                 this.oForm.status = '';
-                                this.oForm.imageUrl = '';
+                                this.ImageUrl = '';
                                 this.oForm.publishDate = '';
                                 this.show();
                             } else if (data.data.code == 'nologin') {
@@ -827,7 +830,7 @@ export default {
                 this.$refs.download.clearFiles();
                 return;
             }
-            this.oForm.imageUrl = data.data;
+            this.ImageUrl = data.data;
             if (data.code == 'nologin') {
                 this.message = data.message;
                 this.open();
@@ -842,12 +845,13 @@ export default {
                 this.$refs.upload.clearFiles();
                 return;
             }
-            this.oImageUrl = data.data;
             if (data.code == 'nologin') {
                 this.message = data.message;
                 this.open();
                 this.$router.push('/login');
             }
+            this.oImageUrl = data.data;
+            this.$refs.upload.clearFiles();
         },
         Search() {
             this.query.pageNo = 1;

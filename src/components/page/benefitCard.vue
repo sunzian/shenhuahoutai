@@ -9,6 +9,14 @@
         </div>
         <div class="container">
             <div class="handle-box">
+                <el-select clearable v-model="query.cinemaCode" placeholder="影院" class="handle-select mr10">
+                    <el-option
+                            v-for="item in cinemaInfo"
+                            :key="item.cinemaCode"
+                            :label="item.cinemaName"
+                            :value="item.cinemaCode"
+                    ></el-option>
+                </el-select>
                 <el-select clearable v-model="query.reduceTypeFilm" placeholder="影片优惠方式" class="handle-select mr10">
                     <el-option key="0" label="不参加" value="0"></el-option>
                     <el-option key="1" label="特惠" value="1"></el-option>
@@ -28,14 +36,6 @@
                 <el-select clearable v-model="query.status" placeholder="状态" class="handle-select mr10">
                     <el-option key="1" label="启用" value="1"></el-option>
                     <el-option key="2" label="未启用" value="0"></el-option>
-                </el-select>
-                <el-select clearable v-model="query.cinemaCode" placeholder="影院" class="handle-select mr10">
-                    <el-option
-                            v-for="item in cinemaInfo"
-                            :key="item.cinemaCode"
-                            :label="item.cinemaName"
-                            :value="item.cinemaCode"
-                    ></el-option>
                 </el-select>
                 <el-input v-model="query.name" placeholder="权益卡名称" class="handle-input mr10"></el-input>
                 <el-button style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
@@ -409,7 +409,7 @@
                     <el-input style="width: 150px" v-model="oForm.numberMerchandise" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oForm.cardType==2" label="券包权益说明" :label-width="formLabelWidth">
-                    <el-input style="width: 150px" v-model="oForm.couponSimpleDesc" maxlength="200" show-word-limit type="textarea"  autocomplete="off"></el-input>
+                    <el-input style="width: 150px" v-model="oForm.couponSimpleDesc" maxlength="200" :rows="4" show-word-limit type="textarea"  autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item
                         v-if="oForm.cardType==2"
@@ -801,7 +801,7 @@
                     <el-input style="width: 150px" v-model="oNumberMerchandise" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oCardType==2" label="券包权益说明" :label-width="formLabelWidth">
-                    <el-input style="width: 150px" v-model="oCouponSimpleDesc" maxlength="200" show-word-limit type="textarea" autocomplete="off"></el-input>
+                    <el-input style="width: 150px" v-model="oCouponSimpleDesc" maxlength="200" :rows="4" show-word-limit type="textarea" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item
                         v-if="oCardType==2"
@@ -1283,6 +1283,7 @@
                     oPageSize: 15,
                     bPageNo: 1,
                     bPageSize: 15,
+                    filmName:'',
                 },
                 restaurants: [],
                 tableData: [],
@@ -3405,6 +3406,7 @@
                             var oData = JSON.parse(Decrypt(data.data.data));
                             console.log(oData);
                             // console.log(this.query);
+                            this.query.filmName='';
                             this.sellTableData = oData.data;
                             console.log(this.sellTableData);
                             this.query.aPageSize = oData.pageSize;

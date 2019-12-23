@@ -277,17 +277,17 @@
                     <el-tag v-if="oType=='1'">优惠券</el-tag>
                     <el-tag v-if="oType=='2'">实物</el-tag>
                 </el-form-item>
-                <el-form-item label="礼物图片：" :label-width="formLabelWidth">
-                    <el-popover placement="right" title trigger="hover">
-                        <img style="width:400px" :src="oImageUrl" />
-                        <img
-                            slot="reference"
-                            :src="oImageUrl"
-                            :alt="oImageUrl"
-                            style="max-height: 50px;max-width: 130px"
-                        />
-                    </el-popover>
-                </el-form-item>
+                <!--<el-form-item label="礼物图片：" :label-width="formLabelWidth">-->
+                    <!--<el-popover placement="right" title trigger="hover">-->
+                        <!--<img style="width:400px" :src="oImageUrl" />-->
+                        <!--<img-->
+                            <!--slot="reference"-->
+                            <!--:src="oImageUrl"-->
+                            <!--:alt="oImageUrl"-->
+                            <!--style="max-height: 50px;max-width: 130px"-->
+                        <!--/>-->
+                    <!--</el-popover>-->
+                <!--</el-form-item>-->
                 <el-form-item :required="true" label="发放组数：" :label-width="formLabelWidth">
                     <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 75px" v-model="oGroupNumber" autocomplete="off"></el-input>
                 </el-form-item>

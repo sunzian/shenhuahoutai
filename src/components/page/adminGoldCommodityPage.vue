@@ -970,7 +970,9 @@ export default {
     data() {
         return {
             content: '',
-            editorOption: {},
+            editorOption: {
+                placeholder: "请在这里输入"
+            },
             img_file: {},
             oTopstatus: '',
             oRecommendStatus: '',

@@ -1192,7 +1192,9 @@ export default {
             partnerName: '',
             partnerCode: '',
             oImageUrl: '',
-            editorOption: {},
+            editorOption: {
+                placeholder: "请在这里输入"
+            },
             img_file: {},
             oTopstatus: '',
             oRecommendStatus: '',

@@ -731,6 +731,7 @@
                         type="textarea"
                         v-model="oNotice"
                         autocomplete="off"
+                        :rows="6"
                         maxlength="300"
                         show-word-limit
                     ></el-input>

@@ -9,22 +9,22 @@
         </div>
         <!--影院信息展示页面-->
         <div class="container" v-if="showSell">
-            <div class="handle-box">
-                <el-select
-                    clearable
-                    v-model="query.cinemaCode"
-                    placeholder="请选择影院"
-                    class="handle-input mr10"
-                >
-                    <el-option
-                        v-for="item in cinemaInfo"
-                        :key="item.cinemaCode"
-                        :label="item.cinemaName"
-                        :value="item.cinemaCode"
-                    ></el-option>
-                </el-select>
-                <el-button style="margin-top: 10px;width: 90px;"  type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
-            </div>
+            <!--<div class="handle-box">-->
+                <!--<el-select-->
+                    <!--clearable-->
+                    <!--v-model="query.cinemaCode"-->
+                    <!--placeholder="请选择影院"-->
+                    <!--class="handle-input mr10"-->
+                <!--&gt;-->
+                    <!--<el-option-->
+                        <!--v-for="item in cinemaInfo"-->
+                        <!--:key="item.cinemaCode"-->
+                        <!--:label="item.cinemaName"-->
+                        <!--:value="item.cinemaCode"-->
+                    <!--&gt;</el-option>-->
+                <!--</el-select>-->
+                <!--<el-button style="margin-top: 10px;width: 90px;"  type="primary" icon="el-icon-search" @click="Search">搜索</el-button>-->
+            <!--</div>-->
             <el-table
                 :data="tableData"
                 border
@@ -1192,7 +1192,7 @@ export default {
                 this.open();
                 return;
             }
-            if (!this.form.image_url) {
+            if (!this.pForm.prizePicture) {
                 this.message = '奖品图片不能为空，请检查！';
                 this.open();
                 return;
@@ -1237,7 +1237,7 @@ export default {
             let onePrize = {
                 prizeLevel: this.form.prizeLevel,
                 prizeName: this.form.prizeName,
-                prizePicture: this.form.image_url,
+                prizePicture: this.pForm.prizePicture,
                 prizeNumber: this.form.prizeNumber,
                 percent: this.form.percent,
                 prizeType: this.form.prizeType,
@@ -1248,7 +1248,7 @@ export default {
             this.prizeInfoList.push(onePrize);
             this.form.prizeLevel = '';
             this.form.prizeName = '';
-            this.form.image_url = '';
+            this.pForm.prizePicture = '';
             this.form.expireDay = '';
             this.form.prizeNumber = '';
             this.form.percent = '';
@@ -1484,7 +1484,7 @@ export default {
                 this.$refs.download.clearFiles();
                 return;
             }
-            this.form.image_url = data.data;
+            this.pForm.prizePicture = data.data;
             // this.$refs.download.clearFiles();//清除已上传文件
             if (data.code == 'nologin') {
                 this.message = data.message;
@@ -1500,7 +1500,7 @@ export default {
                 this.$refs.snload.clearFiles();
                 return;
             }
-            this.form.image_url = data.data;
+            this.pForm.prizePicture = data.data;
             // this.$refs.onload.clearFiles();//清除已上传文件
             if (data.code == 'nologin') {
                 this.message = data.message;
