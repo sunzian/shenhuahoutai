@@ -22,14 +22,6 @@
                         :value="item.businessCode"
                     ></el-option>
                 </el-select>
-                <el-select clearable v-model="query.reduceType" placeholder="优惠方式" class="handle-select mr10">
-                    <el-option key="1" label="特惠活动" value="1"></el-option>
-                    <el-option key="2" label="立减活动" value="2"></el-option>
-                </el-select>
-                <el-select clearable v-model="query.status" placeholder="状态" class="handle-select mr10">
-                    <el-option key="1" label="启用" value="1"></el-option>
-                    <el-option key="2" label="未启用" value="0"></el-option>
-                </el-select>
                 <el-select clearable v-model="query.cinemaCode" placeholder="影院" class="handle-select mr10">
                     <el-option
                             v-for="item in cinemaInfo"
@@ -37,6 +29,14 @@
                             :label="item.cinemaName"
                             :value="item.cinemaCode"
                     ></el-option>
+                </el-select>
+                <el-select clearable v-model="query.reduceType" placeholder="优惠方式" class="handle-select mr10">
+                    <el-option key="1" label="特惠活动" value="1"></el-option>
+                    <el-option key="2" label="满减活动" value="2"></el-option>
+                </el-select>
+                <el-select clearable v-model="query.status" placeholder="状态" class="handle-select mr10">
+                    <el-option key="1" label="启用" value="1"></el-option>
+                    <el-option key="2" label="未启用" value="0"></el-option>
                 </el-select>
                 <el-input v-model="query.name" placeholder="活动名称" class="handle-input mr10"></el-input>
                 <el-button style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="Search">搜索</el-button>

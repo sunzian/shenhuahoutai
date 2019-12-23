@@ -22,19 +22,6 @@
                         :value="item.businessCode"
                     ></el-option>
                 </el-select>
-                <el-select
-                    clearable
-                    v-model="query.cinemaCode"
-                    placeholder="请选择影院"
-                    class="handle-input mr10"
-                >
-                    <el-option
-                        v-for="item in cinemaData"
-                        :key="item.cinemaCode"
-                        :label="item.cinemaName"
-                        :value="item.cinemaCode"
-                    ></el-option>
-                </el-select>
                 <el-button style="margin-top: 10px;width: 90px;"  type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
             </div>
             <el-table
@@ -1289,10 +1276,6 @@ export default {
             });
             setTimeout(() => {
             let businessCode = this.query.businessCode;
-            let cinemaCode = this.query.cinemaCode;
-            if (!cinemaCode) {
-                cinemaCode = '';
-            }
             if (!businessCode) {
                 businessCode = '';
             }

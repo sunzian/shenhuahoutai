@@ -43,6 +43,13 @@
                     class="mr10"
                 ></el-input>
                 <el-input placeholder="手机号" v-model="query.mobile" autocomplete="off" class="mr10"></el-input>
+                <el-input
+                        placeholder="会员卡号"
+                        v-model="query.cardNo"
+                        autocomplete="off"
+                        class="mr10"
+                        style="margin-top: 10px"
+                ></el-input>
                 <el-select
                     clearable
                     v-model="query.payWay"
@@ -215,7 +222,7 @@
                 <el-table-column prop="memo" label="原价" width="60">
                     <template slot-scope="scope">{{scope.row.totalOriginalPrice}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="最低票价" width="80">
+                <el-table-column prop="memo" label="最低票价活动" width="80">
                     <template slot-scope="scope">{{scope.row.totalLowestPrice}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="实付价" width="70">
@@ -909,6 +916,7 @@ export default {
                 let cinemaCode = this.query.cinemaCode;
                 let submitOrderCode = this.query.submitOrderCode;
                 let mobile = this.query.mobile;
+                let cardNo = this.query.cardNo;
                 let payWay = this.query.payWay;
                 let payStatus = this.query.payStatus;
                 let orderStatus = this.query.orderStatus;
@@ -931,6 +939,9 @@ export default {
                 }
                 if (!mobile) {
                     mobile = '';
+                }
+                if (!cardNo) {
+                    cardNo = '';
                 }
                 if (!payWay) {
                     payWay = '';
@@ -959,6 +970,7 @@ export default {
                 jsonArr.push({ key: 'businessCode', value: businessCode });
                 jsonArr.push({ key: 'submitOrderCode', value: submitOrderCode });
                 jsonArr.push({ key: 'mobile', value: mobile });
+                jsonArr.push({ key: 'cardNo', value: cardNo });
                 jsonArr.push({ key: 'payWay', value: payWay });
                 jsonArr.push({ key: 'payStatus', value: payStatus });
                 jsonArr.push({ key: 'orderStatus', value: orderStatus });
