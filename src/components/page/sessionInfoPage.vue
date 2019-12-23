@@ -158,7 +158,7 @@
         <!--编辑弹出框-->
         <el-dialog :close-on-click-modal="false" title="编辑活动" :visible.sync="showActivity">
             <el-form :model="activityForm">
-                <el-form-item :required="true" label="活动类型" :label-width="formLabelWidth">
+                <el-form-item label="活动类型" :label-width="formLabelWidth">
                     <el-select v-model="activityForm.activityType" clearable placeholder="请选择">
                         <el-option
                             v-for="item in options"
@@ -168,11 +168,13 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item :required="true" label="活动说明" :label-width="formLabelWidth">
+                <el-form-item label="活动说明" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         v-model="activityForm.activityDesc"
                         autocomplete="off"
+                        maxlength="60"
+                        show-word-limit
                     ></el-input>
                 </el-form-item>
             </el-form>
@@ -517,8 +519,7 @@ export default {
             activityForm: {
                 activityType: '',
                 activityDesc: '',
-                activityCinemaCode: '',
-                activitySessionCode: ''
+                id: ''
             },
             posterForm: {
                 cinemaCode: '',
@@ -556,15 +557,16 @@ export default {
                 .then(data => {
                     loading.close();
                     if (data.data.code == 'success') {
-                        console.log(JSON.parse(Decrypt(data.data.data)));
-                        this.activityForm.activityCinemaCode = JSON.parse(Decrypt(data.data.data)).cinemaCode;
-                        this.activityForm.activitySessionCode = JSON.parse(Decrypt(data.data.data)).sessionCode;
+                        this.activityForm.id = JSON.parse(Decrypt(data.data.data)).id;
                         if (JSON.parse(Decrypt(data.data.data)).activityType && JSON.parse(Decrypt(data.data.data)).activityType == 1) {
                             this.activityForm.activityType = '见面会'
                         }
                         if (JSON.parse(Decrypt(data.data.data)).activityType && JSON.parse(Decrypt(data.data.data)).activityType == 2) {
                             this.activityForm.activityType = '点映'
                         }
+                        if (!JSON.parse(Decrypt(data.data.data)).activityType) {
+                            this.activityForm.activityType = ''
+                        } 
                         this.activityForm.activityDesc = JSON.parse(Decrypt(data.data.data)).activityDesc;
                         this.showActivity = true;
                     } else if (data.data.code == 'nologin') {
@@ -590,14 +592,14 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            if(!this.activityForm.activityType){
+            // if(!this.activityForm.activityType){
+            //     this.message = '活动类型不能为空，请检查！';
+            //     this.open();
+            //     loading.close();
+            //     return;
+            // }
+            if(this.activityForm.activityDesc && !this.activityForm.activityType){
                 this.message = '活动类型不能为空，请检查！';
-                this.open();
-                loading.close();
-                return;
-            }
-            if(!this.activityForm.activityDesc){
-                this.message = '活动说明不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
@@ -609,13 +611,11 @@ export default {
             if (this.activityForm.activityType == '点映') {
                 this.activityForm.activityType = '2'
             }
-            jsonArr.push({ key: 'cinemaCode', value: this.activityForm.activityCinemaCode });
-            jsonArr.push({ key: 'sessionCode', value: this.activityForm.activitySessionCode });
+            jsonArr.push({ key: 'id', value: this.activityForm.id });
             jsonArr.push({ key: 'activityType', value: this.activityForm.activityType });
             jsonArr.push({ key: 'activityDesc', value: this.activityForm.activityDesc });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
-            console.log(jsonArr)
             let params = ParamsAppend(jsonArr);
             https
                 .fetchPost('/sessionInfo/updateSessionActivity', params)

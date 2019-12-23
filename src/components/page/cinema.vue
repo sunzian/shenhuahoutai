@@ -1276,7 +1276,6 @@ export default {
                 loading.close();
                 return;
             }
-            // !this.oMemberCardCommonUseStatus ||
             var jsonArr = [];
             jsonArr.push({ key: 'specialServiceJson', value: JSON.stringify(this.serveData) });
             jsonArr.push({ key: 'cinemaName', value: this.oCinemaName });

@@ -210,6 +210,9 @@
                 <el-table-column prop="memo" label="影片名称" width="100">
                     <template slot-scope="scope">{{scope.row.filmName}}</template>
                 </el-table-column>
+                <el-table-column prop="memo" label="会员卡号码" width="110">
+                    <template slot-scope="scope">{{scope.row.cardNo}}</template>
+                </el-table-column>
                 <el-table-column prop="memo" label="手机号码" width="110">
                     <template slot-scope="scope">{{scope.row.mobile}}</template>
                 </el-table-column>
