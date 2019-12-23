@@ -29,7 +29,7 @@
                     <el-option key="2" label="纯RMB兑换" value="2"></el-option>
                     <el-option key="3" label="金币加RMB兑换" value="3"></el-option>
                 </el-select>
-                <el-select
+                <!-- <el-select
                     clearable
                     v-model="query.commodityType"
                     placeholder="商品类型"
@@ -39,7 +39,7 @@
                     <el-option key="2" label="优惠券" value="2"></el-option>
                     <el-option key="3" label="券包" value="3"></el-option>
                     <el-option key="4" label="商品" value="4"></el-option>
-                </el-select>
+                </el-select> -->
                 <el-select
                     clearable
                     v-model="query.topStatus"

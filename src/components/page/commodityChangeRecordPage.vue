@@ -165,19 +165,15 @@
                 <el-table-column prop="memo" label="支付金额" width="90">
                     <template slot-scope="scope">{{scope.row.money}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="兑换时间" width="150">
-                    <template slot-scope="scope">{{scope.row.payTime}}</template>
-                </el-table-column>
-
-                <!-- <el-table-column prop="memo" label="支付交易号">
-                    <template slot-scope="scope">{{scope.row.tradeNo}}</template>
-                </el-table-column>-->
                 <el-table-column label="兑换状态" align="center" width="100">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row. payStatus=='0'">待支付</el-tag>
                         <el-tag v-else-if="scope.row. payStatus=='1'">兑换成功</el-tag>
                         <el-tag v-else-if="scope.row. payStatus=='2'">兑换失败</el-tag>
                     </template>
+                </el-table-column>
+                <el-table-column prop="memo" label="兑换时间" width="150">
+                    <template slot-scope="scope">{{scope.row.payTime}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="核销状态" width="90">
                     <template slot-scope="scope">
@@ -186,22 +182,9 @@
                         <el-tag v-else-if="scope.row.status=='3'">已过期</el-tag>
                     </template>
                 </el-table-column>
-                <!-- <el-table-column label="退款状态" align="center">
-                    <template slot-scope="scope">
-                        <el-tag v-if="scope.row.refundStatus=='0'" type="danger">未退款</el-tag>
-                        <el-tag v-else-if="scope.row.refundStatus=='1'" type="success">退款成功</el-tag>
-                        <el-tag v-else-if="scope.row.refundStatus=='2'" type="success">退款失败</el-tag>
-                    </template>
+                <el-table-column prop="memo" label="领取时间" width="150">
+                    <template slot-scope="scope">{{scope.row.getDate}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="退款交易号">
-                    <template slot-scope="scope">{{scope.row.refundNo}}</template>
-                </el-table-column>
-                <el-table-column prop="memo" label="退款时间">
-                    <template slot-scope="scope">{{scope.row.refundTime}}</template>
-                </el-table-column>
-                <el-table-column prop="memo" label="退款金额">
-                    <template slot-scope="scope">{{scope.row.refundPrice}}</template>
-                </el-table-column>-->
                 <el-table-column label="操作" align="center" fixed="right" width="100">
                     <template slot-scope="scope">
                         <el-button
@@ -478,12 +461,12 @@ export default {
                 jsonArr.push({
                     key: 'exportKeysJson',
                     value:
-                        "['id','cinemaCode','cinemaName','partnerName','chSettleStatusString','orderNo','mobile','commodityName','gold','money','payTime','chPayStatus','tradeNo','payReturnMsg','chChangeType','chStatus','chRefundStatus','refundNo','refundReason','refundApply','refundTime','refundPrice']"
+                        "['id','cinemaCode','cinemaName','partnerName','chSettleStatusString','orderNo','mobile','commodityName','gold','money','getDate','payTime','chPayStatus','tradeNo','payReturnMsg','chChangeType','chStatus','chRefundStatus','refundNo','refundReason','refundApply','refundTime','refundPrice']"
                 });
                 jsonArr.push({
                     key: 'exportTitlesJson',
                     value:
-                        "['ID','影院编码','影院名称','商户名称','商户订单结算状态','订单号','手机号','商品名称','消费金币','支付金额','兑换时间','兑换状态','支付交易号','支付回调消息','兑换方式','核销状态','退款状态','退款交易号','退款原因','微信退款回复','退款时间','退款金额']"
+                        "['ID','影院编码','影院名称','商户名称','商户订单结算状态','订单号','手机号','商品名称','消费金币','支付金额','领取时间','兑换时间','兑换状态','支付交易号','支付回调消息','兑换方式','核销状态','退款状态','退款交易号','退款原因','微信退款回复','退款时间','退款金额']"
                 });
                 jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
                 jsonArr.push({ key: 'partnerCode', value: partnerCode });

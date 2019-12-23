@@ -345,6 +345,7 @@
                         style="width: 250px"
                         v-model.trim="oForm.originalPrice"
                         autocomplete="off"
+                        onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')"
                     ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="库存" :label-width="formLabelWidth">
@@ -385,7 +386,7 @@
                     :label-width="formLabelWidth"
                 >
                     <el-input
-                        onkeyup="this.value=this.value.replace(/\D/g,'')"
+                        onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')"
                         style="width: 250px"
                         v-model.trim="oForm.money"
                         autocomplete="off"
@@ -777,6 +778,7 @@
                         style="width: 250px"
                         v-model.trim="form.originalPrice"
                         autocomplete="off"
+                        onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')"
                     ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="库存" :label-width="formLabelWidth">
@@ -817,7 +819,7 @@
                     :required="true"
                 >
                     <el-input
-                        onkeyup="this.value=this.value.replace(/\D/g,'')"
+                        onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')"
                         style="width: 250px"
                         v-model.trim="form.money"
                         autocomplete="off"
@@ -1268,6 +1270,7 @@ export default {
             oName: '',
             message: '', //弹出框消息
             query: {
+                partnerCode: '',
                 pageNo: 1,
                 pageSize: 15,
                 aPageNo: 1,
@@ -1648,6 +1651,7 @@ export default {
             this.$forceUpdate();
         },
         changeSearchCinema(val) {
+            this.query.partnerCode = '';
             this.partnerInfo = [];
             this.getSearchPartner(val);
         },

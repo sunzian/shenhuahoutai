@@ -90,7 +90,7 @@
                     value-format="yyyy-MM-dd HH:mm:ss"
                     format="yyyy-MM-dd HH:mm:ss"
                     default-time="06:00:00"
-                    placeholder="有效期开始时间（起）"
+                    placeholder="过期时间（起）"
                 ></el-date-picker>
                 <el-date-picker
                     v-model="query.endTime"
@@ -99,7 +99,7 @@
                     style="margin-top: 10px;"
                     value-format="yyyy-MM-dd HH:mm:ss"
                     format="yyyy-MM-dd HH:mm:ss"
-                    placeholder="有效期结束时间（止）"
+                    placeholder="过期时间（止）"
                 ></el-date-picker>
                 <el-date-picker
                     v-model="query.payStartTime"
@@ -109,7 +109,7 @@
                     value-format="yyyy-MM-dd HH:mm:ss"
                     format="yyyy-MM-dd HH:mm:ss"
                     default-time="06:00:00"
-                    placeholder="支付开始时间（起）"
+                    placeholder="支付时间（起）"
                 ></el-date-picker>
                 <el-date-picker
                     v-model="query.payEndTime"
@@ -118,7 +118,7 @@
                     style="margin-top: 10px;"
                     value-format="yyyy-MM-dd HH:mm:ss"
                     format="yyyy-MM-dd HH:mm:ss"
-                    placeholder="支付结束时间（止）"
+                    placeholder="支付时间（止）"
                 ></el-date-picker>
                 <el-button
                     type="primary"
