@@ -944,7 +944,7 @@
             <div class="container">
                 <div class="handle-box">
                     <el-input v-model="query.filmName" placeholder="影片名称" class="handle-input mr12"></el-input>
-                    <el-button type="primary" icon="el-icon-search" @click="openNext">搜索</el-button>
+                    <el-button type="primary" icon="el-icon-search" @click="openNext1">搜索</el-button>
                 </div>
                 <el-table
                         :data="sellTableData"
@@ -3425,6 +3425,58 @@
                     }).catch(err=>{
                         loading.close();
                         console.log(err)
+                        }
+                    )
+                }, 500);
+            },
+            openNext1() {
+                //获取影片列表
+                const loading = this.$loading({
+                    lock: true,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)',
+                    target: document.querySelector('.div1')
+                });
+                setTimeout(() => {
+                    let filmName=this.query.filmName;
+                    if(!filmName){
+                        filmName=''
+                    }
+                    let jsonArr = [];
+                    jsonArr.push({key:"filmName",value:filmName});
+                    jsonArr.push({key:"pageNo",value:1});
+                    jsonArr.push({key:"pageSize",value:this.query.aPageSize});
+                    let sign =md5(preSign(jsonArr));
+                    jsonArr.push({key:"sign",value:sign});
+                    var params = ParamsAppend(jsonArr);
+                    https.fetchPost('film/filmPage',params).then((data) => {
+                        loading.close();
+                        console.log(data);
+                        if(data.data.code=='success') {
+                            this.drawer=true
+                            var oData = JSON.parse(Decrypt(data.data.data));
+                            console.log(oData);
+                            // console.log(this.query);
+                            this.query.filmName='';
+                            this.sellTableData = oData.data;
+                            console.log(this.sellTableData);
+                            this.query.aPageSize = oData.pageSize;
+                            this.query.aPageNo = oData.pageNo;
+                            this.query.aTotalCount = oData.totalCount;
+                            this.query.aTotalPage = oData.totalPage
+                        }else if(data.data.code=='nologin'){
+                            this.message=data.data.message
+                            this.open()
+                            this.$router.push('/login');
+                        }else{
+                            this.message=data.data.message
+                            this.open()
+                        }
+
+                    }).catch(err=>{
+                            loading.close();
+                            console.log(err)
                         }
                     )
                 }, 500);
