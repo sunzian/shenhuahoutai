@@ -98,31 +98,31 @@
                         <el-tag v-else type="danger">未启用</el-tag>
                     </template>
                 </el-table-column>
-                <!-- <el-table-column label="操作" width="200" align="center">
+                <el-table-column label="操作" width="200" align="center">
                     <template slot-scope="scope">
-                        <el-button
+                        <!-- <el-button
                             type="success"
                             v-if="scope.row.status == 0"
                             @click="changeStatus(scope.$index, scope.row)"
-                        >启用</el-button>
-                        <el-button
+                        >启用</el-button> -->
+                        <!-- <el-button
                             type="success"
                             v-if="scope.row.status == 1"
                             @click="changeStatus(scope.$index, scope.row)"
-                        >停用</el-button>
+                        >停用</el-button> -->
                         <el-button
                             type="text"
                             icon="el-icon-circle-plus-outline"
                             @click="addChange(scope.$index, scope.row)"
                         >修改</el-button>
-                        <el-button
+                        <!-- <el-button
                             type="text"
                             icon="el-icon-delete"
                             class="red"
                             @click="delChange(scope.$index, scope.row)"
-                        >删除</el-button>
+                        >删除</el-button> -->
                     </template>
-                </el-table-column> -->
+                </el-table-column>
             </el-table>
             <div class="pagination">
                 <el-pagination
@@ -371,10 +371,10 @@
                     ></el-input>
                 </el-form-item>
             </el-form>
-            <span slot="footer" class="dialog-footer">
+            <!-- <span slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false">取消</el-button>
                  <el-button type="primary" @click="exChanger">确 定</el-button>
-            </span>
+            </span> -->
         </el-dialog>
     </div>
 </template>
@@ -825,7 +825,7 @@ export default {
             jsonArr.push({ key: 'sign', value: sign });
             let params = ParamsAppend(jsonArr);
             https
-                .fetchPost('merchandiseCoupon/getMerchandiseCouponById', params)
+                .fetchPost('/admin/merchandiseCoupon/getMerchandiseCouponById', params)
                 .then(data => {
                     loading.close();
                     console.log(JSON.parse(Decrypt(data.data.data)));
@@ -1358,7 +1358,7 @@ export default {
             jsonArr.push({ key: 'sign', value: sign });
             var params = ParamsAppend(jsonArr);
             https
-                .fetchPost('merchandiseCoupon/getMerchandiseByCinemaCode', params)
+                .fetchPost('/admin/merchandiseCoupon/getMerchandiseByCinemaCode', params)
                 .then(data => {
                     if (data.data.code == 'success') {
                         let goods = JSON.parse(Decrypt(data.data.data));

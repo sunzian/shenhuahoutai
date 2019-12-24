@@ -137,7 +137,7 @@
                         <el-tag v-else-if="scope.row.merchandiseStatus=='2'" type="danger">下架</el-tag>
                     </template>
                 </el-table-column>
-                <!-- <el-table-column label="操作" width="100" align="center" fixed="right">
+                <el-table-column label="操作" width="100" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-button
                             type="text"
@@ -145,7 +145,7 @@
                             @click="addChange(scope.$index, scope.row)"
                         >编辑</el-button>
                     </template>
-                </el-table-column> -->
+                </el-table-column>
             </el-table>
             <div class="pagination">
                 <el-pagination
@@ -183,7 +183,7 @@
                             style="max-height: 50px;max-width: 130px"
                         />
                     </el-popover>
-                    <el-upload
+                    <!-- <el-upload
                         :before-upload="beforeUpload"
                         :data="type"
                         class="upload-demo"
@@ -199,7 +199,7 @@
                             <em>点击上传</em>
                         </div>
                         <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过100kb 建议尺寸600*480或按比例上传</div>
-                    </el-upload>
+                    </el-upload> -->
                 </el-form-item>
                 <el-form-item label="商品描述" :label-width="formLabelWidth">
                     <el-input
@@ -251,10 +251,10 @@
                     </el-select>
                 </el-form-item>
             </el-form>
-            <span slot="footer" class="dialog-footer">
+            <!-- <span slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false">取 消</el-button>
                 <el-button type="primary" @click="exChanger">确 定</el-button>
-            </span>
+            </span> -->
         </el-dialog>
     </div>
 </template>
@@ -400,7 +400,7 @@ export default {
                 jsonArr.push({ key: 'sign', value: sign });
                 let params = ParamsAppend(jsonArr);
                 https
-                    .fetchPost('/merchandise/modifyPage', params)
+                    .fetchPost('/admin/merchandise/modifyPage', params)
                     .then(data => {
                         loading.close();
                         console.log(data);

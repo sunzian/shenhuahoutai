@@ -97,7 +97,6 @@ export function exportMethod(data) {
         headers: {'Content-Type': 'application/json'},
         responseType: 'blob'
     }).then((res) => {
-        // console.log(res.data.type);
         if(res.data.type=='application/json'){
             alert('您没有该权限!');
             return
@@ -121,10 +120,65 @@ export function exportMethod(data) {
         console.log(error)
     })
 }
+export function exportCouponMethod(info) {
+    axios({
+        method: info.method,
+        url: info.url,
+        params: info.params,
+        headers: {'Content-Type': 'application/json'},
+        responseType: 'blob'
+    }).then((res) => {
+        const data = res.data
+        // 有可能下载失败，返回{code: '500'},但responseType: 'blob'会把data强制转为blob，导致下载undefined.excel
+        // 解决：将已转为blob类型的data转回json格式，判断是否下载成功
+        let r = new FileReader()
+        r.onload = function () {
+          // 如果JSON.parse(this.result)不报错，说明this.result是json字符串，是下载报错情况的返回值，弹框提示
+          // 如果JSON.parse(this.result)报错，说明下载成功，进入catch
+          try {
+            let resData = JSON.parse(this.result) // this.result为FileReader获取blob数据转换为json后的数据，即后台返回的原始数据
+            if (resData && resData['code'] && resData['code'] === 'error') {
+              alert(resData.message)
+              return;
+            }
+          } catch (err) {
+            let fileName = info.fileName
+            fileName = decodeURIComponent(fileName)
+            // 兼容ie11
+            if (window.navigator.msSaveOrOpenBlob) {
+              try {
+                const blobObject = new Blob([data])
+                window.navigator.msSaveOrOpenBlob(blobObject, fileName)
+              } catch (e) {
+                console.log(e)
+              }
+              return
+            }
+            let url = window.URL.createObjectURL(new Blob([res.data], {type: 'application/vnd.ms-excel'}))
+            let link = document.createElement('a')
+            link.style.display = 'none'
+            link.href = url
+            link.setAttribute('download', fileName)
+            document.body.appendChild(link)
+            link.click()
+            document.body.removeChild(link)
+          }
+        }
+        r.readAsText(data) // FileReader的API
+    })
+        .catch(error => {
+        this.$Notice.error({
+            title: '错误',
+            desc: '网络连接错误'
+        });
+        console.log(error)
+    })
+}
 export default {
     fetchPost,
     fetchGet,
     fetchDelete,
     fetchPut,
     exportMethod,
+    exportCouponMethod,
 }

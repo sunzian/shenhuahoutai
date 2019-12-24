@@ -117,21 +117,21 @@
                         <el-tag v-else-if="scope.row.status == 2" type="danger">未启用</el-tag>
                     </template>
                 </el-table-column>
-                <!-- <el-table-column label="操作" width="180" align="center" fixed="right">
+                <el-table-column label="操作" width="180" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-button
                             type="text"
                             icon="el-icon-edit"
                             @click="addChange(scope.$index, scope.row)"
                         >编辑</el-button>
-                        <el-button
+                        <!-- <el-button
                             type="text"
                             icon="el-icon-delete"
                             class="red"
                             @click="delChange(scope.$index, scope.row)"
-                        >删除</el-button>
+                        >删除</el-button> -->
                     </template>
-                </el-table-column> -->
+                </el-table-column>
             </el-table>
             <div class="pagination">
                 <el-pagination
@@ -311,7 +311,7 @@
                         autocomplete="off"
                         disabled
                     ></el-input>
-                    <el-button type="primary" @click="changeCoupon">更换券包</el-button>
+                    <!-- <el-button type="primary" @click="changeCoupon">更换券包</el-button> -->
                 </el-form-item>
                 <el-form-item
                     :required="true"
@@ -365,10 +365,10 @@
                     </el-select>
                 </el-form-item>
             </el-form>
-            <span slot="footer" class="dialog-footer">
+            <!-- <span slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false">取 消</el-button>
                 <el-button type="primary" @click="exChanger">确 定</el-button>
-            </span>
+            </span> -->
         </el-dialog>
         <!-- 选择优惠券弹出窗 -->
         <el-dialog :close-on-click-modal="false" title="选择优惠券" :visible.sync="drawer">

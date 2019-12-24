@@ -766,7 +766,6 @@ export default {
                 jsonArr.push({ key: 'startDate', value: startDate });
                 jsonArr.push({ key: 'endDate', value: endDate });
                 var params = ParamsAppend(jsonArr);
-                console.log(jsonArr);
                 let myObj = {
                     method: 'get',
                     url: '/exportExcel/merchandiseOrder',

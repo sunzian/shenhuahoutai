@@ -172,31 +172,31 @@
                         <el-tag v-else type="danger">未启用</el-tag>
                     </template>
                 </el-table-column>
-                <!-- <el-table-column label="操作" width="180" align="center" fixed="right">
+                <el-table-column label="操作" width="180" align="center" fixed="right">
                     <template slot-scope="scope">
-                        <el-button
+                        <!-- <el-button
                                 type="success"
                                 v-if="scope.row.status == 0"
                                 @click="changeStatus(scope.$index, scope.row)"
-                        >启用</el-button>
-                        <el-button
+                        >启用</el-button> -->
+                        <!-- <el-button
                                 type="success"
                                 v-if="scope.row.status == 1"
                                 @click="changeStatus(scope.$index, scope.row)"
-                        >停用</el-button>
+                        >停用</el-button> -->
                         <el-button
                                 type="text"
                                 icon="el-icon-circle-plus-outline"
                                 @click="addChange(scope.$index, scope.row)"
                         >修改</el-button>
-                        <el-button
+                        <!-- <el-button
                                 type="text"
                                 icon="el-icon-delete"
                                 class="red"
                                 @click="delChange(scope.$index, scope.row)"
-                        >删除</el-button>
+                        >删除</el-button> -->
                     </template>
-                </el-table-column>-->
+                </el-table-column>
             </el-table>
             <div class="pagination">
                 <el-pagination
@@ -979,7 +979,7 @@
                     label="选择影片"
                     :label-width="formLabelWidth"
                 >
-                    <el-button type="primary" @click="openNext">点击选择</el-button>
+                    <!-- <el-button type="primary" @click="openNext">点击选择</el-button> -->
                 </el-form-item>
                 <el-form-item
                     label="所选影片"
@@ -1000,7 +1000,7 @@
                             :disabled="true"
                             :change="one(item.filmCode)"
                         ></el-input>
-                        <span style="color:red;cursor: pointer;" @click="deleteSell(index)">删除</span>
+                        <!-- <span style="color:red;cursor: pointer;" @click="deleteSell(index)">删除</span> -->
                     </div>
                 </el-form-item>
                 <el-form-item
@@ -1198,7 +1198,7 @@
                     label="选择商品"
                     :label-width="formLabelWidth"
                 >
-                    <el-button type="primary" @click="selectSell">点击选择</el-button>
+                    <!-- <el-button type="primary" @click="selectSell">点击选择</el-button> -->
                 </el-form-item>
                 <el-form-item
                     label="所选商品"
@@ -1219,7 +1219,7 @@
                             :disabled="true"
                             :change="oOne(item.merchandiseCode)"
                         ></el-input>
-                        <span style="color:red;cursor: pointer;" @click="oDeleteSell(index)">删除</span>
+                        <!-- <span style="color:red;cursor: pointer;" @click="oDeleteSell(index)">删除</span> -->
                     </div>
                 </el-form-item>
                 <el-form-item
@@ -1279,7 +1279,7 @@
                     :label-width="formLabelWidth"
                     :required="true"
                 >
-                    <el-button type="primary" @click="changeCoupon">选择券包</el-button>
+                    <!-- <el-button type="primary" @click="changeCoupon">选择券包</el-button> -->
                 </el-form-item>
                 <el-form-item
                     v-if="couponId&&oCardType==2"
@@ -1288,11 +1288,11 @@
                     :required="true"
                 >
                     <el-input style="width: 150px" v-model="groupName" autocomplete="off" disabled></el-input>&nbsp;&nbsp;&nbsp;&nbsp;
-                    <span
+                    <!-- <span
                         v-if="groupName"
                         style="color:red;cursor: pointer;"
                         @click="deletCoupon"
-                    >删除</span>
+                    >删除</span> -->
                 </el-form-item>
                 <el-form-item :required="true" label="有效期单位：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oUnit">
@@ -1345,7 +1345,7 @@
                         end-placeholder="结束时间"
                         placeholder="选择时间范围"
                     ></el-time-picker>
-                    <span style="cursor: pointer;color: blue" @click="addTime">添加</span>
+                    <!-- <span style="cursor: pointer;color: blue" @click="addTime">添加</span> -->
                 </el-form-item>
                 <el-form-item
                     label="所选时间段："
@@ -1354,10 +1354,10 @@
                 >
                     <div v-for="(item, index) in dateInfo" :key="index">
                         {{item}}
-                        <span
+                        <!-- <span
                             style="color:red;cursor: pointer;"
                             @click="deletTime(index)"
-                        >删除</span>
+                        >删除</span> -->
                     </div>
                 </el-form-item>
                 <el-form-item label="星期几不可用：" :label-width="formLabelWidth" v-if="oCardType==1">
@@ -1457,10 +1457,10 @@
                     ></el-input>
                 </el-form-item>
             </el-form>
-            <span slot="footer" class="dialog-footer">
+            <!-- <span slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false">取 消</el-button>
                 <el-button @click="exChanger">确 定</el-button>
-            </span>
+            </span> -->
         </el-dialog>
         <!--新增影片弹出框-->
         <el-dialog :close-on-click-modal="false" title="选择影片" :visible.sync="drawer">
@@ -2559,7 +2559,6 @@ export default {
             }
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
-            console.log(jsonArr);
             let params = ParamsAppend(jsonArr);
             if (this.dialogFormVisible == true) {
                 https
@@ -2697,7 +2696,7 @@ export default {
             jsonArr.push({ key: 'sign', value: sign });
             let params = ParamsAppend(jsonArr);
             https
-                .fetchPost('/benefitCard/getTimesById', params)
+                .fetchPost('/admin/benefitCard/getTimesById', params)
                 .then(data => {
                     //查询可用时间段
                     loading.close();
@@ -2715,20 +2714,16 @@ export default {
                         this.startArr.push(this.dateInfo[x][0]);
                         this.endArr.push(this.dateInfo[x][1]);
                     }
-                    console.log(this.startArr.join(','));
-                    console.log(this.endArr.join(','));
-                    console.log(this.dateInfo);
                 })
                 .catch(err => {
                     loading.close();
                     console.log(err);
                 });
             https
-                .fetchPost('/benefitCard/getBenefitById', params)
+                .fetchPost('/admin/benefitCard/getBenefitById', params)
                 .then(data => {
                     loading.close();
                     console.log(data);
-                    console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.editVisible = true;
                         //电影
@@ -2745,7 +2740,6 @@ export default {
                                 json.filmCode = exFilmCodeList[x];
                                 this.selectedSell.push(json);
                             }
-                            console.log(this.selectedSell);
                         }
                         //卖品
                         if (
@@ -2761,7 +2755,6 @@ export default {
                                 json.merchandiseCode = exFilmCodeList[x];
                                 this.oSelectedSell.push(json);
                             }
-                            console.log(this.oSelectedSell);
                         }
                         let formats = JSON.parse(Decrypt(data.data.data)).formatList;
                         this.formatList = [];

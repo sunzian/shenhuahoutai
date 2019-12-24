@@ -95,31 +95,31 @@
                         <el-tag v-else type="danger">未启用</el-tag>
                     </template>
                 </el-table-column>
-                <!-- <el-table-column label="操作" width="200" align="center">
+                <el-table-column label="操作" width="200" align="center">
                     <template slot-scope="scope">
-                        <el-button
+                        <!-- <el-button
                             type="success"
                             v-if="scope.row.status == 0"
                             @click="changeStatus(scope.$index, scope.row)"
-                        >启用</el-button>
-                        <el-button
+                        >启用</el-button> -->
+                        <!-- <el-button
                             type="success"
                             v-if="scope.row.status == 1"
                             @click="changeStatus(scope.$index, scope.row)"
-                        >停用</el-button>
+                        >停用</el-button> -->
                         <el-button
                             type="text"
                             icon="el-icon-circle-plus-outline"
                             @click="addChange(scope.$index, scope.row)"
                         >修改</el-button>
-                        <el-button
+                        <!-- <el-button
                             type="text"
                             icon="el-icon-delete"
                             class="red"
                             @click="delChange(scope.$index, scope.row)"
-                        >删除</el-button>
+                        >删除</el-button> -->
                     </template>
-                </el-table-column> -->
+                </el-table-column>
             </el-table>
             <div class="pagination">
                 <el-pagination
@@ -374,7 +374,7 @@
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oSelectFilmType != 0" label="选择影片" :label-width="formLabelWidth">
-                    <el-button type="primary" @click="openNext">点击选择</el-button>
+                    <!-- <el-button type="primary" @click="openNext">点击选择</el-button> -->
                 </el-form-item>
                 <el-form-item
                         label="所选影片"
@@ -392,10 +392,10 @@
                                 :change="one(item.filmCode)"
                         >
                         </el-input>
-                        <span
+                        <!-- <span
                                 style="color:red;cursor: pointer;"
                                 @click="deleteSell(index)"
-                        >删除</span>
+                        >删除</span> -->
                     </div>
                 </el-form-item>
                 <el-form-item :required="true" label="支付类型：" :label-width="formLabelWidth">
@@ -480,9 +480,9 @@
                     ></el-input>
                 </el-form-item>
             </el-form>
-            <span slot="footer" class="dialog-footer">
+            <!-- <span slot="footer" class="dialog-footer">
                 <el-button @click="exChanger">确 定</el-button>
-            </span>
+            </span> -->
         </el-dialog>
         <!--新增抽屉弹出框-->
         <el-dialog title="选择影片" :close-on-click-modal="false" :visible.sync="drawer">
@@ -776,7 +776,7 @@ export default {
                 let sign =md5(preSign(jsonArr));
                 jsonArr.push({key:"sign",value:sign});
                 var params = ParamsAppend(jsonArr);
-                https.fetchPost('film/filmPage',params).then((data) => {
+                https.fetchPost('/admin/film/filmPage',params).then((data) => {
                     loading.close();
                     console.log(data);
                     if(data.data.code=='success') {
@@ -1182,7 +1182,7 @@ export default {
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             let params = ParamsAppend(jsonArr);
-            https.fetchPost('/filmCoupon/getFilmCouponById', params).then(data => {
+            https.fetchPost('/admin/filmCoupon/getFilmCouponById', params).then(data => {
                     loading.close();
                     this.selectedSell=[];
                     console.log(data);
@@ -1673,7 +1673,6 @@ export default {
             });
         },
         selectCinema(val) {
-            console.log(1);
             this.oScreenCode=[];
             this.filmInfo=[];
             this.oFilmFormatCode=[];
@@ -1681,7 +1680,6 @@ export default {
             this.getAllScreen(val);
         },
         selectScreens(val) {
-            console.log(val)
             let selectValue = val.join(',');
             this.selectScreenCode = selectValue;
             console.log(selectValue);
@@ -1778,7 +1776,7 @@ export default {
             jsonArr.push({ key: 'sign', value: sign });
             var params = ParamsAppend(jsonArr);
             https
-                .fetchPost('filmCoupon/getScreenInfoByCinemaCode', params)
+                .fetchPost('/admin/filmCoupon/getScreenInfoByCinemaCode', params)
                 .then(data => {
                     if (data.data.code == 'success') {
                         console.log(JSON.parse(Decrypt(data.data.data)));

@@ -65,7 +65,7 @@
                     <el-option key="1" label="实物" value="1"></el-option>
                     <el-option key="2" label="优惠券" value="2"></el-option>
                     <el-option key="3" label="券包" value="3"></el-option>
-                    <el-option key="4" label="商品" value="4"></el-option>
+                    <el-option key="4" label="商户商品" value="4"></el-option>
                 </el-select>
                 <el-select
                     clearable
@@ -1572,7 +1572,7 @@ export default {
                 },
                 {
                     value: '4',
-                    label: '商品'
+                    label: '商户商品'
                 }
             ],
             assignType: [

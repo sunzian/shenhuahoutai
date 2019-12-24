@@ -336,6 +336,11 @@ export default new Router({
                     meta: { title: '合作商家设置' }
                 },
                 {
+                    path: '/adminCinemaPartnerPage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/adminCinemaPartnerPage.vue'),
+                    meta: { title: '合作商家设置' }
+                },
+                {
                     path: '/adminRechargeCardRulePage',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/adminRechargeCardRulePage.vue'),
                     meta: { title: '充值规则管理' }

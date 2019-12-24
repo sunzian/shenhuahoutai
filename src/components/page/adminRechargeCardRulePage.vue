@@ -106,21 +106,21 @@
                         <el-tag v-if="scope.row.status == 2" type="danger">禁用</el-tag>
                     </template>
                 </el-table-column>
-                <!-- <el-table-column label="操作" width="100" align="center" fixed="right">
+                <el-table-column label="操作" width="100" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-button
                             type="text"
                             icon="el-icon-edit"
                             @click="addChange(scope.$index, scope.row)"
                         >编辑</el-button>
-                        <el-button
+                        <!-- <el-button
                             type="text"
                             icon="el-icon-delete"
                             class="red"
                             @click="delChange(scope.$index, scope.row)"
-                        >删除</el-button>
+                        >删除</el-button> -->
                     </template>
-                </el-table-column> -->
+                </el-table-column>
             </el-table>
             <div class="pagination">
                 <el-pagination
@@ -368,10 +368,10 @@
                     </el-select>
                 </el-form-item>
             </el-form>
-            <span slot="footer" class="dialog-footer">
+            <!-- <span slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false">取 消</el-button>
                 <el-button type="primary" @click="exChanger">确 定</el-button>
-            </span>
+            </span> -->
         </el-dialog>
         <!-- 新增选择优惠券弹出窗 -->
         <el-dialog :close-on-click-modal="false" title="选择优惠券" :visible.sync="drawer">
@@ -769,8 +769,6 @@ export default {
             });
             this.idx = index;
             this.form = row;
-
-            console.log(this.form.cinemaCode);
             let jsonArr1 = [];
             jsonArr1.push({ key: 'pageNo', value: this.query.pageNo });
             jsonArr1.push({ key: 'pageSize', value: this.query.pageSize });
@@ -779,7 +777,7 @@ export default {
             let sign1 = md5(preSign(jsonArr1));
             jsonArr1.push({ key: 'sign', value: sign1 });
             var params1 = ParamsAppend(jsonArr1);
-            https.fetchPost('/rechargeCardRule/listCardLevel', params1).then(data => {
+            https.fetchPost('/admin/rechargeCardRule/listCardLevel', params1).then(data => {
                 loading.close();
                 if (data.data.code == 'success') {
                     var res = JSON.parse(Decrypt(data.data.data));
@@ -804,7 +802,7 @@ export default {
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             let params = ParamsAppend(jsonArr);
-            https.fetchPost('/rechargeCardRule/modifyPage', params).then(data => {
+            https.fetchPost('/admin/rechargeCardRule/modifyPage', params).then(data => {
                     loading.close();
                     console.log(data);
                     if (data.data.code == 'success') {

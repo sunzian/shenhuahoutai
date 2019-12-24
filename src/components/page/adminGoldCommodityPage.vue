@@ -63,6 +63,7 @@
                     <el-option key="1" label="实物" value="1"></el-option>
                     <el-option key="2" label="优惠券" value="2"></el-option>
                     <el-option key="3" label="券包" value="3"></el-option>
+                    <el-option key="4" label="商户商品" value="4"></el-option>
                 </el-select>
                 <el-button
                     style="margin-top: 10px;width: 90px;"
@@ -174,21 +175,21 @@
                 <!-- <el-table-column prop="sort" label="对应上方的限制兑换数量" width="160">
                     <template slot-scope="scope">{{scope.row.limitNumber}}</template>
                 </el-table-column>-->
-                <!-- <el-table-column label="操作" width="140" align="center" fixed="right">
+                <el-table-column label="操作" width="140" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-button
                             type="text"
                             icon="el-icon-edit"
                             @click="addChange(scope.$index, scope.row)"
                         >编辑</el-button>
-                        <el-button
+                        <!-- <el-button
                             type="text"
                             icon="el-icon-delete"
                             class="red"
                             @click="delChange(scope.$index, scope.row)"
-                        >删除</el-button>
+                        >删除</el-button> -->
                     </template>
-                </el-table-column> -->
+                </el-table-column>
             </el-table>
             <div class="pagination">
                 <el-pagination
@@ -723,7 +724,7 @@
                     label="选择优惠券"
                     :label-width="formLabelWidth"
                 >
-                    <el-button type="primary" @click="openNext">点击选择</el-button>
+                    <!-- <el-button type="primary" @click="openNext">点击选择</el-button> -->
                 </el-form-item>
                 <el-form-item
                     label="所选优惠券"
@@ -744,7 +745,7 @@
                             :disabled="true"
                             :change="one(item.id)"
                         ></el-input>
-                        <span style="color:red;cursor: pointer;" @click="deleteSell()">删除</span>
+                        <!-- <span style="color:red;cursor: pointer;" @click="deleteSell()">删除</span> -->
                     </div>
                 </el-form-item>
                 <el-form-item
@@ -753,7 +754,7 @@
                     label="选择券包"
                     :label-width="formLabelWidth"
                 >
-                    <el-button type="primary" @click="changeCoupon">点击选择</el-button>
+                    <!-- <el-button type="primary" @click="changeCoupon">点击选择</el-button> -->
                 </el-form-item>
                 <el-form-item
                     v-if="couponId&&form.commodityType==3"
@@ -762,11 +763,11 @@
                     :required="true"
                 >
                     <el-input style="width: 150px" v-model="groupName" autocomplete="off" disabled></el-input>&nbsp;&nbsp;&nbsp;&nbsp;
-                    <span
+                    <!-- <span
                         v-if="groupName"
                         style="color:red;cursor: pointer;"
                         @click="deletCoupon"
-                    >删除</span>
+                    >删除</span> -->
                 </el-form-item>
                 <el-form-item :required="true" label="是否指定日期可以兑换" :label-width="formLabelWidth">
                     <el-select v-model="form.assignType" placeholder="请选择指定日期">
@@ -843,10 +844,10 @@
                     ></el-input>
                 </el-form-item>
             </el-form>
-            <span slot="footer" class="dialog-footer">
+            <!-- <span slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false">取 消</el-button>
                 <el-button type="primary" @click="exChanger">确 定</el-button>
-            </span>
+            </span> -->
         </el-dialog>
         <!--新增优惠券弹出框-->
         <el-dialog :close-on-click-modal="false" title="选择优惠券" :visible.sync="drawer">
@@ -1108,6 +1109,10 @@ export default {
                 {
                     value: '3',
                     label: '券包'
+                },
+                {
+                    value: '4',
+                    label: '商户商品'
                 }
             ],
             assignType: [
@@ -1783,10 +1788,9 @@ export default {
                 jsonArr.push({ key: 'sign', value: sign });
                 let params = ParamsAppend(jsonArr);
                 https
-                    .fetchPost('goldCommodity/modifyPage', params)
+                    .fetchPost('/admin/goldCommodity/modifyPage', params)
                     .then(data => {
                         loading.close();
-                        console.log(JSON.parse(Decrypt(data.data.data)));
                         if (data.data.code == 'success') {
                             this.editVisible = true;
                             //优惠券

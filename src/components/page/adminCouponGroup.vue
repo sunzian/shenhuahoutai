@@ -69,31 +69,31 @@
                         <el-tag v-else type="danger">未启用</el-tag>
                     </template>
                 </el-table-column>
-                <!-- <el-table-column label="操作" width="240" align="center">
+                <el-table-column label="操作" width="240" align="center">
                     <template slot-scope="scope">
-                        <el-button
+                        <!-- <el-button
                             type="success"
                             v-if="scope.row.status == 0"
                             @click="changeStatus(scope.$index, scope.row)"
-                        >启用</el-button>
-                        <el-button
+                        >启用</el-button> -->
+                        <!-- <el-button
                             type="success"
                             v-if="scope.row.status == 1"
                             @click="changeStatus(scope.$index, scope.row)"
-                        >停用</el-button>
+                        >停用</el-button> -->
                         <el-button
                             type="text"
                             icon="el-icon-circle-plus-outline"
                             @click="addChange(scope.$index, scope.row)"
                         >修改</el-button>
-                        <el-button
+                        <!-- <el-button
                             type="text"
                             icon="el-icon-delete"
                             class="red"
                             @click="delChange(scope.$index, scope.row)"
-                        >删除</el-button>
+                        >删除</el-button> -->
                     </template>
-                </el-table-column> -->
+                </el-table-column>
             </el-table>
             <div class="pagination">
                 <el-pagination
@@ -194,7 +194,7 @@
                     <el-input style="width: 215px" v-model="oGroupName" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="选择优惠券" :label-width="formLabelWidth">
-                    <el-button type="primary" @click="openNext">点击选择</el-button>
+                    <!-- <el-button type="primary" @click="openNext">点击选择</el-button> -->
                 </el-form-item>
                 <el-form-item
                         label="所选优惠券"
@@ -214,20 +214,20 @@
                         </el-input>
                         &nbsp;&nbsp;&nbsp;&nbsp;
                         每人发放数量：{{item.num}}
-                        <span
+                        <!-- <span
                                 style="color:red;cursor: pointer;"
                                 @click="deleteSell(index)"
-                        >删除</span>
+                        >删除</span> -->
                     </div>
                 </el-form-item>
                 <el-form-item label="券包说明：" :label-width="formLabelWidth">
                     <el-input type="textarea" maxlength="100" show-word-limit :rows="2" placeholder="请输入内容" v-model="oMemo"></el-input>
                 </el-form-item>
             </el-form>
-            <span slot="footer" class="dialog-footer">
+            <!-- <span slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false">取 消</el-button>
                 <el-button type="primary" @click="exChanger">确 定</el-button>
-            </span>
+            </span> -->
         </el-dialog>
         <!--新增优惠券弹出框-->
         <el-dialog :close-on-click-modal="false" title="选择优惠券" :visible.sync="drawer">
@@ -642,7 +642,7 @@ export default {
             jsonArr.push({ key: 'sign', value: sign });
             let params = ParamsAppend(jsonArr);
             https
-                .fetchPost('couponGroup/updateCouponGroupPage', params)
+                .fetchPost('/admin/couponGroup/updateCouponGroupPage', params)
                 .then(data => {
                     loading.close();
                     console.log(data);

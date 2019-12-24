@@ -141,21 +141,21 @@
                         <el-tag v-else-if="scope.row.status=='2'">下架</el-tag>
                     </template>
                 </el-table-column>
-                <!-- <el-table-column label="操作" width="160" align="center" fixed="right">
+                <el-table-column label="操作" width="160" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-button
                             type="text"
                             icon="el-icon-edit"
                             @click="addChange(scope.$index, scope.row)"
                         >编辑</el-button>
-                        <el-button
+                        <!-- <el-button
                             type="text"
                             icon="el-icon-delete"
                             class="red"
                             @click="delChange(scope.$index, scope.row)"
-                        >删除</el-button>
+                        >删除</el-button> -->
                     </template>
-                </el-table-column> -->
+                </el-table-column>
             </el-table>
             <div class="pagination">
                 <el-pagination
@@ -350,7 +350,7 @@
                             style="max-height: 50px;max-width: 130px"
                         />
                     </el-popover>
-                    <el-upload
+                    <!-- <el-upload
                         :before-upload="beforeUpload"
                         :data="type"
                         class="upload-demo"
@@ -366,10 +366,10 @@
                             <em>点击上传</em>
                         </div>
                         <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过200kb 建议尺寸300*240或按比例上传</div>
-                    </el-upload>
+                    </el-upload> -->
                 </el-form-item>
                 <el-form-item :required="true" label="选择商品" :label-width="formLabelWidth">
-                    <el-button type="primary" @click="openNext">点击选择</el-button>
+                    <!-- <el-button type="primary" @click="openNext">点击选择</el-button> -->
                 </el-form-item>
                 <el-form-item
                     label="所选商品"
@@ -386,7 +386,7 @@
                             :disabled="true"
                             :change="one(item.merchandiseCode)"
                         ></el-input>
-                        <span style="color:red;cursor: pointer;" @click="deleteSell()">删除</span>
+                        <!-- <span style="color:red;cursor: pointer;" @click="deleteSell()">删除</span> -->
                     </div>
                 </el-form-item>
                 <el-form-item label="排序" :label-width="formLabelWidth">
@@ -416,10 +416,10 @@
                     </el-select>
                 </el-form-item>
             </el-form>
-            <span slot="footer" class="dialog-footer">
+            <!-- <span slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false">取 消</el-button>
                 <el-button type="primary" @click="exChanger">确 定</el-button>
-            </span>
+            </span> -->
         </el-dialog>
     </div>
 </template>
@@ -765,7 +765,7 @@ export default {
                 jsonArr.push({ key: 'sign', value: sign });
                 let params = ParamsAppend(jsonArr);
                 https
-                    .fetchPost('/merchandiseCombo/modifyPage', params)
+                    .fetchPost('/admin/merchandiseCombo/modifyPage', params)
                     .then(data => {
                         loading.close();
                         console.log(JSON.parse(Decrypt(data.data.data)));

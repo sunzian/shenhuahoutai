@@ -134,21 +134,21 @@
                         <el-tag v-if="scope.row.redirectType=='4'">不跳转</el-tag>
                     </template>
                 </el-table-column>
-                <!-- <el-table-column label="操作" width="180" align="center" fixed="right">
+                <el-table-column label="操作" width="180" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-button
                             type="text"
                             icon="el-icon-edit"
                             @click="addChange(scope.$index, scope.row)"
                         >编辑</el-button>
-                        <el-button
+                        <!-- <el-button
                             type="text"
                             icon="el-icon-delete"
                             class="red"
                             @click="delChange(scope.$index, scope.row)"
-                        >删除</el-button>
+                        >删除</el-button> -->
                     </template>
-                </el-table-column> -->
+                </el-table-column>
             </el-table>
             <div class="pagination">
                 <el-pagination
@@ -363,7 +363,7 @@
                             style="max-height: 50px;max-width: 130px"
                         />
                     </el-popover>
-                    <el-upload
+                    <!-- <el-upload
                         :before-upload="beforeUpload"
                         :data="type"
                         :limit="8"
@@ -380,7 +380,7 @@
                             <em>点击上传</em>
                         </div>
                         <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过200kb</div>
-                    </el-upload>
+                    </el-upload> -->
                 </el-form-item>
                 <el-form-item :required="true" label="跳转类型" :label-width="formLabelWidth">
                     <el-select v-model="oTabType" placeholder="请选择跳转类型" @change="changeType">
@@ -392,14 +392,14 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item
+                <!-- <el-form-item
                     :required="true"
                     v-if="oTabType==1||oTabType==2||oTabType==3"
                     label="选择跳转类型"
                     :label-width="formLabelWidth"
                 >
                     <el-button type="primary" @click="openNext1">点击选择</el-button>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item
                     :required="true"
                     v-if="oTabType==1||oTabType==2||oTabType==3"
@@ -423,10 +423,10 @@
                     ></el-input>
                 </el-form-item>
             </el-form>
-            <span slot="footer" class="dialog-footer">
+            <!-- <span slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false">取 消</el-button>
                 <el-button type="primary" @click="exChanger">确 定</el-button>
-            </span>
+            </span> -->
         </el-dialog>
         <!--新增金币商品弹出框-->
         <el-dialog :close-on-click-modal="false" title="选择跳转类型" :visible.sync="drawer">
@@ -1339,7 +1339,7 @@ export default {
                 jsonArr.push({ key: 'sign', value: sign });
                 let params = ParamsAppend(jsonArr);
                 https
-                    .fetchPost('/banner/modifyPage', params)
+                    .fetchPost('/admin/banner/modifyPage', params)
                     .then(data => {
                         loading.close();
                         console.log(JSON.parse(Decrypt(data.data.data)));

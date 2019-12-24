@@ -956,85 +956,6 @@ export default {
         this.getMenu();
     },
     methods: {
-        derive(){
-            const loading = this.$loading({
-                lock: true,
-                text: 'Loading',
-                spinner: 'el-icon-loading',
-                background: 'rgba(0, 0, 0, 0.7)',
-                target: document.querySelector('.div1')
-            });
-            setTimeout(() => {
-                let cinemaCode = this.query.cinemaCode;
-                let submitOrderCode = this.query.submitOrderCode;
-                let mobile = this.query.mobile;
-                let payWay = this.query.payWay;
-                let payStatus = this.query.payStatus;
-                let orderStatus = this.query.orderStatus;
-                let startDate = this.query.startDate;
-                let endDate = this.query.endDate;
-                let cardNo= this.query.cardNo;
-                let sessionStartDate = this.query.sessionStartDate;
-                let sessionEndDate = this.query.sessionEndDate;
-                if (!cinemaCode) {
-                    cinemaCode = '';
-                }
-                if (!cardNo) {
-                    cardNo = '';
-                }
-                if (!submitOrderCode) {
-                    submitOrderCode = '';
-                }
-                if (!mobile) {
-                    mobile = '';
-                }
-                if (!payWay) {
-                    payWay = '';
-                }
-                if (!payStatus) {
-                    payStatus = '';
-                }
-                if (!orderStatus) {
-                    orderStatus = '';
-                }
-                if (!startDate) {
-                    startDate = '';
-                }
-                if (!endDate) {
-                    endDate = '';
-                }
-                if (!sessionStartDate) {
-                    sessionStartDate = '';
-                }
-                if (!sessionEndDate) {
-                    sessionEndDate = '';
-                }
-                let jsonArr = [];
-                jsonArr.push({ key: 'tableName', value: "ticket_order" });
-                jsonArr.push({ key: 'exportKeysJson', value: "['id','cinemaCode','orderNo','submitOrderCode','sessionTime','cardNo','mobile','filmName','seatName','number','totalOriginalPrice','totalPrice','totalServiceFee','totalPlatHandFee','totalCinemaAllowance','totalLowestPrice','realisticPrice','totalActivityDiscount','totalCouponDiscount','totalActualPrice','totalReportPrice','totalSubmitPrice','chPayStatus','chPayWay','payTime','chOrderStatus','submitTime','openCardCinemaName','bindCardCinemaName','chActivityType','activityName','userCouponName','printNo','submitMessage','cancelTime','totalRefundHandFee','refundReason','tradeNo']"});
-                jsonArr.push({ key: 'exportTitlesJson', value:"['ID','影院编码','本地单号','售票系统单号','场次时间','会员卡号','手机号','影片名称','座位','数量','应付','票价','服务费','代售费','影院补贴','最低票价','实际票价','活动优惠','优惠券优惠','实付','上报金额','回传金额','支付状态','支付方式','支付时间','订单状态','下单时间','开卡影院','消费影院','活动类型','活动名称','优惠券名称','取票码','下单失败原因','退票时间','退票手续费','退款原因','支付交易号']" });
-                jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
-                jsonArr.push({ key: 'submitOrderCode', value: submitOrderCode });
-                jsonArr.push({ key: 'cardNo', value: cardNo });
-                jsonArr.push({ key: 'mobile', value: mobile });
-                jsonArr.push({ key: 'payWay', value: payWay });
-                jsonArr.push({ key: 'payStatus', value: payStatus });
-                jsonArr.push({ key: 'orderStatus', value: orderStatus });
-                jsonArr.push({ key: 'startDate', value: startDate });
-                jsonArr.push({ key: 'endDate', value: endDate });
-                jsonArr.push({ key: 'sessionStartDate', value: sessionStartDate });
-                jsonArr.push({ key: 'sessionEndDate', value: sessionEndDate });
-                var params = ParamsAppend(jsonArr);
-                let myObj = {
-                    method: 'get',
-                    url: '/exportExcel/ticketOrder',
-                    fileName: '影票订单统计',
-                    params: params
-                };
-                https.exportMethod(myObj);
-                loading.close();
-            }, 1500);
-        },
         canExportCoupon(index, row) {
             //是否拥有权限
             const loading = this.$loading({
@@ -1113,33 +1034,21 @@ export default {
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             let params = ParamsAppend(jsonArr);
-            https
-                .fetchPost('/CouponBackGround/exportCoupon', params)
-                .then(data => {
-                    loading.close();
-                    if (data.data.code == 'success') {
-                        this.exportInfo = JSON.parse(Decrypt(data.data.data))
-                        this.exportForm.id = '';
-                        this.exportForm.validityType = 1;
-                        this.exportForm.validityDay = '';
-                        this.exportForm.startDate = '';
-                        this.exportForm.endDate = '';
-                        this.exportForm.exportNum = '';
-                        this.derive();
-                        // this.exportVisible = false;
-                    } else if (data.data.code == 'nologin') {
-                        this.message = data.data.message;
-                        this.open();
-                        this.$router.push('/login');
-                    } else {
-                        this.message = data.data.message;
-                        this.open();
-                    }
-                })
-                .catch(err => {
-                    loading.close();
-                    console.log(err);
-                });
+            let myObj = {
+                    method: 'post',
+                    url: '/CouponBackGround/exportCoupon',
+                    fileName: '影票优惠券统计',
+                    params: params
+                };
+            https.exportCouponMethod(myObj);
+            this.exportForm.id = '';
+            this.exportForm.validityType = 1;
+            this.exportForm.validityDay = '';
+            this.exportForm.startDate = '';
+            this.exportForm.endDate = '';
+            this.exportForm.exportNum = '';
+            this.exportVisible = false;
+            loading.close();
         },
         clearDiscountMoney() {
             this.oForm.discountMoney = '';

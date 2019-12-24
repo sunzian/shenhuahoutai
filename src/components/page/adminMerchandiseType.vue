@@ -116,21 +116,21 @@
                 <el-table-column prop="sort" label="展示顺序">
                     <template slot-scope="scope">{{scope.row.showSeqNo}}</template>
                 </el-table-column>
-                <!-- <el-table-column label="操作" width="160" align="center" fixed="right">
+                <el-table-column label="操作" width="160" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-button
                             type="text"
                             icon="el-icon-edit"
                             @click="addChange(scope.$index, scope.row)"
                         >编辑</el-button>
-                        <el-button
+                        <!-- <el-button
                             type="text"
                             icon="el-icon-delete"
                             class="red"
                             @click="delChange(scope.$index, scope.row)"
-                        >删除</el-button>
+                        >删除</el-button> -->
                     </template>
-                </el-table-column> -->
+                </el-table-column>
             </el-table>
             <div class="pagination">
                 <el-pagination
@@ -206,7 +206,7 @@
                             style="max-height: 50px;max-width: 130px"
                         />
                     </el-popover>
-                    <el-upload
+                    <!-- <el-upload
                         :before-upload="beforeUpload"
                         :data="type"
                         class="upload-demo"
@@ -222,16 +222,16 @@
                             <em>点击上传</em>
                         </div>
                         <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过50kb 建议尺寸120*120或按比例上传</div>
-                    </el-upload>
+                    </el-upload> -->
                 </el-form-item>
                 <el-form-item label="展示顺序" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="form.showSeqNo" autocomplete="off"></el-input>
                 </el-form-item>
             </el-form>
-            <span slot="footer" class="dialog-footer">
+            <!-- <span slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false">取 消</el-button>
                 <el-button type="primary" @click="exChanger">确 定</el-button>
-            </span>
+            </span> -->
         </el-dialog>
     </div>
 </template>
@@ -468,7 +468,7 @@ export default {
                 jsonArr.push({ key: 'sign', value: sign });
                 let params = ParamsAppend(jsonArr);
                 https
-                    .fetchPost('/merchandiseType/modifyPage', params)
+                    .fetchPost('/admin/merchandiseType/modifyPage', params)
                     .then(data => {
                         loading.close();
                         console.log(data);

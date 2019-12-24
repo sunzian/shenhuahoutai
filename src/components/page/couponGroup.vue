@@ -69,6 +69,10 @@
                             @click="changeStatus(scope.$index, scope.row)"
                         >停用</el-button>
                         <el-button
+                            type="success"
+                            @click="canExportCoupon(scope.$index, scope.row)"
+                        >导出</el-button>
+                        <el-button
                             type="text"
                             icon="el-icon-circle-plus-outline"
                             @click="addChange(scope.$index, scope.row)"
@@ -300,6 +304,67 @@
                 <el-button type="primary" @click="sureNext">确 定</el-button>
             </div>
         </el-dialog>
+                <!--导出弹出框-->
+        <el-dialog title="导出" :close-on-click-modal="false" :visible.sync="exportVisible">
+            <el-form :model="exportForm">
+                <el-form-item :required="true" label="有效期类型" :label-width="formLabelWidth">
+                    <el-radio-group v-model="exportForm.validityType">
+                        <el-radio :label="1">固定天数后过期</el-radio>
+                        <el-radio :label="2">固定有效时间段</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item
+                    label="用户绑定后几天有效"
+                    :label-width="formLabelWidth"
+                    v-if="exportForm.validityType == 1"
+                    :required="true"
+                >
+                    <el-input
+                        type="number"
+                        style="width: 150px"
+                        v-model="exportForm.validityDay"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item
+                    label="指定时间段："
+                    :label-width="formLabelWidth"
+                    v-if="exportForm.validityType == 2"
+                    :required="true"
+                >
+                    <el-date-picker
+                        v-model="exportForm.startDate"
+                        type="date"
+                        placeholder="有效期开始时间"
+                        value-format="yyyy-MM-dd"
+                        format="yyyy-MM-dd"
+                    ></el-date-picker>至
+                    <el-date-picker
+                        v-model="exportForm.endDate"
+                        type="date"
+                        placeholder="有效期结束时间"
+                        value-format="yyyy-MM-dd"
+                        format="yyyy-MM-dd"
+                    ></el-date-picker>
+                </el-form-item>
+                <el-form-item
+                    label="导出数量："
+                    :label-width="formLabelWidth"
+                    :required="true"
+                >
+                    <el-input
+                        type="number"
+                        style="width: 150px"
+                        v-model="exportForm.exportNum"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="exportVisible = false">取 消</el-button>
+                <el-button type="primary" @click="exportCoupon">确 定</el-button>
+            </div>
+        </el-dialog>
     </div>
 </template>
 
@@ -386,6 +451,16 @@ export default {
             value: '',
             sellIndex: '',
             rowMess: '',
+            exportVisible: false,
+            exportForm: {
+                id: '',
+                validityType: 1,
+                validityDay: '',
+                startDate: '',
+                endDate: '',
+                exportNum: ''
+            },
+            exportInfo: []
         };
     },
     created() {},
@@ -393,6 +468,100 @@ export default {
         this.getMenu();
     },
     methods: {
+                canExportCoupon(index, row) {
+            //是否拥有权限
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
+            this.idx = index;
+            var jsonArr = [];
+            jsonArr.push({ key: 'id', value: row.id });
+            let sign = md5(preSign(jsonArr));
+            jsonArr.push({ key: 'sign', value: sign });
+            let params = ParamsAppend(jsonArr);
+            https
+                .fetchPost('/CouponBackGround/pageIndex', params)
+                .then(data => {
+                    loading.close();
+                    if (data.data.code == 'success') {
+                        this.exportVisible = true;
+                        this.exportForm.id = row.id;
+                    } else if (data.data.code == 'nologin') {
+                        this.message = data.data.message;
+                        this.open();
+                        this.$router.push('/login');
+                    } else {
+                        this.message = data.data.message;
+                        this.open();
+                    }
+                })
+                .catch(err => {
+                    loading.close();
+                    console.log(err);
+                });
+        },
+        exportCoupon() {
+            if (this.exportForm.validityType == 1) {
+                if (this.exportForm.validityDay.trim() == '') {
+                    this.message = '绑定后生效天数不能为空！';
+                    this.open();
+                    return;
+                }
+            }
+            if (this.exportForm.exportNum == '' || !this.exportForm.exportNum) {
+                this.message = '导出数量不能为空！';
+                this.open();
+                return;
+            }
+            if (this.exportForm.validityType == 2) {
+                if (
+                    !this.exportForm.startDate ||
+                    this.exportForm.startDate == '' ||
+                    !this.exportForm.endDate ||
+                    this.exportForm.endDate == ''
+                ) {
+                    this.message = '指定时间段不能为空！';
+                    this.open();
+                    return;
+                }
+            }
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
+            var jsonArr = [];
+            jsonArr.push({ key: 'validityType', value: this.exportForm.validityType });
+            jsonArr.push({ key: 'validityDay', value: this.exportForm.validityDay });
+            jsonArr.push({ key: 'startDate', value: this.exportForm.startDate });
+            jsonArr.push({ key: 'endDate', value: this.exportForm.endDate });
+            jsonArr.push({ key: 'exportNum', value: this.exportForm.exportNum });
+            jsonArr.push({ key: 'associatedId', value: this.exportForm.id });
+            let sign = md5(preSign(jsonArr));
+            jsonArr.push({ key: 'sign', value: sign });
+            let params = ParamsAppend(jsonArr);
+            let myObj = {
+                    method: 'post',
+                    url: '/CouponBackGround/exportCoupon',
+                    fileName: '券包统计',
+                    params: params
+                };
+            https.exportCouponMethod(myObj);
+            this.exportForm.id = '';
+            this.exportForm.validityType = 1;
+            this.exportForm.validityDay = '';
+            this.exportForm.startDate = '';
+            this.exportForm.endDate = '';
+            this.exportForm.exportNum = '';
+            this.exportVisible = false;
+            loading.close();
+        },
         changeInput() {
             this.$forceUpdate();
         },
