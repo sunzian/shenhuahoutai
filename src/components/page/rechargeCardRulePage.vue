@@ -213,17 +213,6 @@
                 <el-form-item :required="true" v-if="oForm.givenType == 3 || oForm.givenType == 4" label="优惠券领取后过期天数：" :label-width="formLabelWidth">
                     <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 250px" v-model.trim="oForm.overDays" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="优惠描述：" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 250px"
-                        type="textarea"
-                        :maxlength="10"
-                        show-word-limit
-                        v-model="oForm.ruleMemo"
-                        placeholder="建议长度不超过10字"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
                 <el-form-item :required="true" label="规则有效期：" :label-width="formLabelWidth">
                     <el-date-picker
                         v-model="oForm.startDate"
@@ -249,6 +238,17 @@
                             :value="item.value"
                         ></el-option>
                     </el-select>
+                </el-form-item>
+                <el-form-item label="优惠描述：" :label-width="formLabelWidth">
+                    <el-input
+                            style="width: 250px"
+                            type="textarea"
+                            :maxlength="10"
+                            show-word-limit
+                            v-model="oForm.ruleMemo"
+                            placeholder="建议长度不超过10字"
+                            autocomplete="off"
+                    ></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -324,10 +324,6 @@
                 <el-form-item :required="true" v-if="oGivenType == 3 || oGivenType == 4 || oGivenType == '赠送券包' || oGivenType == '两者都送'" label="优惠券领取后过期天数：" :label-width="formLabelWidth">
                     <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 250px" min="1" v-model.trim="oOverDays" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="优惠描述：" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" type="textarea" :maxlength="10" show-word-limit
-                         v-model="oRuleMemo" autocomplete="off"></el-input>
-                </el-form-item>
                 <el-form-item :required="true" label="规则有效期：" :label-width="formLabelWidth">
                     <el-date-picker
                         v-model="oStartDate"
@@ -353,6 +349,11 @@
                             :value="item.value"
                         ></el-option>
                     </el-select>
+                </el-form-item>
+                <el-form-item label="优惠描述：" :label-width="formLabelWidth">
+                    <el-input style="width: 250px" type="textarea" :maxlength="10" show-word-limit
+                              placeholder="建议长度不超过10字"
+                              v-model="oRuleMemo" autocomplete="off"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">

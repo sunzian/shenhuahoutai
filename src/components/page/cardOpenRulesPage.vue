@@ -197,15 +197,15 @@
                 <el-form-item :required="true" v-if="oForm.givenType == 3" label="领取后过期天数：" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model.trim="oForm.overDays" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="优惠描述：" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 250px"
-                        min="1"
-                        v-model.trim="oForm.ruleMemo"
-                        placeholder="建议长度不超过15字"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
+                <!--<el-form-item label="优惠描述：" :label-width="formLabelWidth">-->
+                    <!--<el-input-->
+                        <!--style="width: 250px"-->
+                        <!--min="1"-->
+                        <!--v-model.trim="oForm.ruleMemo"-->
+                        <!--placeholder="建议长度不超过15字"-->
+                        <!--autocomplete="off"-->
+                    <!--&gt;</el-input>-->
+                <!--</el-form-item>-->
                 <el-form-item :required="true" label="规则有效期：" :label-width="formLabelWidth">
                     <el-date-picker
                         v-model="oForm.startDate"
@@ -290,14 +290,14 @@
                 <el-form-item :required="true" v-if="oGivenType == 3 || oGivenType == '赠送券包'" label="领取后过期天数：" :label-width="formLabelWidth">
                     <el-input style="width: 250px" min="1" v-model.trim="oOverDays" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="优惠描述：" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 250px"
-                        min="1"
-                        v-model.trim="oRuleMemo"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
+                <!--<el-form-item label="优惠描述：" :label-width="formLabelWidth">-->
+                    <!--<el-input-->
+                        <!--style="width: 250px"-->
+                        <!--min="1"-->
+                        <!--v-model.trim="oRuleMemo"-->
+                        <!--autocomplete="off"-->
+                    <!--&gt;</el-input>-->
+                <!--</el-form-item>-->
                 <el-form-item :required="true" label="规则有效期：" :label-width="formLabelWidth">
                     <el-date-picker
                         v-model="oStartDate"

@@ -171,6 +171,8 @@
                 <el-form-item label="活动说明" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
+                        type="textarea"
+                        :rows="4"
                         v-model="activityForm.activityDesc"
                         autocomplete="off"
                         maxlength="60"
@@ -566,7 +568,7 @@ export default {
                         }
                         if (!JSON.parse(Decrypt(data.data.data)).activityType) {
                             this.activityForm.activityType = ''
-                        } 
+                        }
                         this.activityForm.activityDesc = JSON.parse(Decrypt(data.data.data)).activityDesc;
                         this.showActivity = true;
                     } else if (data.data.code == 'nologin') {

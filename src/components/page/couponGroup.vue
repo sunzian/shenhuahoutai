@@ -101,7 +101,7 @@
         <el-dialog :close-on-click-modal="false" :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
                 <el-form-item :required="true" label="券包名称：" :label-width="formLabelWidth">
-                    <el-input style="width: 150px" v-model="oForm.name" autocomplete="off"></el-input>
+                    <el-input placeholder="限20个字" maxlength="20" style="width: 250px" v-model="oForm.name" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="通用方式：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.commonType">
@@ -164,7 +164,9 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="券包说明：" :label-width="formLabelWidth">
-                    <el-input type="textarea" maxlength="100" show-word-limit :rows="2" placeholder="请输入内容" v-model="oForm.memo"></el-input>
+                    <el-input type="textarea" maxlength="100" show-word-limit style="width: 300px"
+                              :rows="6"
+                              placeholder="例如：通用方式及券包内优惠券的详细说明" v-model="oForm.memo"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -185,7 +187,7 @@
                     <span>{{oCinemaName}}</span>
                 </el-form-item>
                 <el-form-item :required="true" label="券包名称：" :label-width="formLabelWidth">
-                    <el-input style="width: 215px" v-model="oGroupName" autocomplete="off"></el-input>
+                    <el-input placeholder="限20个字" maxlength="20" style="width: 250px" v-model="oGroupName" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="选择优惠券" :label-width="formLabelWidth">
                     <el-button type="primary" @click="openNext">点击选择</el-button>
@@ -221,7 +223,9 @@
                     </div>
                 </el-form-item>
                 <el-form-item label="券包说明：" :label-width="formLabelWidth">
-                    <el-input type="textarea" maxlength="100" show-word-limit :rows="2" placeholder="请输入内容" v-model="oMemo"></el-input>
+                    <el-input type="textarea" maxlength="100" show-word-limit style="width: 300px"
+                              :rows="6"
+                              placeholder="例如：通用方式及券包内优惠券的详细说明" v-model="oMemo"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">

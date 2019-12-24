@@ -195,14 +195,6 @@
                         placeholder="选择日期时间"
                     ></el-date-picker>
                 </el-form-item>
-                <el-form-item label="备注" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 250px"
-                        maxlength="30"
-                        v-model="oForm.memo"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
                 <el-form-item :required="true" label="轮播图类别" :label-width="formLabelWidth">
                     <el-select v-model="oForm.bannerType" placeholder="请选择">
                         <el-option
@@ -283,6 +275,17 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
+                <el-form-item label="备注" :label-width="formLabelWidth">
+                    <el-input
+                            type="textarea"
+                            show-word-limit
+                            maxlength="100"
+                            :rows="5"
+                            style="width: 300px"
+                            v-model="oForm.memo"
+                            autocomplete="off"
+                    ></el-input>
+                </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -331,14 +334,6 @@
                         format="yyyy-MM-dd HH:mm:ss"
                         placeholder="选择日期时间"
                     ></el-date-picker>
-                </el-form-item>
-                <el-form-item label="备注" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 150px"
-                        maxlength="9"
-                        v-model.number="form.memo"
-                        autocomplete="off"
-                    ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="轮播图类别" :label-width="formLabelWidth">
                     <el-select v-model="oBannerType" placeholder="请选择">
@@ -418,6 +413,17 @@
                         maxlength="30"
                         v-model="form.sort"
                         autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="备注" :label-width="formLabelWidth">
+                    <el-input
+                            type="textarea"
+                            show-word-limit
+                            maxlength="100"
+                            :rows="5"
+                            style="width: 300px"
+                            v-model.number="form.memo"
+                            autocomplete="off"
                     ></el-input>
                 </el-form-item>
             </el-form>

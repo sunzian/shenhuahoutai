@@ -204,13 +204,6 @@
                         <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过100kb 建议尺寸600*480或按比例上传</div>
                     </el-upload>
                 </el-form-item>
-                <el-form-item label="商品描述" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 250px"
-                        v-model="form.merchandiseDesc"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
                 <el-form-item label="零售价" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
@@ -252,6 +245,16 @@
                             :value="item.typeCode"
                         ></el-option>
                     </el-select>
+                </el-form-item>
+                <el-form-item label="商品描述" :label-width="formLabelWidth">
+                    <el-input
+                            style="width: 250px"
+                            type="textarea"
+                            :maxlength="10"
+                            show-word-limit
+                            v-model="form.merchandiseDesc"
+                            autocomplete="off"
+                    ></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">

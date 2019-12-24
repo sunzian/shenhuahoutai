@@ -11,7 +11,7 @@
         <div class="container">
             <el-form ref="form1" :model="form1">
                 <el-form-item :required="true" label="签到规则说明" :label-width="formLabelWidth">
-                    <el-input style="width: 250px;" type="textarea" maxlength="50" show-word-limit v-model="form1.oSignTips" autocomplete="off"></el-input>
+                    <el-input :rows="6" style="width: 300px;" type="textarea" maxlength="50" show-word-limit v-model="form1.oSignTips" autocomplete="off"></el-input>
                 </el-form-item>
             </el-form>
             <el-table

@@ -158,7 +158,7 @@
         <el-dialog :close-on-click-modal="false" :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
                 <el-form-item :required="true" label="权益卡名称" :label-width="formLabelWidth">
-                    <el-input placeholder="最多输入15个汉字" style="width: 200px" v-model="oForm.name" maxlength="15" autocomplete="off"></el-input>
+                    <el-input placeholder="最多输入15个汉字" style="width: 250px" v-model="oForm.name" maxlength="15" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="权益卡描述" :label-width="formLabelWidth">
                     <el-input placeholder="最多输入16个汉字" style="width: 250px" v-model="oForm.simpleDesc" maxlength="16" autocomplete="off"></el-input>
@@ -184,9 +184,6 @@
                         <el-radio label="1">参加</el-radio>
                         <el-radio label="0">不参加</el-radio>
                     </el-radio-group>
-                </el-form-item>
-                <el-form-item :required="true" v-if="oForm.isFilmJoin==1&&oForm.cardType==1" label="影票权益说明" :label-width="formLabelWidth">
-                  <el-input placeholder="如：适用的影厅，制式，影片以及优惠的方式，限制数量和可用时间段等说明。方便用户了解使用规则。" :rows="3" v-model="oForm.filmSimpleDesc" maxlength="200" show-word-limit type="textarea"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oForm.isFilmJoin==1&&oForm.cardType==1" label="选择影厅" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.selectHallType" @change="clearScreenCode()">
@@ -290,7 +287,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item :required="true" label="限购时间" v-if="oForm.isLimitFilm==1&&oForm.cardType==1&&oForm.isFilmJoin==1" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="限购时间单位" v-if="oForm.isLimitFilm==1&&oForm.cardType==1&&oForm.isFilmJoin==1" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.limitFilmUnit">
                         <el-radio label="年">年</el-radio>
                         <el-radio label="月">月</el-radio>
@@ -298,8 +295,9 @@
                         <el-radio label="日">日</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item :required="true" label="限购张数" v-if="oForm.isLimitFilm==1&&oForm.cardType==1&&oForm.isFilmJoin==1" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="单位内限购张数" v-if="oForm.isLimitFilm==1&&oForm.cardType==1&&oForm.isFilmJoin==1" :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oForm.numberFilm" autocomplete="off"></el-input>
+                    <div>限购时间单位为'日'，单位内限购张数输入'2'，即每日限制使用该权益卡购买2张影票</div>
                 </el-form-item>
                 <el-form-item label="影票可用时间段" :label-width="formLabelWidth" v-if="oForm.cardType==1&&oForm.isFilmJoin==1">
                     <el-time-picker
@@ -314,6 +312,9 @@
                             placeholder="选择时间范围">
                     </el-time-picker>
                     <span style="cursor: pointer;color: blue" @click="addTime">添加</span>
+                </el-form-item>
+                <el-form-item :required="true" v-if="oForm.isFilmJoin==1&&oForm.cardType==1" label="影票权益说明" :label-width="formLabelWidth">
+                    <el-input style="width: 300px"  :rows="5" placeholder="如：适用的影厅，制式，影片以及优惠的方式，限制数量和可用时间段等说明。方便用户了解使用规则。" v-model="oForm.filmSimpleDesc" maxlength="200" show-word-limit type="textarea"></el-input>
                 </el-form-item>
                 <el-form-item
                         label="所选时间段"
@@ -332,9 +333,6 @@
                         <el-radio label="1">参加</el-radio>
                         <el-radio label="0">不参加</el-radio>
                     </el-radio-group>
-                </el-form-item>
-                <el-form-item :required="true" v-if="oForm.isMerchandiseJoin==1&&oForm.cardType==1" label="卖品权益说明" :label-width="formLabelWidth">
-                    <el-input v-model="oForm.merchandiseSimpleDesc" maxlength="200" show-word-limit type="textarea"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oForm.isMerchandiseJoin==1&&oForm.cardType==1"  label="卖品优惠方式" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.reduceTypeMerchandise" @change="clearDiscountMoneyMerchandise()">
@@ -397,7 +395,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item :required="true" label="限购时间" v-if="oForm.isLimitMerchandise==1&&oForm.cardType==1&&oForm.isMerchandiseJoin==1&&(oForm.reduceTypeMerchandise!=2)" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="限购时间单位" v-if="oForm.isLimitMerchandise==1&&oForm.cardType==1&&oForm.isMerchandiseJoin==1&&(oForm.reduceTypeMerchandise!=2)" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.limitMerchandiseUnit">
                         <el-radio label="年">年</el-radio>
                         <el-radio label="月">月</el-radio>
@@ -408,8 +406,8 @@
                 <el-form-item :required="true" label="限购次数" v-if="oForm.isLimitMerchandise==1&&oForm.cardType==1&&oForm.isMerchandiseJoin==1&&(oForm.reduceTypeMerchandise!=2)" :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oForm.numberMerchandise" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item :required="true" v-if="oForm.cardType==2" label="券包权益说明" :label-width="formLabelWidth">
-                    <el-input style="width: 150px" v-model="oForm.couponSimpleDesc" maxlength="200" :rows="4" show-word-limit type="textarea"  autocomplete="off"></el-input>
+                <el-form-item :required="true" v-if="oForm.isMerchandiseJoin==1&&oForm.cardType==1" label="卖品权益说明" :label-width="formLabelWidth">
+                    <el-input style="width: 300px"  :rows="5" placeholder="如：适用的卖品以及优惠的方式，限制数量和可用时间段等说明。方便用户了解使用规则。" v-model="oForm.merchandiseSimpleDesc" maxlength="200" show-word-limit type="textarea"></el-input>
                 </el-form-item>
                 <el-form-item
                         v-if="oForm.cardType==2"
@@ -429,6 +427,9 @@
                             style="color:red;cursor: pointer;"
                             @click="deletCoupon"
                     >删除</span>
+                </el-form-item>
+                <el-form-item :required="true" v-if="oForm.cardType==2" label="券包权益说明" :label-width="formLabelWidth">
+                    <el-input :rows="5" placeholder="如：券包的内容及有效期等说明" style="width: 300px" v-model="oForm.couponSimpleDesc" maxlength="200" show-word-limit type="textarea"  autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="有效期单位" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.unit">
@@ -532,11 +533,15 @@
                 </el-form-item>
                 <el-form-item :required="true" label="使用说明" :label-width="formLabelWidth">
                     <el-input
+                            placeholder="如：
+1、权益卡的适用门店
+2、权益卡购买后有效期时间
+3、权益卡可享受的优惠描述等等"
+                            style="width: 300px"
+                            :rows="6"
                             type="textarea"
                             maxlength="200"
                             show-word-limit
-                            :rows="2"
-                            placeholder="请输入内容"
                             v-model="oForm.benefitDesc"
                     ></el-input>
                 </el-form-item>
@@ -550,7 +555,7 @@
         <el-dialog :close-on-click-modal="false" title="修改" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
                 <el-form-item :required="true" label="权益卡名称" :label-width="formLabelWidth">
-                    <el-input placeholder="最多输入15个汉字" style="width: 200px" v-model="oName" maxlength="15" autocomplete="off"></el-input>
+                    <el-input placeholder="最多输入15个汉字" style="width: 250px" v-model="oName" maxlength="15" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="权益卡描述" :label-width="formLabelWidth">
                     <el-input placeholder="最多输入16个汉字" style="width: 250px" v-model="oSimpleDesc" maxlength="16" autocomplete="off"></el-input>
@@ -576,9 +581,6 @@
                         <el-radio label="1">参加</el-radio>
                         <el-radio label="0">不参加</el-radio>
                     </el-radio-group>
-                </el-form-item>
-                <el-form-item :required="true" v-if="oIsFilmJoin==1&&oCardType==1" label="影票权益说明" :label-width="formLabelWidth">
-                    <el-input placeholder="如：适用的影厅，制式，影片以及优惠的方式，限制数量和可用时间段等说明。方便用户了解使用规则。" :rows="3" v-model="oFilmSimpleDesc"  maxlength="200" show-word-limit type="textarea"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oIsFilmJoin==1&&oCardType==1" label="选择影厅" :label-width="formLabelWidth">
                     <el-radio-group v-model="oSelectHallType" @change="clearScreenCode()">
@@ -682,7 +684,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item :required="true" label="限购时间" v-if="oIsLimitFilm==1&&oCardType==1&&oIsFilmJoin==1" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="限购时间单位" v-if="oIsLimitFilm==1&&oCardType==1&&oIsFilmJoin==1" :label-width="formLabelWidth">
                     <el-radio-group v-model="oLimitFilmUnit">
                         <el-radio label="年">年</el-radio>
                         <el-radio label="月">月</el-radio>
@@ -690,8 +692,9 @@
                         <el-radio label="日">日</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item :required="true" label="限购张数" v-if="oIsLimitFilm==1&&oCardType==1&&oIsFilmJoin==1" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="单位内限购张数" v-if="oIsLimitFilm==1&&oCardType==1&&oIsFilmJoin==1" :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oNumberFilm" autocomplete="off"></el-input>
+                    <div>限购时间单位为'日'，单位内限购张数输入'2'，即每日限制使用该权益卡购买2张影票</div>
                 </el-form-item>
                 <el-form-item label="影票可用时间段" :label-width="formLabelWidth" v-if="oCardType==1&&oIsFilmJoin==1">
                     <el-time-picker
@@ -706,6 +709,9 @@
                             placeholder="选择时间范围">
                     </el-time-picker>
                     <span style="cursor: pointer;color: blue" @click="addTime">添加</span>
+                </el-form-item>
+                <el-form-item :required="true" v-if="oIsFilmJoin==1&&oCardType==1" label="影票权益说明" :label-width="formLabelWidth">
+                    <el-input style="width: 300px"  :rows="5"  placeholder="如：适用的影厅，制式，影片以及优惠的方式，限制数量和可用时间段等说明。方便用户了解使用规则。" v-model="oFilmSimpleDesc"  maxlength="200" show-word-limit type="textarea"></el-input>
                 </el-form-item>
                 <el-form-item
                         label="所选时间段"
@@ -724,9 +730,6 @@
                         <el-radio label="1">参加</el-radio>
                         <el-radio label="0">不参加</el-radio>
                     </el-radio-group>
-                </el-form-item>
-                <el-form-item :required="true" v-if="oIsMerchandiseJoin==1&&oCardType==1" label="卖品权益说明" :label-width="formLabelWidth">
-                    <el-input v-model="oMerchandiseSimpleDesc" maxlength="200" show-word-limit type="textarea"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oIsMerchandiseJoin==1&&oCardType==1"  label="优惠方式" :label-width="formLabelWidth">
                     <el-radio-group v-model="oReduceTypeMerchandise" @change="clearDiscountMoneyMerchandise()">
@@ -789,7 +792,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item :required="true" label="限购时间" v-if="oIsLimitMerchandise==1&&oCardType==1&&oIsMerchandiseJoin==1&&(oReduceTypeMerchandise!=2)" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="限购时间单位" v-if="oIsLimitMerchandise==1&&oCardType==1&&oIsMerchandiseJoin==1&&(oReduceTypeMerchandise!=2)" :label-width="formLabelWidth">
                     <el-radio-group v-model="oLimitMerchandiseUnit">
                         <el-radio label="年">年</el-radio>
                         <el-radio label="月">月</el-radio>
@@ -800,8 +803,8 @@
                 <el-form-item :required="true" label="限购次数" v-if="oIsLimitMerchandise==1&&oCardType==1&&oIsMerchandiseJoin==1&&(oReduceTypeMerchandise!=2)" :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oNumberMerchandise" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item :required="true" v-if="oCardType==2" label="券包权益说明" :label-width="formLabelWidth">
-                    <el-input style="width: 150px" v-model="oCouponSimpleDesc" maxlength="200" :rows="4" show-word-limit type="textarea" autocomplete="off"></el-input>
+                <el-form-item :required="true" v-if="oIsMerchandiseJoin==1&&oCardType==1" label="卖品权益说明" :label-width="formLabelWidth">
+                    <el-input style="width: 300px"  :rows="5" placeholder="如：适用的卖品以及优惠的方式，限制数量和可用时间段等说明。方便用户了解使用规则。" v-model="oMerchandiseSimpleDesc" maxlength="200" show-word-limit type="textarea"></el-input>
                 </el-form-item>
                 <el-form-item
                         v-if="oCardType==2"
@@ -821,6 +824,9 @@
                             style="color:red;cursor: pointer;"
                             @click="deletCoupon"
                     >删除</span>
+                </el-form-item>
+                <el-form-item :required="true" v-if="oCardType==2" label="券包权益说明" :label-width="formLabelWidth">
+                    <el-input :rows="5" placeholder="如：券包的内容及有效期等说明" style="width: 300px" v-model="oCouponSimpleDesc" maxlength="200" show-word-limit type="textarea" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="有效期单位" :label-width="formLabelWidth">
                     <el-radio-group v-model="oUnit">
@@ -928,8 +934,12 @@
                             type="textarea"
                             maxlength="200"
                             show-word-limit
-                            :rows="2"
-                            placeholder="请输入内容"
+                            placeholder="如：
+1、权益卡的适用门店
+2、权益卡购买后有效期时间
+3、权益卡可享受的优惠描述等等"
+                            style="width: 300px"
+                            :rows="6"
                             v-model="oBenefitDesc"
                     ></el-input>
                 </el-form-item>
@@ -1810,19 +1820,19 @@
                             return;
                         }else if(this.oForm.isLimitFilm==1){
                             if(!this.oForm.limitFilmUnit){
-                                this.message = '限购时间不能为空，请检查！';
+                                this.message = '限购时间单位不能为空，请检查！';
                                 this.open();
                                 loading.close();
                                 return;
                             }
                             if(!this.oForm.numberFilm){
-                                this.message = '限购张数不能为空，请检查！';
+                                this.message = '单位内限购张数不能为空，请检查！';
                                 this.open();
                                 loading.close();
                                 return;
                             }
                             if(this.oForm.numberFilm<=0){
-                                this.message = '限购张数必须大于0，请检查！';
+                                this.message = '单位内限购张数必须大于0，请检查！';
                                 this.open();
                                 loading.close();
                                 return;
@@ -1871,19 +1881,19 @@
                                 return;
                             }else if(this.oForm.isLimitMerchandise==1){
                                 if(!this.oForm.limitMerchandiseUnit){
-                                    this.message = '限购时间不能为空，请检查！';
+                                    this.message = '限购时间单位不能为空，请检查！';
                                     this.open();
                                     loading.close();
                                     return;
                                 }
                                 if(!this.oForm.numberMerchandise){
-                                    this.message = '限购张数不能为空，请检查！';
+                                    this.message = '单位内限购张数不能为空，请检查！';
                                     this.open();
                                     loading.close();
                                     return;
                                 }
                                 if(this.oForm.numberMerchandise<=0){
-                                    this.message = '限购张数必须大于0，请检查！';
+                                    this.message = '单位内限购张数必须大于0，请检查！';
                                     this.open();
                                     loading.close();
                                     return;
@@ -1928,19 +1938,19 @@
                                 return;
                             }else if(this.oForm.isLimitMerchandise==1){
                                 if(!this.oForm.limitMerchandiseUnit){
-                                    this.message = '限购时间不能为空，请检查！';
+                                    this.message = '限购时间单位不能为空，请检查！';
                                     this.open();
                                     loading.close();
                                     return;
                                 }
                                 if(!this.oForm.numberMerchandise){
-                                    this.message = '限购张数不能为空，请检查！';
+                                    this.message = '单位内限购张数不能为空，请检查！';
                                     this.open();
                                     loading.close();
                                     return;
                                 }
                                 if(this.oForm.numberMerchandise<=0){
-                                    this.message = '限购张数必须大于0，请检查！';
+                                    this.message = '单位内限购张数必须大于0，请检查！';
                                     this.open();
                                     loading.close();
                                     return;
@@ -2723,19 +2733,19 @@
                             return;
                         }else if(this.oIsLimitFilm==1){
                             if(!this.oLimitFilmUnit){
-                                this.message = '限购时间不能为空，请检查！';
+                                this.message = '限购时间单位不能为空，请检查！';
                                 this.open();
                                 loading.close();
                                 return;
                             }
                             if(!this.oNumberFilm){
-                                this.message = '限购张数不能为空，请检查！';
+                                this.message = '单位内限购张数不能为空，请检查！';
                                 this.open();
                                 loading.close();
                                 return;
                             }
                             if(this.oNumberFilm<=0){
-                                this.message = '限购张数必须大于0，请检查！';
+                                this.message = '单位内限购张数必须大于0，请检查！';
                                 this.open();
                                 loading.close();
                                 return;
@@ -2784,19 +2794,19 @@
                                 return;
                             }else if(this.oIsLimitMerchandise==1){
                                 if(!this.oLimitMerchandiseUnit){
-                                    this.message = '限购时间不能为空，请检查！';
+                                    this.message = '限购时间单位不能为空，请检查！';
                                     this.open();
                                     loading.close();
                                     return;
                                 }
                                 if(!this.oNumberMerchandise){
-                                    this.message = '限购张数不能为空，请检查！';
+                                    this.message = '单位内限购张数不能为空，请检查！';
                                     this.open();
                                     loading.close();
                                     return;
                                 }
                                 if(this.oNumberMerchandise<=0){
-                                    this.message = '限购张数必须大于0，请检查！';
+                                    this.message = '单位内限购张数必须大于0，请检查！';
                                     this.open();
                                     loading.close();
                                     return;
@@ -2841,19 +2851,19 @@
                                 return;
                             }else if(this.oIsLimitMerchandise==1){
                                 if(!this.oLimitMerchandiseUnit){
-                                    this.message = '限购时间不能为空，请检查！';
+                                    this.message = '限购时间单位不能为空，请检查！';
                                     this.open();
                                     loading.close();
                                     return;
                                 }
                                 if(!this.oNumberMerchandise){
-                                    this.message = '限购张数不能为空，请检查！';
+                                    this.message = '单位内限购张数不能为空，请检查！';
                                     this.open();
                                     loading.close();
                                     return;
                                 }
                                 if(this.oNumberMerchandise<=0){
-                                    this.message = '限购张数必须大于0，请检查！';
+                                    this.message = '单位内限购张数必须大于0，请检查！';
                                     this.open();
                                     loading.close();
                                     return;

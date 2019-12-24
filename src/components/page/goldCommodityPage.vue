@@ -315,17 +315,6 @@
                         >只能上传jpg/png文件，且不超过200kb 建议尺寸200*200或按比例上传</div>
                     </el-upload>
                 </el-form-item>
-                <el-form-item :required="true" label="兑换须知" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 360px"
-                        type="textarea"
-                        show-word-limit
-                        maxlength="200"
-                        v-model="oForm.memo"
-                        placeholder="1.可领取时间段2.领取地址3.其他注意事项"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
                 <el-form-item :required="true" label="详情" :label-width="formLabelWidth">
                     <mavon-editor
                         v-model="oForm.details"
@@ -640,6 +629,18 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
+                <el-form-item :required="true" label="兑换须知" :label-width="formLabelWidth">
+                    <el-input
+                            style="width: 360px"
+                            type="textarea"
+                            show-word-limit
+                            maxlength="200"
+                            :rows="5"
+                            v-model="oForm.memo"
+                            placeholder="1.可领取时间段2.领取地址3.其他注意事项"
+                            autocomplete="off"
+                    ></el-input>
+                </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -746,17 +747,6 @@
                             slot="tip"
                         >只能上传jpg/png文件，且不超过200kb 建议尺寸200*200或按比例上传</div>
                     </el-upload>
-                </el-form-item>
-                <el-form-item :required="true" label="兑换须知" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 360px"
-                        type="textarea"
-                        show-word-limit
-                        maxlength="200"
-                        placeholder="1.可领取时间段2.领取地址3.其他注意事项"
-                        v-model="form.memo"
-                        autocomplete="off"
-                    ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="详情" :label-width="formLabelWidth">
                     <mavon-editor
@@ -1071,6 +1061,18 @@
                         onkeyup="this.value=this.value.replace(/\D/g,'')"
                         v-model="form.sort"
                         autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item :required="true" label="兑换须知" :label-width="formLabelWidth">
+                    <el-input
+                            style="width: 360px"
+                            type="textarea"
+                            show-word-limit
+                            :rows="5"
+                            maxlength="200"
+                            placeholder="1.可领取时间段2.领取地址3.其他注意事项"
+                            v-model="form.memo"
+                            autocomplete="off"
                     ></el-input>
                 </el-form-item>
             </el-form>
