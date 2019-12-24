@@ -3,7 +3,7 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
-                    <i class="el-icon-lx-cascades"></i> 合作商家管理
+                    <i class="el-icon-lx-cascades"></i> 合作商家设置
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
@@ -203,15 +203,6 @@
                         placeholder="选择日期时间"
                     ></el-time-picker>
                 </el-form-item>
-                <el-form-item label="商户描述" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 250px"
-                        type="textarea"
-                        maxlength="200"
-                        v-model="oForm.memo"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
                 <el-form-item label="核销码" :label-width="formLabelWidth" :required="true">
                     <el-input
                         style="width: 250px"
@@ -230,6 +221,17 @@
                             :value="item.value"
                         ></el-option>
                     </el-select>
+                </el-form-item>
+                <el-form-item label="商户描述" :label-width="formLabelWidth">
+                    <el-input
+                            style="width: 300px"
+                            type="textarea"
+                            maxlength="200"
+                            :rows="5"
+                            show-word-limit
+                            v-model="oForm.memo"
+                            autocomplete="off"
+                    ></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -312,15 +314,6 @@
                         placeholder="选择日期时间"
                     ></el-time-picker>
                 </el-form-item>
-                <el-form-item label="商户描述" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 250px"
-                        type="textarea"
-                        maxlength="200"
-                        v-model="changeForm.memo"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
                 <el-form-item label="核销码" :label-width="formLabelWidth" :required="true">
                     <el-input
                         style="width: 250px"
@@ -339,6 +332,17 @@
                             :value="item.value"
                         ></el-option>
                     </el-select>
+                </el-form-item>
+                <el-form-item label="商户描述" :label-width="formLabelWidth">
+                    <el-input
+                            style="width: 300px"
+                            type="textarea"
+                            maxlength="200"
+                            :rows="5"
+                            show-word-limit
+                            v-model="changeForm.memo"
+                            autocomplete="off"
+                    ></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">

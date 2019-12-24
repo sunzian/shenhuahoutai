@@ -136,6 +136,7 @@
                         show-word-limit
                         maxlength="100"
                         style="width: 250px"
+                              :rows="5"
                         v-model="oForm.memo"
                         autocomplete="off"
                     ></el-input>
@@ -201,7 +202,10 @@
                 </el-form-item>
                 <el-form-item label="描述" :label-width="formLabelWidth">
                     <el-input
+                            type="textarea"
                         style="width: 250px"
+                            show-word-limit
+                        :rows="5"
                         maxlength="9"
                         v-model="form.memo"
                         autocomplete="off"

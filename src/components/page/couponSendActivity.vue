@@ -222,17 +222,6 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="活动描述" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 250px"
-                        min="1"
-                        type="textarea"
-                        show-word-limit
-                        maxlength="200"
-                        v-model="oForm.activityDesc"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
                 <el-form-item :required="true" label="生效延迟天数" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
@@ -263,6 +252,18 @@
                         style="color:red;cursor: pointer;"
                         @click="deletCoupon"
                     >删除</span>
+                </el-form-item>
+                <el-form-item label="活动描述" :label-width="formLabelWidth">
+                    <el-input
+                            style="width: 300px"
+                            :rows="5"
+                            min="1"
+                            type="textarea"
+                            show-word-limit
+                            maxlength="200"
+                            v-model="oForm.activityDesc"
+                            autocomplete="off"
+                    ></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -376,17 +377,6 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="活动描述" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 250px"
-                        min="1"
-                        type="textarea"
-                        show-word-limit
-                        maxlength="200"
-                        v-model="form.activityDesc"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
                 <el-form-item :required="true" label="生效延迟天数" :label-width="formLabelWidth">
                     <el-input
                             style="width: 250px"
@@ -416,6 +406,18 @@
                         style="color:red;cursor: pointer;"
                         @click="deletCoupon"
                     >删除</span>
+                </el-form-item>
+                <el-form-item label="活动描述" :label-width="formLabelWidth">
+                    <el-input
+                            style="width: 300px"
+                            :rows="5"
+                            min="1"
+                            type="textarea"
+                            show-word-limit
+                            maxlength="200"
+                            v-model="form.activityDesc"
+                            autocomplete="off"
+                    ></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">

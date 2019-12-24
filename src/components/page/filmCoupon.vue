@@ -60,10 +60,10 @@
                 <el-table-column prop="name" label="适用影院">
                     <template slot-scope="scope">{{scope.row.cinemaNames}}</template>
                 </el-table-column>
-                <el-table-column label="优惠券名称">
+                <el-table-column label="优惠券名称" width="110">
                     <template slot-scope="scope">{{scope.row.name}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="优惠券类型" width="110">
+                <el-table-column prop="name" label="优惠券类型" width="100">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.reduceType == 1" type="success">兑换券</el-tag>
                         <el-tag v-else type="danger">代金券</el-tag>
@@ -165,7 +165,8 @@
             <el-form :model="oForm">
                 <el-form-item :required="true" label="优惠券名称" :label-width="formLabelWidth">
                     <el-input
-                        style="width: 150px"
+                        style="width: 250px"
+                        placeholder="限15个字"
                         maxlength="15"
                         v-model="oForm.name"
                         autocomplete="off"
@@ -401,12 +402,17 @@
                 </el-form-item>
                 <el-form-item label="使用须知" :label-width="formLabelWidth">
                     <el-input
-                        type="textarea"
+                            style="width: 300px"
+                            :rows="6"
+                            type="textarea"
                         show-word-limit
                         maxlength="500"
-                        :rows="2"
-                        placeholder="请输入内容"
                         v-model="oForm.couponDesc"
+                            placeholder="例如：
+1、制式和影片限制
+2、可用支付方式 优惠形式
+3、节假日和周几不可用
+4、其他注意事项"
                     ></el-input>
                 </el-form-item>
             </el-form>
@@ -420,7 +426,8 @@
             <el-form ref="form" :model="form">
                 <el-form-item :required="true" label="优惠券名称" :label-width="formLabelWidth">
                     <el-input
-                        style="width: 180px"
+                            style="width: 250px"
+                            placeholder="限15个字"
                         maxlength="15"
                         v-model="oName"
                         autocomplete="off"
@@ -654,11 +661,16 @@
                 </el-form-item>
                 <el-form-item label="使用须知" :label-width="formLabelWidth">
                     <el-input
+                            style="width: 300px"
+                            :rows="6"
+                            placeholder="例如：
+1、制式和影片限制
+2、可用支付方式 优惠形式
+3、节假日和周几不可用
+4、其他注意事项"
                         type="textarea"
                         show-word-limit
                         maxlength="500"
-                        :rows="2"
-                        placeholder="请输入内容"
                         v-model="oCouponDesc"
                     ></el-input>
                 </el-form-item>

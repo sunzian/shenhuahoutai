@@ -136,6 +136,7 @@
                 </el-form-item>
                 <el-form-item label="描述" :label-width="formLabelWidth">
                     <el-input type="textarea"
+                              :rows="6"
                         show-word-limit
                         maxlength="100"
                         style="width: 250px"
@@ -215,7 +216,10 @@
                 <el-form-item label="描述" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        maxlength="9"
+                        :rows="6"
+                        show-word-limit
+                        type="textarea"
+                        maxlength="100"
                         v-model="form.memo"
                         autocomplete="off"
                     ></el-input>

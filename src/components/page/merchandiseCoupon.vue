@@ -134,7 +134,7 @@
         <el-dialog :close-on-click-modal="false" title="新增" :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
                 <el-form-item :required="true" label="优惠券名称：" :label-width="formLabelWidth">
-                    <el-input style="width: 150px" maxlength="15" v-model="oForm.name" autocomplete="off"></el-input>
+                    <el-input placeholder="限15个字" style="width: 250px" maxlength="15" v-model="oForm.name" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="通用方式：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.commonType" @change="selectCommonType">
@@ -237,8 +237,13 @@
                         type="textarea"
                         show-word-limit
                         maxlength="150"
-                        :rows="2"
-                        placeholder="请输入内容"
+                        style="width: 300px"
+                        :rows="6"
+                        placeholder="例如：
+1、通用方式 可参加的卖品
+2、可用支付方式 优惠形式
+3、节假日和周几不可用
+4、其他注意事项"
                         v-model="oForm.couponDesc"
                     ></el-input>
                 </el-form-item>
@@ -252,7 +257,7 @@
         <el-dialog :close-on-click-modal="false" title="修改" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
                 <el-form-item :required="true" label="优惠券名称：" :label-width="formLabelWidth">
-                    <el-input style="width: 180px" maxlength="15" v-model="oName" autocomplete="off"></el-input>
+                    <el-input placeholder="限15个字" style="width: 250px" maxlength="15" v-model="oName" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="通用方式：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oCommonType" @change="selectCommonType2">
@@ -356,8 +361,13 @@
                             type="textarea"
                             show-word-limit
                             maxlength="150"
-                            :rows="2"
-                            placeholder="请输入内容"
+                            style="width: 300px"
+                            :rows="6"
+                            placeholder="例如：
+1、通用方式 可参加的卖品
+2、可用支付方式 优惠形式
+3、节假日和周几不可用
+4、其他注意事项"
                             v-model="oCouponDesc"
                     ></el-input>
                 </el-form-item>
