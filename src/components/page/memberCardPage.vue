@@ -24,8 +24,14 @@
                     class="mr10"
                 ></el-input>
                 <el-input
-                    placeholder="手机号"
+                    placeholder="开卡手机号"
                     v-model="query.mobile"
+                    autocomplete="off"
+                    class="mr10"
+                ></el-input>
+                <el-input
+                    placeholder="绑卡手机号"
+                    v-model="query.bindUserMobile"
                     autocomplete="off"
                     class="mr10"
                 ></el-input>
@@ -189,6 +195,7 @@ export default {
                 let cinemaCode = this.query.cinemaCode;
                 let orderNo = this.query.orderNo;
                 let mobile = this.query.mobile;
+                let bindUserMobile = this.query.bindUserMobile;
                 let employeeCode = this.query.employeeCode;
                 let payWay = this.query.payWay;
                 if (!cinemaCode) {
@@ -199,6 +206,9 @@ export default {
                 }
                 if (!mobile) {
                     mobile = '';
+                }
+                if (!bindUserMobile) {
+                    bindUserMobile = '';
                 }
                 if (!employeeCode) {
                     employeeCode = '';
@@ -214,6 +224,7 @@ export default {
                 jsonArr.push({ key: 'bindStatus', value: payWay });
                 jsonArr.push({ key: 'cardNo', value: orderNo });
                 jsonArr.push({ key: 'userMobile', value: mobile });
+                jsonArr.push({ key: 'bindUserMobile', value: bindUserMobile });
                 var params = ParamsAppend(jsonArr);
                 let myObj = {
                     method: 'get',
@@ -314,6 +325,7 @@ export default {
                 let cinemaCode = this.query.cinemaCode;
                 let orderNo = this.query.orderNo;
                 let mobile = this.query.mobile;
+                let bindUserMobile = this.query.bindUserMobile;
                 let employeeCode = this.query.employeeCode;
                 let payWay = this.query.payWay;
                 if (!cinemaCode) {
@@ -324,6 +336,9 @@ export default {
                 }
                 if (!mobile) {
                     mobile = '';
+                }
+                if (!bindUserMobile) {
+                    bindUserMobile = '';
                 }
                 if (!employeeCode) {
                     employeeCode = '';
@@ -337,6 +352,7 @@ export default {
                 jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
                 jsonArr.push({ key: 'cardNo', value: orderNo });
                 jsonArr.push({ key: 'userMobile', value: mobile });
+                jsonArr.push({ key: 'bindUserMobile', value: bindUserMobile });
                 jsonArr.push({ key: 'employeeCode', value: employeeCode });
                 jsonArr.push({ key: 'bindStatus', value: payWay });
                 let sign = md5(preSign(jsonArr));

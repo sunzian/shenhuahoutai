@@ -612,14 +612,14 @@
                             v-model="oForm.expireDate"
                             placeholder="选择日期时间"></el-date-picker>
                 </el-form-item>
-                <el-form-item label="第三方支付购票收费" :label-width="formLabelWidth">
+                <el-form-item label="第三方支付购票收费（元/张）" :label-width="formLabelWidth" placeholder="售票系统收取">
                     <el-input
                         style="width: 250px"
                         v-model="oForm.thirdPartyPayFee"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="会员卡支付购票收费" :label-width="formLabelWidth">
+                <el-form-item label="会员卡支付购票收费（元/张）" :label-width="formLabelWidth" placeholder="售票系统收取">
                     <el-input
                         style="width: 250px"
                         v-model="oForm.memberCardPayFee"
@@ -1224,14 +1224,14 @@
                             :disabled="true"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="第三方支付购票收费" :label-width="formLabelWidth">
+                <el-form-item label="第三方支付收费（元/张）" :label-width="formLabelWidth" placeholder="售票系统收取">
                     <el-input
                         style="width: 250px"
                         v-model="oThirdPartyPayFee"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="会员卡支付购票收费" :label-width="formLabelWidth">
+                <el-form-item label="会员卡支付购票收费（元/张）" :label-width="formLabelWidth" placeholder="售票系统收取">
                     <el-input
                         style="width: 250px"
                         v-model="oMemberCardPayFee"

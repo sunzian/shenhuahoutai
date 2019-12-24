@@ -414,20 +414,19 @@
                 jsonArr.push({ key: 'simpleType', value: 1 });
                 jsonArr.push({ key: 'name', value: name });
                 jsonArr.push({ key: 'status', value: 1 });
+                jsonArr.push({ key: 'commonType', value: 1 });
                 jsonArr.push({ key: 'cinemaCodes', value: this.cinemaCode });
                 jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
                 jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
-                console.log(jsonArr);
                 var params = ParamsAppend(jsonArr);
-                https.fetchPost('/merchandiseCoupon/merchandiseCouponPage', params).then(data => {
+                https.fetchPost('/merchandiseCoupon/getCouponByCinemaCode', params).then(data => {
                     loading.close();
                     if (data.data.code == 'success') {
                         let oData = JSON.parse(Decrypt(data.data.data));
                         this.drawer = true;
                         this.sellTableData = oData.pageResult.data;
-                        console.log(this.sellTableData);
                         this.query.pageSize = oData.pageResult.pageSize;
                         this.query.pageNo = oData.pageResult.pageNo;
                         this.query.totalCount = oData.pageResult.totalCount;
@@ -572,22 +571,22 @@
             },
             handleSizeChange(val) {
                 this.query.pageSize=val;
-                this.getMenu()
+                this.getAllCoupon()
             },
             currentChange(val) {
                 //点击选择具体页数
                 this.query.pageNo = val;
-                this.getMenu();
+                this.getAllCoupon();
             },
             prev() {
                 //分页按钮上一页
                 this.query.pageNo--;
-                this.getMenu();
+                this.getAllCoupon();
             },
             next() {
                 //分页按钮下一页
                 this.query.pageNo++;
-                this.getMenu();
+                this.getAllCoupon();
             },
         }
     };

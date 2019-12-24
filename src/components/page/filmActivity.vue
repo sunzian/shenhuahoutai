@@ -98,7 +98,7 @@
                 <el-table-column prop="sort" label="最低票价结算" width="60">
                     <template v-if="scope.row.reduceType==4" slot-scope="scope">{{scope.row.discountMoney}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="活动有效期" width="170">
+                <el-table-column prop="memo" label="适用放映时间" width="170">
                     <template slot-scope="scope">{{scope.row.startDate}}至{{scope.row.endDate}}</template>
                 </el-table-column>
                 <el-table-column prop="sort" label="状态" width="100">
@@ -153,7 +153,7 @@
         <el-dialog :close-on-click-modal="false" :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
                 <el-form-item :required="true" label="活动名称：" :label-width="formLabelWidth">
-                    <el-input style="width: 150px" v-model="oForm.name" autocomplete="off"></el-input>
+                    <el-input style="width: 250px" v-model="oForm.name" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="选择影院：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.code" @change="selectCinema">
@@ -227,18 +227,18 @@
                         >删除</span>
                     </div>
                 </el-form-item>
-                <el-form-item :required="true" label="活动有效期：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="适用放映时间：" :label-width="formLabelWidth">
                     <el-date-picker
                             v-model="oForm.startDate"
                             type="datetime"
-                            placeholder="开始时间"
-                                value-format="yyyy-MM-dd HH:mm:ss"
+                            placeholder="开始日期"
+                            value-format="yyyy-MM-dd HH:mm:ss"
                             format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>至
                     <el-date-picker
                             v-model="oForm.endDate"
                             type="datetime"
-                            placeholder="结束时间"
+                            placeholder="结束日期"
                             value-format="yyyy-MM-dd HH:mm:ss"
                             format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
@@ -277,7 +277,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item :required="true" label="节假日是否可用：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="节假日场次是否可用：" :label-width="formLabelWidth">
                     <el-select v-model="oForm.holidayValid" placeholder="请选择">
                         <el-option
                                 v-for="item in canUse"
@@ -460,18 +460,18 @@
                         >删除</span>
                     </div>
                 </el-form-item>
-                <el-form-item :required="true" label="活动有效期：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="适用放映时间：" :label-width="formLabelWidth">
                     <el-date-picker
                             v-model="oStartDate"
                             type="datetime"
-                            placeholder="开始时间"
+                            placeholder="开始日期"
                             value-format="yyyy-MM-dd HH:mm:ss"
                             format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>至
                     <el-date-picker
                             v-model="oEndDate"
                             type="datetime"
-                            placeholder="结束时间"
+                            placeholder="结束日期"
                             value-format="yyyy-MM-dd HH:mm:ss"
                             format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
@@ -510,7 +510,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item :required="true" label="节假日是否可用：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="节假日场次是否可用：" :label-width="formLabelWidth">
                     <el-select v-model="oIsHolidayValid" placeholder="请选择">
                         <el-option
                                 v-for="item in canUse"
