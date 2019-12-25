@@ -156,6 +156,11 @@ export default new Router({
                     meta: { title: '用户分享邀请注册记录' }
                 },
                 {
+                    path: '/adminUserShareRegisterRecordPage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/adminUserShareRegisterRecordPage.vue'),
+                    meta: { title: '用户分享邀请注册记录' }
+                },
+                {
                     path: '/cardConsumePage',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/cardConsumePage.vue'),
                     meta: { title: '会员卡消费记录' }
@@ -373,6 +378,11 @@ export default new Router({
                 {
                     path: '/partnerUserPage',
                     component: () => import(/* webpackChunkName: "table" */ '../components/page/partnerUserPage.vue'),
+                    meta: { title: '商户账号设置' }
+                },
+                {
+                    path: '/adminPartnerUserPage',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/adminPartnerUserPage.vue'),
                     meta: { title: '商户账号设置' }
                 },
                 {

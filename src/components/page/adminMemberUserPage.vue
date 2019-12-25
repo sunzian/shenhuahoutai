@@ -170,11 +170,11 @@
                             icon="el-icon-setting"
                             @click="addChange(scope.$index, scope.row)"
                         >查看详情</el-button>
-                        <el-button
+                        <!-- <el-button
                                 type="text"
                                 icon="el-icon-edit"
                                 @click="changeRole(scope.$index, scope.row)"
-                        >更改角色</el-button>
+                        >更改角色</el-button> -->
                     </template>
                 </el-table-column>
             </el-table>
