@@ -2768,7 +2768,7 @@
                         }
                         else if(this.oReduceTypeMerchandise==1){
                             if(this.oDiscountMoneyMerchandise>=0){
-                                if(!this.oDiscountMoneyMerchandise){
+                                if(!this.oDiscountMoneyMerchandise&&this.oDiscountMoneyMerchandise!=0){
                                     this.message = '固定金额不能为空，请检查！';
                                     this.open();
                                     loading.close();
