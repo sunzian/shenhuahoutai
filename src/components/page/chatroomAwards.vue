@@ -245,7 +245,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item :required="true" label="用户单月领取张数限制：" :label-width="formLabelWidth" v-if="oForm.limitStatus == 2">
+                <el-form-item :required="true" label="该奖品单个用户每月最多领取张数限制：" :label-width="formLabelWidth" v-if="oForm.limitStatus == 2">
                     <el-input
                         style="width: 150px"
                         onkeyup="this.value=this.value.replace(/\D/g,'')"
@@ -303,7 +303,7 @@
                         <el-radio :label="2">限制</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item :required="true" label="用户单月领取张数限制：" :label-width="formLabelWidth" v-if="oLimitStatus == 2">
+                <el-form-item :required="true" label="该奖品单个用户每月最多领取张数限制：" :label-width="formLabelWidth" v-if="oLimitStatus == 2">
                     <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 75px" v-model="oSingleLimitNumber" autocomplete="off"></el-input>
                 </el-form-item>
             </el-form>
@@ -461,7 +461,7 @@ export default {
                 type: ''
             },
             sellTableData: [],
-            formLabelWidth: '120px',
+            formLabelWidth: '150px',
             selectValue: {},
             selectScreenCode: {},
             selectGroup: {},
@@ -545,8 +545,8 @@ export default {
                 loading.close();
                 return;
             }
-            if(this.oForm.singleNumber<=0){
-                this.message = '每组发放数量必须大于0，请检查！';
+            if(this.oForm.singleNumber<0){
+                this.message = '每组发放数量必须大于等于0，请检查！';
                 this.open();
                 loading.close();
                 return;
@@ -588,8 +588,8 @@ export default {
                     loading.close();
                     return;
                 }
-                if(this.oForm.singleLimitNumber<=0){
-                    this.message = '用户单月领取张数限制必须大于0，请检查！';
+                if(this.oForm.singleLimitNumber<0){
+                    this.message = '用户单月领取张数限制必须大于等于0，请检查！';
                     this.open();
                     loading.close();
                     return;
@@ -845,8 +845,8 @@ export default {
                 loading.close();
                 return;
             }
-            if(this.oGroupNumber<=0){
-                this.message = '发放组数必须大于0，请检查！';
+            if(this.oGroupNumber<0){
+                this.message = '发放组数必须大于等于0，请检查！';
                 this.open();
                 loading.close();
                 return;
@@ -857,8 +857,8 @@ export default {
                 loading.close();
                 return;
             }
-            if(this.oSingleNumber<=0){
-                this.message = '每组发放数量必须大于0，请检查！';
+            if(this.oSingleNumber<0){
+                this.message = '每组发放数量必须大于等于0，请检查！';
                 this.open();
                 loading.close();
                 return;
@@ -882,8 +882,8 @@ export default {
                     loading.close();
                     return;
                 }
-                if(this.oSingleLimitNumber<=0){
-                    this.message = '用户单月领取张数限制必须大于0，请检查！';
+                if(this.oSingleLimitNumber<0){
+                    this.message = '用户单月领取张数限制必须大于等于0，请检查！';
                     this.open();
                     loading.close();
                     return;

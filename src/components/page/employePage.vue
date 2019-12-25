@@ -79,6 +79,12 @@
             <div class="handle-box">
                 <el-input v-model="query.name" placeholder="输入员工姓名" class="handle-input mr10"></el-input>
                 <el-input v-model="query.code" placeholder="输入员工编码" class="handle-input mr10"></el-input>
+                <el-input placeholder="推荐充值金额（起）" class="mr10" v-model="query.minMoney" autocomplete="off"></el-input>
+                <el-input placeholder="推荐充值金额（止）" class="mr10" v-model="query.maxMoney" autocomplete="off"></el-input>
+                <el-input placeholder="推荐充值人数（起）" class="mr10" v-model="query.minRecharge" autocomplete="off"></el-input>
+                <el-input placeholder="推荐充值人数（止）" class="mr10" v-model="query.maxRecharge" autocomplete="off"></el-input>
+                <el-input placeholder="推荐注册人数（起）" class="mr10" v-model="query.minRegister" autocomplete="off"></el-input>
+                <el-input placeholder="推荐注册人数（止）" class="mr10" v-model="query.maxRegister" autocomplete="off"></el-input>
                 <el-button style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="searchEmployee">搜索</el-button>
                 <el-button
                     type="primary"
@@ -693,11 +699,35 @@ export default {
             });
             let name = this.query.name;
             let code = this.query.code;
+            let minMoney = this.query.minMoney;
+            let maxMoney = this.query.maxMoney;
+            let minRecharge = this.query.minRecharge;
+            let maxRecharge = this.query.maxRecharge;
+            let minRegister = this.query.minRegister;
+            let maxRegister = this.query.maxRegister;
             if (!name) {
                 name = '';
             }
             if (!code) {
                 code = '';
+            }
+            if (!minMoney) {
+                minMoney = '';
+            }
+            if (!maxMoney) {
+                maxMoney = '';
+            }
+            if (!minRecharge) {
+                minRecharge = '';
+            }
+            if (!maxRecharge) {
+                maxRecharge = '';
+            }
+            if (!minRegister) {
+                minRegister = '';
+            }
+            if (!maxRegister) {
+                maxRegister = '';
             }
             if (row) {
                 this.cinemaCode = row.cinemaCode;
@@ -706,6 +736,12 @@ export default {
             jsonArr.push({ key: 'pageNo', value: this.query.aPageNo });
             jsonArr.push({ key: 'name', value: this.query.name });
             jsonArr.push({ key: 'code', value: this.query.code });
+            jsonArr.push({ key: 'minMoney', value: this.query.minMoney });
+            jsonArr.push({ key: 'maxMoney', value: this.query.maxMoney });
+            jsonArr.push({ key: 'minRecharge', value: this.query.minRecharge });
+            jsonArr.push({ key: 'maxRecharge', value: this.query.maxRecharge });
+            jsonArr.push({ key: 'minRegister', value: this.query.minRegister });
+            jsonArr.push({ key: 'maxRegister', value: this.query.maxRegister });
             jsonArr.push({ key: 'pageSize', value: this.query.aPageSize });
             jsonArr.push({ key: 'cinemaCode', value: this.cinemaCode });
             let sign = md5(preSign(jsonArr));
