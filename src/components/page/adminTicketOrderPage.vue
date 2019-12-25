@@ -297,13 +297,13 @@
                 <!--</el-table-column>-->
                 <el-table-column label="操作" align="center" fixed="right">
                     <template slot-scope="scope">
-                        <el-button
+                        <!-- <el-button
                             type="text"
                             icon="el-icon-delete"
                             class="red"
                             v-if="scope.row.payStatus=='1'"
                             @click="refundTicket(scope.$index, scope.row)"
-                        >退款</el-button>
+                        >退款</el-button> -->
                         <el-button
                             type="text"
                             icon="el-icon-setting"

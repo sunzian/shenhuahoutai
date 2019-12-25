@@ -52,11 +52,11 @@
                 </el-table-column>
                 <el-table-column label="操作" width="120" align="center" fixed="right">
                     <template slot-scope="scope">
-                        <el-button
+                        <!-- <el-button
                                 type="text"
                                 icon="el-icon-setting"
                                 @click="UserPassword(scope.$index, scope.row)"
-                        >获取卡等级</el-button>
+                        >获取卡等级</el-button> -->
                         <el-button type="text" icon="el-icon-view" @click="show(scope.row)">查看</el-button>
                     </template>
                 </el-table-column>
@@ -134,7 +134,7 @@
                 </el-table-column>
                 <el-table-column label="操作" width="180" align="center" fixed="right">
                     <template slot-scope="scope">
-                        <el-button
+                        <!-- <el-button
                                 type="success"
                                 v-if="scope.row.status == 2"
                                 @click="changeStatus(scope.$index, scope.row)"
@@ -143,7 +143,7 @@
                                 type="success"
                                 v-if="scope.row.status == 1"
                                 @click="changeStatus(scope.$index, scope.row)"
-                        >停用</el-button>
+                        >停用</el-button> -->
                         <el-button
                                 type="text"
                                 icon="el-icon-edit"
@@ -178,7 +178,7 @@
                             :disabled="true"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="会员卡图片" :label-width="formLabelWidth">
+                <!-- <el-form-item label="会员卡图片" :label-width="formLabelWidth">
                     <el-upload
                             :before-upload="beforeUpload"
                             :data="type"
@@ -196,7 +196,7 @@
                         </div>
                         <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过200kb 建议670*420</div>
                     </el-upload>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item label="工本费" :label-width="formLabelWidth">
                     <el-input
                             style="width: 250px"
@@ -223,10 +223,10 @@
                     <span style="font-size:12px;">提供一张有效的并且卡类型相同的会员卡号（只用于查询会员价）</span>
                 </el-form-item>
             </el-form>
-            <span slot="footer" class="dialog-footer">
+            <!-- <span slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false">取 消</el-button>
                 <el-button type="primary" @click="exChanger">确 定</el-button>
-            </span>
+            </span> -->
         </el-dialog>
     </div>
 </template>
