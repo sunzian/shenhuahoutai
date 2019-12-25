@@ -1889,6 +1889,18 @@ export default {
                 // }
             }
             if (this.oReduceType == 4) {
+                if (this.oAchieveMoney <this.oDiscountMoney ) {
+                    this.message = '请输入合理的满减金额！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if (this.oAchieveMoney == 0 || this.oDiscountMoney == 0) {
+                    this.message = '请输入合理的满减金额！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
                 if (this.oDiscountMoney > 0 || this.oAchieveMoney > 0) {
                     if (!this.oDiscountMoney || !this.oAchieveMoney) {
                         this.message = '减免金额不能为空，请检查！';
@@ -1899,12 +1911,6 @@ export default {
                 }
                 if (this.oDiscountMoney < 0 || this.oAchieveMoney < 0) {
                     this.message = '减免金额不能小于0！';
-                    this.open();
-                    loading.close();
-                    return;
-                }
-                if (this.oAchieveMoney == 0 && this.oDiscountMoney == 0) {
-                    this.message = '请输入合理的满减金额！';
                     this.open();
                     loading.close();
                     return;

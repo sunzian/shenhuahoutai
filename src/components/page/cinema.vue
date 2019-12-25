@@ -727,11 +727,11 @@
                 </el-form-item>
                 <el-form-item label="影院公告" :label-width="formLabelWidth">
                     <el-input
-                        style="width: 250px"
+                        style="width: 350px"
                         type="textarea"
                         v-model="oNotice"
                         autocomplete="off"
-                        :rows="6"
+                        :rows="7"
                         maxlength="300"
                         show-word-limit
                     ></el-input>
@@ -781,20 +781,20 @@
             :visible.sync="addServeInfo"
         >
             <el-form>
-                <el-form-item label="特色服务名称" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="特色服务名称" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px;"
-                        v-model="addServiceName"
+                        v-model.trim="addServiceName"
                         autocomplete="off"
                         maxlength="8"
                         show-word-limit
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="特色服务内容" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="特色服务内容" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px;"
                         type="textarea"
-                        v-model="addServiceDetail"
+                        v-model.trim="addServiceDetail"
                         autocomplete="off"
                         maxlength="100"
                         show-word-limit
@@ -814,20 +814,20 @@
             :visible.sync="editServeInfo"
         >
             <el-form>
-                <el-form-item label="特色服务名称" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="特色服务名称" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px;"
-                        v-model="editServiceName"
+                        v-model.trim="editServiceName"
                         autocomplete="off"
                         maxlength="8"
                         show-word-limit
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="特色服务内容" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="特色服务内容" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px;"
                         type="textarea"
-                        v-model="editServiceDetail"
+                        v-model.trim="editServiceDetail"
                         autocomplete="off"
                         maxlength="100"
                         show-word-limit
@@ -1222,6 +1222,24 @@ export default {
                 loading.close();
                 return;
             }
+            if (this.oRefundFee<0) {
+                this.message = '退票手续费必须大于0，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if (this.oThirdPartyPayCommissionFee<0) {
+                this.message = '第三方支付代售费必须大于0，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if (this.oMemberCardPayCommissionFee<0) {
+                this.message = '会员卡支付代售费必须大于0，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
             if (!this.oMembershipServiceAgreement) {
                 this.message = '影院会员服务协议不能为空，请检查！';
                 this.open();
@@ -1539,7 +1557,21 @@ export default {
             this.editServeInfo = true;
         },
         deleteServe(val) {
-            this.serveData.splice(val.$index, 1);
+            this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            })
+                .then(() => {
+                    this.serveData.splice(val.$index, 1);
+                    this.$message.error(`删除了`);
+                })  .catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消删除'
+                });
+            });
+
         },
         // 多选操作
         handleSelectionChange(val) {
