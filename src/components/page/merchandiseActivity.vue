@@ -149,11 +149,11 @@
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" label="固定金额：" :label-width="formLabelWidth" v-if="oForm.reduceType == 1">
-                    <el-input placeholder="所选卖品以此价格结算" style="width: 180px" v-model="oForm.discountMoney" autocomplete="off"></el-input>
+                    <el-input placeholder="符合条件的卖品按固定金额*数量结算" style="width: 250px" v-model="oForm.discountMoney" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="减免金额：" :label-width="formLabelWidth" v-if="oForm.reduceType == 2">
                     满
-                    <el-input style="width: 150px" v-model="oForm.achieveMoney" autocomplete="off"></el-input>减
+                    <el-input placeholder="订单总额满多少减多少" style="width: 250px" v-model="oForm.achieveMoney" autocomplete="off"></el-input>减
                     <el-input style="width: 150px" v-model="oForm.discountMoney" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="选择商品：" :label-width="formLabelWidth">
@@ -355,11 +355,11 @@
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" label="固定金额：" :label-width="formLabelWidth" v-if="oReduceType == 1">
-                    <el-input placeholder="所选卖品以此价格结算" style="width: 180px" v-model="oDiscountMoney" autocomplete="off"></el-input>
+                    <el-input placeholder="符合条件的卖品按固定金额*数量结算" style="width: 250px" v-model="oDiscountMoney" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="减免金额：" :label-width="formLabelWidth" v-if="oReduceType == 2">
                     满
-                    <el-input style="width: 150px" v-model="oAchieveMoney" autocomplete="off"></el-input>减
+                    <el-input placeholder="订单总额满多少减多少" style="width: 250px"v-model="oAchieveMoney" autocomplete="off"></el-input>减
                     <el-input style="width: 150px" v-model="oDiscountMoney" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="选择商品：" :label-width="formLabelWidth">

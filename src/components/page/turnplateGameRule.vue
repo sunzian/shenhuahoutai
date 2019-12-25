@@ -515,8 +515,8 @@
                 <el-form-item :required="true" label="奖品概率" :label-width="formLabelWidth">
                     <el-input placeholder="大于0小于100的数字" style="width: 250px" v-model="form.percent" autocomplete="off"></el-input>%
                 </el-form-item>
-                <el-form-item :required="true" label="过期天数" :label-width="formLabelWidth">
-                    <el-input placeholder="中奖后奖品过期天数" style="width: 250px" v-model="form.expireDay" autocomplete="off"></el-input>
+                <el-form-item :required="true" label="有效期天数" :label-width="formLabelWidth">
+                    <el-input placeholder="中奖后奖品有效期天数" style="width: 250px" v-model="form.expireDay" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="奖品类型" :label-width="formLabelWidth">
                     <el-select v-model="form.prizeType" placeholder="请选择类型">
@@ -618,8 +618,8 @@
                 <el-form-item :required="true" label="奖品概率" :label-width="formLabelWidth">
                     <el-input placeholder="大于0小于100的数字" style="width: 250px" v-model="pForm.percent" autocomplete="off"></el-input>%
                 </el-form-item>
-                <el-form-item :required="true" label="过期天数" :label-width="formLabelWidth">
-                    <el-input placeholder="中奖后奖品过期天数" style="width: 250px" v-model="pForm.expireDay" autocomplete="off"></el-input>
+                <el-form-item :required="true" label="有效期天数" :label-width="formLabelWidth">
+                    <el-input placeholder="中奖后奖品有效期天数" style="width: 250px" v-model="pForm.expireDay" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="奖品类型" :label-width="formLabelWidth">
                     <el-select v-model="pForm.prizeType" placeholder="请选择类型">
@@ -1213,12 +1213,12 @@ export default {
                 return;
             }
             if (!this.form.expireDay) {
-                this.message = '过期天数不能为空，请检查！';
+                this.message = '有效期天数不能为空，请检查！';
                 this.open();
                 return;
             }
             if (this.form.expireDay<0) {
-                this.message = '过期天数不能小于0，请检查！';
+                this.message = '有效期天数不能小于0，请检查！';
                 this.open();
                 return;
             }
@@ -1291,12 +1291,12 @@ export default {
                 return;
             }
             if (!this.pForm.expireDay) {
-                this.message = '过期天数不能为空，请检查！';
+                this.message = '有效期天数不能为空，请检查！';
                 this.open();
                 return;
             }
             if (this.pForm.expireDay<0) {
-                this.message = '过期天数不能小于0，请检查！';
+                this.message = '有效期天数不能小于0，请检查！';
                 this.open();
                 return;
             }

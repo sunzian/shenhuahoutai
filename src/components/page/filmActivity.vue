@@ -242,13 +242,13 @@
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" label="固定金额：" :label-width="formLabelWidth" v-if="oForm.reduceType == 1">
-                    <el-input placeholder="影票以此价格结算" style="width: 150px" v-model="oForm.discountMoney" autocomplete="off"></el-input>
+                    <el-input placeholder="每张票固定金额*张数" style="width: 250px" v-model="oForm.discountMoney" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="立减金额：" :label-width="formLabelWidth" v-if="oForm.reduceType == 2">
-                    减<el-input placeholder="每张票分别减掉多少" style="width: 150px" v-model="oForm.discountMoney" autocomplete="off"></el-input>
+                    减<el-input placeholder="(每张票价-立减金额)*张数" style="width: 250px" v-model="oForm.discountMoney" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="增减金额：" :label-width="formLabelWidth" v-if="oForm.reduceType == 4">
-                    <el-input style="width: 150px" v-model="oForm.discountMoney" autocomplete="off"></el-input>&nbsp;&nbsp;
+                    <el-input placeholder="（最低票价+-金额）*张数" style="width: 250px" v-model="oForm.discountMoney" autocomplete="off"></el-input>&nbsp;&nbsp;
                     <span style="color: #ccc;">在最低票价基础上加减多少金额 如果是减金额则填负数</span>
                 </el-form-item>
                 <el-form-item :required="true" label="节假日场次：" :label-width="formLabelWidth">
@@ -481,13 +481,13 @@
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" label="固定金额：" :label-width="formLabelWidth" v-if="oReduceType == 1">
-                    <el-input placeholder="影票以此价格结算" style="width: 150px" v-model="oDiscountMoney" autocomplete="off"></el-input>
+                    <el-input placeholder="每张票固定金额*张数" style="width: 250px" v-model="oDiscountMoney" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="立减金额：" :label-width="formLabelWidth" v-if="oReduceType == 2">
-                    减<el-input placeholder="每张票分别减掉多少" style="width: 150px" v-model="oDiscountMoney" autocomplete="off"></el-input>
+                    减<el-input placeholder="(每张票价-立减金额)*张数" style="width: 250px" v-model="oDiscountMoney" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="增减金额：" :label-width="formLabelWidth" v-if="oReduceType == 4">
-                    <el-input style="width: 150px" v-model="oDiscountMoney" autocomplete="off"></el-input>&nbsp;&nbsp;
+                    <el-input placeholder="（最低票价+-金额）*张数" style="width: 250px" v-model="oDiscountMoney" autocomplete="off"></el-input>&nbsp;&nbsp;
                     <span style="color: #ccc;">在最低票价基础上加减多少金额 如果是减金额则填负数</span>
                 </el-form-item>
                 <el-form-item :required="true" label="节假日场次：" :label-width="formLabelWidth">

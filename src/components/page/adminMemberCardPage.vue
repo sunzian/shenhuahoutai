@@ -57,6 +57,12 @@
                     style="margin-top: 10px;width: 90px;"
                     @click="Search"
                 >搜索</el-button>
+                <el-button
+                        type="primary"
+                        @click="derive"
+                        icon="el-icon-circle-plus-outline"
+                        style="float: right;margin-top: 10px"
+                >导出</el-button>
             </div>
             <div class="handle-box">
                 余额：
@@ -113,7 +119,7 @@
                         <el-tag v-else>未绑定</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" align="center" fixed="right" width="120">
+                <!-- <el-table-column label="操作" align="center" fixed="right" width="120">
                     <template slot-scope="scope">
                         <el-button
                             type="text"
@@ -122,7 +128,7 @@
                             v-if="scope.row.bindStatus=='1'"
                         >解绑</el-button>
                     </template>
-                </el-table-column>
+                </el-table-column> -->
             </el-table>
             <div class="pagination">
                 <el-pagination
@@ -434,6 +440,70 @@ export default {
         this.getMenu();
     },
     methods: {
+        derive(){
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
+            setTimeout(() => {
+                let businessCode = this.query.businessCode;
+                let cinemaCode = this.query.cinemaCode;
+                let orderNo = this.query.orderNo;
+                let mobile = this.query.mobile;
+                let bindUserMobile = this.query.bindUserMobile;
+                let employeeCode = this.query.employeeCode;
+                let payWay = this.query.payWay;
+                if (!cinemaCode) {
+                    cinemaCode = '';
+                }
+                if (!businessCode) {
+                    businessCode = '';
+                }
+                if (!orderNo) {
+                    orderNo = '';
+                }
+                if (!mobile) {
+                    mobile = '';
+                }
+                if (!bindUserMobile) {
+                    bindUserMobile = '';
+                }
+                if (!employeeCode) {
+                    employeeCode = '';
+                }
+                if (!payWay) {
+                    payWay = '';
+                }
+                let jsonArr = [];
+                jsonArr.push({ key: 'tableName', value: "third_party_member_card" });
+                jsonArr.push({ key: 'exportKeysJson', value: "['id','openCardCinemaCode','openCardCinemaName','bindCardCinemaCode','bindCardCinemaName','employeeCode','cardNo','levelCode','levelName','userMobile','userName','cnSex','balance','creditsAmount','cnBindStatus','bindUserMobile','cnOffOrOnLine']"});
+                jsonArr.push({ key: 'exportTitlesJson', value:"['ID','开卡影院编码','开卡影院名称','绑卡影院编码','绑卡影院名称','员工推荐编码','卡号','卡等级编号','卡等级名称','卡用户手机号','用户名','性别','余额','积分','绑定状态','绑卡手机号','是否线上卡']" });
+                jsonArr.push({ key: 'openCardCinemaCode', value: cinemaCode });
+                jsonArr.push({ key: 'businessCode', value: businessCode });
+                jsonArr.push({ key: 'bindStatus', value: payWay });
+                jsonArr.push({ key: 'cardNo', value: orderNo });
+                jsonArr.push({ key: 'userMobile', value: mobile });
+                jsonArr.push({ key: 'bindUserMobile', value: bindUserMobile });
+                var params = ParamsAppend(jsonArr);
+                let businessName = '';
+                for (let i = 0;i < this.businessInfo.length; i ++) {
+                    if (businessCode == this.businessInfo[i].businessCode) {
+                        businessName = this.businessInfo[i].businessName
+                    }
+                }
+                let myObj = {
+                    method: 'get',
+                    url: 'exportExcel/thirdPartyMemberCard',
+                    fileName: businessName + '_会员卡用户列表统计',
+                    params: params
+                };
+                https.exportMethod(myObj);
+                loading.close();
+            }, 1500);
+        },
         addChange(index, row) {
             this.$confirm('此操作将解绑会员卡, 是否继续?', '提示', {
                 confirmButtonText: '确定',

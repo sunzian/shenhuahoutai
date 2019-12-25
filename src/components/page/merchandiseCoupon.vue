@@ -183,11 +183,11 @@
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oForm.reduceType == 1" label="固定金额：" :label-width="formLabelWidth">
-                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" placeholder="所选卖品以此价格结算" style="width: 150px" v-model="oForm.discountMoney" autocomplete="off"></el-input>
+                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" placeholder="固定金额购买一件指定的商品" style="width: 250px" v-model="oForm.discountMoney" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oForm.reduceType==2" label="减免金额：" :label-width="formLabelWidth">
                     满
-                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 150px" v-model="oForm.achieveMoney" autocomplete="off"></el-input>减
+                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" placeholder="订单总额满多少减多少" style="width: 250px" v-model="oForm.achieveMoney" autocomplete="off"></el-input>减
                     <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 150px" v-model="oForm.discountMoney" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="开启状态：" :label-width="formLabelWidth">
@@ -306,11 +306,11 @@
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oReduceType == 1" label="固定金额：" :label-width="formLabelWidth">
-                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" placeholder="所选卖品以此价格结算" style="width: 150px" v-model="oDiscountMoney" autocomplete="off"></el-input>
+                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" placeholder="固定金额购买一件指定的商品" style="width: 250px" v-model="oDiscountMoney" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oReduceType==2" label="减免金额：" :label-width="formLabelWidth">
                     满
-                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 150px" v-model="oAchieveMoney" autocomplete="off"></el-input>减
+                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" placeholder="订单总额满多少减多少" style="width: 250px" v-model="oAchieveMoney" autocomplete="off"></el-input>减
                     <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 150px" v-model="oDiscountMoney" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="开启状态：" :label-width="formLabelWidth">
