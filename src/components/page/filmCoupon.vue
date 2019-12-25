@@ -736,20 +736,20 @@
         <!--导出弹出框-->
         <el-dialog title="导出" :close-on-click-modal="false" :visible.sync="exportVisible">
             <el-form :model="exportForm">
-                <el-form-item :required="true" label="有效期类型" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="有效期类型：" :label-width="formLabelWidth">
                     <el-radio-group v-model="exportForm.validityType">
                         <el-radio :label="1">固定天数后过期</el-radio>
                         <el-radio :label="2">固定有效时间段</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item
-                    label="用户绑定后几天有效"
+                    label="用户绑定后有效期天数："
                     :label-width="formLabelWidth"
                     v-if="exportForm.validityType == 1"
                     :required="true"
                 >
                     <el-input
-                        type="number"
+                        onkeyup="this.value=this.value.replace(/[^0-9]+/,'')"
                         style="width: 150px"
                         v-model="exportForm.validityDay"
                         autocomplete="off"
@@ -782,7 +782,7 @@
                     :required="true"
                 >
                     <el-input
-                        type="number"
+                        onkeyup="this.value=this.value.replace(/[^0-9]+/,'')"
                         style="width: 150px"
                         v-model="exportForm.exportNum"
                         autocomplete="off"
@@ -1002,14 +1002,14 @@ export default {
         },
         exportCoupon() {
             if (this.exportForm.validityType == 1) {
-                if (this.exportForm.validityDay.trim() == '') {
-                    this.message = '绑定后生效天数不能为空！';
+                if (this.exportForm.validityDay.trim() == '' || this.exportForm.validityDay.trim() == 0) {
+                    this.message = '绑定后有效期天数必须大于0！';
                     this.open();
                     return;
                 }
             }
-            if (this.exportForm.exportNum == '' || !this.exportForm.exportNum) {
-                this.message = '导出数量不能为空！';
+            if (this.exportForm.exportNum.trim() == '' || !this.exportForm.exportNum || this.exportForm.exportNum == 0) {
+                this.message = '导出数量必须大于0！';
                 this.open();
                 return;
             }
