@@ -133,14 +133,14 @@
                     <el-input placeholder="限20个字" maxlength="20" style="width: 250px" v-model="oForm.name" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="选择影院：" :label-width="formLabelWidth">
-                    <el-radio-group v-model="oForm.code" @change="selectCinema">
-                        <el-radio
-                                v-for="item in cinemaInfo"
-                                :label="item.cinemaCode"
-                                :key="item.cinemaCode"
-                                :value="item.cinemaName"
-                        >{{item.cinemaName}}</el-radio>
-                    </el-radio-group>
+                    <el-checkbox-group v-model="oForm.code" @change="selectCinema">
+                        <el-checkbox
+                            v-for="item in cinemaInfo"
+                            :key="item.cinemaCode"
+                            :label="item.cinemaCode"
+                            :value="item.cinemaCode"
+                        >{{item.cinemaName}}</el-checkbox>
+                    </el-checkbox-group>
                 </el-form-item>
                 <el-form-item :required="true" label="优惠方式：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.reduceType" @change="clearDiscountMoney()">
@@ -311,7 +311,7 @@
                     <el-input style="width: 150px" v-model="oForm.oneNum" autocomplete="off"></el-input>
                     <div>限购时间单位为'日'，单位内限购张数输入'2'，即每日限制使用该活动购买2件商品</div>
                 </el-form-item>
-                <el-form-item :required="true" label="使用须知：" :label-width="formLabelWidth">
+                <el-form-item label="使用须知：" :label-width="formLabelWidth">
                     <el-input
                             type="textarea"
                             show-word-limit
@@ -339,14 +339,14 @@
                     <el-input placeholder="限20个字" maxlength="20" style="width: 250px" v-model="oName" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="选择影院：" :label-width="formLabelWidth">
-                    <el-radio-group v-model="oCinemaCode" @change="selectCinema">
-                        <el-radio
-                                v-for="item in cinemaInfo"
-                                :label="item.cinemaCode"
-                                :key="item.cinemaCode"
-                                :value="item.cinemaName"
-                        >{{item.cinemaName}}</el-radio>
-                    </el-radio-group>
+                    <el-checkbox-group v-model="oCinemaCode" @change="selectCinema2">
+                        <el-checkbox
+                            v-for="item in cinemaInfo"
+                            :key="item.cinemaCode"
+                            :label="item.cinemaCode"
+                            :value="item.cinemaCode"
+                        >{{item.cinemaName}}</el-checkbox>
+                    </el-checkbox-group>
                 </el-form-item>
                 <el-form-item :required="true" label="优惠方式：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oReduceType" @change="clearDiscountMoney()">
@@ -518,7 +518,7 @@
                     <el-input style="width: 150px" v-model="oSingleNumber" autocomplete="off"></el-input>
                     <div>限购时间单位为'日'，单位内限购张数输入'2'，即每日限制使用该活动购买2件商品</div>
                 </el-form-item>
-                <el-form-item :required="true" label="使用须知：" :label-width="formLabelWidth">
+                <el-form-item label="使用须知：" :label-width="formLabelWidth">
                     <el-input
                             type="textarea"
                             show-word-limit
@@ -637,7 +637,7 @@
                         value:'星期日'
                     },
                 ],
-                oCinemaCode:'',
+                oCinemaCode:[],
                 oStartDate:'',
                 oLimitSingleUnit:'',
                 oEndDate:'',
@@ -756,7 +756,6 @@
                     oneNum: '',
                 },
                 formLabelWidth: '120px',
-                selectValue: {},
                 selectScreenCode: {},
                 selectFormatCode: {},
                 selectFilm: {},
@@ -837,7 +836,6 @@
                     loading.close();
                     if (data.data.code == 'success') {
                         this.selectedSell=[];
-                        this.oForm.code = this.cinemaInfo[0].cinemaCode;
                         // let formats = JSON.parse(Decrypt(data.data.data)).formatList;
                         // this.formatList = [];
                         // for (let i = 0; i < formats.length; i++) {
@@ -879,7 +877,7 @@
                     loading.close();
                     return;
                 }
-                if(!this.oForm.code){
+                if(this.oForm.code.length == 0){
                     this.message = '所选影院不能为空，请检查！';
                     this.open();
                     loading.close();
@@ -1019,15 +1017,12 @@
                         }
                     }
                 }
-                if(!this.oForm.couponDesc){
-                    this.message = '使用须知不能为空，请检查！';
-                    this.open();
-                    loading.close();
-                    return;
-                }
-                if (this.oForm.code == true) {
-                    this.oForm.code = this.cinemaInfo[0].code;
-                }
+                // if(!this.oForm.couponDesc){
+                //     this.message = '使用须知不能为空，请检查！';
+                //     this.open();
+                //     loading.close();
+                //     return;
+                // }
                 let filmeCodes = [];
                 for (let i = 0; i < this.filmInfo.length; i++) {
                     filmeCodes.push(this.filmInfo[i].filmCode);
@@ -1037,7 +1032,7 @@
                 }
                 var jsonArr = [];
                 jsonArr.push({ key: 'name', value: this.oForm.name });
-                jsonArr.push({ key: 'cinemaCode', value: this.selectValue });
+                jsonArr.push({ key: 'cinemaCode', value: this.oForm.code.join(',') });
                 jsonArr.push({ key: 'selectMerchandiseType', value: this.oForm.selectFilmType });
                 if(this.oForm.selectFilmType!=0){
                     jsonArr.push({ key: 'merchandiseCode', value: this.merSelect.join(',') });
@@ -1071,6 +1066,7 @@
                 }
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
+                console.log(jsonArr)
                 let params = ParamsAppend(jsonArr);
                 if (this.dialogFormVisible == true) {
                     https.fetchPost('/merchandiseDiscountActivity/addActivity', params).then(data => {//新增
@@ -1081,7 +1077,7 @@
                             this.selectedSell=[];
                             this.merSelect=[];
                             this.oForm.name = '';
-                            this.selectValue = [];
+                            this.oForm.code = [];
                             this.selectScreenCode = '';
                             this.value1 = '';
                             this.oForm.selectFilmType = '0';
@@ -1106,7 +1102,6 @@
                             this.oForm.oneCanNum = '0';
                             this.oForm.oneNum = '';
                             this.oForm.formatCode = '';
-                            this.oForm.code = '';
                             this.oForm.limitSingleUnit = '年';
                             this.getMenu();
                         } else if (data.data.code == 'nologin') {
@@ -1211,7 +1206,7 @@
                         this.editVisible = true;
                         console.log(JSON.parse(Decrypt(data.data.data)));
                         this.oName = JSON.parse(Decrypt(data.data.data)).name;
-                        this.oCinemaCode = JSON.parse(Decrypt(data.data.data)).cinemaCode;
+                        this.oCinemaCode = JSON.parse(Decrypt(data.data.data)).cinemaCode.split(",");
                         if (JSON.parse(Decrypt(data.data.data)).reduceType == 1) {
                             this.oReduceType = '1';
                         }
@@ -1476,15 +1471,15 @@
                         }
                     }
                 }
-                if(!this.oActivityDesc){
-                    this.message = '使用须知不能为空，请检查！';
-                    this.open();
-                    loading.close();
-                    return;
-                }
+                // if(!this.oActivityDesc){
+                //     this.message = '使用须知不能为空，请检查！';
+                //     this.open();
+                //     loading.close();
+                //     return;
+                // }
                 var jsonArr = [];
                 jsonArr.push({ key: 'name', value: this.oName });
-                jsonArr.push({ key: 'cinemaCode', value: this.oCinemaCode });
+                jsonArr.push({ key: 'cinemaCode', value: this.oCinemaCode.join(',') });
                 jsonArr.push({ key: 'selectMerchandiseType', value: this.oSelectMerchandiseType });
                 if(this.oSelectFilmType!=0){
                     jsonArr.push({ key: 'merchandiseCode', value: merchandiseCodeList.join(',') });
@@ -1635,6 +1630,7 @@
                     loading.close();
                     if (data.data.code == 'success') {
                         var oData = JSON.parse(Decrypt(data.data.data));
+                        console.log(oData)
                         this.cinemaInfo = [];
                         for (let i = 0; i < oData.cinemaList.length; i++) {
                             let cinemaList = {};
@@ -1642,8 +1638,6 @@
                             cinemaList.cinemaName = oData.cinemaList[i].cinemaName;
                             this.cinemaInfo.push(cinemaList);
                         }
-                        this.oForm.cinemaCode = this.cinemaInfo[0].cinemaCode;
-                        this.selectValue = this.cinemaInfo[0].cinemaCode;
                         this.tableData = oData.pageResult.data;
                         this.query.pageSize = oData.pageResult.pageSize;
                         this.query.pageNo = oData.pageResult.pageNo;
@@ -1670,54 +1664,16 @@
                 });
             },
             selectCinema(val) {
-                this.selectedSell=[];
-                // let selectValue = val.join(',');
-                this.selectValue = val;
-                this.getAllScreen(val);
+                this.oForm.code = val;
             },
-            selectScreens(val) {
-                let selectValue = val.join(',');
-                this.selectScreenCode = selectValue;
+            selectCinema2(val) {
+                this.oCinemaCode = val;
             },
             selectFormat(val) {
                 this.selectFormatCode = val.join(',');
             },
             selectDay(val) {
                 this.checkedDays = val.join(',');
-            },
-            // 获取所选影院影厅
-            getAllScreen(value) {
-                if (!value) {
-                    this.screenInfo = [];
-                    return;
-                }
-                let jsonArr = [];
-                jsonArr.push({ key: 'cinemaCode', value: value });
-                let sign = md5(preSign(jsonArr));
-                jsonArr.push({ key: 'sign', value: sign });
-                var params = ParamsAppend(jsonArr);
-                https.fetchPost('filmCoupon/getScreenInfoByCinemaCode', params).then(data => {
-                    if (data.data.code == 'success') {
-                        let screens = JSON.parse(Decrypt(data.data.data));
-                        this.screenInfo = [];
-                        for (let i = 0; i < screens.length; i++) {
-                            let screenList = {};
-                            screenList.screenCode = screens[i].screenCode;
-                            screenList.screenName = screens[i].screenName;
-                            this.screenInfo.push(screenList);
-                        }
-                    } else if (data.data.code == 'nologin') {
-                        this.message = data.data.message;
-                        this.open();
-                        this.$router.push('/login');
-                    } else {
-                        this.message = data.data.message;
-                        this.open();
-                    }
-                })
-                    .catch(err => {
-                        console.log(err);
-                    });
             },
             // 多选操作
             handleSelectionChange(val) {
@@ -1787,7 +1743,7 @@
                     jsonArr.push({key:"pageNo",value:this.query.aPageNo});
                     jsonArr.push({key:"pageSize",value:this.query.aPageSize});
                     jsonArr.push({key:"merchandiseStatus",value:1});
-                    jsonArr.push({key:"cinemaCode",value:this.oForm.code});
+                    jsonArr.push({key:"cinemaCode",value:this.oForm.code.join(',')});
                     let sign =md5(preSign(jsonArr));
                     jsonArr.push({key:"sign",value:sign});
                     var params = ParamsAppend(jsonArr);
@@ -1837,7 +1793,7 @@
                     jsonArr.push({key:"pageNo",value:this.query.aPageNo});
                     jsonArr.push({key:"pageSize",value:this.query.aPageSize});
                     jsonArr.push({key:"merchandiseStatus",value:1});
-                    jsonArr.push({key:"cinemaCode",value:this.oCinemaCode});
+                    jsonArr.push({key:"cinemaCode",value:this.oCinemaCode.join(',')});
                     let sign =md5(preSign(jsonArr));
                     jsonArr.push({key:"sign",value:sign});
                     var params = ParamsAppend(jsonArr);
