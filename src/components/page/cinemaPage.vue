@@ -87,6 +87,19 @@
                 <el-table-column prop="name" label="影院名称" fixed width="180">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
+                <el-table-column prop="sort" label="小程序二维码" width="140">
+                    <template slot-scope="scope">
+                        <el-popover placement="right" title trigger="hover">
+                            <img style="width: 400px" :src="scope.row.miniAppQRCode" />
+                            <img
+                                    slot="reference"
+                                    :src="scope.row.miniAppQRCode"
+                                    :alt="scope.row.miniAppQRCode"
+                                    style="max-height: 50px;max-width: 130px"
+                            />
+                        </el-popover>
+                    </template>
+                </el-table-column>
                 <!-- <el-table-column prop="time" label="开场前的购票时间限制">
                     <template slot-scope="scope">{{scope.row.buyMinutesLimit}}</template>
                 </el-table-column>

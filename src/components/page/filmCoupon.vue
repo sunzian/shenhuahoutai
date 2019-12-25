@@ -298,8 +298,8 @@
                     :required="true"
                 >
                     <el-input
-                        placeholder="影票以此价格结算"
-                        style="width: 150px"
+                        placeholder="固定金额兑换一张票"
+                        style="width: 250px"
                         v-model="oForm.discountMoney"
                         autocomplete="off"
                     ></el-input>
@@ -312,8 +312,8 @@
                 >
                     立减&nbsp;
                     <el-input
-                        placeholder="每张票分别减掉多少"
-                        style="width: 150px"
+                        placeholder="订单总金额立减多少"
+                        style="width: 250px"
                         v-model="oForm.discountMoney"
                         autocomplete="off"
                     ></el-input>&nbsp;元
@@ -326,13 +326,12 @@
                 >
                     满&nbsp;
                     <el-input
-                        placeholder="每笔订单总票数"
-                        style="width: 150px"
+                        placeholder="订单影票满张数减多少"
+                        style="width: 250px"
                         v-model="oForm.achieveMoney"
                         autocomplete="off"
                     ></el-input>&nbsp;张&nbsp;&nbsp;减&nbsp;
                     <el-input
-                        placeholder="每笔订单优惠金额"
                         style="width: 150px"
                         v-model="oForm.discountMoney"
                         autocomplete="off"
@@ -346,13 +345,12 @@
                 >
                     满&nbsp;
                     <el-input
-                        placeholder="影票应付总金额"
-                        style="width: 150px"
+                        placeholder="订单总额满多少减多少"
+                        style="width: 250px"
                         v-model="oForm.achieveMoney"
                         autocomplete="off"
                     ></el-input>&nbsp;元&nbsp;&nbsp;减&nbsp;
                     <el-input
-                        placeholder="应付金额中减（最多减到0）"
                         style="width: 200px"
                         v-model="oForm.discountMoney"
                         autocomplete="off"
@@ -556,8 +554,8 @@
                     :required="true"
                 >
                     <el-input
-                        placeholder="影票以此价格结算"
-                        style="width: 150px"
+                        placeholder="固定金额兑换一张票"
+                        style="width: 250px"
                         v-model="oDiscountMoney"
                         autocomplete="off"
                     ></el-input>
@@ -570,8 +568,8 @@
                 >
                     立减&nbsp;
                     <el-input
-                        placeholder="每张票分别减掉多少"
-                        style="width: 150px"
+                        placeholder="订单总金额立减多少"
+                        style="width: 250px"
                         v-model="oDiscountMoney"
                         autocomplete="off"
                     ></el-input>&nbsp;元
@@ -584,13 +582,12 @@
                 >
                     满&nbsp;
                     <el-input
-                        placeholder="每笔订单总票数"
-                        style="width: 150px"
+                        placeholder="订单影票满张数减多少"
+                        style="width: 250px"
                         v-model="oAchieveMoney"
                         autocomplete="off"
                     ></el-input>&nbsp;张&nbsp;&nbsp;减&nbsp;
                     <el-input
-                        placeholder="每笔订单优惠金额"
                         style="width: 150px"
                         v-model="oDiscountMoney"
                         autocomplete="off"
@@ -604,13 +601,12 @@
                 >
                     满&nbsp;
                     <el-input
-                        placeholder="影票应付总金额"
-                        style="width: 150px"
+                        placeholder="订单总额满多少减多少"
+                        style="width: 250px"
                         v-model="oAchieveMoney"
                         autocomplete="off"
                     ></el-input>&nbsp;元&nbsp;&nbsp;减&nbsp;
                     <el-input
-                        placeholder="应付金额中减（最多减到0）"
                         style="width: 150px"
                         v-model="oDiscountMoney"
                         autocomplete="off"

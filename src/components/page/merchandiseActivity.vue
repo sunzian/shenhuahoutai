@@ -1066,7 +1066,6 @@
                 }
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
-                console.log(jsonArr)
                 let params = ParamsAppend(jsonArr);
                 if (this.dialogFormVisible == true) {
                     https.fetchPost('/merchandiseDiscountActivity/addActivity', params).then(data => {//新增

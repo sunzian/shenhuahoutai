@@ -255,14 +255,14 @@
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" label="固定金额" :label-width="formLabelWidth" v-if="oForm.reduceTypeFilm == 1&&oForm.cardType==1&&oForm.isFilmJoin==1">
-                    <el-input style="width: 150px" v-model="oForm.discountMoneyFilm" autocomplete="off"></el-input>
+                    <el-input placeholder="符合条件的影票按固定金额*张数" style="width: 250px" v-model="oForm.discountMoneyFilm" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="立减金额" :label-width="formLabelWidth" v-if="oForm.reduceTypeFilm == 2&&oForm.cardType==1&&oForm.isFilmJoin==1">
                     减
-                    <el-input style="width: 150px" v-model="oForm.discountMoneyFilm" autocomplete="off"></el-input>
+                    <el-input placeholder="(每张票价-立减金额)*张数" style="width: 250px" v-model="oForm.discountMoneyFilm" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="折扣" :label-width="formLabelWidth" v-if="oForm.reduceTypeFilm == 3&&oForm.cardType==1&&oForm.isFilmJoin==1">
-                    <el-input placeholder="若打95折优惠结算就填写95" style="width: 250px" v-model="oForm.discountMoneyFilm" autocomplete="off"></el-input>%
+                    <el-input placeholder="影票订单总价进行打折" style="width: 250px" v-model="oForm.discountMoneyFilm" autocomplete="off"></el-input>%
                 </el-form-item>
                 <el-form-item :required="true" v-if="oForm.isFilmJoin==1&&oForm.cardType==1"  label="是否限制每部影片购买数量" :label-width="formLabelWidth">
                     <el-select v-model="oForm.isLimitEachFilm" placeholder="请选择" @change="clearIsLimitEachFilm()">
@@ -342,16 +342,16 @@
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" label="固定金额" :label-width="formLabelWidth" v-if="oForm.reduceTypeMerchandise == 1&&oForm.cardType==1&&oForm.isMerchandiseJoin==1">
-                    <el-input style="width: 150px" v-model="oForm.discountMoneyMerchandise" autocomplete="off"></el-input>
+                    <el-input placeholder="卖品按固定金额*数量" style="width: 250px" v-model="oForm.discountMoneyMerchandise" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="立减金额" :label-width="formLabelWidth" v-if="oForm.reduceTypeMerchandise == 2&&oForm.cardType==1&&oForm.isMerchandiseJoin==1">
+                <el-form-item :required="true" label="满减金额" :label-width="formLabelWidth" v-if="oForm.reduceTypeMerchandise == 2&&oForm.cardType==1&&oForm.isMerchandiseJoin==1">
                     满
-                    <el-input style="width: 150px" v-model="oForm.achieveMoneyMerchandise" autocomplete="off"></el-input>
+                    <el-input placeholder="订单总额满多少减多少" style="width: 250px" v-model="oForm.achieveMoneyMerchandise" autocomplete="off"></el-input>
                     减
                     <el-input style="width: 150px" v-model="oForm.discountMoneyMerchandise" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="折扣" :label-width="formLabelWidth" v-if="oForm.reduceTypeMerchandise == 3&&oForm.cardType==1&&oForm.isMerchandiseJoin==1">
-                    <el-input placeholder="若打95折优惠结算就填写95" style="width: 250px" v-model="oForm.discountMoneyMerchandise" autocomplete="off"></el-input>%
+                    <el-input placeholder="卖品订单总价打折" style="width: 250px" v-model="oForm.discountMoneyMerchandise" autocomplete="off"></el-input>%
                 </el-form-item>
                 <el-form-item :required="true" v-if="oForm.isMerchandiseJoin==1&&oForm.cardType==1"  label="选择商品" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.selectMerchandiseType" @change="clearMerchandiseType()">
@@ -479,9 +479,6 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item :required="true" label="卡费" :label-width="formLabelWidth">
-                    <el-input style="width: 150px" v-model="oForm.expense" autocomplete="off"></el-input>
-                </el-form-item>
                 <el-form-item :required="true" label="售卖时间" :label-width="formLabelWidth">
                     <el-date-picker
                             v-model="oForm.startDate"
@@ -530,6 +527,9 @@
                                 :value="item.value"
                         ></el-option>
                     </el-select>
+                </el-form-item>
+                <el-form-item :required="true" label="卡费" :label-width="formLabelWidth">
+                    <el-input style="width: 150px" v-model="oForm.expense" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="使用说明" :label-width="formLabelWidth">
                     <el-input
@@ -652,14 +652,14 @@
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" label="固定金额" :label-width="formLabelWidth" v-if="oReduceTypeFilm == 1&&oCardType==1&&oIsFilmJoin==1">
-                    <el-input style="width: 150px" v-model="oDiscountMoneyFilm" autocomplete="off"></el-input>
+                    <el-input placeholder="符合条件的影票按固定金额*张数" style="width: 250px" v-model="oDiscountMoneyFilm" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="立减金额" :label-width="formLabelWidth" v-if="oReduceTypeFilm == 2&&oCardType==1&&oIsFilmJoin==1">
                     减
-                    <el-input style="width: 150px" v-model="oDiscountMoneyFilm" autocomplete="off"></el-input>
+                    <el-input placeholder="(每张票价-立减金额)*张数" style="width: 250px" v-model="oDiscountMoneyFilm" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="折扣" :label-width="formLabelWidth" v-if="oReduceTypeFilm == 3&&oCardType==1&&oIsFilmJoin==1">
-                    <el-input  placeholder="若打95折优惠结算就填写95" style="width: 250px" v-model="oDiscountMoneyFilm" autocomplete="off"></el-input>%
+                    <el-input placeholder="影票订单总价进行打折" style="width: 250px" v-model="oDiscountMoneyFilm" autocomplete="off"></el-input>%
                 </el-form-item>
                 <el-form-item :required="true" v-if="oIsFilmJoin==1&&oCardType==1"  label="是否限制每部影片购买数量" :label-width="formLabelWidth">
                     <el-select v-model="oIsLimitEachFilm" placeholder="请选择" @change="clearIsLimitEachFilm()">
@@ -739,16 +739,16 @@
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" label="固定金额" :label-width="formLabelWidth" v-if="oIsMerchandiseJoin==1&&oReduceTypeMerchandise == 1&&oCardType==1">
-                    <el-input style="width: 150px" v-model="oDiscountMoneyMerchandise" autocomplete="off"></el-input>
+                    <el-input placeholder="卖品按固定金额*数量" style="width: 250px" v-model="oDiscountMoneyMerchandise" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="立减金额" :label-width="formLabelWidth" v-if="oIsMerchandiseJoin==1&&oReduceTypeMerchandise == 2&&oCardType==1">
+                <el-form-item :required="true" label="满减金额" :label-width="formLabelWidth" v-if="oIsMerchandiseJoin==1&&oReduceTypeMerchandise == 2&&oCardType==1">
                     满
-                    <el-input style="width: 150px" v-model="oAchieveMoneyMerchandise" autocomplete="off"></el-input>
+                    <el-input placeholder="订单总额满多少减多少" style="width: 250px" v-model="oAchieveMoneyMerchandise" autocomplete="off"></el-input>
                     减
                     <el-input style="width: 150px" v-model="oDiscountMoneyMerchandise" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="折扣" :label-width="formLabelWidth" v-if="oIsMerchandiseJoin==1&&oReduceTypeMerchandise == 3&&oCardType==1">
-                    <el-input  placeholder="若打95折优惠结算就填写95" style="width: 250px" v-model="oDiscountMoneyMerchandise" autocomplete="off"></el-input>%
+                    <el-input placeholder="卖品订单总价打折" style="width: 250px" v-model="oDiscountMoneyMerchandise" autocomplete="off"></el-input>%
                 </el-form-item>
                 <el-form-item :required="true" v-if="oIsMerchandiseJoin==1&&oCardType==1"  label="选择商品" :label-width="formLabelWidth">
                     <el-radio-group v-model="oSelectMerchandiseType" @change="clearMerchandiseType()">
@@ -877,9 +877,6 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item :required="true" label="卡费" :label-width="formLabelWidth">
-                    <el-input style="width: 150px" v-model="oExpense" autocomplete="off"></el-input>
-                </el-form-item>
                 <el-form-item :required="true" label="售卖时间" :label-width="formLabelWidth">
                     <el-date-picker
                             v-model="oStartDate"
@@ -928,6 +925,9 @@
                                 :value="item.value"
                         ></el-option>
                     </el-select>
+                </el-form-item>
+                <el-form-item :required="true" label="卡费" :label-width="formLabelWidth">
+                    <el-input style="width: 150px" v-model="oExpense" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="使用说明" :label-width="formLabelWidth">
                     <el-input
