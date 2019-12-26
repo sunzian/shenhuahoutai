@@ -380,40 +380,46 @@
                 target: document.querySelector('.div1')
             });
             setTimeout(() => {
+                if (this.newPass == '' || this.surePass == '' || this.oldPass == '') {
+                    this.message = '请输入密码';
+                    this.open();
+                    loading.close();
+                    return
+                }
                 if (this.newPass != this.surePass) {
                     this.message = '两次密码输入不一致';
                     this.open();
                     loading.close();
-                } else {
-                    var jsonArr = [];
-                    jsonArr.push({ key: 'id', value: this.form.id });
-                    jsonArr.push({ key: 'oldPassword', value: this.oldPass });
-                    jsonArr.push({ key: 'newPassword', value: this.newPass });
-                    let sign = md5(preSign(jsonArr));
-                    jsonArr.push({ key: 'sign', value: sign });
-                    let params = ParamsAppend(jsonArr);
-                    this.passShow = false;
-                    https
-                        .fetchPost('/cinemaPartner/updateUserPassword', params)
-                        .then(data => {
-                            loading.close();
-                            if (data.data.code == 'success') {
-                                this.$message.success(`密码修改成功`);
-                                this.getMenu();
-                            } else if (data.data.code == 'nologin') {
-                                this.message = data.data.message;
-                                this.open();
-                                this.$router.push('/login');
-                            } else {
-                                this.message = data.data.message;
-                                this.open();
-                            }
-                        })
-                        .catch(err => {
-                            loading.close();
-                            console.log(err);
-                        });
+                    return
                 }
+                var jsonArr = [];
+                jsonArr.push({ key: 'id', value: this.form.id });
+                jsonArr.push({ key: 'oldPassword', value: this.oldPass });
+                jsonArr.push({ key: 'newPassword', value: this.newPass });
+                let sign = md5(preSign(jsonArr));
+                jsonArr.push({ key: 'sign', value: sign });
+                let params = ParamsAppend(jsonArr);
+                this.passShow = false;
+                https
+                    .fetchPost('/cinemaPartner/updateUserPassword', params)
+                    .then(data => {
+                        loading.close();
+                        if (data.data.code == 'success') {
+                            this.$message.success(`密码修改成功`);
+                            this.getMenu();
+                        } else if (data.data.code == 'nologin') {
+                            this.message = data.data.message;
+                            this.open();
+                            this.$router.push('/login');
+                        } else {
+                            this.message = data.data.message;
+                            this.open();
+                        }
+                    })
+                    .catch(err => {
+                        loading.close();
+                        console.log(err);
+                    });
             }, 500);
         },
         addPage() {
