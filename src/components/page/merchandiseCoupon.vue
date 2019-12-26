@@ -9,6 +9,10 @@
         </div>
         <div class="container">
             <div class="handle-box">
+                <el-select clearable v-model="query.commonType" placeholder="通用方式" class="handle-select mr10">
+                    <el-option key="1" label="全部影院" value="1"></el-option>
+                    <el-option key="2" label="指定影院" value="2"></el-option>
+                </el-select>
                 <el-select clearable v-model="query.cinemaCode" placeholder="请选择影院" class="mr10">
                     <el-option
                         v-for="item in cinemaData"
@@ -183,12 +187,12 @@
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oForm.reduceType == 1" label="固定金额：" :label-width="formLabelWidth">
-                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" placeholder="固定金额购买一件指定的商品" style="width: 250px" v-model="oForm.discountMoney" autocomplete="off"></el-input>
+                    <el-input onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')" placeholder="固定金额购买一件指定的商品" style="width: 250px" v-model="oForm.discountMoney" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oForm.reduceType==2" label="减免金额：" :label-width="formLabelWidth">
                     满
-                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" placeholder="订单总额满多少减多少" style="width: 250px" v-model="oForm.achieveMoney" autocomplete="off"></el-input>减
-                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 150px" v-model="oForm.discountMoney" autocomplete="off"></el-input>
+                    <el-input onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')" placeholder="订单总额满多少减多少" style="width: 250px" v-model="oForm.achieveMoney" autocomplete="off"></el-input>减
+                    <el-input onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')" style="width: 150px" v-model="oForm.discountMoney" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="开启状态：" :label-width="formLabelWidth">
                     <el-select v-model="oForm.status" placeholder="请选择">
@@ -306,12 +310,12 @@
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oReduceType == 1" label="固定金额：" :label-width="formLabelWidth">
-                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" placeholder="固定金额购买一件指定的商品" style="width: 250px" v-model="oDiscountMoney" autocomplete="off"></el-input>
+                    <el-input onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')" placeholder="固定金额购买一件指定的商品" style="width: 250px" v-model="oDiscountMoney" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oReduceType==2" label="减免金额：" :label-width="formLabelWidth">
                     满
-                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" placeholder="订单总额满多少减多少" style="width: 250px" v-model="oAchieveMoney" autocomplete="off"></el-input>减
-                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 150px" v-model="oDiscountMoney" autocomplete="off"></el-input>
+                    <el-input onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')" placeholder="订单总额满多少减多少" style="width: 250px" v-model="oAchieveMoney" autocomplete="off"></el-input>减
+                    <el-input onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')" style="width: 150px" v-model="oDiscountMoney" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="开启状态：" :label-width="formLabelWidth">
                     <el-select v-model="oStatus" placeholder="请选择">
@@ -1347,6 +1351,7 @@ export default {
             });
             let cinemaCode = this.query.cinemaCode;
             let reduceType = this.query.reduceType;
+            let commonType = this.query.commonType;
             let name = this.query.name;
             let status = this.query.status;
             if (!cinemaCode) {
@@ -1354,6 +1359,9 @@ export default {
             }
             if (!reduceType) {
                 reduceType = '';
+            }
+            if (!commonType) {
+                commonType = '';
             }
             if (!name) {
                 name = '';
@@ -1363,6 +1371,7 @@ export default {
             }
             let jsonArr = [];
             jsonArr.push({ key: 'reduceType', value: reduceType });
+            jsonArr.push({ key: 'commonType', value: commonType });
             jsonArr.push({ key: 'name', value: name });
             jsonArr.push({ key: 'status', value: status });
             jsonArr.push({ key: 'cinemaCodes', value: cinemaCode });

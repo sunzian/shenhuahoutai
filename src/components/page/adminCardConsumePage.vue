@@ -22,7 +22,7 @@
                         :value="item.businessCode"
                     ></el-option>
                 </el-select>
-                <el-select clearable v-model="query.cinemaCode" placeholder="请选择开卡影院" class="mr10">
+                <el-select clearable v-model="query.cinemaCode" placeholder="请选择开卡影院"  @change="changeSearchCinema" class="mr10">
                     <el-option
                         v-for="item in cinemaInfo"
                         :key="item.cinemaCode"
@@ -30,7 +30,7 @@
                         :value="item.cinemaCode"
                     ></el-option>
                 </el-select>
-                <el-select clearable v-model="query.consumeCinemaCode" placeholder="请选择充值影院" class="mr10">
+                <el-select clearable v-model="query.consumeCinemaCode" placeholder="请选择充值影院"  @change="changeSearchCinema2" class="mr10">
                     <el-option
                             v-for="item in cinemaInfo"
                             :key="item.cinemaCode"
@@ -318,7 +318,6 @@ export default {
     created() {},
     mounted() {
         this.getAllBusiness();
-        this.getMenu();
     },
     methods: {
         derive(){
@@ -461,6 +460,7 @@ export default {
                         this.businessInfo = res;
                         this.query.businessCode = res[0].businessCode;
                         this.getAllCinema();
+                        this.getMenu();
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
@@ -476,9 +476,20 @@ export default {
                 });
         },
         changeBusiness(val) {
+            this.query.cinemaCode = '';
+            this.query.consumeCinemaCode = '';
+            this.cinemaInfo = [];
             this.query.businessCode = val;
             this.getAllCinema();
             this.$forceUpdate();
+        },
+        changeSearchCinema(val) {
+            this.$forceUpdate();
+            this.query.cinemaCode = val;
+        },
+        changeSearchCinema2(val) {
+            this.$forceUpdate();
+            this.query.consumeCinemaCode = val;
         },
         // 获取所有影院
         getAllCinema() {

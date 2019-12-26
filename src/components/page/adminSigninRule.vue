@@ -308,7 +308,6 @@
         created() {},
         mounted() {
             this.getAllBusiness();
-            this.getMenu();
         },
         methods: {
             beforeUpload() {

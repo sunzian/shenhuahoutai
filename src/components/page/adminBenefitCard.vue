@@ -24,6 +24,20 @@
                 </el-select>
                 <el-select
                     clearable
+                    v-model="query.cinemaCode"
+                    placeholder="影院"
+                    class="handle-select mr10"
+                    @change="changeSearchCinema"
+                >
+                    <el-option
+                        v-for="item in cinemaInfo"
+                        :key="item.cinemaCode"
+                        :label="item.cinemaName"
+                        :value="item.cinemaCode"
+                    ></el-option>
+                </el-select>
+                <el-select
+                    clearable
                     v-model="query.reduceTypeFilm"
                     placeholder="影片优惠方式"
                     class="handle-select mr10"
@@ -61,19 +75,6 @@
                 >
                     <el-option key="1" label="启用" value="1"></el-option>
                     <el-option key="2" label="未启用" value="0"></el-option>
-                </el-select>
-                <el-select
-                    clearable
-                    v-model="query.cinemaCode"
-                    placeholder="影院"
-                    class="handle-select mr10"
-                >
-                    <el-option
-                        v-for="item in cinemaInfo"
-                        :key="item.cinemaCode"
-                        :label="item.cinemaName"
-                        :value="item.cinemaCode"
-                    ></el-option>
                 </el-select>
                 <el-input v-model="query.name" placeholder="权益卡名称" class="handle-input mr10"></el-input>
                 <el-button
@@ -1870,7 +1871,6 @@ export default {
     created() {},
     mounted() {
         this.getAllBusiness();
-        this.getMenu();
     },
     methods: {
         clearDiscountMoneyMerchandise() {
@@ -3702,6 +3702,7 @@ export default {
                         var res = JSON.parse(Decrypt(data.data.data));
                         this.businessInfo = res;
                         this.query.businessCode = res[0].businessCode;
+                        this.getMenu();
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
@@ -3721,9 +3722,53 @@ export default {
             this.getMenu()
         },
         changeBusiness(val) {
+            this.query.cinemaCode = '';
+            this.cinemaInfo = [];
             this.query.businessCode = val;
+            this.getAllCinema();
             this.$forceUpdate();
-            this.getMenu();
+        },
+        changeSearchCinema(val) {
+            this.$forceUpdate();
+            this.query.cinemaCode = val;
+        },
+        getAllCinema() {
+            if (!this.query.businessCode) {
+                return;
+            }
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
+            var jsonArr = [];
+            jsonArr.push({ key: 'businessCode', value: this.query.businessCode });
+            let sign = md5(preSign(jsonArr));
+            jsonArr.push({ key: 'sign', value: sign });
+            let params = ParamsAppend(jsonArr);
+            https
+                .fetchPost('/cinema/getCinemaListByBusinessCode', params)
+                .then(data => {
+                    loading.close();
+                    if (data.data.code == 'success') {
+                        var res = JSON.parse(Decrypt(data.data.data));
+                        this.cinemaInfo = res;
+                        console.log(res);
+                    } else if (data.data.code == 'nologin') {
+                        this.message = data.data.message;
+                        this.open();
+                        this.$router.push('/login');
+                    } else {
+                        this.message = data.data.message;
+                        this.open();
+                    }
+                })
+                .catch(err => {
+                    loading.close();
+                    console.log(err);
+                });
         },
         // 获取所选影院影厅
         getAllScreen(value) {

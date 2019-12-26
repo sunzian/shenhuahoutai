@@ -22,7 +22,11 @@
                         :value="item.businessCode"
                     ></el-option>
                 </el-select>
-                <el-select clearable v-model="query.cinemaCode" placeholder="请选择影院" class="mr10">
+                <el-select clearable v-model="query.commonType" placeholder="通用方式" class="handle-select mr10">
+                    <el-option key="1" label="全部影院" value="1"></el-option>
+                    <el-option key="2" label="指定影院" value="2"></el-option>
+                </el-select>
+                <el-select clearable v-model="query.cinemaCode" placeholder="请选择影院" @change="changeSearchCinema" class="mr10">
                     <el-option
                         v-for="item in cinemaData"
                         :key="item.cinemaCode"
@@ -511,7 +515,6 @@ export default {
     created() {},
     mounted() {
         this.getAllBusiness();
-        this.getMenu();
     },
     methods: {
         clearDiscountMoney(){
@@ -1171,6 +1174,7 @@ export default {
             let businessCode = this.query.businessCode;
             let cinemaCode = this.query.cinemaCode;
             let reduceType = this.query.reduceType;
+            let commonType = this.query.commonType;
             let name = this.query.name;
             let status = this.query.status;
             if (!businessCode) {
@@ -1182,6 +1186,9 @@ export default {
             if (!reduceType) {
                 reduceType = '';
             }
+            if (!commonType) {
+                commonType = '';
+            }
             if (!name) {
                 name = '';
             }
@@ -1191,6 +1198,7 @@ export default {
             let jsonArr = [];
             jsonArr.push({ key: 'businessCode', value: businessCode });
             jsonArr.push({ key: 'reduceType', value: reduceType });
+            jsonArr.push({ key: 'commonType', value: commonType });
             jsonArr.push({ key: 'name', value: name });
             jsonArr.push({ key: 'status', value: status });
             jsonArr.push({ key: 'cinemaCodes', value: cinemaCode });
@@ -1292,6 +1300,7 @@ export default {
                         this.businessInfo = res;
                         this.query.businessCode = res[0].businessCode;
                         this.getAllCinema();
+                        this.getMenu();
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
@@ -1307,9 +1316,15 @@ export default {
                 });
         },
         changeBusiness(val) {
+            this.query.cinemaCode = '';
+            this.cinemaData = [];
             this.query.businessCode = val;
             this.getAllCinema();
             this.$forceUpdate();
+        },
+        changeSearchCinema(val) {
+            this.$forceUpdate();
+            this.query.cinemaCode = val;
         },
         // 获取所有影院
         getAllCinema() {

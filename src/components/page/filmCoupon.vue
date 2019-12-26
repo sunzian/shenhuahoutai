@@ -9,6 +9,10 @@
         </div>
         <div class="container">
             <div class="handle-box">
+                <el-select clearable v-model="query.commonType" placeholder="通用方式" class="handle-select mr10">
+                    <el-option key="1" label="全部影院" value="1"></el-option>
+                    <el-option key="2" label="指定影院" value="2"></el-option>
+                </el-select>
                 <el-select clearable v-model="query.cinemaCode" placeholder="请选择影院" class="mr10">
                     <el-option
                         v-for="item in cinemaData"
@@ -302,6 +306,7 @@
                         style="width: 250px"
                         v-model="oForm.discountMoney"
                         autocomplete="off"
+                        onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')"
                     ></el-input>
                 </el-form-item>
                 <el-form-item
@@ -316,6 +321,7 @@
                         style="width: 250px"
                         v-model="oForm.discountMoney"
                         autocomplete="off"
+                        onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')"
                     ></el-input>&nbsp;元
                 </el-form-item>
                 <el-form-item
@@ -330,11 +336,13 @@
                         style="width: 250px"
                         v-model="oForm.achieveMoney"
                         autocomplete="off"
+                        onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')"
                     ></el-input>&nbsp;张&nbsp;&nbsp;减&nbsp;
                     <el-input
                         style="width: 150px"
                         v-model="oForm.discountMoney"
                         autocomplete="off"
+                        onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')"
                     ></el-input>&nbsp;元
                 </el-form-item>
                 <el-form-item
@@ -349,11 +357,13 @@
                         style="width: 250px"
                         v-model="oForm.achieveMoney"
                         autocomplete="off"
+                        onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')"
                     ></el-input>&nbsp;元&nbsp;&nbsp;减&nbsp;
                     <el-input
                         style="width: 200px"
                         v-model="oForm.discountMoney"
                         autocomplete="off"
+                        onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')"
                     ></el-input>&nbsp;元
                 </el-form-item>
                 <el-form-item :required="true" label="开启状态" :label-width="formLabelWidth">
@@ -2090,6 +2100,7 @@ export default {
             });
             let cinemaCode = this.query.cinemaCode;
             let reduceType = this.query.reduceType;
+            let commonType = this.query.commonType;
             let name = this.query.name;
             let status = this.query.status;
             if (!cinemaCode) {
@@ -2097,6 +2108,9 @@ export default {
             }
             if (!reduceType) {
                 reduceType = '';
+            }
+            if (!commonType) {
+                commonType = '';
             }
             if (!name) {
                 name = '';
@@ -2106,6 +2120,7 @@ export default {
             }
             let jsonArr = [];
             jsonArr.push({ key: 'reduceType', value: reduceType });
+            jsonArr.push({ key: 'commonType', value: commonType });
             jsonArr.push({ key: 'name', value: name });
             jsonArr.push({ key: 'status', value: status });
             jsonArr.push({ key: 'cinemaCodes', value: cinemaCode });

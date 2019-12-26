@@ -9,6 +9,10 @@
         </div>
         <div class="container">
             <div class="handle-box">
+                <el-select clearable v-model="query.commonType" placeholder="通用方式" class="handle-select mr10">
+                    <el-option key="1" label="全部影院" value="1"></el-option>
+                    <el-option key="2" label="指定影院" value="2"></el-option>
+                </el-select>
                 <el-select clearable v-model="query.cinemaCode" placeholder="请选择影院" class="handle-input mr10">
                     <el-option
                         v-for="item in cinemaData"
@@ -1054,9 +1058,13 @@ export default {
             });
             let cinemaCode = this.query.cinemaCode;
             let groupName = this.query.groupName;
+            let commonType = this.query.commonType;
             let status = this.query.status;
             if (!groupName) {
                 groupName = '';
+            }
+            if (!commonType) {
+                commonType = '';
             }
             if (!cinemaCode) {
                 cinemaCode = '';
@@ -1066,6 +1074,7 @@ export default {
             }
             let jsonArr = [];
             jsonArr.push({ key: 'groupName', value: groupName });
+            jsonArr.push({ key: 'commonType', value: commonType });
             jsonArr.push({ key: 'status', value: status });
             jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
             jsonArr.push({ key: 'pageSize', value: this.query.pageSize });

@@ -369,14 +369,14 @@
                             <span style="color:red;cursor: pointer;" @click="deleteCoupon(index)">删除</span>
                         </div>
                     </el-form-item>
-                    <!-- <el-form-item label="短信模板：" :label-width="formLabelWidth" prop="screenName">
+                    <el-form-item :required="true" label="发放原因说明：" :label-width="formLabelWidth">
                         <el-input
                             style="width: 350px"
                             type="textarea"
-                            v-model="excelCouponForm.messageContent"
+                            v-model="excelCouponForm.sendMemo"
                             autocomplete="off"
                         ></el-input>
-                    </el-form-item> -->
+                    </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer" style="display: flex;justify-content: space-around;">
                     <!-- <el-button @click="cancel">取 消</el-button> -->
@@ -587,14 +587,14 @@
                         <span style="color:red;cursor: pointer;" @click="deleteCoupon(index)">删除</span>
                     </div>
                 </el-form-item>
-                <!-- <el-form-item label="短信模板：" :label-width="formLabelWidth" prop="screenName">
+                <el-form-item :required="true" label="发放原因说明：" :label-width="formLabelWidth">
                     <el-input
                         style="width: 350px"
                         type="textarea"
-                        v-model="couponForm.messageContent"
+                        v-model="couponForm.sendMemo"
                         autocomplete="off"
                     ></el-input>
-                </el-form-item> -->
+                </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="cancel">取 消</el-button>
@@ -665,7 +665,7 @@ export default {
                 endDate: '',
                 overDays: '',
                 couponInfo: '',
-                messageContent: ''
+                sendMemo: ''
             },
             excelCouponForm: {
                 effectiveTimeType: 1,
@@ -673,7 +673,7 @@ export default {
                 endDate: '',
                 overDays: '',
                 couponInfo: '',
-                messageContent: ''
+                sendMemo: ''
             },
             editVisible: false,
             pageTotal: 0,
@@ -702,7 +702,7 @@ export default {
                 endDate: this.excelCouponForm.endDate,
                 overDays: this.excelCouponForm.overDays,
                 couponInfo: this.excelCouponForm.couponInfo,
-                messageContent: this.excelCouponForm.messageContent,
+                sendMemo: this.excelCouponForm.sendMemo,
             }
             let jsonArr = [];
             jsonArr.push({ key: 'cinemaCode', value: params.cinemaCode });
@@ -711,7 +711,7 @@ export default {
             jsonArr.push({ key: 'endDate', value: params.endDate });
             jsonArr.push({ key: 'overDays', value: params.overDays });
             jsonArr.push({ key: 'couponInfo', value: params.couponInfo });
-            jsonArr.push({ key: 'messageContent', value: params.messageContent });
+            jsonArr.push({ key: 'sendMemo', value: params.sendMemo });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             let paramsInfo =  ParamsAppend(jsonArr);
@@ -823,6 +823,16 @@ export default {
                 this.open();
                 return;
             }
+            if (this.couponForm.sendMemo == '') {
+                this.message = '请填写发放原因';
+                this.open();
+                return;
+            }
+            if (this.couponForm.sendMemo.length < 5 || this.couponForm.sendMemo.length > 100) {
+                this.message = '发放原因字符个数为5-100';
+                this.open();
+                return;
+            }
             if (this.couponForm.effectiveTimeType == 1 && this.couponForm.overDays <=0) {
                 this.message = '有效期天数必须大于0';
                 this.open();
@@ -929,7 +939,7 @@ export default {
             jsonArr.push({ key: 'filmCodes', value: filmCodes });
             jsonArr.push({ key: 'effectiveTimeType', value: this.couponForm.effectiveTimeType });
             jsonArr.push({ key: 'couponInfo', value: this.couponForm.couponInfo });
-            jsonArr.push({ key: 'messageContent', value: this.couponForm.messageContent });
+            jsonArr.push({ key: 'sendMemo', value: this.couponForm.sendMemo });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             var params = ParamsAppend(jsonArr);
@@ -944,7 +954,7 @@ export default {
                         this.couponForm.startDate = '';
                         this.couponForm.endDate = '';
                         this.couponForm.overDays = '';
-                        this.couponForm.messageContent = '';
+                        this.couponForm.sendMemo = '';
                         this.couponForm.couponInfo = '';
                         this.message = '优惠券将陆续发放,短时间内请勿连续发放';
                         this.open();
@@ -998,6 +1008,16 @@ export default {
                 this.message = '请上传文件！';
                 this.open();
                 return
+            }
+            if (this.excelCouponForm.sendMemo == '') {
+                this.message = '请填写发放原因';
+                this.open();
+                return;
+            }
+            if (this.excelCouponForm.sendMemo.length < 5 || this.excelCouponForm.sendMemo.length > 100) {
+                this.message = '发放原因字符个数为5-100';
+                this.open();
+                return;
             }
             this.$refs.upload.submit();
         },
@@ -1207,7 +1227,7 @@ export default {
             this.excelCouponForm.couponInfo = '';
             this.couponList = [];
             this.hasExcel = false;
-            this.excelCouponForm.messageContent = '';
+            this.excelCouponForm.sendMemo = '';
         },
 
         // 查询看过的电影
