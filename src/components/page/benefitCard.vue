@@ -469,7 +469,7 @@
                               type="textarea"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="是否赠送券包" :label-width="formLabelWidth">
-                    <el-radio-group v-model="oForm.isGroupJoin" @change="clearFilmJoin()">
+                    <el-radio-group v-model="oForm.isGroupJoin" @change="clearGroupJoin()">
                         <el-radio label="1">参加</el-radio>
                         <el-radio label="0">不参加</el-radio>
                     </el-radio-group>
@@ -493,7 +493,7 @@
                             @click="deletCoupon"
                     >删除</span>
                 </el-form-item>
-                <el-form-item :required="true" v-if="oForm.isGroupJoin==1" label="券包过期方式" :label-width="formLabelWidth">
+                <el-form-item :required="true" v-if="oForm.isGroupJoin==1" label="券包有效期方式" :label-width="formLabelWidth">
                     <el-select v-model="oForm.groupDateType" placeholder="请选择" @change="clearGroupDateType()">
                         <el-option key="0" label="固定时间段" value="0"></el-option>
                         <el-option key="1" label="固定天数" value="1"></el-option>
@@ -530,12 +530,13 @@
                 <el-form-item :required="true" v-if="oForm.isGroupJoin==1&&oForm.groupDateType==1" label="券包有效期数量"
                               :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oForm.groupNumber" autocomplete="off"></el-input>
+                    <div>有效期单位为'日'，券包有效期数量输入'2'，即领取券包后券包内的券在2日内有效</div>
                 </el-form-item>
-                <el-form-item v-if="oForm.isGroupJoin==1" :required="true" label="券包权益说明" :label-width="formLabelWidth">
-                    <el-input :rows="6" placeholder="如：券包的内容及有效期等说明" style="width: 300px"
-                              v-model="oForm.couponSimpleDesc" maxlength="200" show-word-limit type="textarea"
-                              autocomplete="off"></el-input>
-                </el-form-item>
+                <!--<el-form-item v-if="oForm.isGroupJoin==1" :required="true" label="券包权益说明" :label-width="formLabelWidth">-->
+                    <!--<el-input :rows="6" placeholder="如：券包的内容及有效期等说明" style="width: 300px"-->
+                              <!--v-model="oForm.couponSimpleDesc" maxlength="200" show-word-limit type="textarea"-->
+                              <!--autocomplete="off"></el-input>-->
+                <!--</el-form-item>-->
                 <el-form-item :required="true" label="有效期单位" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.unit">
                         <el-radio label="年">年</el-radio>
@@ -958,7 +959,7 @@
                               type="textarea"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="是否赠送券包" :label-width="formLabelWidth">
-                    <el-radio-group v-model="oIsGroupJoin" @change="clearFilmJoin()">
+                    <el-radio-group v-model="oIsGroupJoin" @change="clearGroupJoin()">
                         <el-radio label="1">参加</el-radio>
                         <el-radio label="0">不参加</el-radio>
                     </el-radio-group>
@@ -982,7 +983,7 @@
                             @click="deletCoupon"
                     >删除</span>
                 </el-form-item>
-                <el-form-item :required="true" v-if="oIsGroupJoin==1" label="券包过期方式" :label-width="formLabelWidth">
+                <el-form-item :required="true" v-if="oIsGroupJoin==1" label="券包有效期方式" :label-width="formLabelWidth">
                     <el-select v-model="oGroupDateType" placeholder="请选择" @change="clearGroupDateType()">
                         <el-option key="0" label="固定时间段" value="0"></el-option>
                         <el-option key="1" label="固定天数" value="1"></el-option>
@@ -1019,12 +1020,13 @@
                 <el-form-item :required="true" v-if="oIsGroupJoin==1&&oGroupDateType==1" label="券包有效期数量"
                               :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oGroupNumber" autocomplete="off"></el-input>
+                    <div>有效期单位为'日'，券包有效期数量输入'2'，即领取券包后券包内的券在2日内有效</div>
                 </el-form-item>
-                <el-form-item v-if="oIsGroupJoin==1" :required="true" label="券包权益说明" :label-width="formLabelWidth">
-                    <el-input :rows="6" placeholder="如：券包的内容及有效期等说明" style="width: 300px"
-                              v-model="oCouponSimpleDesc" maxlength="200" show-word-limit type="textarea"
-                              autocomplete="off"></el-input>
-                </el-form-item>
+                <!--<el-form-item v-if="oIsGroupJoin==1" :required="true" label="券包权益说明" :label-width="formLabelWidth">-->
+                    <!--<el-input :rows="6" placeholder="如：券包的内容及有效期等说明" style="width: 300px"-->
+                              <!--v-model="oCouponSimpleDesc" maxlength="200" show-word-limit type="textarea"-->
+                              <!--autocomplete="off"></el-input>-->
+                <!--</el-form-item>-->
                 <el-form-item :required="true" label="有效期单位" :label-width="formLabelWidth">
                     <el-radio-group v-model="oUnit">
                         <el-radio label="年">年</el-radio>
@@ -1334,6 +1336,7 @@
                 oGroupUnit: '',
                 oGroupNumber: '',
                 oForm: {
+                    groupDateType: '',
                     groupStartDate: '',
                     groupEndDate: '',
                     groupUnit: '',
@@ -1591,6 +1594,15 @@
                 this.oIsHolidayValid = '';
                 this.oCheckedDays = [];
                 this.oIsCouponTogether = '';
+            },
+            clearGroupJoin(){
+                this.clearGroupDateType();
+                this.groupName='';
+                this.couponId='';
+                this.oGroupDateType='';
+                this.oCouponSimpleDesc='';
+                this.oForm.groupDateType='';
+                this.oForm.couponSimpleDesc='';
             },
             clearGroupDateType() {
                 this.oForm.groupStartDate = '';
@@ -1913,17 +1925,51 @@
                 }
                 //赠送券包下的判断
                 if (this.oForm.isGroupJoin == 1) {
-                    if (!this.oForm.couponSimpleDesc) {
-                        this.message = '券包权益说明不能为空，请检查！';
-                        this.open();
-                        loading.close();
-                        return;
-                    }
+                    // if (!this.oForm.couponSimpleDesc) {
+                    //     this.message = '券包权益说明不能为空，请检查！';
+                    //     this.open();
+                    //     loading.close();
+                    //     return;
+                    // }
                     if (!this.groupName) {
                         this.message = '所选券包不能为空，请检查！';
                         this.open();
                         loading.close();
                         return;
+                    }
+                    if (!this.oForm.groupDateType) {
+                        this.message = '券包有效期方式不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                    if (this.oForm.groupDateType==0) {
+                        if (!this.oForm.groupStartDate) {
+                            this.message = '券包固定时间段不能为空，请检查！';
+                            this.open();
+                            loading.close();
+                            return;
+                        }
+                        if (!this.oForm.groupEndDate) {
+                            this.message = '券包固定时间段不能为空，请检查！';
+                            this.open();
+                            loading.close();
+                            return;
+                        }
+                    }
+                    if (this.oForm.groupDateType==1) {
+                        if (!this.oForm.groupUnit) {
+                            this.message = '券包有效期单位不能为空，请检查！';
+                            this.open();
+                            loading.close();
+                            return;
+                        }
+                        if (!this.oForm.groupNumber) {
+                            this.message = '券包有效期数量不能为空，请检查！';
+                            this.open();
+                            loading.close();
+                            return;
+                        }
                     }
                 }
                 //影票参与
@@ -2863,17 +2909,51 @@
                 }
                 //赠送券包下的判断
                 if (this.oIsGroupJoin == 1) {
-                    if (!this.oCouponSimpleDesc) {
-                        this.message = '券包权益说明不能为空，请检查！';
-                        this.open();
-                        loading.close();
-                        return;
-                    }
+                    // if (!this.oCouponSimpleDesc) {
+                    //     this.message = '券包权益说明不能为空，请检查！';
+                    //     this.open();
+                    //     loading.close();
+                    //     return;
+                    // }
                     if (!this.groupName) {
                         this.message = '所选券包不能为空，请检查！';
                         this.open();
                         loading.close();
                         return;
+                    }
+                    if (!this.oGroupDateType) {
+                        this.message = '券包有效期方式不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                    if (this.oGroupDateType==0) {
+                        if (!this.oGroupStartDate) {
+                            this.message = '券包固定时间段不能为空，请检查！';
+                            this.open();
+                            loading.close();
+                            return;
+                        }
+                        if (!this.oGroupEndDate) {
+                            this.message = '券包固定时间段不能为空，请检查！';
+                            this.open();
+                            loading.close();
+                            return;
+                        }
+                    }
+                    if (this.oGroupDateType==1) {
+                        if (!this.oGroupUnit) {
+                            this.message = '券包有效期单位不能为空，请检查！';
+                            this.open();
+                            loading.close();
+                            return;
+                        }
+                        if (!this.oGroupNumber) {
+                            this.message = '券包有效期数量不能为空，请检查！';
+                            this.open();
+                            loading.close();
+                            return;
+                        }
                     }
                 }
                 //影票参与
