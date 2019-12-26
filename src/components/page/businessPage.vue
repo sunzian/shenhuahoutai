@@ -81,7 +81,7 @@
         <!--新增弹出框-->
         <el-dialog :close-on-click-modal="false" title="新增影城" :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
-                <el-form-item label="商家名" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="商家名" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         maxlength="10"
@@ -93,20 +93,31 @@
                 <el-form-item label="商家描述" :label-width="formLabelWidth">
                     <el-input
                         maxlength="30"
+                        style="width: 250px"
                         type="textarea"
-                        :rows="2"
+                        :rows="3"
                         show-word-limit
                         v-model="oForm.memo"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="商家logo" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="商家logo" :label-width="formLabelWidth">
+                    <el-popover placement="right" title trigger="hover">
+                        <img style="width: 400px" :src="oForm.logo" />
+                        <img
+                                slot="reference"
+                                :src="oForm.logo"
+                                :alt="oForm.logo"
+                                style="max-height: 50px;max-width: 130px"
+                        />
+                    </el-popover>
                     <el-upload
                             :before-upload="beforeUpload"
                             :data="type"
                             :limit="1"
                             class="upload-demo"
                             drag
+                            :on-exceed="exceed"
                             ref="upload"
                             action="/api/upload/uploadImage"
                             :on-success="onSuccess"
@@ -166,7 +177,7 @@
         <!-- 编辑弹出框 -->
         <el-dialog :close-on-click-modal="false" title="编辑" :visible.sync="editVisible" width="40%">
             <el-form ref="form" :model="form" label-width="100px">
-                <el-form-item label="商家名称">
+                <el-form-item :required="true" label="商家名称">
                     <el-input
                         style="width: 250px"
                         maxlength="10"
@@ -178,20 +189,31 @@
                 <el-form-item label="商家描述">
                     <el-input
                         maxlength="30"
+                        style="width: 250px"
                         type="textarea"
-                        :rows="2"
+                        :rows="3"
                         show-word-limit
                         v-model.trim="oMemo"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="商家logo">
+                <el-form-item :required="true" label="商家logo">
+                    <el-popover placement="right" title trigger="hover">
+                        <img style="width: 400px" :src="oLogo" />
+                        <img
+                                slot="reference"
+                                :src="oLogo"
+                                :alt="oLogo"
+                                style="max-height: 50px;max-width: 130px"
+                        />
+                    </el-popover>
                     <el-upload
                             :before-upload="beforeUpload"
                             :data="type"
                             :limit="1"
                             class="upload-demo"
                             drag
+                            :on-exceed="exceed"
                             ref="upload"
                             action="/api/upload/uploadImage"
                             :on-success="unSuccess"
@@ -323,6 +345,13 @@ export default {
         this.getMenu();
     },
     methods: {
+        exceed(data){
+            console.log(data);
+            if(data.length==1){
+                this.message = '只能上传一张图片，如需重新上传请删除第一张图！';
+                this.open();
+            }
+        },
         beforeUpload(file){//上传之前
             this.type.type=EncryptReplace('business');
             const isLt200Kb = file.size / 1024 < 200;
@@ -403,6 +432,18 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
+            if(!this.oForm.name){
+                this.message = '商家名不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.oForm.logo){
+                this.message = '商家logo不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
             var jsonArr = [];
             jsonArr.push({ key: 'businessName', value: this.oForm.name });
             jsonArr.push({ key: 'businessMemo', value: this.oForm.memo });
@@ -572,6 +613,18 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
+            if(!this.oName){
+                this.message = '商家名不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.oLogo){
+                this.message = '商家logo不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
             var jsonArr = [];
             // jsonArr.push({ key: 'goldExpireYears', value: this.oGold });
             jsonArr.push({ key: 'businessName', value: this.oName });

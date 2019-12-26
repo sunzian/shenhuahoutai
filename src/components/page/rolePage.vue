@@ -76,15 +76,15 @@
         </div>
         <!--新增弹出框-->
         <el-dialog :close-on-click-modal="false" title="新增角色" :visible.sync="dialogFormVisible">
-            <el-form :model="oForm" :rules="rules">
-                <el-form-item prop="name" label="角色名" :label-width="formLabelWidth">
+            <el-form :model="oForm">
+                <el-form-item :required="true" label="角色名" :label-width="formLabelWidth">
                     <el-input style="width: 250px" maxlength="10" show-word-limit v-model="oForm.name" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="描述" :label-width="formLabelWidth">
                     <el-input maxlength="30" type="textarea"
                               :rows="2" show-word-limit v-model="oForm.memo" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item prop="value" label="状态" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="状态" :label-width="formLabelWidth">
                 <el-select v-model="oForm.value" placeholder="请选择状态">
                     <el-option
                                 v-for="item in options"
@@ -102,15 +102,15 @@
         </el-dialog>
         <!-- 编辑弹出框 -->
         <el-dialog :close-on-click-modal="false" title="编辑" :visible.sync="editVisible">
-            <el-form ref="form" :model="form" :rules="rules">
-                <el-form-item prop="oName" label="角色名" :label-width="formLabelWidth">
+            <el-form ref="form" :model="form">
+                <el-form-item :required="true" label="角色名" :label-width="formLabelWidth">
                     <el-input style="width: 250px" maxlength="10" show-word-limit v-model="oName" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="描述" :label-width="formLabelWidth">
                     <el-input maxlength="30" type="textarea"
                               :rows="2" show-word-limit v-model="form.memo" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item prop="value" label="状态" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="状态" :label-width="formLabelWidth">
                     <el-select v-model="selectValue">
                         <el-option
                                 v-for="item in options"
@@ -139,11 +139,6 @@ export default {
     name: 'basetable',
     data() {
         return {
-            rules: {
-                name: [{required: true, message: '请输入角色名', trigger: 'blur'}],
-                oName: [{required: true, message: '请输入角色名', trigger: 'blur'}],
-                value: [{required: true, message: '请选择', trigger: 'change'}],
-            },
             oName:'',
             message:'',//弹出框消息
             query: {

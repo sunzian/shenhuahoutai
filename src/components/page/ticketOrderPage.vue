@@ -134,55 +134,63 @@
                 >搜索</el-button>
             </div>
             <div class="handle-box">
-                票数：
+                票数
                 <el-input
                     style="width: 100px"
                     v-model="totalData.totalTicketNumber"
                     :disabled="true"
                     autocomplete="off"
                     class="mr10"
-                ></el-input>应付：
+                ></el-input>应付
                 <el-input
                     style="width: 100px"
                     v-model="totalData.totalOriginalPrice"
                     :disabled="true"
                     autocomplete="off"
                     class="mr10"
-                ></el-input>实付：
+                ></el-input>实付
                 <el-input
                     style="width: 100px"
                     v-model="totalData.totalActualPrice"
                     :disabled="true"
                     autocomplete="off"
                     class="mr10"
-                ></el-input>总服务费：
+                ></el-input>总服务费
                 <el-input
                         style="width: 100px"
                         v-model="totalData.totalServiceFee"
                         :disabled="true"
                         autocomplete="off"
                         class="mr10"
-                ></el-input>平台代售费：
+                ></el-input>平台代售费
                 <el-input
                         style="width: 100px"
                         v-model="totalData.totalPlatHandFee"
                         :disabled="true"
                         autocomplete="off"
                         class="mr10"
-                ></el-input>活动优惠：
+                ></el-input>活动优惠
                 <el-input
                         style="width: 100px"
                         v-model="totalData.totalActivityDiscount"
                         :disabled="true"
                         autocomplete="off"
                         class="mr10"
-                ></el-input>优惠券金额：
+                ></el-input>优惠券金额
                 <el-input
                     style="width: 100px"
                     v-model="totalData.totalCouponDiscount"
                     :disabled="true"
                     autocomplete="off"
                     class="mr10"
+                ></el-input>
+                实际票价统计
+                <el-input
+                        style="width: 100px"
+                        v-model="totalData.totalActualTicketPrice"
+                        :disabled="true"
+                        autocomplete="off"
+                        class="mr10"
                 ></el-input>
                 <!--回传金额：-->
                 <!--<el-input-->
