@@ -131,9 +131,9 @@
                         slot-scope="scope"
                     >{{scope.row.discountMoney}}</template>
                 </el-table-column>
-                <!--<el-table-column prop="sort" label="最低票价结算" width="60">-->
-                <!--<template v-if="scope.row.reduceType==4" slot-scope="scope">{{scope.row.discountMoney}}</template>-->
-                <!--</el-table-column>-->
+                <el-table-column prop="sort" label="最低票价结算" width="60">
+                    <template v-if="scope.row.reduceType==4" slot-scope="scope">{{scope.row.discountMoney}}</template>
+                </el-table-column>
                 <el-table-column prop="memo" label="适用放映时间" width="170">
                     <template slot-scope="scope">{{scope.row.startDate}}至{{scope.row.endDate}}</template>
                 </el-table-column>
