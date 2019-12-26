@@ -24,6 +24,19 @@
                 </el-select>
                 <el-select
                     clearable
+                    v-model="query.cinemaCode"
+                    placeholder="影院"
+                    class="handle-select mr10"
+                >
+                    <el-option
+                        v-for="item in cinemaInfo"
+                        :key="item.cinemaCode"
+                        :label="item.cinemaName"
+                        :value="item.cinemaCode"
+                    ></el-option>
+                </el-select>
+                <el-select
+                    clearable
                     v-model="query.reduceTypeFilm"
                     placeholder="影片优惠方式"
                     class="handle-select mr10"
@@ -61,19 +74,6 @@
                 >
                     <el-option key="1" label="启用" value="1"></el-option>
                     <el-option key="2" label="未启用" value="0"></el-option>
-                </el-select>
-                <el-select
-                    clearable
-                    v-model="query.cinemaCode"
-                    placeholder="影院"
-                    class="handle-select mr10"
-                >
-                    <el-option
-                        v-for="item in cinemaInfo"
-                        :key="item.cinemaCode"
-                        :label="item.cinemaName"
-                        :value="item.cinemaCode"
-                    ></el-option>
                 </el-select>
                 <el-input v-model="query.name" placeholder="权益卡名称" class="handle-input mr10"></el-input>
                 <el-button

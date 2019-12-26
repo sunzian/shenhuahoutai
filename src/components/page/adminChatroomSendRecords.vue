@@ -255,7 +255,6 @@ export default {
                     if (data.data.code == 'success') {
                         var res = JSON.parse(Decrypt(data.data.data));
                         this.cinemaInfo = res;
-                        console.log(res);
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
