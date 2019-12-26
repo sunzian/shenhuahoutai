@@ -427,7 +427,6 @@
     created() {},
     mounted() {
         this.getAllBusiness();
-        this.getMenu();
     },
     methods: {
         UserPassword(index, row) {
@@ -892,6 +891,7 @@
                         var res = JSON.parse(Decrypt(data.data.data));
                         this.businessInfo = res;
                         this.query.businessCode = res[0].businessCode;
+                        this.getMenu();
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();

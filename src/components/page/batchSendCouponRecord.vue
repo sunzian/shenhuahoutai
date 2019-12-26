@@ -91,6 +91,9 @@
                 <el-table-column label="发放时间" align="center" width="170">
                     <template slot-scope="scope">{{scope.row.createDate}}</template>
                 </el-table-column>
+                <el-table-column label="发放原因" align="center" width="170">
+                    <template slot-scope="scope">{{scope.row.sendMemo}}</template>
+                </el-table-column>
                 <el-table-column label="优惠券详细信息" align="center">
                     <template slot-scope="scope">{{scope.row.couponDetail}}</template>
                 </el-table-column>
@@ -345,7 +348,6 @@ export default {
                 jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
-                console.log(jsonArr);
                 var params = ParamsAppend(jsonArr);
                 https
                     .fetchPost('/batchSendCouponRecord/list', params)
@@ -353,6 +355,7 @@ export default {
                         loading.close();
                         if (data.data.code == 'success') {
                             var oData = JSON.parse(Decrypt(data.data.data));
+                            console.log(oData)
                             this.tableData = oData.data;
                             this.query.pageSize = oData.pageSize;
                             this.query.pageNo = oData.pageNo;

@@ -29,6 +29,7 @@
                     placeholder="请选择影院"
                     class="mr10"
                     style="margin-top: 10px;"
+                    @change="changeSearchCinema"
                 >
                     <el-option
                         v-for="item in cinemaInfo"
@@ -249,7 +250,6 @@ export default {
     created() {},
     mounted() {
         this.getAllBusiness();
-        this.getMenu();
     },
     methods: {
         addChange(index, row) {
@@ -321,6 +321,7 @@ export default {
                         this.businessInfo = res;
                         this.query.businessCode = res[0].businessCode;
                         this.getAllCinema();
+                        this.getMenu();
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
@@ -336,9 +337,15 @@ export default {
                 });
         },
         changeBusiness(val) {
+            this.query.cinemaCode = '';
+            this.cinemaInfo = [];
             this.query.businessCode = val;
             this.getAllCinema();
             this.$forceUpdate();
+        },
+        changeSearchCinema(val) {
+            this.$forceUpdate();
+            this.query.cinemaCode = val;
         },
         // 获取所有影院
         getAllCinema() {

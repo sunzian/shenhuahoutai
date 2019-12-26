@@ -58,16 +58,16 @@
             </el-table>
             <div class="pagination">
                 <el-pagination
-                        background
-                        @size-change="handleSizeChange"
-                        layout="total, sizes, prev, pager, next, jumper"
-                        :current-page="query.pageNo"
-                        :page-sizes="[10, 15, 20, 30]"
-                        :page-size="query.pageSize"
-                        :total="query.totalCount"
-                        @current-change="currentChange"
-                        @prev-click="prev"
-                        @next-click="next"
+                    background
+                    @size-change="handleSizeChange"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :current-page="query.pageNo"
+                    :page-sizes="[10, 15, 20, 30]"
+                    :page-size="query.pageSize"
+                    :total="query.totalCount"
+                    @current-change="currentChange"
+                    @prev-click="prev"
+                    @next-click="next"
                 ></el-pagination>
             </div>
         </div>
@@ -75,16 +75,31 @@
         <div class="container" v-if="!showSell">
             <div class="handle-box">
                 <el-input v-model="query.comboName" placeholder="套餐名字" class="handle-input mr10"></el-input>
-                <el-select clearable v-model="query.comboType" placeholder="套餐类型" class="handle-select mr10">
+                <el-select
+                    clearable
+                    v-model="query.comboType"
+                    placeholder="套餐类型"
+                    class="handle-select mr10"
+                >
                     <el-option key="1" label="单人套餐" value="1"></el-option>
                     <el-option key="2" label="双人套餐" value="2"></el-option>
                     <el-option key="3" label="多人套餐" value="3"></el-option>
                 </el-select>
-                <el-select clearable v-model="query.status" placeholder="状态" class="handle-select mr10">
+                <el-select
+                    clearable
+                    v-model="query.status"
+                    placeholder="状态"
+                    class="handle-select mr10"
+                >
                     <el-option key="1" label="上架" value="1"></el-option>
                     <el-option key="2" label="下架" value="2"></el-option>
                 </el-select>
-                <el-button style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
+                <el-button
+                    style="margin-top: 10px;width: 90px;"
+                    type="primary"
+                    icon="el-icon-search"
+                    @click="Search"
+                >搜索</el-button>
                 <el-button
                     type="primary"
                     @click="back"
@@ -96,7 +111,7 @@
                     @click="addPage"
                     icon="el-icon-circle-plus-outline"
                     style="float: right;margin-top: 10px"
-                >新增套餐</el-button> -->
+                >新增套餐</el-button>-->
             </div>
             <el-table
                 :data="oTableData"
@@ -153,22 +168,22 @@
                             icon="el-icon-delete"
                             class="red"
                             @click="delChange(scope.$index, scope.row)"
-                        >删除</el-button> -->
+                        >删除</el-button>-->
                     </template>
                 </el-table-column>
             </el-table>
             <div class="pagination">
                 <el-pagination
-                        background
-                        @size-change="oHandleSizeChange"
-                        layout="total, sizes, prev, pager, next, jumper"
-                        :current-page="query.pageNo"
-                        :page-sizes="[10, 15, 20, 30]"
-                        :page-size="query.pageSize"
-                        :total="query.totalCount"
-                        @current-change="oCurrentChange"
-                        @prev-click="oPrev"
-                        @next-click="oNext"
+                    background
+                    @size-change="oHandleSizeChange"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :current-page="query.pageNo"
+                    :page-sizes="[10, 15, 20, 30]"
+                    :page-size="query.pageSize"
+                    :total="query.totalCount"
+                    @current-change="oCurrentChange"
+                    @prev-click="oPrev"
+                    @next-click="oNext"
                 ></el-pagination>
             </div>
         </div>
@@ -203,7 +218,10 @@
                             将文件拖到此处，或
                             <em>点击上传</em>
                         </div>
-                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过200kb 建议尺寸300*240或按比例上传</div>
+                        <div
+                            class="el-upload__tip"
+                            slot="tip"
+                        >只能上传jpg/png文件，且不超过200kb 建议尺寸300*240或按比例上传</div>
                     </el-upload>
                 </el-form-item>
                 <el-form-item :required="true" label="选择商品" :label-width="formLabelWidth">
@@ -215,7 +233,11 @@
                     v-if="selectedSell.length>0"
                     :required="true"
                 >
-                    <div v-for="(item, index) in selectedSell" style="margin-bottom: 5px" :key="index">
+                    <div
+                        v-for="(item, index) in selectedSell"
+                        style="margin-bottom: 5px"
+                        :key="index"
+                    >
                         <el-input
                             style="width: 250px"
                             v-model="item.merchandiseName"
@@ -231,7 +253,12 @@
                     <el-input style="width: 250px" v-model="oForm.showSeqNo" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="套餐价格" :label-width="formLabelWidth">
-                    <el-input :disabled="true" style="width: 250px" v-model="oForm.originalPrice" autocomplete="off"></el-input>
+                    <el-input
+                        :disabled="true"
+                        style="width: 250px"
+                        v-model="oForm.originalPrice"
+                        autocomplete="off"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="套餐类型" :label-width="formLabelWidth">
                     <el-select v-model="oForm.comboType" placeholder="请选择套餐状态">
@@ -316,16 +343,16 @@
                 </el-table>
                 <div class="pagination">
                     <el-pagination
-                            background
-                            @size-change="aHandleSizeChange"
-                            layout="total, sizes, prev, pager, next, jumper"
-                            :current-page="query.pageNo"
-                            :page-sizes="[10, 15, 20, 30]"
-                            :page-size="query.pageSize"
-                            :total="query.totalCount"
-                            @current-change="aCurrentChange"
-                            @prev-click="aPrev"
-                            @next-click="aNext"
+                        background
+                        @size-change="aHandleSizeChange"
+                        layout="total, sizes, prev, pager, next, jumper"
+                        :current-page="query.pageNo"
+                        :page-sizes="[10, 15, 20, 30]"
+                        :page-size="query.pageSize"
+                        :total="query.totalCount"
+                        @current-change="aCurrentChange"
+                        @prev-click="aPrev"
+                        @next-click="aNext"
                     ></el-pagination>
                 </div>
             </div>
@@ -366,7 +393,7 @@
                             <em>点击上传</em>
                         </div>
                         <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过200kb 建议尺寸300*240或按比例上传</div>
-                    </el-upload> -->
+                    </el-upload>-->
                 </el-form-item>
                 <el-form-item :required="true" label="选择商品" :label-width="formLabelWidth">
                     <!-- <el-button type="primary" @click="openNext">点击选择</el-button> -->
@@ -377,7 +404,11 @@
                     v-if="selectedSell.length>0"
                     :required="true"
                 >
-                    <div v-for="(item, index) in selectedSell" style="margin-bottom: 5px" :key="index">
+                    <div
+                        v-for="(item, index) in selectedSell"
+                        style="margin-bottom: 5px"
+                        :key="index"
+                    >
                         <el-input
                             style="width: 250px"
                             v-model="item.merchandiseName"
@@ -393,7 +424,12 @@
                     <el-input style="width: 250px" v-model="form.showSeqNo" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="套餐价格" :label-width="formLabelWidth">
-                    <el-input :disabled="true" style="width: 250px" v-model="form.originalPrice" autocomplete="off"></el-input>
+                    <el-input
+                        :disabled="true"
+                        style="width: 250px"
+                        v-model="form.originalPrice"
+                        autocomplete="off"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="套餐类型" :label-width="formLabelWidth">
                     <el-select v-model="form.comboType" placeholder="请选择套餐状态">
@@ -419,7 +455,7 @@
             <!-- <span slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false">取 消</el-button>
                 <el-button type="primary" @click="exChanger">确 定</el-button>
-            </span> -->
+            </span>-->
         </el-dialog>
     </div>
 </template>
@@ -476,7 +512,7 @@ export default {
             },
             idx: -1,
             id: -1,
-            oCinemaCode:'',
+            oCinemaCode: '',
             dialogFormVisible: false,
             formLabelWidth: '120px',
             selectValue: {},
@@ -519,12 +555,11 @@ export default {
     },
     mounted() {
         this.getAllBusiness();
-        this.getMenu();
     },
     methods: {
         deleteSell(index) {
             this.selectedSell.splice(index, 1);
-            this.oForm.originalPrice=''
+            this.oForm.originalPrice = '';
         },
         getCurrentRow(index) {
             this.sellIndex = index;
@@ -577,7 +612,7 @@ export default {
                 target: document.querySelector('.div1')
             });
             setTimeout(() => {
-                if(!this.oForm.comboName||!this.oForm.image_url||!this.selectedSell||!this.oForm.comboType||!this.oForm.status){
+                if (!this.oForm.comboName || !this.oForm.image_url || !this.selectedSell || !this.oForm.comboType || !this.oForm.status) {
                     this.message = '必填项不能为空，请检查！';
                     this.open();
                     loading.close();
@@ -637,10 +672,11 @@ export default {
                 this.selectedSell = [];
                 this.selectedSell.push(this.sellTableData[this.sellIndex]);
             }
-            this.oForm.originalPrice=this.sellTableData[this.sellIndex].settlePrice;
+            this.oForm.originalPrice = this.sellTableData[this.sellIndex].settlePrice;
             this.drawer = false;
         },
-        openNext() {     //获取商品列表
+        openNext() {
+            //获取商品列表
             const loading = this.$loading({
                 lock: true,
                 text: 'Loading',
@@ -659,7 +695,7 @@ export default {
                 }
                 let jsonArr = [];
                 // jsonArr.push({key:"roleName",value:name});
-                jsonArr.push({key:"cinemaCode",value:this.oCinemaCode});
+                jsonArr.push({ key: 'cinemaCode', value: this.oCinemaCode });
                 jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
                 jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
                 let sign = md5(preSign(jsonArr));
@@ -739,13 +775,13 @@ export default {
                                 console.log(err);
                             });
                     }, 500);
-                }) .catch(() => {
-                this.$message({
-                    type: 'info',
-                    message: '已取消删除'
+                })
+                .catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
                 });
-            });
-
         },
         addChange(index, row) {
             //是否修改权限
@@ -770,7 +806,7 @@ export default {
                         loading.close();
                         console.log(JSON.parse(Decrypt(data.data.data)));
                         if (data.data.code == 'success') {
-                            if (this.$refs.download){
+                            if (this.$refs.download) {
                                 this.$refs.download.clearFiles();
                             }
                             this.editVisible = true;
@@ -819,7 +855,7 @@ export default {
                 if (!this.form.image_url) {
                     this.form.image_url = this.form.imageUrl;
                 }
-                if(!this.form.comboName||!this.form.image_url||!this.selectedSell||!this.form.comboType||!this.form.status){
+                if (!this.form.comboName || !this.form.image_url || !this.selectedSell || !this.form.comboType || !this.form.status) {
                     this.message = '必填项不能为空，请检查！';
                     this.open();
                     loading.close();
@@ -875,7 +911,7 @@ export default {
             this.showSell = true;
             this.getMenu();
         },
-                getAllBusiness() {
+        getAllBusiness() {
             const loading = this.$loading({
                 lock: true,
                 text: 'Loading',
@@ -980,9 +1016,9 @@ export default {
                     comboType = '';
                 }
                 let jsonArr = [];
-                jsonArr.push({ key: 'comboName', value: comboName});
-                jsonArr.push({ key: 'status', value: status});
-                jsonArr.push({ key: 'comboType', value: comboType});
+                jsonArr.push({ key: 'comboName', value: comboName });
+                jsonArr.push({ key: 'status', value: status });
+                jsonArr.push({ key: 'comboType', value: comboType });
                 jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
                 jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
                 jsonArr.push({ key: 'cinemaCode', value: this.cinemaCode });
@@ -1020,7 +1056,7 @@ export default {
         },
         show(row) {
             //获取卖品套餐页面列表
-            this.oCinemaCode=row.cinemaCode;
+            this.oCinemaCode = row.cinemaCode;
             this.showSell = false;
             const loading = this.$loading({
                 lock: true,
@@ -1036,7 +1072,7 @@ export default {
                     comboName = '';
                 }
                 let jsonArr = [];
-                jsonArr.push({key:"comboName",value:comboName});
+                jsonArr.push({ key: 'comboName', value: comboName });
                 jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
                 jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
                 jsonArr.push({ key: 'cinemaCode', value: this.cinemaCode });
@@ -1081,9 +1117,9 @@ export default {
             if (!isLt200Kb) {
                 this.message = '图片大小不能超过200kb！';
                 this.open();
-                return false
+                return false;
             }
-            return isLt200Kb
+            return isLt200Kb;
         },
         onSuccess(data) {
             //上传文件 登录超时
@@ -1127,8 +1163,8 @@ export default {
         },
         //影院页面
         handleSizeChange(val) {
-            this.query.pageSize=val;
-            this.getMenu()
+            this.query.pageSize = val;
+            this.getMenu();
         },
         currentChange(val) {
             //点击选择具体页数
@@ -1147,8 +1183,8 @@ export default {
         },
         //卖品页面
         oHandleSizeChange(val) {
-            this.query.pageSize=val;
-            this.refresh()
+            this.query.pageSize = val;
+            this.refresh();
         },
         oCurrentChange(val) {
             //点击选择具体页数
@@ -1167,8 +1203,8 @@ export default {
         },
         //新增套餐选择卖品页面
         aHandleSizeChange(val) {
-            this.query.pageSize=val;
-            this.openNext()
+            this.query.pageSize = val;
+            this.openNext();
         },
         aCurrentChange(val) {
             //点击选择具体页数
@@ -1190,18 +1226,18 @@ export default {
 </script>
 
 <style scoped>
-    .handle-box {
-        width: 100%;
-        margin-bottom: 20px;
-        font-size: 14px;
-    }
-    .table {
-        width: 100%;
-        font-size: 14px;
-    }
-    .mr10 {
-        width: 16%;
-        margin-right: 10px;
-    }
+.handle-box {
+    width: 100%;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+.table {
+    width: 100%;
+    font-size: 14px;
+}
+.mr10 {
+    width: 16%;
+    margin-right: 10px;
+}
 </style>
 

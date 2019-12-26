@@ -746,7 +746,6 @@ export default {
     },
     mounted() {
         this.getAllBusiness();
-        this.getMenu();
     },
     methods: {
         match() {

@@ -36,7 +36,7 @@
                         :value="item.cinemaCode"
                     ></el-option>
                 </el-select>
-                <el-select clearable v-model="query.screenName" placeholder="请选择影厅" class="mr10">
+                <el-select clearable v-model="query.screenName" placeholder="请选择影厅" @change="chooseScreen" class="mr10">
                     <el-option
                         v-for="item in screenInfo"
                         :key="item.screenCode"
@@ -357,7 +357,6 @@ export default {
     created() {},
     mounted() {
         this.getAllBusiness();
-        this.getMenu();
     },
     methods: {
         thirdPrice() {
@@ -829,6 +828,7 @@ export default {
                         this.businessInfo = res;
                         this.query.businessCode = res[0].businessCode;
                         this.getAllCinema();
+                        this.getMenu();
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
@@ -844,9 +844,21 @@ export default {
                 });
         },
         changeBusiness(val) {
+            this.query.cinemaCode = '';
+            this.cinemaInfo = [];
             this.query.businessCode = val;
             this.getAllCinema();
             this.$forceUpdate();
+        },
+        chooseCinema(val) {
+            this.query.screenName = '';
+            this.$forceUpdate();
+            this.query.cinemaCode = val;
+            this.getAllScreen(val);
+        },
+        chooseScreen() {
+            this.$forceUpdate();
+            this.query.screenName = val;
         },
         // 获取所有影院
         getAllCinema() {
@@ -887,10 +899,6 @@ export default {
                     console.log(err);
                 });
         },
-        chooseCinema(val) {
-            this.getAllScreen(val);
-        },
-
         // 获取所有影厅
         getAllScreen(val) {
             if (!val) {

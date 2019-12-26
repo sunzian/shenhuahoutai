@@ -297,7 +297,6 @@
         },
         mounted() {
             this.getAllBusiness();
-            this.getMenu();
         },
         methods: {
             getAllBusiness() {

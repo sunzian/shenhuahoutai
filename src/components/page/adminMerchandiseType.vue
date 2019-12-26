@@ -58,16 +58,16 @@
             </el-table>
             <div class="pagination">
                 <el-pagination
-                        background
-                        @size-change="handleSizeChange"
-                        layout="total, sizes, prev, pager, next, jumper"
-                        :current-page="query.pageNo"
-                        :page-sizes="[10, 15, 20, 30]"
-                        :page-size="query.pageSize"
-                        :total="query.totalCount"
-                        @current-change="currentChange"
-                        @prev-click="prev"
-                        @next-click="next"
+                    background
+                    @size-change="handleSizeChange"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :current-page="query.pageNo"
+                    :page-sizes="[10, 15, 20, 30]"
+                    :page-size="query.pageSize"
+                    :total="query.totalCount"
+                    @current-change="currentChange"
+                    @prev-click="prev"
+                    @next-click="next"
                 ></el-pagination>
             </div>
         </div>
@@ -75,7 +75,12 @@
         <div class="container" v-if="!showSell">
             <div class="handle-box">
                 <el-input v-model="query.typeName" placeholder="分类名称" class="handle-input mr10"></el-input>
-                <el-button style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
+                <el-button
+                    style="margin-top: 10px;width: 90px;"
+                    type="primary"
+                    icon="el-icon-search"
+                    @click="Search"
+                >搜索</el-button>
                 <el-button
                     type="primary"
                     @click="back"
@@ -87,7 +92,7 @@
                     @click="addPage"
                     icon="el-icon-circle-plus-outline"
                     style="float: right;margin-top: 10px;"
-                >新增分类</el-button> -->
+                >新增分类</el-button>-->
             </div>
             <el-table
                 :data="oTableData"
@@ -128,22 +133,22 @@
                             icon="el-icon-delete"
                             class="red"
                             @click="delChange(scope.$index, scope.row)"
-                        >删除</el-button> -->
+                        >删除</el-button>-->
                     </template>
                 </el-table-column>
             </el-table>
             <div class="pagination">
                 <el-pagination
-                        background
-                        @size-change="oHandleSizeChange"
-                        layout="total, sizes, prev, pager, next, jumper"
-                        :current-page="query.pageNo"
-                        :page-sizes="[10, 15, 20, 30]"
-                        :page-size="query.pageSize"
-                        :total="query.totalCount"
-                        @current-change="oCurrentChange"
-                        @prev-click="oPrev"
-                        @next-click="oNext"
+                    background
+                    @size-change="oHandleSizeChange"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :current-page="query.pageNo"
+                    :page-sizes="[10, 15, 20, 30]"
+                    :page-size="query.pageSize"
+                    :total="query.totalCount"
+                    @current-change="oCurrentChange"
+                    @prev-click="oPrev"
+                    @next-click="oNext"
                 ></el-pagination>
             </div>
         </div>
@@ -178,7 +183,10 @@
                             将文件拖到此处，或
                             <em>点击上传</em>
                         </div>
-                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过50kb 建议尺寸120*120或按比例上传</div>
+                        <div
+                            class="el-upload__tip"
+                            slot="tip"
+                        >只能上传jpg/png文件，且不超过50kb 建议尺寸120*120或按比例上传</div>
                     </el-upload>
                 </el-form-item>
                 <el-form-item label="排序" :label-width="formLabelWidth">
@@ -222,7 +230,7 @@
                             <em>点击上传</em>
                         </div>
                         <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过50kb 建议尺寸120*120或按比例上传</div>
-                    </el-upload> -->
+                    </el-upload>-->
                 </el-form-item>
                 <el-form-item label="展示顺序" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="form.showSeqNo" autocomplete="off"></el-input>
@@ -231,7 +239,7 @@
             <!-- <span slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false">取 消</el-button>
                 <el-button type="primary" @click="exChanger">确 定</el-button>
-            </span> -->
+            </span>-->
         </el-dialog>
     </div>
 </template>
@@ -301,7 +309,6 @@ export default {
     },
     mounted() {
         this.getAllBusiness();
-        this.getMenu();
     },
     methods: {
         addPage() {
@@ -350,8 +357,7 @@ export default {
                 target: document.querySelector('.div1')
             });
             setTimeout(() => {
-
-                if(!this.oForm.image_url||!this.oForm.name){
+                if (!this.oForm.image_url || !this.oForm.name) {
                     this.message = '必填项不能为空，请检查！';
                     this.open();
                     loading.close();
@@ -443,12 +449,13 @@ export default {
                                 console.log(err);
                             });
                     }, 500);
-                }) .catch(() => {
-                this.$message({
-                    type: 'info',
-                    message: '已取消删除'
+                })
+                .catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
                 });
-            });
         },
         addChange(index, row) {
             //是否修改权限
@@ -506,7 +513,7 @@ export default {
                 if (!this.form.image_url) {
                     this.form.image_url = this.form.imageUrl;
                 }
-                if(!this.form.imageUrl||!this.form.typeName){
+                if (!this.form.imageUrl || !this.form.typeName) {
                     this.message = '必填项不能为空，请检查！';
                     this.open();
                     loading.close();
@@ -555,7 +562,7 @@ export default {
             this.showSell = true;
             this.getMenu();
         },
-                getAllBusiness() {
+        getAllBusiness() {
             const loading = this.$loading({
                 lock: true,
                 text: 'Loading',
@@ -662,7 +669,7 @@ export default {
                     typeName = '';
                 }
                 let jsonArr = [];
-                jsonArr.push({ key: 'typeName', value: typeName});
+                jsonArr.push({ key: 'typeName', value: typeName });
                 jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
                 jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
                 jsonArr.push({ key: 'cinemaCode', value: this.cinemaCode });
@@ -754,9 +761,9 @@ export default {
             if (!isLt50Kb) {
                 this.message = '图片大小不能超过50kb！';
                 this.open();
-                return false
+                return false;
             }
-            return isLt50Kb
+            return isLt50Kb;
         },
         onSuccess(data) {
             //上传文件 登录超时
@@ -799,8 +806,8 @@ export default {
             this.multipleSelection = val;
         },
         handleSizeChange(val) {
-            this.query.pageSize=val;
-            this.getMenu()
+            this.query.pageSize = val;
+            this.getMenu();
         },
         currentChange(val) {
             //点击选择具体页数
@@ -818,8 +825,8 @@ export default {
             this.getMenu();
         },
         oHandleSizeChange(val) {
-            this.query.pageSize=val;
-            this.refresh()
+            this.query.pageSize = val;
+            this.refresh();
         },
         oCurrentChange(val) {
             //点击选择具体页数
@@ -841,17 +848,17 @@ export default {
 </script>
 
 <style scoped>
-    .handle-box {
-        width: 100%;
-        margin-bottom: 20px;
-        font-size: 14px;
-    }
-    .table {
-        width: 100%;
-        font-size: 14px;
-    }
-    .mr10 {
-        width: 16%;
-        margin-right: 10px;
-    }
+.handle-box {
+    width: 100%;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+.table {
+    width: 100%;
+    font-size: 14px;
+}
+.mr10 {
+    width: 16%;
+    margin-right: 10px;
+}
 </style>

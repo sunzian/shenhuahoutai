@@ -325,7 +325,6 @@ export default {
     },
     mounted() {
         this.getAllBusiness();
-        this.getMenu();
     },
     methods: {
         delChange(index, row) {
