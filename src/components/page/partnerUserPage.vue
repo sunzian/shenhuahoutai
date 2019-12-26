@@ -378,6 +378,8 @@
                     memo: '',
                     sort: '',
                     id:'',
+                    realName:'',
+                    callNumber:'',
                 },
                 partnerCode: '',
                 partnerName: '',
@@ -475,12 +477,12 @@
                     let sign = md5(preSign(jsonArr));
                     jsonArr.push({ key: 'sign', value: sign });
                     let params = ParamsAppend(jsonArr);
-                    this.passShow = false;
                     https
                         .fetchPost('/cinemaPartner/updateUserPassword', params)
                         .then(data => {
                             loading.close();
                             if (data.data.code == 'success') {
+                                this.passShow = false;
                                 this.$message.success(`密码修改成功`);
                                 this.getMenu();
                             } else if (data.data.code == 'nologin') {
