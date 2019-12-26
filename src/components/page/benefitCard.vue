@@ -429,7 +429,7 @@
                     >删除</span>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oForm.cardType==2" label="券包权益说明" :label-width="formLabelWidth">
-                    <el-input :rows="5" placeholder="如：券包的内容及有效期等说明" style="width: 300px" v-model="oForm.couponSimpleDesc" maxlength="200" show-word-limit type="textarea"  autocomplete="off"></el-input>
+                    <el-input :rows="6" placeholder="如：券包的内容及有效期等说明" style="width: 300px" v-model="oForm.couponSimpleDesc" maxlength="200" show-word-limit type="textarea"  autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="有效期单位" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.unit">
@@ -826,7 +826,7 @@
                     >删除</span>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oCardType==2" label="券包权益说明" :label-width="formLabelWidth">
-                    <el-input :rows="5" placeholder="如：券包的内容及有效期等说明" style="width: 300px" v-model="oCouponSimpleDesc" maxlength="200" show-word-limit type="textarea" autocomplete="off"></el-input>
+                    <el-input :rows="6" placeholder="如：券包的内容及有效期等说明" style="width: 300px" v-model="oCouponSimpleDesc" maxlength="200" show-word-limit type="textarea" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="有效期单位" :label-width="formLabelWidth">
                     <el-radio-group v-model="oUnit">

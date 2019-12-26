@@ -669,7 +669,7 @@ export default {
                     loading.close();
                     return;
                 }
-                if(!this.oForm.overDays){
+                if(!this.oForm.overDays&&this.oForm.overDays!=0){
                     this.message = '优惠券领取后过期天数不能为空，请检查！';
                     this.open();
                     loading.close();
@@ -700,7 +700,7 @@ export default {
                     loading.close();
                     return;
                 }
-                if(!this.oForm.overDays){
+                if(!this.oForm.overDays&&this.oForm.overDays!=0){
                     this.message = '优惠券领取后过期天数不能为空，请检查！';
                     this.open();
                     loading.close();
@@ -980,7 +980,7 @@ export default {
                     loading.close();
                     return;
                 }
-                if(!this.oOverDays){
+                if(!this.oOverDays&&this.oOverDays!=0){
                     this.message = '优惠券领取后过期天数不能为空，请检查！';
                     this.open();
                     loading.close();
@@ -1011,7 +1011,7 @@ export default {
                     loading.close();
                     return;
                 }
-                if(!this.oOverDays){
+                if(!this.oOverDays&&this.oOverDays!=0){
                     this.message = '优惠券领取后过期天数不能为空，请检查！';
                     this.open();
                     loading.close();

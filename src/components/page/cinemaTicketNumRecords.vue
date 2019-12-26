@@ -134,7 +134,7 @@
         <!--新增弹出框-->
         <el-dialog :close-on-click-modal="false" title="充值张数" :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
-                <el-form-item label="选择影院：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="选择影院：" :label-width="formLabelWidth">
                     <el-select v-model="oForm.cinemaCode" placeholder="请选择">
                         <el-option
                                 v-for="info in cinemaInfo"
@@ -144,7 +144,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="交易张数：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="交易张数：" :label-width="formLabelWidth">
                     <el-input style="width: 200px" min="1" v-model="oForm.tradeTicketNum" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="充值明细：" :label-width="formLabelWidth">
@@ -159,7 +159,7 @@
         <!--新增弹出框-->
         <el-dialog :close-on-click-modal="false" title="充值金额" :visible.sync="dialogFormVisible2">
             <el-form :model="pForm">
-                <el-form-item label="选择影院：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="选择影院：" :label-width="formLabelWidth">
                     <el-select v-model="pForm.cinemaCode" placeholder="请选择">
                         <el-option
                                 v-for="info in cinemaInfo"
@@ -169,7 +169,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="交易金额：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="交易金额：" :label-width="formLabelWidth">
                     <el-input style="width: 200px" min="1" v-model="pForm.tradeTicketPrice" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="充值明细：" :label-width="formLabelWidth">
