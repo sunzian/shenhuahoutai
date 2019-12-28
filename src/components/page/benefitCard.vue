@@ -530,14 +530,14 @@
                 <el-form-item :required="true" v-if="oForm.isGroupJoin==1&&oForm.groupDateType==1" label="券包有效期数量"
                               :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oForm.groupNumber" autocomplete="off"></el-input>
-                    <div>有效期单位为'日'，券包有效期数量输入'2'，即领取券包后券包内的券在2日内有效</div>
+                    <div style="color:red;font-size:12px">有效期单位为'日'，券包有效期数量输入'2'，即领取券包后券包内的券在2日内有效</div>
                 </el-form-item>
                 <!--<el-form-item v-if="oForm.isGroupJoin==1" :required="true" label="券包权益说明" :label-width="formLabelWidth">-->
                     <!--<el-input :rows="6" placeholder="如：券包的内容及有效期等说明" style="width: 300px"-->
                               <!--v-model="oForm.couponSimpleDesc" maxlength="200" show-word-limit type="textarea"-->
                               <!--autocomplete="off"></el-input>-->
                 <!--</el-form-item>-->
-                <el-form-item :required="true" label="有效期单位" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="权益卡有效期单位" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.unit">
                         <el-radio label="年">年</el-radio>
                         <el-radio label="季">季</el-radio>
@@ -546,7 +546,7 @@
                         <el-radio label="日">日</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item :required="true" label="有效期数量" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="权益卡有效期数量" :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oForm.number" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="可用支付方式" :label-width="formLabelWidth">
@@ -1020,14 +1020,14 @@
                 <el-form-item :required="true" v-if="oIsGroupJoin==1&&oGroupDateType==1" label="券包有效期数量"
                               :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oGroupNumber" autocomplete="off"></el-input>
-                    <div>有效期单位为'日'，券包有效期数量输入'2'，即领取券包后券包内的券在2日内有效</div>
+                    <div style="color:red;font-size:12px">有效期单位为'日'，券包有效期数量输入'2'，即领取券包后券包内的券在2日内有效</div>
                 </el-form-item>
                 <!--<el-form-item v-if="oIsGroupJoin==1" :required="true" label="券包权益说明" :label-width="formLabelWidth">-->
                     <!--<el-input :rows="6" placeholder="如：券包的内容及有效期等说明" style="width: 300px"-->
                               <!--v-model="oCouponSimpleDesc" maxlength="200" show-word-limit type="textarea"-->
                               <!--autocomplete="off"></el-input>-->
                 <!--</el-form-item>-->
-                <el-form-item :required="true" label="有效期单位" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="权益卡有效期单位" :label-width="formLabelWidth">
                     <el-radio-group v-model="oUnit">
                         <el-radio label="年">年</el-radio>
                         <el-radio label="季">季</el-radio>
@@ -1036,7 +1036,7 @@
                         <el-radio label="日">日</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item :required="true" label="有效期数量" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="权益卡有效期数量" :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oNumber" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="可用支付方式" :label-width="formLabelWidth">
@@ -2664,6 +2664,7 @@
                                 break;
                             }
                         }
+                        this.oGroupNumber = JSON.parse(Decrypt(data.data.data)).benefitCard.groupNumber;
                         this.oLimitBuyNumber = JSON.parse(Decrypt(data.data.data)).benefitCard.limitBuyNumber;
                         this.oEachFilmNumber = JSON.parse(Decrypt(data.data.data)).benefitCard.eachFilmNumber;
                         this.oLimitFilmUnit = JSON.parse(Decrypt(data.data.data)).benefitCard.limitFilmUnit;
@@ -3476,10 +3477,6 @@
                 })
             },
             Search() {
-                console.log(this.query.reduceType);
-                console.log(this.query.status);
-                console.log(this.query.cinemaCode);
-                console.log(this.query.name);
                 this.query.pageNo = 1;
                 this.getMenu();
             },
@@ -3506,10 +3503,8 @@
                 jsonArr.push({key: 'pageNo', value: this.query.pageNo});
                 jsonArr.push({key: 'reduceTypeFilm', value: reduceTypeFilm});
                 jsonArr.push({key: 'reduceTypeMerchandise', value: reduceTypeMerchandise});
-                // jsonArr.push({key: 'cardType', value: cardType});
                 jsonArr.push({key: 'cinemaCode', value: this.query.cinemaCode});
                 jsonArr.push({key: 'pageSize', value: this.query.pageSize});
-                // jsonArr.push({ key: 'filmName', value: name });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({key: 'sign', value: sign});
                 console.log(jsonArr);

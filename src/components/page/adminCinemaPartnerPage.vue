@@ -38,6 +38,15 @@
                 </el-select>
                 <el-select
                     clearable
+                    v-model="query.adminPartner"
+                    placeholder="通用商家"
+                    class="handle-select mr10"
+                >
+                    <el-option key="1" label="是" value="1"></el-option>
+                    <el-option key="2" label="否" value="2"></el-option>
+                </el-select>
+                <el-select
+                    clearable
                     v-model="query.status"
                     placeholder="状态"
                     class="handle-select mr10"
@@ -117,13 +126,21 @@
                             type="text"
                             icon="el-icon-edit"
                             @click="addChange(scope.$index, scope.row)"
+                            v-if="!scope.row.cinemaCodes"
                         >编辑</el-button>
-                        <!-- <el-button
+                        <el-button
+                            type="text"
+                            icon="el-icon-edit"
+                            @click="addChange(scope.$index, scope.row)"
+                            v-else
+                        >查看</el-button>
+                        <el-button
                             type="text"
                             icon="el-icon-delete"
                             class="red"
+                            v-if="!scope.row.cinemaCodes"
                             @click="delChange(scope.$index, scope.row)"
-                        >删除</el-button> -->
+                        >删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -145,7 +162,7 @@
         <!--新增弹出框-->
         <el-dialog :close-on-click-modal="false" title="新增合作商家" :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
-                <el-form-item :required="true" label="适用影院" :label-width="formLabelWidth">
+                <!-- <el-form-item :required="true" label="适用影院" :label-width="formLabelWidth">
                     <el-checkbox-group v-model="oForm.cinemaCodes" @change="changeCinema">
                         <el-checkbox
                             v-for="item in cinemaInfo"
@@ -154,7 +171,7 @@
                             :value="item.cinemaCode"
                         >{{item.cinemaName}}</el-checkbox>
                     </el-checkbox-group>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item :required="true" label="商户名称" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
@@ -254,7 +271,7 @@
         <!-- 编辑弹出框 -->
         <el-dialog :close-on-click-modal="false" title="编辑" :visible.sync="editVisible">
             <el-form ref="form" :model="changeForm">
-                <el-form-item :required="true" label="适用影院" :label-width="formLabelWidth">
+                <!-- <el-form-item :required="true" label="适用影院" :label-width="formLabelWidth">
                     <el-checkbox-group v-model="changeForm.cinemaCodes" @change="changeCinema2">
                         <el-checkbox
                             v-for="item in cinemaInfo"
@@ -263,7 +280,7 @@
                             :value="item.cinemaCode"
                         >{{item.cinemaName}}</el-checkbox>
                     </el-checkbox-group>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item :required="true" label="商户名称" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
@@ -355,10 +372,10 @@
                     </el-select>
                 </el-form-item>
             </el-form>
-            <!-- <span slot="footer" class="dialog-footer">
+            <span slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false">取 消</el-button>
                 <el-button type="primary" @click="exChanger">确 定</el-button>
-            </span> -->
+            </span>
         </el-dialog>
     </div>
 </template>
@@ -481,7 +498,7 @@ export default {
             });
             setTimeout(() => {
                 https
-                    .fetchPost('/cinemaPartner/addPage', '')
+                    .fetchPost('/admin/cinemaPartner/addPage', '')
                     .then(data => {
                         loading.close();
                         if (data.data.code == 'success') {
@@ -524,12 +541,12 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            if (this.oForm.cinemaCodes.length == 0) {
-                this.message = '请选择影院！';
-                this.open();
-                loading.close();
-                return;
-            }
+            // if (this.oForm.cinemaCodes.length == 0) {
+            //     this.message = '请选择影院！';
+            //     this.open();
+            //     loading.close();
+            //     return;
+            // }
             if (this.oForm.partnerName == '') {
                 this.message = '商户名称不能为空！';
                 this.open();
@@ -575,7 +592,7 @@ export default {
             setTimeout(() => {
                 let cinemaCodes = this.oForm.cinemaCodes.join(",")
                 var jsonArr = [];
-                jsonArr.push({ key: 'cinemaCodes', value: cinemaCodes });
+                // jsonArr.push({ key: 'cinemaCodes', value: cinemaCodes });
                 jsonArr.push({ key: 'status', value: this.oForm.status });;
                 jsonArr.push({ key: 'partnerName', value: this.oForm.partnerName });
                 jsonArr.push({ key: 'storeMobile', value: this.oForm.storeMobile });
@@ -591,7 +608,7 @@ export default {
                 let params = ParamsAppend(jsonArr);
                 if (this.dialogFormVisible == true) {
                     https
-                        .fetchPost('/cinemaPartner/add', params)
+                        .fetchPost('/admin/cinemaPartner/add', params)
                         .then(data => {
                             //新增
                             loading.close();
@@ -599,7 +616,7 @@ export default {
                                 this.dialogFormVisible = false;
                                 this.$message.success(`新增成功`);
                                 this.oForm.partnerName = '';
-                                this.oForm.cinemaCodes = [];
+                                // this.oForm.cinemaCodes = [];
                                 this.oForm.status = '';
                                 this.oForm.storeMobile = '';
                                 this.oForm.concatName = '';
@@ -650,7 +667,7 @@ export default {
                         jsonArr.push({ key: 'sign', value: sign });
                         let params = ParamsAppend(jsonArr);
                         https
-                            .fetchPost('/cinemaPartner/deleteById', params)
+                            .fetchPost('/admin/cinemaPartner/deleteById', params)
                             .then(data => {
                                 loading.close();
                                 if (data.data.code == 'success') {
@@ -708,8 +725,9 @@ export default {
                                     break;
                                 }
                             }
+                            console.log(JSON.parse(Decrypt(data.data.data)))
                             this.changeForm.status = this.showStatus[index].value;
-                            this.changeForm.cinemaCodes = JSON.parse(Decrypt(data.data.data)).cinemaCodes.split(",");
+                            // this.changeForm.cinemaCodes = JSON.parse(Decrypt(data.data.data)).cinemaCodes.split(",");
                             this.changeForm.partnerName = JSON.parse(Decrypt(data.data.data)).partnerName;
                             this.changeForm.partnerCode = JSON.parse(Decrypt(data.data.data)).partnerCode;
                             this.changeForm.storeMobile = JSON.parse(Decrypt(data.data.data)).storeMobile;
@@ -745,12 +763,12 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            if (this.changeForm.cinemaCodes.length == 0) {
-                this.message = '请选择影院！';
-                this.open();
-                loading.close();
-                return;
-            }
+            // if (this.changeForm.cinemaCodes.length == 0) {
+            //     this.message = '请选择影院！';
+            //     this.open();
+            //     loading.close();
+            //     return;
+            // }
             if (this.changeForm.partnerName == '') {
                 this.message = '商户名称不能为空！';
                 this.open();
@@ -798,7 +816,7 @@ export default {
                 var jsonArr = [];
                 jsonArr.push({ key: 'partnerName', value: this.changeForm.partnerName });
                 jsonArr.push({ key: 'partnerCode', value: this.changeForm.partnerCode });
-                jsonArr.push({ key: 'cinemaCodes', value: cinemaCodes });
+                // jsonArr.push({ key: 'cinemaCodes', value: cinemaCodes });
                 jsonArr.push({ key: 'status', value: this.changeForm.status });
                 jsonArr.push({ key: 'storeMobile', value: this.changeForm.storeMobile });
                 jsonArr.push({ key: 'concatName', value: this.changeForm.concatName });
@@ -814,7 +832,7 @@ export default {
                 console.log(jsonArr);
                 let params = ParamsAppend(jsonArr);
                 https
-                    .fetchPost('/cinemaPartner/updateById', params)
+                    .fetchPost('/admin/cinemaPartner/updateById', params)
                     .then(data => {
                         loading.close();
                         if (data.data.code == 'success') {
@@ -852,6 +870,7 @@ export default {
             setTimeout(() => {
                 let businessCode = this.query.businessCode;
                 let partnerName = this.query.partnerName;
+                let adminPartner = this.query.adminPartner;
                 let cinemaCodes = this.query.cinemaCodes;
                 let concatName = this.query.concatName;
                 let storeMobile = this.query.storeMobile;
@@ -862,6 +881,9 @@ export default {
                 }
                 if (!businessCode) {
                     businessCode = '';
+                }
+                if (!adminPartner) {
+                    adminPartner = '';
                 }
                 if (!cinemaCodes) {
                     cinemaCodes = '';
@@ -882,6 +904,7 @@ export default {
                 jsonArr.push({ key: 'status', value: status });
                 jsonArr.push({ key: 'businessCode', value: businessCode });
                 jsonArr.push({ key: 'cinemaCodes', value: cinemaCodes });
+                jsonArr.push({ key: 'adminPartner', value: adminPartner });
                 jsonArr.push({ key: 'partnerName', value: partnerName });
                 jsonArr.push({ key: 'concatName', value: concatName });
                 jsonArr.push({ key: 'storeMobile', value: storeMobile });
@@ -890,7 +913,6 @@ export default {
                 jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
-                console.log(jsonArr)
                 var params = ParamsAppend(jsonArr);
                 https
                     .fetchPost('/admin/cinemaPartner/page', params)

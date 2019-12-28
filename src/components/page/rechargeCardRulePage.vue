@@ -210,7 +210,7 @@
                         @click="deletCoupon"
                     >删除</span>
                 </el-form-item>
-                <el-form-item :required="true" v-if="oForm.givenType == 3 || oForm.givenType == 4" label="优惠券领取后过期天数：" :label-width="formLabelWidth">
+                <el-form-item :required="true" v-if="oForm.givenType == 3 || oForm.givenType == 4" label="优惠券领取后有效期天数：" :label-width="formLabelWidth">
                     <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 250px" v-model.trim="oForm.overDays" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="规则有效期：" :label-width="formLabelWidth">
@@ -321,7 +321,7 @@
                     ></el-input>
                     <el-button type="primary" @click="changeCoupon">更换券包</el-button>
                 </el-form-item>
-                <el-form-item :required="true" v-if="oGivenType == 3 || oGivenType == 4 || oGivenType == '赠送券包' || oGivenType == '两者都送'" label="优惠券领取后过期天数：" :label-width="formLabelWidth">
+                <el-form-item :required="true" v-if="oGivenType == 3 || oGivenType == 4 || oGivenType == '赠送券包' || oGivenType == '两者都送'" label="优惠券领取后有效期天数：" :label-width="formLabelWidth">
                     <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 250px" min="1" v-model.trim="oOverDays" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="规则有效期：" :label-width="formLabelWidth">
@@ -656,7 +656,7 @@ export default {
                     loading.close();
                     return;
                 }
-                if(this.oForm.givenMoney<=0){
+                if(this.oForm.givenMoney.trim()<=0){
                     this.message = '赠送金额必须大于0，请检查！';
                     this.open();
                     loading.close();
@@ -670,13 +670,13 @@ export default {
                     return;
                 }
                 if(!this.oForm.overDays&&this.oForm.overDays!=0){
-                    this.message = '优惠券领取后过期天数不能为空，请检查！';
+                    this.message = '优惠券领取后有效期天数不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
                 if(this.oForm.overDays<=0){
-                    this.message = '优惠券领取后过期天数必须大于0，请检查！';
+                    this.message = '优惠券领取后有效期天数必须大于0，请检查！';
                     this.open();
                     loading.close();
                     return;
@@ -688,7 +688,7 @@ export default {
                     loading.close();
                     return;
                 }
-                if(this.oForm.givenMoney<=0){
+                if(this.oForm.givenMoney.trim()<=0){
                     this.message = '赠送金额必须大于0，请检查！';
                     this.open();
                     loading.close();
@@ -701,13 +701,13 @@ export default {
                     return;
                 }
                 if(!this.oForm.overDays&&this.oForm.overDays!=0){
-                    this.message = '优惠券领取后过期天数不能为空，请检查！';
+                    this.message = '优惠券领取后有效期天数不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
                 if(this.oForm.overDays<=0){
-                    this.message = '优惠券领取后过期天数必须大于0，请检查！';
+                    this.message = '优惠券领取后有效期天数必须大于0，请检查！';
                     this.open();
                     loading.close();
                     return;
@@ -743,7 +743,6 @@ export default {
             jsonArr.push({ key: 'startDate', value: this.oForm.startDate });
             jsonArr.push({ key: 'endDate', value: this.oForm.endDate });
             jsonArr.push({ key: 'status', value: this.oForm.status });
-            console.log(jsonArr);
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             console.log(jsonArr);
@@ -967,7 +966,7 @@ export default {
                     loading.close();
                     return;
                 }
-                if(this.oGivenMoney<=0){
+                if(this.oGivenMoney.trim()<=0){
                     this.message = '赠送金额必须大于0，请检查！';
                     this.open();
                     loading.close();
@@ -981,13 +980,13 @@ export default {
                     return;
                 }
                 if(!this.oOverDays&&this.oOverDays!=0){
-                    this.message = '优惠券领取后过期天数不能为空，请检查！';
+                    this.message = '优惠券领取后有效期天数不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
                 if(this.oOverDays<=0){
-                    this.message = '优惠券领取后过期天数必须大于0，请检查！';
+                    this.message = '优惠券领取后有效期天数必须大于0，请检查！';
                     this.open();
                     loading.close();
                     return;
@@ -999,7 +998,7 @@ export default {
                     loading.close();
                     return;
                 }
-                if(this.oGivenMoney<=0){
+                if(this.oGivenMoney.trim()<=0){
                     this.message = '赠送金额必须大于0，请检查！';
                     this.open();
                     loading.close();
@@ -1012,13 +1011,13 @@ export default {
                     return;
                 }
                 if(!this.oOverDays&&this.oOverDays!=0){
-                    this.message = '优惠券领取后过期天数不能为空，请检查！';
+                    this.message = '优惠券领取后有效期天数不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
                 if(this.oOverDays<=0){
-                    this.message = '优惠券领取后过期天数必须大于0，请检查！';
+                    this.message = '优惠券领取后有效期天数必须大于0，请检查！';
                     this.open();
                     loading.close();
                     return;

@@ -105,7 +105,7 @@
                 ref="multipleTable"
                 header-cell-class-name="table-header"
                 @selection-change="handleSelectionChange"
-            >
+                >
                 <el-table-column prop="sort" label="允许兑换的门店" width="240">
                     <template slot-scope="scope">{{scope.row.cinemaNames}}</template>
                 </el-table-column>
@@ -314,15 +314,6 @@
                             class="el-upload__tip"
                         >只能上传jpg/png文件，且不超过200kb 建议尺寸200*200或按比例上传</div>
                     </el-upload>
-                </el-form-item>
-                <el-form-item :required="true" label="详情" :label-width="formLabelWidth">
-                    <mavon-editor
-                        v-model="oForm.details"
-                        ref="md"
-                        @change="changeMarkdown"
-                        @imgAdd="$imgAdd"
-                        @imgDel="$imgDel"
-                    />
                 </el-form-item>
                 <el-form-item
                     :required="true"
@@ -641,6 +632,15 @@
                             autocomplete="off"
                     ></el-input>
                 </el-form-item>
+                <el-form-item :required="true" label="详情" :label-width="formLabelWidth">
+                    <mavon-editor
+                        v-model="oForm.details"
+                        ref="md"
+                        @change="changeMarkdown"
+                        @imgAdd="$imgAdd"
+                        @imgDel="$imgDel"
+                    />
+                </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -747,16 +747,6 @@
                             slot="tip"
                         >只能上传jpg/png文件，且不超过200kb 建议尺寸200*200或按比例上传</div>
                     </el-upload>
-                </el-form-item>
-                <el-form-item :required="true" label="详情" :label-width="formLabelWidth">
-                    <mavon-editor
-                        class="markdown-body"
-                        v-model="form.markdown"
-                        ref="md"
-                        @change="changeFormMarkdown"
-                        @imgAdd="$imgAdd"
-                        @imgDel="$imgDel"
-                    />
                 </el-form-item>
                 <el-form-item
                     v-if="form.commodityType==1 || form.commodityType==4"
@@ -1074,6 +1064,16 @@
                             v-model="form.memo"
                             autocomplete="off"
                     ></el-input>
+                </el-form-item>
+                <el-form-item :required="true" label="详情" :label-width="formLabelWidth">
+                    <mavon-editor
+                        class="markdown-body"
+                        v-model="form.markdown"
+                        ref="md"
+                        @change="changeFormMarkdown"
+                        @imgAdd="$imgAdd"
+                        @imgDel="$imgDel"
+                    />
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">

@@ -278,19 +278,20 @@
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="开场前的购票时间限制（分钟）" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="oBuyMinutesLimit" autocomplete="off"></el-input>
+                    <el-input style="width: 250px" onkeyup="this.value=this.value.replace(/\D/g,'')" v-model="oBuyMinutesLimit" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="开场前的退票时间限制（分钟）" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="oRefundMinutesLimit" autocomplete="off"></el-input>
+                    <el-input style="width: 250px" onkeyup="this.value=this.value.replace(/\D/g,'')" v-model="oRefundMinutesLimit" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="退票手续费" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="oRefundFee" autocomplete="off"></el-input>
+                    <el-input style="width: 250px" onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')" v-model="oRefundFee" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="第三方支付代售费" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         v-model="oThirdPartyPayCommissionFee"
                         autocomplete="off"
+                        onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="会员卡支付代售费" :label-width="formLabelWidth">
@@ -298,6 +299,7 @@
                         style="width: 250px"
                         v-model="oMemberCardPayCommissionFee"
                         autocomplete="off"
+                        onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')"
                     ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="影院会员服务协议" :label-width="formLabelWidth">
@@ -1198,7 +1200,7 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            if (!this.oConcatName) {
+            if (!this.oConcatName.trim()) {
                 this.message = '影院联系人姓名不能为空，请检查！';
                 this.open();
                 loading.close();

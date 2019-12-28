@@ -119,7 +119,7 @@
                         <el-tag v-else type="danger">未启用</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" width="200" align="center" fixed="right">
+                <el-table-column label="操作" width="150" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-button
                             type="success"
@@ -1383,6 +1383,12 @@ export default {
                     loading.close();
                     return;
                 }
+                if (Number(this.oForm.achieveMoney) < Number(this.oForm.discountMoney)) {
+                    this.message = '减免金额不能大于满减金额！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
             }
             if (!this.oForm.status) {
                 this.message = '开启状态不能为空，请检查！';
@@ -1899,12 +1905,6 @@ export default {
                 // }
             }
             if (this.oReduceType == 4) {
-                if (this.oAchieveMoney <this.oDiscountMoney ) {
-                    this.message = '请输入合理的满减金额！';
-                    this.open();
-                    loading.close();
-                    return;
-                }
                 if (this.oAchieveMoney == 0 || this.oDiscountMoney == 0) {
                     this.message = '请输入合理的满减金额！';
                     this.open();
@@ -1921,6 +1921,12 @@ export default {
                 }
                 if (this.oDiscountMoney < 0 || this.oAchieveMoney < 0) {
                     this.message = '减免金额不能小于0！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if (Number(this.oDiscountMoney) > Number(this.oAchieveMoney)) {
+                    this.message = '减免金额不能大于满减金额！';
                     this.open();
                     loading.close();
                     return;
