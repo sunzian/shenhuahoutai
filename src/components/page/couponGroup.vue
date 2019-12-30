@@ -60,7 +60,7 @@
                         <el-tag v-else type="danger">未启用</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" width="240" align="center">
+                <el-table-column label="操作" width="150" align="center">
                     <template slot-scope="scope">
                         <el-button
                             type="success"

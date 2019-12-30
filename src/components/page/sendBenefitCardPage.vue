@@ -3,7 +3,7 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
-                    <i class="el-icon-lx-cascades"></i> 优惠券发放
+                    <i class="el-icon-lx-cascades"></i> 权益卡发放
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
@@ -163,7 +163,7 @@
                 >搜索</el-button>
             </div>
             <div style="margin-bottom: 10px; margin-top: 10px;height: 42px; float: right;">
-                <el-button type="primary" style="margin-right: 10px;" @click="setConditions">发放优惠券</el-button>
+                <el-button type="primary" style="margin-right: 10px;" @click="setConditions">发放权益卡</el-button>
             </div>
             <div style="float: right;">
                 <el-button
@@ -295,7 +295,7 @@
                             >上传模板只能是 xls、xlsx格式!</div>
                         </el-upload>
                     </el-form-item>
-                    <el-form-item :required="true" label="选择有效时间类型：" :label-width="formLabelWidth">
+                    <!-- <el-form-item :required="true" label="选择有效时间类型：" :label-width="formLabelWidth">
                         <el-radio-group v-model="excelCouponForm.effectiveTimeType">
                             <el-radio :label="1">固定天数后过期</el-radio>
                             <el-radio :label="2">指定时间段有效</el-radio>
@@ -335,12 +335,12 @@
                             v-model="excelCouponForm.overDays"
                             autocomplete="off"
                         ></el-input>天
-                    </el-form-item>
-                    <el-form-item :required="true" label="选择优惠券：" :label-width="formLabelWidth">
-                        <el-button @click="getAllCoupon">选择优惠券</el-button>
+                    </el-form-item> -->
+                    <el-form-item :required="true" label="选择权益卡：" :label-width="formLabelWidth">
+                        <el-button @click="getAllCoupon">选择权益卡</el-button>
                     </el-form-item>
                     <el-form-item
-                        label="所选优惠券"
+                        label="所选权益卡"
                         :label-width="formLabelWidth"
                         v-if="couponList.length>0"
                         :required="true"
@@ -384,13 +384,13 @@
                 </div>
             </div>
         </div>
-        <!-- 优惠券弹出框 -->
-        <el-dialog title="选择优惠券" :visible.sync="editVisible" :show-close="false" :close-on-click-modal="false">
+        <!-- 权益卡弹出框 -->
+        <el-dialog title="选择权益卡" :visible.sync="editVisible" :show-close="false" :close-on-click-modal="false">
             <div class="container">
                 <div class="handle-box">
                     <el-input
                         v-model="query.couponName"
-                        placeholder="优惠券名称"
+                        placeholder="权益卡名称"
                         class="handle-input mr10"
                     ></el-input>
                     <el-button type="primary" icon="el-icon-search" @click="getAllCoupon">搜索</el-button>
@@ -405,38 +405,11 @@
                     :row-key="getcouponId"
                 >
                     <el-table-column type="selection" :reserve-selection="true" width="55"></el-table-column>
-                    <el-table-column prop="sort" label="优惠券名称">
+                    <el-table-column prop="sort" label="权益卡名称">
                         <template slot-scope="scope">{{scope.row.name}}</template>
                     </el-table-column>
-                    <el-table-column label="优惠券类型" prop="sort">
-                        <template slot-scope="scope">
-                            <el-tag v-if="scope.row.couponType == 1" type="success">影票优惠券</el-tag>
-                            <el-tag v-else-if="scope.row.couponType == 2" type="success">卖品优惠券</el-tag>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="sort" label="优惠金额">
-                        <template slot-scope="scope">
-                            <el-tag
-                                v-if="scope.row.reduceType == 1"
-                                type="success"
-                            >固定{{scope.row.discountMoney}}元</el-tag>
-                            <el-tag
-                                v-else-if="scope.row.reduceType == 2 && scope.row.couponType == 2"
-                                type="success"
-                            >满{{scope.row.achieveMoney}}减{{scope.row.discountMoney}}</el-tag>
-                            <el-tag
-                                v-else-if="scope.row.reduceType == 2 && scope.row.couponType == 1"
-                                type="success"
-                            >减{{scope.row.discountMoney}}元</el-tag>
-                            <el-tag
-                                    v-else-if="scope.row.reduceType == 3 && scope.row.couponType == 1"
-                                    type="success"
-                            >满{{scope.row.achieveMoney}}张减{{scope.row.discountMoney}}元</el-tag>
-                            <el-tag
-                                    v-else-if="scope.row.reduceType == 4 && scope.row.couponType == 1"
-                                    type="success"
-                            >满{{scope.row.achieveMoney}}减{{scope.row.discountMoney}}元</el-tag>
-                        </template>
+                    <el-table-column label="权益卡说明" prop="sort">
+                        <template slot-scope="scope">{{scope.row.simpleDesc}}</template>
                     </el-table-column>
                 </el-table>
                 <div class="pagination">
@@ -519,13 +492,13 @@
             :close-on-click-modal="false"
             >
             <el-form :model="couponForm">
-                <el-form-item :required="true" label="选择有效时间类型：" :label-width="formLabelWidth">
+                <!-- <el-form-item :required="true" label="选择有效时间类型：" :label-width="formLabelWidth">
                     <el-radio-group v-model="couponForm.effectiveTimeType">
                         <el-radio :label="1">固定天数后过期</el-radio>
                         <el-radio :label="2">指定时间段有效</el-radio>
                     </el-radio-group>
-                </el-form-item>
-                <el-form-item
+                </el-form-item> -->
+                <!-- <el-form-item
                     label="指定时间段："
                     :label-width="formLabelWidth"
                     v-if="couponForm.effectiveTimeType == 2"
@@ -553,12 +526,12 @@
                     :required="true"
                 >
                     <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" placeholder="自领取之日起计算" style="width: 150px" v-model="couponForm.overDays" autocomplete="off"></el-input>天
-                </el-form-item>
-                <el-form-item :required="true" label="选择优惠券：" :label-width="formLabelWidth">
-                    <el-button @click="getAllCoupon">选择优惠券</el-button>
+                </el-form-item> -->
+                <el-form-item :required="true" label="选择权益卡：" :label-width="formLabelWidth">
+                    <el-button @click="getAllCoupon">选择权益卡</el-button>
                 </el-form-item>
                 <el-form-item
-                    label="所选优惠券"
+                    label="所选权益卡"
                     :label-width="formLabelWidth"
                     v-if="couponList.length>0"
                     :required="true"
@@ -629,7 +602,7 @@ export default {
             sendType: 1,
             hasExcel: false,
             message: '', //弹出框消息
-            uploadAction: 'api/batchSendCoupon/importExcelToSendCoupon',
+            uploadAction: 'api/batchSendBenefitCard/importExcelToSendCoupon',
             type: {},
             query: {
                 pageNo: 1,
@@ -697,19 +670,19 @@ export default {
         paramsData: function () {
             let params = {
                 cinemaCode: this.query.cinemaCode,
-                effectiveTimeType: this.excelCouponForm.effectiveTimeType,
-                startDate: this.excelCouponForm.startDate,
-                endDate: this.excelCouponForm.endDate,
-                overDays: this.excelCouponForm.overDays,
+                // effectiveTimeType: this.excelCouponForm.effectiveTimeType,
+                // startDate: this.excelCouponForm.startDate,
+                // endDate: this.excelCouponForm.endDate,
+                // overDays: this.excelCouponForm.overDays,
                 couponInfo: this.excelCouponForm.couponInfo,
                 sendMemo: this.excelCouponForm.sendMemo,
             }
             let jsonArr = [];
             jsonArr.push({ key: 'cinemaCode', value: params.cinemaCode });
-            jsonArr.push({ key: 'effectiveTimeType', value: params.effectiveTimeType });
-            jsonArr.push({ key: 'startDate', value: params.startDate });
-            jsonArr.push({ key: 'endDate', value: params.endDate });
-            jsonArr.push({ key: 'overDays', value: params.overDays });
+            // jsonArr.push({ key: 'effectiveTimeType', value: params.effectiveTimeType });
+            // jsonArr.push({ key: 'startDate', value: params.startDate });
+            // jsonArr.push({ key: 'endDate', value: params.endDate });
+            // jsonArr.push({ key: 'overDays', value: params.overDays });
             jsonArr.push({ key: 'couponInfo', value: params.couponInfo });
             jsonArr.push({ key: 'sendMemo', value: params.sendMemo });
             let sign = md5(preSign(jsonArr));
@@ -723,7 +696,7 @@ export default {
             this.showType = true;
             this.dialogVisible = true;
         },
-        // 获取所有的优惠券
+        // 获取所有的权益卡
         getAllCoupon() {
             if (!this.query.cinemaCode) {
                 this.message = '请选择影院';
@@ -737,13 +710,14 @@ export default {
                 }
                 let jsonArr = [];
                 jsonArr.push({ key: 'name', value: couponName });
+                jsonArr.push({key: 'status', value: 1});
                 jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
                 jsonArr.push({ key: 'pageNo', value: this.query.couponPageNo });
                 jsonArr.push({ key: 'pageSize', value: this.query.couponPageSize });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
                 var params = ParamsAppend(jsonArr);
-                https.fetchPost('/merchandiseCoupon/getCouponByCinemaCode', params).then(data => {
+                https.fetchPost('/batchSendBenefitCard/benefitCardList', params).then(data => {
                         if (data.data.code == 'success') {
                             var res = JSON.parse(Decrypt(data.data.data));
                             this.couponInfo = res.pageResult.data;
@@ -807,27 +781,27 @@ export default {
         // 发放优惠券
         sendCoupon() {
             if (this.couponList.length == 0) {
-                this.message = '请选择优惠券';
+                this.message = '请选择权益卡';
                 this.open();
                 return;
             }
             for (let i = 0;i < this.couponList.length;i ++) {
                 if (this.couponList[i].count < 1) {
-                    this.message = '每种优惠券单次发放数量不能小于1张！';
+                    this.message = '每种权益卡单次发放数量不能小于1张！';
                     this.open();
                     return;
                 }
                 if (this.couponList[i].count > 20) {
-                    this.message = '每种优惠券单次发放数量不能大于20张！';
+                    this.message = '每种权益卡单次发放数量不能大于20张！';
                     this.open();
                     return;
                 }
             }
-            if (this.couponForm.effectiveTimeType == 1 && this.couponForm.overDays == '') {
-                this.message = '请填写有效期天数';
-                this.open();
-                return;
-            }
+            // if (this.couponForm.effectiveTimeType == 1 && this.couponForm.overDays == '') {
+            //     this.message = '请填写有效期天数';
+            //     this.open();
+            //     return;
+            // }
             if (this.couponForm.sendMemo == '') {
                 this.message = '请填写发放原因';
                 this.open();
@@ -838,18 +812,18 @@ export default {
                 this.open();
                 return;
             }
-            if (this.couponForm.effectiveTimeType == 1 && this.couponForm.overDays <=0) {
-                this.message = '有效期天数必须大于0';
-                this.open();
-                return;
-            }
-            if (this.couponForm.effectiveTimeType == 2) {
-                if (this.couponForm.startDate == '' || this.couponForm.endDate == '') {
-                    this.message = '请填写时间段';
-                    this.open();
-                    return;
-                }
-            }
+            // if (this.couponForm.effectiveTimeType == 1 && this.couponForm.overDays <=0) {
+            //     this.message = '有效期天数必须大于0';
+            //     this.open();
+            //     return;
+            // }
+            // if (this.couponForm.effectiveTimeType == 2) {
+            //     if (this.couponForm.startDate == '' || this.couponForm.endDate == '') {
+            //         this.message = '请填写时间段';
+            //         this.open();
+            //         return;
+            //     }
+            // }
             const loading = this.$loading({
                 lock: true,
                 text: 'Loading',
@@ -922,13 +896,13 @@ export default {
             }
             this.couponForm.couponInfo = couponData.join(',');
             let jsonArr = [];
-            if (this.couponForm.effectiveTimeType == 1) {
-                jsonArr.push({ key: 'overDays', value: this.couponForm.overDays });
-            }
-            if (this.couponForm.effectiveTimeType == 2) {
-                jsonArr.push({ key: 'startDate', value: this.couponForm.startDate });
-                jsonArr.push({ key: 'endDate', value: this.couponForm.endDate });
-            }
+            // if (this.couponForm.effectiveTimeType == 1) {
+            //     jsonArr.push({ key: 'overDays', value: this.couponForm.overDays });
+            // }
+            // if (this.couponForm.effectiveTimeType == 2) {
+            //     jsonArr.push({ key: 'startDate', value: this.couponForm.startDate });
+            //     jsonArr.push({ key: 'endDate', value: this.couponForm.endDate });
+            // }
             jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
             jsonArr.push({ key: 'mobile', value: mobile });
             jsonArr.push({ key: 'consumeStartDate', value: consumeStartDate });
@@ -942,26 +916,27 @@ export default {
             jsonArr.push({ key: 'userRole', value: userRole });
             jsonArr.push({ key: 'bindCardStatus', value: bindCardStatus });
             jsonArr.push({ key: 'filmCodes', value: filmCodes });
-            jsonArr.push({ key: 'effectiveTimeType', value: this.couponForm.effectiveTimeType });
+            // jsonArr.push({ key: 'effectiveTimeType', value: this.couponForm.effectiveTimeType });
             jsonArr.push({ key: 'couponInfo', value: this.couponForm.couponInfo });
             jsonArr.push({ key: 'sendMemo', value: this.couponForm.sendMemo });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
+            console.log(jsonArr)
             var params = ParamsAppend(jsonArr);
             https
-                .fetchPost('/batchSendCoupon/batchSendCoupon', params)
+                .fetchPost('/batchSendBenefitCard/batchSendCoupon', params)
                 .then(data => {
                     loading.close();
                     if (data.data.code == 'success') {
                         this.sendConditions = false;
                         this.couponList = [];
-                        this.couponForm.effectiveTimeType = 1;
-                        this.couponForm.startDate = '';
-                        this.couponForm.endDate = '';
-                        this.couponForm.overDays = '';
+                        // this.couponForm.effectiveTimeType = 1;
+                        // this.couponForm.startDate = '';
+                        // this.couponForm.endDate = '';
+                        // this.couponForm.overDays = '';
                         this.couponForm.sendMemo = '';
                         this.couponForm.couponInfo = '';
-                        this.message = '优惠券将陆续发放,短时间内请勿连续发放';
+                        this.message = '权益卡将陆续发放,短时间内请勿连续发放';
                         this.open();
                         this.Search();
                     } else if (data.data.code == 'nologin') {
@@ -981,39 +956,39 @@ export default {
 
         excelSendCoupon() {
             if (this.couponList.length == 0) {
-                this.message = '请选择优惠券';
+                this.message = '请选择权益卡';
                 this.open();
                 return;
             }
             for (let i = 0;i < this.couponList.length;i ++) {
                 if (this.couponList[i].count < 1) {
-                    this.message = '每种优惠券单次发放数量不能小于1张！';
+                    this.message = '每种权益卡单次发放数量不能小于1张！';
                     this.open();
                     return;
                 }
                 if (this.couponList[i].count > 20) {
-                    this.message = '每种优惠券单次发放数量不能大于20张！';
+                    this.message = '每种权益卡单次发放数量不能大于20张！';
                     this.open();
                     return;
                 }
             }
-            if (this.excelCouponForm.effectiveTimeType == 1 && this.excelCouponForm.overDays == '') {
-                this.message = '请填写有效期天数';
-                this.open();
-                return;
-            }
-            if (this.excelCouponForm.effectiveTimeType == 1 && this.excelCouponForm.overDays <=0) {
-                this.message = '有效期天数必须大于0';
-                this.open();
-                return;
-            }
-            if (this.excelCouponForm.effectiveTimeType == 2) {
-                if (this.excelCouponForm.startDate == '' || this.excelCouponForm.endDate == '') {
-                    this.message = '请填写时间段';
-                    this.open();
-                    return;
-                }
-            }
+            // if (this.excelCouponForm.effectiveTimeType == 1 && this.excelCouponForm.overDays == '') {
+            //     this.message = '请填写有效期天数';
+            //     this.open();
+            //     return;
+            // }
+            // if (this.excelCouponForm.effectiveTimeType == 1 && this.excelCouponForm.overDays <=0) {
+            //     this.message = '有效期天数必须大于0';
+            //     this.open();
+            //     return;
+            // }
+            // if (this.excelCouponForm.effectiveTimeType == 2) {
+            //     if (this.excelCouponForm.startDate == '' || this.excelCouponForm.endDate == '') {
+            //         this.message = '请填写时间段';
+            //         this.open();
+            //         return;
+            //     }
+            // }
             if (this.hasExcel == false) {
                 this.message = '请上传文件！';
                 this.open();
@@ -1042,10 +1017,10 @@ export default {
                 .then(() => {
                     this.sendConditions = false;
                     this.couponList = [];
-                    this.couponForm.effectiveTimeType = 1;
-                    this.couponForm.startDate = '';
-                    this.couponForm.endDate = '';
-                    this.couponForm.overDays = '';
+                    // this.couponForm.effectiveTimeType = 1;
+                    // this.couponForm.startDate = '';
+                    // this.couponForm.endDate = '';
+                    // this.couponForm.overDays = '';
                     this.couponForm.messageContent = '';
                     this.couponForm.couponInfo = '';
                 })
@@ -1151,7 +1126,7 @@ export default {
                 jsonArr.push({ key: 'sign', value: sign });
                 var params = ParamsAppend(jsonArr);
                 https
-                    .fetchPost('/batchSendCoupon/searchUser', params)
+                    .fetchPost('/batchSendBenefitCard/searchUser', params)
                     .then(data => {
                         loading.close();
                         if (data.data.code == 'success') {
@@ -1227,13 +1202,13 @@ export default {
 
         uploadExcel(response) {
             this.successUpLoad = true;
-            this.message = '优惠券将陆续发放,短时间内请勿连续发放';
+            this.message = '权益卡将陆续发放,短时间内请勿连续发放';
             this.open();
             this.$refs.upload.clearFiles();
-            this.excelCouponForm.effectiveTimeType = 1;
-            this.excelCouponForm.startDate = '';
-            this.excelCouponForm.endDate = '';
-            this.excelCouponForm.overDays = '';
+            // this.excelCouponForm.effectiveTimeType = 1;
+            // this.excelCouponForm.startDate = '';
+            // this.excelCouponForm.endDate = '';
+            // this.excelCouponForm.overDays = '';
             this.excelCouponForm.couponInfo = '';
             this.couponList = [];
             this.hasExcel = false;
@@ -1300,7 +1275,7 @@ export default {
             });
             setTimeout(() => {
                 https
-                    .fetchPost('/batchSendCoupon/pageIndex')
+                    .fetchPost('/batchSendBenefitCard/pageIndex')
                     .then(data => {
                         loading.close();
                         if (data.data.code == 'success') {

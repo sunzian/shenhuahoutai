@@ -226,9 +226,19 @@ export default new Router({
                     meta: { title: '优惠券发放' }
                 },
                 {
+                    path: '/sendBenefitCardPage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/sendBenefitCardPage.vue'),
+                    meta: { title: '权益卡发放' }
+                },
+                {
                     path: '/batchSendCouponRecord',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/batchSendCouponRecord.vue'),
                     meta: { title: '优惠券发放记录' }
+                },
+                {
+                    path: '/batchSendBenefitRecord',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/batchSendBenefitRecord.vue'),
+                    meta: { title: '权益卡发放记录' }
                 },
                 {
                     path: '/adminBatchSendCouponRecord',
