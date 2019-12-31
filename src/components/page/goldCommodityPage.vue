@@ -138,6 +138,15 @@
                         <el-tag v-else-if="scope.row.changeType=='3'">金币+RMB 兑换</el-tag>
                     </template>
                 </el-table-column>
+                <el-table-column prop="sort" label="支持快递" width="130">
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row.supportExpressStatus=='1'">支持</el-tag>
+                        <el-tag v-else-if="scope.row.supportExpressStatus=='2'">不支持</el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="sort" label="快递费用" width="110">
+                    <template slot-scope="scope">{{scope.row.expressFee}}</template>
+                </el-table-column>
                 <el-table-column prop="sort" label="所需金币数量" width="110">
                     <template slot-scope="scope">{{scope.row.gold}}</template>
                 </el-table-column>
@@ -370,6 +379,29 @@
                         style="width: 250px"
                         v-model.trim="oForm.money"
                         autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item v-if="oForm.commodity_type==4" :required="true" label="是否支持快递" :label-width="formLabelWidth">
+                    <el-select v-model="oForm.supportExpressStatus" placeholder="请选择兑换方式">
+                        <el-option
+                                v-for="item in supportType"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item
+                        :required="true"
+                        v-if="oForm.commodity_type==4&&oForm.supportExpressStatus==1"
+                        label="快递费用"
+                        :label-width="formLabelWidth"
+                >
+                    <el-input
+                            onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')"
+                            style="width: 250px"
+                            v-model.trim="oForm.expressFee"
+                            autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item
@@ -803,6 +835,29 @@
                         style="width: 250px"
                         v-model.trim="form.money"
                         autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item v-if="form.commodityType==4" :required="true" label="是否支持快递" :label-width="formLabelWidth">
+                    <el-select v-model="form.supportExpressStatus" placeholder="请选择兑换方式">
+                        <el-option
+                                v-for="item in supportType"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item
+                        :required="true"
+                        v-if="form.commodityType==4&&form.supportExpressStatus==1"
+                        label="快递费用"
+                        :label-width="formLabelWidth"
+                >
+                    <el-input
+                            onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')"
+                            style="width: 250px"
+                            v-model.trim="form.expressFee"
+                            autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item
@@ -1307,6 +1362,8 @@ export default {
                 assignInfo: '',
                 gold: '',
                 money: '',
+                supportExpressStatus: '',
+                expressFee: '',
                 store: ''
             },
             idx: -1,
@@ -1332,6 +1389,8 @@ export default {
                 assign_info: '',
                 gold: '',
                 money: '',
+                supportExpressStatus: '',
+                expressFee: '',
                 store: ''
             },
 
@@ -1547,6 +1606,16 @@ export default {
                 {
                     value: '2',
                     label: '未上架'
+                }
+            ],
+            supportType: [
+                {
+                    value: '1',
+                    label: '支持'
+                },
+                {
+                    value: '2',
+                    label: '不支持'
                 }
             ],
             topStatusList: [
@@ -1966,6 +2035,26 @@ export default {
                     loading.close();
                     return;
                 }
+                if (!this.oForm.supportExpressStatus) {
+                    this.message = '支持快递不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if(this.oForm.supportExpressStatus==1){
+                    if (!this.oForm.expressFee&&this.oForm.expressFee!=0) {
+                        this.message = '快递费用不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                    if (this.oForm.expressFee<0) {
+                        this.message = '快递费用不能小于0，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
             }
             if (!this.oForm.image_url) {
                 this.message = '商品图片不能为空，请检查！';
@@ -2205,6 +2294,8 @@ export default {
             if (this.oForm.commodity_type == 4) {
                 jsonArr.push({ key: 'partnerCode', value: this.partnerCode });
                 jsonArr.push({ key: 'pickupType', value: this.oForm.pickupType });
+                jsonArr.push({ key: 'supportExpressStatus', value: this.oForm.supportExpressStatus });
+                jsonArr.push({ key: 'expressFee', value: this.oForm.expressFee });
             }
             if (this.oForm.commodity_type == 3) {
                 jsonArr.push({ key: 'ticketIds', value: this.couponId });
@@ -2429,6 +2520,7 @@ export default {
                             this.form.limitType = JSON.parse(Decrypt(data.data.data)).goldCommodity.limitType;
                             this.form.limitNumber = JSON.parse(Decrypt(data.data.data)).goldCommodity.limitNumber;
                             this.form.sort = JSON.parse(Decrypt(data.data.data)).goldCommodity.sort;
+                            this.form.expressFee = JSON.parse(Decrypt(data.data.data)).goldCommodity.expressFee;
                             this.oCities = JSON.parse(Decrypt(data.data.data)).cinemas;
                             this.oLaterDays = JSON.parse(Decrypt(data.data.data)).goldCommodity.laterDays;
                             this.oStartEffectiveDate = JSON.parse(Decrypt(data.data.data)).goldCommodity.startEffectiveDate;
@@ -2495,6 +2587,13 @@ export default {
                                     break;
                                 }
                             }
+                            //是否快递下拉选显示对应的选项
+                            for (let x in this.supportType) {
+                                if (this.supportType[x].value == JSON.parse(Decrypt(data.data.data)).goldCommodity.supportExpressStatus) {
+                                    this.form.supportExpressStatus = this.supportType[x].value;
+                                    break;
+                                }
+                            }
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
                             this.open();
@@ -2557,6 +2656,26 @@ export default {
                     this.open();
                     loading.close();
                     return;
+                }
+                if (!this.form.supportExpressStatus) {
+                    this.message = '支持快递不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if(this.form.supportExpressStatus==1){
+                    if (!this.form.expressFee&&this.form.expressFee!=0) {
+                        this.message = '快递费用不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                    if (this.form.expressFee<0) {
+                        this.message = '快递费用不能小于0，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
                 }
             }
             if (!this.oImageUrl) {
@@ -2795,6 +2914,8 @@ export default {
                 if (this.form.commodityType == 4) {
                     jsonArr.push({ key: 'partnerCode', value: this.partnerCode });
                     jsonArr.push({ key: 'pickupType', value: this.form.pickupType });
+                    jsonArr.push({ key: 'supportExpressStatus', value: this.form.supportExpressStatus });
+                    jsonArr.push({ key: 'expressFee', value: this.form.expressFee });
                 }
                 if (this.form.commodityType == 2) {
                     jsonArr.push({ key: 'ticketIds', value: this.ticketIds });

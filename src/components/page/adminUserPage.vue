@@ -91,13 +91,13 @@
         <!--新增弹出框-->
         <el-dialog :close-on-click-modal="false" title="新增角色" :visible.sync="dialogFormVisible">
             <el-form v-model="oForm">
-                <el-form-item label="用户名" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="用户名" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oForm.userName" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="密码" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="密码" :label-width="formLabelWidth">
                     <el-input type="password" style="width: 250px" maxlength="16" v-model="oForm.userPass" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="状态" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="状态" :label-width="formLabelWidth">
                     <el-select v-model="oForm.value" placeholder="请选择状态">
                         <el-option
                                 v-for="item in options"
@@ -113,7 +113,7 @@
                 <el-form-item label="呼叫号码" :label-width="formLabelWidth">
                     <el-input style="width: 250px" maxlength="18" v-model="oForm.callNumber" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="影院公司名" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="影院公司名" :label-width="formLabelWidth">
                     <el-select v-model="selectList.businessCode" >
                         <el-option
                                 v-for="item in selectList"
@@ -126,7 +126,7 @@
                 <el-form-item label="描述" :label-width="formLabelWidth">
                     <el-input style="width: 250px" maxlength="9" v-model="oForm.memo" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="权限" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="权限" :label-width="formLabelWidth">
                     <el-tree
                             ref="tree"
                             :data="data"
@@ -146,10 +146,10 @@
         <!-- 编辑弹出框 -->
         <el-dialog :close-on-click-modal="false" title="编辑" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
-                <el-form-item label="用户名" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="用户名" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="userName" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="状态" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="状态" :label-width="formLabelWidth">
                     <el-select v-model="selectValue">
                         <el-option
                                 v-for="item in options"
@@ -165,7 +165,7 @@
                 <el-form-item label="呼叫号码" :label-width="formLabelWidth">
                     <el-input style="width: 250px"  maxlength="18" v-model="form.callNumber" autocomplete="off"></el-input>
                 </el-form-item >
-                <el-form-item label="影院公司名" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="影院公司名" :label-width="formLabelWidth">
                     <el-select v-model="selectCode">
                         <el-option
                                 v-for="item in businessInfoList"
@@ -178,7 +178,7 @@
                 <el-form-item label="描述" :label-width="formLabelWidth">
                     <el-input style="width: 250px"  maxlength="9" v-model="form.memo" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="权限" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="权限" :label-width="formLabelWidth">
                     <el-tree
                             ref="tree"
                             :data="data"
@@ -303,6 +303,30 @@
                     background: 'rgba(0, 0, 0, 0.7)',
                     target: document.querySelector('.div1')
                 });
+                if (!this.oForm.userName) {
+                    this.message = '用户名不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if (!this.oForm.userPass) {
+                    this.message = '密码不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if (!this.oForm.value) {
+                    this.message = '状态不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if (!this.selectList.businessCode) {
+                    this.message = '影院公司名不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
                 setTimeout(() => {
                     var jsonArr = [];
                     jsonArr.push({key:"userName",value:this.oForm.userName});
@@ -466,6 +490,24 @@
                     background: 'rgba(0, 0, 0, 0.7)',
                     target: document.querySelector('.div1')
                 });
+                if (!this.userName) {
+                    this.message = '用户名不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if (!this.selectValue) {
+                    this.message = '状态不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if (!this.selectCode) {
+                    this.message = '影院公司名不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
                 setTimeout(() => {
                     var jsonArr = [];
                     jsonArr.push({key:"id",value:this.form.id});

@@ -250,8 +250,14 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            if(!this.oForm.name||!this.oForm.picture){
-                this.message = '必填项不能为空，请检查！';
+            if(!this.oForm.name){
+                this.message = '演员名称不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.oForm.picture){
+                this.message = '演员图片不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
@@ -392,8 +398,14 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            if(!this.oName||!this.oPicture){
-                this.message = '必填项不能为空，请检查！';
+            if(!this.oName){
+                this.message = '演员名称不能为空，请检查！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if(!this.oPicture){
+                this.message = '演员图片不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;

@@ -63,6 +63,15 @@
                     <el-option key="3" label="已过期" value="3"></el-option>
                 </el-select>
                 <el-select
+                        clearable
+                        v-model="query.pickupWay"
+                        placeholder="取货方式"
+                        class="handle-select mr10"
+                >
+                    <el-option key="1" label="自提" value="1"></el-option>
+                    <el-option key="2" label="快递" value="2"></el-option>
+                </el-select>
+                <el-select
                     clearable
                     v-model="query.payStatus"
                     placeholder="兑换状态"
@@ -175,6 +184,25 @@
                 <el-table-column prop="memo" label="兑换时间" width="150">
                     <template slot-scope="scope">{{scope.row.payTime}}</template>
                 </el-table-column>
+                <el-table-column label="取货方式" align="center" width="100">
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row. pickupWay=='1'">自提</el-tag>
+                        <el-tag v-else-if="scope.row. pickupWay=='2'">快递</el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="memo" label="物流单号" width="150">
+                    <template slot-scope="scope">{{scope.row.trackingNumber}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="收货人名称" width="150">
+                    <template slot-scope="scope">{{scope.row.deliveryName}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="快递状态" width="90">
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row.trackingStatus=='1'">快递中</el-tag>
+                        <el-tag v-else-if="scope.row.trackingStatus=='2'">已送达</el-tag>
+                        <el-tag v-else-if="scope.row.trackingStatus=='3'">已收货</el-tag>
+                    </template>
+                </el-table-column>
                 <el-table-column prop="memo" label="核销状态" width="90">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status=='1'">未核销</el-tag>
@@ -267,6 +295,54 @@
                         style="width: 250px"
                         v-model="form.status"
                         autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="取货方式" :label-width="formLabelWidth">
+                    <el-input
+                            :disabled="true"
+                            style="width: 250px"
+                            v-model="form.pickupWay"
+                            autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="物流单号" :label-width="formLabelWidth">
+                    <el-input
+                            :disabled="true"
+                            style="width: 250px"
+                            v-model="form.trackingNumber"
+                            autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="快递状态" :label-width="formLabelWidth">
+                    <el-input
+                            :disabled="true"
+                            style="width: 250px"
+                            v-model="form.trackingStatus"
+                            autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="收货人名称" :label-width="formLabelWidth">
+                    <el-input
+                            :disabled="true"
+                            style="width: 250px"
+                            v-model="form.deliveryName"
+                            autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="收货人电话" :label-width="formLabelWidth">
+                    <el-input
+                            :disabled="true"
+                            style="width: 250px"
+                            v-model="form.deliveryMobile"
+                            autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="收货人地址" :label-width="formLabelWidth">
+                    <el-input
+                            :disabled="true"
+                            style="width: 250px"
+                            v-model="form.deliveryAddressDetail"
+                            autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="支付交易号" :label-width="formLabelWidth">
@@ -420,8 +496,12 @@ export default {
                 let endDate = this.query.endDate;
                 let refundStatus = this.query.refundStatus;
                 let changeType = this.query.changeType;
+                let pickupWay = this.query.pickupWay;
                 if (!changeType) {
                     changeType = '';
+                }
+                if (!pickupWay) {
+                    pickupWay = '';
                 }
                 if (!cinemaCode) {
                     cinemaCode = '';
@@ -461,12 +541,12 @@ export default {
                 jsonArr.push({
                     key: 'exportKeysJson',
                     value:
-                        "['id','cinemaCode','cinemaName','partnerName','chSettleStatusString','orderNo','mobile','commodityName','gold','money','getDate','payTime','chPayStatus','tradeNo','payReturnMsg','chChangeType','chStatus','chRefundStatus','refundNo','refundReason','refundApply','refundTime','refundPrice']"
+                        "['id','cinemaCode','cinemaName','partnerName','chSettleStatusString','orderNo','mobile','commodityName','gold','money','getDate','payTime','chPayStatus','chPickupWay','trackingNumber','chTrackingStatus','deliveryName','deliveryMobile','deliveryAddressDetail','tradeNo','payReturnMsg','chChangeType','chStatus','chRefundStatus','refundNo','refundReason','refundApply','refundTime','refundPrice']"
                 });
                 jsonArr.push({
                     key: 'exportTitlesJson',
                     value:
-                        "['ID','影院编码','影院名称','商户名称','商户订单结算状态','订单号','手机号','商品名称','消费金币','支付金额','领取时间','兑换时间','兑换状态','支付交易号','支付回调消息','兑换方式','核销状态','退款状态','退款交易号','退款原因','微信退款回复','退款时间','退款金额']"
+                        "['ID','影院编码','影院名称','商户名称','商户订单结算状态','订单号','手机号','商品名称','消费金币','支付金额','领取时间','兑换时间','兑换状态','取货方式','物流单号','快递状态','收货人名称','收货人电话','收货人地址','支付交易号','支付回调消息','兑换方式','核销状态','退款状态','退款交易号','退款原因','微信退款回复','退款时间','退款金额']"
                 });
                 jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
                 jsonArr.push({ key: 'partnerCode', value: partnerCode });
@@ -477,6 +557,7 @@ export default {
                 jsonArr.push({ key: 'refundStatus', value: refundStatus });
                 jsonArr.push({ key: 'status', value: status });
                 jsonArr.push({ key: 'changeType', value: changeType });
+                jsonArr.push({ key: 'pickupWay', value: pickupWay });
                 jsonArr.push({ key: 'payStatus', value: payStatus });
                 jsonArr.push({ key: 'startDate', value: startDate });
                 jsonArr.push({ key: 'endDate', value: endDate });
@@ -597,6 +678,18 @@ export default {
                             } else if (JSON.parse(Decrypt(data.data.data)).refundStatus == 2) {
                                 this.form.refundStatus = '退款失败';
                             }
+                            if (JSON.parse(Decrypt(data.data.data)).trackingStatus == 1) {
+                                this.form.trackingStatus = '快递中';
+                            } else if (JSON.parse(Decrypt(data.data.data)).trackingStatus == 2) {
+                                this.form.trackingStatus = '已送达';
+                            } else if (JSON.parse(Decrypt(data.data.data)).trackingStatus == 3) {
+                                this.form.trackingStatus = '已收货';
+                            }
+                            if (JSON.parse(Decrypt(data.data.data)).pickupWay == 1) {
+                                this.form.pickupWay = '自提';
+                            } else if (JSON.parse(Decrypt(data.data.data)).pickupWay == 2) {
+                                this.form.pickupWay = '快递';
+                            }
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
                             this.open();
@@ -638,6 +731,10 @@ export default {
                 let partnerCode = this.query.partnerCode;
                 let settleStatus = this.query.settleStatus;
                 let commodityName = this.query.commodityName;
+                let pickupWay = this.query.pickupWay;
+                if (!pickupWay) {
+                    pickupWay = '';
+                }
                 if (!cinemaCode) {
                     cinemaCode = '';
                 }
@@ -687,6 +784,7 @@ export default {
                 jsonArr.push({ key: 'refundStatus', value: refundStatus });
                 jsonArr.push({ key: 'startDate', value: startDate });
                 jsonArr.push({ key: 'endDate', value: endDate });
+                jsonArr.push({ key: 'pickupWay', value: pickupWay });
                 jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
                 jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
                 let sign = md5(preSign(jsonArr));
@@ -698,6 +796,7 @@ export default {
                         loading.close();
                         if (data.data.code == 'success') {
                             var oData = JSON.parse(Decrypt(data.data.data));
+                            // console.log(oData);
                             this.tableData = oData.pageResult.data;
                             this.totalData = oData.statistics;
                             this.query.pageSize = oData.pageResult.pageSize;
@@ -766,6 +865,7 @@ export default {
 .mr10 {
     width: 16%;
     margin-right: 10px;
+    margin-top: 10px;
 }
 </style>
 
