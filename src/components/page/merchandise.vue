@@ -240,7 +240,7 @@
                     <el-select v-model="form.typeCode" placeholder="请选择分类">
                         <el-option
                             v-for="item in selectValue"
-                            :key="item.typeCode"
+                            :key="item.typeName"
                             :label="item.typeName"
                             :value="item.typeCode"
                         ></el-option>
@@ -307,7 +307,6 @@ export default {
             id: -1,
             dialogFormVisible: false,
             formLabelWidth: '120px',
-            selectValue: {},
             showStatus: [
                 {
                     value: '1',
@@ -417,8 +416,7 @@ export default {
                     .fetchPost('/merchandise/modifyPage', params)
                     .then(data => {
                         loading.close();
-                        console.log(data);
-                        // console.log(JSON.parse(Decrypt(data.data.data)));
+                        console.log(JSON.parse(Decrypt(data.data.data)));
                         if (data.data.code == 'success') {
                             this.editVisible = true;
                             this.form.name = JSON.parse(Decrypt(data.data.data)).merchandise.merchandiseName;
@@ -481,7 +479,6 @@ export default {
                 jsonArr.push({ key: 'sign', value: sign });
                 console.log(jsonArr);
                 let params = ParamsAppend(jsonArr);
-                console.log(params);
                 https
                     .fetchPost('/merchandise/modify', params)
                     .then(data => {
