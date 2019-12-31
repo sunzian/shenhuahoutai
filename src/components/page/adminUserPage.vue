@@ -34,7 +34,7 @@
                 <el-table-column prop="memo" label="真实姓名">
                     <template slot-scope="scope">{{scope.row.realName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="呼叫号码" width="130">
+                <el-table-column prop="memo" label="联系电话" width="130">
                     <template slot-scope="scope">{{scope.row.callNumber}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="影院公司名">
@@ -110,7 +110,7 @@
                 <el-form-item label="真实姓名" :label-width="formLabelWidth">
                     <el-input style="width: 250px" maxlength="9" v-model="oForm.realName" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="呼叫号码" :label-width="formLabelWidth">
+                <el-form-item label="联系电话" :label-width="formLabelWidth">
                     <el-input style="width: 250px" maxlength="18" v-model="oForm.callNumber" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="影院公司名" :label-width="formLabelWidth">
@@ -162,7 +162,7 @@
                 <el-form-item label="真实姓名" :label-width="formLabelWidth">
                     <el-input style="width: 250px"  maxlength="9" v-model="form.realName" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="呼叫号码" :label-width="formLabelWidth">
+                <el-form-item label="联系电话" :label-width="formLabelWidth">
                     <el-input style="width: 250px"  maxlength="18" v-model="form.callNumber" autocomplete="off"></el-input>
                 </el-form-item >
                 <el-form-item :required="true" label="影院公司名" :label-width="formLabelWidth">

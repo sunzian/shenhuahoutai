@@ -126,7 +126,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="呼叫号码" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="联系电话" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         maxlength="18"
@@ -205,7 +205,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="呼叫号码" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="联系电话" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         maxlength="18"
@@ -583,13 +583,13 @@
                 return;
             }
             if(!this.oForm.callNumber){
-                this.message = '呼叫号码不能为空，请检查！';
+                this.message = '联系电话不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
             }
             if(this.oForm.callNumber.length!=11){
-                this.message = '请输入正确的呼叫号码！';
+                this.message = '请输入正确的联系电话！';
                 this.open();
                 loading.close();
                 return;
@@ -781,13 +781,13 @@
                 return;
             }
             if(!this.form.callNumber){
-                this.message = '呼叫号码不能为空，请检查！';
+                this.message = '联系电话不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
             }
             if(this.form.callNumber.length!=11){
-                this.message = '请输入正确的呼叫号码！';
+                this.message = '请输入正确的联系电话！';
                 this.open();
                 loading.close();
                 return;

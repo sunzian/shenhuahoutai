@@ -1608,8 +1608,6 @@ export default {
                 .then(data => {
                     loading.close();
                     this.selectedSell = [];
-                    console.log(data);
-                    console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         if (JSON.parse(Decrypt(data.data.data)).coupon.filmCode && JSON.parse(Decrypt(data.data.data)).coupon.filmNames) {
                             let exFilmCodeList = JSON.parse(Decrypt(data.data.data)).coupon.filmCode.split(',');
