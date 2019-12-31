@@ -119,14 +119,13 @@
             <el-form ref="screenForm" :model="screenForm">
                 <el-form-item label="第三方影厅名称" :label-width="formLabelWidth">
                     <el-input
-                        style="width: 250px"
-                        type="textarea"
-                        maxlength="50"
-                        :rows="5"
+                        style="width: 500px"
+                        maxlength="100"
                         show-word-limit
                         v-model="screenForm.thirdPartyScreenName"
                         autocomplete="off"
                     ></el-input>
+                    <div>猫眼影厅名称@淘票票影厅名称@百度糯米影厅名称</div>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">

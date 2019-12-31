@@ -183,7 +183,7 @@
                 <el-form-item label="门店电话" :label-width="formLabelWidth" :required="true">
                     <el-input
                         style="width: 250px"
-                        maxlength="30"
+                        maxlength="13"
                         v-model="oForm.storeMobile"
                         autocomplete="off"
                         onkeyup="this.value=this.value.replace(/[^0-9-]+/,'')"
@@ -200,7 +200,7 @@
                 <el-form-item label="联系人电话" :label-width="formLabelWidth" :required="true">
                     <el-input
                         style="width: 250px"
-                        maxlength="30"
+                        maxlength="11"
                         v-model="oForm.concatMobile"
                         autocomplete="off"
                         onkeyup="this.value=this.value.replace(/\D/g,'')"
@@ -292,7 +292,7 @@
                 <el-form-item label="门店电话" :label-width="formLabelWidth" :required="true">
                     <el-input
                         style="width: 250px"
-                        maxlength="30"
+                        maxlength="13"
                         v-model="changeForm.storeMobile"
                         autocomplete="off"
                         onkeyup="this.value=this.value.replace(/[^0-9-]+/,'')"
@@ -309,7 +309,7 @@
                 <el-form-item label="联系人电话" :label-width="formLabelWidth" :required="true">
                     <el-input
                         style="width: 250px"
-                        maxlength="30"
+                        maxlength="11"
                         v-model="changeForm.concatMobile"
                         autocomplete="off"
                         onkeyup="this.value=this.value.replace(/\D/g,'')"
