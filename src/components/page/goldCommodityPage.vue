@@ -138,15 +138,16 @@
                         <el-tag v-else-if="scope.row.changeType=='3'">金币+RMB 兑换</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="sort" label="支持快递" width="130">
+                <el-table-column prop="sort" label="取货方式" width="130">
                     <template slot-scope="scope">
-                        <el-tag v-if="scope.row.supportExpressStatus=='1'">支持</el-tag>
-                        <el-tag v-else-if="scope.row.supportExpressStatus=='2'">不支持</el-tag>
+                        <el-tag v-if="scope.row.supportExpressStatus=='1'">自提</el-tag>
+                        <el-tag v-else-if="scope.row.supportExpressStatus=='2'">快递</el-tag>
+                        <el-tag v-else-if="scope.row.supportExpressStatus=='3'">自提加快递</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="sort" label="快递费用" width="110">
-                    <template slot-scope="scope">{{scope.row.expressFee}}</template>
-                </el-table-column>
+                <!--<el-table-column prop="sort" label="快递费用" width="110">-->
+                    <!--<template slot-scope="scope">{{scope.row.expressFee}}</template>-->
+                <!--</el-table-column>-->
                 <el-table-column prop="sort" label="所需金币数量" width="110">
                     <template slot-scope="scope">{{scope.row.gold}}</template>
                 </el-table-column>
@@ -381,8 +382,8 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item v-if="oForm.commodity_type==4" :required="true" label="是否支持快递" :label-width="formLabelWidth">
-                    <el-select v-model="oForm.supportExpressStatus" placeholder="请选择兑换方式">
+                <el-form-item v-if="oForm.commodity_type==4" :required="true" label="取货方式" :label-width="formLabelWidth">
+                    <el-select v-model="oForm.supportExpressStatus" placeholder="请选择取货方式">
                         <el-option
                                 v-for="item in supportType"
                                 :key="item.value"
@@ -391,19 +392,19 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item
-                        :required="true"
-                        v-if="oForm.commodity_type==4&&oForm.supportExpressStatus==1"
-                        label="快递费用"
-                        :label-width="formLabelWidth"
-                >
-                    <el-input
-                            onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')"
-                            style="width: 250px"
-                            v-model.trim="oForm.expressFee"
-                            autocomplete="off"
-                    ></el-input>
-                </el-form-item>
+                <!--<el-form-item-->
+                        <!--:required="true"-->
+                        <!--v-if="oForm.commodity_type==4&&oForm.supportExpressStatus==1"-->
+                        <!--label="快递费用"-->
+                        <!--:label-width="formLabelWidth"-->
+                <!--&gt;-->
+                    <!--<el-input-->
+                            <!--onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')"-->
+                            <!--style="width: 250px"-->
+                            <!--v-model.trim="oForm.expressFee"-->
+                            <!--autocomplete="off"-->
+                    <!--&gt;</el-input>-->
+                <!--</el-form-item>-->
                 <el-form-item
                     :required="true"
                     label="生效方式"
@@ -837,8 +838,8 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item v-if="form.commodityType==4" :required="true" label="是否支持快递" :label-width="formLabelWidth">
-                    <el-select v-model="form.supportExpressStatus" placeholder="请选择兑换方式">
+                <el-form-item v-if="form.commodityType==4" :required="true" label="取货方式" :label-width="formLabelWidth">
+                    <el-select v-model="form.supportExpressStatus" placeholder="请选择取货方式">
                         <el-option
                                 v-for="item in supportType"
                                 :key="item.value"
@@ -847,19 +848,19 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item
-                        :required="true"
-                        v-if="form.commodityType==4&&form.supportExpressStatus==1"
-                        label="快递费用"
-                        :label-width="formLabelWidth"
-                >
-                    <el-input
-                            onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')"
-                            style="width: 250px"
-                            v-model.trim="form.expressFee"
-                            autocomplete="off"
-                    ></el-input>
-                </el-form-item>
+                <!--<el-form-item-->
+                        <!--:required="true"-->
+                        <!--v-if="form.commodityType==4&&form.supportExpressStatus==1"-->
+                        <!--label="快递费用"-->
+                        <!--:label-width="formLabelWidth"-->
+                <!--&gt;-->
+                    <!--<el-input-->
+                            <!--onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')"-->
+                            <!--style="width: 250px"-->
+                            <!--v-model.trim="form.expressFee"-->
+                            <!--autocomplete="off"-->
+                    <!--&gt;</el-input>-->
+                <!--</el-form-item>-->
                 <el-form-item
                     :required="true"
                     label="生效方式"
@@ -1611,12 +1612,16 @@ export default {
             supportType: [
                 {
                     value: '1',
-                    label: '支持'
+                    label: '自提'
                 },
                 {
                     value: '2',
-                    label: '不支持'
-                }
+                    label: '快递'
+                },
+                {
+                    value: '3',
+                    label: '自提加快递'
+                },
             ],
             topStatusList: [
                 {
