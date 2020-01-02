@@ -151,6 +151,7 @@
                     border
                     class="table"
                     ref="multipleTable"
+                    highlight-current-row
                     header-cell-class-name="table-header"
                     @selection-change="handleSelectionChange"
             >
@@ -233,7 +234,7 @@
                                 icon="el-icon-setting"
                                 @click="logChange(scope.$index, scope.row)"
                         >修改物流
-                        </el-button> 
+                        </el-button>
                     </template>
                 </el-table-column>
             </el-table>

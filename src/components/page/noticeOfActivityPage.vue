@@ -30,6 +30,7 @@
                 height="500"
                 class="table"
                 ref="multipleTable"
+                highlight-current-row
                 header-cell-class-name="table-header"
             >
                 <el-table-column prop="name" label="影院编码" width="140">
@@ -107,6 +108,7 @@
                 height="400"
                 class="table"
                 ref="multipleTable"
+                highlight-current-row
                 header-cell-class-name="table-header"
                 @selection-change="handleSelectionChange"
             >

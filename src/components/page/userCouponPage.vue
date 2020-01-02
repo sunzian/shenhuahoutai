@@ -87,6 +87,7 @@
                 border
                 class="table"
                 ref="multipleTable"
+                highlight-current-row
                 header-cell-class-name="table-header"
                 @selection-change="handleSelectionChange"
             >

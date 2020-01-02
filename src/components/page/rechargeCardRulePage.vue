@@ -52,6 +52,7 @@
                 border
                 class="table"
                 ref="multipleTable"
+                highlight-current-row
                 header-cell-class-name="table-header"
             >
                 <el-table-column prop="code" label="影院编码" width="100">

@@ -30,6 +30,7 @@
                 height="500"
                 class="table"
                 ref="multipleTable"
+                highlight-current-row
                 header-cell-class-name="table-header"
             >
                 <el-table-column prop="name" label="影院编码" width="110">
@@ -170,6 +171,7 @@
                 height="500"
                 class="table"
                 ref="multipleTable"
+                highlight-current-row
                 header-cell-class-name="table-header"
             >
                 <el-table-column prop="name" label="服务费规则名称">
@@ -498,6 +500,7 @@
                     border
                     class="table"
                     ref="multipleTable"
+                    highlight-current-row
                     header-cell-class-name="table-header"
                     @selection-change="handleSelectionChange"
                 >

@@ -9,7 +9,7 @@
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-select style="margin-top: 10px" clearable v-model="query.cinemaCode" placeholder="请选择影院" class="mr10">
+                <el-select style="margin-bottom: 10px" clearable v-model="query.cinemaCode" placeholder="请选择影院" class="mr10">
                     <el-option
                         v-for="item in cinemaInfo"
                         :key="item.cinemaCode"
@@ -18,35 +18,35 @@
                     ></el-option>
                 </el-select>
                 <el-input
-                        style="margin-top: 10px"
+                        style="margin-bottom: 10px"
                         placeholder="卖品名称"
                         v-model="query.merNames"
                         autocomplete="off"
                         class="mr10"
                 ></el-input>
                 <el-input
-                        style="margin-top: 10px"
+                        style="margin-bottom: 10px"
                     placeholder="订单号"
                     v-model="query.submitOrderCode"
                     autocomplete="off"
                     class="mr10"
                 ></el-input>
                 <el-input
-                        style="margin-top: 10px"
+                        style="margin-bottom: 10px"
                     placeholder="手机号"
                     v-model="query.mobile"
                     autocomplete="off"
                     class="mr10"
                 ></el-input>
                 <el-input
-                        style="margin-top: 10px"
+                        style="margin-bottom: 10px"
                     placeholder="取货码"
                     v-model="query.printNo"
                     autocomplete="off"
                     class="mr10"
                 ></el-input>
                 <el-select
-                        style="margin-top: 10px"
+                        style="margin-bottom: 10px"
                         clearable
                         v-model="query.deliveryType"
                         placeholder="取货方式"
@@ -56,7 +56,7 @@
                     <el-option key="1" label="送至影厅" value="1"></el-option>
                 </el-select>
                 <el-select
-                        style="margin-top: 10px"
+                        style="margin-bottom: 10px"
                     clearable
                     v-model="query.payWay"
                     placeholder="支付方式"
@@ -67,7 +67,7 @@
                 </el-select>
                 <el-select
                     clearable
-                    style="margin-top: 10px"
+                    style="margin-bottom: 10px"
                     v-model="query.payStatus"
                     placeholder="支付状态"
                     class="handle-select mr10"
@@ -78,7 +78,7 @@
                 </el-select>
                 <el-select
                     clearable
-                    style="margin-top: 10px"
+                    style="margin-bottom: 10px"
                     v-model="query.submitStatus"
                     placeholder="下单状态"
                     class="handle-select mr10"
@@ -89,7 +89,7 @@
                 <el-date-picker
                     v-model="query.startDate"
                     type="datetime"
-                    style="margin-top: 10px"
+                    style="margin-bottom: 10px"
                     value-format="yyyy-MM-dd HH:mm:ss"
                     format="yyyy-MM-dd HH:mm:ss"
                     class="mr10"
@@ -98,7 +98,7 @@
                 <el-date-picker
                     v-model="query.endDate"
                     type="datetime"
-                    style="margin-top: 10px"
+                    style="margin-bottom: 10px"
                     value-format="yyyy-MM-dd HH:mm:ss"
                     format="yyyy-MM-dd HH:mm:ss"
                     placeholder="支付结束时间（止）"
@@ -153,23 +153,12 @@
                 border
                 class="table"
                 ref="multipleTable"
+                highlight-current-row
                 header-cell-class-name="table-header"
                 @selection-change="handleSelectionChange"
             >
-                <el-table-column prop="name" label="影院编码" width="85">
-                    <template slot-scope="scope">{{scope.row.cinemaCode}}</template>
-                </el-table-column>
-                <el-table-column label="备注" width="115">
-                    <template slot-scope="scope">{{scope.row.deliveryMemo}}</template>
-                </el-table-column>
-                <el-table-column prop="memo" label="送货地址" width="90">
-                    <template slot-scope="scope">{{scope.row.deliveryAddress}}</template>
-                </el-table-column>
-                <el-table-column label="订单号" width="135">
+                <el-table-column label="订单号" width="150">
                     <template slot-scope="scope">{{scope.row.submitOrderCode}}</template>
-                </el-table-column>
-                <el-table-column prop="memo" label="手机号码" width="110">
-                    <template slot-scope="scope">{{scope.row.mobile}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="送餐手机号" width="110">
                     <template slot-scope="scope">{{scope.row.deliveryMobile}}</template>
@@ -177,10 +166,10 @@
                 <el-table-column prop="memo" label="取货码" width="85">
                     <template slot-scope="scope">{{scope.row.printNo}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="支付时间" width="100">
+                <el-table-column prop="memo" label="支付时间" width="155">
                     <template slot-scope="scope">{{scope.row.payTime}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="卖品内容" width="110">
+                <el-table-column prop="memo" label="卖品内容" width="150">
                     <template slot-scope="scope">{{scope.row.merNames}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="原价" width="60">
@@ -195,8 +184,20 @@
                 <el-table-column prop="memo" label="优惠券优惠" width="100">
                     <template slot-scope="scope">{{scope.row.totalCouponDiscount}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="优惠券名称" width="100">
-                    <template slot-scope="scope">{{scope.row.userCouponName}}</template>
+                <!--<el-table-column prop="memo" label="优惠券名称" width="150">-->
+                    <!--<template slot-scope="scope">{{scope.row.userCouponName}}</template>-->
+                <!--</el-table-column>-->
+                <el-table-column prop="memo" label="手机号码" width="110">
+                    <template slot-scope="scope">{{scope.row.mobile}}</template>
+                </el-table-column>
+                <el-table-column prop="name" label="影院编码" width="85">
+                    <template slot-scope="scope">{{scope.row.cinemaCode}}</template>
+                </el-table-column>
+                <el-table-column label="备注" width="115">
+                    <template slot-scope="scope">{{scope.row.deliveryMemo}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="送货地址" width="90">
+                    <template slot-scope="scope">{{scope.row.deliveryAddress}}</template>
                 </el-table-column>
                 <el-table-column label="支付方式" align="center" width="80" fixed="right">
                     <template slot-scope="scope">
@@ -223,7 +224,7 @@
                         <el-tag v-else-if="scope.row.deliveryType=='1'">送至影厅</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" align="center" fixed="right">
+                <el-table-column label="操作" align="center" fixed="right" width="120">
                     <template slot-scope="scope">
                         <el-button
                             type="text"

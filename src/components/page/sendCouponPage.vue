@@ -180,6 +180,7 @@
                 border
                 class="table"
                 ref="multipleTable"
+                highlight-current-row
                 header-cell-class-name="table-header"
             >
                 <el-table-column prop="name" label="头像" width="90">
@@ -400,6 +401,7 @@
                     border
                     class="table"
                     ref="multipleTable"
+                    highlight-current-row
                     header-cell-class-name="table-header"
                     @selection-change="changeSelectCounpon"
                     :row-key="getcouponId"
@@ -476,6 +478,7 @@
                     border
                     class="table"
                     ref="multipleTable"
+                    highlight-current-row
                     header-cell-class-name="table-header"
                     @selection-change="changeSelectFilm"
                     :row-key="getFilmId"

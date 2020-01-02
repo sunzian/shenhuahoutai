@@ -96,6 +96,7 @@
                 height="500"
                 class="table"
                 ref="multipleTable"
+                highlight-current-row
                 header-cell-class-name="table-header"
             >
                 <el-table-column prop="name" label="权益卡名称" width="150">
@@ -1566,6 +1567,7 @@
                     border
                     class="table"
                     ref="multipleTable"
+                    highlight-current-row
                     header-cell-class-name="table-header"
                     @selection-change="handleSelectionChange"
                 >
@@ -1621,6 +1623,7 @@
                     border
                     class="table"
                     ref="multipleTable"
+                    highlight-current-row
                     header-cell-class-name="table-header"
                     @selection-change="handleSelectionChange"
                 >
@@ -1684,6 +1687,7 @@
                     border
                     class="table"
                     ref="multipleTable"
+                    highlight-current-row
                     header-cell-class-name="table-header"
                     @selection-change="handleSelectionChange"
                 >

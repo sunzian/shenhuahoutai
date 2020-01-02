@@ -73,6 +73,7 @@
                 border
                 height="500"
                 class="table"
+                highlight-current-row
                 ref="multipleTable"
                 header-cell-class-name="table-header"
             >
@@ -666,6 +667,7 @@
                     border
                     class="table"
                     ref="multipleTable"
+                    highlight-current-row
                     header-cell-class-name="table-header"
                     @selection-change="handleSelectionChange"
                 >

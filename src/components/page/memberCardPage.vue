@@ -29,6 +29,25 @@
                     autocomplete="off"
                     class="mr10"
                 ></el-input>
+                <el-date-picker
+                        v-model="query.startDate"
+                        type="datetime"
+                        class="mr10"
+                        style="margin-top: 10px"
+                        value-format="yyyy-MM-dd HH:mm:ss"
+                        format="yyyy-MM-dd HH:mm:ss"
+                        default-time="06:00:00"
+                        placeholder="开卡开始时间（起）"
+                ></el-date-picker>
+                <el-date-picker
+                        v-model="query.endDate"
+                        type="datetime"
+                        class="mr10"
+                        style="margin-top: 10px"
+                        value-format="yyyy-MM-dd HH:mm:ss"
+                        format="yyyy-MM-dd HH:mm:ss"
+                        placeholder="开卡结束时间（止）"
+                ></el-date-picker>
                 <el-input
                     placeholder="绑卡手机号"
                     v-model="query.bindUserMobile"
@@ -85,6 +104,7 @@
                 border
                 class="table"
                 ref="multipleTable"
+                highlight-current-row
                 header-cell-class-name="table-header"
                 @selection-change="handleSelectionChange"
             >
@@ -102,6 +122,9 @@
                 </el-table-column>
                 <el-table-column prop="memo" label="开卡手机号" width="150">
                     <template slot-scope="scope">{{scope.row.userMobile}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="开卡时间" width="155">
+                    <template slot-scope="scope">{{scope.row.openCardDate}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="员工推荐编码" width="150">
                     <template slot-scope="scope">{{scope.row.employeeCode}}</template>
@@ -328,6 +351,14 @@ export default {
                 let bindUserMobile = this.query.bindUserMobile;
                 let employeeCode = this.query.employeeCode;
                 let payWay = this.query.payWay;
+                let startDate = this.query.startDate;
+                let endDate = this.query.endDate;
+                if (!startDate) {
+                    startDate = '';
+                }
+                if (!endDate) {
+                    endDate = '';
+                }
                 if (!cinemaCode) {
                     cinemaCode = '';
                 }
@@ -355,6 +386,8 @@ export default {
                 jsonArr.push({ key: 'bindUserMobile', value: bindUserMobile });
                 jsonArr.push({ key: 'employeeCode', value: employeeCode });
                 jsonArr.push({ key: 'bindStatus', value: payWay });
+                jsonArr.push({ key: 'startDate', value: startDate });
+                jsonArr.push({ key: 'endDate', value: endDate });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
                 var params = ParamsAppend(jsonArr);

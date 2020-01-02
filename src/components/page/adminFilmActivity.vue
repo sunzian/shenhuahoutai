@@ -75,6 +75,7 @@
                 height="500"
                 class="table"
                 ref="multipleTable"
+                highlight-current-row
                 header-cell-class-name="table-header"
             >
                 <el-table-column prop="name" label="适用影院" width="160">
@@ -766,6 +767,7 @@
                     border
                     class="table"
                     ref="multipleTable"
+                    highlight-current-row
                     header-cell-class-name="table-header"
                     @selection-change="handleSelectionChange"
                 >

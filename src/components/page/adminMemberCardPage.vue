@@ -86,6 +86,7 @@
                 border
                 class="table"
                 ref="multipleTable"
+                highlight-current-row
                 header-cell-class-name="table-header"
                 @selection-change="handleSelectionChange"
             >
@@ -700,7 +701,7 @@ export default {
                                 this.tableData = [];
                                 this.totalData = [];
                             }
-                            
+
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
                             this.open();

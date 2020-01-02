@@ -9,7 +9,7 @@
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-select style="margin-top: 10px" clearable v-model="query.cinemaCode" placeholder="请选择影院" class="mr10">
+                <el-select  style="margin-bottom: 10px" clearable v-model="query.cinemaCode" placeholder="请选择影院" class="mr10">
                     <el-option
                         v-for="item in cinemaInfo"
                         :key="item.cinemaCode"
@@ -22,34 +22,34 @@
                         v-model="query.filmName"
                         autocomplete="off"
                         class="mr10"
-                        style="margin-top: 10px"
+                        style="margin-bottom: 10px"
                 ></el-input>
                 <el-input
                     placeholder="订单号"
                     v-model="query.submitOrderCode"
                     autocomplete="off"
                     class="mr10"
-                    style="margin-top: 10px"
+                    style="margin-bottom: 10px"
                 ></el-input>
                 <el-input
                     placeholder="手机号"
                     v-model="query.mobile"
                     autocomplete="off"
                     class="mr10"
-                    style="margin-top: 10px"
+                    style="margin-bottom: 10px"
                 ></el-input>
                 <el-input
                         placeholder="会员卡号"
                         v-model="query.cardNo"
                         autocomplete="off"
                         class="mr10"
-                        style="margin-top: 10px"
+                        style="margin-bottom: 10px"
                 ></el-input>
                 <el-select
                     clearable
                     v-model="query.payWay"
                     placeholder="支付方式"
-                    style="margin-top: 10px"
+                    style="margin-bottom: 10px"
                     class="handle-select mr10"
                 >
                     <el-option key="0" label="微信" value="0"></el-option>
@@ -59,7 +59,7 @@
                     clearable
                     v-model="query.payStatus"
                     placeholder="支付状态"
-                    style="margin-top: 10px"
+                    style="margin-bottom: 10px"
                     class="handle-select mr10"
                 >
                     <el-option key="1" label="支付成功" value="1"></el-option>
@@ -70,7 +70,7 @@
                     clearable
                     v-model="query.orderStatus"
                     placeholder="订单状态"
-                    style="margin-top: 10px"
+                    style="margin-bottom: 10px"
                     class="handle-select mr10"
                 >
                     <el-option key="4" label="未取票" value="4"></el-option>
@@ -85,7 +85,7 @@
                     v-model="query.startDate"
                     type="datetime"
                     class="mr10"
-                    style="margin-top: 10px"
+                    style="margin-bottom: 10px"
                     value-format="yyyy-MM-dd HH:mm:ss"
                     format="yyyy-MM-dd HH:mm:ss"
                     default-time="06:00:00"
@@ -95,7 +95,7 @@
                     v-model="query.endDate"
                     type="datetime"
                     class="mr10"
-                    style="margin-top: 10px"
+                    style="margin-bottom: 10px"
                     value-format="yyyy-MM-dd HH:mm:ss"
                     format="yyyy-MM-dd HH:mm:ss"
                     placeholder="支付结束时间（止）"
@@ -104,7 +104,7 @@
                     v-model="query.sessionStartDate"
                     type="datetime"
                     class="mr10"
-                    style="margin-top: 10px"
+                    style="margin-bottom: 10px"
                     value-format="yyyy-MM-dd HH:mm:ss"
                     format="yyyy-MM-dd HH:mm:ss"
                     default-time="06:00:00"
@@ -114,7 +114,7 @@
                     v-model="query.sessionEndDate"
                     type="datetime"
                     class="mr10"
-                    style="margin-top: 10px"
+                    style="margin-bottom: 10px"
                     value-format="yyyy-MM-dd HH:mm:ss"
                     format="yyyy-MM-dd HH:mm:ss"
                     placeholder="场次结束时间（止）"
@@ -214,21 +214,16 @@
                 class="table"
                 ref="multipleTable"
                 header-cell-class-name="table-header"
+                highlight-current-row
                 @selection-change="handleSelectionChange"
             >
-                <el-table-column prop="name" label="影院编码" width="85">
-                    <template slot-scope="scope">{{scope.row.cinemaCode}}</template>
-                </el-table-column>
-                <el-table-column label="订单号" width="100">
+                <el-table-column label="订单号" width="150">
                     <template slot-scope="scope">{{scope.row.submitOrderCode}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="场次时间" width="100">
-                    <template slot-scope="scope">{{scope.row.sessionTime}}</template>
-                </el-table-column>
-                <el-table-column prop="memo" label="影片名称" width="100">
+                <el-table-column prop="memo" label="影片名称" width="200">
                     <template slot-scope="scope">{{scope.row.filmName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="交易时间" width="100">
+                <el-table-column prop="memo" label="交易时间" width="155">
                     <template slot-scope="scope">{{scope.row.payTime}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="用户手机号" width="110">
@@ -237,16 +232,16 @@
                 <el-table-column prop="memo" label="票数" width="50">
                     <template slot-scope="scope">{{scope.row.number}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="座位" width="80">
+                <el-table-column prop="memo" label="座位" width="120">
                     <template slot-scope="scope">{{scope.row.seatName}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="应付" width="60">
                     <template slot-scope="scope">{{scope.row.totalOriginalPrice}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="实付" width="70">
+                <el-table-column prop="memo" label="实付" width="60">
                     <template slot-scope="scope">{{scope.row.totalActualPrice}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="票价" width="70">
+                <el-table-column prop="memo" label="票价" width="50">
                     <template slot-scope="scope">{{scope.row.totalPrice}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="实际票价" width="80">
@@ -255,21 +250,27 @@
                 <el-table-column prop="memo" label="上报金额" width="80">
                     <template slot-scope="scope">{{scope.row.totalReportPrice}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="服务费" width="70">
-                    <template slot-scope="scope">{{scope.row.totalServiceFee}}</template>
-                </el-table-column>
-                <el-table-column prop="memo" label="平台代售费" width="100">
-                    <template slot-scope="scope">{{scope.row.totalPlatHandFee}}</template>
+                <el-table-column prop="memo" label="优惠券优惠" width="100">
+                    <template slot-scope="scope">{{scope.row.totalCouponDiscount}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="活动优惠" width="80">
                     <template slot-scope="scope">{{scope.row.totalActivityDiscount}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="优惠券优惠" width="100">
-                    <template slot-scope="scope">{{scope.row.totalCouponDiscount}}</template>
+                <el-table-column prop="memo" label="平台代售费" width="100">
+                    <template slot-scope="scope">{{scope.row.totalPlatHandFee}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="服务费" width="65">
+                    <template slot-scope="scope">{{scope.row.totalServiceFee}}</template>
                 </el-table-column>
                 <!--<el-table-column prop="memo" label="上报金额" width="80">-->
                     <!--<template slot-scope="scope">{{scope.row.totalReportPrice}}</template>-->
                 <!--</el-table-column>-->
+                <el-table-column prop="name" label="影院编码" width="85">
+                    <template slot-scope="scope">{{scope.row.cinemaCode}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="场次时间" width="160">
+                    <template slot-scope="scope">{{scope.row.sessionTime}}</template>
+                </el-table-column>
                 <el-table-column prop="name" label="开卡影院" width="185">
                     <template slot-scope="scope">{{scope.row.openCardCinemaName}}</template>
                 </el-table-column>
@@ -316,7 +317,7 @@
                         <el-tag v-else-if="scope.row.orderStatus=='6'" type="danger">已退票</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" align="center" fixed="right">
+                <el-table-column label="操作" align="center" fixed="right" width="120">
                     <template slot-scope="scope">
                         <el-button
                             type="text"
@@ -1058,7 +1059,7 @@ export default {
             //分页按钮下一页
             this.query.pageNo++;
             this.getMenu();
-        }
+        },
     }
 };
 </script>

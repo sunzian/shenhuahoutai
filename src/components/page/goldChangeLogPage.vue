@@ -31,7 +31,7 @@
                         value-format="yyyy-MM-dd HH:mm:ss"
                         format="yyyy-MM-dd HH:mm:ss"
                         default-time="06:00:00"
-                        placeholder="开始时间"
+                        placeholder="操作开始时间（起）"
                 ></el-date-picker>
                 <el-date-picker
                         v-model="query.endDate"
@@ -40,7 +40,7 @@
                         style="margin-top: 10px"
                         value-format="yyyy-MM-dd HH:mm:ss"
                         format="yyyy-MM-dd HH:mm:ss"
-                        placeholder="结束时间"
+                        placeholder="操作结束时间（止）"
                 ></el-date-picker>
                 <el-select
                         clearable
@@ -69,71 +69,56 @@
                     border
                     class="table"
                     ref="multipleTable"
+                    highlight-current-row
                     header-cell-class-name="table-header"
                     @selection-change="handleSelectionChange"
             >
-                <el-table-column type="selection" width="55"></el-table-column>
-                <el-table-column label="交易时间" width="190">
-                    <template slot-scope="scope">{{scope.row.createDate}}</template>
+                <!--<el-table-column type="selection" width="55"></el-table-column>-->
+                <el-table-column label="影院名称" width="190">
+                    <template slot-scope="scope">{{scope.row.userCinemaName}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="用户名称" width="100">
+                <el-table-column prop="name" label="影院编码" width="100">
+                    <template slot-scope="scope">{{scope.row.userCinemaCode}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="用户名" width="120">
                     <template slot-scope="scope">{{scope.row.userName}}</template>
                 </el-table-column>
                 <el-table-column prop="name" label="用户手机号" width="120">
                     <template slot-scope="scope">{{scope.row.userMobile}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="优惠券名称" width="220">
-                    <template slot-scope="scope">{{scope.row.couponName}}</template>
+                <el-table-column prop="memo" label="金币过期时间" width="180">
+                    <template slot-scope="scope">{{scope.row.overDate}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="后台发放批次编号" width="180">
-                    <template slot-scope="scope">{{scope.row.sendCode}}</template>
-                </el-table-column>
-                <el-table-column prop="memo" label="领取时间" width="160">
+                <el-table-column prop="memo" label="操作时间" width="160">
                     <template slot-scope="scope">{{scope.row.createDate}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="有效期开始时间" width="160">
-                    <template slot-scope="scope">{{scope.row.startTime}}</template>
+                <el-table-column prop="memo" label="数量" width="80">
+                    <template slot-scope="scope">{{scope.row.number}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="有效期结束时间" width="160">
-                    <template slot-scope="scope">{{scope.row.endTime}}</template>
+                <el-table-column prop="memo" label="备注" width="180">
+                    <template slot-scope="scope">{{scope.row.memo}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="使用时间" width="160">
-                    <template slot-scope="scope">{{scope.row.useTime}}</template>
-                </el-table-column>
-                <el-table-column prop="memo" label="使用状态" width="100">
+                <el-table-column prop="memo" label="变动类型" width="100">
                     <template slot-scope="scope">
-                        <el-tag v-if="scope.row.status=='1'">未使用</el-tag>
-                        <el-tag v-else-if="scope.row.status=='2'">已使用</el-tag>
-                        <el-tag v-else-if="scope.row.status=='3'">已过期</el-tag>
+                        <el-tag v-if="scope.row.type=='1'">签到获取</el-tag>
+                        <el-tag v-else-if="scope.row.type=='2'">积分兑换</el-tag>
+                        <el-tag v-else-if="scope.row.type=='3'">抽奖消耗</el-tag>
+                        <el-tag v-else-if="scope.row.type=='4'">金币商品兑换</el-tag>
+                        <el-tag v-else-if="scope.row.type=='5'">邀请好友注册得金币</el-tag>
+                        <el-tag v-else-if="scope.row.type=='6'">购买影票赠送</el-tag>
+                        <el-tag v-else-if="scope.row.type=='7'">购买卖品赠送</el-tag>
+                        <el-tag v-else-if="scope.row.type=='8'">金币商品退款</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="memo" label="领取类型" width="100">
-                    <template slot-scope="scope">
-                        <el-tag v-if="scope.row.getType=='1'">注册送券</el-tag>
-                        <el-tag v-else-if="scope.row.getType=='2'">聊天室领取</el-tag>
-                        <el-tag v-else-if="scope.row.getType=='3'">转盘抽奖</el-tag>
-                        <el-tag v-else-if="scope.row.getType=='4'">连续签到7天之后领取</el-tag>
-                        <el-tag v-else-if="scope.row.getType=='5'">金币商城兑换</el-tag>
-                        <el-tag v-else-if="scope.row.getType=='6'">后台发放</el-tag>
-                        <el-tag v-else-if="scope.row.getType=='7'">会员卡注册送券</el-tag>
-                        <el-tag v-else-if="scope.row.getType=='8'">会员卡充值送券</el-tag>
-                        <el-tag v-else-if="scope.row.getType=='9'">权益卡券包</el-tag>
-                        <el-tag v-else-if="scope.row.getType=='10'">员工推荐充值赠送</el-tag>
-                        <el-tag v-else-if="scope.row.getType=='11'">绑定售票系统的券</el-tag>
-                    </template>
-                </el-table-column>
-                <el-table-column label="使用订单号" align="center" width="200">
-                    <template slot-scope="scope">{{scope.row.orderNum}}</template>
-                </el-table-column>
-                <el-table-column label="操作" align="center" fixed="right">
-                    <template slot-scope="scope">
-                        <el-button
-                                type="text"
-                                icon="el-icon-setting"
-                                @click="delChange(scope.$index, scope.row)"
-                        >删除</el-button>
-                    </template>
-                </el-table-column>
+                <!--<el-table-column label="操作" align="center" fixed="right">-->
+                    <!--<template slot-scope="scope">-->
+                        <!--<el-button-->
+                                <!--type="text"-->
+                                <!--icon="el-icon-setting"-->
+                                <!--@click="delChange(scope.$index, scope.row)"-->
+                        <!--&gt;删除</el-button>-->
+                    <!--</template>-->
+                <!--</el-table-column>-->
             </el-table>
             <div class="pagination">
                 <el-pagination

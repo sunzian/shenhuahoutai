@@ -60,6 +60,7 @@
                 border
                 height="500"
                 class="table"
+                highlight-current-row
                 ref="multipleTable"
                 header-cell-class-name="table-header"
             >

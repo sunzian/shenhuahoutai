@@ -29,9 +29,10 @@
                     border
                     class="table"
                     ref="multipleTable"
+                    highlight-current-row
                     header-cell-class-name="table-header"
                     @selection-change="handleSelectionChange"
-            >   
+            >
                 <el-table-column prop="name" label="影院编码" width="120">
                     <template slot-scope="scope">{{scope.row.cinemaCode}}</template>
                 </el-table-column>
@@ -100,6 +101,7 @@
                     border
                     class="table"
                     ref="multipleTable"
+                    highlight-current-row
                     header-cell-class-name="table-header"
                     @selection-change="handleSelectionChange"
             >

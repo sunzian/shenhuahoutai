@@ -150,6 +150,7 @@
                 border
                 class="table"
                 ref="multipleTable"
+                highlight-current-row
                 header-cell-class-name="table-header"
                 @selection-change="handleSelectionChange"
             >
@@ -930,7 +931,7 @@ export default {
                                 this.query.totalPage = oData.pageResult.totalPage;
                             } else {
                                 this.tableData = [];
-                                this.totalData = [];  
+                                this.totalData = [];
                             }
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
