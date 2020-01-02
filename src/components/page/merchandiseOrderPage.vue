@@ -159,7 +159,7 @@
                 <el-table-column prop="name" label="影院编码" width="85">
                     <template slot-scope="scope">{{scope.row.cinemaCode}}</template>
                 </el-table-column>
-                <el-table-column label="备注" width="135">
+                <el-table-column label="备注" width="115">
                     <template slot-scope="scope">{{scope.row.deliveryMemo}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="送货地址" width="90">
@@ -176,6 +176,9 @@
                 </el-table-column>
                 <el-table-column prop="memo" label="取货码" width="85">
                     <template slot-scope="scope">{{scope.row.printNo}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="支付时间" width="100">
+                    <template slot-scope="scope">{{scope.row.payTime}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="卖品内容" width="110">
                     <template slot-scope="scope">{{scope.row.merNames}}</template>
@@ -195,29 +198,26 @@
                 <el-table-column prop="memo" label="优惠券名称" width="100">
                     <template slot-scope="scope">{{scope.row.userCouponName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="支付时间" width="100">
-                    <template slot-scope="scope">{{scope.row.payTime}}</template>
-                </el-table-column>
-                <el-table-column label="支付方式" align="center" width="80">
+                <el-table-column label="支付方式" align="center" width="80" fixed="right">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.payWay=='0'">微信</el-tag>
                         <el-tag v-else-if="scope.row.payWay=='1'">会员卡</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="支付状态" align="center" >
+                <el-table-column label="支付状态" align="center"  fixed="right">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.payStatus=='1'">支付成功</el-tag>
                         <el-tag v-else-if="scope.row.payStatus=='2'">支付失败</el-tag>
                         <el-tag v-else-if="scope.row.payStatus=='3'">退款成功</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="下单状态" align="center">
+                <el-table-column label="下单状态" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.submitStatus=='0'" type="danger">下单失败</el-tag>
                         <el-tag v-else-if="scope.row.submitStatus=='1'" type="success">下单成功</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="取货方式" align="center">
+                <el-table-column label="取货方式" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.deliveryType=='0'">自取</el-tag>
                         <el-tag v-else-if="scope.row.deliveryType=='1'">送至影厅</el-tag>
