@@ -183,6 +183,24 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
+                <el-form-item label="门店经度" :label-width="formLabelWidth">
+                    <el-input
+                        style="width: 250px"
+                        maxlength="20"
+                        onkeyup="this.value=this.value.replace(/[^0-9-.]+/,'')"
+                        v-model="oForm.longitude"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="门店纬度" :label-width="formLabelWidth">
+                    <el-input
+                        style="width: 250px"
+                        maxlength="20"
+                        onkeyup="this.value=this.value.replace(/[^0-9-.]+/,'')"
+                        v-model="oForm.latitude"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
                 <el-form-item label="营业开始时间" :label-width="formLabelWidth">
                     <el-time-picker
                         style="width: 200px"
@@ -294,6 +312,24 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
+                                <el-form-item label="门店经度" :label-width="formLabelWidth">
+                    <el-input
+                        style="width: 250px"
+                        maxlength="20"
+                        onkeyup="this.value=this.value.replace(/[^0-9-.]+/,'')"
+                        v-model="changeForm.longitude"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="门店纬度" :label-width="formLabelWidth">
+                    <el-input
+                        style="width: 250px"
+                        maxlength="20"
+                        onkeyup="this.value=this.value.replace(/[^0-9-.]+/,'')"
+                        v-model="changeForm.latitude"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
                 <el-form-item label="营业开始时间" :label-width="formLabelWidth">
                     <el-time-picker
                         style="width: 200px"
@@ -398,6 +434,8 @@ export default {
                 concatName: '',
                 concatMobile: '',
                 address: '',
+                longitude: '',
+                latitude: '',
                 verifyCode: '',
                 statusValue: '',
                 beginTime: '',
@@ -416,6 +454,8 @@ export default {
                 concatName: '',
                 concatMobile: '',
                 address: '',
+                longitude: '',
+                latitude: '',
                 verifyCode: '',
                 statusValue: '',
                 beginTime: '',
@@ -499,6 +539,8 @@ export default {
             this.oForm.concatName = '';
             this.oForm.concatMobile = '';
             this.oForm.address = '';
+            this.oFormlongitude = '';
+            this.oFormlatitude = '';
             this.oForm.beginTime = '';
             this.oForm.endTime = '';
             this.oForm.memo = '';
@@ -571,6 +613,8 @@ export default {
                 jsonArr.push({ key: 'concatName', value: this.oForm.concatName });
                 jsonArr.push({ key: 'concatMobile', value: this.oForm.concatMobile });
                 jsonArr.push({ key: 'address', value: this.oForm.address });
+                jsonArr.push({ key: 'longitude', value: this.oForm.longitude });
+                jsonArr.push({ key: 'latitude', value: this.oForm.latitude });
                 jsonArr.push({ key: 'beginTime', value: this.oForm.beginTime });
                 jsonArr.push({ key: 'endTime', value: this.oForm.endTime });
                 jsonArr.push({ key: 'memo', value: this.oForm.memo });
@@ -594,6 +638,8 @@ export default {
                                 this.oForm.concatName = '';
                                 this.oForm.concatMobile = '';
                                 this.oForm.address = '';
+                                this.oForm.longitude = '';
+                                this.oForm.latitude = '';
                                 this.oForm.beginTime = '';
                                 this.oForm.endTime = '';
                                 this.oForm.memo = '';
@@ -705,6 +751,8 @@ export default {
                             this.changeForm.concatName = JSON.parse(Decrypt(data.data.data)).concatName;
                             this.changeForm.concatMobile = JSON.parse(Decrypt(data.data.data)).concatMobile;
                             this.changeForm.address = JSON.parse(Decrypt(data.data.data)).address;
+                            this.changeForm.longitude = JSON.parse(Decrypt(data.data.data)).longitude;
+                            this.changeForm.latitude = JSON.parse(Decrypt(data.data.data)).latitude;
                             this.changeForm.beginTime = JSON.parse(Decrypt(data.data.data)).beginTime;
                             this.changeForm.endTime = JSON.parse(Decrypt(data.data.data)).endTime;
                             this.changeForm.memo = JSON.parse(Decrypt(data.data.data)).memo;
@@ -793,6 +841,8 @@ export default {
                 jsonArr.push({ key: 'concatName', value: this.changeForm.concatName });
                 jsonArr.push({ key: 'concatMobile', value: this.changeForm.concatMobile });
                 jsonArr.push({ key: 'address', value: this.changeForm.address });
+                jsonArr.push({ key: 'latitude', value: this.changeForm.latitude });
+                jsonArr.push({ key: 'longitude', value: this.changeForm.longitude });
                 jsonArr.push({ key: 'beginTime', value: this.changeForm.beginTime });
                 jsonArr.push({ key: 'endTime', value: this.changeForm.endTime });
                 jsonArr.push({ key: 'memo', value: this.changeForm.memo });
