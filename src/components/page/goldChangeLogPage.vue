@@ -73,8 +73,8 @@
                     @selection-change="handleSelectionChange"
             >
                 <el-table-column type="selection" width="55"></el-table-column>
-                <el-table-column label="优惠券所属影院" width="190">
-                    <template slot-scope="scope">{{scope.row.cinemaName}}</template>
+                <el-table-column label="交易时间" width="190">
+                    <template slot-scope="scope">{{scope.row.createDate}}</template>
                 </el-table-column>
                 <el-table-column prop="name" label="用户名称" width="100">
                     <template slot-scope="scope">{{scope.row.userName}}</template>
