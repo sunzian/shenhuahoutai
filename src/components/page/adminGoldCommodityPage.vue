@@ -1322,7 +1322,6 @@
                             placeholder="门店名称"
                             class="handle-input mr12"
                             style="width: 30%"
-                            @input="changecinemaName($event)"
                     ></el-input>
                     <el-button type="primary" icon="el-icon-search" @click="getCinemaCode">搜索</el-button>
                 </div>
@@ -1405,6 +1404,7 @@
                 query: {
                     partnerCode: '',
                     adminPartnerCode: '',
+                    cinemaName: '',
                     pageNo: 1,
                     pageSize: 15,
                     aPageNo: 1,
@@ -1795,9 +1795,6 @@
                 console.log(this.cinemaData);
                 this.drawerCinema = false
             },
-            changeCinemaName(e) {
-                this.$forceUpdate();
-            },
             changePartnerName(e) {
                 this.$forceUpdate();
             },
@@ -2032,6 +2029,9 @@
                             loading.close();
                             if (data.data.code == 'success') {
                                 this.dialogFormVisible = true;
+                                this.cinemaData=[];
+                                this.partnerName='';
+                                this.partnerCode='';
                             } else if (data.data.code == 'nologin') {
                                 this.message = data.data.message;
                                 this.open();

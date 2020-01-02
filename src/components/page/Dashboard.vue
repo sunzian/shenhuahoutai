@@ -265,10 +265,11 @@
                         this.message = data.data.message;
                         this.open();
                         this.$router.push('/login');
-                    } else {
-                        this.message = data.data.message;
-                        this.open();
                     }
+                    // else {
+                    //     this.message = data.data.message;
+                    //     this.open();
+                    // }
                 })
                     .catch(err => {
                         loading.close();
@@ -295,10 +296,11 @@
                         this.message = data.data.message;
                         this.open();
                         this.$router.push('/login');
-                    } else {
-                        this.message = data.data.message;
-                        this.open();
                     }
+                    // else {
+                    //     this.message = data.data.message;
+                    //     this.open();
+                    // }
                 })
                     .catch(err => {
                         loading.close();
@@ -323,10 +325,11 @@
                         this.message = data.data.message;
                         this.open();
                         this.$router.push('/login');
-                    } else {
-                        this.message = data.data.message;
-                        this.open();
                     }
+                    // else {
+                    //     this.message = data.data.message;
+                    //     this.open();
+                    // }
                 })
                     .catch(err => {
                         loading.close();
@@ -351,10 +354,11 @@
                         this.message = data.data.message;
                         this.open();
                         this.$router.push('/login');
-                    } else {
-                        this.message = data.data.message;
-                        this.open();
                     }
+                    // else {
+                    //     this.message = data.data.message;
+                    //     this.open();
+                    // }
                 })
                     .catch(err => {
                         loading.close();
@@ -384,10 +388,11 @@
                         this.message = data.data.message;
                         this.open();
                         this.$router.push('/login');
-                    } else {
-                        this.message = data.data.message;
-                        this.open();
                     }
+                    // else {
+                    //     this.message = data.data.message;
+                    //     this.open();
+                    // }
                 })
                     .catch(err => {
                         loading.close();
@@ -412,10 +417,11 @@
                         this.message = data.data.message;
                         this.open();
                         this.$router.push('/login');
-                    } else {
-                        this.message = data.data.message;
-                        this.open();
                     }
+                    // else {
+                    //     this.message = data.data.message;
+                    //     this.open();
+                    // }
                 })
                     .catch(err => {
                         loading.close();
@@ -454,10 +460,11 @@
                         this.message = data.data.message;
                         this.open();
                         this.$router.push('/login');
-                    } else {
-                        this.message = data.data.message;
-                        this.open();
                     }
+                    // else {
+                    //     this.message = data.data.message;
+                    //     this.open();
+                    // }
                 })
                     .catch(err => {
                         loading.close();
@@ -496,10 +503,11 @@
                         this.message = data.data.message;
                         this.open();
                         this.$router.push('/login');
-                    } else {
-                        this.message = data.data.message;
-                        this.open();
                     }
+                    // else {
+                    //     this.message = data.data.message;
+                    //     this.open();
+                    // }
                 })
                     .catch(err => {
                         loading.close();
@@ -538,10 +546,11 @@
                         this.message = data.data.message;
                         this.open();
                         this.$router.push('/login');
-                    } else {
-                        this.message = data.data.message;
-                        this.open();
                     }
+                    // else {
+                    //     this.message = data.data.message;
+                    //     this.open();
+                    // }
                 })
                     .catch(err => {
                         loading.close();
@@ -580,10 +589,11 @@
                         this.message = data.data.message;
                         this.open();
                         this.$router.push('/login');
-                    } else {
-                        this.message = data.data.message;
-                        this.open();
                     }
+                    // else {
+                    //     this.message = data.data.message;
+                    //     this.open();
+                    // }
                 })
                     .catch(err => {
                         loading.close();
@@ -610,10 +620,11 @@
                         this.message = data.data.message;
                         this.open();
                         this.$router.push('/login');
-                    } else {
-                        this.message = data.data.message;
-                        this.open();
                     }
+                    // else {
+                    //     this.message = data.data.message;
+                    //     this.open();
+                    // }
                 })
                     .catch(err => {
                         loading.close();

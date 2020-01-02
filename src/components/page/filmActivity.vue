@@ -132,7 +132,7 @@
                         slot-scope="scope"
                     >{{scope.row.discountMoney}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="最低票价结算" width="60">
+                <el-table-column prop="sort" label="最低票价结算" width="120">
                     <template v-if="scope.row.reduceType==4" slot-scope="scope">{{scope.row.discountMoney}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="适用放映时间" width="170">
@@ -317,6 +317,19 @@
                             :value="item.value"
                         ></el-option>
                     </el-select>
+                </el-form-item>
+                <el-form-item
+                        label="节假日加价金额"
+                        :label-width="formLabelWidth"
+                        v-if="oForm.holidayValid == 1&&(oForm.reduceType==1||oForm.reduceType==4)"
+                >
+                    <el-input
+                            style="width: 250px"
+                            placeholder="选填 填写大于等于0的数字"
+                            v-model="oForm.holidayAddMoney"
+                            autocomplete="off"
+                            onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="适用放映日期：" :label-width="formLabelWidth">
                     <el-date-picker
@@ -588,6 +601,19 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item
+                        label="节假日加价金额"
+                        :label-width="formLabelWidth"
+                        v-if="oIsHolidayValid == 1&&(oReduceType==1||oReduceType==4)"
+                >
+                    <el-input
+                            style="width: 250px"
+                            placeholder="选填 填写大于等于0的数字"
+                            v-model="oHolidayAddMoney"
+                            autocomplete="off"
+                            onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')"
+                    ></el-input>
+                </el-form-item>
                 <el-form-item :required="true" label="适用放映日期：" :label-width="formLabelWidth">
                     <el-date-picker
                         v-model="oStartDate"
@@ -831,6 +857,7 @@ export default {
             oCinemaCode: '',
             oSelectHallType: '',
             oSelectFilmFormatType: '',
+            oHolidayValid: '',
             oActivityDesc: '',
             oStartDate: '',
             oEndDate: '',
@@ -868,6 +895,7 @@ export default {
             oIsLimitSingle: '', ////
             oSingleNumber: '',
             oStatus: '',
+            oHolidayAddMoney: '',
             formatList: [], //电影制式列表
             message: '', //弹出框消息
             query: {
@@ -957,6 +985,7 @@ export default {
                 id: '',
                 status: '0',
                 oNum: '',
+                holidayAddMoney: '',
                 oneNum: ''
             },
             formLabelWidth: '120px',
@@ -1187,6 +1216,16 @@ export default {
                     return;
                 }
             }
+            if (this.oForm.reduceType == 4) {
+                if (this.oForm.discountMoney >= 0) {
+                    if (!this.oForm.discountMoney) {
+                        this.message = '增减金额不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+            }
             if (!this.oForm.status) {
                 this.message = '开启状态不能为空，请检查！';
                 this.open();
@@ -1294,6 +1333,14 @@ export default {
             jsonArr.push({ key: 'startTimeVal', value: this.startArr.join(',') });
             jsonArr.push({ key: 'endTimeVal', value: this.endArr.join(',') });
             jsonArr.push({ key: 'isLimitTotal', value: this.oForm.oCanNum });
+            if(this.oForm.holidayValid==1){
+                if(this.oForm.reduceType==1){
+                    jsonArr.push({ key: 'holidayAddMoney', value: this.oForm.holidayAddMoney });
+                }
+                if(this.oForm.reduceType==4){
+                    jsonArr.push({ key: 'holidayAddMoney', value: this.oForm.holidayAddMoney });
+                }
+            }
             if (this.oForm.oCanNum != 0) {
                 jsonArr.push({ key: 'totalNumber', value: this.oForm.oNum });
             }
@@ -1489,6 +1536,7 @@ export default {
                         }
                         this.oName = JSON.parse(Decrypt(data.data.data)).discountActivity.name;
                         this.oCinemaCode = JSON.parse(Decrypt(data.data.data)).discountActivity.cinemaCode.split(",");
+                        this.oHolidayAddMoney = JSON.parse(Decrypt(data.data.data)).discountActivity.holidayAddMoney;
                         if (this.oCinemaCode.length == 1) {
                             console.log(this.oCinemaCode.join(","))
                             this.getAllScreen(this.oCinemaCode.join(","));
@@ -1727,6 +1775,16 @@ export default {
                     return;
                 }
             }
+            if (this.oReduceType == 4) {
+                if (this.oDiscountMoney >= 0) {
+                    if (!this.oDiscountMoney) {
+                        this.message = '增减金额不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+            }
             if (!this.oStatus) {
                 this.message = '开启状态不能为空，请检查！';
                 this.open();
@@ -1823,6 +1881,14 @@ export default {
             jsonArr.push({ key: 'startTimeVal', value: this.startArr.join(',') });
             jsonArr.push({ key: 'endTimeVal', value: this.endArr.join(',') });
             jsonArr.push({ key: 'isLimitTotal', value: this.oIsLimitTotal });
+            if(this.oIsHolidayValid==1){
+                if(this.oReduceType==1){
+                    jsonArr.push({ key: 'holidayAddMoney', value: this.oHolidayAddMoney });
+                }
+                if(this.oReduceType==5){
+                    jsonArr.push({ key: 'holidayAddMoney', value: this.oHolidayAddMoney });
+                }
+            }
             if (this.oIsLimitTotal != 0) {
                 jsonArr.push({ key: 'totalNumber', value: this.oTotalNumber });
             }

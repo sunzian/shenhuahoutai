@@ -513,11 +513,19 @@
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="物流公司名称" :label-width="formLabelWidth">
-                    <el-input
-                            style="width: 250px"
-                            v-model="form1.trackingName"
-                            autocomplete="off"
-                    ></el-input>
+                    <!--<el-input-->
+                            <!--style="width: 250px"-->
+                            <!--v-model="form1.trackingName"-->
+                            <!--autocomplete="off"-->
+                    <!--&gt;</el-input>-->
+                    <el-select clearable v-model="form1.trackingName" placeholder="请选择">
+                        <el-option
+                                v-for="item in supportDeliveryList"
+                                :key="item.value"
+                                :label="item.name"
+                                :value="item.value"
+                        ></el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item label="物流单号" :label-width="formLabelWidth">
                     <el-input
@@ -573,6 +581,7 @@
                 value: '',
                 form: [],
                 form1: [],
+                supportDeliveryList: [],
                 cinemaInfo: [],
                 partnerInfo: [],
                 commodityType: [
@@ -858,9 +867,10 @@
                                 this.logVisible = true;
                                 console.log(JSON.parse(Decrypt(data.data.data)));
                                 this.form1.id = row.id;
-                                this.form1 = JSON.parse(Decrypt(data.data.data));
+                                this.form1 = JSON.parse(Decrypt(data.data.data)).commodityChangeRecord;
+                                this.supportDeliveryList = JSON.parse(Decrypt(data.data.data)).supportDeliveryList;
                                 for (let x in this.commodityType) {
-                                    if (this.commodityType[x].value == JSON.parse(Decrypt(data.data.data)).trackingStatus) {
+                                    if (this.commodityType[x].value == JSON.parse(Decrypt(data.data.data)).commodityChangeRecord.trackingStatus) {
                                         this.form1.trackingStatus = this.commodityType[x].value;
                                         break;
                                     }

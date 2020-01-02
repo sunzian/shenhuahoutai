@@ -65,7 +65,7 @@
                 <el-table-column prop="name" label="适用影院">
                     <template slot-scope="scope">{{scope.row.cinemaNames}}</template>
                 </el-table-column>
-                <el-table-column label="优惠券名称" width="110">
+                <el-table-column label="优惠券名称" width="230">
                     <template slot-scope="scope">{{scope.row.name}}</template>
                 </el-table-column>
                 <el-table-column prop="name" label="优惠券类型" width="100">
@@ -294,6 +294,7 @@
                         <el-radio label="3">满张数减</el-radio>
                         <el-radio label="2">立减</el-radio>
                         <el-radio label="1">固定价格（兑换券）</el-radio>
+                        <el-radio label="5">最低票价结算</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item
@@ -367,6 +368,10 @@
                         onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')"
                     ></el-input>&nbsp;元
                 </el-form-item>
+                <el-form-item :required="true" label="增减金额" :label-width="formLabelWidth" v-if="oForm.reduceType == 5">
+                    <el-input placeholder="（最低票价+-金额）*张数" style="width: 250px" v-model="oForm.discountMoney" autocomplete="off"></el-input>&nbsp;&nbsp;
+                    <span style="color: #ccc;">在最低票价基础上加减多少金额 如果是减金额则填负数</span>
+                </el-form-item>
                 <el-form-item :required="true" label="开启状态" :label-width="formLabelWidth">
                     <el-select v-model="oForm.status" placeholder="请选择">
                         <el-option
@@ -386,6 +391,19 @@
                             :value="item.value"
                         ></el-option>
                     </el-select>
+                </el-form-item>
+                <el-form-item
+                        label="节假日加价金额"
+                        :label-width="formLabelWidth"
+                        v-if="oForm.holidayValid == 1&&(oForm.reduceType==1||oForm.reduceType==5)"
+                >
+                    <el-input
+                            style="width: 250px"
+                            placeholder="选填 填写大于等于0的数字"
+                            v-model="oForm.holidayAddMoney"
+                            autocomplete="off"
+                            onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item label="星期几不可用" :label-width="formLabelWidth">
                     <el-checkbox-group :max="6" v-model="oForm.checkedDays" @change="selectDay">
@@ -556,6 +574,7 @@
                         <el-radio label="3">满张数减</el-radio>
                         <el-radio label="2">立减</el-radio>
                         <el-radio label="1">固定价格（兑换券）</el-radio>
+                        <el-radio label="5">最低票价结算</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item
@@ -623,6 +642,10 @@
                         autocomplete="off"
                     ></el-input>&nbsp;元
                 </el-form-item>
+                <el-form-item :required="true" label="增减金额：" :label-width="formLabelWidth" v-if="oReduceType == 5">
+                    <el-input placeholder="（最低票价+-金额）*张数" style="width: 250px" v-model="oDiscountMoney" autocomplete="off"></el-input>&nbsp;&nbsp;
+                    <span style="color: #ccc;">在最低票价基础上加减多少金额 如果是减金额则填负数</span>
+                </el-form-item>
                 <el-form-item :required="true" label="开启状态" :label-width="formLabelWidth">
                     <el-select v-model="oStatus" placeholder="请选择">
                         <el-option
@@ -642,6 +665,19 @@
                             :value="item.value"
                         ></el-option>
                     </el-select>
+                </el-form-item>
+                <el-form-item
+                        label="节假日加价金额"
+                        :label-width="formLabelWidth"
+                        v-if="oHolidayValid == 1&&(oReduceType==1||oReduceType==5)"
+                >
+                    <el-input
+                            style="width: 250px"
+                            placeholder="选填 填写大于等于0的数字"
+                            v-model="oHolidayAddMoney"
+                            autocomplete="off"
+                            onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item label="星期几不可用" :label-width="formLabelWidth">
                     <el-checkbox-group :max="6" v-model="oCheckedDays" @change="selectDay">
@@ -859,6 +895,7 @@ export default {
             sellTableData: [],
             oCinemaName: '',
             oSelectFilmType: '',
+            oHolidayAddMoney: '',
             oScreenName: '',
             oFilmName: '',
             oAchieveMoney: '',
@@ -928,6 +965,7 @@ export default {
                 selectHallType: '0',
                 selectFilmFormatType: '0', //选择制式
                 filmCode: '',
+                holidayAddMoney: '',
                 filmName: '',
                 filmFormatCode: [],
                 checkedDays: [],
@@ -1391,6 +1429,16 @@ export default {
                     return;
                 }
             }
+            if (this.oForm.reduceType == 5) {
+                if (this.oForm.discountMoney > 0) {
+                    if (!this.oForm.discountMoney) {
+                        this.message = '增减金额不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+            }
             if (!this.oForm.status) {
                 this.message = '开启状态不能为空，请检查！';
                 this.open();
@@ -1403,6 +1451,22 @@ export default {
                 loading.close();
                 return;
             }
+            // if (this.oForm.reduceType == 1&&this.oForm.holidayValid==1) {
+            //     if (this.oForm.holidayAddMoney > 0) {
+            //         if (!this.oForm.holidayAddMoney) {
+            //             this.message = '节假日加价金额不能为空，请检查！';
+            //             this.open();
+            //             loading.close();
+            //             return;
+            //         }
+            //         if (this.oForm.holidayAddMoney<0) {
+            //             this.message = '节假日加价金额不能小于0，请检查！';
+            //             this.open();
+            //             loading.close();
+            //             return;
+            //         }
+            //     }
+            // }
             if (!this.oForm.activityTogether) {
                 this.message = '是否和活动共用不能为空，请检查！';
                 this.open();
@@ -1469,6 +1533,14 @@ export default {
             jsonArr.push({ key: 'couponDesc', value: this.oForm.couponDesc });
             jsonArr.push({ key: 'selectFilmFormatType', value: this.oForm.selectFilmFormatType });
             jsonArr.push({ key: 'filmFormatCode', value: this.selectFormatCode });
+            if(this.oForm.holidayValid==1){
+                if(this.oForm.reduceType==1){
+                    jsonArr.push({ key: 'holidayAddMoney', value: this.oForm.holidayAddMoney });
+                }
+                if(this.oForm.reduceType==5){
+                    jsonArr.push({ key: 'holidayAddMoney', value: this.oForm.holidayAddMoney });
+                }
+            }
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             console.log(jsonArr);
@@ -1496,6 +1568,7 @@ export default {
                             this.oForm.validPayType = '0';
                             this.oForm.reduceType = '1';
                             this.oForm.achieveMoney = '';
+                            this.oForm.holidayAddMoney = '';
                             this.oForm.discountMoney = '';
                             this.oForm.holidayValid = '1';
                             this.oForm.checkedDays = [];
@@ -1636,6 +1709,7 @@ export default {
                         this.oCinemaCode = JSON.parse(Decrypt(data.data.data)).coupon.cinemaCodes;
                         this.oCommonType = JSON.parse(Decrypt(data.data.data)).coupon.commonType;
                         this.oFilmFormatName = JSON.parse(Decrypt(data.data.data)).coupon.filmFormatName;
+                        this.oHolidayAddMoney = JSON.parse(Decrypt(data.data.data)).coupon.holidayAddMoney;
                         this.oName = JSON.parse(Decrypt(data.data.data)).coupon.name;
                         // this.oStartDate = JSON.parse(Decrypt(data.data.data)).coupon.startDate;
                         if (JSON.parse(Decrypt(data.data.data)).coupon.exceptWeekDay) {
@@ -1698,7 +1772,9 @@ export default {
                         if (JSON.parse(Decrypt(data.data.data)).coupon.reduceType == 4) {
                             this.oReduceType = '4';
                         }
-
+                        if (JSON.parse(Decrypt(data.data.data)).coupon.reduceType == 5) {
+                            this.oReduceType = '5';
+                        }
                         this.oDiscountMoney = JSON.parse(Decrypt(data.data.data)).coupon.discountMoney;
                         this.oAchieveMoney = JSON.parse(Decrypt(data.data.data)).coupon.achieveMoney;
                         this.oCouponDesc = JSON.parse(Decrypt(data.data.data)).coupon.couponDesc;
@@ -1931,6 +2007,16 @@ export default {
                     return;
                 }
             }
+            if (this.oReduceType == 5) {
+                if (this.oDiscountMoney > 0) {
+                    if (!this.oDiscountMoney) {
+                        this.message = '增减金额不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+            }
             if (!this.oStatus) {
                 this.message = '开启状态不能为空，请检查！';
                 this.open();
@@ -1943,6 +2029,22 @@ export default {
                 loading.close();
                 return;
             }
+            // if (this.oReduceType == 1&&this.oHolidayValid==1) {
+            //     if (this.oHolidayAddMoney > 0) {
+            //         if (!this.oHolidayAddMoney) {
+            //             this.message = '节假日加价金额不能为空，请检查！';
+            //             this.open();
+            //             loading.close();
+            //             return;
+            //         }
+            //         if (this.oHolidayAddMoney<0) {
+            //             this.message = '节假日加价金额不能小于0，请检查！';
+            //             this.open();
+            //             loading.close();
+            //             return;
+            //         }
+            //     }
+            // }
             if (!this.oActivityTogether) {
                 this.message = '是否和活动共用不能为空，请检查！';
                 this.open();
@@ -1998,6 +2100,14 @@ export default {
             jsonArr.push({ key: 'reduceType', value: this.oReduceType });
             jsonArr.push({ key: 'activityTogether', value: this.oActivityTogether });
             jsonArr.push({ key: 'id', value: this.oId });
+            if(this.oHolidayValid==1){
+                if(this.oReduceType==1){
+                    jsonArr.push({ key: 'holidayAddMoney', value: this.oHolidayAddMoney });
+                }
+                if(this.oReduceType==5){
+                    jsonArr.push({ key: 'holidayAddMoney', value: this.oHolidayAddMoney });
+                }
+            }
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             let params = ParamsAppend(jsonArr);

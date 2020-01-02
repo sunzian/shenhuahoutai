@@ -47,6 +47,7 @@ export default {
                 this.key=true;
                 // let menus=;//返回的数据进行解密
                 this.menuList =JSON.parse(Decrypt(data.data.data));
+                // console.log(this.menuList);
             }
         }).catch(err=>{
             console.log(err);
