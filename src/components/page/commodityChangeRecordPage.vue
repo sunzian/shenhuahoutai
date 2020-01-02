@@ -233,7 +233,7 @@
                                 icon="el-icon-setting"
                                 @click="logChange(scope.$index, scope.row)"
                         >修改物流
-                        </el-button>
+                        </el-button> 
                     </template>
                 </el-table-column>
             </el-table>

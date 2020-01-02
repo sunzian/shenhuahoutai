@@ -286,8 +286,18 @@
                         @click="deletPartner"
                     >删除</span>
                 </el-form-item>
+                <el-form-item v-if="oForm.commodity_type==4" :required="true" label="取货方式" :label-width="formLabelWidth">
+                    <el-select v-model="oForm.supportExpressStatus" placeholder="请选择取货方式">
+                        <el-option
+                                v-for="item in supportType"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
                 <el-form-item
-                    v-if="oForm.commodity_type==4"
+                    v-if="oForm.commodity_type==4 && oForm.supportExpressStatus == 1"
                     :required="true"
                     label="领取方式"
                     :label-width="formLabelWidth"
@@ -381,16 +391,6 @@
                         v-model.trim="oForm.money"
                         autocomplete="off"
                     ></el-input>
-                </el-form-item>
-                <el-form-item v-if="oForm.commodity_type==4" :required="true" label="取货方式" :label-width="formLabelWidth">
-                    <el-select v-model="oForm.supportExpressStatus" placeholder="请选择取货方式">
-                        <el-option
-                                v-for="item in supportType"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                        ></el-option>
-                    </el-select>
                 </el-form-item>
                 <!--<el-form-item-->
                         <!--:required="true"-->
@@ -737,8 +737,18 @@
                         @click="deletPartner"
                     >删除</span>
                 </el-form-item>
+                <el-form-item v-if="form.commodityType==4" :required="true" label="取货方式" :label-width="formLabelWidth">
+                    <el-select v-model="form.supportExpressStatus" placeholder="请选择取货方式">
+                        <el-option
+                                v-for="item in supportType"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
                 <el-form-item
-                    v-if="form.commodityType==4"
+                    v-if="form.commodityType==4 && form.supportExpressStatus == 1"
                     :required="true"
                     label="领取方式"
                     :label-width="formLabelWidth"
@@ -837,16 +847,6 @@
                         v-model.trim="form.money"
                         autocomplete="off"
                     ></el-input>
-                </el-form-item>
-                <el-form-item v-if="form.commodityType==4" :required="true" label="取货方式" :label-width="formLabelWidth">
-                    <el-select v-model="form.supportExpressStatus" placeholder="请选择取货方式">
-                        <el-option
-                                v-for="item in supportType"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                        ></el-option>
-                    </el-select>
                 </el-form-item>
                 <!--<el-form-item-->
                         <!--:required="true"-->
@@ -1390,7 +1390,7 @@ export default {
                 assign_info: '',
                 gold: '',
                 money: '',
-                supportExpressStatus: '',
+                supportExpressStatus: '1',
                 expressFee: '',
                 store: ''
             },
@@ -1618,10 +1618,10 @@ export default {
                     value: '2',
                     label: '快递'
                 },
-                {
-                    value: '3',
-                    label: '自提加快递'
-                },
+                // {
+                //     value: '3',
+                //     label: '自提加快递'
+                // },
             ],
             topStatusList: [
                 {
@@ -1929,7 +1929,6 @@ export default {
                     .fetchPost('merchandiseCoupon/getCouponByCinemaCode', params)
                     .then(data => {
                         loading.close();
-                        console.log(data);
                         if (data.data.code == 'success') {
                             this.drawer = true;
                             var oData = JSON.parse(Decrypt(data.data.data));
@@ -1974,7 +1973,6 @@ export default {
                         // console.log(data);
                         if (data.data.code == 'success') {
                             this.fileList = [];
-                            console.log(JSON.parse(Decrypt(data.data.data)));
                             this.cities = JSON.parse(Decrypt(data.data.data));
                             this.dialogFormVisible = true;
                         } else if (data.data.code == 'nologin') {
@@ -2356,6 +2354,7 @@ export default {
                             this.oForm.recommendStatus = '';
                             this.oForm.sort = '';
                             this.partnerCode = '';
+                            this.oForm.supportExpressStatus = '1';
                             this.dialogFormVisible = false;
                             this.$message.success(`新增成功`);
                             this.getMenu();

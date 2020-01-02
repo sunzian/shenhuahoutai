@@ -176,6 +176,12 @@
                             icon="el-icon-setting"
                             @click="addChange(scope.$index, scope.row)"
                         >查看详情</el-button>
+                        <el-button
+                            v-if="scope.row.pickupWay=='2'"
+                            type="text"
+                            icon="el-icon-setting"
+                            @click="logChange(scope.$index, scope.row)"
+                        >修改物流</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -346,6 +352,91 @@
                 <el-button type="primary" @click="editVisible = false">确 定</el-button>
             </span>
         </el-dialog>
+        <!-- 修改物流弹出框 -->
+        <el-dialog :close-on-click-modal="false" title="物流" :visible.sync="logVisible">
+            <el-form ref="form" :model="form1">
+                <el-form-item label="领取影院名称" :label-width="formLabelWidth">
+                    <el-input
+                        :disabled="true"
+                        style="width: 250px"
+                        v-model="form1.exchangeCinemaName"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="订单编号" :label-width="formLabelWidth">
+                    <el-input
+                        :disabled="true"
+                        style="width: 250px"
+                        v-model="form1.orderNo"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="物流单号" :label-width="formLabelWidth">
+                    <el-input
+                        :disabled="true"
+                        style="width: 250px"
+                        v-model="form1.trackingNumber"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="收货人名称" :label-width="formLabelWidth">
+                    <el-input
+                        :disabled="true"
+                        style="width: 250px"
+                        v-model="form1.deliveryName"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="收货人电话" :label-width="formLabelWidth">
+                    <el-input
+                        :disabled="true"
+                        style="width: 250px"
+                        v-model="form1.deliveryMobile"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="收货人地址" :label-width="formLabelWidth">
+                    <el-input
+                        :disabled="true"
+                        style="width: 250px"
+                        v-model="form1.deliveryAddressDetail"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="商品名称" :label-width="formLabelWidth">
+                    <el-input
+                        :disabled="true"
+                        style="width: 250px"
+                        v-model="form1.commodityName"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="物流公司名称" :label-width="formLabelWidth">
+                    <el-input style="width: 250px" v-model="form1.trackingName" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="物流单号" :label-width="formLabelWidth">
+                    <el-input
+                        style="width: 250px"
+                        v-model="form1.trackingNumber"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="物流状态" :label-width="formLabelWidth">
+                    <el-select v-model="form1.trackingStatus" placeholder="请选择商品类型">
+                        <el-option
+                            v-for="item in commodityType"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="logVisible = false">取 消</el-button>
+                <el-button type="primary" @click="exLogChanger">确 定</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 
@@ -366,6 +457,7 @@ export default {
                 pageNo: 1,
                 pageSize: 15
             },
+            logVisible: false,
             editVisible: false,
             pageTotal: 0,
             idx: -1,
@@ -374,8 +466,27 @@ export default {
             businessInfoList: [],
             value: '',
             form: [],
+            form1: [],
             cinemaInfo: [],
-            partnerInfo: []
+            partnerInfo: [],
+            commodityType: [
+                    {
+                        value: '1',
+                        label: '待发货'
+                    },
+                    {
+                        value: '2',
+                        label: '快递中'
+                    },
+                    {
+                        value: '3',
+                        label: '已送达'
+                    },
+                    {
+                        value: '4',
+                        label: '已收货'
+                    }
+                ],
         };
     },
     created() {},
@@ -586,6 +697,97 @@ export default {
                     });
             }, 500);
         },
+        logChange(index, row) {
+            //是否修改权限
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
+            setTimeout(() => {
+                this.idx = index;
+                this.form = row;
+                var jsonArr = [];
+                jsonArr.push({ key: 'id', value: row.id });
+                let sign = md5(preSign(jsonArr));
+                jsonArr.push({ key: 'sign', value: sign });
+                let params = ParamsAppend(jsonArr);
+                https
+                    .fetchPost('/commodityChangeRecord/updateTrackingInfoPage', params)
+                    .then(data => {
+                        loading.close();
+                        if (data.data.code == 'success') {
+                            this.logVisible = true;
+                            console.log(JSON.parse(Decrypt(data.data.data)));
+                            this.form1.id = row.id;
+                            this.form1 = JSON.parse(Decrypt(data.data.data));
+                            for (let x in this.commodityType) {
+                                if (this.commodityType[x].value == JSON.parse(Decrypt(data.data.data)).trackingStatus) {
+                                    this.form1.trackingStatus = this.commodityType[x].value;
+                                    break;
+                                }
+                            }
+                        } else if (data.data.code == 'nologin') {
+                            this.message = data.data.message;
+                            this.open();
+                            this.$router.push('/login');
+                        } else {
+                            this.message = data.data.message;
+                            this.open();
+                        }
+                    })
+                    .catch(err => {
+                        loading.close();
+                        console.log(err);
+                    });
+            }, 500);
+        },
+        // 编辑物流操作
+        exLogChanger() {
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
+            setTimeout(() => {
+                var jsonArr = [];
+                jsonArr.push({ key: 'id', value: this.form1.id });
+                jsonArr.push({ key: 'trackingName', value: this.form1.trackingName });
+                jsonArr.push({ key: 'trackingNumber', value: this.form1.trackingNumber });
+                jsonArr.push({ key: 'trackingStatus', value: this.form1.trackingStatus });
+                let sign = md5(preSign(jsonArr));
+                jsonArr.push({ key: 'sign', value: sign });
+                console.log(jsonArr);
+                let params = ParamsAppend(jsonArr);
+                https
+                    .fetchPost('/commodityChangeRecord/updateTrackingInfo', params)
+                    .then(data => {
+                        loading.close();
+                        // console.log(data);
+                        // console.log(JSON.parse(Decrypt(data.data.data)));
+                        if (data.data.code == 'success') {
+                            this.logVisible = false;
+                            this.$message.success(`编辑成功`);
+                            this.getMenu();
+                        } else if (data.data.code == 'nologin') {
+                            this.message = data.data.message;
+                            this.open();
+                            this.$router.push('/login');
+                        } else {
+                            this.message = data.data.message;
+                            this.open();
+                        }
+                    })
+                    .catch(err => {
+                        loading.close();
+                        console.log(err);
+                    });
+            }, 500);
+        },
         Search() {
             this.query.pageNo = 1;
             this.getMenu();
@@ -662,7 +864,7 @@ export default {
                         loading.close();
                         if (data.data.code == 'success') {
                             var oData = JSON.parse(Decrypt(data.data.data));
-                            console.log(oData)
+                            console.log(oData);
                             this.tableData = oData.pageResult.data;
                             this.totalData = oData.statistics;
                             this.query.pageSize = oData.pageResult.pageSize;
