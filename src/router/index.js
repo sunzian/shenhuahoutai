@@ -26,6 +26,11 @@ export default new Router({
                     meta: { title: '商家账号管理' }
                 },
                 {
+                    path: '/queryMemberPrice',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/queryMemberPrice.vue'),
+                    meta: { title: '调试售票系统接口' }
+                },
+                {
                     path: '/partnerUserInfoPage',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/partnerUserInfoPage.vue'),
                     meta: { title: '商家账号管理' }
