@@ -115,13 +115,6 @@
                         @click="Search"
                 >搜索
                 </el-button>
-                <el-button
-                        type="primary"
-                        @click="derive"
-                        icon="el-icon-circle-plus-outline"
-                        style="float: right;margin-top: 10px"
-                >导出
-                </el-button>
             </div>
             <div class="handle-box">
                 总支付金币：
@@ -145,6 +138,20 @@
                         :disabled="true"
                         autocomplete="off"
                 ></el-input>
+                <el-button
+                        type="primary"
+                        @click="downderive"
+                        icon="el-icon-circle-plus-outline"
+                        style="float: right;margin-top: 10px;margin-left:10px"
+                >导入物流单号
+                </el-button>
+                <el-button
+                        type="primary"
+                        @click="derive"
+                        icon="el-icon-circle-plus-outline"
+                        style="float: right;margin-top: 10px;margin-left:10px"
+                >导出
+                </el-button>
             </div>
             <el-table
                     :data="tableData"
@@ -550,6 +557,34 @@
                 <el-button type="primary" @click="exLogChanger">确 定</el-button>
             </span>
         </el-dialog>
+        <!-- 导入excel -->
+        <el-dialog :close-on-click-modal="false" title="导入excel" :visible.sync="excelVisible">
+            <el-form :model="excelForm">
+                <el-form-item :required="true" label="选择excel文件：" :label-width="formLabelWidth">
+                        <el-upload
+                            class="upload-demo"
+                            :action="uploadAction"
+                            ref="upload"
+                            :on-change="changeExcel"
+                            :on-success="uploadExcel"
+                            :before-upload="beforeExcel"
+                            :auto-upload="false">
+                            <i class="el-icon-upload"></i>
+                            <div class="el-upload__text">
+                                <em>点击上传</em>
+                            </div>
+                            <div
+                                    class="el-upload__tip"
+                                    slot="tip"
+                            >上传模板只能是 xls、xlsx格式!</div>
+                        </el-upload>
+                </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="excelVisible = false">取 消</el-button>
+                <el-button type="primary" @click="downExcel">确 定</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 
@@ -567,6 +602,14 @@
                 totalData: [],
                 tableData: [],
                 message: '', //弹出框消息
+                type: {
+                    type: ''
+                },
+                excelForm: {},
+                excelVisible: false,
+                uploadAction: 'api/commodityChangeRecord/importExcelTrackingInfo',
+                hasExcel: false,
+                successUpLoad: false,
                 query: {
                     pageNo: 1,
                     pageSize: 15
@@ -706,6 +749,42 @@
                     https.exportMethod(myObj);
                     loading.close();
                 }, 1500);
+            },
+            downderive() {
+                this.excelVisible = true;
+            },
+            changeExcel(file,fileList) {
+                this.hasExcel = true;
+            },
+            beforeExcel(file) {
+                const extension = file.name.split(".")[file.name.split(".").length-1] === "xls";
+                const extension2 = file.name.split(".")[file.name.split(".").length-1] === "xlsx";
+                const isLt2M = file.size / 1024 / 1024 < 10;
+                if (!extension && !extension2) {
+                    this.message = '上传模板只能是 xls、xlsx格式!';
+                    this.open();
+                }
+                if (!isLt2M) {
+                    this.message = '上传模板大小不能超过 10MB!';
+                    this.open();
+                }
+                return extension || extension2;
+            },
+            uploadExcel(response) {
+                this.successUpLoad = true;
+                this.message = response.message;
+                this.open();
+                this.$refs.upload.clearFiles();
+                this.hasExcel = false;
+                this.excelVisible = false;
+            },
+            downExcel() {
+                if (this.hasExcel == false) {
+                    this.message = '请上传文件！';
+                    this.open();
+                    return
+                }
+                this.$refs.upload.submit();
             },
             changeSearchCinema(val) {
                 this.partnerInfo = [];
