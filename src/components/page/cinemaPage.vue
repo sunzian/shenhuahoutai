@@ -205,6 +205,16 @@
                             @click="addChange(scope.$index, scope.row)"
                         >编辑</el-button>
                         <el-button
+                                type="text"
+                                @click="addPrice(scope.$index, scope.row)"
+                                icon="el-icon-circle-plus-outline"
+                        >充值金额</el-button>
+                        <el-button
+                                type="text"
+                                @click="addNumPage(scope.$index, scope.row)"
+                                icon="el-icon-circle-plus-outline"
+                        >充值张数</el-button>
+                        <el-button
                             type="text"
                             icon="el-icon-delete"
                             class="red"
@@ -1331,7 +1341,6 @@
                         :limit="1"
                         ref="upload"
                         :on-success="onSuccess"
-                        :on-exceed="sza"
                         :file-list="fileList"
                         list-type="picture"
                     >
@@ -1451,6 +1460,36 @@
                 <el-button type="primary" @click="exChanger">确 定</el-button>
             </span>
         </el-dialog>
+        <!--新增充值张数弹出框-->
+        <el-dialog :close-on-click-modal="false" title="充值张数" :visible.sync="numVisible">
+            <el-form>
+                <el-form-item :required="true" label="交易张数：" :label-width="formLabelWidth">
+                    <el-input style="width: 200px" min="1" v-model="numForm.tradeTicketNum" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="充值明细：" :label-width="formLabelWidth">
+                    <el-input style="width: 200px" type="textarea" min="1" maxlength="200" show-word-limit v-model="numForm.tradeDetail" autocomplete="off"></el-input>
+                </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="numVisible = false">取 消</el-button>
+                <el-button type="primary" @click="addNumRole">确 定</el-button>
+            </span>
+        </el-dialog>
+        <!--新增充值金额弹出框-->
+        <el-dialog :close-on-click-modal="false" title="充值金额" :visible.sync="dialogFormVisible2">
+            <el-form>
+                <el-form-item :required="true" label="交易金额：" :label-width="formLabelWidth">
+                    <el-input style="width: 200px" min="1" v-model="pForm.tradeTicketPrice" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="充值明细：" :label-width="formLabelWidth">
+                    <el-input style="width: 200px" type="textarea" min="1" maxlength="200" show-word-limit v-model="pForm.tradeDetail" autocomplete="off"></el-input>
+                </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogFormVisible2 = false">取 消</el-button>
+                <el-button type="primary" @click="addRole2">确 定</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 
@@ -1508,6 +1547,8 @@ export default {
             oMtxPayType:'',
             oVideoStatus:'',
             oCinemaName: '',
+            numCinemaCode: '',
+            numCinemaName: '',
             oCinemaCode: '',
             oProvince: '',
             oCity: '',
@@ -1602,15 +1643,19 @@ export default {
             ],
             businessInfo: [], //关联商家信息
             form: [],
+            numForm: [],
+            pForm: [],
             tableData: [],
             fileList: [],
             multipleSelection: [],
             delList: [],
             editVisible: false,
+            numVisible: false,
             pageTotal: 0,
             idx: -1,
             id: -1,
             dialogFormVisible: false,
+            dialogFormVisible2: false,
             oForm: {
                 cinemaName: '',
                 cinemaCode: '',
@@ -1685,8 +1730,187 @@ export default {
         this.getBusinessInfo();
     },
     methods: {
-        sza(){
-
+        addNumPage(index, row) {
+            //获取新增按钮权限
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
+            this.numCinemaCode=row.cinemaCode;
+            this.numCinemaName=row.cinemaName;
+            https.fetchPost('/cinemaTicketNumRecords/addPage', '')
+                .then(data => {
+                    loading.close();
+                    if (data.data.code == 'success') {
+                        this.numVisible = true;
+                    } else if (data.data.code == 'nologin') {
+                        this.message = data.data.message;
+                        this.open();
+                        this.$router.push('/login');
+                    } else {
+                        this.message = data.data.message;
+                        this.open();
+                    }
+                })
+                .catch(err => {
+                    loading.close();
+                    console.log(err);
+                });
+        },
+        addPrice(index, row) {
+            //获取新增按钮权限
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
+            this.numCinemaCode=row.cinemaCode;
+            this.numCinemaName=row.cinemaName;
+            https.fetchPost('/cinemaTicketNumRecords/addPage ', '')
+                .then(data => {
+                    loading.close();
+                    if (data.data.code == 'success') {
+                        this.dialogFormVisible2 = true;
+                    } else if (data.data.code == 'nologin') {
+                        this.message = data.data.message;
+                        this.open();
+                        this.$router.push('/login');
+                    } else {
+                        this.message = data.data.message;
+                        this.open();
+                    }
+                })
+                .catch(err => {
+                    loading.close();
+                    console.log(err);
+                });
+        },
+        addNumRole() {
+            //新增按钮操作
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
+            var jsonArr = [];
+            if (!this.numCinemaCode) {
+                this.message = '请选择影院';
+                this.open();
+                loading.close();
+                return;
+            }
+            if (!this.numForm.tradeTicketNum) {
+                this.message = '请输入数量';
+                this.open();
+                loading.close();
+                return;
+            }
+            // let cinemaName = ''
+            // for (let i = 0; i < this.cinemaInfo.length; i ++) {
+            //     if (this.cinemaInfo[i].cinemaCode == this.oForm.cinemaCode) {
+            //         cinemaName = this.cinemaInfo[i].cinemaName
+            //     }
+            // }
+            jsonArr.push({ key: 'cinemaName', value:  this.numCinemaName});
+            jsonArr.push({ key: 'cinemaCode', value: this.numCinemaCode });
+            jsonArr.push({ key: 'tradeDetail', value: this.numForm.tradeDetail });
+            jsonArr.push({ key: 'tradeTicketNum', value: this.numForm.tradeTicketNum });
+            let sign = md5(preSign(jsonArr));
+            jsonArr.push({ key: 'sign', value: sign });
+            let params = ParamsAppend(jsonArr);
+            if (this.numVisible == true) {
+                https
+                    .fetchPost('/cinemaTicketNumRecords/addCinemaTicketNumRecords', params)
+                    .then(data => {
+                        loading.close();
+                        if (data.data.code == 'success') {
+                            this.numVisible = false;
+                            this.$message.success(`充值成功`);
+                            this.numForm.tradeDetail = '';
+                            this.numForm.tradeTicketNum = '';
+                            this.getMenu();
+                        } else if (data.data.code == 'nologin') {
+                            this.message = data.data.message;
+                            this.open();
+                            this.$router.push('/login');
+                        } else {
+                            this.message = data.data.message;
+                            this.open();
+                        }
+                    })
+                    .catch(err => {
+                        loading.close();
+                        console.log(err);
+                    });
+            }
+        },
+        addRole2() {
+            //新增按钮操作
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
+            var jsonArr = [];
+            if (!this.numCinemaCode) {
+                this.message = '请选择影院';
+                this.open();
+                loading.close();
+                return;
+            }
+            if (!this.pForm.tradeTicketPrice) {
+                this.message = '请输入金额';
+                this.open();
+                loading.close();
+                return;
+            }
+            // let cinemaName = ''
+            // for (let i = 0; i < this.cinemaInfo.length; i ++) {
+            //     if (this.cinemaInfo[i].cinemaCode == this.pForm.cinemaCode) {
+            //         cinemaName = this.cinemaInfo[i].cinemaName
+            //     }
+            // }
+            jsonArr.push({ key: 'cinemaName', value:  this.numCinemaName});
+            jsonArr.push({ key: 'cinemaCode', value: this.numCinemaCode});
+            jsonArr.push({ key: 'tradeDetail', value: this.pForm.tradeDetail });
+            jsonArr.push({ key: 'tradeTicketPrice', value: this.pForm.tradeTicketPrice });
+            let sign = md5(preSign(jsonArr));
+            jsonArr.push({ key: 'sign', value: sign });
+            let params = ParamsAppend(jsonArr);
+            if (this.dialogFormVisible2 == true) {
+                https
+                    .fetchPost('/cinemaTicketNumRecords/updateRemainTicketPrice', params)
+                    .then(data => {
+                        loading.close();
+                        if (data.data.code == 'success') {
+                            this.dialogFormVisible2 = false;
+                            this.$message.success(`充值成功`);
+                            this.pForm.tradeDetail = '';
+                            this.pForm.tradeTicketPrice = '';
+                            this.getMenu();
+                        } else if (data.data.code == 'nologin') {
+                            this.message = data.data.message;
+                            this.open();
+                            this.$router.push('/login');
+                        } else {
+                            this.message = data.data.message;
+                            this.open();
+                        }
+                    })
+                    .catch(err => {
+                        loading.close();
+                        console.log(err);
+                    });
+            }
         },
         addPage() {
             //获取新增按钮权限
