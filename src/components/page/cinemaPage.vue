@@ -1029,7 +1029,7 @@
                         <!--&gt;</el-option>-->
                     <!--</el-select>-->
                 <!--</el-form-item>-->
-                <el-form-item prop="snackDispatcherStatus" label="是否小卖配送" :label-width="formLabelWidth">
+                <el-form-item prop="snackDispatcherStatus" label="卖品配送方式" :label-width="formLabelWidth">
                     <el-select
                     v-model="oSnackDispatcherStatus"
                     >
@@ -1638,7 +1638,7 @@ export default {
                 },
                 {
                     value: '2',
-                    label: '否'
+                    label: '不配送'
                 },
                 {
                     value: '3',
