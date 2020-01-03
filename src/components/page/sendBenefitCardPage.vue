@@ -116,7 +116,7 @@
                 <el-select
                     v-model="query.bindCardStatus"
                     clearable
-                    placeholder="是否绑定会员卡"
+                    placeholder="绑定会员卡"
                     class="mr10"
                     style="margin-top: 10px;width:18%;"
                 >
@@ -202,7 +202,7 @@
                 <el-table-column prop="memo" label="手机号" width="110">
                     <template slot-scope="scope">{{scope.row.userMobile}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="注册影院">
+                <el-table-column prop="memo" label="注册影院" width="180">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="注册时间" width="160">
@@ -211,7 +211,7 @@
                 <el-table-column prop="memo" label="最近登陆时间" width="160">
                     <template slot-scope="scope">{{scope.row.loginDate}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="金币数量" width="90">
+                <el-table-column prop="memo" label="金币数量" width="80">
                     <template slot-scope="scope">{{scope.row.goldNumber}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="累计消费金额" width="110">
@@ -232,7 +232,7 @@
                         <el-tag v-else-if="scope.row.userRole=='2'" type="success">管理员</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="memo" label="是否绑定会员卡" width="100">
+                <el-table-column prop="memo" label="绑定会员卡" width="100">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.bindMemberCardStatus=='1'" type="danger">未绑定</el-tag>
                         <el-tag v-else-if="scope.row.bindMemberCardStatus=='2'" type="success">已绑定</el-tag>

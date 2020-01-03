@@ -162,54 +162,52 @@
                     header-cell-class-name="table-header"
                     @selection-change="handleSelectionChange"
             >
-                <el-table-column prop="name" label="兑换影院名称">
+                <el-table-column prop="name" label="兑换影院名称" width="210">
                     <template slot-scope="scope">{{scope.row.exchangeCinemaName}}</template>
                 </el-table-column>
-                <el-table-column label="订单号" width="190">
-                    <template slot-scope="scope">{{scope.row.orderNo}}</template>
-                </el-table-column>
-                <el-table-column prop="memo" label="手机号码" width="120">
+                <el-table-column prop="memo" label="会员手机号" width="110">
                     <template slot-scope="scope">{{scope.row.mobile}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="商品名称">
+                <el-table-column prop="memo" label="商品名称" width="180">
                     <template slot-scope="scope">{{scope.row.commodityName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="兑换方式" width="130">
-                    <template slot-scope="scope">
-                        <el-tag v-if="scope.row.changeType=='1'">纯金币兑换</el-tag>
-                        <el-tag v-else-if="scope.row.changeType=='2'">纯RMB兑换</el-tag>
-                        <el-tag v-else-if="scope.row.changeType=='3'">金币加RMB兑换</el-tag>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="memo" label="消耗金币" width="90">
+                <el-table-column prop="memo" label="消耗金币" width="80">
                     <template slot-scope="scope">{{scope.row.gold}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="支付金额" width="90">
+                <el-table-column prop="memo" label="实付" width="60">
                     <template slot-scope="scope">{{scope.row.money}}</template>
                 </el-table-column>
-                <el-table-column label="兑换状态" align="center" width="100">
+                <el-table-column prop="memo" label="兑换时间" width="160">
+                    <template slot-scope="scope">{{scope.row.payTime}}</template>
+                </el-table-column>
+                <el-table-column label="兑换状态" align="center" width="80">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row. payStatus=='0'">待支付</el-tag>
                         <el-tag v-else-if="scope.row. payStatus=='1'">兑换成功</el-tag>
                         <el-tag v-else-if="scope.row. payStatus=='2'">兑换失败</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="memo" label="兑换时间" width="150">
-                    <template slot-scope="scope">{{scope.row.payTime}}</template>
-                </el-table-column>
-                <el-table-column label="取货方式" align="center" width="100">
+                <!--<el-table-column prop="memo" label="兑换方式" width="120">-->
+                    <!--<template slot-scope="scope">-->
+                        <!--<el-tag v-if="scope.row.changeType=='1'">纯金币兑换</el-tag>-->
+                        <!--<el-tag v-else-if="scope.row.changeType=='2'">纯RMB兑换</el-tag>-->
+                        <!--<el-tag v-else-if="scope.row.changeType=='3'">金币加RMB兑换</el-tag>-->
+                    <!--</template>-->
+                <!--</el-table-column>-->
+                <el-table-column label="取货方式" align="center" width="80">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.pickupWay=='1'">自提</el-tag>
                         <el-tag v-else-if="scope.row.pickupWay=='2'">快递</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="memo" label="物流单号" width="150">
-                    <template slot-scope="scope">{{scope.row.trackingNumber}}</template>
+                <el-table-column prop="memo" label="核销状态" width="80">
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row.status=='1'">未核销</el-tag>
+                        <el-tag v-else-if="scope.row.status=='2'">已核销</el-tag>
+                        <el-tag v-else-if="scope.row.status=='3'">已过期</el-tag>
+                    </template>
                 </el-table-column>
-                <el-table-column prop="memo" label="收货人名称" width="150">
-                    <template slot-scope="scope">{{scope.row.deliveryName}}</template>
-                </el-table-column>
-                <el-table-column prop="memo" label="快递状态" width="90">
+                <el-table-column prop="memo" label="快递状态" width="80">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.trackingStatus=='1'">待发货</el-tag>
                         <el-tag v-else-if="scope.row.trackingStatus=='2'">快递中</el-tag>
@@ -217,30 +215,32 @@
                         <el-tag v-else-if="scope.row.trackingStatus=='4'">已收货</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="memo" label="核销状态" width="90">
-                    <template slot-scope="scope">
-                        <el-tag v-if="scope.row.status=='1'">未核销</el-tag>
-                        <el-tag v-else-if="scope.row.status=='2'">已核销</el-tag>
-                        <el-tag v-else-if="scope.row.status=='3'">已过期</el-tag>
-                    </template>
+                <el-table-column prop="memo" label="收货人手机号" width="110">
+                    <template slot-scope="scope">{{scope.row.deliveryMobile}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="领取时间" width="150">
+                <el-table-column prop="memo" label="收货人名称" width="120">
+                    <template slot-scope="scope">{{scope.row.deliveryName}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="领取时间" width="160">
                     <template slot-scope="scope">{{scope.row.getDate}}</template>
                 </el-table-column>
-                <el-table-column label="操作" align="center" fixed="right" width="100">
+                <el-table-column label="订单号" width="190">
+                    <template slot-scope="scope">{{scope.row.orderNo}}</template>
+                </el-table-column>
+                <el-table-column label="操作" align="center" fixed="right" width="120">
                     <template slot-scope="scope">
                         <el-button
                                 type="text"
                                 icon="el-icon-setting"
                                 @click="addChange(scope.$index, scope.row)"
-                        >查看详情
+                        >查看
                         </el-button>
                         <el-button
                                 v-if="scope.row.pickupWay=='2'"
                                 type="text"
                                 icon="el-icon-setting"
                                 @click="logChange(scope.$index, scope.row)"
-                        >修改物流
+                        >修改
                         </el-button>
                     </template>
                 </el-table-column>
@@ -1104,7 +1104,7 @@
                             loading.close();
                             if (data.data.code == 'success') {
                                 var oData = JSON.parse(Decrypt(data.data.data));
-                                // console.log(oData);
+                                console.log(oData);
                                 this.tableData = oData.pageResult.data;
                                 this.totalData = oData.statistics;
                                 this.query.pageSize = oData.pageResult.pageSize;

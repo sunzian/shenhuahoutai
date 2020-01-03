@@ -139,25 +139,22 @@
                 header-cell-class-name="table-header"
                 @selection-change="handleSelectionChange"
             >
-                <el-table-column prop="name" label="影院名称">
+                <el-table-column prop="name" label="影院名称" width="220">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="用户" width="100">
+                <el-table-column prop="memo" label="用户" width="120">
                     <template slot-scope="scope">{{scope.row.userName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="手机号" width="140">
+                <el-table-column prop="memo" label="手机号" width="120">
                     <template slot-scope="scope">{{scope.row.phone}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="权益卡名称">
+                <el-table-column prop="memo" label="权益卡名称" width="160">
                     <template slot-scope="scope">{{scope.row.benefitName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="订单号">
-                    <template slot-scope="scope">{{scope.row.orderNumber}}</template>
-                </el-table-column>
-                <el-table-column prop="memo" label="支付金额">
+                <el-table-column prop="memo" label="实付" width="60">
                     <template slot-scope="scope">{{scope.row.payPrice}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="累计优惠金额">
+                <el-table-column prop="memo" label="累计优惠" width="80">
                     <template slot-scope="scope">{{scope.row.totalDiscountMoney}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="支付时间" width="160">
@@ -169,14 +166,17 @@
                 <el-table-column prop="memo" label="过期时间" width="160">
                     <template slot-scope="scope">{{scope.row.endDate}}</template>
                 </el-table-column>
-                <el-table-column label="支付状态" align="center" width="100">
+                <el-table-column prop="memo" label="订单号" width="240">
+                    <template slot-scope="scope">{{scope.row.orderNumber}}</template>
+                </el-table-column>
+                <el-table-column label="支付状态" align="center" width="80" fixed="right">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.payStatus=='0'">未支付</el-tag>
                         <el-tag v-else-if="scope.row.payStatus=='1'">已支付</el-tag>
                         <el-tag v-else-if="scope.row.payStatus=='2'">支付失败</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="权益卡状态" align="center" width="100">
+                <el-table-column label="状态" align="center" width="70" fixed="right">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.benefitStatus=='0'">失效</el-tag>
                         <el-tag v-else-if="scope.row.benefitStatus=='1'">正常</el-tag>

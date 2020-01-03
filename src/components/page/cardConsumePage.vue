@@ -103,25 +103,25 @@
                 header-cell-class-name="table-header"
                 @selection-change="handleSelectionChange"
             >
-                <el-table-column prop="name" label="开卡影院">
+                <el-table-column prop="name" label="开卡影院" width="250">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="消费影院">
+                <el-table-column prop="memo" label="消费影院" width="250">
                     <template slot-scope="scope">{{scope.row.consumeCinemaName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="消费明细">
+                <el-table-column prop="memo" label="消费明细" width="320">
                     <template slot-scope="scope">{{scope.row.consumeDetail}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="消费卡号" width="110">
+                <el-table-column prop="memo" label="消费卡号" width="130">
                     <template slot-scope="scope">{{scope.row.cardNo}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="下单手机号" width="110">
+                <el-table-column prop="memo" label="下单手机号" width="130">
                     <template slot-scope="scope">{{scope.row.mobilePhone}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="消费金额" width="80">
+                <el-table-column prop="memo" label="消费金额" width="90">
                     <template slot-scope="scope">{{scope.row.consumeAmount}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="消费时间" width="160">
+                <el-table-column prop="memo" label="消费时间" width="170">
                     <template slot-scope="scope">{{scope.row.consumeTime}}</template>
                 </el-table-column>
                 <!--<el-table-column prop="memo" label="消费结果" width="305">-->
@@ -130,7 +130,7 @@
                         <!--<el-tag v-else>{{scope.row.errorMessage}}</el-tag>-->
                     <!--</template>-->
                 <!--</el-table-column>-->
-                <el-table-column label="订单类型" align="center" width="90">
+                <el-table-column label="订单类型" align="center" width="100">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.orderType=='1'">购票</el-tag>
                         <el-tag v-else>卖品</el-tag>

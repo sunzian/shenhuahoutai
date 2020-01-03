@@ -71,10 +71,10 @@
                 header-cell-class-name="table-header"
                 @selection-change="handleSelectionChange"
             >
-                <el-table-column prop="name" label="影院名称" width="300">
+                <el-table-column prop="name" label="影院名称" width="200">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="发送人" width="110">
+                <el-table-column prop="memo" label="发送人" width="100">
                     <template slot-scope="scope">{{scope.row.sendUserName}}</template>
                 </el-table-column>
                 <!-- <el-table-column prop="memo" label="客户类型">
@@ -86,13 +86,13 @@
                 <el-table-column prop="memo" label="后台发放批次编号" width="180">
                     <template slot-scope="scope">{{scope.row.sendCode}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="发放人数" align="center" width="120">
+                <el-table-column prop="memo" label="发放人数" align="center" width="80">
                     <template slot-scope="scope">{{scope.row.customNumber}}</template>
                 </el-table-column>
-                <el-table-column label="发放时间" align="center" width="170">
+                <el-table-column label="发放时间" align="center" width="180">
                     <template slot-scope="scope">{{scope.row.createDate}}</template>
                 </el-table-column>
-                <el-table-column label="发放原因" align="center" width="170">
+                <el-table-column label="发放原因" align="center" width="180">
                     <template slot-scope="scope">{{scope.row.sendMemo}}</template>
                 </el-table-column>
                 <el-table-column label="优惠券详细信息" align="center">

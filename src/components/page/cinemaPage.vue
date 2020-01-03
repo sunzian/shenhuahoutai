@@ -82,13 +82,13 @@
                 header-cell-class-name="table-header"
                 @selection-change="handleSelectionChange"
             >
-                <el-table-column prop="code" label="影院编码" fixed width="140">
+                <el-table-column prop="code" label="影院编码" fixed width="110">
                     <template slot-scope="scope">{{scope.row.cinemaCode}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="影院名称" fixed width="180">
+                <el-table-column prop="name" label="影院名称" fixed>
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="小程序二维码" width="140">
+                <el-table-column prop="sort" label="小程序二维码" width="120">
                     <template slot-scope="scope">
                         <el-popover placement="right" title trigger="hover">
                             <img style="width: 400px" :src="scope.row.miniAppQRCode" />
@@ -134,7 +134,7 @@
                         <el-tag v-else type="danger">否</el-tag>
                     </template>
                 </el-table-column> -->
-                <el-table-column prop="string" label="售票系统">
+                <el-table-column prop="string" label="售票系统" width="80">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.ticketingSystemType == 1" type="info">辰星</el-tag>
                         <el-tag v-else-if="scope.row.ticketingSystemType == 2" type="info">电影1905</el-tag>
@@ -152,28 +152,28 @@
                         <el-tag v-else type="info">三体</el-tag>
                     </template>
                 </el-table-column> -->
-                <el-table-column prop="booleans" label="是否开通服务">
+                <el-table-column prop="booleans" label="是否开通服务" width="120">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.openStatus == 1" type="success">是</el-tag>
                         <el-tag v-else type="danger">否</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="string" label="费用支付类型">
+                <el-table-column prop="string" label="费用支付类型" width="120">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.paymentType == 1" type="info">包年</el-tag>
                         <el-tag v-else type="info">按票收费</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="time" label="到期时间">
+                <el-table-column prop="time" label="到期时间" width="160">
                     <template slot-scope="scope">{{scope.row.expireDate}}</template>
                 </el-table-column>
-                <el-table-column prop="time" label="剩余张数">
+                <el-table-column prop="time" label="剩余张数" width="100">
                     <template slot-scope="scope">{{scope.row.remainTicketsNumber}}</template>
                 </el-table-column>
-                <el-table-column prop="time" label="剩余金额">
+                <el-table-column prop="time" label="剩余金额" width="100">
                     <template slot-scope="scope">{{scope.row.remainTicketPrice}}</template>
                 </el-table-column>
-                <el-table-column prop="string" label="票价上报方式">
+                <el-table-column prop="string" label="票价上报方式" width="130">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.reportedType == 1" type="info">标准价格上报</el-tag>
                         <el-tag v-else type="info">优惠后价格上报</el-tag>
@@ -197,13 +197,8 @@
                         <el-tag v-else type="danger">否</el-tag>
                     </template>
                 </el-table-column> -->
-                <el-table-column label="操作" width="100" align="center" fixed="right">
+                <el-table-column label="充值" width="180" align="center" fixed="right">
                     <template slot-scope="scope">
-                        <el-button
-                            type="text"
-                            icon="el-icon-edit"
-                            @click="addChange(scope.$index, scope.row)"
-                        >编辑</el-button>
                         <el-button
                                 type="text"
                                 @click="addPrice(scope.$index, scope.row)"
@@ -214,6 +209,15 @@
                                 @click="addNumPage(scope.$index, scope.row)"
                                 icon="el-icon-circle-plus-outline"
                         >充值张数</el-button>
+                    </template>
+                </el-table-column>
+                <el-table-column label="操作" width="120" align="center" fixed="right">
+                    <template slot-scope="scope">
+                        <el-button
+                            type="text"
+                            icon="el-icon-edit"
+                            @click="addChange(scope.$index, scope.row)"
+                        >编辑</el-button>
                         <el-button
                             type="text"
                             icon="el-icon-delete"

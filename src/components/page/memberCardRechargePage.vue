@@ -117,10 +117,10 @@
                 header-cell-class-name="table-header"
                 @selection-change="handleSelectionChange"
             >
-                <el-table-column prop="name" label="注册影院">
+                <el-table-column prop="name" label="注册影院" width="250">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
-                <el-table-column label="充值影院">
+                <el-table-column label="充值影院" width="250">
                     <template slot-scope="scope">{{scope.row.rechargeCinemaName}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="卡号" width="130">
@@ -129,13 +129,13 @@
                 <el-table-column prop="memo" label="手机号" width="130">
                     <template slot-scope="scope">{{scope.row.mobilePhone}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="支付金额" width="90">
+                <el-table-column prop="memo" label="支付金额" width="95">
                     <template slot-scope="scope">{{scope.row.payAmount}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="赠送金额" width="90">
+                <el-table-column prop="memo" label="赠送金额" width="95">
                     <template slot-scope="scope">{{scope.row.givenMoney}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="充值金额" width="90">
+                <el-table-column prop="memo" label="充值金额" width="95">
                     <template slot-scope="scope">{{scope.row.rechargeAmount}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="充值时间" width="160">
@@ -144,7 +144,7 @@
                 <el-table-column prop="memo" label="推荐员工编码" width="120">
                     <template slot-scope="scope">{{scope.row.employeeCode}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="支付状态" width="90">
+                <el-table-column prop="memo" label="支付状态" width="100">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.payStatus=='0'" type="danger">未支付</el-tag>
                         <el-tag v-else-if="scope.row.payStatus=='1'" type="success">支付成功</el-tag>

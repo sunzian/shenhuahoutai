@@ -70,23 +70,23 @@
                 header-cell-class-name="table-header"
                 @selection-change="handleSelectionChange"
             >
-                <el-table-column prop="name" label="推荐人">
+                <el-table-column prop="name" label="推荐人" width="140">
                     <template slot-scope="scope">{{scope.row.recommendedUserName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="推荐人手机号">
+                <el-table-column prop="memo" label="推荐人手机号" width="140">
                     <template slot-scope="scope">{{scope.row.recommendedUserMobile}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="推荐人所在影院" width="130">
+                <el-table-column prop="memo" label="推荐人所在影院" width="180">
                     <template slot-scope="scope">{{scope.row.recommendedCinemaName}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="会员注册影院" width="180">
+                    <template slot-scope="scope">{{scope.row.memberUserCinemaName}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="会员昵称">
                     <template slot-scope="scope">{{scope.row.memberUserName}}</template>
                 </el-table-column>
-                <el-table-column label="会员手机号" align="center">
+                <el-table-column label="会员手机号" align="center" width="140">
                     <template slot-scope="scope">{{scope.row.memberUserMobile}}</template>
-                </el-table-column>
-                <el-table-column prop="memo" label="会员注册影院">
-                    <template slot-scope="scope">{{scope.row.memberUserCinemaName}}</template>
                 </el-table-column>
                 <el-table-column label="推荐时间" align="center">
                     <template slot-scope="scope">{{scope.row.recommendedTime}}</template>

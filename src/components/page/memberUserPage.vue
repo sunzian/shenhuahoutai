@@ -98,6 +98,9 @@
                         <!--</el-popover>-->
                     <!--</template>-->
                 <!--</el-table-column>-->
+                <el-table-column prop="memo" label="注册影院" width="230">
+                    <template slot-scope="scope">{{scope.row.cinemaName}}</template>
+                </el-table-column>
                 <el-table-column label="昵称" width="110">
                     <template slot-scope="scope">{{scope.row.userName}}</template>
                 </el-table-column>
@@ -110,53 +113,50 @@
                         <el-tag v-else-if="scope.row.miniRegisterStatus=='2'" type="success">已注册</el-tag>
                     </template>
                 </el-table-column> -->
-                <el-table-column prop="memo" label="注册影院">
-                    <template slot-scope="scope">{{scope.row.cinemaName}}</template>
+                <el-table-column prop="memo" label="最近登陆时间" width="160">
+                    <template slot-scope="scope">{{scope.row.loginDate}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="最近消费时间" width="160">
+                    <template slot-scope="scope">{{scope.row.lastConsumeDate}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="金币数量" width="80">
+                    <template slot-scope="scope">{{scope.row.goldNumber}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="累计消费" width="80">
+                    <template slot-scope="scope">{{scope.row.consumptionAmount}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="优惠券数量" width="100">
+                    <template slot-scope="scope">{{scope.row.remainCoupons}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="推荐员工编码" width="110">
+                    <template slot-scope="scope">{{scope.row.employeeCode}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="邀请人数" width="80">
+                    <template slot-scope="scope">{{scope.row.shareRegisterNumber}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="注册时间" width="160">
                     <template slot-scope="scope">{{scope.row.miniRegisterDate}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="最近登陆时间" width="160">
-                    <template slot-scope="scope">{{scope.row.loginDate}}</template>
-                </el-table-column>
-                <el-table-column prop="memo" label="金币数量" width="90">
-                    <template slot-scope="scope">{{scope.row.goldNumber}}</template>
-                </el-table-column>
-                <el-table-column prop="memo" label="累计消费金额" width="110">
-                    <template slot-scope="scope">{{scope.row.consumptionAmount}}</template>
-                </el-table-column>
-                <el-table-column prop="memo" label="最近一次消费" width="160">
-                    <template slot-scope="scope">{{scope.row.lastConsumeDate}}</template>
-                </el-table-column>
-                <el-table-column prop="memo" label="有效优惠券数量" width="130">
-                    <template slot-scope="scope">{{scope.row.remainCoupons}}</template>
-                </el-table-column>
-                <el-table-column prop="memo" label="推荐员工编码" width="120">
-                    <template slot-scope="scope">{{scope.row.employeeCode}}</template>
-                </el-table-column>
-                <el-table-column prop="memo" label="邀请注册人数" width="120">
-                    <template slot-scope="scope">{{scope.row.shareRegisterNumber}}</template>
-                </el-table-column>
-                <el-table-column prop="memo" label="游戏厅角色" width="100">
+                <el-table-column prop="memo" label="游戏厅角色" width="100" fixed="right">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.userRole=='1'" type="danger">普通用户</el-tag>
                         <el-tag v-else-if="scope.row.userRole=='2'" type="success">管理员</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="memo" label="是否绑卡" width="100">
+                <el-table-column prop="memo" label="是否绑卡" width="80" fixed="right">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.bindMemberCardStatus=='1'" type="danger">未绑定</el-tag>
                         <el-tag v-else-if="scope.row.bindMemberCardStatus=='2'" type="success">已绑定</el-tag>
                         <el-tag v-else-if="scope.row.bindMemberCardStatus=='3'" type="success">已解绑</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" align="center" fixed="right" width="100" >
+                <el-table-column label="操作" align="center" fixed="right" width="160" >
                     <template slot-scope="scope">
                         <el-button
                             type="text"
                             icon="el-icon-setting"
                             @click="addChange(scope.$index, scope.row)"
-                        >查看详情</el-button>
+                        >查看</el-button>
                         <el-button
                                 type="text"
                                 icon="el-icon-edit"
