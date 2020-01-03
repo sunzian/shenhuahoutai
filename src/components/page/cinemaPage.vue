@@ -1020,7 +1020,7 @@
                     v-model="oSnackDispatcherStatus"
                     >
                         <el-option
-                                v-for="info in boolean"
+                                v-for="info in delivery"
                                 :key="info.value"
                                 :label="info.label"
                                 :value="info.value"
@@ -1586,6 +1586,20 @@ export default {
                     label:'否',
                 }
             ],
+            delivery: [
+                {
+                    value: '1',
+                    label: '送至影厅'
+                },
+                {
+                    value: '2',
+                    label: '否'
+                },
+                {
+                    value: '3',
+                    label: '送至影厅座位'
+                }
+            ],
             businessInfo: [], //关联商家信息
             form: [],
             tableData: [],
@@ -2035,9 +2049,9 @@ export default {
                         //         break;
                         //     }
                         // }
-                        for (let x in this.boolean) {
-                            if (this.boolean[x].value == JSON.parse(Decrypt(data.data.data)).Cinema.snackDispatcherStatus) {
-                                this.oSnackDispatcherStatus = this.boolean[x].value;
+                        for (let x in this.delivery) {
+                            if (this.delivery[x].value == JSON.parse(Decrypt(data.data.data)).Cinema.snackDispatcherStatus) {
+                                this.oSnackDispatcherStatus = this.delivery[x].value;
                                 break;
                             }
                         }
