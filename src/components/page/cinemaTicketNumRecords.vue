@@ -22,18 +22,18 @@
                     <el-option key="4" label="充值金额" value="4"></el-option>
                 </el-select>
                 <el-button style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
-                <el-button
-                        type="primary"
-                        @click="addPrice"
-                        icon="el-icon-circle-plus-outline"
-                        style="float: right;margin-top: 10px"
-                >充值购票金额</el-button>
-                <el-button
-                        type="primary"
-                        @click="addPage"
-                        icon="el-icon-circle-plus-outline"
-                        style="float: right;margin-top: 10px"
-                >充值购票张数</el-button>
+                <!--<el-button-->
+                        <!--type="primary"-->
+                        <!--@click="addPrice"-->
+                        <!--icon="el-icon-circle-plus-outline"-->
+                        <!--style="float: right;margin-top: 10px"-->
+                <!--&gt;充值购票金额</el-button>-->
+                <!--<el-button-->
+                        <!--type="primary"-->
+                        <!--@click="addPage"-->
+                        <!--icon="el-icon-circle-plus-outline"-->
+                        <!--style="float: right;margin-top: 10px"-->
+                <!--&gt;充值购票张数</el-button>-->
             </div>
             <el-table
                     :data="tableData"

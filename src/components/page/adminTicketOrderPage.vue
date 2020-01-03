@@ -10,6 +10,7 @@
         <div class="container">
             <div class="handle-box">
                 <el-select
+                        clearable
                     v-model="query.businessCode"
                     placeholder="请选择商家"
                     class="mr10"

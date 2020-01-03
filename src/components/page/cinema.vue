@@ -139,6 +139,9 @@
                 <el-table-column prop="number" label="剩余票数" width="90">
                     <template slot-scope="scope">{{scope.row.remainTicketsNumber}}</template>
                 </el-table-column>
+                <el-table-column prop="number" label="剩余购票金额" width="120">
+                    <template slot-scope="scope">{{scope.row.remainTicketPrice}}</template>
+                </el-table-column>
                 <el-table-column prop="time" label="到期时间" width="150">
                     <template slot-scope="scope">{{scope.row.expireDate}}</template>
                 </el-table-column>
@@ -666,6 +669,22 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
+                <el-form-item label="剩余票数" :label-width="formLabelWidth">
+                    <el-input
+                            style="width: 250px"
+                            :disabled="true"
+                            v-model="oRemainTicketsNumber"
+                            autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="剩余购票金额" :label-width="formLabelWidth">
+                    <el-input
+                            style="width: 250px"
+                            :disabled="true"
+                            v-model="oRemainTicketPrice"
+                            autocomplete="off"
+                    ></el-input>
+                </el-form-item>
                 <!--<el-form-item-->
                 <!--style="width: 250px"-->
                 <!--prop="ticketingSystemPassword"-->
@@ -903,6 +922,8 @@ export default {
             oSnackDispatcherStatus: '',
             oRefundable: '',
             oSnackBeginTime: '',
+            oRemainTicketPrice: '',
+            oRemainTicketsNumber: '',
             oSnackEndTime: '',
             oMessagePlatformType: '',
             oMessageType1: '',
@@ -1092,6 +1113,8 @@ export default {
                         this.oSnackEndTime = JSON.parse(Decrypt(data.data.data)).Cinema.snackEndTime;
                         this.oEquityCardAgreement = JSON.parse(Decrypt(data.data.data)).Cinema.equityCardAgreement;
                         this.oGoldActivityMemo = JSON.parse(Decrypt(data.data.data)).Cinema.goldActivityMemo;
+                        this.oRemainTicketPrice = JSON.parse(Decrypt(data.data.data)).Cinema.remainTicketPrice;
+                        this.oRemainTicketsNumber = JSON.parse(Decrypt(data.data.data)).Cinema.remainTicketsNumber;
                         // this.oMessagePlatformType = JSON.parse(Decrypt(data.data.data)).Cinema.messagePlatformType;
                         // this.oMessagePlatformAccount = JSON.parse(Decrypt(data.data.data)).CinemaMessagePlatFormInfo.messagePlatformAccount;
                         // this.oMessagePlatformPassword = JSON.parse(Decrypt(data.data.data)).CinemaMessagePlatFormInfo.messagePlatformPassword;
