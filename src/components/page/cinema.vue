@@ -355,7 +355,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="是否小卖配送" :label-width="formLabelWidth" :required="true">
+                <el-form-item label="卖品配送方式" :label-width="formLabelWidth" :required="true">
                     <el-select v-model="oSnackDispatcherStatus" @change="openServe">
                         <el-option
                             v-for="info in delivery"
@@ -951,7 +951,7 @@ export default {
                 },
                 {
                     value: '2',
-                    label: '否'
+                    label: '不配送'
                 },
                 {
                     value: '3',
