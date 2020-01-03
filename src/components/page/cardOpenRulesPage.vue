@@ -70,19 +70,19 @@
                 highlight-current-row
                 header-cell-class-name="table-header"
             >
-                <el-table-column prop="code" label="影院编码" width="140">
+                <el-table-column prop="code" label="影院编码" width="100">
                     <template slot-scope="scope">{{scope.row.cinemaCode}}</template>
                 </el-table-column>
-                <el-table-column prop="code" label="影院名称">
+                <el-table-column prop="code" label="影院名称" width="250">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="开卡规则名称" width="160">
+                <el-table-column prop="name" label="开卡规则名称" width="300">
                     <template slot-scope="scope">{{scope.row.ruleName}}</template>
                 </el-table-column>
                 <el-table-column prop="sort" label="会员卡名称" width="120">
                     <template slot-scope="scope">{{scope.row.cardLevelName}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" align="center" label="赠送类型" width="100">
+                <el-table-column prop="sort" align="center" label="赠送类型" width="90">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.givenType=='1'">不赠送</el-tag>
                         <el-tag v-else-if="scope.row.givenType=='2'">赠送金额</el-tag>
@@ -90,19 +90,19 @@
                         <el-tag v-else-if="scope.row.givenType=='4'">两者都送</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="number" label="赠送金额" width="100">
+                <el-table-column prop="number" label="赠送金额" width="80">
                     <template slot-scope="scope">{{scope.row.givenMoney}}</template>
                 </el-table-column>
                 <el-table-column prop="number" label="赠送券包">
                     <template slot-scope="scope">{{scope.row.couponGroupName}}</template>
                 </el-table-column>
-                <el-table-column prop="booleans" align="center" label="状态" width="100">
+                <el-table-column prop="booleans" align="center" label="状态" width="80">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status == 1" type="success">启用</el-tag>
                         <el-tag v-else-if="scope.row.status == 2" type="danger">未启用</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" width="180" align="center" fixed="right">
+                <el-table-column label="操作" width="140" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-button
                             type="text"

@@ -9,7 +9,8 @@
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-select clearable v-model="query.cinemaCode" placeholder="影院" class="handle-select mr10">
+                <el-input v-model="query.name" placeholder="权益卡名称" class="handle-input mr10"></el-input>
+                <el-select clearable v-model="query.cinemaCode" placeholder="适用影院" class="handle-select mr10">
                     <el-option
                             v-for="item in cinemaInfo"
                             :key="item.cinemaCode"
@@ -38,7 +39,6 @@
                     <el-option key="1" label="启用" value="1"></el-option>
                     <el-option key="0" label="未启用" value="0"></el-option>
                 </el-select>
-                <el-input v-model="query.name" placeholder="权益卡名称" class="handle-input mr10"></el-input>
                 <el-button style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="Search">
                     搜索
                 </el-button>
@@ -53,16 +53,15 @@
             <el-table
                     :data="tableData"
                     border
-                    height="500"
                     class="table"
                     highlight-current-row
                     ref="multipleTable"
                     header-cell-class-name="table-header"
             >
-                <el-table-column prop="name" label="权益卡名称" width="150">
+                <el-table-column prop="name" label="权益卡名称" width="300">
                     <template slot-scope="scope">{{scope.row.name}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="适用影院" width="200">
+                <el-table-column prop="name" label="适用影院" width="250">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
                 <!--<el-table-column prop="name" label="权益卡类型" width="110">-->
@@ -71,59 +70,34 @@
                 <!--<el-tag v-else-if="scope.row.cardType == 2">赠送券包{{scope.row.groupName}}</el-tag>-->
                 <!--</template>-->
                 <!--</el-table-column>-->
-                <el-table-column prop="name" label="影票优惠" width="130">
+                <el-table-column prop="name" label="影票" width="90">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.isFilmJoin == 0">不参与</el-tag>
-                        <el-tag v-else-if="scope.row.isFilmJoin == 1&&scope.row.reduceTypeFilm==1">
-                            特惠{{scope.row.discountMoneyFilm}}元
-                        </el-tag>
-                        <el-tag v-else-if="scope.row.isFilmJoin == 1&&scope.row.reduceTypeFilm==2">
-                            立减{{scope.row.discountMoneyFilm}}元
-                        </el-tag>
-                        <el-tag v-else-if="scope.row.isFilmJoin == 1&&scope.row.reduceTypeFilm==3">
-                            打折{{scope.row.discountMoneyFilm}}%
-                        </el-tag>
+                        <el-tag v-else-if="scope.row.isFilmJoin == 1">参与</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="name" label="卖品优惠" width="130">
+                <el-table-column prop="name" label="卖品" width="90">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.isMerchandiseJoin == 0">不参与</el-tag>
-                        <el-tag v-else-if="scope.row.isMerchandiseJoin == 1&&scope.row.reduceTypeMerchandise==1">
-                            特惠{{scope.row.discountMoneyMerchandise}}元
-                        </el-tag>
-                        <el-tag v-else-if="scope.row.isMerchandiseJoin == 1&&scope.row.reduceTypeMerchandise==2">
-                            满{{scope.row.achieveMoneyMerchandise}}元减{{scope.row.discountMoneyMerchandise}}元
-                        </el-tag>
-                        <el-tag v-else-if="scope.row.isMerchandiseJoin == 1&&scope.row.reduceTypeMerchandise==3">
-                            打折{{scope.row.discountMoneyMerchandise}}%
-                        </el-tag>
+                        <el-tag v-else-if="scope.row.isMerchandiseJoin == 1">参与</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="name" label="适用影厅" width="130">
+                <el-table-column prop="name" label="券包" width="90">
                     <template slot-scope="scope">
-                        <el-tag v-if="scope.row.selectHallType == 0">全部影厅</el-tag>
-                        <el-tag v-else-if="scope.row.selectHallType == 1">{{scope.row.screenName}}</el-tag>
-                        <el-tag v-else-if="scope.row.selectHallType == 2">除{{scope.row.screenName}}外所有影厅</el-tag>
+                        <el-tag v-if="scope.row.isGroupJoin == 0">不赠送</el-tag>
+                        <el-tag v-else-if="scope.row.isGroupJoin == 1">赠送</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="name" label="适用制式" width="180">
-                    <template slot-scope="scope">
-                        <el-tag v-if="scope.row.selectFilmFormatType == 0">全部制式</el-tag>
-                        <el-tag v-else-if="scope.row.selectFilmFormatType == 1">{{scope.row.filmFormatName}}</el-tag>
-                        <el-tag v-else-if="scope.row.selectFilmFormatType == 2">除{{scope.row.filmFormatName}}外所有制式
-                        </el-tag>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="memo" label="有效期" width="70">
+                <el-table-column prop="memo" label="有效期" width="90">
                     <template slot-scope="scope">{{scope.row.number}}{{scope.row.unit}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="卡费" width="70">
+                <el-table-column prop="memo" label="卡费" width="90">
                     <template slot-scope="scope">{{scope.row.expense}}元</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="售卖时间" width="320">
                     <template slot-scope="scope">{{scope.row.startDate}}至{{scope.row.endDate}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="状态">
+                <el-table-column prop="sort" label="状态" width="90" fixed="right">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status == 1" type="success">启用</el-tag>
                         <el-tag v-else type="danger">未启用</el-tag>

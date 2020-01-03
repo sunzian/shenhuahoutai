@@ -3,12 +3,13 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
-                    <i class="el-icon-lx-cascades"></i> 影院购票充值
+                    <i class="el-icon-lx-cascades"></i> 影院充值记录
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="container">
             <div class="handle-box">
+                <el-input v-model="query.cinemaCode" placeholder="影院编码" class="handle-input mr10"></el-input>
                 <el-input v-model="query.cinemaName" placeholder="影院名称" class="handle-input mr10"></el-input>
                 <el-select
                     clearable
@@ -471,8 +472,12 @@
                     background: 'rgba(0, 0, 0, 0.7)',
                     target: document.querySelector('.div1')
                 });
+                let cinemaCode = this.query.cinemaCode;
                 let cinemaName = this.query.cinemaName;
                 let tradeType = this.query.tradeType;
+                if (!cinemaCode) {
+                    cinemaCode = '';
+                }
                 if (!cinemaName) {
                     cinemaName = '';
                 }
@@ -480,6 +485,7 @@
                     tradeType = '';
                 }
                 let jsonArr = [];
+                jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
                 jsonArr.push({ key: 'cinemaName', value: cinemaName });
                 jsonArr.push({ key: 'tradeType', value: tradeType });
                 jsonArr.push({ key: 'pageNo', value: this.query.pageNo });

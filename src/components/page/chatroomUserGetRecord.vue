@@ -18,6 +18,12 @@
                     ></el-option>
                 </el-select>
                 <el-input
+                        placeholder="用户手机号"
+                        v-model="query.mobile"
+                        autocomplete="off"
+                        class="mr10"
+                ></el-input>
+                <el-input
                     placeholder="礼物名称"
                     v-model="query.name"
                     autocomplete="off"
@@ -71,6 +77,9 @@
                 </el-table-column>
                 <el-table-column prop="memo" label="领取用户">
                     <template slot-scope="scope">{{scope.row.userName}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="用户手机号">
+                    <template slot-scope="scope">{{scope.row.userMobile}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="礼物名称">
                     <template slot-scope="scope">{{scope.row.name}}</template>
@@ -306,6 +315,7 @@ export default {
             });
             setTimeout(() => {
                 let cinemaCode = this.query.cinemaCode;
+                let mobile = this.query.mobile;
                 let name = this.query.name;
                 let type = this.query.type;
                 let startDate = this.query.startDate;
@@ -313,6 +323,9 @@ export default {
                 let userName = this.query.userName;
                 if (!cinemaCode) {
                     cinemaCode = '';
+                }
+                if (!mobile) {
+                    mobile = '';
                 }
                 if (!userName) {
                     userName = '';
@@ -331,6 +344,7 @@ export default {
                 }
                 let jsonArr = [];
                 jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
+                jsonArr.push({ key: 'mobile', value: mobile });
                 jsonArr.push({ key: 'userName', value: userName });
                 jsonArr.push({ key: 'name', value: name });
                 jsonArr.push({ key: 'giftType', value: type });

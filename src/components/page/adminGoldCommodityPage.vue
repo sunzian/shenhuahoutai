@@ -2567,7 +2567,7 @@
                                 this.form.cinemaCodes = JSON.parse(Decrypt(data.data.data)).goldCommodity.cinemaCodes;
                                 this.oCheckedCities = this.form.cinemaCodes.split(',');
                                 this.form.status = JSON.parse(Decrypt(data.data.data)).goldCommodity.status;
-                                this.form.commodityType = JSON.parse(Decrypt(data.data.data)).goldCommodity.commodityType;
+                                // this.form.commodityType = JSON.parse(Decrypt(data.data.data)).goldCommodity.commodityType;
                                 this.oTopstatus = JSON.parse(Decrypt(data.data.data)).goldCommodity.topStatus;
                                 this.ticketIds = JSON.parse(Decrypt(data.data.data)).goldCommodity.ticketIds;
                                 this.couponId = JSON.parse(Decrypt(data.data.data)).goldCommodity.ticketIds;
@@ -2594,6 +2594,18 @@
                                         this.form.commodityType = this.commodityType[x].value;
                                         break;
                                     }
+                                }
+                                if(JSON.parse(Decrypt(data.data.data)).goldCommodity.commodityType==1){
+                                    this.form.commodityType='实物'
+                                }
+                                if(JSON.parse(Decrypt(data.data.data)).goldCommodity.commodityType==2){
+                                    this.form.commodityType='优惠券'
+                                }
+                                if(JSON.parse(Decrypt(data.data.data)).goldCommodity.commodityType==3){
+                                    this.form.commodityType='券包'
+                                }
+                                if(JSON.parse(Decrypt(data.data.data)).goldCommodity.commodityType==4){
+                                    this.form.commodityType='商户商品'
                                 }
                                 //是否今日大牌下拉选显示对应的选项
                                 for (let x in this.topStatusList) {
@@ -2681,6 +2693,18 @@
                     background: 'rgba(0, 0, 0, 0.7)',
                     target: document.querySelector('.div1')
                 });
+                // if(this.form.commodityType=='实物'){
+                //     this.form.commodityType=1
+                // }
+                // if(this.form.commodityType=='优惠券'){
+                //     this.form.commodityType=2
+                // }
+                // if(this.form.commodityType=='券包'){
+                //     this.form.commodityType=3
+                // }
+                // if(this.form.commodityType=='商户商品'){
+                //     this.form.commodityType=4
+                // }
                 let cinemaList = [];
                 for (let x in this.cinemaData) {
                     cinemaList.push(this.cinemaData[x].cinemaCode);
@@ -2927,7 +2951,7 @@
                     jsonArr.push({key: 'money', value: this.form.money});
                     jsonArr.push({key: 'cinemaCodes', value: cinemaList.join(',')});
                     jsonArr.push({key: 'status', value: this.form.status});
-                    jsonArr.push({key: 'commodityType', value: this.form.commodityType});
+                    // jsonArr.push({key: 'commodityType', value: this.form.commodityType});
                     jsonArr.push({key: 'assignType', value: this.form.assignType});
                     jsonArr.push({key: 'assignInfo', value: this.form.assignInfo});
                     jsonArr.push({key: 'limitType', value: this.form.limitType});
