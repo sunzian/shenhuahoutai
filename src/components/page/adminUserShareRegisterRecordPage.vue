@@ -25,6 +25,7 @@
                     v-model="query.businessCode"
                     placeholder="请选择商家"
                     class="mr10"
+                    clearable
                     @change="changeBusiness"
                 >
                     <el-option
