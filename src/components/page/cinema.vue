@@ -113,8 +113,9 @@
                 <!--</el-table-column>-->
                 <el-table-column prop="booleans" label="是否支持卖品送餐" width="140" align="center">
                     <template slot-scope="scope">
-                        <el-tag v-if="scope.row.snackDispatcherStatus == 1" type="success">是</el-tag>
-                        <el-tag v-else type="danger">否</el-tag>
+                        <el-tag v-if="scope.row.snackDispatcherStatus == 1" type="success">送至影厅</el-tag>
+                        <el-tag v-else-if="scope.row.snackDispatcherStatus == 2" type="danger">否</el-tag>
+                        <el-tag v-else-if="scope.row.snackDispatcherStatus == 3" type="danger">送至影厅座位</el-tag>
                     </template>
                 </el-table-column>
                 <!--<el-table-column prop="string" label="短信平台">-->
@@ -357,7 +358,7 @@
                 <el-form-item label="是否小卖配送" :label-width="formLabelWidth" :required="true">
                     <el-select v-model="oSnackDispatcherStatus" @change="openServe">
                         <el-option
-                            v-for="info in boolean"
+                            v-for="info in delivery"
                             :key="info.value"
                             :label="info.label"
                             :value="info.value"
@@ -943,6 +944,20 @@ export default {
                     label: '否'
                 }
             ],
+            delivery: [
+                {
+                    value: '1',
+                    label: '送至影厅'
+                },
+                {
+                    value: '2',
+                    label: '否'
+                },
+                {
+                    value: '3',
+                    label: '送至影厅座位'
+                }
+            ],
             businessInfo: [], //关联商家信息
             form: [],
             tableData: [],
@@ -1093,9 +1108,9 @@ export default {
                         //         break;
                         //     }
                         // }
-                        for (let x in this.boolean) {
-                            if (this.boolean[x].value == JSON.parse(Decrypt(data.data.data)).Cinema.snackDispatcherStatus) {
-                                this.oSnackDispatcherStatus = this.boolean[x].value;
+                        for (let x in this.delivery) {
+                            if (this.delivery[x].value == JSON.parse(Decrypt(data.data.data)).Cinema.snackDispatcherStatus) {
+                                this.oSnackDispatcherStatus = this.delivery[x].value;
                                 break;
                             }
                         }
