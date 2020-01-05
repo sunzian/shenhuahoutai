@@ -64,10 +64,10 @@
                 <el-table-column prop="sort" label="影厅类型" width="110">
                     <template slot-scope="scope">{{scope.row.screenType}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="第三方影厅名称" width="110">
+                <el-table-column prop="sort" label="第三方影厅名称">
                     <template slot-scope="scope">{{scope.row.thirdPartyScreenName}}</template>
                 </el-table-column>
-                <el-table-column label="操作" width="180" align="center">
+                <el-table-column label="操作" align="center">
                     <template slot-scope="scope">
                         <el-button
                             type="text"
