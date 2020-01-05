@@ -126,7 +126,7 @@
                         v-model="screenForm.thirdPartyScreenName"
                         autocomplete="off"
                     ></el-input>
-                    <div>猫眼影厅名称@淘票票影厅名称@百度糯米影厅名称</div>
+                    <div>请按此规则进行拼接：猫眼影厅名称@淘票票影厅名称@百度糯米影厅名称</div>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
