@@ -1485,9 +1485,25 @@ export default {
         },
         sureNext() {
             if (this.sellIndex >= 0) {
-                this.selectedSell.push(this.sellTableData[this.sellIndex]);
-                this.drawer = false;
+                // console.log('选了数据');
+                if (this.selectedSell.length <= 0) {
+                    // console.log('长度为0');
+                    this.selectedSell.push(this.sellTableData[this.sellIndex]);
+                } else if (this.selectedSell.length > 0) {
+                    // console.log('有数据');
+                    for (let x in this.selectedSell) {
+                        if (this.selectedSell[x].filmCode == this.sellTableData[this.sellIndex].filmCode) {
+                            this.message = '不能添加相同影片！';
+                            this.open();
+                            return;
+                        }
+                    }
+                    // console.log('判断不重复');
+                    this.selectedSell.push(this.sellTableData[this.sellIndex]);
+                }
             }
+            console.log(this.selectedSell);
+            this.drawer = false;
         },
         deletCoupon() {
             this.couponInfo = {};

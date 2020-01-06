@@ -326,11 +326,6 @@
                     </el-time-picker>
                     <span style="cursor: pointer;color: blue" @click="addTime">添加</span>
                 </el-form-item>
-                <el-form-item :required="true" v-if="oForm.isFilmJoin==1" label="影票权益说明" :label-width="formLabelWidth">
-                    <el-input style="width: 300px" :rows="5"
-                              placeholder="如：适用的影厅，制式，影片以及优惠的方式，限制数量和可用时间段等说明。方便用户了解使用规则。"
-                              v-model="oForm.filmSimpleDesc" maxlength="200" show-word-limit type="textarea"></el-input>
-                </el-form-item>
                 <el-form-item
                         label="所选时间段"
                         :label-width="formLabelWidth"
@@ -342,6 +337,11 @@
                                 @click="deletTime(index)"
                         >删除</span>
                     </div>
+                </el-form-item>
+                <el-form-item :required="true" v-if="oForm.isFilmJoin==1" label="影票权益说明" :label-width="formLabelWidth">
+                    <el-input style="width: 300px" :rows="5"
+                              placeholder="如：适用的影厅，制式，影片以及优惠的方式，限制数量和可用时间段等说明。方便用户了解使用规则。"
+                              v-model="oForm.filmSimpleDesc" maxlength="200" show-word-limit type="textarea"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="卖品是否参与" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.isMerchandiseJoin" @change="clearMerchandiseJoin()">
@@ -495,17 +495,18 @@
                 <el-form-item :required="true" v-if="oForm.isGroupJoin==1&&oForm.groupDateType==1" label="券包有效期单位"
                               :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.groupUnit">
-                        <el-radio label="年">年</el-radio>
-                        <el-radio label="季">季</el-radio>
-                        <el-radio label="月">月</el-radio>
-                        <el-radio label="周">周</el-radio>
                         <el-radio label="日">日</el-radio>
+                        <el-radio label="周">周</el-radio>
+                        <el-radio label="月">月</el-radio>
+                        <el-radio label="季">季</el-radio>
+                        <el-radio label="年">年</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item :required="true" v-if="oForm.isGroupJoin==1&&oForm.groupDateType==1" label="券包有效期数量"
+
+                <el-form-item :required="true" v-if="oForm.isGroupJoin==1&&oForm.groupDateType==1" label="券包单位数量"
                               :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oForm.groupNumber" autocomplete="off"></el-input>
-                    <div style="color:red;font-size:12px">有效期单位为'日'，券包有效期数量输入'2'，即领取券包后券包内的券在2日内有效</div>
+                    <div style="color:red;font-size:12px">有效期单位为'日'，券包单位数量输入'2'，即领取券包后券包内的券在2日内有效</div>
                 </el-form-item>
                 <!--<el-form-item v-if="oForm.isGroupJoin==1" :required="true" label="券包权益说明" :label-width="formLabelWidth">-->
                     <!--<el-input :rows="6" placeholder="如：券包的内容及有效期等说明" style="width: 300px"-->
@@ -521,7 +522,7 @@
                         <el-radio label="日">日</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item :required="true" label="权益卡有效期数量" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="权益卡单位数量" :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oForm.number" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="可用支付方式" :label-width="formLabelWidth">
@@ -816,12 +817,6 @@
                     </el-time-picker>
                     <span style="cursor: pointer;color: blue" @click="addTime">添加</span>
                 </el-form-item>
-                <el-form-item :required="true" v-if="oIsFilmJoin==1" label="影票权益说明"
-                              :label-width="formLabelWidth">
-                    <el-input style="width: 300px" :rows="5"
-                              placeholder="如：适用的影厅，制式，影片以及优惠的方式，限制数量和可用时间段等说明。方便用户了解使用规则。" v-model="oFilmSimpleDesc"
-                              maxlength="200" show-word-limit type="textarea"></el-input>
-                </el-form-item>
                 <el-form-item
                         label="所选时间段"
                         :label-width="formLabelWidth"
@@ -833,6 +828,12 @@
                                 @click="deletTime(index)"
                         >删除</span>
                     </div>
+                </el-form-item>
+                <el-form-item :required="true" v-if="oIsFilmJoin==1" label="影票权益说明"
+                              :label-width="formLabelWidth">
+                    <el-input style="width: 300px" :rows="5"
+                              placeholder="如：适用的影厅，制式，影片以及优惠的方式，限制数量和可用时间段等说明。方便用户了解使用规则。" v-model="oFilmSimpleDesc"
+                              maxlength="200" show-word-limit type="textarea"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="卖品是否参与" :label-width="formLabelWidth">
                     <el-radio-group v-model="oIsMerchandiseJoin" @change="clearMerchandiseJoin()">
@@ -985,17 +986,17 @@
                 <el-form-item :required="true" v-if="oIsGroupJoin==1&&oGroupDateType==1" label="券包有效期单位"
                               :label-width="formLabelWidth">
                     <el-radio-group v-model="oGroupUnit">
-                        <el-radio label="年">年</el-radio>
-                        <el-radio label="季">季</el-radio>
-                        <el-radio label="月">月</el-radio>
-                        <el-radio label="周">周</el-radio>
                         <el-radio label="日">日</el-radio>
+                        <el-radio label="周">周</el-radio>
+                        <el-radio label="月">月</el-radio>
+                        <el-radio label="季">季</el-radio>
+                        <el-radio label="年">年</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item :required="true" v-if="oIsGroupJoin==1&&oGroupDateType==1" label="券包有效期数量"
+                <el-form-item :required="true" v-if="oIsGroupJoin==1&&oGroupDateType==1" label="券包单位数量"
                               :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oGroupNumber" autocomplete="off"></el-input>
-                    <div style="color:red;font-size:12px">有效期单位为'日'，券包有效期数量输入'2'，即领取券包后券包内的券在2日内有效</div>
+                    <div style="color:red;font-size:12px">有效期单位为'日'，券包单位数量输入'2'，即领取券包后券包内的券在2日内有效</div>
                 </el-form-item>
                 <!--<el-form-item v-if="oIsGroupJoin==1" :required="true" label="券包权益说明" :label-width="formLabelWidth">-->
                     <!--<el-input :rows="6" placeholder="如：券包的内容及有效期等说明" style="width: 300px"-->
@@ -1004,14 +1005,14 @@
                 <!--</el-form-item>-->
                 <el-form-item :required="true" label="权益卡有效期单位" :label-width="formLabelWidth">
                     <el-radio-group v-model="oUnit">
-                        <el-radio label="年">年</el-radio>
-                        <el-radio label="季">季</el-radio>
-                        <el-radio label="月">月</el-radio>
-                        <el-radio label="周">周</el-radio>
                         <el-radio label="日">日</el-radio>
+                        <el-radio label="周">周</el-radio>
+                        <el-radio label="月">月</el-radio>
+                        <el-radio label="季">季</el-radio>
+                        <el-radio label="年">年</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item :required="true" label="权益卡有效期数量" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="权益卡单位数量" :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oNumber" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="可用支付方式" :label-width="formLabelWidth">
@@ -1314,7 +1315,7 @@
                     groupDateType: '',
                     groupStartDate: '',
                     groupEndDate: '',
-                    groupUnit: '',
+                    groupUnit: '日',
                     groupNumber: '',
                     name: '',
                     simpleDesc: '',
@@ -1333,7 +1334,7 @@
                     benefitType: '0',//权益类型
                     selectFilmFormatType: '0',//选择制式
                     isLimitEachFilm: '0',//是否限制每部影片限购数量
-                    isLimitBuy: '0',//限制购买次数
+                    isLimitBuy: '1',//限制购买次数
                     code: [],//选择影院
                     filmCode: '',
                     filmName: '',
@@ -1353,7 +1354,7 @@
                     isCouponTogether: '0',
                     limitFilmUnit: '年',
                     limitMerchandiseUnit: '年',
-                    unit: '年',
+                    unit: '日',
                     couponDesc: '',
                     id: '',
                     status: '0',
@@ -1940,7 +1941,7 @@
                             return;
                         }
                         if (!this.oForm.groupNumber) {
-                            this.message = '券包有效期数量不能为空，请检查！';
+                            this.message = '券包单位数量不能为空，请检查！';
                             this.open();
                             loading.close();
                             return;
@@ -2399,7 +2400,7 @@
                             this.oForm.endDate = '';
                             this.oForm.status = '0';
                             this.oForm.benefitDesc = '';
-                            this.oForm.unit = '年';
+                            this.oForm.unit = '日';
                             this.oForm.number = '';
                             this.oForm.expense = '';
                             this.oForm.isFilmJoin = '0';
@@ -2431,7 +2432,7 @@
                             this.oForm.selectMerchandiseType = '0';
                             this.oForm.isRecommend = '0';
                             this.oForm.isLimitMerchandise = '0';
-                            this.oForm.isLimitBuy = '0';
+                            this.oForm.isLimitBuy = '1';
                             this.oForm.merchandiseCode = '';
                             this.oForm.limitBuyNumber = '';
                             this.oForm.achieveMoneyMerchandise = '';
@@ -2925,7 +2926,7 @@
                             return;
                         }
                         if (!this.oGroupNumber) {
-                            this.message = '券包有效期数量不能为空，请检查！';
+                            this.message = '券包单位数量不能为空，请检查！';
                             this.open();
                             loading.close();
                             return;
