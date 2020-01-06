@@ -47,16 +47,16 @@
                 highlight-current-row
                 header-cell-class-name="table-header"
             >
-                <el-table-column prop="name" label="适用影院">
+                <el-table-column prop="name" label="适用影院" width="240">
                     <template slot-scope="scope">{{scope.row.cinemaNames}}</template>
                 </el-table-column>
                 <!--<el-table-column prop="name" label="适用卖品">-->
                     <!--<template slot-scope="scope">{{scope.row.merchandiseNames}}</template>-->
                 <!--</el-table-column>-->
-                <el-table-column label="优惠券名称">
+                <el-table-column label="优惠券名称" width="290">
                     <template slot-scope="scope">{{scope.row.name}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="优惠券类型" width="120">
+                <el-table-column prop="name" label="优惠券类型" width="130">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.reduceType == 1" type="success">兑换券</el-tag>
                         <el-tag v-else type="danger">代金券</el-tag>
@@ -69,43 +69,47 @@
                 <!-- <el-table-column prop="sort" label="有效天数">
                     <template slot-scope="scope">{{scope.row.publishDate}}</template>
                 </el-table-column>-->
-                <el-table-column prop="sort" label="金额" width="100">
+                <el-table-column prop="sort" label="金额" width="115">
                     <template slot-scope="scope">{{scope.row.discountMoney}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="满多少可用" width="110">
+                <el-table-column prop="sort" label="满多少可用" width="115">
                     <template slot-scope="scope">{{scope.row.achieveMoney}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="总库存" width="80">
+                <el-table-column prop="sort" label="总库存" width="115">
                     <template slot-scope="scope">{{scope.row.sendNumber}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="已发放" width="80">
+                <el-table-column prop="sort" label="已发放" width="115">
                     <template slot-scope="scope">{{scope.row.acquireNumber}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="已使用" width="80">
+                <el-table-column prop="sort" label="已使用" width="115">
                     <template slot-scope="scope">{{scope.row.usedNumber}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="状态" width="90">
+                <el-table-column prop="sort" label="状态" width="115">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status == 1" type="success">启用</el-tag>
                         <el-tag v-else type="danger">未启用</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" width="150" align="center">
+                <el-table-column label="操作" width="150" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-button
-                            type="success"
-                            v-if="scope.row.status == 0"
-                            @click="changeStatus(scope.$index, scope.row)"
+                                type="success"
+                                v-if="scope.row.status == 0"
+                                @click="changeStatus(scope.$index, scope.row)"
                         >启用</el-button>
                         <el-button
-                            type="success"
-                            v-if="scope.row.status == 1"
-                            @click="changeStatus(scope.$index, scope.row)"
+                                type="success"
+                                v-if="scope.row.status == 1"
+                                @click="changeStatus(scope.$index, scope.row)"
                         >停用</el-button>
                         <el-button
-                            type="success"
-                            @click="canExportCoupon(scope.$index, scope.row)"
+                                type="success"
+                                @click="canExportCoupon(scope.$index, scope.row)"
                         >导出</el-button>
+                    </template>
+                </el-table-column>
+                <el-table-column label="操作" width="150" align="center" fixed="right">
+                    <template slot-scope="scope">
                         <el-button
                             type="text"
                             icon="el-icon-circle-plus-outline"

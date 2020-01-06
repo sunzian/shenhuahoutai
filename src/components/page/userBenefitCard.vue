@@ -134,6 +134,7 @@
                 :data="tableData"
                 border
                 class="table"
+                height="500"
                 ref="multipleTable"
                 highlight-current-row
                 header-cell-class-name="table-header"

@@ -43,7 +43,7 @@
                     type="primary"
                     @click="addPage"
                     icon="el-icon-circle-plus-outline"
-                    style="float: right"
+                    style="float: right;margin-top: 10px"
                 >添加</el-button>
             </div>
             <el-table

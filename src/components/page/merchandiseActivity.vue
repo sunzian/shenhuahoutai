@@ -63,7 +63,7 @@
                 highlight-current-row
                 header-cell-class-name="table-header"
             >
-                <el-table-column prop="name" label="适用影院" width="200">
+                <el-table-column prop="name" label="适用影院" width="300">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
                 <!--<el-table-column prop="name" label="适用商品" width="100">-->
@@ -73,7 +73,7 @@
                 <!--<el-tag v-else-if="scope.row.selectMerchandiseType == 2" >除{{scope.row.merchandiseName}}外所有商品</el-tag>-->
                 <!--</template>-->
                 <!--</el-table-column>-->
-                <el-table-column label="活动名称">
+                <el-table-column label="活动名称" width="310">
                     <template slot-scope="scope">{{scope.row.name}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="活动有效期" width="320">
@@ -102,24 +102,28 @@
                 <el-table-column prop="sort" label="金额" width="60">
                     <template slot-scope="scope">{{scope.row.discountMoney}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="状态" width="90">
+                <el-table-column prop="sort" label="状态" width="90" fixed="right">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status == 1" type="success">启用</el-tag>
                         <el-tag v-else type="danger">未启用</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" width="220" align="center" fixed="right">
+                <el-table-column label="操作" width="100" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-button
-                            type="success"
-                            v-if="scope.row.status == 0"
-                            @click="changeStatus(scope.$index, scope.row)"
+                                type="success"
+                                v-if="scope.row.status == 0"
+                                @click="changeStatus(scope.$index, scope.row)"
                         >启用</el-button>
                         <el-button
-                            type="success"
-                            v-if="scope.row.status == 1"
-                            @click="changeStatus(scope.$index, scope.row)"
+                                type="success"
+                                v-if="scope.row.status == 1"
+                                @click="changeStatus(scope.$index, scope.row)"
                         >停用</el-button>
+                    </template>
+                </el-table-column>
+                <el-table-column label="操作" width="140" align="center" fixed="right">
+                    <template slot-scope="scope">
                         <el-button
                             type="text"
                             icon="el-icon-circle-plus-outline"

@@ -110,7 +110,7 @@
                 <el-table-column prop="sort" label="允许兑换的门店" width="240">
                     <template slot-scope="scope">{{scope.row.cinemaNames}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="商品名称">
+                <el-table-column prop="name" label="商品名称" width="260">
                     <template slot-scope="scope">{{scope.row.name}}</template>
                 </el-table-column>
                 <el-table-column prop="sort" label="商品图片" width="90">

@@ -174,10 +174,10 @@
                 highlight-current-row
                 header-cell-class-name="table-header"
             >
-                <el-table-column prop="name" label="服务费规则名称">
+                <el-table-column prop="name" label="服务费规则名称" width="320">
                     <template slot-scope="scope">{{scope.row.serviceFeeName}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="影厅类型" width="120" >
+                <el-table-column prop="name" label="影厅类型" width="180" >
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.screenType == 1" type="success">全部影厅</el-tag>
                         <el-tag v-else type="success">部分影厅</el-tag>
@@ -189,7 +189,7 @@
                         <!--slot-scope="scope"-->
                     <!--&gt;{{scope.row.screenNames}}</template>-->
                 <!--</el-table-column>-->
-                <el-table-column prop="name" label="影片类型" width="120">
+                <el-table-column prop="name" label="影片类型" width="180">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.filmType == 1" type="success">全部影片</el-tag>
                         <el-tag v-else type="success">部分影片</el-tag>
@@ -201,13 +201,13 @@
                         <!--slot-scope="scope"-->
                     <!--&gt;{{scope.row.filmNames}}</template>-->
                 <!--</el-table-column>-->
-                <el-table-column prop="memo" label="开始日期" width="160" >
+                <el-table-column prop="memo" label="开始日期" width="190" >
                     <template slot-scope="scope">{{scope.row.startDate}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="结束日期" width="160" >
+                <el-table-column prop="sort" label="结束日期" width="190" >
                     <template slot-scope="scope">{{scope.row.endDate}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="是否启用" width="100">
+                <el-table-column prop="sort" label="是否启用" width="130">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status == 1" type="success">启用</el-tag>
                         <el-tag v-else type="danger">未启用</el-tag>
@@ -219,7 +219,7 @@
                 <el-table-column prop="sort" label="会员卡支付代售费" width="140">
                     <template slot-scope="scope">{{scope.row.memberServiceFee}}</template>
                 </el-table-column>
-                <el-table-column label="操作" width="110" align="center">
+                <el-table-column label="操作" width="150" align="center">
                     <template slot-scope="scope">
                         <el-button
                             type="text"

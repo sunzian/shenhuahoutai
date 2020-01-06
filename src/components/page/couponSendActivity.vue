@@ -42,7 +42,7 @@
                 <el-table-column prop="code" label="影院名称" width="190">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
-                <el-table-column prop="code" label="活动名称">
+                <el-table-column prop="code" label="活动名称" width="210">
                     <template slot-scope="scope">{{scope.row.name}}</template>
                 </el-table-column>
                 <!-- <el-table-column prop="booleans" label="券包名称" width="140">
@@ -53,10 +53,10 @@
                         <el-tag v-if="scope.row.type=='1'">注册送券</el-tag>
                     </template>
                 </el-table-column> -->
-                <el-table-column prop="sort" label="活动开始时间" width="160">
+                <el-table-column prop="sort" label="活动开始时间" width="165">
                     <template slot-scope="scope">{{scope.row.startDate}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="活动结束时间" width="160">
+                <el-table-column prop="name" label="活动结束时间" width="165">
                     <template slot-scope="scope">{{scope.row.endDate}}</template>
                 </el-table-column>
                 <el-table-column prop="sort" label="开启状态" width="100">

@@ -116,7 +116,7 @@
                 <el-select
                     v-model="query.bindCardStatus"
                     clearable
-                    placeholder="是否绑定会员卡"
+                    placeholder="绑定会员卡"
                     class="mr10"
                     style="margin-top: 10px;width:18%;"
                 >
@@ -196,13 +196,13 @@
                         </el-popover>
                     </template>
                 </el-table-column>
-                <el-table-column label="昵称" width="110">
+                <el-table-column label="昵称" width="130">
                     <template slot-scope="scope">{{scope.row.userName}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="手机号" width="110">
                     <template slot-scope="scope">{{scope.row.userMobile}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="注册影院">
+                <el-table-column prop="memo" label="注册影院" width="220">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="注册时间" width="160">
@@ -226,13 +226,13 @@
                 <el-table-column prop="memo" label="邀请注册人数" width="120">
                     <template slot-scope="scope">{{scope.row.shareRegisterNumber}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="游戏厅角色" width="100">
+                <el-table-column prop="memo" label="游戏厅角色" width="100" fixed="right">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.userRole=='1'" type="danger">普通用户</el-tag>
                         <el-tag v-else-if="scope.row.userRole=='2'" type="success">管理员</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="memo" label="是否绑定会员卡" width="100">
+                <el-table-column prop="memo" label="绑定会员卡" width="100" fixed="right">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.bindMemberCardStatus=='1'" type="danger">未绑定</el-tag>
                         <el-tag v-else-if="scope.row.bindMemberCardStatus=='2'" type="success">已绑定</el-tag>

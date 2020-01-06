@@ -77,25 +77,25 @@
                 header-cell-class-name="table-header"
                 @selection-change="handleSelectionChange"
             >
-                <el-table-column prop="sort" label="商户名称" width="220">
+                <el-table-column prop="sort" label="商户名称" width="360">
                     <template slot-scope="scope">{{scope.row.partnerName}}</template>
                 </el-table-column>
                 <el-table-column label="所属影院名称" width="300">
                     <template slot-scope="scope">{{scope.row.cinemaNames}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="是否显示" width="120">
+                <el-table-column prop="sort" label="是否显示" width="100">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status=='1'">启用</el-tag>
                         <el-tag v-else-if="scope.row.status=='2'">停用</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="sort" label="门店电话" width="220">
+                <el-table-column prop="sort" label="门店电话" width="230">
                     <template slot-scope="scope">{{scope.row.storeMobile}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="联系人" width="220">
+                <el-table-column prop="sort" label="联系人" width="230">
                     <template slot-scope="scope">{{scope.row.concatName}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="联系人电话" width="220">
+                <el-table-column prop="sort" label="联系人电话" width="230">
                     <template slot-scope="scope">{{scope.row.concatMobile }}</template>
                 </el-table-column>
                 <el-table-column label="操作" width="180" align="center" fixed="right">

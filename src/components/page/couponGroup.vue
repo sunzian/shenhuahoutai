@@ -43,13 +43,13 @@
                 highlight-current-row
                 header-cell-class-name="table-header"
             >
-                <el-table-column prop="name" label="适用影院">
+                <el-table-column prop="name" label="适用影院" width="240">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
-                <el-table-column label="券包名称">
+                <el-table-column label="券包名称" width="290">
                     <template slot-scope="scope">{{scope.row.groupName}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="券包说明">
+                <el-table-column prop="sort" label="券包说明" width="550">
                     <template slot-scope="scope">{{scope.row.memo}}</template>
                 </el-table-column>
                 <el-table-column prop="sort" label="已发放数量" width="110">
@@ -64,19 +64,23 @@
                 <el-table-column label="操作" width="150" align="center">
                     <template slot-scope="scope">
                         <el-button
-                            type="success"
-                            v-if="scope.row.status == 0"
-                            @click="changeStatus(scope.$index, scope.row)"
+                                type="success"
+                                v-if="scope.row.status == 0"
+                                @click="changeStatus(scope.$index, scope.row)"
                         >启用</el-button>
                         <el-button
-                            type="success"
-                            v-if="scope.row.status == 1"
-                            @click="changeStatus(scope.$index, scope.row)"
+                                type="success"
+                                v-if="scope.row.status == 1"
+                                @click="changeStatus(scope.$index, scope.row)"
                         >停用</el-button>
                         <el-button
-                            type="success"
-                            @click="canExportCoupon(scope.$index, scope.row)"
+                                type="success"
+                                @click="canExportCoupon(scope.$index, scope.row)"
                         >导出</el-button>
+                    </template>
+                </el-table-column>
+                <el-table-column label="操作" width="150" align="center">
+                    <template slot-scope="scope">
                         <el-button
                             type="text"
                             icon="el-icon-circle-plus-outline"

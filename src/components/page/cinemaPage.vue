@@ -431,12 +431,12 @@
                         <!--&gt;</el-option>-->
                     <!--</el-select>-->
                 <!--</el-form-item>-->
-                <el-form-item prop="snackDispatcherStatus" label="是否小卖配送" :label-width="formLabelWidth">
+                <el-form-item prop="snackDispatcherStatus" label="卖品配送方式" :label-width="formLabelWidth">
                     <el-select
                             v-model="oForm.snackDispatcherStatus"
                     >
                         <el-option
-                                v-for="info in boolean"
+                                v-for="info in delivery"
                                 :key="info.value"
                                 :label="info.label"
                                 :value="info.value"
