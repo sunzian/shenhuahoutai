@@ -36,7 +36,7 @@
                     <el-input :disabled="true" onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 250px" v-model="sessionId" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="会员号"  :label-width="formLabelWidth">
-                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 250px" v-model="oForm.cardNo" autocomplete="off"></el-input>
+                    <el-input onkeyup="value=value.replace(/[^\w\.\/]/ig,'')" style="width: 250px" v-model="oForm.cardNo" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="查询"  :label-width="formLabelWidth">
                     <el-button type="warning" @click="addPage">查询会员价</el-button>
