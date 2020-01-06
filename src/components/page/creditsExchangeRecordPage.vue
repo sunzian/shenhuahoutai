@@ -72,19 +72,19 @@
                 <el-table-column prop="memo" label="卡号" width="160">
                     <template slot-scope="scope">{{scope.row.cardNo}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="订单号">
+                <el-table-column prop="memo" label="订单号" width="350">
                     <template slot-scope="scope">{{scope.row.orderNo}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="消耗积分" width="90">
+                <el-table-column prop="memo" label="消耗积分" width="120">
                     <template slot-scope="scope">{{scope.row.useCredits}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="获得金币" width="90">
+                <el-table-column prop="memo" label="获得金币" width="120">
                     <template slot-scope="scope">{{scope.row.exchangeGoldNumber}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="兑换时间" width="160">
+                <el-table-column prop="memo" label="兑换时间" width="180">
                     <template slot-scope="scope">{{scope.row.exchangeDate}}</template>
                 </el-table-column>
-                <el-table-column label="兑换状态" align="center" width="110">
+                <el-table-column label="兑换状态" align="center" width="130">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status=='1'">未成功</el-tag>
                         <el-tag v-else>兑换成功</el-tag>

@@ -28,7 +28,7 @@
                 <el-table-column prop="name" label="角色名" width="150">
                     <template slot-scope="scope">{{scope.row.roleName}}</template>
                 </el-table-column>
-                <el-table-column label="创建时间">
+                <el-table-column label="创建时间" width="180">
                     <template slot-scope="scope">{{scope.row.createDate}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="描述">

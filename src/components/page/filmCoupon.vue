@@ -70,7 +70,7 @@
                 <el-table-column label="优惠券名称" width="230">
                     <template slot-scope="scope">{{scope.row.name}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="优惠券类型" width="100">
+                <el-table-column prop="name" label="优惠券类型" width="120">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.reduceType == 1" type="success">兑换券</el-tag>
                         <el-tag v-else type="danger">代金券</el-tag>
@@ -145,6 +145,10 @@
                                 @click="canExportCoupon(scope.$index, scope.row)"
                         >导出
                         </el-button>
+                    </template>
+                </el-table-column>
+                <el-table-column label="操作" width="130" align="center" fixed="right">
+                    <template slot-scope="scope">
                         <el-button
                                 type="text"
                                 icon="el-icon-circle-plus-outline"

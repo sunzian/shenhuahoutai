@@ -115,6 +115,20 @@
                         @click="Search"
                 >搜索
                 </el-button>
+                <el-button
+                        type="primary"
+                        @click="downderive"
+                        icon="el-icon-circle-plus-outline"
+                        style="float: right;margin-top: 10px;margin-left:10px"
+                >导入物流单号
+                </el-button>
+                <el-button
+                        type="primary"
+                        @click="derive"
+                        icon="el-icon-circle-plus-outline"
+                        style="float: right;margin-top: 10px;margin-left:10px"
+                >导出
+                </el-button>
             </div>
             <div class="handle-box">
                 总支付金币：
@@ -138,20 +152,6 @@
                         :disabled="true"
                         autocomplete="off"
                 ></el-input>
-                <el-button
-                        type="primary"
-                        @click="downderive"
-                        icon="el-icon-circle-plus-outline"
-                        style="float: right;margin-top: 10px;margin-left:10px"
-                >导入物流单号
-                </el-button>
-                <el-button
-                        type="primary"
-                        @click="derive"
-                        icon="el-icon-circle-plus-outline"
-                        style="float: right;margin-top: 10px;margin-left:10px"
-                >导出
-                </el-button>
             </div>
             <el-table
                     :data="tableData"

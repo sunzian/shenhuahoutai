@@ -109,22 +109,22 @@
                 highlight-current-row
                 header-cell-class-name="table-header"
             >
-                <el-table-column prop="name" label="员工编码">
+                <el-table-column prop="name" label="员工编码" width="150">
                     <template slot-scope="scope">{{scope.row.employeeCode}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="员工名称">
+                <el-table-column prop="name" label="员工名称" width="150">
                     <template slot-scope="scope">{{scope.row.employeeName}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="员工手机号">
+                <el-table-column prop="name" label="员工手机号" width="180">
                     <template slot-scope="scope">{{scope.row.employeeMobile}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="推荐注册人数">
+                <el-table-column prop="memo" label="推荐注册人数" width="190">
                     <template slot-scope="scope">{{scope.row.registerNumber}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="推荐充值单数">
+                <el-table-column prop="sort" label="推荐充值单数" width="190">
                     <template slot-scope="scope">{{scope.row.rechargeNumber}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="推荐充值总金额">
+                <el-table-column prop="sort" label="推荐充值总金额" width="190">
                     <template slot-scope="scope">{{scope.row.rechargeMoney}}</template>
                 </el-table-column>
                 <el-table-column prop="sort" label="二维码（右键另存为）" align="center" width="200">
@@ -144,6 +144,24 @@
                 <el-table-column label="操作" width="180" align="center">
                     <template slot-scope="scope">
                         <el-button
+                                type="text"
+                                icon="el-icon-refresh"
+                                class="red"
+                                v-if="!scope.row.qrCode"
+                                @click="addCode(scope.row.id)"
+                        >生成员工二维码</el-button>
+                        <el-button
+                                type="text"
+                                icon="el-icon-refresh"
+                                class="red"
+                                v-if="scope.row.qrCode"
+                                @click="addCode(scope.row.id)"
+                        >刷新员工二维码</el-button>
+                    </template>
+                </el-table-column>
+                <el-table-column label="操作" width="180" align="center">
+                    <template slot-scope="scope">
+                        <el-button
                             type="text"
                             icon="el-icon-circle-plus-outline"
                             @click="addChange(scope.$index, scope.row)"
@@ -154,20 +172,6 @@
                             class="red"
                             @click="delChange(scope.$index, scope.row)"
                         >删除</el-button>
-                        <el-button
-                            type="text"
-                            icon="el-icon-refresh"
-                            class="red"
-                            v-if="!scope.row.qrCode"
-                            @click="addCode(scope.row.id)"
-                        >生成员工二维码</el-button>
-                        <el-button
-                            type="text"
-                            icon="el-icon-refresh"
-                            class="red"
-                            v-if="scope.row.qrCode"
-                            @click="addCode(scope.row.id)"
-                        >刷新员工二维码</el-button>
                     </template>
                 </el-table-column>
             </el-table>

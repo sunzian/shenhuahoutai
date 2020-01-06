@@ -142,7 +142,7 @@
                 <el-table-column prop="number" label="剩余购票金额" width="120">
                     <template slot-scope="scope">{{scope.row.remainTicketPrice}}</template>
                 </el-table-column>
-                <el-table-column prop="time" label="到期时间" width="150">
+                <el-table-column prop="time" label="到期时间" width="160">
                     <template slot-scope="scope">{{scope.row.expireDate}}</template>
                 </el-table-column>
                 <!--<el-table-column prop="string" label="票价上报方式">-->

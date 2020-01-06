@@ -74,10 +74,10 @@
                     @selection-change="handleSelectionChange"
             >
                 <!--<el-table-column type="selection" width="55"></el-table-column>-->
-                <el-table-column label="影院名称" width="190">
+                <el-table-column label="影院名称" width="210">
                     <template slot-scope="scope">{{scope.row.userCinemaName}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="影院编码" width="100">
+                <el-table-column prop="name" label="影院编码" width="110">
                     <template slot-scope="scope">{{scope.row.userCinemaCode}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="用户名" width="120">
@@ -86,7 +86,7 @@
                 <el-table-column prop="name" label="用户手机号" width="120">
                     <template slot-scope="scope">{{scope.row.userMobile}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="金币过期时间" width="180">
+                <el-table-column prop="memo" label="金币过期时间" width="190">
                     <template slot-scope="scope">{{scope.row.overDate}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="操作时间" width="160">
@@ -95,10 +95,10 @@
                 <el-table-column prop="memo" label="数量" width="80">
                     <template slot-scope="scope">{{scope.row.number}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="备注" width="180">
+                <el-table-column prop="memo" label="备注" width="480">
                     <template slot-scope="scope">{{scope.row.memo}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="变动类型" width="100">
+                <el-table-column prop="memo" label="变动类型" width="150">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.type=='1'">签到获取</el-tag>
                         <el-tag v-else-if="scope.row.type=='2'">积分兑换</el-tag>

@@ -54,6 +54,7 @@
                     :data="tableData"
                     border
                     class="table"
+                    height="500"
                     highlight-current-row
                     ref="multipleTable"
                     header-cell-class-name="table-header"
@@ -318,6 +319,7 @@
                             type="date"
                             format="HH:mm:ss"
                             value-format="HH:mm:ss"
+                            :default-value="new Date('2018','7','6','08','00','00')"
                             v-model="value1"
                             range-separator="至"
                             start-placeholder="开始时间"

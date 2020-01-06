@@ -772,13 +772,14 @@ export default {
                 this.$refs.upload.clearFiles();
                 return;
             }
-            this.oImageUrl = data.data;
             if (data.code == 'nologin') {
                 this.$refs.upload.clearFiles();
                 this.message = data.message;
                 this.open();
                 this.$router.push('/login');
             }
+            this.oImageUrl = data.data;
+            this.$refs.upload.clearFiles();
         },
         back() {
             this.showSell = true;

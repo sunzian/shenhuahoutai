@@ -66,10 +66,10 @@
                     ref="multipleTable"
                     header-cell-class-name="table-header"
             >
-                <el-table-column prop="name" label="适用影院" width="160">
+                <el-table-column prop="name" label="适用影院" width="220">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
-                <el-table-column label="活动名称" width="160">
+                <el-table-column label="活动名称" width="200">
                     <template slot-scope="scope">{{scope.row.name}}</template>
                 </el-table-column>
                 <el-table-column prop="name" label="适用影厅">
@@ -127,14 +127,14 @@
                         <el-tag v-else-if="scope.row.reduceType == 4">最低票价结算</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="sort" label="固定金额" width="60">
+                <el-table-column prop="sort" label="固定金额" width="90">
                     <template
                             v-if="scope.row.reduceType==1"
                             slot-scope="scope"
                     >{{scope.row.discountMoney}}
                     </template>
                 </el-table-column>
-                <el-table-column prop="sort" label="立减金额" width="60">
+                <el-table-column prop="sort" label="立减金额" width="90">
                     <template
                             v-if="scope.row.reduceType==2"
                             slot-scope="scope"
@@ -144,17 +144,17 @@
                 <el-table-column prop="sort" label="最低票价结算" width="120">
                     <template v-if="scope.row.reduceType==4" slot-scope="scope">{{scope.row.discountMoney}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="适用放映时间" width="170">
+                <el-table-column prop="memo" label="适用放映时间" width="300">
                     <template slot-scope="scope">{{scope.row.startDate}}至{{scope.row.endDate}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="状态" width="80">
+                <el-table-column prop="sort" label="状态" width="80" fixed="right">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status == 1" type="success">启用</el-tag>
                         <el-tag v-if="scope.row.status == 0" type="danger">未启用</el-tag>
                         <el-tag v-if="scope.row.status == 2" type="danger">已过期</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" width="200" align="center" fixed="right">
+                <el-table-column label="操作" width="100" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-button
                                 type="success"
@@ -168,6 +168,10 @@
                                 @click="changeStatus(scope.$index, scope.row)"
                         >停用
                         </el-button>
+                    </template>
+                </el-table-column>
+                <el-table-column label="操作" width="140" align="center" fixed="right">
+                    <template slot-scope="scope">
                         <el-button
                                 type="text"
                                 icon="el-icon-circle-plus-outline"
