@@ -37,20 +37,11 @@
                 <el-form-item label="场次" :label-width="formLabelWidth">
                     <el-button type="primary" @click="getSession">点击选择</el-button>
                 </el-form-item>
-<<<<<<< HEAD
-                <!--<el-form-item label="所选场次id"  :label-width="formLabelWidth">-->
-                <!--<el-input :disabled="true" onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 250px" v-model="sessionId" autocomplete="off"></el-input>-->
-                <!--</el-form-item>-->
-                <el-form-item label="所选场次时间" :label-width="formLabelWidth">
-                    <el-input :disabled="true" onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 250px"
-                              v-model="sessionTime" autocomplete="off"></el-input>
-=======
                 <el-form-item label="所选场次"  :label-width="formLabelWidth">
                     <el-input :disabled="true" onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 250px" v-model="sessionId" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="会员号"  :label-width="formLabelWidth">
                     <el-input onkeyup="value=value.replace(/[^\w\.\/]/ig,'')" style="width: 250px" v-model="oForm.cardNo" autocomplete="off"></el-input>
->>>>>>> 613a583f015eeb575848488d7e172e838d314818
                 </el-form-item>
                 <el-form-item label="会员号" :label-width="formLabelWidth">
                     <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 250px"
