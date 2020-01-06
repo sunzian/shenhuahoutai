@@ -2048,20 +2048,20 @@ export default {
                     loading.close();
                     return;
                 }
-                if(this.oForm.supportExpressStatus==1){
-                    if (!this.oForm.expressFee&&this.oForm.expressFee!=0) {
-                        this.message = '快递费用不能为空，请检查！';
-                        this.open();
-                        loading.close();
-                        return;
-                    }
-                    if (this.oForm.expressFee<0) {
-                        this.message = '快递费用不能小于0，请检查！';
-                        this.open();
-                        loading.close();
-                        return;
-                    }
-                }
+                // if(this.oForm.supportExpressStatus==1){
+                //     if (!this.oForm.expressFee&&this.oForm.expressFee!=0) {
+                //         this.message = '快递费用不能为空，请检查！';
+                //         this.open();
+                //         loading.close();
+                //         return;
+                //     }
+                //     if (this.oForm.expressFee<0) {
+                //         this.message = '快递费用不能小于0，请检查！';
+                //         this.open();
+                //         loading.close();
+                //         return;
+                //     }
+                // }
             }
             if (!this.oForm.image_url) {
                 this.message = '商品图片不能为空，请检查！';
@@ -2302,7 +2302,7 @@ export default {
                 jsonArr.push({ key: 'partnerCode', value: this.partnerCode });
                 jsonArr.push({ key: 'pickupType', value: this.oForm.pickupType });
                 jsonArr.push({ key: 'supportExpressStatus', value: this.oForm.supportExpressStatus });
-                jsonArr.push({ key: 'expressFee', value: this.oForm.expressFee });
+                // jsonArr.push({ key: 'expressFee', value: this.oForm.expressFee });
             }
             if (this.oForm.commodity_type == 3) {
                 jsonArr.push({ key: 'ticketIds', value: this.couponId });
@@ -2528,7 +2528,7 @@ export default {
                             this.form.limitType = JSON.parse(Decrypt(data.data.data)).goldCommodity.limitType;
                             this.form.limitNumber = JSON.parse(Decrypt(data.data.data)).goldCommodity.limitNumber;
                             this.form.sort = JSON.parse(Decrypt(data.data.data)).goldCommodity.sort;
-                            this.form.expressFee = JSON.parse(Decrypt(data.data.data)).goldCommodity.expressFee;
+                            // this.form.expressFee = JSON.parse(Decrypt(data.data.data)).goldCommodity.expressFee;
                             this.oCities = JSON.parse(Decrypt(data.data.data)).cinemas;
                             this.oLaterDays = JSON.parse(Decrypt(data.data.data)).goldCommodity.laterDays;
                             this.oStartEffectiveDate = JSON.parse(Decrypt(data.data.data)).goldCommodity.startEffectiveDate;
@@ -2671,20 +2671,20 @@ export default {
                     loading.close();
                     return;
                 }
-                if(this.form.supportExpressStatus==1){
-                    if (!this.form.expressFee&&this.form.expressFee!=0) {
-                        this.message = '快递费用不能为空，请检查！';
-                        this.open();
-                        loading.close();
-                        return;
-                    }
-                    if (this.form.expressFee<0) {
-                        this.message = '快递费用不能小于0，请检查！';
-                        this.open();
-                        loading.close();
-                        return;
-                    }
-                }
+                // if(this.form.supportExpressStatus==1){
+                //     if (!this.form.expressFee&&this.form.expressFee!=0) {
+                //         this.message = '快递费用不能为空，请检查！';
+                //         this.open();
+                //         loading.close();
+                //         return;
+                //     }
+                //     if (this.form.expressFee<0) {
+                //         this.message = '快递费用不能小于0，请检查！';
+                //         this.open();
+                //         loading.close();
+                //         return;
+                //     }
+                // }
             }
             if (!this.oImageUrl) {
                 this.message = '商品图片不能为空，请检查！';
@@ -2923,7 +2923,7 @@ export default {
                     jsonArr.push({ key: 'partnerCode', value: this.partnerCode });
                     jsonArr.push({ key: 'pickupType', value: this.form.pickupType });
                     jsonArr.push({ key: 'supportExpressStatus', value: this.form.supportExpressStatus });
-                    jsonArr.push({ key: 'expressFee', value: this.form.expressFee });
+                    // jsonArr.push({ key: 'expressFee', value: this.form.expressFee });
                 }
                 if (this.form.commodityType == 2) {
                     jsonArr.push({ key: 'ticketIds', value: this.ticketIds });
