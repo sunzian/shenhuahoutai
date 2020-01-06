@@ -64,10 +64,10 @@
                 <el-table-column prop="sort" label="影厅类型" width="110">
                     <template slot-scope="scope">{{scope.row.screenType}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="第三方影厅名称" width="110">
+                <el-table-column prop="sort" label="第三方影厅名称">
                     <template slot-scope="scope">{{scope.row.thirdPartyScreenName}}</template>
                 </el-table-column>
-                <el-table-column label="操作" width="180" align="center">
+                <el-table-column label="操作" align="center">
                     <template slot-scope="scope">
                         <el-button
                             type="text"
@@ -126,7 +126,7 @@
                         v-model="screenForm.thirdPartyScreenName"
                         autocomplete="off"
                     ></el-input>
-                    <div>猫眼影厅名称@淘票票影厅名称@百度糯米影厅名称</div>
+                    <div>请按此规则进行拼接：猫眼影厅名称@淘票票影厅名称@百度糯米影厅名称</div>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
