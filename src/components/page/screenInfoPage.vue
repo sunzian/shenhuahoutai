@@ -44,30 +44,30 @@
                 header-cell-class-name="table-header"
                 @selection-change="selectAll"
             >
-				<el-table-column type="selection" width="55">
+				<el-table-column type="selection" width="50">
                 </el-table-column>
                 <!-- <el-table-column prop="name" label="影院编码" width="130">
                     <template slot-scope="scope">{{scope.row.cinemaCode}}</template>
                 </el-table-column> -->
-                <el-table-column prop="name" label="影院名称" width="260">
+                <el-table-column prop="name" label="影院名称" width="220">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
                 <el-table-column label="影厅编号" width="150">
                     <template slot-scope="scope">{{scope.row.screenCode}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="影厅名称">
+                <el-table-column prop="memo" label="影厅名称" width="350">
                     <template slot-scope="scope">{{scope.row.screenName}}</template>
                 </el-table-column>
                 <el-table-column prop="sort" label="座位数" width="90">
                     <template slot-scope="scope">{{scope.row.seatCount}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="影厅类型" width="110">
+                <el-table-column prop="sort" label="影厅类型" width="100">
                     <template slot-scope="scope">{{scope.row.screenType}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="第三方影厅名称">
+                <el-table-column prop="sort" label="第三方影厅名称" width="680">
                     <template slot-scope="scope">{{scope.row.thirdPartyScreenName}}</template>
                 </el-table-column>
-                <el-table-column label="操作" align="center">
+                <el-table-column label="操作" align="center" width="90" fixed="right">
                     <template slot-scope="scope">
                         <el-button
                             type="text"

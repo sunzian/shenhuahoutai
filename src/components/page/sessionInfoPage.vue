@@ -49,7 +49,7 @@
                     placeholder="放映结束时间（止）"
                 ></el-date-picker>
                 <el-button
-                    style="float: right;margin-top: 10px;width: 90px;"
+                    style="float: right;width: 90px;"
                     type="primary"
                     icon="el-icon-search"
                     @click="Search"
