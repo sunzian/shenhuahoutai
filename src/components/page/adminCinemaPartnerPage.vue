@@ -37,7 +37,7 @@
                         :value="item.cinemaCode"
                     ></el-option>
                 </el-select>
-                <el-select
+                <!-- <el-select
                     clearable
                     v-model="query.adminPartner"
                     placeholder="通用商家"
@@ -45,7 +45,7 @@
                 >
                     <el-option key="1" label="是" value="1"></el-option>
                     <el-option key="2" label="否" value="2"></el-option>
-                </el-select>
+                </el-select> -->
                 <el-select
                     clearable
                     v-model="query.status"
@@ -972,6 +972,7 @@ export default {
                     loading.close();
                     if (data.data.code == 'success') {
                         var res = JSON.parse(Decrypt(data.data.data));
+                        res.unshift({businessName: '通用商家', businessCode: 'admin'})
                         this.businessInfo = res;
                         this.query.businessCode = res[0].businessCode;
                         this.getAllCinema();

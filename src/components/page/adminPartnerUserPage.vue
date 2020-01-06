@@ -30,12 +30,12 @@
                     <el-option key="2" label="禁用" value="2"></el-option>
                 </el-select>
                 <el-button style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
-                <!-- <el-button
+                <el-button
                     type="primary"
                     @click="addPage"
                     icon="el-icon-circle-plus-outline"
                     style="float: right;margin-top: 10px"
-                >新增</el-button> -->
+                >新增</el-button>
             </div>
             <el-table
                 :data="tableData"
@@ -86,13 +86,13 @@
                             icon="el-icon-edit"
                             @click="addChange(scope.$index, scope.row)"
                         >修改</el-button>
-                        <!-- <el-button
-                            v-if="scope.row.adminFlag !='1'"
+                        <el-button
+                            v-if="scope.row.adminFlag !='1' && scope.row.businessCode == 'admin'"
                             type="text"
                             icon="el-icon-delete"
                             class="red"
                             @click="delChange(scope.$index, scope.row)"
-                        >删除</el-button> -->
+                        >删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -138,10 +138,11 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="呼叫号码" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="联系电话" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         maxlength="18"
+                        onkeyup="this.value=this.value.replace(/[^0-9-]+/,'')"
                         v-model="oForm.callNumber"
                         autocomplete="off"
                     ></el-input>
@@ -151,7 +152,7 @@
                         show-word-limit
                         maxlength="100"
                         style="width: 250px"
-                              :rows="5"
+                        :rows="5"
                         v-model="oForm.memo"
                         autocomplete="off"
                     ></el-input>
@@ -207,21 +208,22 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="呼叫号码" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="联系电话" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         maxlength="18"
+                        onkeyup="this.value=this.value.replace(/[^0-9-]+/,'')"
                         v-model="form.callNumber"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="描述" :label-width="formLabelWidth">
                     <el-input
-                            type="textarea"
+                        type="textarea"
                         style="width: 250px"
-                            show-word-limit
+                        show-word-limit
                         :rows="5"
-                        maxlength="9"
+                        maxlength="100"
                         v-model="form.memo"
                         autocomplete="off"
                     ></el-input>
@@ -391,6 +393,8 @@
                 editVisible: false,
                 pageTotal: 0,
                 form: {
+                    realName: '',
+                    callNumber: '',
                     memo: '',
                     sort: '',
                     id:'',
@@ -527,7 +531,7 @@
             });
             setTimeout(() => {
                 https
-                    .fetchPost('/cinemaPartner/addPartnerUserPage', '')
+                    .fetchPost('/admin/cinemaPartner/addPartnerUserPage', '')
                     .then(data => {
                         loading.close();
                         if (data.data.code == 'success') {
@@ -579,13 +583,13 @@
                 return;
             }
             if(!this.oForm.callNumber){
-                this.message = '呼叫号码不能为空，请检查！';
+                this.message = '联系电话不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
             }
             if(this.oForm.callNumber.length!=11){
-                this.message = '请输入正确的呼叫号码！';
+                this.message = '请输入正确的联系电话！';
                 this.open();
                 loading.close();
                 return;
@@ -608,9 +612,10 @@
             jsonArr.push({key:"sign",value:sign});
             let params = ParamsAppend(jsonArr);
             if(this.dialogFormVisible == true){
-                https.fetchPost('/cinemaPartner/addPartnerUser',params).then((data) => {//新增
+                https.fetchPost('/admin/cinemaPartner/addPartnerUser',params).then((data) => {//新增
                         loading.close();
                         if (data.data.code == 'success') {
+                            this.$message.success(`新增成功`);
                             this.dialogFormVisible = false;
                             this.oForm.value='1';
                             this.oForm.userName='';
@@ -655,7 +660,7 @@
                             let sign =md5(preSign(jsonArr));
                             jsonArr.push({key:"sign",value:sign});
                             let params = ParamsAppend(jsonArr);
-                            https.fetchPost('/cinemaPartner/deletePartnerUser',params).then((data) => {
+                            https.fetchPost('/admin/cinemaPartner/deletePartnerUser',params).then((data) => {
                                 loading.close();
                                 if (data.data.code == 'success') {
                                     this.$message.error(`删除了`);
@@ -762,13 +767,13 @@
                 return;
             }
             if(!this.form.callNumber){
-                this.message = '呼叫号码不能为空，请检查！';
+                this.message = '联系电话不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
             }
             if(this.form.callNumber.length!=11){
-                this.message = '请输入正确的呼叫号码！';
+                this.message = '请输入正确的联系电话！';
                 this.open();
                 loading.close();
                 return;
@@ -789,7 +794,6 @@
             jsonArr.push({key:"cinemaCodes",value:this.partnerCode});
             let sign =md5(preSign(jsonArr));
             jsonArr.push({key:"sign",value:sign});
-            console.log(jsonArr);
             let params = ParamsAppend(jsonArr);
             https.fetchPost('/cinemaPartner/modifyPartnerUser',params).then((data) => {
                 loading.close();
@@ -806,8 +810,8 @@
                     this.open()
                 }
             }).catch(err=>{
-                loading.close();
-                console.log(err)
+                    loading.close();
+                    console.log(err)
                 }
             )
             },
@@ -855,6 +859,7 @@
                         if (data.data.code == 'success') {
                             if (data.data && data.data.data) {
                                 var oData = JSON.parse(Decrypt(data.data.data));
+                                console.log(oData)
                                 this.tableData = oData.pageResult.data;
                                 this.query.pageSize = oData.pageResult.pageSize;
                                 this.query.pageNo = oData.pageResult.pageNo;
@@ -892,6 +897,7 @@
                     loading.close();
                     if (data.data.code == 'success') {
                         var res = JSON.parse(Decrypt(data.data.data));
+                        res.unshift({businessName: '通用商家', businessCode: 'admin'})
                         this.businessInfo = res;
                         this.query.businessCode = res[0].businessCode;
                         this.getMenu();
@@ -927,7 +933,7 @@
             jsonArr.push({ key: 'sign', value: sign });
             var params = ParamsAppend(jsonArr);
             https
-                .fetchPost('/cinemaPartner/getPartnerPage', params)
+                .fetchPost('/admin/cinemaPartner/getPartnerPage', params)
                 .then(data => {
                     if (data.data.code == 'success') {
                         var res = JSON.parse(Decrypt(data.data.data));

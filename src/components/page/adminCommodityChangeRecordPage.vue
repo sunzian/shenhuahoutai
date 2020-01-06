@@ -23,7 +23,13 @@
                         :value="item.businessCode"
                     ></el-option>
                 </el-select>
-                <el-select clearable v-model="query.cinemaCode" placeholder="请选择影院" @change="changeSearchCinema" class="mr10">
+                <el-select
+                    clearable
+                    v-model="query.cinemaCode"
+                    placeholder="请选择影院"
+                    @change="changeSearchCinema"
+                    class="mr10"
+                >
                     <el-option
                         v-for="item in cinemaInfo"
                         :key="item.cinemaCode"
@@ -48,6 +54,15 @@
                     <el-option key="1" label="纯金币兑换" value="1"></el-option>
                     <el-option key="2" label="纯RMB兑换" value="2"></el-option>
                     <el-option key="3" label="金币加RMB兑换" value="3"></el-option>
+                </el-select>
+                <el-select
+                    clearable
+                    v-model="query.pickupWay"
+                    placeholder="取货方式"
+                    class="handle-select mr10"
+                >
+                    <el-option key="1" label="自提" value="1"></el-option>
+                    <el-option key="2" label="快递" value="2"></el-option>
                 </el-select>
                 <el-select
                     clearable
@@ -138,79 +153,113 @@
                 header-cell-class-name="table-header"
                 @selection-change="handleSelectionChange"
             >
-                <el-table-column prop="name" label="兑换影院名称">
+                <el-table-column prop="name" label="兑换影院名称" width="210">
                     <template slot-scope="scope">{{scope.row.exchangeCinemaName}}</template>
                 </el-table-column>
-                <el-table-column label="订单号" width="190">
-                    <template slot-scope="scope">{{scope.row.orderNo}}</template>
-                </el-table-column>
-                <el-table-column prop="memo" label="手机号码" width="120">
+                <el-table-column prop="memo" label="会员手机号" width="110">
                     <template slot-scope="scope">{{scope.row.mobile}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="商品名称">
+                <el-table-column prop="memo" label="商品名称" width="180">
                     <template slot-scope="scope">{{scope.row.commodityName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="兑换方式" width="130">
-                    <template slot-scope="scope">
-                        <el-tag v-if="scope.row.changeType=='1'">纯金币兑换</el-tag>
-                        <el-tag v-else-if="scope.row.changeType=='2'">纯RMB兑换</el-tag>
-                        <el-tag v-else-if="scope.row.changeType=='3'">金币加RMB兑换</el-tag>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="memo" label="消耗金币" width="90">
+                <el-table-column prop="memo" label="消耗金币" width="80">
                     <template slot-scope="scope">{{scope.row.gold}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="支付金额" width="90">
+                <el-table-column prop="memo" label="实付" width="60">
                     <template slot-scope="scope">{{scope.row.money}}</template>
                 </el-table-column>
-                <el-table-column label="兑换状态" align="center" width="100">
+                <el-table-column prop="memo" label="兑换时间" width="160">
+                    <template slot-scope="scope">{{scope.row.payTime}}</template>
+                </el-table-column>
+                <el-table-column label="兑换状态" align="center" width="80">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row. payStatus=='0'">待支付</el-tag>
                         <el-tag v-else-if="scope.row. payStatus=='1'">兑换成功</el-tag>
                         <el-tag v-else-if="scope.row. payStatus=='2'">兑换失败</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="memo" label="兑换时间" width="150">
-                    <template slot-scope="scope">{{scope.row.payTime}}</template>
+                <!--<el-table-column prop="memo" label="兑换方式" width="120">-->
+                <!--<template slot-scope="scope">-->
+                <!--<el-tag v-if="scope.row.changeType=='1'">纯金币兑换</el-tag>-->
+                <!--<el-tag v-else-if="scope.row.changeType=='2'">纯RMB兑换</el-tag>-->
+                <!--<el-tag v-else-if="scope.row.changeType=='3'">金币加RMB兑换</el-tag>-->
+                <!--</template>-->
+                <!--</el-table-column>-->
+                <el-table-column label="取货方式" align="center" width="80">
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row.pickupWay=='1'">自提</el-tag>
+                        <el-tag v-else-if="scope.row.pickupWay=='2'">快递</el-tag>
+                    </template>
                 </el-table-column>
-                <el-table-column prop="memo" label="核销状态" width="90">
+                <el-table-column prop="memo" label="核销状态" width="80">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status=='1'">未核销</el-tag>
                         <el-tag v-else-if="scope.row.status=='2'">已核销</el-tag>
                         <el-tag v-else-if="scope.row.status=='3'">已过期</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="memo" label="领取时间" width="150">
+                <el-table-column prop="memo" label="快递状态" width="80">
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row.trackingStatus=='1'">待发货</el-tag>
+                        <el-tag v-else-if="scope.row.trackingStatus=='2'">快递中</el-tag>
+                        <el-tag v-else-if="scope.row.trackingStatus=='3'">已送达</el-tag>
+                        <el-tag v-else-if="scope.row.trackingStatus=='4'">已收货</el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="memo" label="收货人手机号" width="110">
+                    <template slot-scope="scope">{{scope.row.deliveryMobile}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="收货人名称" width="120">
+                    <template slot-scope="scope">{{scope.row.deliveryName}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="领取时间" width="160">
                     <template slot-scope="scope">{{scope.row.getDate}}</template>
                 </el-table-column>
-                <el-table-column label="操作" align="center" fixed="right" width="100">
+                <el-table-column label="订单号" width="190">
+                    <template slot-scope="scope">{{scope.row.orderNo}}</template>
+                </el-table-column>
+                <el-table-column label="操作" align="center" fixed="right" width="120">
                     <template slot-scope="scope">
                         <el-button
                             type="text"
                             icon="el-icon-setting"
                             @click="addChange(scope.$index, scope.row)"
-                        >查看详情</el-button>
+                        >查看</el-button>
+                        <el-button
+                            v-if="scope.row.pickupWay=='2'"
+                            type="text"
+                            icon="el-icon-setting"
+                            @click="logChange(scope.$index, scope.row)"
+                        >修改</el-button>
                     </template>
                 </el-table-column>
             </el-table>
             <div class="pagination">
                 <el-pagination
-                        background
-                        @size-change="handleSizeChange"
-                        layout="total, sizes, prev, pager, next, jumper"
-                        :current-page="query.pageNo"
-                        :page-sizes="[10, 15, 20, 30]"
-                        :page-size="query.pageSize"
-                        :total="query.totalCount"
-                        @current-change="currentChange"
-                        @prev-click="prev"
-                        @next-click="next"
+                    background
+                    @size-change="handleSizeChange"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :current-page="query.pageNo"
+                    :page-sizes="[10, 15, 20, 30]"
+                    :page-size="query.pageSize"
+                    :total="query.totalCount"
+                    @current-change="currentChange"
+                    @prev-click="prev"
+                    @next-click="next"
                 ></el-pagination>
             </div>
         </div>
         <!-- 详情弹出框 -->
         <el-dialog :close-on-click-modal="false" title="详情" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
+                <el-form-item label="商品名称" :label-width="formLabelWidth">
+                    <el-input
+                        :disabled="true"
+                        style="width: 250px"
+                        v-model="form.commodityName"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
                 <el-form-item label="领取影院名称" :label-width="formLabelWidth">
                     <el-input
                         :disabled="true"
@@ -225,7 +274,9 @@
                         style="width: 250px"
                         v-model="form.orderNo"
                         autocomplete="off"
-                    ></el-input>
+                        id="inviteCode"
+                    ></el-input>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <span style="color: rgb(64,158,255);cursor: pointer;" @click="copy">点击复制订单号</span>
                 </el-form-item>
                 <el-form-item label="用户手机号" :label-width="formLabelWidth">
                     <el-input
@@ -264,6 +315,54 @@
                         :disabled="true"
                         style="width: 250px"
                         v-model="form.status"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="取货方式" :label-width="formLabelWidth">
+                    <el-input
+                        :disabled="true"
+                        style="width: 250px"
+                        v-model="form.pickupWay"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="物流单号" :label-width="formLabelWidth">
+                    <el-input
+                        :disabled="true"
+                        style="width: 250px"
+                        v-model="form.trackingNumber"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="快递状态" :label-width="formLabelWidth">
+                    <el-input
+                        :disabled="true"
+                        style="width: 250px"
+                        v-model="form.trackingStatus"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="收货人名称" :label-width="formLabelWidth">
+                    <el-input
+                        :disabled="true"
+                        style="width: 250px"
+                        v-model="form.deliveryName"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="收货人电话" :label-width="formLabelWidth">
+                    <el-input
+                        :disabled="true"
+                        style="width: 250px"
+                        v-model="form.deliveryMobile"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="收货人地址" :label-width="formLabelWidth">
+                    <el-input
+                        :disabled="true"
+                        style="width: 250px"
+                        v-model="form.deliveryAddressDetail"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
@@ -347,14 +446,6 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="商品名称" :label-width="formLabelWidth">
-                    <el-input
-                        :disabled="true"
-                        style="width: 250px"
-                        v-model="form.commodityName"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button type="primary" @click="editVisible = false">确 定</el-button>
@@ -417,8 +508,12 @@ export default {
                 let endDate = this.query.endDate;
                 let refundStatus = this.query.refundStatus;
                 let changeType = this.query.changeType;
+                let pickupWay = this.query.pickupWay;
                 if (!changeType) {
                     changeType = '';
+                }
+                if (!pickupWay) {
+                    pickupWay = '';
                 }
                 if (!businessCode) {
                     businessCode = '';
@@ -455,12 +550,12 @@ export default {
                 jsonArr.push({
                     key: 'exportKeysJson',
                     value:
-                        "['id','cinemaCode','cinemaName','orderNo','mobile','commodityName','gold','money','getDate','payTime','chPayStatus','tradeNo','payReturnMsg','chChangeType','chStatus','chRefundStatus','refundNo','refundReason','refundApply','refundTime','refundPrice']"
+                        "['cinemaName','partnerName','chSettleStatusString','orderNo','mobile','commodityName','gold','money','getDate','payTime','chPayStatus','chPickupWay','trackingNumber','chTrackingStatus','deliveryName','deliveryMobile','deliveryAddressDetail','tradeNo','payReturnMsg','chChangeType','chStatus','chRefundStatus','refundNo','refundReason','refundApply','refundTime','refundPrice']"
                 });
                 jsonArr.push({
                     key: 'exportTitlesJson',
                     value:
-                        "['ID','影院编码','影院名称','订单号','手机号','商品名称','消费金币','支付金额','领取时间','兑换时间','兑换状态','支付交易号','支付回调消息','兑换方式','核销状态','退款状态','退款交易号','退款原因','微信退款回复','退款时间','退款金额']"
+                        "['影院名称','商户名称','商户订单结算状态','订单号','手机号','商品名称','消费金币','支付金额','领取时间','兑换时间','兑换状态','取货方式','物流单号','快递状态','收货人名称','收货人电话','收货人地址','支付交易号','支付回调消息','兑换方式','核销状态','退款状态','退款交易号','退款原因','微信退款回复','退款时间','退款金额']"
                 });
 
                 jsonArr.push({ key: 'businessCode', value: businessCode });
@@ -469,6 +564,7 @@ export default {
                 jsonArr.push({ key: 'commodityName', value: commodityName });
                 jsonArr.push({ key: 'mobile', value: mobile });
                 jsonArr.push({ key: 'refundStatus', value: refundStatus });
+                jsonArr.push({ key: 'pickupWay', value: pickupWay });
                 jsonArr.push({ key: 'status', value: status });
                 jsonArr.push({ key: 'changeType', value: changeType });
                 jsonArr.push({ key: 'payStatus', value: payStatus });
@@ -477,9 +573,9 @@ export default {
                 var params = ParamsAppend(jsonArr);
                 console.log(jsonArr);
                 let businessName = '';
-                for (let i = 0;i < this.businessInfo.length; i ++) {
+                for (let i = 0; i < this.businessInfo.length; i++) {
                     if (businessCode == this.businessInfo[i].businessCode) {
-                        businessName = this.businessInfo[i].businessName
+                        businessName = this.businessInfo[i].businessName;
                     }
                 }
                 let myObj = {
@@ -549,11 +645,9 @@ export default {
                 jsonArr.push({ key: 'sign', value: sign });
                 let params = ParamsAppend(jsonArr);
                 https
-                    .fetchPost('/admin/commodityChangeRecord/getById', params)
+                    .fetchPost('/commodityChangeRecord/getById', params)
                     .then(data => {
                         loading.close();
-                        console.log(data);
-                        console.log(JSON.parse(Decrypt(data.data.data)));
                         if (data.data.code == 'success') {
                             this.editVisible = true;
                             this.form.id = row.id;
@@ -585,6 +679,20 @@ export default {
                                 this.form.refundStatus = '退款成功';
                             } else if (JSON.parse(Decrypt(data.data.data)).refundStatus == 2) {
                                 this.form.refundStatus = '退款失败';
+                            }
+                            if (JSON.parse(Decrypt(data.data.data)).trackingStatus == 1) {
+                                this.form.trackingStatus = '待发货';
+                            } else if (JSON.parse(Decrypt(data.data.data)).trackingStatus == 2) {
+                                this.form.trackingStatus = '快递中';
+                            } else if (JSON.parse(Decrypt(data.data.data)).trackingStatus == 3) {
+                                this.form.trackingStatus = '已送达';
+                            } else if (JSON.parse(Decrypt(data.data.data)).trackingStatus == 4) {
+                                this.form.trackingStatus = '已收货';
+                            }
+                            if (JSON.parse(Decrypt(data.data.data)).pickupWay == 1) {
+                                this.form.pickupWay = '自提';
+                            } else if (JSON.parse(Decrypt(data.data.data)).pickupWay == 2) {
+                                this.form.pickupWay = '快递';
                             }
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
@@ -669,6 +777,10 @@ export default {
                 let cinemaCode = this.query.cinemaCode;
                 let businessCode = this.query.businessCode;
                 let commodityName = this.query.commodityName;
+                let pickupWay = this.query.pickupWay;
+                if (!pickupWay) {
+                    pickupWay = '';
+                }
                 if (!businessCode) {
                     businessCode = '';
                 }
@@ -708,6 +820,7 @@ export default {
                 jsonArr.push({ key: 'businessCode', value: businessCode });
                 jsonArr.push({ key: 'commodityName', value: commodityName });
                 jsonArr.push({ key: 'mobile', value: mobile });
+                jsonArr.push({ key: 'pickupWay', value: pickupWay });
                 jsonArr.push({ key: 'payStatus', value: payStatus });
                 jsonArr.push({ key: 'changeType', value: changeType });
                 jsonArr.push({ key: 'status', value: status });
@@ -726,17 +839,17 @@ export default {
                         console.log(data);
                         if (data.data.code == 'success') {
                             if (data.data && data.data.data) {
-                            var oData = JSON.parse(Decrypt(data.data.data));
-                            this.tableData = oData.pageResult.data;
-                            this.totalData = oData.statistics;
-                            this.query.pageSize = oData.pageResult.pageSize;
-                            this.query.pageNo = oData.pageResult.pageNo;
-                            this.query.totalCount = oData.pageResult.totalCount;
-                            this.query.totalPage = oData.pageResult.totalPage;
-                        } else {
-                            this.tableData = [];
-                            this.totalData = [];
-                        }
+                                var oData = JSON.parse(Decrypt(data.data.data));
+                                this.tableData = oData.pageResult.data;
+                                this.totalData = oData.statistics;
+                                this.query.pageSize = oData.pageResult.pageSize;
+                                this.query.pageNo = oData.pageResult.pageNo;
+                                this.query.totalCount = oData.pageResult.totalCount;
+                                this.query.totalPage = oData.pageResult.totalPage;
+                            } else {
+                                this.tableData = [];
+                                this.totalData = [];
+                            }
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
                             this.open();
@@ -759,8 +872,8 @@ export default {
             });
         },
         handleSizeChange(val) {
-            this.query.pageSize=val;
-            this.getMenu()
+            this.query.pageSize = val;
+            this.getMenu();
         },
         // 多选操作
         handleSelectionChange(val) {
@@ -780,6 +893,16 @@ export default {
             //分页按钮下一页
             this.query.pageNo++;
             this.getMenu();
+        },
+        copy() {
+            var Url = this.form.orderNo
+            var oInput = document.createElement("input");
+            oInput.value = Url;
+            document.body.appendChild(oInput);
+            oInput.select(); // 选择对象
+            document.execCommand("Copy"); // 执行浏览器复制命令
+            oInput.className = "oInput";
+            oInput.style.display = "none";
         }
     }
 };

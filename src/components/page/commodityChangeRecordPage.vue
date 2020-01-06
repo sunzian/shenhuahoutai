@@ -161,7 +161,7 @@
                     highlight-current-row
                     header-cell-class-name="table-header"
                     @selection-change="handleSelectionChange"
-            >
+                >
                 <el-table-column prop="name" label="兑换影院名称" width="210">
                     <template slot-scope="scope">{{scope.row.exchangeCinemaName}}</template>
                 </el-table-column>
@@ -263,6 +263,14 @@
         <!-- 详情弹出框 -->
         <el-dialog :close-on-click-modal="false" title="详情" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
+                <el-form-item label="商品名称" :label-width="formLabelWidth">
+                    <el-input
+                            :disabled="true"
+                            style="width: 250px"
+                            v-model="form.commodityName"
+                            autocomplete="off"
+                    ></el-input>
+                </el-form-item>
                 <el-form-item label="领取影院名称" :label-width="formLabelWidth">
                     <el-input
                             :disabled="true"
@@ -277,7 +285,9 @@
                             style="width: 250px"
                             v-model="form.orderNo"
                             autocomplete="off"
-                    ></el-input>
+                            id="inviteCode"
+                    ></el-input>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <span style="color: rgb(64,158,255);cursor: pointer;" @click="copy">点击复制订单号</span>
                 </el-form-item>
                 <el-form-item label="用户手机号" :label-width="formLabelWidth">
                     <el-input
@@ -447,14 +457,6 @@
                             autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="商品名称" :label-width="formLabelWidth">
-                    <el-input
-                            :disabled="true"
-                            style="width: 250px"
-                            v-model="form.commodityName"
-                            autocomplete="off"
-                    ></el-input>
-                </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button type="primary" @click="editVisible = false">确 定</el-button>
@@ -520,11 +522,6 @@
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="物流公司名称" :label-width="formLabelWidth">
-                    <!--<el-input-->
-                            <!--style="width: 250px"-->
-                            <!--v-model="form1.trackingName"-->
-                            <!--autocomplete="off"-->
-                    <!--&gt;</el-input>-->
                     <el-select clearable v-model="form1.trackingName" placeholder="请选择">
                         <el-option
                                 v-for="item in supportDeliveryList"
@@ -560,6 +557,9 @@
         <!-- 导入excel -->
         <el-dialog :close-on-click-modal="false" title="导入excel" :visible.sync="excelVisible">
             <el-form :model="excelForm">
+                <el-form-item  :required="true" label="下载导入模板：" :label-width="formLabelWidth">
+                    <a href="http://wanht.oss-cn-hangzhou.aliyuncs.com/images/excel/template/金币商城_物流订单导入模板.xlsx">点击下载模板</a>
+                </el-form-item>
                 <el-form-item :required="true" label="选择excel文件：" :label-width="formLabelWidth">
                         <el-upload
                             class="upload-demo"
@@ -576,7 +576,7 @@
                             <div
                                     class="el-upload__tip"
                                     slot="tip"
-                            >上传模板只能是 xls、xlsx格式!</div>
+                            >请按模板上传，上传模板只能是 xls、xlsx格式!</div>
                         </el-upload>
                 </el-form-item>
             </el-form>
@@ -719,12 +719,12 @@
                     jsonArr.push({
                         key: 'exportKeysJson',
                         value:
-                            "['id','cinemaCode','cinemaName','partnerName','chSettleStatusString','orderNo','mobile','commodityName','gold','money','getDate','payTime','chPayStatus','chPickupWay','trackingNumber','chTrackingStatus','deliveryName','deliveryMobile','deliveryAddressDetail','tradeNo','payReturnMsg','chChangeType','chStatus','chRefundStatus','refundNo','refundReason','refundApply','refundTime','refundPrice']"
+                            "['cinemaName','partnerName','chSettleStatusString','orderNo','mobile','commodityName','gold','money','getDate','payTime','chPayStatus','chPickupWay','trackingNumber','chTrackingStatus','deliveryName','deliveryMobile','deliveryAddressDetail','tradeNo','payReturnMsg','chChangeType','chStatus','chRefundStatus','refundNo','refundReason','refundApply','refundTime','refundPrice']"
                     });
                     jsonArr.push({
                         key: 'exportTitlesJson',
                         value:
-                            "['ID','影院编码','影院名称','商户名称','商户订单结算状态','订单号','手机号','商品名称','消费金币','支付金额','领取时间','兑换时间','兑换状态','取货方式','物流单号','快递状态','收货人名称','收货人电话','收货人地址','支付交易号','支付回调消息','兑换方式','核销状态','退款状态','退款交易号','退款原因','微信退款回复','退款时间','退款金额']"
+                            "['影院名称','商户名称','商户订单结算状态','订单号','手机号','商品名称','消费金币','支付金额','领取时间','兑换时间','兑换状态','取货方式','物流单号','快递状态','收货人名称','收货人电话','收货人地址','支付交易号','支付回调消息','兑换方式','核销状态','退款状态','退款交易号','退款原因','微信退款回复','退款时间','退款金额']"
                     });
                     jsonArr.push({key: 'cinemaCode', value: cinemaCode});
                     jsonArr.push({key: 'partnerCode', value: partnerCode});
@@ -1155,6 +1155,16 @@
                 //分页按钮下一页
                 this.query.pageNo++;
                 this.getMenu();
+            },
+            copy() {
+                var Url = this.form.orderNo
+                var oInput = document.createElement("input");
+                oInput.value = Url;
+                document.body.appendChild(oInput);
+                oInput.select(); // 选择对象
+                document.execCommand("Copy"); // 执行浏览器复制命令
+                oInput.className = "oInput";
+                oInput.style.display = "none";
             }
         }
     };
