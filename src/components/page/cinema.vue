@@ -67,6 +67,15 @@
                     <el-option key="3" label="按剩余票数升序" value="3"></el-option>
                     <el-option key="4" label="按剩余票数降序" value="4"></el-option>
                 </el-select>
+                <el-select
+                        clearable
+                        v-model="query.miniOnLine"
+                        placeholder="是否正式上线"
+                        class="handle-select mr10"
+                >
+                    <el-option key="0" label="未上线" value="0"></el-option>
+                    <el-option key="1" label="上线" value="1"></el-option>
+                </el-select>
                 <el-button
                     style="margin-top: 10px;width: 90px;"
                     type="primary"
@@ -144,6 +153,12 @@
                 </el-table-column>
                 <el-table-column prop="time" label="到期时间" width="160">
                     <template slot-scope="scope">{{scope.row.expireDate}}</template>
+                </el-table-column>
+                <el-table-column prop="string" label="正式上线" width="80">
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row.miniOnLine == 1" type="info">上线</el-tag>
+                        <el-tag v-else type="info">未上线</el-tag>
+                    </template>
                 </el-table-column>
                 <!--<el-table-column prop="string" label="票价上报方式">-->
                 <!--<template slot-scope="scope">-->
@@ -762,6 +777,16 @@
                 <el-form-item label="特色服务" :label-width="formLabelWidth">
                     <el-button @click="serveInfo = true">编辑服务</el-button>
                 </el-form-item>
+                <el-form-item label="是否正式上线" :label-width="formLabelWidth">
+                    <el-select
+                            :disabled="true"
+                            v-model="oMiniOnLine"
+                            style="width: 150px"
+                    >
+                        <el-option key="0" label="未上线" value="0"></el-option>
+                        <el-option key="1" label="上线" value="1"></el-option>
+                    </el-select>
+                </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false">取 消</el-button>
@@ -893,6 +918,7 @@ export default {
             oTicketingSystemType: '',
             oBelongBusinessCode: '',
             oTicketingSystemTypeVersion: '',
+            oMiniOnLine: '',
             oMiniAppName: '',
             oMiniAppQRCode: '',
             oVideoStatus: '',
@@ -977,6 +1003,16 @@ export default {
                 {
                     value: '3',
                     label: '送至影厅座位'
+                }
+            ],
+            miniOnLineList: [
+                {
+                    value: '0',
+                    label:'未上线',
+                },
+                {
+                    value: '1',
+                    label:'上线',
                 }
             ],
             businessInfo: [], //关联商家信息
@@ -1131,6 +1167,12 @@ export default {
                         //         break;
                         //     }
                         // }
+                        for (let x in this.miniOnLineList) {
+                            if (this.miniOnLineList[x].value == JSON.parse(Decrypt(data.data.data)).Cinema.miniOnLine) {
+                                this.oMiniOnLine = this.miniOnLineList[x].value;
+                                break;
+                            }
+                        }
                         for (let x in this.delivery) {
                             if (this.delivery[x].value == JSON.parse(Decrypt(data.data.data)).Cinema.snackDispatcherStatus) {
                                 this.oSnackDispatcherStatus = this.delivery[x].value;
@@ -1453,8 +1495,12 @@ export default {
             let endDate = this.query.endDate;
             let reportedType = this.query.reportedType;
             let paymentType = this.query.paymentType;
+            let miniOnLine = this.query.miniOnLine;
             if (!cinemaCode) {
                 cinemaCode = '';
+            }
+            if (!miniOnLine) {
+                miniOnLine = '';
             }
             if (!orderNumber) {
                 orderNumber = '';
@@ -1478,6 +1524,7 @@ export default {
             jsonArr.push({ key: 'endDate', value: endDate });
             jsonArr.push({ key: 'reportedType', value: reportedType });
             jsonArr.push({ key: 'paymentType', value: paymentType });
+            jsonArr.push({ key: 'miniOnLine', value: miniOnLine });
             jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
             jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
             let sign = md5(preSign(jsonArr));

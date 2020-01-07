@@ -64,6 +64,15 @@
                     <el-option key="3" label="按剩余票数升序" value="3"></el-option>
                     <el-option key="4" label="按剩余票数降序" value="4"></el-option>
                 </el-select>
+                <el-select
+                        clearable
+                        v-model="query.miniOnLine"
+                        placeholder="是否正式上线"
+                        class="handle-select mr10"
+                >
+                    <el-option key="0" label="未上线" value="0"></el-option>
+                    <el-option key="1" label="上线" value="1"></el-option>
+                </el-select>
                 <el-button style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
                 <el-button
                     type="primary"
@@ -85,7 +94,7 @@
                 <el-table-column prop="code" label="影院编码" fixed width="110">
                     <template slot-scope="scope">{{scope.row.cinemaCode}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="影院名称" fixed>
+                <el-table-column prop="name" label="影院名称" fixed width="200">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
                 <el-table-column prop="sort" label="小程序二维码" width="120">
@@ -177,6 +186,12 @@
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.reportedType == 1" type="info">标准价格上报</el-tag>
                         <el-tag v-else type="info">优惠后价格上报</el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="string" label="正式上线" width="80">
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row.miniOnLine == 1" type="info">上线</el-tag>
+                        <el-tag v-else type="info">未上线</el-tag>
                     </template>
                 </el-table-column>
                 <!-- <el-table-column prop="booleans" label="是否开通会员卡功能">
@@ -1467,6 +1482,15 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
+                <el-form-item label="是否正式上线" :label-width="formLabelWidth">
+                    <el-select
+                            v-model="oMiniOnLine"
+                            style="width: 150px"
+                    >
+                        <el-option key="0" label="未上线" value="0"></el-option>
+                        <el-option key="1" label="上线" value="1"></el-option>
+                    </el-select>
+                </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false">取 消</el-button>
@@ -2558,6 +2582,7 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
+            let miniOnLine = this.query.miniOnLine;
             let cinemaName = this.query.cinemaName;
             let orderNumber = this.query.orderNumber;
             let cinemaCode = this.query.cinemaCode;
@@ -2569,6 +2594,9 @@ export default {
             let endDate = this.query.endDate;
             if (!cinemaName) {
                 cinemaName = '';
+            }
+            if (!miniOnLine) {
+                miniOnLine = '';
             }
             if (!orderNumber) {
                 orderNumber = '';
@@ -2604,6 +2632,7 @@ export default {
             jsonArr.push({ key: 'ticketingSystemType', value: ticketingSystemType });
             jsonArr.push({ key: 'startDate', value: startDate });
             jsonArr.push({ key: 'endDate', value: endDate });
+            jsonArr.push({ key: 'miniOnLine', value: miniOnLine });
             jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
             jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
             let sign = md5(preSign(jsonArr));
