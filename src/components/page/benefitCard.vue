@@ -517,11 +517,11 @@
                 <!--</el-form-item>-->
                 <el-form-item :required="true" label="权益卡有效期单位" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.unit">
-                        <el-radio label="年">年</el-radio>
-                        <el-radio label="季">季</el-radio>
-                        <el-radio label="月">月</el-radio>
-                        <el-radio label="周">周</el-radio>
                         <el-radio label="日">日</el-radio>
+                        <el-radio label="周">周</el-radio>
+                        <el-radio label="月">月</el-radio>
+                        <el-radio label="季">季</el-radio>
+                        <el-radio label="年">年</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" label="权益卡单位数量" :label-width="formLabelWidth">

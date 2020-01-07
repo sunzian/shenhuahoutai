@@ -28,7 +28,22 @@ export default new Router({
                 {
                     path: '/queryMemberPrice',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/queryMemberPrice.vue'),
-                    meta: { title: '调试售票系统接口' }
+                    meta: { title: '查询影片会员价' }
+                },
+                {
+                    path: '/querySession',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/querySession.vue'),
+                    meta: { title: '查询排期' }
+                },
+                {
+                    path: '/queryTicketOreder',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/queryTicketOreder.vue'),
+                    meta: { title: '查询影票订单' }
+                },
+                {
+                    path: '/queryMerchandiseOrder',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/queryMerchandiseOrder.vue'),
+                    meta: { title: '查询卖品订单' }
                 },
                 {
                     path: '/partnerUserInfoPage',

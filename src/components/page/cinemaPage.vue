@@ -842,6 +842,15 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
+                <el-form-item label="是否正式上线" :label-width="formLabelWidth">
+                    <el-select
+                            v-model="oForm.miniOnLine"
+                            style="width: 150px"
+                    >
+                        <el-option key="0" label="未上线" value="0"></el-option>
+                        <el-option key="1" label="上线" value="1"></el-option>
+                    </el-select>
+                </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -1546,6 +1555,7 @@ export default {
             type: {
                 type: 'bussiness'
             },
+            oMiniOnLine:'',
             oMiniAppName:'',
             oMiniAppQRCode:'',
             oMtxPayType:'',
@@ -1631,6 +1641,16 @@ export default {
                     label:'否',
                 }
             ],
+            miniOnLineList: [
+                {
+                    value: '0',
+                    label:'未上线',
+                },
+                {
+                    value: '1',
+                    label:'上线',
+                }
+            ],
             delivery: [
                 {
                     value: '1',
@@ -1661,6 +1681,7 @@ export default {
             dialogFormVisible: false,
             dialogFormVisible2: false,
             oForm: {
+                miniOnLine: '0',
                 cinemaName: '',
                 cinemaCode: '',
                 province: '',
@@ -1969,6 +1990,7 @@ export default {
             jsonArr.push({ key: 'concatMobile', value: this.oForm.concatMobile });
             jsonArr.push({ key: 'serviceMobile', value: this.oForm.serviceMobile });
             jsonArr.push({ key: 'comparePriceCode', value: this.oForm.comparePriceCode });
+            jsonArr.push({ key: 'miniOnLine', value: this.oForm.miniOnLine });
             if(!this.oForm.buyMinutesLimit){
                 jsonArr.push({ key: 'buyMinutesLimit', value: 0 });
             }else {
@@ -2114,6 +2136,7 @@ export default {
                             this.oForm.ticketsForMemberCardPayStatus = '';
                             this.oForm.miniAppSecret = '';
                             this.oForm.miniMerchantNo = '';
+                            this.oForm.miniOnLine = '0';
                             this.oForm.miniMerchantSecret = '';
                             this.oForm.miniRefundCertificateUrl = '';
                             this.oForm.ticketingSystemType = '';
@@ -2268,6 +2291,12 @@ export default {
                         for (let x in this.businessInfo) {
                             if (this.businessInfo[x].businessCode == JSON.parse(Decrypt(data.data.data)).Cinema.belongBusinessCode) {
                                 this.oBelongBusinessCode = this.businessInfo[x].businessCode;
+                                break;
+                            }
+                        }
+                        for (let x in this.miniOnLineList) {
+                            if (this.miniOnLineList[x].value == JSON.parse(Decrypt(data.data.data)).Cinema.miniOnLine) {
+                                this.oMiniOnLine = this.miniOnLineList[x].value;
                                 break;
                             }
                         }
@@ -2465,6 +2494,7 @@ export default {
             jsonArr.push({ key: 'memberCardPayFee', value: this.oMemberCardPayFee });
             jsonArr.push({ key: 'miniAppName', value: this.oMiniAppName });
             jsonArr.push({ key: 'miniAppQRCode', value: this.oMiniAppQRCode });
+            jsonArr.push({ key: 'miniOnLine', value: this.oMiniOnLine });
             jsonArr.push({ key: 'id', value: this.oId });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
