@@ -657,7 +657,7 @@ export default {
                     loading.close();
                     return;
                 }
-                if(this.oForm.givenMoney.trim()<=0){
+                if(this.oForm.givenMoney<=0){
                     this.message = '赠送金额必须大于0，请检查！';
                     this.open();
                     loading.close();
@@ -689,7 +689,7 @@ export default {
                     loading.close();
                     return;
                 }
-                if(this.oForm.givenMoney.trim()<=0){
+                if(this.oForm.givenMoney<=0){
                     this.message = '赠送金额必须大于0，请检查！';
                     this.open();
                     loading.close();
@@ -967,7 +967,7 @@ export default {
                     loading.close();
                     return;
                 }
-                if(this.oGivenMoney.trim()<=0){
+                if(this.oGivenMoney<=0){
                     this.message = '赠送金额必须大于0，请检查！';
                     this.open();
                     loading.close();
@@ -999,7 +999,7 @@ export default {
                     loading.close();
                     return;
                 }
-                if(this.oGivenMoney.trim()<=0){
+                if(this.oGivenMoney<=0){
                     this.message = '赠送金额必须大于0，请检查！';
                     this.open();
                     loading.close();
