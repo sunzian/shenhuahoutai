@@ -299,7 +299,7 @@
                             :disabled="true"
                             :change="one(item.filmCode)"
                         ></el-input>
-                        <span style="color:red;cursor: pointer;" @click="deleteSell()">删除</span>
+                        <span style="color:red;cursor: pointer;" @click="deleteSell(index)">删除</span>
                     </div>
                 </el-form-item>
                 <el-form-item :required="true" label="有效期：" :label-width="formLabelWidth">
@@ -423,7 +423,7 @@
                             :disabled="true"
                             :change="one(item.filmCode)"
                         ></el-input>
-                        <span style="color:red;cursor: pointer;" @click="deleteSell()">删除</span>
+                        <span style="color:red;cursor: pointer;" @click="deleteSell(index)">删除</span>
                     </div>
                 </el-form-item>
                 <el-form-item :required="true" label="有效期：" :label-width="formLabelWidth">
