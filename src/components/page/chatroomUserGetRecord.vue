@@ -38,6 +38,15 @@
                     <el-option key="1" label="优惠券" value="1"></el-option>
                     <el-option key="2" label="实物" value="2"></el-option>
                 </el-select>
+                <el-select
+                    clearable
+                    v-model="query.getStatus"
+                    placeholder="是否核销"
+                    class="handle-select mr10"
+                >
+                    <el-option key="1" label="未核销" value="1"></el-option>
+                    <el-option key="2" label="已核销" value="2"></el-option>
+                </el-select>
                 <el-input placeholder="用户名称" class="mr10" v-model="query.userName" autocomplete="off"></el-input>
                 <el-date-picker
                         v-model="query.startDate"
@@ -55,6 +64,23 @@
                         value-format="yyyy-MM-dd HH:mm:ss"
                         format="yyyy-MM-dd HH:mm:ss"
                         placeholder="领取结束时间（止）"
+                ></el-date-picker>
+                <el-date-picker
+                        v-model="query.startGetDate"
+                        type="datetime"
+                        class="mr10"
+                        value-format="yyyy-MM-dd HH:mm:ss"
+                        format="yyyy-MM-dd HH:mm:ss"
+                        default-time="06:00:00"
+                        placeholder="核销时间（起）"
+                ></el-date-picker>
+                <el-date-picker
+                        v-model="query.endGetDate"
+                        type="datetime"
+                        class="mr10"
+                        value-format="yyyy-MM-dd HH:mm:ss"
+                        format="yyyy-MM-dd HH:mm:ss"
+                        placeholder="核销时间（止）"
                 ></el-date-picker>
                 <el-button
                     type="primary"
@@ -86,6 +112,15 @@
                 </el-table-column>
                 <el-table-column prop="memo" label="领取时间">
                     <template slot-scope="scope">{{scope.row.createDate}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="是否核销">
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row.getStatus=='1'">未核销</el-tag>
+                        <el-tag v-else-if="scope.row.getStatus=='2'">已核销</el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="memo" label="核销时间">
+                    <template slot-scope="scope">{{scope.row.getDate}}</template>
                 </el-table-column>
                 <el-table-column label="礼物类型" align="center">
                     <template slot-scope="scope">
@@ -321,6 +356,9 @@ export default {
                 let startDate = this.query.startDate;
                 let endDate = this.query.endDate;
                 let userName = this.query.userName;
+                let getStatus = this.query.getStatus;
+                let startGetDate = this.query.startGetDate;
+                let endGetDate = this.query.endGetDate;
                 if (!cinemaCode) {
                     cinemaCode = '';
                 }
@@ -342,6 +380,15 @@ export default {
                 if (!endDate) {
                     endDate = '';
                 }
+                if (!getStatus) {
+                    getStatus = '';
+                }
+                if (!startGetDate) {
+                    startGetDate = '';
+                }
+                if (!endGetDate) {
+                    endGetDate = '';
+                }
                 let jsonArr = [];
                 jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
                 jsonArr.push({ key: 'mobile', value: mobile });
@@ -350,6 +397,9 @@ export default {
                 jsonArr.push({ key: 'giftType', value: type });
                 jsonArr.push({ key: 'startDate', value: startDate });
                 jsonArr.push({ key: 'endDate', value: endDate });
+                jsonArr.push({ key: 'getStatus', value: getStatus });
+                jsonArr.push({ key: 'startGetDate', value: startGetDate });
+                jsonArr.push({ key: 'endGetDate', value: endGetDate });
                 jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
                 jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
                 let sign = md5(preSign(jsonArr));

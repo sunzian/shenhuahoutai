@@ -459,19 +459,23 @@
         },
         surePassword() {
             //确认修改密码
-            const loading = this.$loading({
-                lock: true,
-                text: 'Loading',
-                spinner: 'el-icon-loading',
-                background: 'rgba(0, 0, 0, 0.7)',
-                target: document.querySelector('.div1')
-            });
             setTimeout(() => {
-                if (this.newPass != this.surePass) {
+                if (this.newPass.trim() == '' || this.surePass.trim() == '' || this.oldPass.trim() == '') {
+                    this.message = '请输入密码';
+                    this.open();
+                    loading.close();
+                } else if (this.newPass != this.surePass) {
                     this.message = '两次密码输入不一致';
                     this.open();
                     loading.close();
                 } else {
+                    const loading = this.$loading({
+                        lock: true,
+                        text: 'Loading',
+                        spinner: 'el-icon-loading',
+                        background: 'rgba(0, 0, 0, 0.7)',
+                        target: document.querySelector('.div1')
+                    });
                     var jsonArr = [];
                     jsonArr.push({ key: 'id', value: this.form.id });
                     jsonArr.push({ key: 'oldPassword', value: this.oldPass });

@@ -856,14 +856,12 @@ export default {
             }
         },
         prizeModify(row, index) {
-            console.log(row);
             this.couponInfo.couponName = row.couponName;
             this.couponInfo.id = row.couponId;
             this.oIndex = index;
             this.pForm = row;
             for (let x in this.prizeType) {
                 if (this.prizeType[x].value == row.prizeType) {
-                    console.log('22sd ');
                     this.pForm.prizeType = this.prizeType[x].value;
                     break;
                 }

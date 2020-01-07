@@ -500,6 +500,18 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item
+                    label="下架日期："
+                    :label-width="formLabelWidth"
+                >
+                    <el-date-picker
+                        v-model="oForm.endDate"
+                        type="datetime"
+                        placeholder="请选择时间"
+                        value-format="yyyy-MM-dd HH:mm:ss"
+                        format="yyyy-MM-dd HH:mm:ss"
+                    ></el-date-picker>
+                </el-form-item>
+                <el-form-item
                     :required="true"
                     v-if="oForm.commodity_type==2"
                     label="选择优惠券"
@@ -956,6 +968,18 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item
+                    label="下架日期："
+                    :label-width="formLabelWidth"
+                >
+                    <el-date-picker
+                        v-model="form.endDate"
+                        type="datetime"
+                        placeholder="请选择时间"
+                        value-format="yyyy-MM-dd HH:mm:ss"
+                        format="yyyy-MM-dd HH:mm:ss"
+                    ></el-date-picker>
+                </el-form-item>
+                <el-form-item
                     :required="true"
                     v-if="form.commodityType==2"
                     label="选择优惠券"
@@ -1369,7 +1393,8 @@ export default {
                 money: '',
                 supportExpressStatus: '',
                 expressFee: '',
-                store: ''
+                store: '',
+                endDate: ''
             },
             idx: -1,
             id: -1,
@@ -1396,7 +1421,8 @@ export default {
                 money: '',
                 supportExpressStatus: '1',
                 expressFee: '',
-                store: ''
+                store: '',
+                endDate: ''
             },
 
             formLabelWidth: '120px',
@@ -2298,6 +2324,7 @@ export default {
             jsonArr.push({ key: 'recommendStatus', value: this.oForm.recommendStatus });
             jsonArr.push({ key: 'expireDay', value: this.oForm.expireDay });
             jsonArr.push({ key: 'sort', value: this.oForm.sort });
+            jsonArr.push({ key: 'endDate', value: this.oForm.endDate });
             if (this.oForm.commodity_type == 4) {
                 jsonArr.push({ key: 'partnerCode', value: this.partnerCode });
                 jsonArr.push({ key: 'pickupType', value: this.oForm.pickupType });
@@ -2358,6 +2385,7 @@ export default {
                             this.oForm.recommendStatus = '';
                             this.oForm.sort = '';
                             this.partnerCode = '';
+                            this.oForm.endDate = '';
                             this.oForm.supportExpressStatus = '1';
                             this.dialogFormVisible = false;
                             this.$message.success(`新增成功`);
@@ -2528,6 +2556,7 @@ export default {
                             this.form.limitType = JSON.parse(Decrypt(data.data.data)).goldCommodity.limitType;
                             this.form.limitNumber = JSON.parse(Decrypt(data.data.data)).goldCommodity.limitNumber;
                             this.form.sort = JSON.parse(Decrypt(data.data.data)).goldCommodity.sort;
+                            this.form.endDate = JSON.parse(Decrypt(data.data.data)).goldCommodity.endDate;
                             // this.form.expressFee = JSON.parse(Decrypt(data.data.data)).goldCommodity.expressFee;
                             this.oCities = JSON.parse(Decrypt(data.data.data)).cinemas;
                             this.oLaterDays = JSON.parse(Decrypt(data.data.data)).goldCommodity.laterDays;
@@ -2919,6 +2948,7 @@ export default {
                 jsonArr.push({ key: 'topStatus', value: this.oTopstatus });
                 jsonArr.push({ key: 'recommendStatus', value: this.oRecommendStatus });
                 jsonArr.push({ key: 'sort', value: this.form.sort });
+                jsonArr.push({ key: 'endDate', value: this.form.endDate });
                 if (this.form.commodityType == 4) {
                     jsonArr.push({ key: 'partnerCode', value: this.partnerCode });
                     jsonArr.push({ key: 'pickupType', value: this.form.pickupType });
