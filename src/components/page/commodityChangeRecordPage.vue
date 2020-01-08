@@ -1045,6 +1045,8 @@ export default {
                         .then(data => {
                             loading.close();
                             if (data.data.code == 'success') {
+                                this.message = `核销成功！`;
+                                this.open();
                                 this.getMenu();
                             } else if (data.data.code == 'nologin') {
                                 this.message = data.data.message;

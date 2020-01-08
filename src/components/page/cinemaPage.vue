@@ -64,6 +64,15 @@
                     <el-option key="3" label="按剩余票数升序" value="3"></el-option>
                     <el-option key="4" label="按剩余票数降序" value="4"></el-option>
                 </el-select>
+                <el-select
+                        clearable
+                        v-model="query.miniOnLine"
+                        placeholder="是否正式上线"
+                        class="handle-select mr10"
+                >
+                    <el-option key="0" label="未上线" value="0"></el-option>
+                    <el-option key="1" label="上线" value="1"></el-option>
+                </el-select>
                 <el-button style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
                 <el-button
                     type="primary"
@@ -85,7 +94,7 @@
                 <el-table-column prop="code" label="影院编码" fixed width="110">
                     <template slot-scope="scope">{{scope.row.cinemaCode}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="影院名称" fixed>
+                <el-table-column prop="name" label="影院名称" fixed width="200">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
                 <el-table-column prop="sort" label="小程序二维码" width="120">
@@ -177,6 +186,12 @@
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.reportedType == 1" type="info">标准价格上报</el-tag>
                         <el-tag v-else type="info">优惠后价格上报</el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="string" label="正式上线" width="80">
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row.miniOnLine == 1" type="info">上线</el-tag>
+                        <el-tag v-else type="info">未上线</el-tag>
                     </template>
                 </el-table-column>
                 <!-- <el-table-column prop="booleans" label="是否开通会员卡功能">
@@ -842,6 +857,15 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
+                <el-form-item label="是否正式上线" :label-width="formLabelWidth">
+                    <el-select
+                            v-model="oForm.miniOnLine"
+                            style="width: 150px"
+                    >
+                        <el-option key="0" label="未上线" value="0"></el-option>
+                        <el-option key="1" label="上线" value="1"></el-option>
+                    </el-select>
+                </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -1458,6 +1482,15 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
+                <el-form-item label="是否正式上线" :label-width="formLabelWidth">
+                    <el-select
+                            v-model="oMiniOnLine"
+                            style="width: 150px"
+                    >
+                        <el-option key="0" label="未上线" value="0"></el-option>
+                        <el-option key="1" label="上线" value="1"></el-option>
+                    </el-select>
+                </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false">取 消</el-button>
@@ -1546,6 +1579,7 @@ export default {
             type: {
                 type: 'bussiness'
             },
+            oMiniOnLine:'',
             oMiniAppName:'',
             oMiniAppQRCode:'',
             oMtxPayType:'',
@@ -1631,6 +1665,16 @@ export default {
                     label:'否',
                 }
             ],
+            miniOnLineList: [
+                {
+                    value: '0',
+                    label:'未上线',
+                },
+                {
+                    value: '1',
+                    label:'上线',
+                }
+            ],
             delivery: [
                 {
                     value: '1',
@@ -1661,6 +1705,7 @@ export default {
             dialogFormVisible: false,
             dialogFormVisible2: false,
             oForm: {
+                miniOnLine: '0',
                 cinemaName: '',
                 cinemaCode: '',
                 province: '',
@@ -1969,6 +2014,7 @@ export default {
             jsonArr.push({ key: 'concatMobile', value: this.oForm.concatMobile });
             jsonArr.push({ key: 'serviceMobile', value: this.oForm.serviceMobile });
             jsonArr.push({ key: 'comparePriceCode', value: this.oForm.comparePriceCode });
+            jsonArr.push({ key: 'miniOnLine', value: this.oForm.miniOnLine });
             if(!this.oForm.buyMinutesLimit){
                 jsonArr.push({ key: 'buyMinutesLimit', value: 0 });
             }else {
@@ -2114,6 +2160,7 @@ export default {
                             this.oForm.ticketsForMemberCardPayStatus = '';
                             this.oForm.miniAppSecret = '';
                             this.oForm.miniMerchantNo = '';
+                            this.oForm.miniOnLine = '0';
                             this.oForm.miniMerchantSecret = '';
                             this.oForm.miniRefundCertificateUrl = '';
                             this.oForm.ticketingSystemType = '';
@@ -2268,6 +2315,12 @@ export default {
                         for (let x in this.businessInfo) {
                             if (this.businessInfo[x].businessCode == JSON.parse(Decrypt(data.data.data)).Cinema.belongBusinessCode) {
                                 this.oBelongBusinessCode = this.businessInfo[x].businessCode;
+                                break;
+                            }
+                        }
+                        for (let x in this.miniOnLineList) {
+                            if (this.miniOnLineList[x].value == JSON.parse(Decrypt(data.data.data)).Cinema.miniOnLine) {
+                                this.oMiniOnLine = this.miniOnLineList[x].value;
                                 break;
                             }
                         }
@@ -2465,6 +2518,7 @@ export default {
             jsonArr.push({ key: 'memberCardPayFee', value: this.oMemberCardPayFee });
             jsonArr.push({ key: 'miniAppName', value: this.oMiniAppName });
             jsonArr.push({ key: 'miniAppQRCode', value: this.oMiniAppQRCode });
+            jsonArr.push({ key: 'miniOnLine', value: this.oMiniOnLine });
             jsonArr.push({ key: 'id', value: this.oId });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
@@ -2528,6 +2582,7 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
+            let miniOnLine = this.query.miniOnLine;
             let cinemaName = this.query.cinemaName;
             let orderNumber = this.query.orderNumber;
             let cinemaCode = this.query.cinemaCode;
@@ -2539,6 +2594,9 @@ export default {
             let endDate = this.query.endDate;
             if (!cinemaName) {
                 cinemaName = '';
+            }
+            if (!miniOnLine) {
+                miniOnLine = '';
             }
             if (!orderNumber) {
                 orderNumber = '';
@@ -2574,6 +2632,7 @@ export default {
             jsonArr.push({ key: 'ticketingSystemType', value: ticketingSystemType });
             jsonArr.push({ key: 'startDate', value: startDate });
             jsonArr.push({ key: 'endDate', value: endDate });
+            jsonArr.push({ key: 'miniOnLine', value: miniOnLine });
             jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
             jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
             let sign = md5(preSign(jsonArr));

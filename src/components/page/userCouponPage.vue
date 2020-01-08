@@ -36,7 +36,7 @@
                     class="mr10"
                 ></el-input>
                 <el-input
-                        placeholder="后台发放批次编号"
+                        placeholder="发放批次编号/券码"
                         v-model="query.sendCode"
                         autocomplete="off"
                         class="mr10"
@@ -68,6 +68,7 @@
                     <el-option key="9" label="权益卡券包" value="9"></el-option>
                     <el-option key="10" label="员工推荐充值赠送" value="10"></el-option>
                     <el-option key="11" label="绑定售票系统的券" value="11"></el-option>
+                    <el-option key="12" label="绑定本平台的券" value="12"></el-option>
                 </el-select>
                 <el-button
                     type="primary"
@@ -104,10 +105,10 @@
                 <el-table-column prop="memo" label="优惠券名称" width="220">
                     <template slot-scope="scope">{{scope.row.couponName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="后台发放批次编号" width="180">
+                <el-table-column prop="memo" label="发放批次编号/券码" width="180">
                     <template slot-scope="scope">{{scope.row.sendCode}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="领取时间" width="160">
+                <el-table-column prop="memo" label="领取/绑定时间" width="160">
                     <template slot-scope="scope">{{scope.row.createDate}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="有效期开始时间" width="160">

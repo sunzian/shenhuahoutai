@@ -9,7 +9,7 @@
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-button style="float: right;margin-top: 10px" type="warning" @click="addPage">查询会员价</el-button>
+                <el-button style="float: right" type="warning" @click="addPage">查询会员价</el-button>
             </div>
             <el-form v-model="oForm">
                 <el-form-item label="影院" :label-width="formLabelWidth">
@@ -40,12 +40,11 @@
                 <el-form-item label="所选场次"  :label-width="formLabelWidth">
                     <el-input :disabled="true" onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 250px" v-model="sessionId" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="会员号"  :label-width="formLabelWidth">
-                    <el-input onkeyup="value=value.replace(/[^\w\.\/]/ig,'')" style="width: 250px" v-model="oForm.cardNo" autocomplete="off"></el-input>
-                </el-form-item>
                 <el-form-item label="会员号" :label-width="formLabelWidth">
-                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 250px"
-                              v-model="oForm.cardNo" autocomplete="off"></el-input>
+                    <el-input style="width: 250px" v-model="oForm.cardNo" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="会员卡密码" :label-width="formLabelWidth">
+                    <el-input placeholder="1905系统必填" style="width: 250px" v-model="oForm.cardPassWord" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-divider></el-divider>
             </el-form>
@@ -159,6 +158,7 @@
                     interfaceInput: '',
                     interfaceOutput: '',
                     status: '',
+                    cardPassWord: '',
                 },
                 idx: -1,
                 id: -1,
@@ -295,6 +295,7 @@
                 jsonArr.push({key: 'cinemaCode', value: this.oForm.cinemaCode});
                 jsonArr.push({key: 'sessionId', value: this.sessionId});
                 jsonArr.push({key: 'cardNo', value: this.oForm.cardNo});
+                jsonArr.push({key: 'cardPassWord', value: this.oForm.cardPassWord});
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({key: 'sign', value: sign});
                 let params = ParamsAppend(jsonArr);

@@ -299,7 +299,7 @@
                             :disabled="true"
                             :change="one(item.filmCode)"
                         ></el-input>
-                        <span style="color:red;cursor: pointer;" @click="deleteSell()">删除</span>
+                        <span style="color:red;cursor: pointer;" @click="deleteSell(index)">删除</span>
                     </div>
                 </el-form-item>
                 <el-form-item :required="true" label="有效期：" :label-width="formLabelWidth">
@@ -423,7 +423,7 @@
                             :disabled="true"
                             :change="one(item.filmCode)"
                         ></el-input>
-                        <span style="color:red;cursor: pointer;" @click="deleteSell()">删除</span>
+                        <span style="color:red;cursor: pointer;" @click="deleteSell(index)">删除</span>
                     </div>
                 </el-form-item>
                 <el-form-item :required="true" label="有效期：" :label-width="formLabelWidth">
@@ -931,6 +931,9 @@ export default {
                 .then(data => {
                     loading.close();
                     if (data.data.code == 'success') {
+                        this.selectedSell=[];
+                        this.oFilmCode=[];
+                        this.oFilmName=[];
                         this.editVisible = true;
                         this.getAllScreen();
                         this.oThirdServiceFee = JSON.parse(Decrypt(data.data.data)).thirdServiceFee;
@@ -960,12 +963,12 @@ export default {
                         this.oFilmType = JSON.parse(Decrypt(data.data.data)).filmType;
                         if (JSON.parse(Decrypt(data.data.data)).filmNames) {
                             this.oFilmNames = JSON.parse(Decrypt(data.data.data)).filmNames;
+                            this.oFilmName = this.oFilmNames.split(',');
                         }
                         if (JSON.parse(Decrypt(data.data.data)).filmCodes) {
                             this.oFilmCodes = JSON.parse(Decrypt(data.data.data)).filmCodes;
+                            this.oFilmCode = this.oFilmCodes.split(',');
                         }
-                        this.oFilmName = this.oFilmNames.split(',');
-                        this.oFilmCode = this.oFilmCodes.split(',');
                         let selectedSell = [];
                         for (let i = 0; i < this.oFilmCode.length; i++) {
                             selectedSell.push({ filmCode: this.oFilmCode[i], filmName: this.oFilmName[i] });
