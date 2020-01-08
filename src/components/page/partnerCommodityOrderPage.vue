@@ -57,6 +57,23 @@
                 </el-select>
                 <el-select
                     clearable
+                    v-model="query.trackingStatus"
+                    placeholder="快递状态"
+                    class="handle-select mr10"
+                >
+                    <el-option key="1" label="待发货" value="1"></el-option>
+                    <el-option key="2" label="快递中" value="2"></el-option>
+                    <el-option key="3" label="已送达" value="3"></el-option>
+                    <el-option key="4" label="已收货" value="4"></el-option>
+                </el-select>
+                <el-input
+                    placeholder="快递单号"
+                    class="mr10"
+                    v-model="query.trackingNumber"
+                    autocomplete="off"
+                ></el-input>
+                <el-select
+                    clearable
                     v-model="query.payStatus"
                     placeholder="兑换状态"
                     class="handle-select mr10"
@@ -219,6 +236,12 @@
                             icon="el-icon-setting"
                             @click="logChange(scope.$index, scope.row)"
                         >修改物流</el-button>
+                        <el-button
+                            v-if="scope.row.pickupWay=='1' && scope.row.status=='1'"
+                            type="text"
+                            icon="el-icon-setting"
+                            @click="statusChange(scope.$index, scope.row)"
+                        >核销</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -681,6 +704,14 @@ export default {
                 let refundStatus = this.query.refundStatus;
                 let changeType = this.query.changeType;
                 let pickupWay = this.query.pickupWay;
+                let trackingStatus = this.query.trackingStatus;
+                let trackingNumber = this.query.trackingNumber;
+                if (!trackingStatus) {
+                    trackingStatus = '';
+                }
+                if (!trackingNumber) {
+                    trackingNumber = '';
+                }
                 if (!changeType) {
                     changeType = '';
                 }
@@ -737,6 +768,8 @@ export default {
                 jsonArr.push({ key: 'payStatus', value: payStatus });
                 jsonArr.push({ key: 'startDate', value: startDate });
                 jsonArr.push({ key: 'endDate', value: endDate });
+                jsonArr.push({ key: 'trackingStatus', value: trackingStatus });
+                jsonArr.push({ key: 'trackingNumber', value: trackingNumber });
                 var params = ParamsAppend(jsonArr);
                 let myObj = {
                     method: 'get',
@@ -975,6 +1008,53 @@ export default {
                     });
             }, 500);
         },
+        statusChange(index, row) {
+            this.$confirm('此操作将核销商品, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            })
+                .then(() => {
+                    const loading = this.$loading({
+                        lock: true,
+                        text: 'Loading',
+                        spinner: 'el-icon-loading',
+                        background: 'rgba(0, 0, 0, 0.7)',
+                        target: document.querySelector('.div1')
+                    });
+                    var jsonArr = [];
+                    jsonArr.push({ key: 'id', value: row.id });
+                    let sign = md5(preSign(jsonArr));
+                    jsonArr.push({ key: 'sign', value: sign });
+                    let params = ParamsAppend(jsonArr);
+                    https
+                        .fetchPost('/cinemaPartner/verificationCommodityOrder', params)
+                        .then(data => {
+                            loading.close();
+                            if (data.data.code == 'success') {
+                                this.message = `核销成功！`;
+                                this.open();
+                                this.getMenu();
+                            } else if (data.data.code == 'nologin') {
+                                this.message = data.data.message;
+                                this.open();
+                                this.$router.push('/login');
+                            } else {
+                                this.message = data.data.message;
+                                this.open();
+                            }
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        });
+                })
+                .catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消更改'
+                    });
+                });
+        },
         Search() {
             this.query.pageNo = 1;
             this.getMenu();
@@ -1000,6 +1080,14 @@ export default {
                 let settleStatus = this.query.settleStatus;
                 let commodityName = this.query.commodityName;
                 let pickupWay = this.query.pickupWay;
+                let trackingStatus = this.query.trackingStatus;
+                let trackingNumber = this.query.trackingNumber;
+                if (!trackingStatus) {
+                    trackingStatus = '';
+                }
+                if (!trackingNumber) {
+                    trackingNumber = '';
+                }
                 if (!pickupWay) {
                     pickupWay = '';
                 }
@@ -1045,6 +1133,8 @@ export default {
                 jsonArr.push({ key: 'refundStatus', value: refundStatus });
                 jsonArr.push({ key: 'startDate', value: startDate });
                 jsonArr.push({ key: 'endDate', value: endDate });
+                jsonArr.push({ key: 'trackingStatus', value: trackingStatus });
+                jsonArr.push({ key: 'trackingNumber', value: trackingNumber });
                 jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
                 jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
                 let sign = md5(preSign(jsonArr));

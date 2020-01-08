@@ -76,6 +76,23 @@
                 </el-select>
                 <el-select
                     clearable
+                    v-model="query.trackingStatus"
+                    placeholder="快递状态"
+                    class="handle-select mr10"
+                >
+                    <el-option key="1" label="待发货" value="1"></el-option>
+                    <el-option key="2" label="快递中" value="2"></el-option>
+                    <el-option key="3" label="已送达" value="3"></el-option>
+                    <el-option key="4" label="已收货" value="4"></el-option>
+                </el-select>
+                <el-input
+                    placeholder="快递单号"
+                    class="mr10"
+                    v-model="query.trackingNumber"
+                    autocomplete="off"
+                ></el-input>
+                <el-select
+                    clearable
                     v-model="query.payStatus"
                     placeholder="兑换状态"
                     class="handle-select mr10"
@@ -509,6 +526,14 @@ export default {
                 let refundStatus = this.query.refundStatus;
                 let changeType = this.query.changeType;
                 let pickupWay = this.query.pickupWay;
+                let trackingStatus = this.query.trackingStatus;
+                let trackingNumber = this.query.trackingNumber;
+                if (!trackingStatus) {
+                    trackingStatus = '';
+                }
+                if (!trackingNumber) {
+                    trackingNumber = '';
+                }
                 if (!changeType) {
                     changeType = '';
                 }
@@ -570,6 +595,8 @@ export default {
                 jsonArr.push({ key: 'payStatus', value: payStatus });
                 jsonArr.push({ key: 'startDate', value: startDate });
                 jsonArr.push({ key: 'endDate', value: endDate });
+                jsonArr.push({ key: 'trackingStatus', value: trackingStatus });
+                jsonArr.push({ key: 'trackingNumber', value: trackingNumber });
                 var params = ParamsAppend(jsonArr);
                 console.log(jsonArr);
                 let businessName = '';
@@ -778,6 +805,14 @@ export default {
                 let businessCode = this.query.businessCode;
                 let commodityName = this.query.commodityName;
                 let pickupWay = this.query.pickupWay;
+                let trackingStatus = this.query.trackingStatus;
+                let trackingNumber = this.query.trackingNumber;
+                if (!trackingStatus) {
+                    trackingStatus = '';
+                }
+                if (!trackingNumber) {
+                    trackingNumber = '';
+                }
                 if (!pickupWay) {
                     pickupWay = '';
                 }
@@ -827,6 +862,8 @@ export default {
                 jsonArr.push({ key: 'refundStatus', value: refundStatus });
                 jsonArr.push({ key: 'startDate', value: startDate });
                 jsonArr.push({ key: 'endDate', value: endDate });
+                jsonArr.push({ key: 'trackingStatus', value: trackingStatus });
+                jsonArr.push({ key: 'trackingNumber', value: trackingNumber });
                 jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
                 jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
                 let sign = md5(preSign(jsonArr));
