@@ -275,7 +275,14 @@
                         <el-radio :label="2" disabled>指定影院</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item :required="true" label="选择影院：" :label-width="formLabelWidth" v-if="oCommonType == 2">
+                <el-form-item :required="true" label="所选影院" :label-width="formLabelWidth">
+                    <el-input
+                        style="width: 250px"
+                        v-model="oCinemaNames"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <!-- <el-form-item :required="true" label="选择影院：" :label-width="formLabelWidth" v-if="oCommonType == 2">
                     <el-radio-group v-model="oCinemaCode" @change="selectCinema">
                         <el-radio
                                 v-for="item in cinemaInfo"
@@ -284,7 +291,7 @@
                                 :value="item.cinemaName"
                         >{{item.cinemaName}}</el-radio>
                     </el-radio-group>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item :required="true" label="选择商品：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oSelectMerchandiseType" @change="clearMerchandiseCode()">
                         <el-radio label="0">全部商品</el-radio>
@@ -293,14 +300,19 @@
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oSelectMerchandiseType==1||oSelectMerchandiseType==2" label="适用卖品：" :label-width="formLabelWidth">
-                    <el-checkbox-group v-model="oMerchandiseCode" @change="selectGoods">
+                    <!-- <el-checkbox-group v-model="oMerchandiseCode" @change="selectGoods">
                         <el-checkbox
                                 v-for="item in goodsInfo"
                                 :label="item.merchandiseCode"
                                 :key="item.merchandiseCode"
                                 :value="item.merchandiseName"
                         >{{item.merchandiseName}}</el-checkbox>
-                    </el-checkbox-group>
+                    </el-checkbox-group> -->
+                    <el-input
+                        style="width: 250px"
+                        v-model="oMerchandiseNames"
+                        autocomplete="off"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="支付类型：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oValidPayType">
@@ -545,7 +557,7 @@ export default {
                     if (data.data.code == 'success') {
                         this.dialogFormVisible = true;
                         this.oForm.merchandiseCode = [];
-                        this.getAllGoods();
+                        // this.getAllGoods();
                         if (JSON.parse(Decrypt(data.data.data)).adminFlag <= 1) {
                             this.oForm.commonType = 1
                         } else {
@@ -846,6 +858,8 @@ export default {
                         }
                         this.oMerchandiseName = JSON.parse(Decrypt(data.data.data)).coupon.merchandiseNames;
                         this.oCommonType = JSON.parse(Decrypt(data.data.data)).coupon.commonType;
+                        this.oCinemaNames = JSON.parse(Decrypt(data.data.data)).coupon.cinemaNames;
+                        this.oMerchandiseNames = JSON.parse(Decrypt(data.data.data)).coupon.merchandiseNames;
                         this.oCinemaCode = JSON.parse(Decrypt(data.data.data)).coupon.cinemaCodes;
                         this.oName = JSON.parse(Decrypt(data.data.data)).coupon.name;
                         // this.oStartDate = JSON.parse(Decrypt(data.data.data)).coupon.startDate;
@@ -906,7 +920,7 @@ export default {
                                 break;
                             }
                         }
-                        this.getAllGoods(this.oCinemaCode);
+                        // this.getAllGoods(this.oCinemaCode);
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
@@ -1217,15 +1231,6 @@ export default {
                     if (data.data.code == 'success') {
                         if (data.data && data.data.data) {
                             var oData = JSON.parse(Decrypt(data.data.data));
-                            this.cinemaInfo = [];
-                            for (let i = 0; i < oData.cinemaList.length; i++) {
-                                let cinemaList = {};
-                                cinemaList.cinemaCode = oData.cinemaList[i].cinemaCode;
-                                cinemaList.cinemaName = oData.cinemaList[i].cinemaName;
-                                this.cinemaInfo.push(cinemaList);
-                            }
-                            this.oForm.cinemaCode = this.cinemaInfo[0].cinemaCode;
-                            this.selectValue = this.cinemaInfo[0].cinemaCode;
                             this.tableData = oData.pageResult.data;
                             this.query.pageSize = oData.pageResult.pageSize;
                             this.query.pageNo = oData.pageResult.pageNo;
@@ -1257,23 +1262,23 @@ export default {
         },
         selectCommonType(val) {
             if (val == 2) {
-                this.getAllGoods(this.oForm.cinemaCode);
+                // this.getAllGoods(this.oForm.cinemaCode);
             } else {
-                this.getAllGoods();
+                // this.getAllGoods();
             }
         },
         selectCommonType2(val) {
             if (val == 2) {
-                this.getAllGoods(this.oCinemaCode);
+                // this.getAllGoods(this.oCinemaCode);
             } else {
-                this.getAllGoods();
+                // this.getAllGoods();
             }
         },
         selectCinema(val) {
             console.log(val);
             this.oMerchandiseCode=[];
             this.selectValue = val;
-            this.getAllGoods(val);
+            // this.getAllGoods(val);
         },
         selectGoods(val) {
             // console.log(val)
@@ -1352,6 +1357,8 @@ export default {
                     if (data.data.code == 'success') {
                         var res = JSON.parse(Decrypt(data.data.data));
                         this.cinemaData = res;
+                        this.oForm.cinemaCode = this.cinemaInfo[0].cinemaCode;
+                        this.selectValue = this.cinemaInfo[0].cinemaCode;
                         console.log(res);
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;

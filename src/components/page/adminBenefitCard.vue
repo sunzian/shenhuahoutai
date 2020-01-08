@@ -882,7 +882,14 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="选择影院" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="所选影院" :label-width="formLabelWidth">
+                    <el-input
+                        style="width: 250px"
+                        v-model="oCinemaName"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <!-- <el-form-item :required="true" label="选择影院" :label-width="formLabelWidth">
                     <el-radio-group v-model="oCinemaCode" @change="selectCinema">
                         <el-radio
                             v-for="item in cinemaInfo"
@@ -891,7 +898,7 @@
                             :value="item.cinemaName"
                         >{{item.cinemaName}}</el-radio>
                     </el-radio-group>
-                </el-form-item>
+                </el-form-item> -->
                 <!--<el-form-item :required="true" label="权益类型" :label-width="formLabelWidth">-->
                 <!--<el-radio-group v-model="oCardType" @change="clearCardType()">-->
                 <!--<el-radio label="1">优惠活动</el-radio>-->
@@ -2806,11 +2813,10 @@ export default {
             jsonArr.push({ key: 'sign', value: sign });
             let params = ParamsAppend(jsonArr);
             https
-                .fetchPost('/benefitCard/getTimesById', params)
+                .fetchPost('/admin/benefitCard/getTimesById', params)
                 .then(data => {
                     //查询可用时间段
                     loading.close();
-                    console.log(data);
                     this.dateInfo = [];
                     this.startArr = [];
                     this.endArr = [];
@@ -2835,6 +2841,7 @@ export default {
                     loading.close();
                     if (data.data.code == 'success') {
                         this.editVisible = true;
+                        this.getAllCinema();
                         console.log(JSON.parse(Decrypt(data.data.data)));
                         //电影
                         if (
@@ -3016,6 +3023,7 @@ export default {
                         if (JSON.parse(Decrypt(data.data.data)).benefitCard.groupDateType == 1) {
                             this.oGroupDateType = '1';
                         }
+                        this.oCinemaName = JSON.parse(Decrypt(data.data.data)).benefitCard.cinemaName;
                         this.groupNumber = JSON.parse(Decrypt(data.data.data)).benefitCard.groupNumber;
                         this.oGroupStartDate = JSON.parse(Decrypt(data.data.data)).benefitCard.groupStartDate;
                         this.oGroupEndDate = JSON.parse(Decrypt(data.data.data)).benefitCard.groupEndDate;
@@ -3732,31 +3740,37 @@ export default {
             setTimeout(() => {
                 let reduceTypeFilm = this.query.reduceTypeFilm;
                 let reduceTypeMerchandise = this.query.reduceTypeMerchandise;
-                // let cardType = this.query.cardType;
+                let cinemaCode = this.query.cinemaCode;
+                let status = this.query.status;
                 let businessCode = this.query.businessCode;
+                let name = this.query.name;
                 if (!reduceTypeFilm) {
                     reduceTypeFilm = '';
                 }
                 if (!reduceTypeMerchandise) {
                     reduceTypeMerchandise = '';
                 }
-                // if (!cardType) {
-                //     cardType = '';
-                // }
+                if (!cinemaCode) {
+                    cinemaCode = '';
+                }
+                if (!status) {
+                    status = '';
+                }
+                if (!name) {
+                    name = '';
+                }
                 if (!businessCode) {
                     businessCode = '';
                 }
                 let jsonArr = [];
-                jsonArr.push({ key: 'name', value: this.query.name });
-                jsonArr.push({ key: 'status', value: this.query.status });
+                jsonArr.push({ key: 'name', value: name });
+                jsonArr.push({ key: 'status', value: status });
                 jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
                 jsonArr.push({ key: 'reduceTypeFilm', value: reduceTypeFilm });
                 jsonArr.push({ key: 'reduceTypeMerchandise', value: reduceTypeMerchandise });
-                // jsonArr.push({ key: 'cardType', value: cardType });
-                jsonArr.push({ key: 'cinemaCode', value: this.query.cinemaCode });
-                jsonArr.push({ key: 'businessCode', value: this.query.businessCode });
+                jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
+                jsonArr.push({ key: 'businessCode', value: businessCode });
                 jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
-                // jsonArr.push({ key: 'filmName', value: name });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
                 console.log(jsonArr);
@@ -3768,15 +3782,7 @@ export default {
                         if (data.data.code == 'success') {
                             if (data.data && data.data.data) {
                                 var oData = JSON.parse(Decrypt(data.data.data));
-                                this.cinemaInfo = [];
-                                for (let i = 0; i < oData.cinemaList.length; i++) {
-                                    let cinemaList = {};
-                                    cinemaList.cinemaCode = oData.cinemaList[i].cinemaCode;
-                                    cinemaList.cinemaName = oData.cinemaList[i].cinemaName;
-                                    this.cinemaInfo.push(cinemaList);
-                                }
-                                this.oForm.cinemaCode = this.cinemaInfo[0].cinemaCode;
-                                this.selectValue = this.cinemaInfo[0].cinemaCode;
+                                console.log(oData)
                                 this.tableData = oData.pageResult.data;
                                 this.query.pageSize = oData.pageResult.pageSize;
                                 this.query.pageNo = oData.pageResult.pageNo;
@@ -3896,7 +3902,8 @@ export default {
                     if (data.data.code == 'success') {
                         var res = JSON.parse(Decrypt(data.data.data));
                         this.cinemaInfo = res;
-                        console.log(res);
+                        this.oForm.cinemaCode = this.cinemaInfo[0].cinemaCode;
+                        this.selectValue = this.cinemaInfo[0].cinemaCode;
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();

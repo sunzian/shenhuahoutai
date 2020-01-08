@@ -328,7 +328,14 @@
                         <el-radio :label="2" disabled>指定影院</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item :required="true" label="选择影院：" :label-width="formLabelWidth" v-if="oCommonType == 2">
+                <el-form-item :required="true" label="所选影院" :label-width="formLabelWidth">
+                    <el-input
+                        style="width: 250px"
+                        v-model="oCinemaName"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <!-- <el-form-item :required="true" label="选择影院：" :label-width="formLabelWidth" v-if="oCommonType == 2">
                     <el-radio-group v-model="oCinemaCode" @change="selectCinema">
                         <el-radio
                                 v-for="item in cinemaInfo"
@@ -337,7 +344,7 @@
                                 :value="item.cinemaName"
                         >{{item.cinemaName}}</el-radio>
                     </el-radio-group>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item :required="true" label="选择影厅：" :label-width="formLabelWidth" v-if="oCommonType == 2">
                     <el-radio-group v-model="oSelectHallType" @change="clearScreenCode()">
                         <el-radio label="0">全部影厅</el-radio>
@@ -1644,15 +1651,6 @@ export default {
                     if (data.data.code == 'success') {
                         if (data.data && data.data.data) {
                             var oData = JSON.parse(Decrypt(data.data.data));
-                            this.cinemaInfo = [];
-                            for (let i = 0; i < oData.cinemaList.length; i++) {
-                                let cinemaList = {};
-                                cinemaList.cinemaCode = oData.cinemaList[i].cinemaCode;
-                                cinemaList.cinemaName = oData.cinemaList[i].cinemaName;
-                                this.cinemaInfo.push(cinemaList);
-                            }
-                            this.oForm.cinemaCode = this.cinemaInfo[0].cinemaCode;
-                            this.selectValue = this.cinemaInfo[0].cinemaCode;
                             this.tableData = oData.pageResult.data;
                             this.query.pageSize = oData.pageResult.pageSize;
                             this.query.pageNo = oData.pageResult.pageNo;
@@ -1766,6 +1764,8 @@ export default {
                     if (data.data.code == 'success') {
                         var res = JSON.parse(Decrypt(data.data.data));
                         this.cinemaData = res;
+                        this.oForm.cinemaCode = this.cinemaInfo[0].cinemaCode;
+                        this.selectValue = this.cinemaInfo[0].cinemaCode;
                         console.log(res);
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
