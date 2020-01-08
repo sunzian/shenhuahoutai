@@ -38,7 +38,7 @@
                     <el-button type="primary" @click="getSession">点击选择</el-button>
                 </el-form-item>
                 <el-form-item label="所选场次"  :label-width="formLabelWidth">
-                    <el-input :disabled="true" onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 250px" v-model="sessionId" autocomplete="off"></el-input>
+                    <el-input :disabled="true" onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 250px" v-model="sessionTime" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="会员号" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oForm.cardNo" autocomplete="off"></el-input>
