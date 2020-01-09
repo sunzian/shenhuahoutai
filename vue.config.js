@@ -6,8 +6,8 @@ module.exports = {
         proxy: {
             '/api':{
                 // target: 'http://test.legendpicture.com',
-                // target: 'https://wonder.legendpicture.com',
-                target: 'https://192.168.43.169:8080',
+                target: 'https://wonder.legendpicture.com',
+                // target: 'https://192.168.43.169:8080',
                 // target: 'https://192.168.43.34:8080',
                 // target: 'https://192.168.1.122:8080',  // gw
                 // target: 'https://192.168.31.222:8080',  // zy jzkj

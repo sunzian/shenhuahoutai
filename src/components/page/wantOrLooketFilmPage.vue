@@ -3,24 +3,33 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
-                    <i class="el-icon-lx-cascades"></i> 影片信息维护
+                    <i class="el-icon-lx-cascades"></i> 影片评论管理
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-input v-model="query.name" placeholder="影片名称" class="handle-input mr10"></el-input>
-                <el-select clearable v-model="query.status" placeholder="状态" class="mr10">
-                    <el-option key="1" label="显示" value="1"></el-option>
-                    <el-option key="0" label="未显示" value="0"></el-option>
+                <el-select style="margin-bottom: 10px" clearable v-model="oForm.cinemaCode" placeholder="请选择影院" class="mr10">
+                    <el-option
+                            v-for="item in cinemaInfo"
+                            :key="item.cinemaCode"
+                            :label="item.cinemaName"
+                            :value="item.cinemaCode"
+                    ></el-option>
+                </el-select>
+                <el-input v-model="query.name" placeholder="用户名" class="handle-input mr10"></el-input>
+                <el-input v-model="query.filmName" placeholder="影片名" class="handle-input mr10"></el-input>
+                <el-select clearable v-model="query.status" placeholder="通过状态" class="mr10">
+                    <el-option key="1" label="未通过" value="1"></el-option>
+                    <el-option key="2" label="通过" value="2"></el-option>
                 </el-select>
                 <el-button style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
-                <el-button
+                <!-- <el-button
                     type="primary"
                     @click="addPage"
                     icon="el-icon-circle-plus-outline"
                     style="float: right;margin-top: 10px"
-                >添加</el-button>
+                >添加</el-button> -->
             </div>
             <el-table
                 :data="tableData"
@@ -31,36 +40,32 @@
                 highlight-current-row
                 header-cell-class-name="table-header"
             >
-                <el-table-column prop="name" label="影片编码">
-                    <template slot-scope="scope">{{scope.row.filmCode}}</template>
+                <el-table-column prop="name" label="影院名称">
+                    <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
                 <el-table-column prop="name" label="影片名称">
                     <template slot-scope="scope">{{scope.row.filmName}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="图片">
-                    <template slot-scope="scope">
-                        <el-popover placement="right" title trigger="hover">
-                            <img style="width:400px" :src="scope.row.image" />
-                            <img
-                                slot="reference"
-                                :src="scope.row.image"
-                                :alt="scope.row.image"
-                                style="max-height: 50px;max-width: 130px"
-                            />
-                        </el-popover>
-                    </template>
+                <el-table-column prop="memo" label="评论用户名称">
+                    <template slot-scope="scope">{{scope.row.userName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="影片时长">
-                    <template slot-scope="scope">{{scope.row.duration}}</template>
+                <el-table-column prop="sort" label="评论内容">
+                    <template slot-scope="scope">{{scope.row.comment}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="影片上映日期">
-                    <template slot-scope="scope">{{scope.row.publishDate}}</template>
+                <el-table-column prop="sort" label="评论时间">
+                    <template slot-scope="scope">{{scope.row.commentDate}}</template>
                 </el-table-column>
                 <el-table-column prop="sort" label="通过状态">
                     <template slot-scope="scope">
-                        <el-tag v-if="scope.row.status == 1" type="success">显示</el-tag>
-                        <el-tag v-else type="danger">未显示</el-tag>
+                        <el-tag v-if="scope.row.status == 1">未通过</el-tag>
+                        <el-tag v-else>通过</el-tag>
                     </template>
+                </el-table-column>
+                <el-table-column prop="sort" label="点赞数量">
+                    <template slot-scope="scope">{{scope.row.thumbNumber}}</template>
+                </el-table-column>
+                <el-table-column prop="sort" label="评分">
+                    <template slot-scope="scope">{{scope.row.score}}</template>
                 </el-table-column>
                 <el-table-column label="操作" width="180" align="center">
                     <template slot-scope="scope">
@@ -68,12 +73,12 @@
                             type="text"
                             icon="el-icon-circle-plus-outline"
                             @click="addChange(scope.$index, scope.row)"
-                        >编辑</el-button>
-                        <el-button
+                        >查看评论</el-button>
+                        <!-- <el-button
                             type="text"
                             icon="el-icon-circle-plus-outline"
                             @click="delChange(scope.$index, scope.row)"
-                        >删除</el-button>
+                        >删除</el-button> -->
                     </template>
                 </el-table-column>
             </el-table>
@@ -669,6 +674,7 @@ export default {
     created() {},
     mounted() {
         this.getMenu();
+        this.getAllCinema();
     },
     methods: {
         addPage() {
@@ -1044,8 +1050,16 @@ export default {
             });
             let name = this.query.name;
             let status = this.query.status;
+            let cinemaCode = this.query.cinemaCode;
+            let filmName = this.query.filmName;
             if (!name) {
                 name = '';
+            }
+            if (!filmName) {
+                filmName = '';
+            }
+            if (!cinemaCode) {
+                cinemaCode = '';
             }
             if (!status) {
                 status = '';
@@ -1053,13 +1067,15 @@ export default {
             let jsonArr = [];
             jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
             jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
-            jsonArr.push({ key: 'filmName', value: name });
+            jsonArr.push({ key: 'userName', value: name });
+            jsonArr.push({ key: 'filmName', value: filmName });
             jsonArr.push({ key: 'status', value: status });
+            jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             var params = ParamsAppend(jsonArr);
             https
-                .fetchPost('/film/filmPage', params)
+                .fetchPost('/wantOrLooketFilm/page', params)
                 .then(data => {
                     loading.close();
                     if (data.data.code == 'success') {
@@ -1203,6 +1219,26 @@ export default {
         directorSearch() {
             this.query.pageNo = 1;
             this.getAllDirector();
+        },
+        getAllCinema() {
+            https
+                .fetchPost('/cinema/getAllCinema')
+                .then(data => {
+                    if (data.data.code == 'success') {
+                        var res = JSON.parse(Decrypt(data.data.data));
+                        this.cinemaInfo = res;
+                    } else if (data.data.code == 'nologin') {
+                        this.message = data.data.message;
+                        this.open();
+                        this.$router.push('/login');
+                    } else {
+                        this.message = data.data.message;
+                        this.open();
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                });
         },
         // 获取所有导演
         getAllDirector() {
