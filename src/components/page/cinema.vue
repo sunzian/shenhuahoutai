@@ -823,7 +823,7 @@
         </el-dialog>
         <!-- 新增特色服务 -->
         <el-dialog
-            width="30%"
+            width="40%"
             top="30vh"
             :close-on-click-modal="false"
             :visible.sync="addServeInfo"
@@ -856,7 +856,7 @@
         </el-dialog>
         <!-- 编辑特色服务 -->
         <el-dialog
-            width="30%"
+            width="40%"
             top="30vh"
             :close-on-click-modal="false"
             :visible.sync="editServeInfo"
