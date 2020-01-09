@@ -146,39 +146,41 @@
                 <el-form-item :required="true" label="游戏名称" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oForm.gameName" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="大转盘背景图" :label-width="formLabelWidth">
-                    <el-popover placement="right" title trigger="hover">
-                        <img style="width: 400px" :src="this.oImageUrl" />
-                        <img
-                            slot="reference"
-                            :src="this.oImageUrl"
-                            :alt="this.oImageUrl"
-                            style="max-height: 50px;max-width: 130px"
-                        />
-                    </el-popover>
-                    <el-upload
-                        :before-upload="beforeUpload"
-                        :data="type"
-                        class="upload-demo"
-                        ref="upload"
-                        drag
-                        :limit="1"
-                        :on-exceed="exceed"
-                        action="/api/upload/uploadImage"
-                        :on-success="unSuccess"
-                        multiple
-                    >
-                        <i class="el-icon-upload"></i>
-                        <div class="el-upload__text">
-                            将文件拖到此处，或
-                            <em>点击上传</em>
-                        </div>
-                        <div
-                            class="el-upload__tip"
-                            slot="tip"
-                        >只能上传jpg/png文件，且不超过200kb 建议尺寸120*120或按比例上传</div>
-                    </el-upload>
-                </el-form-item>
+                <div style="width: 520px;">
+                    <el-form-item label="大转盘背景图" :label-width="formLabelWidth">
+                        <el-popover placement="right" title trigger="hover">
+                            <img style="width: 400px" :src="this.oImageUrl" />
+                            <img
+                                    slot="reference"
+                                    :src="this.oImageUrl"
+                                    :alt="this.oImageUrl"
+                                    style="max-height: 50px;max-width: 130px"
+                            />
+                        </el-popover>
+                        <el-upload
+                                :before-upload="beforeUpload"
+                                :data="type"
+                                class="upload-demo"
+                                ref="upload"
+                                drag
+                                :limit="1"
+                                :on-exceed="exceed"
+                                action="/api/upload/uploadImage"
+                                :on-success="unSuccess"
+                                multiple
+                        >
+                            <i class="el-icon-upload"></i>
+                            <div class="el-upload__text">
+                                将文件拖到此处，或
+                                <em>点击上传</em>
+                            </div>
+                            <div
+                                    class="el-upload__tip"
+                                    slot="tip"
+                            >只能上传jpg/png文件，且不超过200kb 建议尺寸120*120或按比例上传</div>
+                        </el-upload>
+                    </el-form-item>
+                </div>
                 <el-form-item :required="true" label="活动开始时间" :label-width="formLabelWidth">
                     <el-date-picker
                         style="width:250px"
@@ -321,39 +323,41 @@
                 <el-form-item :required="true" label="游戏名称" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="form.gameName" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="大转盘背景图" :label-width="formLabelWidth">
-                    <el-popover placement="right" title trigger="hover">
-                        <img style="width: 400px" :src="this.oImageUrl" />
-                        <img
-                            slot="reference"
-                            :src="this.oImageUrl"
-                            :alt="this.oImageUrl"
-                            style="max-height: 50px;max-width: 130px"
-                        />
-                    </el-popover>
-                    <el-upload
-                        :before-upload="beforeUpload"
-                        :data="type"
-                        class="upload-demo"
-                        ref="download"
-                        drag
-                        :limit="1"
-                        :on-exceed="exceed"
-                        action="/api/upload/uploadImage"
-                        :on-success="unSuccess"
-                        multiple
-                    >
-                        <i class="el-icon-upload"></i>
-                        <div class="el-upload__text">
-                            将文件拖到此处，或
-                            <em>点击上传</em>
-                        </div>
-                        <div
-                            class="el-upload__tip"
-                            slot="tip"
-                        >只能上传jpg/png文件，且不超过200kb 建议尺寸375*600或按比例上传</div>
-                    </el-upload>
-                </el-form-item>
+                <div style="width: 520px;">
+                    <el-form-item label="大转盘背景图" :label-width="formLabelWidth">
+                        <el-popover placement="right" title trigger="hover">
+                            <img style="width: 400px" :src="this.oImageUrl" />
+                            <img
+                                    slot="reference"
+                                    :src="this.oImageUrl"
+                                    :alt="this.oImageUrl"
+                                    style="max-height: 50px;max-width: 130px"
+                            />
+                        </el-popover>
+                        <el-upload
+                                :before-upload="beforeUpload"
+                                :data="type"
+                                class="upload-demo"
+                                ref="download"
+                                drag
+                                :limit="1"
+                                :on-exceed="exceed"
+                                action="/api/upload/uploadImage"
+                                :on-success="unSuccess"
+                                multiple
+                        >
+                            <i class="el-icon-upload"></i>
+                            <div class="el-upload__text">
+                                将文件拖到此处，或
+                                <em>点击上传</em>
+                            </div>
+                            <div
+                                    class="el-upload__tip"
+                                    slot="tip"
+                            >只能上传jpg/png文件，且不超过200kb 建议尺寸375*600或按比例上传</div>
+                        </el-upload>
+                    </el-form-item>
+                </div>
                 <el-form-item :required="true" label="活动开始时间" :label-width="formLabelWidth">
                     <el-date-picker
                         style="width:250px"
