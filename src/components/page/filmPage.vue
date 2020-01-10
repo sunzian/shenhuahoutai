@@ -757,7 +757,7 @@ export default {
             }
             if (this.oForm.topScore != '') {
                 if (this.oForm.topScore > 10 || this.oForm.topScore < 0) {
-                    this.message = '管理员评分只能0-10的整数！';
+                    this.message = '管理员评分只能0-10的数字！';
                     this.open();
                     loading.close();
                     return;
@@ -989,7 +989,7 @@ export default {
             }
             if (this.oTopScore != '') {
                 if (this.oTopScore > 10 || this.oTopScore < 0) {
-                    this.message = '管理员评分只能0-10的整数！';
+                    this.message = '管理员评分只能0-10的数字！';
                     this.open();
                     loading.close();
                     return;
