@@ -136,6 +136,11 @@ export default new Router({
                     meta: { title: '影院管理' }
                 },
                 {
+                    path: '/wantOrLooketFilmPage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/wantOrLooketFilmPage.vue'),
+                    meta: { title: '影片评论管理' }
+                },
+                {
                     path: '/cinema',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/cinema.vue'),
                     meta: { title: '影院设置' }

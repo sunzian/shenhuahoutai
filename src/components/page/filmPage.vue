@@ -264,6 +264,9 @@
                 <el-form-item label="影片时长" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oDuration" autocomplete="off"></el-input>
                 </el-form-item>
+                <el-form-item label="影片评分" :label-width="formLabelWidth">
+                    <el-input style="width: 250px" disabled v-model="oRealAveScore" autocomplete="off"></el-input>
+                </el-form-item>
                 <el-form-item label="上映时间" :label-width="formLabelWidth">
                     <el-date-picker
                             v-model="oPublishDate"
@@ -571,6 +574,7 @@ export default {
             oLanguage: '',
             oProducer: '',
             oPublishDate: '',
+            oRealAveScore: '',
             oPublisher: '',
             oScore: '',
             oStagePhoto: [],
@@ -891,6 +895,7 @@ export default {
                         this.oIntroduction = JSON.parse(Decrypt(data.data.data)).introduction;
                         this.oLanguage = JSON.parse(Decrypt(data.data.data)).language;
                         this.oProducer = JSON.parse(Decrypt(data.data.data)).producer;
+                        this.oRealAveScore = JSON.parse(Decrypt(data.data.data)).realAveScore;
                         this.oPublishDate = JSON.parse(Decrypt(data.data.data)).publishDate;
                         this.oPublisher = JSON.parse(Decrypt(data.data.data)).publisher;
                         this.oScore = JSON.parse(Decrypt(data.data.data)).score;
