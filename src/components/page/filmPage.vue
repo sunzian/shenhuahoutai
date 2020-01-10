@@ -105,6 +105,9 @@
                 <el-form-item :required="true" label="影片时长" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oForm.duration" autocomplete="off"></el-input>
                 </el-form-item>
+                <el-form-item label="管理员影片评分" :label-width="formLabelWidth">
+                    <el-input style="width: 250px" type="number" v-model="oForm.topScore" autocomplete="off"></el-input>
+                </el-form-item>
                 <el-form-item :required="true" label="上映时间" :label-width="formLabelWidth">
                     <el-date-picker
                             v-model="oForm.publishDate"
@@ -264,7 +267,10 @@
                 <el-form-item label="影片时长" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oDuration" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="影片评分" :label-width="formLabelWidth">
+                <el-form-item label="管理员影片评分" :label-width="formLabelWidth">
+                    <el-input style="width: 250px" type="number" v-model="oTopScore" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="观众影片评分" :label-width="formLabelWidth">
                     <el-input style="width: 250px" disabled v-model="oRealAveScore" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="上映时间" :label-width="formLabelWidth">
@@ -570,6 +576,7 @@ export default {
             oFilmCode: '',
             oId: '',
             oImage: '',
+            oTopScore: '',
             oIntroduction: '',
             oLanguage: '',
             oProducer: '',
@@ -651,6 +658,7 @@ export default {
                 introduction: '',
                 language: '',
                 producer: '',
+                topScore: '',
                 publishDate: '',
                 publisher: '',
                 score: '',
@@ -697,6 +705,7 @@ export default {
                         this.actorList = [];
                         this.oForm.introduction = '';
                         this.oForm.score = '';
+                        this.oForm.topScore = '';
                         this.oForm.area = '';
                         this.oForm.type = '';
                         this.oForm.language = '';
@@ -746,6 +755,14 @@ export default {
             if (this.stageImg.substring(1).length > 0) {
                 this.stageImg = this.stageImg.substring(1);
             }
+            if (this.oForm.topScore != '') {
+                if (this.oForm.topScore > 10 || this.oForm.topScore < 0) {
+                    this.message = '管理员评分只能0-10的整数！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
             // console.log(this.oForm.stagePhoto);
             // console.log(this.stageImg);
             // console.log(this.actor);
@@ -760,6 +777,7 @@ export default {
             jsonArr.push({ key: 'actorId', value: this.actor });
             jsonArr.push({ key: 'introduction', value: this.oForm.introduction });
             jsonArr.push({ key: 'score', value: this.oForm.score });
+            jsonArr.push({ key: 'topScore', value: this.oForm.topScore });
             jsonArr.push({ key: 'area', value: this.oForm.area });
             jsonArr.push({ key: 'type', value: this.oForm.type });
             jsonArr.push({ key: 'language', value: this.oForm.language });
@@ -780,9 +798,9 @@ export default {
                         if (data.data.code == 'success') {
                             this.dialogFormVisible = false;
                             this.$message.success(`新增成功`);
-                           this.directorList=[];
-                           this.actorList=[];
-                           this.oForm.stagePhoto=[];
+                            this.directorList=[];
+                            this.actorList=[];
+                            this.oForm.stagePhoto=[];
                             this.director='';
                             this.actor='';
                             this.stageImg='';
@@ -878,9 +896,8 @@ export default {
             https
                 .fetchPost('/film/getFilmById', params)
                 .then(data => {
-                    console.log(data);
                     loading.close();
-                    // console.log(JSON.parse(Decrypt(data.data.data)));
+                    console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.editVisible = true;
                         this.oArea = JSON.parse(Decrypt(data.data.data)).area;
@@ -892,6 +909,7 @@ export default {
                         this.oFilmName = JSON.parse(Decrypt(data.data.data)).filmName;
                         this.oId = JSON.parse(Decrypt(data.data.data)).id;
                         this.oImage = JSON.parse(Decrypt(data.data.data)).image;
+                        this.oTopScore = JSON.parse(Decrypt(data.data.data)).topScore;
                         this.oIntroduction = JSON.parse(Decrypt(data.data.data)).introduction;
                         this.oLanguage = JSON.parse(Decrypt(data.data.data)).language;
                         this.oProducer = JSON.parse(Decrypt(data.data.data)).producer;
@@ -928,9 +946,6 @@ export default {
         },
         // 编辑操作
         exChanger() {
-            console.log(this.directorList);
-            console.log(this.actorList);
-            console.log(this.oStagePhoto);
             const loading = this.$loading({
                 lock: true,
                 text: 'Loading',
@@ -972,6 +987,14 @@ export default {
                     }
                 }
             }
+            if (this.oTopScore != '') {
+                if (this.oTopScore > 10 || this.oTopScore < 0) {
+                    this.message = '管理员评分只能0-10的整数！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
             jsonArr.push({ key: 'filmCode', value: this.oFilmCode });
             jsonArr.push({ key: 'filmName', value: this.oFilmName });
             jsonArr.push({ key: 'dimensional', value: this.oDimensional });
@@ -983,6 +1006,7 @@ export default {
             jsonArr.push({ key: 'score', value: this.oScore });
             jsonArr.push({ key: 'area', value: this.oArea });
             jsonArr.push({ key: 'type', value: this.oType });
+            jsonArr.push({ key: 'topScore', value: this.oTopScore });
             jsonArr.push({ key: 'language', value: this.oLanguage });
             if (this.oStatus == '通过') {
                 this.oStatus = 1;
