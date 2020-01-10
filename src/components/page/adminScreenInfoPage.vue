@@ -63,25 +63,25 @@
                 <!-- <el-table-column prop="name" label="影院编码" width="130">
                     <template slot-scope="scope">{{scope.row.cinemaCode}}</template>
                 </el-table-column> -->
-                <el-table-column prop="name" label="影院名称" width="260">
+                <el-table-column prop="name" label="影院名称" width="220">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
                 <el-table-column label="影厅编号" width="150">
                     <template slot-scope="scope">{{scope.row.screenCode}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="影厅名称">
+                <el-table-column prop="memo" label="影厅名称" width="260">
                     <template slot-scope="scope">{{scope.row.screenName}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="座位数" width="90">
+                <el-table-column prop="sort" label="座位数" width="80">
                     <template slot-scope="scope">{{scope.row.seatCount}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="影厅类型" width="110">
+                <el-table-column prop="sort" label="影厅类型" width="80">
                     <template slot-scope="scope">{{scope.row.screenType}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="第三方影厅名称" width="110">
+                <el-table-column prop="sort" label="第三方影厅名称">
                     <template slot-scope="scope">{{scope.row.thirdPartyScreenName}}</template>
                 </el-table-column>
-                <!-- <el-table-column label="操作" width="180" align="center">
+                <el-table-column label="操作" width="80" align="center">
                     <template slot-scope="scope">
                         <el-button
                             type="text"
@@ -89,7 +89,7 @@
                             @click="addChange(scope.$index, scope.row)"
                         >编辑</el-button>
                     </template>
-                </el-table-column> -->
+                </el-table-column>
             </el-table>
             <div class="pagination">
                 <el-pagination
@@ -134,12 +134,13 @@
             <el-form ref="screenForm" :model="screenForm">
                 <el-form-item label="第三方影厅名称" :label-width="formLabelWidth">
                     <el-input
-                        style="width: 250px"
+                        style="width: 500px"
                         maxlength="50"
                         show-word-limit
                         v-model="screenForm.thirdPartyScreenName"
                         autocomplete="off"
                     ></el-input>
+                    <div>请按此规则进行拼接：猫眼影厅名称@淘票票影厅名称@百度糯米影厅名称</div>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -330,7 +331,7 @@ export default {
             jsonArr.push({ key: 'sign', value: sign });
             let params = ParamsAppend(jsonArr);
             https
-                .fetchPost('/screenInfo/updatePage', params)
+                .fetchPost('/admin/screenInfo/updatePage', params)
                 .then(data => {
                     loading.close();
                     if (data.data.code == 'success') {
@@ -372,7 +373,7 @@ export default {
             jsonArr.push({ key: 'sign', value: sign });
             let params = ParamsAppend(jsonArr);
             https
-                .fetchPost('/screenInfo/updateScreenName', params)
+                .fetchPost('/admin/screenInfo/updateScreenName', params)
                 .then(data => {
                     loading.close();
                     if (data.data.code == 'success') {
