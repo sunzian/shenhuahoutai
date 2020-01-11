@@ -53,6 +53,7 @@
                 >
                     <el-option key="0" label="自取" value="0"></el-option>
                     <el-option key="1" label="送至影厅" value="1"></el-option>
+                    <el-option key="2" label="送至座位" value="2"></el-option>
                 </el-select>
                 <el-select
                     clearable
