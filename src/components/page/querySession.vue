@@ -48,11 +48,11 @@
                               v-model="oForm.status" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="接口入参" :label-width="formLabelWidth">
-                    <el-input type="textarea" :rows="8" onkeyup="this.value=this.value.replace(/\D/g,'')"
+                    <el-input :disabled="true" type="textarea" :rows="8" onkeyup="this.value=this.value.replace(/\D/g,'')"
                               style="width: 600px" v-model="oForm.interfaceInput" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="接口出参" :label-width="formLabelWidth">
-                    <el-input type="textarea" :rows="8" onkeyup="this.value=this.value.replace(/\D/g,'')"
+                    <el-input :disabled="true" type="textarea" :rows="8" onkeyup="this.value=this.value.replace(/\D/g,'')"
                               style="width: 600px" v-model="oForm.interfaceOutput" autocomplete="off"></el-input>
                 </el-form-item>
             </el-form>

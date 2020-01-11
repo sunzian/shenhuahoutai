@@ -54,7 +54,7 @@
                 </el-table-column>
                 <el-table-column label="操作" width="100" align="center" fixed="right">
                     <template slot-scope="scope">
-                        <el-button type="text" icon="el-icon-edit" @click="show(scope.row)">编辑规则</el-button>
+                        <el-button type="text" icon="el-icon-edit" @click="show(scope.row)">查看规则</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -211,7 +211,7 @@
                         style="width: 250px;"
                         type="textarea"
                         show-word-limit
-                        :rows="4"
+                        :rows="6"
                         maxlength="300"
                         v-model="oForm.gameRule"
                         autocomplete="off"
@@ -375,6 +375,7 @@
                 <el-form-item label="抽奖规则说明" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
+                        :rows="6"
                         type="textarea"
                         show-word-limit
                         maxlength="300"
@@ -557,7 +558,7 @@
             </span>
         </el-dialog>
         <!-- 修改奖项弹出框 -->
-        <el-dialog :close-on-click-modal="false" title="编辑" :visible.sync="showModify">
+        <el-dialog :close-on-click-modal="false" title="查看" :visible.sync="showModify">
             <el-form ref="form" :model="pForm">
                 <el-form-item label="奖品等级" :label-width="formLabelWidth">
                     <el-input

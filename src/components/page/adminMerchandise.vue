@@ -146,7 +146,7 @@
                             type="text"
                             icon="el-icon-edit"
                             @click="addChange(scope.$index, scope.row)"
-                        >编辑</el-button>
+                        >详情</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -166,7 +166,7 @@
             </div>
         </div>
         <!-- 编辑弹出框 -->
-        <el-dialog :close-on-click-modal="false" title="编辑" :visible.sync="editVisible">
+        <el-dialog :close-on-click-modal="false" title="详情" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
                 <el-form-item label="商品名称" :label-width="formLabelWidth">
                     <el-input

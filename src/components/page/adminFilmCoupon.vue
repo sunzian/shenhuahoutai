@@ -117,7 +117,7 @@
                             type="text"
                             icon="el-icon-circle-plus-outline"
                             @click="addChange(scope.$index, scope.row)"
-                        >修改</el-button>
+                        >详情</el-button>
                         <!-- <el-button
                             type="text"
                             icon="el-icon-delete"
@@ -317,7 +317,7 @@
             </div>
         </el-dialog>
         <!-- 编辑弹出框 -->
-        <el-dialog title="修改" :close-on-click-modal="false" :visible.sync="editVisible">
+        <el-dialog title="详情" :close-on-click-modal="false" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
                 <el-form-item :required="true" label="优惠券名称：" :label-width="formLabelWidth">
                     <el-input style="width: 180px"  maxlength="15" v-model="oName" autocomplete="off"></el-input>

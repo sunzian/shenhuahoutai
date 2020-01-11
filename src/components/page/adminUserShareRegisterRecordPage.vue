@@ -9,18 +9,6 @@
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-input
-                    placeholder="推荐人手机号"
-                    v-model="query.recommendedUserMobile"
-                    autocomplete="off"
-                    class="mr10"
-                ></el-input>
-                <el-input
-                    placeholder="会员注册手机号"
-                    v-model="query.memberUserMobile"
-                    autocomplete="off"
-                    class="mr10"
-                ></el-input>
                 <el-select
                     v-model="query.businessCode"
                     placeholder="请选择商家"
@@ -51,6 +39,18 @@
                         :value="item.cinemaName"
                     ></el-option>
                 </el-select>
+                <el-input
+                        placeholder="推荐人手机号"
+                        v-model="query.recommendedUserMobile"
+                        autocomplete="off"
+                        class="mr10"
+                ></el-input>
+                <el-input
+                        placeholder="会员注册手机号"
+                        v-model="query.memberUserMobile"
+                        autocomplete="off"
+                        class="mr10"
+                ></el-input>
                 <el-date-picker
                     v-model="query.startDate"
                     type="datetime"

@@ -106,6 +106,11 @@ export default new Router({
                     meta: { title: '金币明细列表' }
                 },
                 {
+                    path: '/adminGoldChangeLogPage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/adminGoldChangeLogPage.vue'),
+                    meta: { title: '金币明细列表' }
+                },
+                {
                     path: '/adminNoticeOfActivityPage',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/adminNoticeOfActivityPage.vue'),
                     meta: { title: '轮播图文章管理' }

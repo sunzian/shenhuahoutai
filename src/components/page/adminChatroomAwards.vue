@@ -10,43 +10,45 @@
         <div class="container" v-if="showSell">
             <div class="handle-box">
                 <el-select
-                    v-model="query.businessCode"
-                    placeholder="请选择商家"
-                    class="mr10"
-                    clearable
-                    @change="changeBusiness"
+                        v-model="query.businessCode"
+                        placeholder="请选择商家"
+                        class="mr10"
+                        clearable
+                        @change="changeBusiness"
                 >
                     <el-option
-                        v-for="item in businessInfo"
-                        :key="item.businessCode"
-                        :label="item.businessName"
-                        :value="item.businessCode"
+                            v-for="item in businessInfo"
+                            :key="item.businessCode"
+                            :label="item.businessName"
+                            :value="item.businessCode"
                     ></el-option>
                 </el-select>
                 <el-select
-                    clearable
-                    v-model="query.cinemaCode"
-                    placeholder="请选择影院"
-                    class="handle-input mr10"
-                    @change="changeSearchCinema"
+                        clearable
+                        v-model="query.cinemaCode"
+                        placeholder="请选择影院"
+                        class="handle-input mr10"
+                        @change="changeSearchCinema"
                 >
                     <el-option
-                        v-for="item in cinemaData"
-                        :key="item.cinemaCode"
-                        :label="item.cinemaName"
-                        :value="item.cinemaCode"
+                            v-for="item in cinemaData"
+                            :key="item.cinemaCode"
+                            :label="item.cinemaName"
+                            :value="item.cinemaCode"
                     ></el-option>
                 </el-select>
-                <el-button style="margin-top: 10px;width: 90px;"  type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
+                <el-button style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="Search">
+                    搜索
+                </el-button>
             </div>
             <el-table
-                :data="tableData"
-                border
-                height="500"
-                class="table"
-                ref="multipleTable"
-                highlight-current-row
-                header-cell-class-name="table-header"
+                    :data="tableData"
+                    border
+                    height="500"
+                    class="table"
+                    ref="multipleTable"
+                    highlight-current-row
+                    header-cell-class-name="table-header"
             >
                 <el-table-column prop="name" label="影院编码" width="110">
                     <template slot-scope="scope">{{scope.row.cinemaCode}}</template>
@@ -69,10 +71,11 @@
                 <el-table-column label="操作" width="180" align="center">
                     <template slot-scope="scope">
                         <el-button
-                            type="text"
-                            icon="el-icon-circle-plus-outline"
-                            @click="show(scope.row)"
-                        >查看礼物详情</el-button>
+                                type="text"
+                                icon="el-icon-circle-plus-outline"
+                                @click="show(scope.row)"
+                        >查看礼物详情
+                        </el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -108,13 +111,16 @@
                     <el-option key="1" label="优惠券" value="1"></el-option>
                     <el-option key="2" label="实物" value="2"></el-option>
                 </el-select>
-                <el-button style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="show1()">搜索</el-button>
+                <el-button style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="show1()">
+                    搜索
+                </el-button>
                 <el-button
-                    type="primary"
-                    @click="back"
-                    icon="el-icon-circle-plus-outline"
-                    style="float: right;margin-top: 10px"
-                >返回影院列表</el-button>
+                        type="primary"
+                        @click="back"
+                        icon="el-icon-circle-plus-outline"
+                        style="float: right;margin-top: 10px"
+                >返回影院列表
+                </el-button>
                 <!-- <el-button
                     type="primary"
                     @click="addPage"
@@ -123,13 +129,13 @@
                 >新增奖品</el-button> -->
             </div>
             <el-table
-                :data="tableData"
-                border
-                height="500"
-                class="table"
-                ref="multipleTable"
-                highlight-current-row
-                header-cell-class-name="table-header"
+                    :data="tableData"
+                    border
+                    height="500"
+                    class="table"
+                    ref="multipleTable"
+                    highlight-current-row
+                    header-cell-class-name="table-header"
             >
                 <el-table-column prop="name" label="影院" width="280">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
@@ -137,12 +143,12 @@
                 <el-table-column label="礼物图片" width="140">
                     <template slot-scope="scope">
                         <el-popover placement="right" title trigger="hover">
-                            <img style="width:400px" :src="scope.row.imageUrl" />
+                            <img style="width:400px" :src="scope.row.imageUrl"/>
                             <img
-                                slot="reference"
-                                :src="scope.row.imageUrl"
-                                :alt="scope.row.imageUrl"
-                                style="max-height: 50px;max-width: 130px"
+                                    slot="reference"
+                                    :src="scope.row.imageUrl"
+                                    :alt="scope.row.imageUrl"
+                                    style="max-height: 50px;max-width: 130px"
                             />
                         </el-popover>
                     </template>
@@ -180,14 +186,14 @@
             </el-table>
             <div class="pagination">
                 <el-pagination
-                    background
-                    layout="total, prev, pager, next"
-                    :current-page="query.pageNo"
-                    :page-size="query.pageSize"
-                    :total="query.totalCount"
-                    @current-change="currentChange"
-                    @prev-click="prev"
-                    @next-click="next"
+                        background
+                        layout="total, prev, pager, next"
+                        :current-page="query.pageNo"
+                        :page-size="query.pageSize"
+                        :total="query.totalCount"
+                        @current-change="currentChange"
+                        @prev-click="prev"
+                        @next-click="next"
                 ></el-pagination>
             </div>
         </div>
@@ -197,10 +203,10 @@
                 <el-form-item :required="true" label="礼品类型：" :label-width="formLabelWidth">
                     <el-select v-model="oForm.type" placeholder="请选择">
                         <el-option
-                            v-for="item in options"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value"
+                                v-for="item in options"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
                         ></el-option>
                     </el-select>
                 </el-form-item>
@@ -212,34 +218,35 @@
                 </el-form-item>
                 <el-form-item :required="true" label="所选优惠券：" :label-width="formLabelWidth" v-if="oForm.type == 1">
                     <el-input
-                        style="width: 150px"
-                        v-model="couponInfo.couponName"
-                        autocomplete="off"
-                        disabled
+                            style="width: 150px"
+                            v-model="couponInfo.couponName"
+                            autocomplete="off"
+                            disabled
                     ></el-input>&nbsp;&nbsp;&nbsp;&nbsp;
                     <span
-                        v-if="couponInfo.couponName"
-                        style="color:red;cursor: pointer;"
-                        @click="deletCoupon"
+                            v-if="couponInfo.couponName"
+                            style="color:red;cursor: pointer;"
+                            @click="deletCoupon"
                     >删除</span>
                 </el-form-item>
                 <el-form-item :required="true" label="礼品图片" :label-width="formLabelWidth">
                     <el-upload
-                        class="upload-demo"
-                        action="/api/upload/uploadImage"
-                        :before-upload="beforeUpload"
-                        :data="type"
-                        :limit="1"
-                        ref="download"
-                        :on-success="onSuccess"
-                        :file-list="fileList"
-                        list-type="picture"
+                            class="upload-demo"
+                            action="/api/upload/uploadImage"
+                            :before-upload="beforeUpload"
+                            :data="type"
+                            :limit="1"
+                            ref="download"
+                            :on-success="onSuccess"
+                            :file-list="fileList"
+                            list-type="picture"
                     >
                         <el-button size="small" type="primary">点击上传</el-button>
                         <div
-                            slot="tip"
-                            class="el-upload__tip"
-                        >只能上传jpg/png文件，且不超过200kb 建议尺寸150*150或按比例上传</div>
+                                slot="tip"
+                                class="el-upload__tip"
+                        >只能上传jpg/png文件，且不超过200kb 建议尺寸150*150或按比例上传
+                        </div>
                     </el-upload>
                 </el-form-item>
                 <el-form-item :required="true" label="每组发放数量：" :label-width="formLabelWidth">
@@ -251,21 +258,22 @@
                 <el-form-item :required="true" label="领取后多少天过期：" :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oForm.overDays" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="是否限制用户每月领取数量：" :label-width="formLabelWidth" >
+                <el-form-item :required="true" label="是否限制用户每月领取数量：" :label-width="formLabelWidth">
                     <el-select v-model="oForm.limitStatus" placeholder="请选择">
                         <el-option
-                            v-for="item in canUse"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value"
+                                v-for="item in canUse"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item :required="true" label="用户单月领取张数限制：" :label-width="formLabelWidth" v-if="oForm.limitStatus == 2">
+                <el-form-item :required="true" label="用户单月领取张数限制：" :label-width="formLabelWidth"
+                              v-if="oForm.limitStatus == 2">
                     <el-input
-                        style="width: 150px"
-                        v-model="oForm.singleLimitNumber"
-                        autocomplete="off"
+                            style="width: 150px"
+                            v-model="oForm.singleLimitNumber"
+                            autocomplete="off"
                     ></el-input>
                 </el-form-item>
             </el-form>
@@ -279,10 +287,10 @@
             <el-form ref="form" :model="form">
                 <el-form-item label="影院名称：" :label-width="formLabelWidth">
                     <el-input
-                        style="width: 150px"
-                        v-model="oCinemaName"
-                        autocomplete="off"
-                        disabled
+                            style="width: 150px"
+                            v-model="oCinemaName"
+                            autocomplete="off"
+                            disabled
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="奖品名称：" :label-width="formLabelWidth">
@@ -294,12 +302,12 @@
                 </el-form-item>
                 <el-form-item label="礼物图片：" :label-width="formLabelWidth">
                     <el-popover placement="right" title trigger="hover">
-                        <img style="width:400px" :src="oImageUrl" />
+                        <img style="width:400px" :src="oImageUrl"/>
                         <img
-                            slot="reference"
-                            :src="oImageUrl"
-                            :alt="oImageUrl"
-                            style="max-height: 50px;max-width: 130px"
+                                slot="reference"
+                                :src="oImageUrl"
+                                :alt="oImageUrl"
+                                style="max-height: 50px;max-width: 130px"
                         />
                     </el-popover>
                 </el-form-item>
@@ -318,7 +326,8 @@
                         <el-radio :label="2">限制</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item :required="true" label="用户单月领取张数限制：" :label-width="formLabelWidth" v-if="oLimitStatus == 2">
+                <el-form-item :required="true" label="用户单月领取张数限制：" :label-width="formLabelWidth"
+                              v-if="oLimitStatus == 2">
                     <el-input style="width: 75px" v-model="oSingleLimitNumber" autocomplete="off"></el-input>
                 </el-form-item>
             </el-form>
@@ -335,13 +344,13 @@
                     <el-button type="primary" icon="el-icon-search" @click="getAllCoupon">搜索</el-button>
                 </div>
                 <el-table
-                    :data="sellTableData"
-                    border
-                    class="table"
-                    ref="multipleTable"
-                    highlight-current-row
-                    header-cell-class-name="table-header"
-                    @selection-change="handleSelectionChange"
+                        :data="sellTableData"
+                        border
+                        class="table"
+                        ref="multipleTable"
+                        highlight-current-row
+                        header-cell-class-name="table-header"
+                        @selection-change="handleSelectionChange"
                 >
                     <el-table-column label="操作" width="100" align="center">
                         <template slot-scope="scope">
@@ -349,17 +358,17 @@
                         </template>
                     </el-table-column>
                     <!--<el-table-column prop="name" label="图片">-->
-                        <!--<template slot-scope="scope">-->
-                            <!--<el-popover placement="right" title trigger="hover">-->
-                                <!--<img style="width:400px" :src="scope.row.imgUrl" />-->
-                                <!--<img-->
-                                    <!--slot="reference"-->
-                                    <!--:src="scope.row.imgUrl"-->
-                                    <!--:alt="scope.row.imgUrl"-->
-                                    <!--style="max-height: 50px;max-width: 130px"-->
-                                <!--/>-->
-                            <!--</el-popover>-->
-                        <!--</template>-->
+                    <!--<template slot-scope="scope">-->
+                    <!--<el-popover placement="right" title trigger="hover">-->
+                    <!--<img style="width:400px" :src="scope.row.imgUrl" />-->
+                    <!--<img-->
+                    <!--slot="reference"-->
+                    <!--:src="scope.row.imgUrl"-->
+                    <!--:alt="scope.row.imgUrl"-->
+                    <!--style="max-height: 50px;max-width: 130px"-->
+                    <!--/>-->
+                    <!--</el-popover>-->
+                    <!--</template>-->
                     <!--</el-table-column>-->
                     <el-table-column prop="sort" label="优惠券类型" width="150">
                         <template slot-scope="scope">
@@ -374,8 +383,9 @@
                         <template slot-scope="scope">
                             <el-tag v-if="scope.row.reduceType=='1'">{{scope.row.discountMoney}}元兑换卷</el-tag>
                             <el-tag
-                                v-else-if="scope.row.reduceType=='2'"
-                            >满{{scope.row.achieveMoney}}元减{{scope.row.discountMoney}}元</el-tag>
+                                    v-else-if="scope.row.reduceType=='2'"
+                            >满{{scope.row.achieveMoney}}元减{{scope.row.discountMoney}}元
+                            </el-tag>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -403,186 +413,439 @@
 </template>
 
 <script>
-import { fetchData } from '../../api/index';
-import { Decrypt, Encrypt, preSign, EncryptReplace, ParamsAppend } from '@/aes/utils';
-import md5 from 'js-md5';
-import axios from 'axios';
-import https from '../../https';
-export default {
-    name: 'basetable',
-    data() {
-        return {
-            oCinemaName: '',
-            oName: '',
-            oOverDays: '',
-            oImageUrl: '',
-            oType: '',
-            oSingleNumber: '',
-            oGroupNumber: '',
-            oId: '',
-            oLimitStatus: '',
-            oSingleLimitNumber: '',
-            drawer: false,
-            showSell: true, //卖品信息页面是否展示开关
-            type: {
-                type: ''
-            },
-            fileList: [],
-            message: '', //弹出框消息
-            query: {
-                pageNo: 1,
-                pageSize: 15,
-                aPageNo: 1,
-                aPageSize: 15
-            },
-            restaurants: [],
-            tableData: [],
-            multipleSelection: [],
-            delList: [],
-            editVisible: false,
-            pageTotal: 0,
-            form: {},
-            id: '',
-            dialogFormVisible: false,
-            options: [
-                {
-                    value: '1',
-                    label: '优惠券'
+    import {fetchData} from '../../api/index';
+    import {Decrypt, Encrypt, preSign, EncryptReplace, ParamsAppend} from '@/aes/utils';
+    import md5 from 'js-md5';
+    import axios from 'axios';
+    import https from '../../https';
+
+    export default {
+        name: 'basetable',
+        data() {
+            return {
+                oCinemaName: '',
+                oName: '',
+                oOverDays: '',
+                oImageUrl: '',
+                oType: '',
+                oSingleNumber: '',
+                oGroupNumber: '',
+                oId: '',
+                oLimitStatus: '',
+                oSingleLimitNumber: '',
+                drawer: false,
+                showSell: true, //卖品信息页面是否展示开关
+                type: {
+                    type: ''
                 },
-                {
-                    value: '2',
-                    label: '实物'
-                }
-            ],
-            canUse: [
-                {
-                    value: '1',
-                    label: '不限制'
+                fileList: [],
+                message: '', //弹出框消息
+                query: {
+                    pageNo: 1,
+                    pageSize: 15,
+                    aPageNo: 1,
+                    aPageSize: 15
                 },
-                {
-                    value: '2',
-                    label: '限制'
-                }
-            ],
-            oForm: {
-                name: '',
-                cinemaName: '',
-                cinemaCode: '',
-                image_url: '',
-                singleNumber: '',
-                overDays: '',
-                limitStatus: '',
-                groupNumber: '',
-                singleLimitNumber: '',
-                type: ''
-            },
-            sellTableData: [],
-            formLabelWidth: '120px',
-            selectValue: {},
-            selectScreenCode: {},
-            selectGroup: {},
-            cinemaInfo: [],
-            cinemaData: [],
-            couponInfo: {},
-            value: [],
-            couponName: '',
-            businessInfo: []
-        };
-    },
-    created() {
-        this.showSell = true;
-    },
-    mounted() {
-        this.getAllBusiness();
-    },
-    methods: {
-        addPage() {
-            this.dialogFormVisible = true;
-            this.oForm.name = '';
-            this.oForm.cinemaCode = '';
-            this.oForm.image_url = '';
-            this.oForm.singleNumber = '';
-            this.oForm.overDays = '';
-            this.cinemaInfo = [];
-            this.fileList = [];
-            this.oForm.type = '';
-            this.oForm.limitStatus = '';
-            this.oForm.groupNumber = '';
-            this.oForm.singleLimitNumber = '';
-            this.oForm.type = '';
-            this.getAllCinema();
+                restaurants: [],
+                tableData: [],
+                multipleSelection: [],
+                delList: [],
+                editVisible: false,
+                pageTotal: 0,
+                form: {},
+                id: '',
+                dialogFormVisible: false,
+                options: [
+                    {
+                        value: '1',
+                        label: '优惠券'
+                    },
+                    {
+                        value: '2',
+                        label: '实物'
+                    }
+                ],
+                canUse: [
+                    {
+                        value: '1',
+                        label: '不限制'
+                    },
+                    {
+                        value: '2',
+                        label: '限制'
+                    }
+                ],
+                oForm: {
+                    name: '',
+                    cinemaName: '',
+                    cinemaCode: '',
+                    image_url: '',
+                    singleNumber: '',
+                    overDays: '',
+                    limitStatus: '',
+                    groupNumber: '',
+                    singleLimitNumber: '',
+                    type: ''
+                },
+                sellTableData: [],
+                formLabelWidth: '120px',
+                selectValue: {},
+                selectScreenCode: {},
+                selectGroup: {},
+                cinemaInfo: [],
+                cinemaData: [],
+                couponInfo: {},
+                value: [],
+                couponName: '',
+                businessInfo: []
+            };
         },
-        addRole() {
-            //新增按钮操作
-            const loading = this.$loading({
-                lock: true,
-                text: 'Loading',
-                spinner: 'el-icon-loading',
-                background: 'rgba(0, 0, 0, 0.7)',
-                target: document.querySelector('.div1')
-            });
-            if(!this.oForm.type||!this.oForm.image_url||!this.oForm.singleNumber||!this.oForm.groupNumber||!this.oForm.overDays||!this.oForm.limitStatus){
-                this.message = '必填项不能为空，请检查！';
-                this.open();
-                loading.close();
-                return;
-            }
-            if(this.oForm.type==2) {
-                if (!this.oForm.name) {
+        created() {
+            this.showSell = true;
+        },
+        mounted() {
+            this.getAllBusiness();
+        },
+        methods: {
+            addPage() {
+                this.dialogFormVisible = true;
+                this.oForm.name = '';
+                this.oForm.cinemaCode = '';
+                this.oForm.image_url = '';
+                this.oForm.singleNumber = '';
+                this.oForm.overDays = '';
+                this.cinemaInfo = [];
+                this.fileList = [];
+                this.oForm.type = '';
+                this.oForm.limitStatus = '';
+                this.oForm.groupNumber = '';
+                this.oForm.singleLimitNumber = '';
+                this.oForm.type = '';
+                this.getAllCinema();
+            },
+            addRole() {
+                //新增按钮操作
+                const loading = this.$loading({
+                    lock: true,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)',
+                    target: document.querySelector('.div1')
+                });
+                if (!this.oForm.type || !this.oForm.image_url || !this.oForm.singleNumber || !this.oForm.groupNumber || !this.oForm.overDays || !this.oForm.limitStatus) {
                     this.message = '必填项不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
-            }
-            if(this.oForm.type==1) {
-                if (!this.couponInfo.couponName) {
-                    this.message = '必填项不能为空，请检查！';
-                    this.open();
-                    loading.close();
-                    return;
+                if (this.oForm.type == 2) {
+                    if (!this.oForm.name) {
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
                 }
-            }
-            if(this.oForm.limitStatus == 2) {
-                if (!this.oForm.singleLimitNumber) {
-                    this.message = '必填项不能为空，请检查！';
-                    this.open();
-                    loading.close();
-                    return;
+                if (this.oForm.type == 1) {
+                    if (!this.couponInfo.couponName) {
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
                 }
-            }
-            var jsonArr = [];
-            if (this.oForm.limitStatus == 2) {
-                jsonArr.push({ key: 'monthLimitNumber', value: this.oForm.singleLimitNumber });
-            }
-            jsonArr.push({ key: 'imageUrl', value: this.oForm.image_url });
-            if (this.oForm.type == 1) {
-                // jsonArr.push({ key: 'imageUrl', value: this.couponInfo.imgUrl });
-                jsonArr.push({ key: 'couponId', value: this.couponInfo.id });
-            }
-            jsonArr.push({ key: 'name', value: this.oForm.name });
-            jsonArr.push({ key: 'cinemaCode', value: this.cinemaCode });
-            jsonArr.push({ key: 'singleNumber', value: this.oForm.singleNumber });
-            jsonArr.push({ key: 'overDays', value: this.oForm.overDays });
-            jsonArr.push({ key: 'groupNumber', value: this.oForm.groupNumber });
-            jsonArr.push({ key: 'limitStatus', value: this.oForm.limitStatus });
-            jsonArr.push({ key: 'type', value: this.oForm.type });
-            let sign = md5(preSign(jsonArr));
-            jsonArr.push({ key: 'sign', value: sign });
-            console.log(jsonArr);
-            let params = ParamsAppend(jsonArr);
-            if (this.dialogFormVisible == true) {
+                if (this.oForm.limitStatus == 2) {
+                    if (!this.oForm.singleLimitNumber) {
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                var jsonArr = [];
+                if (this.oForm.limitStatus == 2) {
+                    jsonArr.push({key: 'monthLimitNumber', value: this.oForm.singleLimitNumber});
+                }
+                jsonArr.push({key: 'imageUrl', value: this.oForm.image_url});
+                if (this.oForm.type == 1) {
+                    // jsonArr.push({ key: 'imageUrl', value: this.couponInfo.imgUrl });
+                    jsonArr.push({key: 'couponId', value: this.couponInfo.id});
+                }
+                jsonArr.push({key: 'name', value: this.oForm.name});
+                jsonArr.push({key: 'cinemaCode', value: this.cinemaCode});
+                jsonArr.push({key: 'singleNumber', value: this.oForm.singleNumber});
+                jsonArr.push({key: 'overDays', value: this.oForm.overDays});
+                jsonArr.push({key: 'groupNumber', value: this.oForm.groupNumber});
+                jsonArr.push({key: 'limitStatus', value: this.oForm.limitStatus});
+                jsonArr.push({key: 'type', value: this.oForm.type});
+                let sign = md5(preSign(jsonArr));
+                jsonArr.push({key: 'sign', value: sign});
+                console.log(jsonArr);
+                let params = ParamsAppend(jsonArr);
+                if (this.dialogFormVisible == true) {
+                    https
+                        .fetchPost('chatroomAwards/addAwards', params)
+                        .then(data => {
+                            loading.close();
+                            //新增
+                            console.log(data);
+                            if (data.data.code == 'success') {
+                                this.dialogFormVisible = false;
+                                this.$refs.download.clearFiles();
+                                this.$message.success(`新增成功`);
+                                this.couponInfo = {};
+                                this.show(this.cinemaCode);
+                            } else if (data.data.code == 'nologin') {
+                                this.message = data.data.message;
+                                this.open();
+                                this.$router.push('/login');
+                            } else {
+                                this.message = data.data.message;
+                                this.open();
+                            }
+                        })
+                        .catch(err => {
+                            loading.close();
+                            console.log(err);
+                        });
+                }
+            },
+            delChange(index, row) {
+                //删除数据
+                this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                })
+                    .then(() => {
+                        this.idx = index;
+                        this.form = row;
+                        let jsonArr = [];
+                        jsonArr.push({key: 'id', value: row.id});
+                        let sign = md5(preSign(jsonArr));
+                        jsonArr.push({key: 'sign', value: sign});
+                        let params = ParamsAppend(jsonArr);
+                        https
+                            .fetchPost('chatroomAwards/deleteAwards', params)
+                            .then(data => {
+                                if (data.data.code == 'success') {
+                                    this.$message.error(`删除了`);
+                                    this.show(this.cinemaCode);
+                                } else if (data.data.code == 'nologin') {
+                                    this.message = data.data.message;
+                                    this.open();
+                                    this.$router.push('/login');
+                                } else {
+                                    this.message = data.data.message;
+                                    this.open();
+                                }
+                            })
+                            .catch(err => {
+                                console.log(err);
+                            });
+                    })
+                    .catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '已取消删除'
+                        });
+                    });
+            },
+            addChange(index, row) {
+                //是否修改权限
+                const loading = this.$loading({
+                    lock: true,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)',
+                    target: document.querySelector('.div1')
+                });
+                this.idx = index;
+                this.form = row;
+                var jsonArr = [];
+                jsonArr.push({key: 'id', value: row.id});
+                let sign = md5(preSign(jsonArr));
+                jsonArr.push({key: 'sign', value: sign});
+                let params = ParamsAppend(jsonArr);
                 https
-                    .fetchPost('chatroomAwards/addAwards', params)
+                    .fetchPost('chatroomAwards/updateAwardsPage', params)
                     .then(data => {
                         loading.close();
-                        //新增
                         console.log(data);
+                        console.log(JSON.parse(Decrypt(data.data.data)));
                         if (data.data.code == 'success') {
-                            this.dialogFormVisible = false;
-                            this.$refs.download.clearFiles();
-                            this.$message.success(`新增成功`);
-                            this.couponInfo={};
+                            this.oCinemaName = JSON.parse(Decrypt(data.data.data)).cinemaName;
+                            this.oName = JSON.parse(Decrypt(data.data.data)).name;
+                            this.oSingleNumber = JSON.parse(Decrypt(data.data.data)).singleNumber;
+                            this.oGroupNumber = JSON.parse(Decrypt(data.data.data)).groupNumber;
+                            this.oType = JSON.parse(Decrypt(data.data.data)).type;
+                            this.oImageUrl = JSON.parse(Decrypt(data.data.data)).imageUrl;
+                            this.oOverDays = JSON.parse(Decrypt(data.data.data)).overDays;
+                            this.oLimitStatus = JSON.parse(Decrypt(data.data.data)).limitStatus;
+                            this.oId = JSON.parse(Decrypt(data.data.data)).id;
+                            this.oSingleLimitNumber = JSON.parse(Decrypt(data.data.data)).monthLimitNumber;
+                            this.editVisible = true;
+                        } else if (data.data.code == 'nologin') {
+                            this.message = data.data.message;
+                            this.open();
+                            this.$router.push('/login');
+                        } else {
+                            this.message = data.data.message;
+                            this.open();
+                        }
+                    })
+                    .catch(err => {
+                        loading.close();
+                        console.log(err);
+                    });
+            },
+            show(row) {
+                // console.log(row);
+                this.showSell = false;
+                //是否拥有权限
+                const loading = this.$loading({
+                    lock: true,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)',
+                    target: document.querySelector('.div1')
+                });
+                if (row.cinemaCode) {
+                    this.cinemaCode = row.cinemaCode;
+                }
+                var jsonArr = [];
+                jsonArr.push({key: 'pageNo', value: this.query.pageNo});
+                jsonArr.push({key: 'pageSize', value: this.query.pageSize});
+                jsonArr.push({key: 'cinemaCode', value: this.cinemaCode});
+                let sign = md5(preSign(jsonArr));
+                jsonArr.push({key: 'sign', value: sign});
+                let params = ParamsAppend(jsonArr);
+                https
+                    .fetchPost('/admin/chatroomAwards/awardsPage', params)
+                    .then(data => {
+                        loading.close();
+                        if (data.data.code == 'success') {
+                            var oData = JSON.parse(Decrypt(data.data.data));
+                            console.log(oData);
+                            this.tableData = oData.data;
+                            this.query.pageSize = oData.pageSize;
+                            this.query.pageNo = oData.pageNo;
+                            this.query.totalCount = oData.totalCount;
+                            this.query.totalPage = oData.totalPage;
+                        } else if (data.data.code == 'nologin') {
+                            this.message = data.data.message;
+                            this.open();
+                            this.$router.push('/login');
+                        } else {
+                            this.message = data.data.message;
+                            this.open();
+                        }
+                    })
+                    .catch(err => {
+                        loading.close();
+                        console.log(err);
+                    });
+            },
+            show1() {
+                this.showSell = false;
+                //是否拥有权限
+                const loading = this.$loading({
+                    lock: true,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)',
+                    target: document.querySelector('.div1')
+                });
+                let name = this.query.name;
+                let type = this.query.type;
+                if (!name) {
+                    name = '';
+                }
+                if (!type) {
+                    type = '';
+                }
+                var jsonArr = [];
+                jsonArr.push({key: 'name', value: name});
+                jsonArr.push({key: 'type', value: type});
+                jsonArr.push({key: 'pageNo', value: this.query.pageNo});
+                jsonArr.push({key: 'pageSize', value: this.query.pageSize});
+                jsonArr.push({key: 'cinemaCode', value: this.cinemaCode});
+                let sign = md5(preSign(jsonArr));
+                jsonArr.push({key: 'sign', value: sign});
+                let params = ParamsAppend(jsonArr);
+                https
+                    .fetchPost('/admin/chatroomAwards/awardsPage', params)
+                    .then(data => {
+                        loading.close();
+                        if (data.data.code == 'success') {
+                            if (data.data && data.data.data) {
+                                var oData = JSON.parse(Decrypt(data.data.data));
+                                this.tableData = oData.data;
+                                this.query.pageSize = oData.pageSize;
+                                this.query.pageNo = oData.pageNo;
+                                this.query.totalCount = oData.totalCount;
+                                this.query.totalPage = oData.totalPage;
+                            } else {
+                                this.tableData = [];
+                            }
+                        } else if (data.data.code == 'nologin') {
+                            this.message = data.data.message;
+                            this.open();
+                            this.$router.push('/login');
+                        } else {
+                            this.message = data.data.message;
+                            this.open();
+                        }
+                    })
+                    .catch(err => {
+                        loading.close();
+                        console.log(err);
+                    });
+            },
+            // 编辑操作
+            exChanger() {
+                const loading = this.$loading({
+                    lock: true,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)',
+                    target: document.querySelector('.div1')
+                });
+                if (!this.oGroupNumber || !this.oSingleNumber || !this.oOverDays) {
+                    this.message = '必填项不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if (this.oLimitStatus == 2) {
+                    if (!this.oSingleLimitNumber) {
+                        this.message = '必填项不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                var jsonArr = [];
+                if (this.oLimitStatus == 2) {
+                    jsonArr.push({key: 'monthLimitNumber', value: this.oSingleLimitNumber});
+                }
+                jsonArr.push({key: 'singleNumber', value: this.oSingleNumber});
+                jsonArr.push({key: 'groupNumber', value: this.oGroupNumber});
+                jsonArr.push({key: 'overDays', value: this.oOverDays});
+                jsonArr.push({key: 'limitStatus', value: this.oLimitStatus});
+                jsonArr.push({key: 'id', value: this.oId});
+                let sign = md5(preSign(jsonArr));
+                jsonArr.push({key: 'sign', value: sign});
+                console.log(jsonArr);
+                let params = ParamsAppend(jsonArr);
+                https
+                    .fetchPost('chatroomAwards/updateAwards', params)
+                    .then(data => {
+                        loading.close();
+                        // console.log(JSON.parse(Decrypt(data.data.data)));
+                        if (data.data.code == 'success') {
+                            this.editVisible = false;
+                            this.$message.success(`编辑成功`);
                             this.show(this.cinemaCode);
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
@@ -597,29 +860,96 @@ export default {
                         loading.close();
                         console.log(err);
                     });
-            }
-        },
-        delChange(index, row) {
-            //删除数据
-            this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-            })
-                .then(() => {
-                    this.idx = index;
-                    this.form = row;
+            },
+            // 修改状态
+            changeStatus(index, row) {
+                const loading = this.$loading({
+                    lock: true,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)',
+                    target: document.querySelector('.div1')
+                });
+                this.idx = index;
+                this.form = row;
+                var jsonArr = [];
+                let status;
+                if (row.status == 1) {
+                    status = 0;
+                } else if (row.status == 0) {
+                    status = 1;
+                }
+                jsonArr.push({key: 'id', value: row.id});
+                jsonArr.push({key: 'status', value: status});
+                let sign = md5(preSign(jsonArr));
+                jsonArr.push({key: 'sign', value: sign});
+                console.log(jsonArr);
+                let params = ParamsAppend(jsonArr);
+                https
+                    .fetchPost('couponGroup/updateStatusById', params)
+                    .then(data => {
+                        loading.close();
+                        // console.log(JSON.parse(Decrypt(data.data.data)));
+                        if (data.data.code == 'success') {
+                            this.$message.success(`修改成功`);
+                            this.getMenu();
+                        } else if (data.data.code == 'nologin') {
+                            this.message = data.data.message;
+                            this.open();
+                            this.$router.push('/login');
+                        } else {
+                            this.message = data.data.message;
+                            this.open();
+                        }
+                    })
+                    .catch(err => {
+                        loading.close();
+                        console.log(err);
+                    });
+            },
+            Search() {
+                this.query.pageNo = 1;
+                this.getMenu();
+            },
+            getMenu() {
+                //获取菜单栏
+                const loading = this.$loading({
+                    lock: true,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)',
+                    target: document.querySelector('.div1')
+                });
+                setTimeout(() => {
+                    let cinemaCode = this.query.cinemaCode;
+                    let businessCode = this.query.businessCode;
+                    if (!cinemaCode) {
+                        cinemaCode = '';
+                    }
+                    if (!businessCode) {
+                        businessCode = '';
+                    }
                     let jsonArr = [];
-                    jsonArr.push({ key: 'id', value: row.id });
+                    jsonArr.push({key: 'cinemaCode', value: cinemaCode});
+                    jsonArr.push({key: 'businessCode', value: businessCode});
+                    jsonArr.push({key: 'pageNo', value: this.query.pageNo});
+                    jsonArr.push({key: 'pageSize', value: this.query.pageSize});
                     let sign = md5(preSign(jsonArr));
-                    jsonArr.push({ key: 'sign', value: sign });
-                    let params = ParamsAppend(jsonArr);
+                    jsonArr.push({key: 'sign', value: sign});
+                    console.log(jsonArr);
+                    var params = ParamsAppend(jsonArr);
                     https
-                        .fetchPost('chatroomAwards/deleteAwards', params)
+                        .fetchPost('/cinema/getCinemaInfoByBusinessCode', params)
                         .then(data => {
+                            loading.close();
                             if (data.data.code == 'success') {
-                                this.$message.error(`删除了`);
-                                this.show(this.cinemaCode);
+                                var oData = JSON.parse(Decrypt(data.data.data));
+                                console.log(oData);
+                                this.tableData = oData.data;
+                                this.query.pageSize = oData.pageSize;
+                                this.query.pageNo = oData.pageNo;
+                                this.query.totalCount = oData.totalCount;
+                                this.query.totalPage = oData.totalPage;
                             } else if (data.data.code == 'nologin') {
                                 this.message = data.data.message;
                                 this.open();
@@ -630,597 +960,280 @@ export default {
                             }
                         })
                         .catch(err => {
+                            loading.close();
                             console.log(err);
                         });
-                })
-                .catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: '已取消删除'
+                }, 1000)
+            },
+            back() {
+                this.showSell = true;
+                this.getMenu();
+            },
+            open() {
+                //信息提示弹出框
+                this.$alert(this.message, '信息提示', {
+                    dangerouslyUseHTMLString: true
+                });
+            },
+            selectStatus(val) {
+                this.selectValue = val;
+            },
+            selectDay(val) {
+                // console.log(val)
+                this.checkedDays = val.join(',');
+            },
+            getAllBusiness() {
+                const loading = this.$loading({
+                    lock: true,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)',
+                    target: document.querySelector('.div1')
+                });
+                https
+                    .fetchPost('/businessInfo/getBusinessList')
+                    .then(data => {
+                        loading.close();
+                        if (data.data.code == 'success') {
+                            var res = JSON.parse(Decrypt(data.data.data));
+                            this.businessInfo = res;
+                            this.query.businessCode = res[0].businessCode;
+                            this.getAllCinema();
+                            this.getMenu();
+                        } else if (data.data.code == 'nologin') {
+                            this.message = data.data.message;
+                            this.open();
+                            this.$router.push('/login');
+                        } else {
+                            this.message = data.data.message;
+                            this.open();
+                        }
+                    })
+                    .catch(err => {
+                        loading.close();
+                        console.log(err);
                     });
-                });
-        },
-        addChange(index, row) {
-            //是否修改权限
-            const loading = this.$loading({
-                lock: true,
-                text: 'Loading',
-                spinner: 'el-icon-loading',
-                background: 'rgba(0, 0, 0, 0.7)',
-                target: document.querySelector('.div1')
-            });
-            this.idx = index;
-            this.form = row;
-            var jsonArr = [];
-            jsonArr.push({ key: 'id', value: row.id });
-            let sign = md5(preSign(jsonArr));
-            jsonArr.push({ key: 'sign', value: sign });
-            let params = ParamsAppend(jsonArr);
-            https
-                .fetchPost('chatroomAwards/updateAwardsPage', params)
-                .then(data => {
-                    loading.close();
-                    console.log(data);
-                    console.log(JSON.parse(Decrypt(data.data.data)));
-                    if (data.data.code == 'success') {
-                        this.oCinemaName = JSON.parse(Decrypt(data.data.data)).cinemaName;
-                        this.oName = JSON.parse(Decrypt(data.data.data)).name;
-                        this.oSingleNumber = JSON.parse(Decrypt(data.data.data)).singleNumber;
-                        this.oGroupNumber = JSON.parse(Decrypt(data.data.data)).groupNumber;
-                        this.oType = JSON.parse(Decrypt(data.data.data)).type;
-                        this.oImageUrl = JSON.parse(Decrypt(data.data.data)).imageUrl;
-                        this.oOverDays = JSON.parse(Decrypt(data.data.data)).overDays;
-                        this.oLimitStatus = JSON.parse(Decrypt(data.data.data)).limitStatus;
-                        this.oId = JSON.parse(Decrypt(data.data.data)).id;
-                        this.oSingleLimitNumber = JSON.parse(Decrypt(data.data.data)).monthLimitNumber;
-                        this.editVisible = true;
-                    } else if (data.data.code == 'nologin') {
-                        this.message = data.data.message;
-                        this.open();
-                        this.$router.push('/login');
-                    } else {
-                        this.message = data.data.message;
-                        this.open();
-                    }
-                })
-                .catch(err => {
-                    loading.close();
-                    console.log(err);
-                });
-        },
-        show(row) {
-            // console.log(row);
-            this.showSell = false;
-            //是否拥有权限
-            const loading = this.$loading({
-                lock: true,
-                text: 'Loading',
-                spinner: 'el-icon-loading',
-                background: 'rgba(0, 0, 0, 0.7)',
-                target: document.querySelector('.div1')
-            });
-            if (row.cinemaCode) {
-                this.cinemaCode = row.cinemaCode;
-            }
-            var jsonArr = [];
-            jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
-            jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
-            jsonArr.push({ key: 'cinemaCode', value: this.cinemaCode });
-            let sign = md5(preSign(jsonArr));
-            jsonArr.push({ key: 'sign', value: sign });
-            let params = ParamsAppend(jsonArr);
-            https
-                .fetchPost('/admin/chatroomAwards/awardsPage', params)
-                .then(data => {
-                    loading.close();
-                    if (data.data.code == 'success') {
-                        var oData = JSON.parse(Decrypt(data.data.data));
-                        console.log(oData);
-                        this.tableData = oData.data;
-                        this.query.pageSize = oData.pageSize;
-                        this.query.pageNo = oData.pageNo;
-                        this.query.totalCount = oData.totalCount;
-                        this.query.totalPage = oData.totalPage;
-                    } else if (data.data.code == 'nologin') {
-                        this.message = data.data.message;
-                        this.open();
-                        this.$router.push('/login');
-                    } else {
-                        this.message = data.data.message;
-                        this.open();
-                    }
-                })
-                .catch(err => {
-                    loading.close();
-                    console.log(err);
-                });
-        },
-        show1() {
-            this.showSell = false;
-            //是否拥有权限
-            const loading = this.$loading({
-                lock: true,
-                text: 'Loading',
-                spinner: 'el-icon-loading',
-                background: 'rgba(0, 0, 0, 0.7)',
-                target: document.querySelector('.div1')
-            });
-            let name = this.query.name;
-            let type = this.query.type;
-            if (!name) {
-                name = '';
-            }
-            if (!type) {
-                type = '';
-            }
-            var jsonArr = [];
-            jsonArr.push({ key: 'name', value: name });
-            jsonArr.push({ key: 'type', value: type });
-            jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
-            jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
-            jsonArr.push({ key: 'cinemaCode', value: this.cinemaCode });
-            let sign = md5(preSign(jsonArr));
-            jsonArr.push({ key: 'sign', value: sign });
-            let params = ParamsAppend(jsonArr);
-            https
-                .fetchPost('/admin/chatroomAwards/awardsPage', params)
-                .then(data => {
-                    loading.close();
-                    if (data.data.code == 'success') {
-                        if (data.data && data.data.data) {
-                                var oData = JSON.parse(Decrypt(data.data.data));
-                                this.tableData = oData.data;
-                                this.query.pageSize = oData.pageSize;
-                                this.query.pageNo = oData.pageNo;
-                                this.query.totalCount = oData.totalCount;
-                                this.query.totalPage = oData.totalPage;
-                            } else {
-                                this.tableData = [];
-                            }
-                    } else if (data.data.code == 'nologin') {
-                        this.message = data.data.message;
-                        this.open();
-                        this.$router.push('/login');
-                    } else {
-                        this.message = data.data.message;
-                        this.open();
-                    }
-                })
-                .catch(err => {
-                    loading.close();
-                    console.log(err);
-                });
-        },
-        // 编辑操作
-        exChanger() {
-            const loading = this.$loading({
-                lock: true,
-                text: 'Loading',
-                spinner: 'el-icon-loading',
-                background: 'rgba(0, 0, 0, 0.7)',
-                target: document.querySelector('.div1')
-            });
-            if(!this.oGroupNumber||!this.oSingleNumber||!this.oOverDays){
-                this.message = '必填项不能为空，请检查！';
-                this.open();
-                loading.close();
-                return;
-            }
-            if(this.oLimitStatus==2) {
-                if (!this.oSingleLimitNumber) {
-                    this.message = '必填项不能为空，请检查！';
-                    this.open();
-                    loading.close();
+            },
+            changeBusiness(val) {
+                this.query.cinemaCode = '';
+                this.cinemaData = [];
+                this.query.businessCode = val;
+                this.getAllCinema();
+                this.$forceUpdate();
+            },
+            changeSearchCinema(val) {
+                this.$forceUpdate();
+                this.query.cinemaCode = val;
+            },
+            // 获取所有影院
+            getAllCinema() {
+                if (!this.query.businessCode) {
                     return;
                 }
-            }
-            var jsonArr = [];
-            if (this.oLimitStatus == 2) {
-                jsonArr.push({ key: 'monthLimitNumber', value: this.oSingleLimitNumber });
-            }
-            jsonArr.push({ key: 'singleNumber', value: this.oSingleNumber });
-            jsonArr.push({ key: 'groupNumber', value: this.oGroupNumber });
-            jsonArr.push({ key: 'overDays', value: this.oOverDays });
-            jsonArr.push({ key: 'limitStatus', value: this.oLimitStatus });
-            jsonArr.push({ key: 'id', value: this.oId });
-            let sign = md5(preSign(jsonArr));
-            jsonArr.push({ key: 'sign', value: sign });
-            console.log(jsonArr);
-            let params = ParamsAppend(jsonArr);
-            https
-                .fetchPost('chatroomAwards/updateAwards', params)
-                .then(data => {
-                    loading.close();
-                    // console.log(JSON.parse(Decrypt(data.data.data)));
-                    if (data.data.code == 'success') {
-                        this.editVisible = false;
-                        this.$message.success(`编辑成功`);
-                        this.show(this.cinemaCode);
-                    } else if (data.data.code == 'nologin') {
-                        this.message = data.data.message;
-                        this.open();
-                        this.$router.push('/login');
-                    } else {
-                        this.message = data.data.message;
-                        this.open();
-                    }
-                })
-                .catch(err => {
-                    loading.close();
-                    console.log(err);
+                const loading = this.$loading({
+                    lock: true,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)',
+                    target: document.querySelector('.div1')
                 });
-        },
-        // 修改状态
-        changeStatus(index, row) {
-            const loading = this.$loading({
-                lock: true,
-                text: 'Loading',
-                spinner: 'el-icon-loading',
-                background: 'rgba(0, 0, 0, 0.7)',
-                target: document.querySelector('.div1')
-            });
-            this.idx = index;
-            this.form = row;
-            var jsonArr = [];
-            let status;
-            if (row.status == 1) {
-                status = 0;
-            } else if (row.status == 0) {
-                status = 1;
-            }
-            jsonArr.push({ key: 'id', value: row.id });
-            jsonArr.push({ key: 'status', value: status });
-            let sign = md5(preSign(jsonArr));
-            jsonArr.push({ key: 'sign', value: sign });
-            console.log(jsonArr);
-            let params = ParamsAppend(jsonArr);
-            https
-                .fetchPost('couponGroup/updateStatusById', params)
-                .then(data => {
-                    loading.close();
-                    // console.log(JSON.parse(Decrypt(data.data.data)));
-                    if (data.data.code == 'success') {
-                        this.$message.success(`修改成功`);
-                        this.getMenu();
-                    } else if (data.data.code == 'nologin') {
-                        this.message = data.data.message;
-                        this.open();
-                        this.$router.push('/login');
-                    } else {
-                        this.message = data.data.message;
-                        this.open();
-                    }
-                })
-                .catch(err => {
-                    loading.close();
-                    console.log(err);
-                });
-        },
-        Search() {
-            this.query.pageNo = 1;
-            this.getMenu();
-        },
-        getMenu() {
-            //获取菜单栏
-            const loading = this.$loading({
-                lock: true,
-                text: 'Loading',
-                spinner: 'el-icon-loading',
-                background: 'rgba(0, 0, 0, 0.7)',
-                target: document.querySelector('.div1')
-            });
-            setTimeout(() => {
-            let cinemaCode = this.query.cinemaCode;
-            let businessCode = this.query.businessCode;
-            if (!cinemaCode) {
-                cinemaCode = '';
-            }
-            if (!businessCode) {
-                businessCode = '';
-            }
-            let jsonArr = [];
-            jsonArr.push({ key: 'businessCode', value: businessCode });
-            jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
-            jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
-            let sign = md5(preSign(jsonArr));
-            jsonArr.push({ key: 'sign', value: sign });
-            var params = ParamsAppend(jsonArr);
-            https
-                .fetchPost('/cinema/getCinemaInfoByBusinessCode', params)
-                .then(data => {
-                    loading.close();
-                    if (data.data.code == 'success') {
-                        var oData = JSON.parse(Decrypt(data.data.data));
-                        console.log(oData);
-                        this.tableData = oData.data;
-                        this.query.pageSize = oData.pageSize;
-                        this.query.pageNo = oData.pageNo;
-                        this.query.totalCount = oData.totalCount;
-                        this.query.totalPage = oData.totalPage;
-                    } else if (data.data.code == 'nologin') {
-                        this.message = data.data.message;
-                        this.open();
-                        this.$router.push('/login');
-                    } else {
-                        this.message = data.data.message;
-                        this.open();
-                    }
-                })
-                .catch(err => {
-                    loading.close();
-                    console.log(err);
-                });
-            },1000)
-        },
-        back() {
-            this.showSell = true;
-            this.getMenu();
-        },
-        open() {
-            //信息提示弹出框
-            this.$alert(this.message, '信息提示', {
-                dangerouslyUseHTMLString: true
-            });
-        },
-        selectStatus(val) {
-            this.selectValue = val;
-        },
-        selectDay(val) {
-            // console.log(val)
-            this.checkedDays = val.join(',');
-        },
-        getAllBusiness() {
-            const loading = this.$loading({
-                lock: true,
-                text: 'Loading',
-                spinner: 'el-icon-loading',
-                background: 'rgba(0, 0, 0, 0.7)',
-                target: document.querySelector('.div1')
-            });
-            https
-                .fetchPost('/businessInfo/getBusinessList')
-                .then(data => {
-                    loading.close();
-                    if (data.data.code == 'success') {
-                        var res = JSON.parse(Decrypt(data.data.data));
-                        this.businessInfo = res;
-                        this.query.businessCode = res[0].businessCode;
-                        this.getAllCinema();
-                        this.getMenu();
-                    } else if (data.data.code == 'nologin') {
-                        this.message = data.data.message;
-                        this.open();
-                        this.$router.push('/login');
-                    } else {
-                        this.message = data.data.message;
-                        this.open();
-                    }
-                })
-                .catch(err => {
-                    loading.close();
-                    console.log(err);
-                });
-        },
-        changeBusiness(val) {
-            this.query.cinemaCode = '';
-            this.cinemaData = [];
-            this.query.businessCode = val;
-            this.getAllCinema();
-            this.$forceUpdate();
-        },
-        changeSearchCinema(val) {
-            this.$forceUpdate();
-            this.query.cinemaCode = val;
-        },
-        // 获取所有影院
-        getAllCinema() {
-            if (!this.query.businessCode) {
-                return;
-            }
-            const loading = this.$loading({
-                lock: true,
-                text: 'Loading',
-                spinner: 'el-icon-loading',
-                background: 'rgba(0, 0, 0, 0.7)',
-                target: document.querySelector('.div1')
-            });
-            var jsonArr = [];
-            jsonArr.push({ key: 'businessCode', value: this.query.businessCode });
-            let sign = md5(preSign(jsonArr));
-            jsonArr.push({ key: 'sign', value: sign });
-            let params = ParamsAppend(jsonArr);
-            https
-                .fetchPost('/cinema/getCinemaListByBusinessCode', params)
-                .then(data => {
-                    loading.close();
-                    if (data.data.code == 'success') {
-                        let cinemas = JSON.parse(Decrypt(data.data.data));
-                        this.cinemaData = cinemas;
-                        for (let i = 0; i < cinemas.length; i++) {
-                            let cinemaInfo = {};
-                            cinemaInfo.label = cinemas[i].cinemaName;
-                            cinemaInfo.value = cinemas[i].cinemaCode;
-                            this.cinemaInfo.push(cinemaInfo);
+                var jsonArr = [];
+                jsonArr.push({key: 'businessCode', value: this.query.businessCode});
+                let sign = md5(preSign(jsonArr));
+                jsonArr.push({key: 'sign', value: sign});
+                let params = ParamsAppend(jsonArr);
+                https
+                    .fetchPost('/cinema/getCinemaListByBusinessCode', params)
+                    .then(data => {
+                        loading.close();
+                        if (data.data.code == 'success') {
+                            let cinemas = JSON.parse(Decrypt(data.data.data));
+                            this.cinemaData = cinemas;
+                            for (let i = 0; i < cinemas.length; i++) {
+                                let cinemaInfo = {};
+                                cinemaInfo.label = cinemas[i].cinemaName;
+                                cinemaInfo.value = cinemas[i].cinemaCode;
+                                this.cinemaInfo.push(cinemaInfo);
+                            }
+                        } else if (data.data.code == 'nologin') {
+                            this.message = data.data.message;
+                            this.open();
+                            this.$router.push('/login');
+                        } else {
+                            this.message = data.data.message;
+                            this.open();
                         }
-                    } else if (data.data.code == 'nologin') {
-                        this.message = data.data.message;
-                        this.open();
-                        this.$router.push('/login');
-                    } else {
-                        this.message = data.data.message;
-                        this.open();
-                    }
-                })
-                .catch(err => {
-                    loading.close();
-                    console.log(err);
+                    })
+                    .catch(err => {
+                        loading.close();
+                        console.log(err);
+                    });
+            },
+            // 获取所有优惠券
+            getAllCoupon() {
+                const loading = this.$loading({
+                    lock: true,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)',
+                    target: document.querySelector('.div1')
                 });
-        },
-        // 获取所有优惠券
-        getAllCoupon() {
-            const loading = this.$loading({
-                lock: true,
-                text: 'Loading',
-                spinner: 'el-icon-loading',
-                background: 'rgba(0, 0, 0, 0.7)',
-                target: document.querySelector('.div1')
-            });
-            let name = this.couponName;
-            if (!name) {
-                name = '';
-            }
-            let date = new Date();
-            let today =
-                date.getFullYear() +
-                '-' +
-                (date.getMonth() + 1) +
-                '-' +
-                date.getDate() +
-                ' ' +
-                date.getHours() +
-                ':' +
-                date.getMinutes() +
-                ':' +
-                date.getSeconds();
-            let jsonArr = [];
-            jsonArr.push({ key: 'name', value: name });
-            // jsonArr.push({ key: 'endDate', value: today });
-            jsonArr.push({ key: 'cinemaCode', value: this.cinemaCode });
-            jsonArr.push({ key: 'pageNo', value: this.query.aPageNo });
-            jsonArr.push({ key: 'pageSize', value: this.query.aPageSize });
-            let sign = md5(preSign(jsonArr));
-            jsonArr.push({ key: 'sign', value: sign });
-            console.log(jsonArr);
-            var params = ParamsAppend(jsonArr);
-            https
-                .fetchPost('merchandiseCoupon/getCouponByCinemaCode', params)
-                .then(data => {
-                    loading.close();
-                    if (data.data.code == 'success') {
-                        let oData = JSON.parse(Decrypt(data.data.data));
-                        this.drawer = true;
-                        this.sellTableData = oData.pageResult.data;
-                        // for (let i = 0; i < this.sellTableData.length; i++) {
-                        //     this.$set(
-                        //         this.sellTableData[i],
-                        //         'imgUrl',
-                        //         'http://xiangshan-wexin.oss-cn-hangzhou.aliyuncs.com/images/201909262039272.jpg'
-                        //     );
-                        // }
-                        this.query.aPageSize = oData.pageResult.pageSize;
-                        this.query.aPageNo = oData.pageResult.pageNo;
-                        this.query.aTotalCount = oData.pageResult.totalCount;
-                        this.query.aTotalPage = oData.pageResult.totalPage;
-                    } else if (data.data.code == 'nologin') {
-                        this.message = data.data.message;
-                        this.open();
-                        this.$router.push('/login');
-                    } else {
-                        this.message = data.data.message;
-                        this.open();
-                    }
-                })
-                .catch(err => {
-                    loading.close();
-                    console.log(err);
-                });
-        },
-        sureNext(id) {
-            this.couponInfo.imgUrl = 'http://xiangshan-wexin.oss-cn-hangzhou.aliyuncs.com/images/201909262039272.jpg';
-            for (let i = 0; i < this.sellTableData.length; i++) {
-                if (this.sellTableData[i].id == this.couponInfo.id) {
-                    this.couponInfo.couponName = this.sellTableData[i].name;
+                let name = this.couponName;
+                if (!name) {
+                    name = '';
                 }
+                let date = new Date();
+                let today =
+                    date.getFullYear() +
+                    '-' +
+                    (date.getMonth() + 1) +
+                    '-' +
+                    date.getDate() +
+                    ' ' +
+                    date.getHours() +
+                    ':' +
+                    date.getMinutes() +
+                    ':' +
+                    date.getSeconds();
+                let jsonArr = [];
+                jsonArr.push({key: 'name', value: name});
+                // jsonArr.push({ key: 'endDate', value: today });
+                jsonArr.push({key: 'cinemaCode', value: this.cinemaCode});
+                jsonArr.push({key: 'pageNo', value: this.query.aPageNo});
+                jsonArr.push({key: 'pageSize', value: this.query.aPageSize});
+                let sign = md5(preSign(jsonArr));
+                jsonArr.push({key: 'sign', value: sign});
+                console.log(jsonArr);
+                var params = ParamsAppend(jsonArr);
+                https
+                    .fetchPost('merchandiseCoupon/getCouponByCinemaCode', params)
+                    .then(data => {
+                        loading.close();
+                        if (data.data.code == 'success') {
+                            let oData = JSON.parse(Decrypt(data.data.data));
+                            this.drawer = true;
+                            this.sellTableData = oData.pageResult.data;
+                            // for (let i = 0; i < this.sellTableData.length; i++) {
+                            //     this.$set(
+                            //         this.sellTableData[i],
+                            //         'imgUrl',
+                            //         'http://xiangshan-wexin.oss-cn-hangzhou.aliyuncs.com/images/201909262039272.jpg'
+                            //     );
+                            // }
+                            this.query.aPageSize = oData.pageResult.pageSize;
+                            this.query.aPageNo = oData.pageResult.pageNo;
+                            this.query.aTotalCount = oData.pageResult.totalCount;
+                            this.query.aTotalPage = oData.pageResult.totalPage;
+                        } else if (data.data.code == 'nologin') {
+                            this.message = data.data.message;
+                            this.open();
+                            this.$router.push('/login');
+                        } else {
+                            this.message = data.data.message;
+                            this.open();
+                        }
+                    })
+                    .catch(err => {
+                        loading.close();
+                        console.log(err);
+                    });
+            },
+            sureNext(id) {
+                this.couponInfo.imgUrl = 'http://xiangshan-wexin.oss-cn-hangzhou.aliyuncs.com/images/201909262039272.jpg';
+                for (let i = 0; i < this.sellTableData.length; i++) {
+                    if (this.sellTableData[i].id == this.couponInfo.id) {
+                        this.couponInfo.couponName = this.sellTableData[i].name;
+                    }
+                }
+                this.drawer = false;
+            },
+            deletCoupon() {
+                this.couponInfo = {};
+            },
+            handleSelect(item) {
+                this.selectGroup = {};
+                this.selectGroup = item;
+            },
+            beforeUpload(file) {
+                //上传之前
+                this.type.type = EncryptReplace('activity');
+                const isLt200Kb = file.size / 1024 < 200;
+                if (!isLt200Kb) {
+                    this.message = '图片大小不能超过200kb！';
+                    this.open();
+                    return false
+                }
+                return isLt200Kb
+            },
+            onSuccess(data) {
+                //上传文件 登录超时
+                if (data.status == '-1') {
+                    this.message = data.message;
+                    this.open();
+                    this.$refs.download.clearFiles();
+                    return;
+                }
+                this.oForm.image_url = data.data;
+                if (data.code == 'nologin') {
+                    this.message = data.message;
+                    this.open();
+                    this.$router.push('/login');
+                }
+            },
+            unSuccess(data) {
+                //修改上传文件 登录超时
+                // console.log(data);
+                this.form.image_url = data.data;
+                if (data.code == 'nologin') {
+                    this.message = data.message;
+                    this.open();
+                    this.$router.push('/login');
+                }
+            },
+            // 多选操作
+            handleSelectionChange(val) {
+                this.multipleSelection = val;
+            },
+            handleSizeChange(val) {
+                this.query.pageSize = val;
+                this.getMenu()
+            },
+            currentChange(val) {
+                //点击选择具体页数
+                this.query.pageNo = val;
+                this.getMenu();
+            },
+            prev() {
+                //分页按钮上一页
+                this.query.pageNo--;
+                this.getMenu();
+            },
+            next() {
+                //分页按钮下一页
+                this.query.pageNo++;
+                this.getMenu();
+            },
+            aHandleSizeChange(val) {
+                this.query.aPageSize = val;
+                this.getAllCoupon()
+            },
+            aCurrentChange(val) {
+                //点击选择具体页数
+                this.query.aPageNo = val;
+                this.getAllCoupon();
+            },
+            aPrev() {
+                //分页按钮上一页
+                this.query.aPageNo--;
+                this.getAllCoupon();
+            },
+            aNext() {
+                //分页按钮下一页
+                this.query.aPageNo++;
+                this.getAllCoupon();
             }
-            this.drawer = false;
-        },
-        deletCoupon() {
-            this.couponInfo = {};
-        },
-        handleSelect(item) {
-            this.selectGroup = {};
-            this.selectGroup = item;
-        },
-        beforeUpload(file) {
-            //上传之前
-            this.type.type = EncryptReplace('activity');
-            const isLt200Kb = file.size / 1024 < 200;
-            if (!isLt200Kb) {
-                this.message = '图片大小不能超过200kb！';
-                this.open();
-                return false
-            }
-            return isLt200Kb
-        },
-        onSuccess(data) {
-            //上传文件 登录超时
-            if (data.status == '-1') {
-                this.message = data.message;
-                this.open();
-                this.$refs.download.clearFiles();
-                return;
-            }
-            this.oForm.image_url = data.data;
-            if (data.code == 'nologin') {
-                this.message = data.message;
-                this.open();
-                this.$router.push('/login');
-            }
-        },
-        unSuccess(data) {
-            //修改上传文件 登录超时
-            // console.log(data);
-            this.form.image_url = data.data;
-            if (data.code == 'nologin') {
-                this.message = data.message;
-                this.open();
-                this.$router.push('/login');
-            }
-        },
-        // 多选操作
-        handleSelectionChange(val) {
-            this.multipleSelection = val;
-        },
-        handleSizeChange(val) {
-            this.query.pageSize=val;
-            this.getMenu()
-        },
-        currentChange(val) {
-            //点击选择具体页数
-            this.query.pageNo = val;
-            this.getMenu();
-        },
-        prev() {
-            //分页按钮上一页
-            this.query.pageNo--;
-            this.getMenu();
-        },
-        next() {
-            //分页按钮下一页
-            this.query.pageNo++;
-            this.getMenu();
-        },
-        aHandleSizeChange(val) {
-            this.query.aPageSize=val;
-            this.getAllCoupon()
-        },
-        aCurrentChange(val) {
-            //点击选择具体页数
-            this.query.aPageNo = val;
-            this.getAllCoupon();
-        },
-        aPrev() {
-            //分页按钮上一页
-            this.query.aPageNo--;
-            this.getAllCoupon();
-        },
-        aNext() {
-            //分页按钮下一页
-            this.query.aPageNo++;
-            this.getAllCoupon();
         }
-    }
-};
+    };
 </script>
 
 <style scoped>
@@ -1229,10 +1242,12 @@ export default {
         margin-bottom: 20px;
         font-size: 14px;
     }
+
     .table {
         width: 100%;
         font-size: 14px;
     }
+
     .mr10 {
         width: 16%;
         margin-right: 10px;

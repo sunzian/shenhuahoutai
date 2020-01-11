@@ -73,7 +73,7 @@
                         <el-tag v-else-if="scope.row.status=='2'" type="danger">禁用</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作"  align="center"  fixed="right" width="200">
+                <el-table-column label="操作"  align="center"  fixed="right" width="140">
                     <template slot-scope="scope">
                         <!-- <el-button
                             type="text"
@@ -85,7 +85,7 @@
                             type="text"
                             icon="el-icon-edit"
                             @click="addChange(scope.$index, scope.row)"
-                        >修改</el-button>
+                        >详情</el-button>
                         <el-button
                             v-if="scope.row.adminFlag !='1' && scope.row.businessCode == 'admin'"
                             type="text"
@@ -112,7 +112,7 @@
             </div>
         </div>
         <!--新增弹出框-->
-        <el-dialog :close-on-click-modal="false" title="新增商户" :visible.sync="dialogFormVisible">
+        <el-dialog :close-on-click-modal="false" title="新增" :visible.sync="dialogFormVisible">
             <el-form v-model="oForm">
                 <el-form-item :required="true" label="用户名" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oForm.userName" autocomplete="off"></el-input>
@@ -185,7 +185,7 @@
             </div>
         </el-dialog>
         <!-- 编辑弹出框 -->
-        <el-dialog :close-on-click-modal="false" title="编辑" :visible.sync="editVisible">
+        <el-dialog :close-on-click-modal="false" title="详情" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
                 <el-form-item :required="true" label="用户名" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="userName" autocomplete="off"></el-input>

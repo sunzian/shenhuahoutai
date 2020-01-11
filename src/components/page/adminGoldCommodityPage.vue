@@ -233,7 +233,7 @@
                                 type="text"
                                 icon="el-icon-edit"
                                 @click="addChange(scope.$index, scope.row)"
-                        >编辑
+                        >详情
                         </el-button>
                         <el-button
                                 type="text"
@@ -2785,7 +2785,7 @@
                     loading.close();
                     return;
                 }
-                if (!this.form.store) {
+                if (!this.form.store&&this.form.store!=0) {
                     this.message = '库存不能为空，请检查！';
                     this.open();
                     loading.close();

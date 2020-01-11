@@ -279,7 +279,7 @@
                 </el-form-item>
                 <el-form-item :required="true" label="影院联系人电话" :label-width="formLabelWidth">
                     <el-input
-                        onkeyup="this.value=this.value.replace(/\D/g,'')"
+                            onkeyup="this.value=this.value.replace(/[^0-9-]+/,'')"
                         style="width: 250px"
                         v-model="oConcatMobile"
                         autocomplete="off"
@@ -287,6 +287,7 @@
                 </el-form-item>
                 <el-form-item
                     :required="true"
+                    onkeyup="this.value=this.value.replace(/[^0-9-]+/,'')"
                     prop="serviceMobile"
                     label="客服电话"
                     :label-width="formLabelWidth"

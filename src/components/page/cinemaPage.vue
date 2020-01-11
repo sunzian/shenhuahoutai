@@ -332,6 +332,7 @@
                 <el-form-item label="影院联系人电话" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
+                        onkeyup="this.value=this.value.replace(/[^0-9-]+/,'')"
                         v-model="oForm.concatMobile"
                         autocomplete="off"
                     ></el-input>
@@ -339,6 +340,7 @@
                 <el-form-item prop="serviceMobile" label="客服电话" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
+                        onkeyup="this.value=this.value.replace(/[^0-9-]+/,'')"
                         v-model="oForm.serviceMobile"
                         autocomplete="off"
                     ></el-input>
@@ -940,6 +942,7 @@
                 <el-form-item label="影院联系人电话" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
+                        onkeyup="this.value=this.value.replace(/[^0-9-]+/,'')"
                         v-model="oConcatMobile"
                         autocomplete="off"
                     ></el-input>
@@ -947,6 +950,7 @@
                 <el-form-item prop="serviceMobile" label="客服电话" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
+                        onkeyup="this.value=this.value.replace(/[^0-9-]+/,'')"
                         v-model="oServiceMobile"
                         autocomplete="off"
                     ></el-input>

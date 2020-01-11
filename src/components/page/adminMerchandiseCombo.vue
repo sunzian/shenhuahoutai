@@ -165,7 +165,7 @@
                             type="text"
                             icon="el-icon-edit"
                             @click="addChange(scope.$index, scope.row)"
-                        >编辑</el-button>
+                        >详情</el-button>
                         <!-- <el-button
                             type="text"
                             icon="el-icon-delete"
@@ -366,7 +366,7 @@
             </div>
         </el-dialog>
         <!-- 编辑弹出框 -->
-        <el-dialog :close-on-click-modal="false" title="编辑" :visible.sync="editVisible">
+        <el-dialog :close-on-click-modal="false" title="详情" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
                 <el-form-item :required="true" label="套餐名称" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="form.comboName" autocomplete="off"></el-input>

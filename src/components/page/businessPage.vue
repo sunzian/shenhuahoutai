@@ -128,9 +128,10 @@
                         <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过200kb 建议尺寸200*200或按比例上传</div>
                     </el-upload>
                 </el-form-item>
-                <el-form-item label="商家电话" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="商家电话" :label-width="formLabelWidth">
                     <el-input
                         style="width: 150px"
+                        onkeyup="this.value=this.value.replace(/[^0-9-]+/,'')"
                         v-model="oForm.mobile"
                         autocomplete="off"
                     ></el-input>
@@ -224,8 +225,9 @@
                         <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过200kb 建议尺寸200*200或按比例上传</div>
                     </el-upload>
                 </el-form-item>
-                <el-form-item label="商家电话">
+                <el-form-item :required="true" label="商家电话">
                     <el-input
+                            onkeyup="this.value=this.value.replace(/[^0-9-]+/,'')"
                             style="width: 250px"
                             v-model="oMobile"
                             autocomplete="off"

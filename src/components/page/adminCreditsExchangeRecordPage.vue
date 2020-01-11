@@ -389,13 +389,12 @@ export default {
                 target: document.querySelector('.div1')
             });
             setTimeout(() => {
-                let businessCode = this.query.businessCode;
                 let cinemaCode = this.query.cinemaCode;
                 let orderNo = this.query.orderNo;
                 let mobile = this.query.mobile;
                 let status = this.query.status;
-                // let userName = this.query.userName;
                 let cardNo = this.query.cardNo;
+                let businessCode = this.query.businessCode;
                 if (!businessCode) {
                     businessCode = '';
                 }

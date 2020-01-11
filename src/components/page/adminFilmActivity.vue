@@ -79,13 +79,13 @@
                 highlight-current-row
                 header-cell-class-name="table-header"
             >
-                <el-table-column prop="name" label="适用影院" width="160">
+                <el-table-column prop="name" label="适用影院" width="200">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
                 <el-table-column label="活动名称" width="160">
                     <template slot-scope="scope">{{scope.row.name}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="适用影厅">
+                <el-table-column prop="name" label="适用影厅"width="160">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.selectHallType == 0">全部影厅</el-tag>
                         <el-tag v-else-if="scope.row.selectHallType == 1">{{scope.row.screenName}}</el-tag>
@@ -94,7 +94,7 @@
                         >除{{scope.row.screenName}}外所有影厅</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="name" label="适用制式" width="100">
+                <el-table-column prop="name" label="适用制式" width="110">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.selectFilmFormatType == 0">全部制式</el-tag>
                         <el-tag
@@ -105,7 +105,7 @@
                         >除{{scope.row.filmFormatName}}外所有制式</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="name" label="适用影片">
+                <el-table-column prop="name" label="适用影片" width="160">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.selectFilmType == 0">全部影片</el-tag>
                         <el-tag v-else-if="scope.row.selectFilmType == 1">{{scope.row.filmName}}</el-tag>
@@ -114,7 +114,7 @@
                         >除{{scope.row.filmName}}外所有影片</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="sort" label="限购总数" width="130">
+                <el-table-column prop="sort" label="限购总数" width="90">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.isLimitTotal == 0">不限购</el-tag>
                         <el-tag
@@ -128,26 +128,26 @@
                         <el-tag v-else-if="scope.row.isLimitSingle == 1">{{scope.row.singleNumber}}</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="sort" label="优惠方式" width="90">
+                <el-table-column prop="sort" label="优惠方式" width="100">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.reduceType == 1">特惠价格</el-tag>
                         <el-tag v-else-if="scope.row.reduceType == 2">立减金额</el-tag>
                         <el-tag v-else-if="scope.row.reduceType == 4">最低票价结算</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="sort" label="固定金额" width="60">
+                <el-table-column prop="sort" label="固定金额" width="80">
                     <template
                         v-if="scope.row.reduceType==1"
                         slot-scope="scope"
                     >{{scope.row.discountMoney}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="立减金额" width="60">
+                <el-table-column prop="sort" label="立减金额" width="80">
                     <template
                         v-if="scope.row.reduceType==2"
                         slot-scope="scope"
                     >{{scope.row.discountMoney}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="最低票价结算" width="60">
+                <el-table-column prop="sort" label="最低票价结算" width="110">
                     <template
                         v-if="scope.row.reduceType==4"
                         slot-scope="scope"
@@ -162,7 +162,7 @@
                         <el-tag v-else type="danger">未启用</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" width="200" align="center" fixed="right">
+                <el-table-column label="操作" width="80" align="center" fixed="right">
                     <template slot-scope="scope">
                         <!-- <el-button
                                 type="success"
@@ -178,7 +178,7 @@
                             type="text"
                             icon="el-icon-circle-plus-outline"
                             @click="addChange(scope.$index, scope.row)"
-                        >修改</el-button>
+                        >详情</el-button>
                         <!-- <el-button
                                 type="text"
                                 icon="el-icon-delete"
@@ -204,7 +204,7 @@
             </div>
         </div>
         <!--新增弹出框-->
-        <el-dialog :close-on-click-modal="false" :visible.sync="dialogFormVisible">
+        <el-dialog :close-on-click-modal="false" title="新增" :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
                 <el-form-item :required="true" label="活动名称：" :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oForm.name" autocomplete="off"></el-input>
@@ -479,7 +479,7 @@
             </div>
         </el-dialog>
         <!-- 编辑弹出框 -->
-        <el-dialog :close-on-click-modal="false" title="修改" :visible.sync="editVisible">
+        <el-dialog :close-on-click-modal="false" title="详情" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
                 <el-form-item :required="true" label="活动名称：" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oName" autocomplete="off"></el-input>

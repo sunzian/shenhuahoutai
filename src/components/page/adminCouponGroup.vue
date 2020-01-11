@@ -91,7 +91,7 @@
                             type="text"
                             icon="el-icon-circle-plus-outline"
                             @click="addChange(scope.$index, scope.row)"
-                        >修改</el-button>
+                        >详情</el-button>
                         <!-- <el-button
                             type="text"
                             icon="el-icon-delete"
@@ -117,7 +117,7 @@
             </div>
         </div>
         <!--新增弹出框-->
-        <el-dialog :close-on-click-modal="false" :visible.sync="dialogFormVisible">
+        <el-dialog :close-on-click-modal="false" title="新增" :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
                 <el-form-item :required="true" label="券包名称：" :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oForm.name" autocomplete="off"></el-input>
