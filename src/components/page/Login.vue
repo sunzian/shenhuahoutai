@@ -56,6 +56,7 @@ export default {
         };
     },
     created() {
+        this.checkLogin();
         this.getValidateCode()
     },
     methods: {
@@ -98,6 +99,34 @@ export default {
                     console.log(err)
                 }
             )
+        },
+        open() {
+            //信息提示弹出框
+            this.$alert(this.message, '信息提示', {
+                dangerouslyUseHTMLString: true
+            });
+        },
+        checkLogin() {
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
+            https.fetchPost('/admin/checkLogin',).then(data => {
+                    loading.close();
+                        if(data.data.status==0){
+                            localStorage.setItem('ms_username', data.data.message);
+                            this.$router.push('/dashboard');
+                        }else{
+                            this.$router.push('/login');
+                        }
+                })
+                .catch(err => {
+                    loading.close();
+                    console.log(err);
+                });
         },
     },
 };

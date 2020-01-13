@@ -34,44 +34,60 @@
                 highlight-current-row
                 header-cell-class-name="table-header"
              >
-                <el-table-column prop="name" label="影院名称">
+                <el-table-column prop="name" label="影院名称" width="200">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="影片名称">
+                <el-table-column prop="name" label="影片名称" width="160">
                     <template slot-scope="scope">{{scope.row.filmName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="评论用户名称">
+                <el-table-column prop="memo" label="评论用户名称" width="160">
                     <template slot-scope="scope">{{scope.row.userName}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="评论内容">
+                <el-table-column prop="sort" label="评论内容" width="230">
                     <template slot-scope="scope">{{scope.row.comment}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="评论时间">
+                <el-table-column prop="sort" label="评论时间" width="160">
                     <template slot-scope="scope">{{scope.row.commentDate}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="通过状态">
+                <el-table-column prop="sort" label="通过状态" width="100">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status == 1">未通过</el-tag>
                         <el-tag v-else>通过</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="sort" label="点赞数量">
+                <el-table-column prop="sort" label="点赞数量" width="100">
                     <template slot-scope="scope">{{scope.row.thumbNumber}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="评分">
+                <el-table-column prop="sort" label="评分" width="100">
                     <template slot-scope="scope">{{scope.row.score}}</template>
                 </el-table-column>
-                <el-table-column label="操作" width="180" align="center">
+                <el-table-column label="操作" width="100" align="center" fixed="right">
+                    <template slot-scope="scope">
+                        <el-button
+                                type="success"
+                                v-if="scope.row.status == 1"
+                                @click="changeStatus(scope.$index, scope.row)"
+                        >通过
+                        </el-button>
+                        <el-button
+                                type="success"
+                                v-if="scope.row.status == 2"
+                                @click="changeStatus(scope.$index, scope.row)"
+                        >未通过
+                        </el-button>
+                    </template>
+                </el-table-column>
+                <el-table-column label="操作" width="160" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-button
                             type="text"
                             icon="el-icon-circle-plus-outline"
-                            @click="addChange(scope.$index, scope.row)"
+                            @click="addChange(scope.$index,scope.row)"
                         >查看评论</el-button>
                         <el-button
                             type="text"
                             icon="el-icon-delete"
-                            @click="delChange(scope.$index, scope.row)"
+                            @click="delChange(scope.$index,scope.row)"
                         >删除</el-button>
                     </template>
                 </el-table-column>
@@ -162,6 +178,7 @@ export default {
             oStatus: '',
             oTrailer: '',
             oType: '',
+            rowMess: '',
             videoFlag: false,
             videoForm: {},
             type: {
@@ -173,6 +190,7 @@ export default {
             dialogImageUrl: '',
             dialogVisible: false,
             oDimensional: '',
+            oCommentType: '',
             message: '', //弹出框消息
             query: {
                 pageNo: 1,
@@ -216,6 +234,70 @@ export default {
         this.getAllCinema();
     },
     methods: {
+        // 修改状态
+        changeStatus(index, row) {
+            if (row.status == 1) {
+                this.rowMess = '通过'
+            }
+            if (row.status == 2) {
+                this.rowMess = '未通过'
+            }
+            this.$confirm('是否确定' + this.rowMess + '此评论?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            })
+                .then(() => {
+                    const loading = this.$loading({
+                        lock: true,
+                        text: 'Loading',
+                        spinner: 'el-icon-loading',
+                        background: 'rgba(0, 0, 0, 0.7)',
+                        target: document.querySelector('.div1')
+                    });
+                    this.idx = index;
+                    this.form = row;
+                    var jsonArr = [];
+                    let status;
+                    if (row.status == 2) {
+                        status = 1;
+                    } else if (row.status == 1) {
+                        status = 2;
+                    }
+                    jsonArr.push({key: 'id', value: row.id});
+                    jsonArr.push({key: 'commentType', value: row.commentType});
+                    jsonArr.push({key: 'status', value: status});
+                    let sign = md5(preSign(jsonArr));
+                    jsonArr.push({key: 'sign', value: sign});
+                    console.log(jsonArr);
+                    let params = ParamsAppend(jsonArr);
+                    https.fetchPost('/wantOrLooketFilm/updateStatus', params).then(data => {
+                        loading.close();
+                        console.log(data);
+                        // console.log(JSON.parse(Decrypt(data.data.data)));
+                        if (data.data.code == 'success') {
+                            this.$message.success(`修改成功`);
+                            this.getMenu();
+                        } else if (data.data.code == 'nologin') {
+                            this.message = data.data.message;
+                            this.open();
+                            this.$router.push('/login');
+                        } else {
+                            this.message = data.data.message;
+                            this.open();
+                        }
+                    })
+                        .catch(err => {
+                            loading.close();
+                            console.log(err);
+                        });
+                }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消修改'
+                });
+            })
+        },
         delChange(index, row) {
             //删除数据
             this.$confirm('此操作将永久删除该评论, 是否继续?', '提示', {
@@ -234,6 +316,7 @@ export default {
                     this.idx = index;
                     let jsonArr = [];
                     jsonArr.push({ key: 'id', value: row.id });
+                    jsonArr.push({ key: 'commentType', value: row.commentType });
                     let sign = md5(preSign(jsonArr));
                     jsonArr.push({ key: 'sign', value: sign });
                     let params = ParamsAppend(jsonArr);
@@ -277,6 +360,7 @@ export default {
             this.form = row;
             var jsonArr = [];
             jsonArr.push({ key: 'id', value: row.id });
+            jsonArr.push({ key: 'commentType', value: row.commentType });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             let params = ParamsAppend(jsonArr);
@@ -287,6 +371,7 @@ export default {
                     if (data.data.code == 'success') {
                         this.editVisible = true;
                         this.oCinemaName = JSON.parse(Decrypt(data.data.data)).cinemaName;
+                        this.oCommentType = JSON.parse(Decrypt(data.data.data)).commentType;
                         this.oFilmName = JSON.parse(Decrypt(data.data.data)).filmName;
                         this.oUserName = JSON.parse(Decrypt(data.data.data)).userName;
                         this.oComment = JSON.parse(Decrypt(data.data.data)).comment;
@@ -327,6 +412,7 @@ export default {
             });
             var jsonArr = [];
             jsonArr.push({ key: 'replyComment', value: this.oReplyComment });
+            jsonArr.push({ key: 'commentType', value: this.oCommentType });
             jsonArr.push({ key: 'status', value: this.oStatus });
             jsonArr.push({ key: 'id', value: this.oId });
             let sign = md5(preSign(jsonArr));

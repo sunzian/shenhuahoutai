@@ -78,7 +78,7 @@
                         <el-tag v-else-if="scope.row.tradeType=='4'"
                         >满天星</el-tag>
                         <el-tag v-if="scope.row.tradeType=='8'"
-                        >粤科</el-tag>
+                        >凤凰佳影</el-tag>
                         <el-tag v-else-if="scope.row.tradeType=='16'"
                         >云智</el-tag>
                         <el-tag v-else-if="scope.row.tradeType=='32'"
