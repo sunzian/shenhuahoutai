@@ -305,7 +305,7 @@
                     <el-input style="width: 250px" onkeyup="this.value=this.value.replace(/\D/g,'')" v-model="oRefundMinutesLimit" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="退票手续费" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')" v-model="oRefundFee" autocomplete="off"></el-input>
+                    <el-input placeholder="会员卡支付退票不收手续费" style="width: 450px" onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')" v-model="oRefundFee" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="第三方支付代售费" :label-width="formLabelWidth">
                     <el-input

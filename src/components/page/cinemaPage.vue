@@ -31,7 +31,7 @@
                     <el-option key="1" label="辰星" value="1"></el-option>
                     <el-option key="2" label="1905" value="2"></el-option>
                     <el-option key="4" label="满天星" value="4"></el-option>
-                    <el-option key="8" label="粤科" value="8"></el-option>
+                    <el-option key="8" label="凤凰佳影" value="8"></el-option>
                     <el-option key="16" label="云智" value="16"></el-option>
                     <el-option key="32" label="火烈鸟" value="32"></el-option>
                     <el-option key="64" label="鼎新" value="64"></el-option>
@@ -148,7 +148,7 @@
                         <el-tag v-if="scope.row.ticketingSystemType == 1" type="info">辰星</el-tag>
                         <el-tag v-else-if="scope.row.ticketingSystemType == 2" type="info">电影1905</el-tag>
                         <el-tag v-else-if="scope.row.ticketingSystemType == 4" type="info">满天星</el-tag>
-                        <el-tag v-else-if="scope.row.ticketingSystemType == 8" type="info">粤科</el-tag>
+                        <el-tag v-else-if="scope.row.ticketingSystemType == 8" type="info">凤凰佳影</el-tag>
                         <el-tag v-else-if="scope.row.ticketingSystemType == 16" type="info">云智</el-tag>
                         <el-tag v-else-if="scope.row.ticketingSystemType == 32" type="info">火烈鸟</el-tag>
                         <el-tag v-else-if="scope.row.ticketingSystemType == 64" type="info">鼎星</el-tag>
@@ -368,7 +368,8 @@
                 </el-form-item>
                 <el-form-item label="退票手续费" :label-width="formLabelWidth">
                     <el-input
-                        style="width: 250px"
+                        style="width: 450px"
+                        placeholder="会员卡支付退票不收手续费"
                         v-model="oForm.refundFee"
                         autocomplete="off"
                     ></el-input>
@@ -804,7 +805,7 @@
                         <el-radio label="1">辰星</el-radio>
                         <el-radio label="2">电影1905</el-radio>
                         <el-radio label="4">满天星</el-radio>
-                        <el-radio label="8">粤科</el-radio>
+                        <el-radio label="8">凤凰佳影</el-radio>
                         <el-radio label="16">云智</el-radio>
                         <el-radio label="32">火烈鸟</el-radio>
                         <el-radio label="64">鼎新</el-radio>
@@ -978,7 +979,8 @@
                 </el-form-item>
                 <el-form-item label="退票手续费" :label-width="formLabelWidth">
                     <el-input
-                        style="width: 250px"
+                        style="width: 450px"
+                        placeholder="会员卡支付退票不收手续费"
                         v-model="oRefundFee"
                         autocomplete="off"
                     ></el-input>
@@ -1431,7 +1433,7 @@
                         <el-radio label="1">辰星</el-radio>
                         <el-radio label="2">电影1905</el-radio>
                         <el-radio label="4">满天星</el-radio>
-                        <el-radio label="8">粤科</el-radio>
+                        <el-radio label="8">凤凰佳影</el-radio>
                         <el-radio label="16">云智</el-radio>
                         <el-radio label="32">火烈鸟</el-radio>
                         <el-radio label="64">鼎新</el-radio>
@@ -1681,16 +1683,16 @@ export default {
             ],
             delivery: [
                 {
-                    value: '1',
-                    label: '送至影厅'
-                },
-                {
                     value: '2',
                     label: '不配送'
                 },
                 {
+                    value: '1',
+                    label: '送至影厅门口'
+                },
+                {
                     value: '3',
-                    label: '送至影厅座位'
+                    label: '送至座位'
                 }
             ],
             businessInfo: [], //关联商家信息
