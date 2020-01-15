@@ -749,11 +749,26 @@ export default {
             if (this.actor.substring(1).length > 0) {
                 this.actor = this.actor.substring(1);
             }
-            for (let i = 0; i < this.oForm.stagePhoto.length; i++) {
-                this.stageImg += ',' + this.oForm.stagePhoto[i].url;
-            }
-            if (this.stageImg.substring(1).length > 0) {
-                this.stageImg = this.stageImg.substring(1);
+            // for (let i = 0; i < this.oForm.stagePhoto.length; i++) {
+            //     this.stageImg += ',' + this.oForm.stagePhoto[i].url;
+            // }
+            // if (this.stageImg.substring(1).length > 0) {
+            //     this.stageImg = this.stageImg.substring(1);
+            // }
+            if (this.oForm.stagePhoto.length == 0) {
+                for (let i = 0; i < this.oForm.stagePhoto.length; i++) {
+                    this.stageImg += ',' + this.oForm.stagePhoto[i];
+                }
+                if (this.stageImg.substring(1).length > 0) {
+                    this.stageImg = this.stageImg.substring(1);
+                }
+            } else {
+                for (let i = 0; i < this.oForm.stagePhoto.length; i++) {
+                    this.stageImg += ',' + this.oForm.stagePhoto[i].url;
+                }
+                if (this.stageImg.substring(1).length > 0) {
+                    this.stageImg = this.stageImg.substring(1);
+                }
             }
             if (this.oForm.topScore != '') {
                 if (this.oForm.topScore > 10 || this.oForm.topScore < 0) {
@@ -970,7 +985,7 @@ export default {
                     this.actor = this.actor.substring(1);
                 }
             }
-            if(this.oStagePhoto&&this.oStagePhoto.length>0){
+            // if(this.oStagePhoto&&this.oStagePhoto.length>0){
                 if (this.oStagePhoto.length == 0) {
                     for (let i = 0; i < this.oStagePhotoList.length; i++) {
                         this.photoUrl += ',' + this.oStagePhotoList[i];
@@ -986,7 +1001,7 @@ export default {
                         this.photoUrl = this.photoUrl.substring(1);
                     }
                 }
-            }
+            // }
             if (this.oTopScore != '') {
                 if (this.oTopScore > 10 || this.oTopScore < 0) {
                     this.message = '管理员评分只能0-10的数字！';
@@ -1174,6 +1189,7 @@ export default {
                 this.open();
                 this.$router.push('/login');
             }
+            console.log(this.oForm.stagePhoto);
         },
         onPhotoSuccessChange(response, file) {
             console.log(response);

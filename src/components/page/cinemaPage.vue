@@ -179,7 +179,7 @@
                 <el-table-column prop="time" label="剩余张数" width="100">
                     <template slot-scope="scope">{{scope.row.remainTicketsNumber}}</template>
                 </el-table-column>
-                <el-table-column prop="time" label="剩余金额" width="100">
+                <el-table-column prop="time" label="剩余售票系统金额" width="140">
                     <template slot-scope="scope">{{scope.row.remainTicketPrice}}</template>
                 </el-table-column>
                 <el-table-column prop="string" label="票价上报方式" width="130">
@@ -212,13 +212,13 @@
                         <el-tag v-else type="danger">否</el-tag>
                     </template>
                 </el-table-column> -->
-                <el-table-column label="充值" width="180" align="center" fixed="right">
+                <el-table-column label="充值" width="220" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-button
                                 type="text"
                                 @click="addPrice(scope.$index, scope.row)"
                                 icon="el-icon-circle-plus-outline"
-                        >充值金额</el-button>
+                        >充值售票系统金额</el-button>
                         <el-button
                                 type="text"
                                 @click="addNumPage(scope.$index, scope.row)"
@@ -368,7 +368,7 @@
                 </el-form-item>
                 <el-form-item label="退票手续费" :label-width="formLabelWidth">
                     <el-input
-                        style="width: 450px"
+                        style="width: 250px"
                         placeholder="会员卡支付退票不收手续费"
                         v-model="oForm.refundFee"
                         autocomplete="off"
@@ -979,7 +979,7 @@
                 </el-form-item>
                 <el-form-item label="退票手续费" :label-width="formLabelWidth">
                     <el-input
-                        style="width: 450px"
+                        style="width: 250px"
                         placeholder="会员卡支付退票不收手续费"
                         v-model="oRefundFee"
                         autocomplete="off"

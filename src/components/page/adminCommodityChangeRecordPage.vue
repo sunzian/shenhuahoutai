@@ -967,6 +967,7 @@ export default {
 .mr10 {
     width: 16%;
     margin-right: 10px;
+    margin-top: 10px;
 }
 </style>
 

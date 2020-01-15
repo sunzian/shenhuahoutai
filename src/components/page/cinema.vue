@@ -305,7 +305,7 @@
                     <el-input style="width: 250px" onkeyup="this.value=this.value.replace(/\D/g,'')" v-model="oRefundMinutesLimit" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="退票手续费" :label-width="formLabelWidth">
-                    <el-input placeholder="会员卡支付退票不收手续费" style="width: 450px" onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')" v-model="oRefundFee" autocomplete="off"></el-input>
+                    <el-input placeholder="会员卡支付退票不收手续费" style="width: 250px" onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')" v-model="oRefundFee" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="第三方支付代售费" :label-width="formLabelWidth">
                     <el-input
@@ -321,39 +321,6 @@
                         v-model="oMemberCardPayCommissionFee"
                         autocomplete="off"
                         onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item :required="true" label="影院会员服务协议" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 250px"
-                        v-model="oMembershipServiceAgreement"
-                        autocomplete="off"
-                        type="textarea"
-                        maxlength="2000"
-                        :rows="6"
-                        show-word-limit
-                    ></el-input>
-                </el-form-item>
-                <el-form-item :required="true" label="购票提示" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 250px"
-                        type="textarea"
-                        :rows="3"
-                        v-model="oBuyTicketHint"
-                        maxlength="100"
-                        show-word-limit
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item :required="true" label="权益卡协议" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 250px"
-                        type="textarea"
-                        v-model="oEquityCardAgreement"
-                        autocomplete="off"
-                        maxlength="1000"
-                        :rows="6"
-                        show-word-limit
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="金币活动描述 " :label-width="formLabelWidth">
@@ -763,6 +730,39 @@
                             slot="tip"
                         >只能上传jpg/png文件，且不超过100kb 建议尺寸540*400或按比例上传</div>
                     </el-upload>
+                </el-form-item>
+                <el-form-item label="影院会员服务协议" :label-width="formLabelWidth">
+                    <el-input
+                            style="width: 250px"
+                            v-model="oMembershipServiceAgreement"
+                            autocomplete="off"
+                            type="textarea"
+                            maxlength="2000"
+                            :rows="6"
+                            show-word-limit
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="购票提示" :label-width="formLabelWidth">
+                    <el-input
+                            style="width: 250px"
+                            type="textarea"
+                            :rows="3"
+                            v-model="oBuyTicketHint"
+                            maxlength="100"
+                            show-word-limit
+                            autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="权益卡协议" :label-width="formLabelWidth">
+                    <el-input
+                            style="width: 250px"
+                            type="textarea"
+                            v-model="oEquityCardAgreement"
+                            autocomplete="off"
+                            maxlength="1000"
+                            :rows="6"
+                            show-word-limit
+                    ></el-input>
                 </el-form-item>
                 <el-form-item label="影院公告" :label-width="formLabelWidth">
                     <el-input
@@ -1320,24 +1320,6 @@ export default {
             }
             if (this.oMemberCardPayCommissionFee<0) {
                 this.message = '会员卡支付代售费必须大于0，请检查！';
-                this.open();
-                loading.close();
-                return;
-            }
-            if (!this.oMembershipServiceAgreement) {
-                this.message = '影院会员服务协议不能为空，请检查！';
-                this.open();
-                loading.close();
-                return;
-            }
-            if (!this.oBuyTicketHint) {
-                this.message = '购票提示不能为空，请检查！';
-                this.open();
-                loading.close();
-                return;
-            }
-            if (!this.oEquityCardAgreement) {
-                this.message = '权益卡协议不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;

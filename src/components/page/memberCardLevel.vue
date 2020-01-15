@@ -94,9 +94,15 @@
                 <el-button  style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
                 <el-button
                         type="primary"
+                        @click="updatePrice"
+                        style="float: right;margin-top: 10px"
+                        icon="el-icon-circle-plus-outline"
+                >刷新小程序会员价</el-button>
+                <el-button
+                        type="primary"
                         @click="back"
                         icon="el-icon-circle-plus-outline"
-                        style="float: right;"
+                        style="float: right;margin-top: 10px"
                 >返回卡等级管理</el-button>
             </div>
             <el-table
@@ -317,6 +323,58 @@
             this.getAllCinema();
         },
         methods: {
+            updatePrice() {
+                if (!this.cinemaCode) {
+                    this.message = '请选择影院！';
+                    this.open();
+                    return;
+                }
+                this.$confirm('该操作将花费较长时间, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                })
+                    .then(() => {
+                        const loading = this.$loading({
+                            lock: true,
+                            text: 'Loading',
+                            spinner: 'el-icon-loading',
+                            background: 'rgba(0, 0, 0, 0.7)',
+                            target: document.querySelector('.div1')
+                        });
+                        var jsonArr = [];
+                        jsonArr.push({ key: 'cinemaCode', value: this.cinemaCode });
+                        let sign = md5(preSign(jsonArr));
+                        jsonArr.push({ key: 'sign', value: sign });
+                        let params = ParamsAppend(jsonArr);
+                        https
+                            .fetchPost('/sessionInfo/updateMemberPrice', params)
+                            .then(data => {
+                                loading.close();
+                                if (data.data.code == 'success') {
+                                    this.$message.success(`刷新成功`);
+                                    this.show();
+                                } else if (data.data.code == 'nologin') {
+                                    this.message = data.data.message;
+                                    this.open();
+                                    this.$router.push('/login');
+                                } else {
+                                    this.message = data.data.message;
+                                    this.open();
+                                }
+                            })
+                            .catch(err => {
+                                loading.close();
+                                console.log(err);
+                            });
+                    })
+                    .catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '已取消'
+                        });
+                    });
+            },
             exceed(data){
                 console.log(data);
                 if(data.length==1){
