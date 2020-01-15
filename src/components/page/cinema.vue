@@ -229,42 +229,37 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="所在省份" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="所在省份" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        :disabled="true"
                         v-model="oProvince"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="所在城市" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="所在城市" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        :disabled="true"
                         v-model="oCity"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="详细地址" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="详细地址" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        :disabled="true"
                         v-model="oAddress"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="经度" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="经度" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        :disabled="true"
                         v-model="oLongitude"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="纬度" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="纬度" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        :disabled="true"
                         v-model="oLatitude"
                         autocomplete="off"
                     ></el-input>
