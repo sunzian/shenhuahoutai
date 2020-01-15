@@ -61,34 +61,32 @@
                 <el-table-column prop="sort" label="评分" width="100">
                     <template slot-scope="scope">{{scope.row.score}}</template>
                 </el-table-column>
-                <el-table-column label="操作" width="100" align="center" fixed="right">
+                <el-table-column label="操作" width="160" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-button
                                 type="success"
-                                v-if="scope.row.status == 1"
                                 @click="changeStatus(scope.$index, scope.row)"
                         >通过
                         </el-button>
                         <el-button
                                 type="success"
-                                v-if="scope.row.status == 2"
-                                @click="changeStatus(scope.$index, scope.row)"
+                                @click="delChange(scope.$index, scope.row)"
                         >未通过
                         </el-button>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" width="160" align="center" fixed="right">
+                <el-table-column label="操作" width="80" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-button
                             type="text"
                             icon="el-icon-circle-plus-outline"
                             @click="addChange(scope.$index,scope.row)"
-                        >查看评论</el-button>
-                        <el-button
-                            type="text"
-                            icon="el-icon-delete"
-                            @click="delChange(scope.$index,scope.row)"
-                        >删除</el-button>
+                        >查看</el-button>
+                        <!--<el-button-->
+                            <!--type="text"-->
+                            <!--icon="el-icon-delete"-->
+                            <!--@click="delChange(scope.$index,scope.row)"-->
+                        <!--&gt;删除</el-button>-->
                     </template>
                 </el-table-column>
             </el-table>
@@ -236,13 +234,7 @@ export default {
     methods: {
         // 修改状态
         changeStatus(index, row) {
-            if (row.status == 1) {
-                this.rowMess = '通过'
-            }
-            if (row.status == 2) {
-                this.rowMess = '未通过'
-            }
-            this.$confirm('是否确定' + this.rowMess + '此评论?', '提示', {
+            this.$confirm('是否确定通过此评论?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
@@ -258,15 +250,9 @@ export default {
                     this.idx = index;
                     this.form = row;
                     var jsonArr = [];
-                    let status;
-                    if (row.status == 2) {
-                        status = 1;
-                    } else if (row.status == 1) {
-                        status = 2;
-                    }
                     jsonArr.push({key: 'id', value: row.id});
                     jsonArr.push({key: 'commentType', value: row.commentType});
-                    jsonArr.push({key: 'status', value: status});
+                    jsonArr.push({key: 'status', value: 2});
                     let sign = md5(preSign(jsonArr));
                     jsonArr.push({key: 'sign', value: sign});
                     console.log(jsonArr);
@@ -300,7 +286,7 @@ export default {
         },
         delChange(index, row) {
             //删除数据
-            this.$confirm('此操作将永久删除该评论, 是否继续?', '提示', {
+            this.$confirm('是否确定未通过此评论?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
@@ -325,7 +311,7 @@ export default {
                         .then(data => {
                             loading.close();
                             if (data.data.code == 'success') {
-                                this.$message.error(`删除了`);
+                                this.$message.error(`修改成功`);
                                 this.getMenu();
                             } else if (data.data.code == 'nologin') {
                                 this.message = data.data.message;
