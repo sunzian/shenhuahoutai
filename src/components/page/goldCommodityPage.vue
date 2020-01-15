@@ -2945,8 +2945,8 @@ export default {
                 jsonArr.push({ key: 'assignInfo', value: this.form.assignInfo });
                 jsonArr.push({ key: 'limitType', value: this.form.limitType });
                 jsonArr.push({ key: 'limitNumber', value: this.form.limitNumber });
-                jsonArr.push({ key: 'details', value: this.form.details });
-                jsonArr.push({ key: 'markdown', value: this.form.markdown });
+                jsonArr.push({ key: 'details', value: this.form.markdown });
+                // jsonArr.push({ key: 'markdown', value: this.form.markdown });
                 jsonArr.push({ key: 'originalPrice', value: this.form.originalPrice });
                 jsonArr.push({ key: 'expireDay', value: this.form.expireDay });
                 jsonArr.push({ key: 'topStatus', value: this.oTopstatus });
