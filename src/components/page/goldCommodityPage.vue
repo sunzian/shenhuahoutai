@@ -679,13 +679,14 @@
                     ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="详情" :label-width="formLabelWidth">
-                    <mavon-editor
+                    <editor-bar v-model="oForm.details" :isClear="isClear" @change="changeMarkdown"></editor-bar>
+                    <!-- <mavon-editor
                         v-model="oForm.details"
                         ref="md"
                         @change="changeMarkdown"
                         @imgAdd="$imgAdd"
                         @imgDel="$imgDel"
-                    />
+                    /> -->
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -1147,14 +1148,15 @@
                     ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="详情" :label-width="formLabelWidth">
-                    <mavon-editor
+                    <editor-bar v-model="form.markdown" :isClear="isClear" @change="changeFormMarkdown"></editor-bar>
+                    <!-- <mavon-editor
                         class="markdown-body"
                         v-model="form.markdown"
                         ref="md"
                         @change="changeFormMarkdown"
                         @imgAdd="$imgAdd"
                         @imgDel="$imgDel"
-                    />
+                    /> -->
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -1334,10 +1336,12 @@ import 'quill/dist/quill.bubble.css';
 import md5 from 'js-md5';
 import axios from 'axios';
 import https from '../../https';
+import EditorBar from '../common/Editor';
 export default {
     name: 'basetable',
     data() {
         return {
+            isClear: false,
             content: '',
             partnerName: '',
             partnerCode: '',
@@ -1740,7 +1744,7 @@ export default {
             groupName: ''
         };
     },
-    components: { quillEditor },
+    components: { quillEditor,EditorBar },
     created() {},
     mounted() {
         this.getMenu();
@@ -2317,7 +2321,7 @@ export default {
             jsonArr.push({ key: 'assignInfo', value: this.oForm.assign_info });
             jsonArr.push({ key: 'limitType', value: this.oForm.limit_type });
             jsonArr.push({ key: 'limitNumber', value: this.oForm.limit_number });
-            jsonArr.push({ key: 'details', value: this.content });
+            jsonArr.push({ key: 'details', value: this.oForm.details });
             jsonArr.push({ key: 'markdown', value: this.oForm.markdown });
             jsonArr.push({ key: 'originalPrice', value: this.oForm.originalPrice });
             jsonArr.push({ key: 'topStatus', value: this.oForm.topStatus });
@@ -2539,7 +2543,7 @@ export default {
                             this.form.store = JSON.parse(Decrypt(data.data.data)).goldCommodity.store;
                             this.form.expireDay = JSON.parse(Decrypt(data.data.data)).goldCommodity.expireDay;
                             this.form.originalPrice = JSON.parse(Decrypt(data.data.data)).goldCommodity.originalPrice;
-                            this.form.markdown = JSON.parse(Decrypt(data.data.data)).goldCommodity.markdown;
+                            this.form.markdown = JSON.parse(Decrypt(data.data.data)).goldCommodity.details;
                             this.form.alredyChangedNumber = JSON.parse(Decrypt(data.data.data)).goldCommodity.alredyChangedNumber;
                             this.form.gold = JSON.parse(Decrypt(data.data.data)).goldCommodity.gold;
                             this.form.money = JSON.parse(Decrypt(data.data.data)).goldCommodity.money;
@@ -2593,14 +2597,14 @@ export default {
                             }
 
                             //生效方式下拉选显示对应的选项
-                            console.log(typeof JSON.parse(Decrypt(data.data.data)).goldCommodity.effectiveType);
+                            // console.log(typeof JSON.parse(Decrypt(data.data.data)).goldCommodity.effectiveType);
                             for (let x in this.effectiveType) {
                                 if (this.effectiveType[x].value == JSON.parse(Decrypt(data.data.data)).goldCommodity.effectiveType) {
                                     this.oEffectiveType = this.effectiveType[x].value;
                                     break;
                                 }
                             }
-                            console.log(this.oEffectiveType);
+                            // console.log(this.oEffectiveType);
                             //上架状态下拉选显示对应的选项
                             for (let x in this.showStatus) {
                                 if (this.showStatus[x].value == JSON.parse(Decrypt(data.data.data)).goldCommodity.status) {
@@ -3266,14 +3270,21 @@ export default {
         $imgDel(pos) {
             delete this.img_file[pos];
         },
-        changeMarkdown(value, render) {
-            this.oForm.markdown = value;
-            this.content = render;
+        // changeMarkdown(value, render) {
+        //     this.oForm.markdown = value;
+        //     this.content = render;
+        // },
+        // changeFormMarkdown(value, render) {
+        //     this.form.markdown = value;
+        //     this.form.details = render;
+        // },
+        changeMarkdown(val) {
+            // console.log(val)
+            this.oForm.details = val
         },
-        changeFormMarkdown(value, render) {
-            this.form.markdown = value;
-            this.form.details = render;
-        }
+        changeFormMarkdown(val) {
+            this.form.details = val;
+        },
     }
 };
 </script>

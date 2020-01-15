@@ -127,6 +127,17 @@
                     format="yyyy-MM-dd HH:mm:ss"
                     placeholder="兑换结束时间（止）"
                 ></el-date-picker>
+                <el-select
+                    clearable
+                    v-model="query.commodityType"
+                    placeholder="商品类型"
+                    class="handle-select mr10"
+                >
+                    <el-option key="1" label="实物" value="1"></el-option>
+                    <el-option key="2" label="优惠券" value="2"></el-option>
+                    <el-option key="3" label="券包" value="3"></el-option>
+                    <el-option key="4" label="商户商品" value="4"></el-option>
+                </el-select>
                 <el-button
                     style="margin-top: 10px;width: 90px;"
                     type="primary"
@@ -536,6 +547,10 @@ export default {
                 let pickupWay = this.query.pickupWay;
                 let trackingStatus = this.query.trackingStatus;
                 let trackingNumber = this.query.trackingNumber;
+                let commodityType = this.query.commodityType;
+                if (!commodityType) {
+                    commodityType = '';
+                }
                 if (!trackingStatus) {
                     trackingStatus = '';
                 }
@@ -590,7 +605,7 @@ export default {
                     value:
                         "['影院名称','商户名称','商户订单结算状态','订单号','手机号','用户备注','商品名称','消费金币','支付金额','领取时间','兑换时间','兑换状态','取货方式','物流单号','快递状态','收货人名称','收货人电话','省','市','区','收货人地址','支付交易号','支付回调消息','兑换方式','核销状态','退款状态','退款交易号','退款原因','微信退款回复','退款时间','退款金额']"
                 });
-
+                jsonArr.push({ key: 'commodityType', value: commodityType });
                 jsonArr.push({ key: 'businessCode', value: businessCode });
                 jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
                 jsonArr.push({ key: 'orderNo', value: orderNo });
@@ -815,6 +830,10 @@ export default {
                 let pickupWay = this.query.pickupWay;
                 let trackingStatus = this.query.trackingStatus;
                 let trackingNumber = this.query.trackingNumber;
+                let commodityType = this.query.commodityType;
+                if (!commodityType) {
+                    commodityType = '';
+                }
                 if (!trackingStatus) {
                     trackingStatus = '';
                 }
@@ -858,6 +877,7 @@ export default {
                     endDate = '';
                 }
                 let jsonArr = [];
+                jsonArr.push({ key: 'commodityType', value: commodityType });
                 jsonArr.push({ key: 'orderNo', value: orderNo });
                 jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
                 jsonArr.push({ key: 'businessCode', value: businessCode });
