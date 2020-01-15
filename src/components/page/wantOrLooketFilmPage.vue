@@ -140,7 +140,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="管理员回复" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" type="textarea" v-model="oReplyComment" maxlength="200"
+                    <el-input style="width: 250px" type="textarea" v-model="oReplyComment" maxlength="100"
                         show-word-limit autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="回复时间" :label-width="formLabelWidth">
