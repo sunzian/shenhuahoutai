@@ -82,7 +82,7 @@
           'underline', // 下划线
           'strikeThrough', // 删除线
           'foreColor', // 文字颜色
-          // 'backColor', // 背景颜色
+          'backColor', // 背景颜色
           // 'link', // 插入链接
           'list', // 列表
           'justify', // 对齐方式
