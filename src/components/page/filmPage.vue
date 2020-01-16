@@ -945,6 +945,7 @@ export default {
                         this.oDimensional = JSON.parse(Decrypt(data.data.data)).dimensional;
                         this.director = '';
                         this.actor = '';
+                        console.log(this.oStagePhotoList)
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
