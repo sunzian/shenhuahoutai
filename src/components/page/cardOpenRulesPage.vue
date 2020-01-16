@@ -195,8 +195,49 @@
                         @click="deletCoupon"
                     >删除</span>
                 </el-form-item>
-                <el-form-item :required="true" v-if="oForm.givenType == 3" label="领取后过期天数：" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model.trim="oForm.overDays" autocomplete="off"></el-input>
+                <el-form-item :required="true" v-if="oForm.givenType == 3 || oForm.givenType == 4" label="选择有效时间类型："
+                              :label-width="formLabelWidth">
+                    <el-radio-group v-model="oForm.effectiveTimeType">
+                        <el-radio :label="1">固定天数后过期</el-radio>
+                        <el-radio :label="2">指定时间段有效</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item
+                        label="指定时间段："
+                        :label-width="formLabelWidth"
+                        v-if="oForm.effectiveTimeType == 2&&(oForm.givenType == 3 || oForm.givenType == 4)"
+                        :required="true"
+                >
+                    <el-date-picker
+                            v-model="oForm.startEffectDate"
+                            type="date"
+                            placeholder="开始时间"
+                            value-format="yyyy-MM-dd"
+                            format="yyyy-MM-dd"
+                    ></el-date-picker>
+                    至
+                    <el-date-picker
+                            v-model="oForm.endEffectDate"
+                            type="date"
+                            placeholder="结束时间"
+                            value-format="yyyy-MM-dd"
+                            format="yyyy-MM-dd"
+                    ></el-date-picker>
+                </el-form-item>
+                <el-form-item
+                        label="有效期天数："
+                        :label-width="formLabelWidth"
+                        v-if="oForm.effectiveTimeType == 1&&(oForm.givenType == 3 || oForm.givenType == 4)"
+                        :required="true"
+                >
+                    <el-input
+                            style="width: 150px"
+                            placeholder="自领取之日起计算"
+                            onkeyup="this.value=this.value.replace(/\D/g,'')"
+                            v-model="oForm.overDays"
+                            autocomplete="off"
+                    ></el-input>
+                    天
                 </el-form-item>
                 <!--<el-form-item label="优惠描述：" :label-width="formLabelWidth">-->
                     <!--<el-input-->
@@ -207,7 +248,7 @@
                         <!--autocomplete="off"-->
                     <!--&gt;</el-input>-->
                 <!--</el-form-item>-->
-                <el-form-item :required="true" label="规则有效期：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="开卡规则有效期：" :label-width="formLabelWidth">
                     <el-date-picker
                         v-model="oForm.startDate"
                         type="datetime"
@@ -288,8 +329,50 @@
                     ></el-input>
                     <el-button type="primary" @click="changeCoupon">更换券包</el-button>
                 </el-form-item>
-                <el-form-item :required="true" v-if="oGivenType == 3 || oGivenType == '赠送券包'" label="领取后过期天数：" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" min="1" v-model.trim="oOverDays" autocomplete="off"></el-input>
+                <el-form-item :required="true"
+                              v-if="oGivenType == 3 || oGivenType == 4|| oGivenType == '赠送券包' || oGivenType == '两者都送'"
+                              label="选择有效时间类型：" :label-width="formLabelWidth">
+                    <el-radio-group v-model="oEffectiveTimeType">
+                        <el-radio :label="1">固定天数后过期</el-radio>
+                        <el-radio :label="2">指定时间段有效</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item
+                        label="指定时间段："
+                        :label-width="formLabelWidth"
+                        v-if="oEffectiveTimeType == 2&&(oGivenType == 3 || oGivenType == 4|| oGivenType == '赠送券包' || oGivenType == '两者都送')"
+                        :required="true"
+                >
+                    <el-date-picker
+                            v-model="oStartEffectDate"
+                            type="date"
+                            placeholder="开始时间"
+                            value-format="yyyy-MM-dd"
+                            format="yyyy-MM-dd"
+                    ></el-date-picker>
+                    至
+                    <el-date-picker
+                            v-model="oEndEffectDate"
+                            type="date"
+                            placeholder="结束时间"
+                            value-format="yyyy-MM-dd"
+                            format="yyyy-MM-dd"
+                    ></el-date-picker>
+                </el-form-item>
+                <el-form-item
+                        label="有效期天数："
+                        :label-width="formLabelWidth"
+                        v-if="oEffectiveTimeType == 1&&(oGivenType == 3 || oGivenType == 4|| oGivenType == '赠送券包' || oGivenType == '两者都送')"
+                        :required="true"
+                >
+                    <el-input
+                            style="width: 150px"
+                            placeholder="自领取之日起计算"
+                            onkeyup="this.value=this.value.replace(/\D/g,'')"
+                            v-model="oOverDays"
+                            autocomplete="off"
+                    ></el-input>
+                    天
                 </el-form-item>
                 <!--<el-form-item label="优惠描述：" :label-width="formLabelWidth">-->
                     <!--<el-input-->
@@ -299,7 +382,7 @@
                         <!--autocomplete="off"-->
                     <!--&gt;</el-input>-->
                 <!--</el-form-item>-->
-                <el-form-item :required="true" label="规则有效期：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="开卡规则有效期：" :label-width="formLabelWidth">
                     <el-date-picker
                         v-model="oStartDate"
                         type="datetime"
@@ -394,6 +477,9 @@ export default {
     name: 'basetable',
     data() {
         return {
+            oEffectiveTimeType: '',
+            oStartEffectDate: '',
+            oEndEffectDate: '',
             oCinemaName: '',
             oCardLevelCode: '',
             oCardLevelName: '',
@@ -461,6 +547,9 @@ export default {
                 ruleMemo: '', // 活动描述
                 status: '', // 启用状态
                 id: '',
+                effectiveTimeType: '',
+                startEffectDate: '',
+                endEffectDate: '',
                 startDate: '',
                 endDate: ''
             },
@@ -497,6 +586,9 @@ export default {
                         }
                         this.couponId = '';
                         this.groupName = '';
+                        this.oForm.effectiveTimeType = '';
+                        this.oForm.startEffectDate = '';
+                        this.oForm.endEffectDate = '';
                         this.dialogFormVisible = true;
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
@@ -546,7 +638,7 @@ export default {
                 return;
             }
             if(!this.oForm.startDate||!this.oForm.endDate){
-                this.message = '规则有效期不能为空，请检查！';
+                this.message = '开卡规则有效期不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
@@ -564,17 +656,32 @@ export default {
                     loading.close();
                     return;
                 }
-                if(!this.oForm.overDays){
-                    this.message = '领取后过期天数不能为空，请检查！';
+                if (!this.oForm.effectiveTimeType) {
+                    this.message = '有效时间类型不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
                 }
-                if(this.oForm.overDays<=0){
-                    this.message = '领取后过期天数必须大于0，请检查！';
-                    this.open();
-                    loading.close();
-                    return;
+                if (this.oForm.effectiveTimeType == 1) {
+                    if (!this.oForm.overDays && this.oForm.overDays != 0) {
+                        this.message = '优惠券领取后有效期天数不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                    if (this.oForm.overDays <= 0) {
+                        this.message = '优惠券领取后有效期天数必须大于0，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                } else if (this.oForm.effectiveTimeType == 2) {
+                    if (!this.oForm.startEffectDate || !this.oForm.endEffectDate) {
+                        this.message = '指定时间段不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
                 }
             }
             var jsonArr = [];
@@ -587,7 +694,14 @@ export default {
             jsonArr.push({ key: 'cardLevelCode', value: this.oForm.levelName });
             // jsonArr.push({ key: 'cardLevelName', value: this.oForm.levelName });
             jsonArr.push({ key: 'givenType', value: this.oForm.givenType });
-            jsonArr.push({ key: 'overDays', value: this.oForm.overDays });
+            jsonArr.push({ key: 'effectiveTimeType', value: this.oForm.effectiveTimeType });
+            if(this.oForm.effectiveTimeType==1){
+                jsonArr.push({ key: 'overDays', value: this.oForm.overDays });
+            }
+            if(this.oForm.effectiveTimeType==2){
+                jsonArr.push({ key: 'startEffectDate', value: this.oForm.startEffectDate });
+                jsonArr.push({ key: 'endEffectDate', value: this.oForm.endEffectDate });
+            }
             jsonArr.push({ key: 'ruleMemo', value: this.oForm.ruleMemo });
             jsonArr.push({ key: 'startDate', value: this.oForm.startDate });
             jsonArr.push({ key: 'endDate', value: this.oForm.endDate });
@@ -709,6 +823,8 @@ export default {
                         this.oRechargeAmount = JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.rechargeAmount;
                         this.groupName = JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.couponGroupName;
                         this.couponId = JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.givenCouponGroupId;
+                        this.oStartEffectDate = JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.startEffectDate;
+                        this.oEndEffectDate = JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.endEffectDate;
                         if (JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.givenMoney) {
                             this.oGivenMoney = JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.givenMoney;
                         }
@@ -723,6 +839,12 @@ export default {
                         }
                         if (JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.givenType == 4) {
                             this.oGivenType = '两者都送';
+                        }
+                        if (JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.effectiveTimeType == 1) {
+                            this.oEffectiveTimeType = 1;
+                        }
+                        if (JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.effectiveTimeType == 2) {
+                            this.oEffectiveTimeType = 2;
                         }
                         this.oRuleMemo = JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.ruleMemo;
                         this.oStartDate = JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.startDate;
@@ -781,7 +903,7 @@ export default {
                 return;
             }
             if(!this.oStartDate||!this.oEndDate){
-                this.message = '规则有效期不能为空，请检查！';
+                this.message = '开卡规则有效期不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
@@ -799,17 +921,26 @@ export default {
                     loading.close();
                     return;
                 }
-                if(!this.oOverDays){
-                    this.message = '领取后过期天数不能为空，请检查！';
-                    this.open();
-                    loading.close();
-                    return;
-                }
-                if(this.oOverDays<=0){
-                    this.message = '领取后过期天数必须大于0，请检查！';
-                    this.open();
-                    loading.close();
-                    return;
+                if (this.oEffectiveTimeType == 1) {
+                    if (!this.oOverDays && this.oOverDays != 0) {
+                        this.message = '优惠券领取后有效期天数不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                    if (this.oOverDays <= 0) {
+                        this.message = '优惠券领取后有效期天数必须大于0，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                } else if (this.oEffectiveTimeType == 2) {
+                    if (!this.oStartEffectDate || !this.oEndEffectDate) {
+                        this.message = '指定时间段不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
                 }
             }
             var jsonArr = [];
@@ -880,7 +1011,14 @@ export default {
             jsonArr.push({ key: 'endDate', value: this.oEndDate });
             jsonArr.push({ key: 'rechargeAmount', value: '0' });
             jsonArr.push({ key: 'ruleMemo', value: this.oRuleMemo });
-            jsonArr.push({ key: 'overDays', value: this.oOverDays });
+            jsonArr.push({ key: 'effectiveTimeType', value: this.oEffectiveTimeType });
+            if(this.oEffectiveTimeType==1){
+                jsonArr.push({ key: 'overDays', value: this.oOverDays });
+            }
+            if(this.oEffectiveTimeType==2){
+                jsonArr.push({ key: 'startEffectDate', value: this.oStartEffectDate });
+                jsonArr.push({ key: 'endEffectDate', value: this.oEndEffectDate });
+            }
             jsonArr.push({ key: 'cardLevelCode', value: this.oCardLevelName });
             // jsonArr.push({ key: 'cardLevelName', value: this.oCardLevelName });
             jsonArr.push({ key: 'id', value: this.oId });

@@ -258,20 +258,34 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="赠送券包id" :label-width="formLabelWidth">
+                <el-form-item label="赠送券包名称" :label-width="formLabelWidth">
                     <el-input
                         :disabled="true"
                         style="width: 250px"
-                        v-model="form.givenCouponGroupId"
+                        v-model="form.couponGroupName"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="优惠券领取后过期天数" :label-width="formLabelWidth">
+                <el-form-item v-if="form.effectiveTimeType==1" label="优惠券领取后过期天数" :label-width="formLabelWidth">
                     <el-input
                         :disabled="true"
                         style="width: 250px"
                         v-model="form.overDays"
                         autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item v-if="form.effectiveTimeType==2" label="优惠券有效期" :label-width="formLabelWidth">
+                    <el-input
+                            :disabled="true"
+                            style="width: 250px"
+                            v-model="form.startEffectDate"
+                            autocomplete="off"
+                    ></el-input>至
+                    <el-input
+                            :disabled="true"
+                            style="width: 250px"
+                            v-model="form.endEffectDate"
+                            autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="赠送金额" :label-width="formLabelWidth">
@@ -478,6 +492,7 @@ export default {
                             this.editVisible = true;
                             this.form.id = row.id;
                             this.form = JSON.parse(Decrypt(data.data.data));
+                            console.log(JSON.parse(Decrypt(data.data.data)));
                             if (JSON.parse(Decrypt(data.data.data)).payWay == 0) {
                                 this.form.payWay = '微信';
                             } else if (JSON.parse(Decrypt(data.data.data)).payWay == 1) {
