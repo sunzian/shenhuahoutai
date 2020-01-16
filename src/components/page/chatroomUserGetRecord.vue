@@ -98,31 +98,31 @@
                 header-cell-class-name="table-header"
                 @selection-change="handleSelectionChange"
             >
-                <el-table-column prop="name" label="影院名称">
+                <el-table-column prop="name" label="影院名称" width="220">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="领取用户">
+                <el-table-column prop="memo" label="领取用户" width="220">
                     <template slot-scope="scope">{{scope.row.userName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="用户手机号">
+                <el-table-column prop="memo" label="用户手机号" width="180">
                     <template slot-scope="scope">{{scope.row.userMobile}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="礼物名称">
+                <el-table-column prop="memo" label="礼物名称" width="240">
                     <template slot-scope="scope">{{scope.row.name}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="领取时间">
+                <el-table-column prop="memo" label="领取时间" width="200">
                     <template slot-scope="scope">{{scope.row.createDate}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="是否核销">
+                <el-table-column prop="memo" label="是否核销" width="180">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.getStatus=='1'">未核销</el-tag>
                         <el-tag v-else-if="scope.row.getStatus=='2'">已核销</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="memo" label="核销时间">
+                <el-table-column prop="memo" label="核销时间" width="200">
                     <template slot-scope="scope">{{scope.row.getDate}}</template>
                 </el-table-column>
-                <el-table-column label="礼物类型" align="center">
+                <el-table-column label="礼物类型" align="center" width="180">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.type=='1'">优惠券</el-tag>
                         <el-tag v-else-if="scope.row.type=='2'">实物</el-tag>

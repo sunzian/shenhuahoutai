@@ -1050,6 +1050,7 @@ export default {
                         this.directorList=[];
                         this.actorList=[];
                         this.oStagePhotoList=[];
+                        this.oStagePhoto=[];
                         this.director='';
                         this.actor='';
                         this.photoUrl='';

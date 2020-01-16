@@ -97,7 +97,7 @@
                         @click="updatePrice"
                         style="float: right;margin-top: 10px"
                         icon="el-icon-circle-plus-outline"
-                >刷新小程序会员价</el-button>
+                >刷新影城会员价</el-button>
                 <el-button
                         type="primary"
                         @click="back"

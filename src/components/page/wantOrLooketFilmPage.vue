@@ -20,7 +20,7 @@
                 <el-input v-model="query.name" placeholder="用户名" class="handle-input mr10"></el-input>
                 <el-input v-model="query.filmName" placeholder="影片名" class="handle-input mr10"></el-input>
                 <el-select clearable v-model="query.status" placeholder="通过状态" class="mr10">
-                    <el-option key="1" label="未通过" value="1"></el-option>
+                    <el-option key="1" label="不通过" value="1"></el-option>
                     <el-option key="2" label="通过" value="2"></el-option>
                 </el-select>
                 <el-button style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
@@ -51,7 +51,7 @@
                 </el-table-column>
                 <el-table-column prop="sort" label="通过状态" width="100">
                     <template slot-scope="scope">
-                        <el-tag v-if="scope.row.status == 1">未通过</el-tag>
+                        <el-tag v-if="scope.row.status == 1">不通过</el-tag>
                         <el-tag v-else>通过</el-tag>
                     </template>
                 </el-table-column>
@@ -71,7 +71,7 @@
                         <el-button
                                 type="success"
                                 @click="delChange(scope.$index, scope.row)"
-                        >未通过
+                        >不通过
                         </el-button>
                     </template>
                 </el-table-column>
@@ -213,7 +213,7 @@ export default {
             options: [
                 {
                     value: '1',
-                    label: '未通过'
+                    label: '不通过'
                 },
                 {
                     value: '2',
@@ -286,7 +286,7 @@ export default {
         },
         delChange(index, row) {
             //删除数据
-            this.$confirm('是否确定未通过此评论?', '提示', {
+            this.$confirm('是否确定不通过此评论?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'

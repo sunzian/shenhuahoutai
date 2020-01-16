@@ -470,7 +470,8 @@
                             @click="deletCoupon"
                     >删除</span>
                 </el-form-item>
-                <el-form-item :required="true" v-if="oForm.isGroupJoin==1" label="券包有效期方式" :label-width="formLabelWidth">
+                <el-form-item :required="true" v-if="oForm.isGroupJoin==1" label="券包有效期方式"
+                              :label-width="formLabelWidth">
                     <el-select v-model="oForm.groupDateType" placeholder="请选择" @change="clearGroupDateType()">
                         <el-option key="0" label="固定时间段" value="0"></el-option>
                         <el-option key="1" label="固定天数" value="1"></el-option>
@@ -504,29 +505,39 @@
                         <el-radio label="年">年</el-radio>
                     </el-radio-group>
                 </el-form-item>
-
                 <el-form-item :required="true" v-if="oForm.isGroupJoin==1&&oForm.groupDateType==1" label="券包单位数量"
                               :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oForm.groupNumber" autocomplete="off"></el-input>
                     <div style="color:red;font-size:12px">有效期单位为'日'，券包单位数量输入'2'，即领取券包后券包内的券在2日内有效</div>
                 </el-form-item>
                 <!--<el-form-item v-if="oForm.isGroupJoin==1" :required="true" label="券包权益说明" :label-width="formLabelWidth">-->
-                    <!--<el-input :rows="6" placeholder="如：券包的内容及有效期等说明" style="width: 300px"-->
-                              <!--v-model="oForm.couponSimpleDesc" maxlength="200" show-word-limit type="textarea"-->
-                              <!--autocomplete="off"></el-input>-->
+                <!--<el-input :rows="6" placeholder="如：券包的内容及有效期等说明" style="width: 300px"-->
+                <!--v-model="oForm.couponSimpleDesc" maxlength="200" show-word-limit type="textarea"-->
+                <!--autocomplete="off"></el-input>-->
                 <!--</el-form-item>-->
-                <el-form-item :required="true" label="权益卡有效期单位" :label-width="formLabelWidth">
-                    <el-radio-group v-model="oForm.unit">
-                        <el-radio label="日">日</el-radio>
-                        <el-radio label="周">周</el-radio>
-                        <el-radio label="月">月</el-radio>
-                        <el-radio label="季">季</el-radio>
-                        <el-radio label="年">年</el-radio>
-                    </el-radio-group>
+                <el-form-item :required="true" label="权益卡有效期" :label-width="formLabelWidth">
+                    <el-input placeholder="填写数字" style="width: 100px" v-model="oForm.number" autocomplete="off"></el-input>
+                    <el-select style="width: 70px" v-model="oForm.unit" placeholder="请选择">
+                        <el-option
+                                v-for="item in unitList"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                        ></el-option>
+                    </el-select>
                 </el-form-item>
-                <el-form-item :required="true" label="权益卡单位数量" :label-width="formLabelWidth">
-                    <el-input style="width: 150px" v-model="oForm.number" autocomplete="off"></el-input>
-                </el-form-item>
+                <!--<el-form-item :required="true" label="权益卡有效期单位" :label-width="formLabelWidth">-->
+                    <!--<el-radio-group v-model="oForm.unit">-->
+                        <!--<el-radio label="日">日</el-radio>-->
+                        <!--<el-radio label="周">周</el-radio>-->
+                        <!--<el-radio label="月">月</el-radio>-->
+                        <!--<el-radio label="季">季</el-radio>-->
+                        <!--<el-radio label="年">年</el-radio>-->
+                    <!--</el-radio-group>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item :required="true" label="权益卡单位数量" :label-width="formLabelWidth">-->
+                    <!--<el-input style="width: 150px" v-model="oForm.number" autocomplete="off"></el-input>-->
+                <!--</el-form-item>-->
                 <el-form-item :required="true" label="可用支付方式" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.validPayType">
                         <el-radio label="0">全部可用</el-radio>
@@ -1001,22 +1012,33 @@
                     <div style="color:red;font-size:12px">有效期单位为'日'，券包单位数量输入'2'，即领取券包后券包内的券在2日内有效</div>
                 </el-form-item>
                 <!--<el-form-item v-if="oIsGroupJoin==1" :required="true" label="券包权益说明" :label-width="formLabelWidth">-->
-                    <!--<el-input :rows="6" placeholder="如：券包的内容及有效期等说明" style="width: 300px"-->
-                              <!--v-model="oCouponSimpleDesc" maxlength="200" show-word-limit type="textarea"-->
-                              <!--autocomplete="off"></el-input>-->
+                <!--<el-input :rows="6" placeholder="如：券包的内容及有效期等说明" style="width: 300px"-->
+                <!--v-model="oCouponSimpleDesc" maxlength="200" show-word-limit type="textarea"-->
+                <!--autocomplete="off"></el-input>-->
                 <!--</el-form-item>-->
-                <el-form-item :required="true" label="权益卡有效期单位" :label-width="formLabelWidth">
-                    <el-radio-group v-model="oUnit">
-                        <el-radio label="日">日</el-radio>
-                        <el-radio label="周">周</el-radio>
-                        <el-radio label="月">月</el-radio>
-                        <el-radio label="季">季</el-radio>
-                        <el-radio label="年">年</el-radio>
-                    </el-radio-group>
+                <el-form-item :required="true" label="权益卡有效期" :label-width="formLabelWidth">
+                    <el-input placeholder="填写数字" style="width: 100px" v-model="oNumber" autocomplete="off"></el-input>
+                    <el-select style="width: 70px" v-model="oUnit" placeholder="请选择">
+                        <el-option
+                                v-for="item in unitList"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                        ></el-option>
+                    </el-select>
                 </el-form-item>
-                <el-form-item :required="true" label="权益卡单位数量" :label-width="formLabelWidth">
-                    <el-input style="width: 150px" v-model="oNumber" autocomplete="off"></el-input>
-                </el-form-item>
+                <!--<el-form-item :required="true" label="权益卡有效期单位" :label-width="formLabelWidth">-->
+                    <!--<el-radio-group v-model="oUnit">-->
+                        <!--<el-radio label="日">日</el-radio>-->
+                        <!--<el-radio label="周">周</el-radio>-->
+                        <!--<el-radio label="月">月</el-radio>-->
+                        <!--<el-radio label="季">季</el-radio>-->
+                        <!--<el-radio label="年">年</el-radio>-->
+                    <!--</el-radio-group>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item :required="true" label="权益卡单位数量" :label-width="formLabelWidth">-->
+                    <!--<el-input style="width: 150px" v-model="oNumber" autocomplete="off"></el-input>-->
+                <!--</el-form-item>-->
                 <el-form-item :required="true" label="可用支付方式" :label-width="formLabelWidth">
                     <el-radio-group v-model="oValidPayType">
                         <el-radio label="0">全部可用</el-radio>
@@ -1297,8 +1319,8 @@
 </template>
 
 <script>
-    import {fetchData} from '../../api/index';
-    import {Decrypt, Encrypt, preSign, EncryptReplace, ParamsAppend} from '@/aes/utils';
+    import { fetchData } from '../../api/index';
+    import { Decrypt, Encrypt, preSign, EncryptReplace, ParamsAppend } from '@/aes/utils';
     import md5 from 'js-md5';
     import axios from 'axios';
     import https from '../../https';
@@ -1373,37 +1395,37 @@
                     numberFilm: '',
                     eachFilmNumber: '',
                     discountMoneyFilm: '',
-                    filmSimpleDesc: '',
+                    filmSimpleDesc: ''
                 },
                 oExceptWeekDay: [
                     {
-                        index: "1",
+                        index: '1',
                         value: '星期一'
                     },
                     {
-                        index: "2",
+                        index: '2',
                         value: '星期二'
                     },
                     {
-                        index: "3",
+                        index: '3',
                         value: '星期三'
                     },
                     {
-                        index: "4",
+                        index: '4',
                         value: '星期四'
                     },
                     {
-                        index: "5",
+                        index: '5',
                         value: '星期五'
                     },
                     {
-                        index: "6",
+                        index: '6',
                         value: '星期六'
                     },
                     {
-                        index: "7",
+                        index: '7',
                         value: '星期日'
-                    },
+                    }
                 ],
                 selectedSell: [],
                 oSelectedSell: [],
@@ -1490,7 +1512,7 @@
                     oPageSize: 15,
                     bPageNo: 1,
                     bPageSize: 15,
-                    filmName: '',
+                    filmName: ''
                 },
                 restaurants: [],
                 tableData: [],
@@ -1519,6 +1541,23 @@
                         value: '1',
                         label: '是'
                     }],
+                unitList: [{
+                    value: '日',
+                    label: '日'
+                },
+                    {
+                        value: '周',
+                        label: '周'
+                    }, {
+                        value: '月',
+                        label: '月'
+                    }, {
+                        value: '季',
+                        label: '季'
+                    }, {
+                        value: '年',
+                        label: '年'
+                    }],
                 canUse1: [{
                     value: '0',
                     label: '不可用'
@@ -1544,7 +1583,7 @@
                 couponName: '',
                 couponList: [],
                 groupName: '',
-                rowMess: '',
+                rowMess: ''
             };
         },
         created() {
@@ -1573,14 +1612,14 @@
                 this.oCheckedDays = [];
                 this.oIsCouponTogether = '';
             },
-            clearGroupJoin(){
+            clearGroupJoin() {
                 this.clearGroupDateType();
-                this.groupName='';
-                this.couponId='';
-                this.oGroupDateType='';
-                this.oCouponSimpleDesc='';
-                this.oForm.groupDateType='';
-                this.oForm.couponSimpleDesc='';
+                this.groupName = '';
+                this.couponId = '';
+                this.oGroupDateType = '';
+                this.oCouponSimpleDesc = '';
+                this.oForm.groupDateType = '';
+                this.oForm.couponSimpleDesc = '';
             },
             clearGroupDateType() {
                 this.oForm.groupStartDate = '';
@@ -1609,18 +1648,18 @@
                 this.oNumberMerchandise = '';
             },
             clearMerchandiseType() {
-                this.oSelectedSell = []
+                this.oSelectedSell = [];
             },
             clearFilmJoin() {
                 this.oForm.filmSimpleDesc = '';
                 this.oForm.selectHallType = '';
-                this.clearScreenCode()
+                this.clearScreenCode();
                 this.oForm.selectFilmFormatType = '';
-                this.clearFilmFormatCode()
+                this.clearFilmFormatCode();
                 this.oForm.selectFilmType = '';
-                this.clearSelectedSell()
+                this.clearSelectedSell();
                 this.oForm.reduceTypeFilm = '';
-                this.clearDiscountMoneyFilm()
+                this.clearDiscountMoneyFilm();
                 this.oForm.isLimitEachFilm = '';
                 this.oForm.eachFilmNumber = '';
                 this.oForm.isLimitFilm = '';
@@ -1638,7 +1677,7 @@
                 this.oNumberFilm = '';
             },
             clearMerchandiseJoin() {
-                this.clearDiscountMoneyMerchandise()
+                this.clearDiscountMoneyMerchandise();
                 this.oForm.merchandiseSimpleDesc = '';
                 this.oForm.reduceTypeMerchandise = '';
                 this.oForm.selectMerchandiseType = '';
@@ -1651,7 +1690,7 @@
                 this.oIsLimitMerchandise = '';
                 this.oLimitMerchandiseUnit = '';
                 this.oNumberMerchandise = '';
-                this.oSelectedSell = []
+                this.oSelectedSell = [];
             },
             clearDiscountMoneyMerchandise() {
                 this.oForm.discountMoneyMerchandise = '';
@@ -1664,7 +1703,7 @@
                 this.oDiscountMoneyFilm = '';
             },
             clearSelectedSell() {
-                this.selectedSell = []
+                this.selectedSell = [];
             },
             clearFilmFormatCode() {
                 this.oForm.filmFormatCode = [];
@@ -1693,18 +1732,18 @@
             },
             // 更换券包
             changeCoupon() {
-                let groupName = this.query.groupName
+                let groupName = this.query.groupName;
                 if (!groupName) {
-                    groupName = ''
+                    groupName = '';
                 }
                 let jsonArr = [];
-                jsonArr.push({key: 'cinemaCodes', value: this.oForm.cinemaCode});
-                jsonArr.push({key: 'groupName', value: groupName});
-                jsonArr.push({key: 'status', value: 1});
-                jsonArr.push({key: 'pageNo', value: this.query.bPageNo});
-                jsonArr.push({key: 'pageSize', value: this.query.bPageSize});
+                jsonArr.push({ key: 'cinemaCodes', value: this.oForm.cinemaCode });
+                jsonArr.push({ key: 'groupName', value: groupName });
+                jsonArr.push({ key: 'status', value: 1 });
+                jsonArr.push({ key: 'pageNo', value: this.query.bPageNo });
+                jsonArr.push({ key: 'pageSize', value: this.query.bPageSize });
                 let sign = md5(preSign(jsonArr));
-                jsonArr.push({key: 'sign', value: sign});
+                jsonArr.push({ key: 'sign', value: sign });
                 var params = ParamsAppend(jsonArr);
                 https.fetchPost('/couponGroup/couponGroupPage', params).then(data => {
                     if (data.data.code == 'success') {
@@ -1754,8 +1793,8 @@
                         return;
                     }
                     this.dateInfo.push(this.value1);
-                    this.startArr.push(this.value1[0])
-                    this.endArr.push(this.value1[1])
+                    this.startArr.push(this.value1[0]);
+                    this.endArr.push(this.value1[1]);
                     this.value1 = '';
                 }
             },
@@ -1921,7 +1960,7 @@
                         loading.close();
                         return;
                     }
-                    if (this.oForm.groupDateType==0) {
+                    if (this.oForm.groupDateType == 0) {
                         if (!this.oForm.groupStartDate) {
                             this.message = '券包固定时间段不能为空，请检查！';
                             this.open();
@@ -1935,7 +1974,7 @@
                             return;
                         }
                     }
-                    if (this.oForm.groupDateType==1) {
+                    if (this.oForm.groupDateType == 1) {
                         if (!this.oForm.groupUnit) {
                             this.message = '券包有效期单位不能为空，请检查！';
                             this.open();
@@ -2296,91 +2335,91 @@
                     return;
                 }
                 var jsonArr = [];
-                jsonArr.push({key: 'name', value: this.oForm.name});
-                jsonArr.push({key: 'cinemaCode', value: this.oForm.cinemaCode});
+                jsonArr.push({ key: 'name', value: this.oForm.name });
+                jsonArr.push({ key: 'cinemaCode', value: this.oForm.cinemaCode });
                 // jsonArr.push({ key: 'cardType', value: this.oForm.cardType});
-                jsonArr.push({key: 'startDate', value: this.oForm.startDate});
-                jsonArr.push({key: 'endDate', value: this.oForm.endDate});
-                jsonArr.push({key: 'status', value: this.oForm.status});
-                jsonArr.push({key: 'benefitDesc', value: this.oForm.benefitDesc});
-                jsonArr.push({key: 'unit', value: this.oForm.unit});
-                jsonArr.push({key: 'number', value: this.oForm.number});
-                jsonArr.push({key: 'expense', value: this.oForm.expense});
-                jsonArr.push({key: 'simpleDesc', value: this.oForm.simpleDesc});
-                jsonArr.push({key: 'isRecommend', value: this.oForm.isRecommend});
-                jsonArr.push({key: 'isLimitBuy', value: this.oForm.isLimitBuy});
+                jsonArr.push({ key: 'startDate', value: this.oForm.startDate });
+                jsonArr.push({ key: 'endDate', value: this.oForm.endDate });
+                jsonArr.push({ key: 'status', value: this.oForm.status });
+                jsonArr.push({ key: 'benefitDesc', value: this.oForm.benefitDesc });
+                jsonArr.push({ key: 'unit', value: this.oForm.unit });
+                jsonArr.push({ key: 'number', value: this.oForm.number });
+                jsonArr.push({ key: 'expense', value: this.oForm.expense });
+                jsonArr.push({ key: 'simpleDesc', value: this.oForm.simpleDesc });
+                jsonArr.push({ key: 'isRecommend', value: this.oForm.isRecommend });
+                jsonArr.push({ key: 'isLimitBuy', value: this.oForm.isLimitBuy });
                 if (this.oForm.isLimitBuy == 1) {
-                    jsonArr.push({key: 'limitBuyNumber', value: this.oForm.limitBuyNumber});
+                    jsonArr.push({ key: 'limitBuyNumber', value: this.oForm.limitBuyNumber });
                 }
-                jsonArr.push({key: 'isFilmJoin', value: this.oForm.isFilmJoin});
-                jsonArr.push({key: 'isMerchandiseJoin', value: this.oForm.isMerchandiseJoin});
-                jsonArr.push({key: 'isGroupJoin', value: this.oForm.isGroupJoin});
-                jsonArr.push({key: 'startTimeVal', value: this.startArr.join(',')});
-                jsonArr.push({key: 'endTimeVal', value: this.endArr.join(',')});
-                jsonArr.push({key: 'isHolidayValid', value: this.oForm.isHolidayValid});
-                jsonArr.push({key: 'validWeekDay', value: this.oForm.validWeekDay});
-                jsonArr.push({key: 'validPayType', value: this.oForm.validPayType});
-                jsonArr.push({key: 'isCouponTogether', value: this.oForm.isCouponTogether});
+                jsonArr.push({ key: 'isFilmJoin', value: this.oForm.isFilmJoin });
+                jsonArr.push({ key: 'isMerchandiseJoin', value: this.oForm.isMerchandiseJoin });
+                jsonArr.push({ key: 'isGroupJoin', value: this.oForm.isGroupJoin });
+                jsonArr.push({ key: 'startTimeVal', value: this.startArr.join(',') });
+                jsonArr.push({ key: 'endTimeVal', value: this.endArr.join(',') });
+                jsonArr.push({ key: 'isHolidayValid', value: this.oForm.isHolidayValid });
+                jsonArr.push({ key: 'validWeekDay', value: this.oForm.validWeekDay });
+                jsonArr.push({ key: 'validPayType', value: this.oForm.validPayType });
+                jsonArr.push({ key: 'isCouponTogether', value: this.oForm.isCouponTogether });
                 if (this.oForm.isFilmJoin == 1) {
-                    jsonArr.push({key: 'filmSimpleDesc', value: this.oForm.filmSimpleDesc});
-                    jsonArr.push({key: 'reduceTypeFilm', value: this.oForm.reduceTypeFilm});
-                    jsonArr.push({key: 'discountMoneyFilm', value: this.oForm.discountMoneyFilm});
-                    jsonArr.push({key: 'selectHallType', value: this.oForm.selectHallType});
-                    jsonArr.push({key: 'selectFilmFormatType', value: this.oForm.selectFilmFormatType});
-                    jsonArr.push({key: 'selectFilmType', value: this.oForm.selectFilmType});
-                    jsonArr.push({key: 'isLimitFilm', value: this.oForm.isLimitFilm});
-                    jsonArr.push({key: 'isLimitEachFilm', value: this.oForm.isLimitEachFilm});
+                    jsonArr.push({ key: 'filmSimpleDesc', value: this.oForm.filmSimpleDesc });
+                    jsonArr.push({ key: 'reduceTypeFilm', value: this.oForm.reduceTypeFilm });
+                    jsonArr.push({ key: 'discountMoneyFilm', value: this.oForm.discountMoneyFilm });
+                    jsonArr.push({ key: 'selectHallType', value: this.oForm.selectHallType });
+                    jsonArr.push({ key: 'selectFilmFormatType', value: this.oForm.selectFilmFormatType });
+                    jsonArr.push({ key: 'selectFilmType', value: this.oForm.selectFilmType });
+                    jsonArr.push({ key: 'isLimitFilm', value: this.oForm.isLimitFilm });
+                    jsonArr.push({ key: 'isLimitEachFilm', value: this.oForm.isLimitEachFilm });
                     if (this.oForm.isLimitEachFilm != 0) {
-                        jsonArr.push({key: 'eachFilmNumber', value: this.oForm.eachFilmNumber});
+                        jsonArr.push({ key: 'eachFilmNumber', value: this.oForm.eachFilmNumber });
                     }
                     if (this.oForm.selectHallType != 0) {
-                        jsonArr.push({key: 'screenCode', value: this.oForm.screenCode});
+                        jsonArr.push({ key: 'screenCode', value: this.oForm.screenCode });
                     }
                     if (this.oForm.selectFilmFormatType != 0) {
-                        jsonArr.push({key: 'filmFormatCode', value: this.oForm.filmFormatCode});
+                        jsonArr.push({ key: 'filmFormatCode', value: this.oForm.filmFormatCode });
                     }
                     if (this.oForm.selectFilmType != 0) {
-                        jsonArr.push({key: 'filmCode', value: this.oForm.filmCode});
+                        jsonArr.push({ key: 'filmCode', value: this.oForm.filmCode });
                     }
                     if (this.oForm.isLimitFilm != 0) {
-                        jsonArr.push({key: 'numberFilm', value: this.oForm.numberFilm});
-                        jsonArr.push({key: 'limitFilmUnit', value: this.oForm.limitFilmUnit});
+                        jsonArr.push({ key: 'numberFilm', value: this.oForm.numberFilm });
+                        jsonArr.push({ key: 'limitFilmUnit', value: this.oForm.limitFilmUnit });
                     }
                 }
                 if (this.oForm.isMerchandiseJoin == 1) {
-                    jsonArr.push({key: 'reduceTypeMerchandise', value: this.oForm.reduceTypeMerchandise});
-                    jsonArr.push({key: 'merchandiseSimpleDesc', value: this.oForm.merchandiseSimpleDesc});
-                    jsonArr.push({key: 'discountMoneyMerchandise', value: this.oForm.discountMoneyMerchandise});
-                    jsonArr.push({key: 'selectMerchandiseType', value: this.oForm.selectMerchandiseType});
+                    jsonArr.push({ key: 'reduceTypeMerchandise', value: this.oForm.reduceTypeMerchandise });
+                    jsonArr.push({ key: 'merchandiseSimpleDesc', value: this.oForm.merchandiseSimpleDesc });
+                    jsonArr.push({ key: 'discountMoneyMerchandise', value: this.oForm.discountMoneyMerchandise });
+                    jsonArr.push({ key: 'selectMerchandiseType', value: this.oForm.selectMerchandiseType });
                     if (this.oForm.selectMerchandiseType != 0) {
-                        jsonArr.push({key: 'merchandiseCode', value: this.oForm.merchandiseCode});
+                        jsonArr.push({ key: 'merchandiseCode', value: this.oForm.merchandiseCode });
                     }
                     if (this.oForm.reduceTypeMerchandise == 2) {
-                        jsonArr.push({key: 'achieveMoneyMerchandise', value: this.oForm.achieveMoneyMerchandise});
-                        jsonArr.push({key: 'isLimitMerchandise', value: '0'});
+                        jsonArr.push({ key: 'achieveMoneyMerchandise', value: this.oForm.achieveMoneyMerchandise });
+                        jsonArr.push({ key: 'isLimitMerchandise', value: '0' });
                     } else {
-                        jsonArr.push({key: 'isLimitMerchandise', value: this.oForm.isLimitMerchandise});
+                        jsonArr.push({ key: 'isLimitMerchandise', value: this.oForm.isLimitMerchandise });
                     }
                     if (this.oForm.isLimitMerchandise != 0) {
-                        jsonArr.push({key: 'numberMerchandise', value: this.oForm.numberMerchandise});
-                        jsonArr.push({key: 'limitMerchandiseUnit', value: this.oForm.limitMerchandiseUnit});
+                        jsonArr.push({ key: 'numberMerchandise', value: this.oForm.numberMerchandise });
+                        jsonArr.push({ key: 'limitMerchandiseUnit', value: this.oForm.limitMerchandiseUnit });
                     }
                 }
                 if (this.oForm.isGroupJoin == 1) {
-                    jsonArr.push({key: 'couponGroupId', value: this.couponId});
-                    jsonArr.push({key: 'couponSimpleDesc', value: this.oForm.couponSimpleDesc});
-                    jsonArr.push({key: 'groupDateType', value: this.oForm.groupDateType});
+                    jsonArr.push({ key: 'couponGroupId', value: this.couponId });
+                    jsonArr.push({ key: 'couponSimpleDesc', value: this.oForm.couponSimpleDesc });
+                    jsonArr.push({ key: 'groupDateType', value: this.oForm.groupDateType });
                     if (this.oForm.groupDateType == 1) {
-                        jsonArr.push({key: 'groupUnit', value: this.oForm.groupUnit});
-                        jsonArr.push({key: 'groupNumber', value: this.oForm.groupNumber});
+                        jsonArr.push({ key: 'groupUnit', value: this.oForm.groupUnit });
+                        jsonArr.push({ key: 'groupNumber', value: this.oForm.groupNumber });
                     }
                     if (this.oForm.groupDateType == 0) {
-                        jsonArr.push({key: 'groupStartDate', value: this.oForm.groupStartDate});
-                        jsonArr.push({key: 'groupEndDate', value: this.oForm.groupEndDate});
+                        jsonArr.push({ key: 'groupStartDate', value: this.oForm.groupStartDate });
+                        jsonArr.push({ key: 'groupEndDate', value: this.oForm.groupEndDate });
                     }
                 }
                 let sign = md5(preSign(jsonArr));
-                jsonArr.push({key: 'sign', value: sign});
+                jsonArr.push({ key: 'sign', value: sign });
                 console.log(jsonArr);
                 let params = ParamsAppend(jsonArr);
                 if (this.dialogFormVisible == true) {
@@ -2466,9 +2505,9 @@
                     this.idx = index;
                     this.form = row;
                     let jsonArr = [];
-                    jsonArr.push({key: 'id', value: row.id});
+                    jsonArr.push({ key: 'id', value: row.id });
                     let sign = md5(preSign(jsonArr));
-                    jsonArr.push({key: 'sign', value: sign});
+                    jsonArr.push({ key: 'sign', value: sign });
                     let params = ParamsAppend(jsonArr);
                     https.fetchPost('/benefitCard/deleteById', params).then(data => {
                         if (data.data.code == 'success') {
@@ -2506,9 +2545,9 @@
                 this.idx = index;
                 this.form = row;
                 var jsonArr = [];
-                jsonArr.push({key: 'id', value: row.id});
+                jsonArr.push({ key: 'id', value: row.id });
                 let sign = md5(preSign(jsonArr));
-                jsonArr.push({key: 'sign', value: sign});
+                jsonArr.push({ key: 'sign', value: sign });
                 let params = ParamsAppend(jsonArr);
                 https.fetchPost('/benefitCard/getTimesById', params).then(data => { //查询可用时间段
                     loading.close();
@@ -2520,10 +2559,10 @@
                         let jsonarr = [];
                         jsonarr.push(JSON.parse(Decrypt(data.data.data))[x].startTime);
                         jsonarr.push(JSON.parse(Decrypt(data.data.data))[x].endTime);
-                        this.dateInfo.push(jsonarr)
+                        this.dateInfo.push(jsonarr);
                     }
                     for (let x in this.dateInfo) {
-                        this.startArr.push(this.dateInfo[x][0])
+                        this.startArr.push(this.dateInfo[x][0]);
                         this.endArr.push(this.dateInfo[x][1]);
                     }
 
@@ -2545,7 +2584,7 @@
                                 let json = {};
                                 json.filmName = exFilmNameList[x];
                                 json.filmCode = exFilmCodeList[x];
-                                this.selectedSell.push(json)
+                                this.selectedSell.push(json);
                             }
                             console.log(this.selectedSell);
                         }
@@ -2558,7 +2597,7 @@
                                 let json = {};
                                 json.merchandiseName = exFilmNameList[x];
                                 json.merchandiseCode = exFilmCodeList[x];
-                                this.oSelectedSell.push(json)
+                                this.oSelectedSell.push(json);
                             }
                         }
                         let formats = JSON.parse(Decrypt(data.data.data)).formatList;
@@ -2597,7 +2636,7 @@
                             this.oSelectHallType = '2';
                         }
                         if (JSON.parse(Decrypt(data.data.data)).benefitCard.screenCode) {
-                            this.oScreenCode = JSON.parse(Decrypt(data.data.data)).benefitCard.screenCode.split(",");
+                            this.oScreenCode = JSON.parse(Decrypt(data.data.data)).benefitCard.screenCode.split(',');
                         }
                         if (JSON.parse(Decrypt(data.data.data)).benefitCard.selectFilmFormatType == 0) {
                             this.oSelectFilmFormatType = '0';
@@ -2609,7 +2648,7 @@
                             this.oSelectFilmFormatType = '2';
                         }
                         if (JSON.parse(Decrypt(data.data.data)).benefitCard.filmFormatCode) {
-                            this.oFilmFormatCode = JSON.parse(Decrypt(data.data.data)).benefitCard.filmFormatCode.split(",");
+                            this.oFilmFormatCode = JSON.parse(Decrypt(data.data.data)).benefitCard.filmFormatCode.split(',');
                         }
                         if (JSON.parse(Decrypt(data.data.data)).benefitCard.selectFilmType == 0) {
                             this.oSelectFilmType = '0';
@@ -2763,7 +2802,7 @@
                             }
                         }
                         if (JSON.parse(Decrypt(data.data.data)).benefitCard.validWeekDay) {
-                            this.oCheckedDays = JSON.parse(Decrypt(data.data.data)).benefitCard.validWeekDay.split(",");
+                            this.oCheckedDays = JSON.parse(Decrypt(data.data.data)).benefitCard.validWeekDay.split(',');
                         }
                         for (let x in this.canUse) {
                             if (this.canUse[x].value == JSON.parse(Decrypt(data.data.data)).benefitCard.isCouponTogether) {
@@ -2812,11 +2851,11 @@
                 });
                 let filmCodeList = [];
                 for (let x in this.selectedSell) {
-                    filmCodeList.push(this.selectedSell[x].filmCode)
+                    filmCodeList.push(this.selectedSell[x].filmCode);
                 }
                 let merchandiseCodeList = [];
                 for (let x in this.oSelectedSell) {
-                    merchandiseCodeList.push(this.oSelectedSell[x].merchandiseCode)
+                    merchandiseCodeList.push(this.oSelectedSell[x].merchandiseCode);
                 }
                 //权益卡判断
                 if (!this.oName) {
@@ -2906,7 +2945,7 @@
                         loading.close();
                         return;
                     }
-                    if (this.oGroupDateType==0) {
+                    if (this.oGroupDateType == 0) {
                         if (!this.oGroupStartDate) {
                             this.message = '券包固定时间段不能为空，请检查！';
                             this.open();
@@ -2920,7 +2959,7 @@
                             return;
                         }
                     }
-                    if (this.oGroupDateType==1) {
+                    if (this.oGroupDateType == 1) {
                         if (!this.oGroupUnit) {
                             this.message = '券包有效期单位不能为空，请检查！';
                             this.open();
@@ -3281,93 +3320,93 @@
                     return;
                 }
                 var jsonArr = [];
-                jsonArr.push({key: 'name', value: this.oName});
-                jsonArr.push({key: 'cinemaCode', value: this.oCinemaCode});
+                jsonArr.push({ key: 'name', value: this.oName });
+                jsonArr.push({ key: 'cinemaCode', value: this.oCinemaCode });
                 // jsonArr.push({key: 'cardType', value: this.oCardType});
-                jsonArr.push({key: 'startDate', value: this.oStartDate});
-                jsonArr.push({key: 'endDate', value: this.oEndDate});
-                jsonArr.push({key: 'status', value: this.oStatus});
-                jsonArr.push({key: 'benefitDesc', value: this.oBenefitDesc});
-                jsonArr.push({key: 'unit', value: this.oUnit});
-                jsonArr.push({key: 'number', value: this.oNumber});
-                jsonArr.push({key: 'expense', value: this.oExpense});
-                jsonArr.push({key: 'simpleDesc', value: this.oSimpleDesc});
-                jsonArr.push({key: 'isRecommend', value: this.oIsRecommend});
-                jsonArr.push({key: 'isLimitBuy', value: this.oIsLimitBuy});
+                jsonArr.push({ key: 'startDate', value: this.oStartDate });
+                jsonArr.push({ key: 'endDate', value: this.oEndDate });
+                jsonArr.push({ key: 'status', value: this.oStatus });
+                jsonArr.push({ key: 'benefitDesc', value: this.oBenefitDesc });
+                jsonArr.push({ key: 'unit', value: this.oUnit });
+                jsonArr.push({ key: 'number', value: this.oNumber });
+                jsonArr.push({ key: 'expense', value: this.oExpense });
+                jsonArr.push({ key: 'simpleDesc', value: this.oSimpleDesc });
+                jsonArr.push({ key: 'isRecommend', value: this.oIsRecommend });
+                jsonArr.push({ key: 'isLimitBuy', value: this.oIsLimitBuy });
                 if (this.oIsLimitBuy == 1) {
-                    jsonArr.push({key: 'limitBuyNumber', value: this.oLimitBuyNumber});
+                    jsonArr.push({ key: 'limitBuyNumber', value: this.oLimitBuyNumber });
                 }
-                jsonArr.push({key: 'isFilmJoin', value: this.oIsFilmJoin});
-                jsonArr.push({key: 'isGroupJoin', value: this.oIsGroupJoin});
-                jsonArr.push({key: 'isMerchandiseJoin', value: this.oIsMerchandiseJoin});
-                jsonArr.push({key: 'startTimeVal', value: this.startArr.join(',')});
-                jsonArr.push({key: 'endTimeVal', value: this.endArr.join(',')});
-                jsonArr.push({key: 'isHolidayValid', value: this.oIsHolidayValid});
-                jsonArr.push({key: 'validWeekDay', value: this.oCheckedDays});
-                jsonArr.push({key: 'validPayType', value: this.oValidPayType});
-                jsonArr.push({key: 'isCouponTogether', value: this.oIsCouponTogether});
+                jsonArr.push({ key: 'isFilmJoin', value: this.oIsFilmJoin });
+                jsonArr.push({ key: 'isGroupJoin', value: this.oIsGroupJoin });
+                jsonArr.push({ key: 'isMerchandiseJoin', value: this.oIsMerchandiseJoin });
+                jsonArr.push({ key: 'startTimeVal', value: this.startArr.join(',') });
+                jsonArr.push({ key: 'endTimeVal', value: this.endArr.join(',') });
+                jsonArr.push({ key: 'isHolidayValid', value: this.oIsHolidayValid });
+                jsonArr.push({ key: 'validWeekDay', value: this.oCheckedDays });
+                jsonArr.push({ key: 'validPayType', value: this.oValidPayType });
+                jsonArr.push({ key: 'isCouponTogether', value: this.oIsCouponTogether });
                 if (this.oIsFilmJoin == 1) {
-                    jsonArr.push({key: 'filmSimpleDesc', value: this.oFilmSimpleDesc});
-                    jsonArr.push({key: 'reduceTypeFilm', value: this.oReduceTypeFilm});
-                    jsonArr.push({key: 'discountMoneyFilm', value: this.oDiscountMoneyFilm});
-                    jsonArr.push({key: 'selectHallType', value: this.oSelectHallType});
-                    jsonArr.push({key: 'selectFilmFormatType', value: this.oSelectFilmFormatType});
-                    jsonArr.push({key: 'selectFilmType', value: this.oSelectFilmType});
-                    jsonArr.push({key: 'isLimitFilm', value: this.oIsLimitFilm});
-                    jsonArr.push({key: 'isLimitEachFilm', value: this.oIsLimitEachFilm});
+                    jsonArr.push({ key: 'filmSimpleDesc', value: this.oFilmSimpleDesc });
+                    jsonArr.push({ key: 'reduceTypeFilm', value: this.oReduceTypeFilm });
+                    jsonArr.push({ key: 'discountMoneyFilm', value: this.oDiscountMoneyFilm });
+                    jsonArr.push({ key: 'selectHallType', value: this.oSelectHallType });
+                    jsonArr.push({ key: 'selectFilmFormatType', value: this.oSelectFilmFormatType });
+                    jsonArr.push({ key: 'selectFilmType', value: this.oSelectFilmType });
+                    jsonArr.push({ key: 'isLimitFilm', value: this.oIsLimitFilm });
+                    jsonArr.push({ key: 'isLimitEachFilm', value: this.oIsLimitEachFilm });
                     if (this.oIsLimitEachFilm != 0) {
-                        jsonArr.push({key: 'eachFilmNumber', value: this.oEachFilmNumber});
+                        jsonArr.push({ key: 'eachFilmNumber', value: this.oEachFilmNumber });
                     }
                     if (this.oSelectHallType != 0) {
-                        jsonArr.push({key: 'screenCode', value: this.oScreenCode});
+                        jsonArr.push({ key: 'screenCode', value: this.oScreenCode });
                     }
                     if (this.oSelectFilmFormatType != 0) {
-                        jsonArr.push({key: 'filmFormatCode', value: this.oFilmFormatCode});
+                        jsonArr.push({ key: 'filmFormatCode', value: this.oFilmFormatCode });
                     }
                     if (this.oSelectFilmType != 0) {
-                        jsonArr.push({key: 'filmCode', value: filmCodeList.join(',')});
+                        jsonArr.push({ key: 'filmCode', value: filmCodeList.join(',') });
                     }
                     if (this.oIsLimitFilm != 0) {
-                        jsonArr.push({key: 'numberFilm', value: this.oNumberFilm});
-                        jsonArr.push({key: 'limitFilmUnit', value: this.oLimitFilmUnit});
+                        jsonArr.push({ key: 'numberFilm', value: this.oNumberFilm });
+                        jsonArr.push({ key: 'limitFilmUnit', value: this.oLimitFilmUnit });
                     }
                 }
                 if (this.oIsMerchandiseJoin == 1) {
-                    jsonArr.push({key: 'reduceTypeMerchandise', value: this.oReduceTypeMerchandise});
-                    jsonArr.push({key: 'merchandiseSimpleDesc', value: this.oMerchandiseSimpleDesc});
-                    jsonArr.push({key: 'discountMoneyMerchandise', value: this.oDiscountMoneyMerchandise});
-                    jsonArr.push({key: 'selectMerchandiseType', value: this.oSelectMerchandiseType});
+                    jsonArr.push({ key: 'reduceTypeMerchandise', value: this.oReduceTypeMerchandise });
+                    jsonArr.push({ key: 'merchandiseSimpleDesc', value: this.oMerchandiseSimpleDesc });
+                    jsonArr.push({ key: 'discountMoneyMerchandise', value: this.oDiscountMoneyMerchandise });
+                    jsonArr.push({ key: 'selectMerchandiseType', value: this.oSelectMerchandiseType });
 
                     if (this.oSelectMerchandiseType != 0) {
-                        jsonArr.push({key: 'merchandiseCode', value: merchandiseCodeList.join(',')});
+                        jsonArr.push({ key: 'merchandiseCode', value: merchandiseCodeList.join(',') });
                     }
                     if (this.oReduceTypeMerchandise == 2) {
-                        jsonArr.push({key: 'achieveMoneyMerchandise', value: this.oAchieveMoneyMerchandise});
-                        jsonArr.push({key: 'isLimitMerchandise', value: '0'});
+                        jsonArr.push({ key: 'achieveMoneyMerchandise', value: this.oAchieveMoneyMerchandise });
+                        jsonArr.push({ key: 'isLimitMerchandise', value: '0' });
                     } else {
-                        jsonArr.push({key: 'isLimitMerchandise', value: this.oIsLimitMerchandise});
+                        jsonArr.push({ key: 'isLimitMerchandise', value: this.oIsLimitMerchandise });
                     }
                     if (this.oIsLimitMerchandise != 0) {
-                        jsonArr.push({key: 'numberMerchandise', value: this.oNumberMerchandise});
-                        jsonArr.push({key: 'limitMerchandiseUnit', value: this.oLimitMerchandiseUnit});
+                        jsonArr.push({ key: 'numberMerchandise', value: this.oNumberMerchandise });
+                        jsonArr.push({ key: 'limitMerchandiseUnit', value: this.oLimitMerchandiseUnit });
                     }
                 }
                 if (this.oIsGroupJoin == 1) {
-                    jsonArr.push({key: 'couponGroupId', value: this.couponId});
-                    jsonArr.push({key: 'couponSimpleDesc', value: this.oCouponSimpleDesc});
-                    jsonArr.push({key: 'groupDateType', value: this.oGroupDateType});
+                    jsonArr.push({ key: 'couponGroupId', value: this.couponId });
+                    jsonArr.push({ key: 'couponSimpleDesc', value: this.oCouponSimpleDesc });
+                    jsonArr.push({ key: 'groupDateType', value: this.oGroupDateType });
                     if (this.oGroupDateType == 1) {
-                        jsonArr.push({key: 'groupUnit', value: this.oGroupUnit});
-                        jsonArr.push({key: 'groupNumber', value: this.oGroupNumber});
+                        jsonArr.push({ key: 'groupUnit', value: this.oGroupUnit });
+                        jsonArr.push({ key: 'groupNumber', value: this.oGroupNumber });
                     }
                     if (this.oGroupDateType == 0) {
-                        jsonArr.push({key: 'groupStartDate', value: this.oGroupStartDate});
-                        jsonArr.push({key: 'groupEndDate', value: this.oGroupEndDate});
+                        jsonArr.push({ key: 'groupStartDate', value: this.oGroupStartDate });
+                        jsonArr.push({ key: 'groupEndDate', value: this.oGroupEndDate });
                     }
                 }
-                jsonArr.push({key: 'id', value: this.form.id});
+                jsonArr.push({ key: 'id', value: this.form.id });
                 let sign = md5(preSign(jsonArr));
-                jsonArr.push({key: 'sign', value: sign});
+                jsonArr.push({ key: 'sign', value: sign });
                 console.log(jsonArr);
                 let params = ParamsAppend(jsonArr);
                 https.fetchPost('/benefitCard/updateBenefitById', params).then(data => {
@@ -3394,10 +3433,10 @@
             // 修改状态
             changeStatus(index, row) {
                 if (row.status == 0) {
-                    this.rowMess = '启用'
+                    this.rowMess = '启用';
                 }
                 if (row.status == 1) {
-                    this.rowMess = '停用'
+                    this.rowMess = '停用';
                 }
                 this.$confirm('是否确定' + this.rowMess + '此权益卡?', '提示', {
                     confirmButtonText: '确定',
@@ -3421,10 +3460,10 @@
                         } else if (row.status == 0) {
                             status = 1;
                         }
-                        jsonArr.push({key: 'id', value: row.id});
-                        jsonArr.push({key: 'status', value: status});
+                        jsonArr.push({ key: 'id', value: row.id });
+                        jsonArr.push({ key: 'status', value: status });
                         let sign = md5(preSign(jsonArr));
-                        jsonArr.push({key: 'sign', value: sign});
+                        jsonArr.push({ key: 'sign', value: sign });
                         console.log(jsonArr);
                         let params = ParamsAppend(jsonArr);
                         https.fetchPost('/benefitCard/updateStatusById', params).then(data => {
@@ -3452,7 +3491,7 @@
                         type: 'info',
                         message: '已取消修改'
                     });
-                })
+                });
             },
             Search() {
                 this.query.pageNo = 1;
@@ -3476,15 +3515,15 @@
                     reduceTypeMerchandise = '';
                 }
                 let jsonArr = [];
-                jsonArr.push({key: 'name', value: this.query.name});
-                jsonArr.push({key: 'status', value: this.query.status});
-                jsonArr.push({key: 'pageNo', value: this.query.pageNo});
-                jsonArr.push({key: 'reduceTypeFilm', value: reduceTypeFilm});
-                jsonArr.push({key: 'reduceTypeMerchandise', value: reduceTypeMerchandise});
-                jsonArr.push({key: 'cinemaCode', value: this.query.cinemaCode});
-                jsonArr.push({key: 'pageSize', value: this.query.pageSize});
+                jsonArr.push({ key: 'name', value: this.query.name });
+                jsonArr.push({ key: 'status', value: this.query.status });
+                jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
+                jsonArr.push({ key: 'reduceTypeFilm', value: reduceTypeFilm });
+                jsonArr.push({ key: 'reduceTypeMerchandise', value: reduceTypeMerchandise });
+                jsonArr.push({ key: 'cinemaCode', value: this.query.cinemaCode });
+                jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
                 let sign = md5(preSign(jsonArr));
-                jsonArr.push({key: 'sign', value: sign});
+                jsonArr.push({ key: 'sign', value: sign });
                 console.log(jsonArr);
                 var params = ParamsAppend(jsonArr);
                 https.fetchPost('/benefitCard/page', params).then(data => {
@@ -3529,19 +3568,19 @@
                 });
             },
             selectCinema(val) {
-                console.log(val)
+                console.log(val);
                 // let selectValue = val.join(',');
                 this.selectValue = val;
                 this.getAllScreen(val);
             },
             selectScreens(val) {
-                console.log(val)
+                console.log(val);
                 let selectValue = val.join(',');
                 this.selectScreenCode = selectValue;
                 console.log(selectValue);
             },
             selectFormat(val) {
-                console.log(val)
+                console.log(val);
                 this.selectFormatCode = val.join(',');
                 console.log(this.selectFormatCode);
             },
@@ -3556,9 +3595,9 @@
                     return;
                 }
                 let jsonArr = [];
-                jsonArr.push({key: 'cinemaCode', value: value});
+                jsonArr.push({ key: 'cinemaCode', value: value });
                 let sign = md5(preSign(jsonArr));
-                jsonArr.push({key: 'sign', value: sign});
+                jsonArr.push({ key: 'sign', value: sign });
                 var params = ParamsAppend(jsonArr);
                 https.fetchPost('filmCoupon/getScreenInfoByCinemaCode', params).then(data => {
                     if (data.data.code == 'success') {
@@ -3590,7 +3629,7 @@
             },
             handleSizeChange(val) {
                 this.query.pageSize = val;
-                this.getMenu()
+                this.getMenu();
             },
             currentChange(val) {
                 //点击选择具体页数
@@ -3609,7 +3648,7 @@
             },
             oHandleSizeChange(val) {
                 this.query.oPageSize = val;
-                this.selectSell()
+                this.selectSell();
             },
             oCurrentChange(val) {
                 //点击选择具体页数
@@ -3628,7 +3667,7 @@
             },
             bHandleSizeChange(val) {
                 this.query.bPageSize = val;
-                this.changeCoupon()
+                this.changeCoupon();
             },
             bCurrentChange(val) {
                 //点击选择具体页数
@@ -3646,18 +3685,18 @@
                 this.changeCoupon();
             },
             getCurrentRow(index) {//影片弹出框index
-                this.sellIndex = index
+                this.sellIndex = index;
             },
             oGetCurrentRow(index) {//商品弹出框index
-                this.oSellIndex = index
+                this.oSellIndex = index;
             },
             one(a) {//获取影片绑定的value值
                 // console.log(a);
-                this.oForm.filmCode = a
+                this.oForm.filmCode = a;
             },
             oOne(a) {//获取卖品绑定的value值
                 // console.log(a);
-                this.oForm.merchandiseCode = a
+                this.oForm.merchandiseCode = a;
             },
             sureNext() {
                 if (this.sellIndex >= 0) {
@@ -3671,7 +3710,7 @@
                             if (this.selectedSell[x].filmCode == this.sellTableData[this.sellIndex].filmCode) {
                                 this.message = '不能添加相同影片！';
                                 this.open();
-                                return
+                                return;
                             }
                         }
                         // console.log('判断不重复');
@@ -3694,7 +3733,7 @@
                             if (this.oSelectedSell[x].merchandiseCode == this.oSellTableData[this.oSellIndex].merchandiseCode) {
                                 this.message = '不能添加相同卖品！';
                                 this.open();
-                                return
+                                return;
                             }
                         }
                         // console.log('判断不重复');
@@ -3717,20 +3756,20 @@
                 setTimeout(() => {
                     let filmName = this.query.filmName;
                     if (!filmName) {
-                        filmName = ''
+                        filmName = '';
                     }
                     let jsonArr = [];
-                    jsonArr.push({key: "filmName", value: filmName});
-                    jsonArr.push({key: "pageNo", value: this.query.aPageNo});
-                    jsonArr.push({key: "pageSize", value: this.query.aPageSize});
+                    jsonArr.push({ key: 'filmName', value: filmName });
+                    jsonArr.push({ key: 'pageNo', value: this.query.aPageNo });
+                    jsonArr.push({ key: 'pageSize', value: this.query.aPageSize });
                     let sign = md5(preSign(jsonArr));
-                    jsonArr.push({key: "sign", value: sign});
+                    jsonArr.push({ key: 'sign', value: sign });
                     var params = ParamsAppend(jsonArr);
                     https.fetchPost('film/filmPage', params).then((data) => {
                         loading.close();
                         console.log(data);
                         if (data.data.code == 'success') {
-                            this.drawer = true
+                            this.drawer = true;
                             var oData = JSON.parse(Decrypt(data.data.data));
                             console.log(oData);
                             // console.log(this.query);
@@ -3740,21 +3779,21 @@
                             this.query.aPageSize = oData.pageSize;
                             this.query.aPageNo = oData.pageNo;
                             this.query.aTotalCount = oData.totalCount;
-                            this.query.aTotalPage = oData.totalPage
+                            this.query.aTotalPage = oData.totalPage;
                         } else if (data.data.code == 'nologin') {
-                            this.message = data.data.message
-                            this.open()
+                            this.message = data.data.message;
+                            this.open();
                             this.$router.push('/login');
                         } else {
-                            this.message = data.data.message
-                            this.open()
+                            this.message = data.data.message;
+                            this.open();
                         }
 
                     }).catch(err => {
                             loading.close();
-                            console.log(err)
+                            console.log(err);
                         }
-                    )
+                    );
                 }, 500);
             },
             openNext1() {
@@ -3769,20 +3808,20 @@
                 setTimeout(() => {
                     let filmName = this.query.filmName;
                     if (!filmName) {
-                        filmName = ''
+                        filmName = '';
                     }
                     let jsonArr = [];
-                    jsonArr.push({key: "filmName", value: filmName});
-                    jsonArr.push({key: "pageNo", value: 1});
-                    jsonArr.push({key: "pageSize", value: this.query.aPageSize});
+                    jsonArr.push({ key: 'filmName', value: filmName });
+                    jsonArr.push({ key: 'pageNo', value: 1 });
+                    jsonArr.push({ key: 'pageSize', value: this.query.aPageSize });
                     let sign = md5(preSign(jsonArr));
-                    jsonArr.push({key: "sign", value: sign});
+                    jsonArr.push({ key: 'sign', value: sign });
                     var params = ParamsAppend(jsonArr);
                     https.fetchPost('film/filmPage', params).then((data) => {
                         loading.close();
                         console.log(data);
                         if (data.data.code == 'success') {
-                            this.drawer = true
+                            this.drawer = true;
                             var oData = JSON.parse(Decrypt(data.data.data));
                             console.log(oData);
                             // console.log(this.query);
@@ -3792,21 +3831,21 @@
                             this.query.aPageSize = oData.pageSize;
                             this.query.aPageNo = oData.pageNo;
                             this.query.aTotalCount = oData.totalCount;
-                            this.query.aTotalPage = oData.totalPage
+                            this.query.aTotalPage = oData.totalPage;
                         } else if (data.data.code == 'nologin') {
-                            this.message = data.data.message
-                            this.open()
+                            this.message = data.data.message;
+                            this.open();
                             this.$router.push('/login');
                         } else {
-                            this.message = data.data.message
-                            this.open()
+                            this.message = data.data.message;
+                            this.open();
                         }
 
                     }).catch(err => {
                             loading.close();
-                            console.log(err)
+                            console.log(err);
                         }
-                    )
+                    );
                 }, 500);
             },
             selectSell() {
@@ -3822,22 +3861,22 @@
                     let merchandiseName = this.query.merName;
                     let cinemaCode = '';
                     if (this.oForm.cinemaCode) {
-                        cinemaCode = this.oForm.cinemaCode
+                        cinemaCode = this.oForm.cinemaCode;
                     }
                     if (this.oCinemaCode) {
-                        cinemaCode = this.oCinemaCode
+                        cinemaCode = this.oCinemaCode;
                     }
                     if (!merchandiseName) {
-                        merchandiseName = ''
+                        merchandiseName = '';
                     }
                     let jsonArr = [];
-                    jsonArr.push({key: "cinemaCode", value: cinemaCode});
-                    jsonArr.push({key: "merchandiseName", value: merchandiseName});
-                    jsonArr.push({key: "merchandiseStatus", value: '1'});
-                    jsonArr.push({key: "pageNo", value: this.query.oPageNo});
-                    jsonArr.push({key: "pageSize", value: this.query.oPageSize});
+                    jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
+                    jsonArr.push({ key: 'merchandiseName', value: merchandiseName });
+                    jsonArr.push({ key: 'merchandiseStatus', value: '1' });
+                    jsonArr.push({ key: 'pageNo', value: this.query.oPageNo });
+                    jsonArr.push({ key: 'pageSize', value: this.query.oPageSize });
                     let sign = md5(preSign(jsonArr));
-                    jsonArr.push({key: "sign", value: sign});
+                    jsonArr.push({ key: 'sign', value: sign });
                     var params = ParamsAppend(jsonArr);
                     https.fetchPost('/merchandise/list', params).then((data) => {
                         loading.close();
@@ -3851,39 +3890,39 @@
                             this.query.oPageSize = oData.pageSize;
                             this.query.oPageNo = oData.pageNo;
                             this.query.oTotalCount = oData.totalCount;
-                            this.query.oTotalPage = oData.totalPage
+                            this.query.oTotalPage = oData.totalPage;
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
                             this.open();
                             this.$router.push('/login');
                         } else {
                             this.message = data.data.message;
-                            this.open()
+                            this.open();
                         }
 
                     }).catch(err => {
                             loading.close();
-                            console.log(err)
+                            console.log(err);
                         }
-                    )
+                    );
                 }, 500);
             },
             aHandleSizeChange(val) {
                 this.query.aPageSize = val;
-                this.openNext()
+                this.openNext();
             },
             //新增套餐选择卖品页面
             aCurrentChange(val) {//点击选择具体页数
                 this.query.aPageNo = val;
-                this.openNext()
+                this.openNext();
             },
             aPrev() {//分页按钮上一页
                 this.query.aPageNo--;
-                this.openNext()
+                this.openNext();
             },
             aNext() {//分页按钮下一页
                 this.query.aPageNo++;
-                this.openNext()
+                this.openNext();
             }
         }
     };
