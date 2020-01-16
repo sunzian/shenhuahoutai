@@ -1053,6 +1053,7 @@ export default {
                         this.actor='';
                         this.photoUrl='';
                         this.$refs.upload.clearFiles();//清除已上传文件
+                        this.$refs.download.clearFiles();
                         this.getMenu();
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
@@ -1201,6 +1202,7 @@ export default {
                 return;
             }
             this.oStagePhoto.push({ name: file.name, url: response.data });
+            // this.$refs.download.clearFiles();
             console.log(this.oStagePhoto);
             if (response.code == 'nologin') {
                 this.message = response.message;
@@ -1343,6 +1345,15 @@ export default {
                 });
         },
         sureDirector() {
+            for (let x in this.directorList) {
+                for(let y in this.directorList1){
+                    if (this.directorList[x].id == this.directorList1[y].id) {
+                        this.message = '不能添加相同导演！';
+                        this.open();
+                        return;
+                    }
+                }
+            }
             console.log(this.directorList);
             console.log(this.directorList1);
             for(let x in this.directorList1){
@@ -1356,6 +1367,15 @@ export default {
             this.allDirector = false;
         },
         sureActor() {
+            for (let x in this.actorList) {
+                for(let y in this.actorList1){
+                    if (this.actorList[x].id == this.actorList1[y].id) {
+                        this.message = '不能添加相同演员！';
+                        this.open();
+                        return;
+                    }
+                }
+            }
             for(let x in this.actorList1){
                 this.actorList.push(this.actorList1[x])
             }
