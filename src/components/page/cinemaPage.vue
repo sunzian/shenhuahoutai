@@ -329,7 +329,7 @@
                          maxlength="10"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="影院联系人电话" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="影院联系人电话" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         onkeyup="this.value=this.value.replace(/[^0-9-]+/,'')"
@@ -940,7 +940,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="影院联系人电话" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="影院联系人电话" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         onkeyup="this.value=this.value.replace(/[^0-9-]+/,'')"
@@ -2167,6 +2167,7 @@ export default {
                             this.oForm.miniAppSecret = '';
                             this.oForm.miniMerchantNo = '';
                             this.oForm.miniOnLine = '0';
+                            this.oForm.miniAppName = '';
                             this.oForm.miniMerchantSecret = '';
                             this.oForm.miniRefundCertificateUrl = '';
                             this.oForm.ticketingSystemType = '';
