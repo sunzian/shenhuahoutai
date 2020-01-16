@@ -680,13 +680,6 @@
                 </el-form-item>
                 <el-form-item :required="true" label="详情" :label-width="formLabelWidth">
                     <editor-bar v-model="oForm.details" :isClear="isClear" @change="changeMarkdown"></editor-bar>
-                    <!-- <mavon-editor
-                        v-model="oForm.details"
-                        ref="md"
-                        @change="changeMarkdown"
-                        @imgAdd="$imgAdd"
-                        @imgDel="$imgDel"
-                    /> -->
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -1149,14 +1142,6 @@
                 </el-form-item>
                 <el-form-item :required="true" label="详情" :label-width="formLabelWidth">
                     <editor-bar v-model="form.markdown" :isClear="isClear" @change="changeFormMarkdown"></editor-bar>
-                    <!-- <mavon-editor
-                        class="markdown-body"
-                        v-model="form.markdown"
-                        ref="md"
-                        @change="changeFormMarkdown"
-                        @imgAdd="$imgAdd"
-                        @imgDel="$imgDel"
-                    /> -->
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -2322,7 +2307,6 @@ export default {
             jsonArr.push({ key: 'limitType', value: this.oForm.limit_type });
             jsonArr.push({ key: 'limitNumber', value: this.oForm.limit_number });
             jsonArr.push({ key: 'details', value: this.oForm.details });
-            jsonArr.push({ key: 'markdown', value: this.oForm.markdown });
             jsonArr.push({ key: 'originalPrice', value: this.oForm.originalPrice });
             jsonArr.push({ key: 'topStatus', value: this.oForm.topStatus });
             jsonArr.push({ key: 'recommendStatus', value: this.oForm.recommendStatus });
@@ -2333,7 +2317,6 @@ export default {
                 jsonArr.push({ key: 'partnerCode', value: this.partnerCode });
                 jsonArr.push({ key: 'pickupType', value: this.oForm.pickupType });
                 jsonArr.push({ key: 'supportExpressStatus', value: this.oForm.supportExpressStatus });
-                // jsonArr.push({ key: 'expressFee', value: this.oForm.expressFee });
             }
             if (this.oForm.commodity_type == 3) {
                 jsonArr.push({ key: 'ticketIds', value: this.couponId });
@@ -2383,7 +2366,6 @@ export default {
                             this.oForm.limit_type = '';
                             this.oForm.limit_number = '';
                             this.oForm.details = '';
-                            this.oForm.markdown = '';
                             this.oForm.originalPrice = '';
                             this.oForm.topStatus = '';
                             this.oForm.recommendStatus = '';
@@ -2945,8 +2927,7 @@ export default {
                 jsonArr.push({ key: 'assignInfo', value: this.form.assignInfo });
                 jsonArr.push({ key: 'limitType', value: this.form.limitType });
                 jsonArr.push({ key: 'limitNumber', value: this.form.limitNumber });
-                jsonArr.push({ key: 'details', value: this.form.details });
-                jsonArr.push({ key: 'markdown', value: this.form.markdown });
+                jsonArr.push({ key: 'details', value: this.form.markdown });
                 jsonArr.push({ key: 'originalPrice', value: this.form.originalPrice });
                 jsonArr.push({ key: 'expireDay', value: this.form.expireDay });
                 jsonArr.push({ key: 'topStatus', value: this.oTopstatus });
@@ -3270,16 +3251,7 @@ export default {
         $imgDel(pos) {
             delete this.img_file[pos];
         },
-        // changeMarkdown(value, render) {
-        //     this.oForm.markdown = value;
-        //     this.content = render;
-        // },
-        // changeFormMarkdown(value, render) {
-        //     this.form.markdown = value;
-        //     this.form.details = render;
-        // },
         changeMarkdown(val) {
-            // console.log(val)
             this.oForm.details = val
         },
         changeFormMarkdown(val) {

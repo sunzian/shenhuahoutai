@@ -229,12 +229,7 @@
                     </el-upload>
                 </el-form-item>
                 <el-form-item :required="true" label="内容" :label-width="formLabelWidth">
-                    <quill-editor
-                        ref="text"
-                        v-model="oForm.content"
-                        class="myQuillEditor"
-                        :options="editorOption"
-                    />
+                    <editor-bar v-model="oForm.content" :isClear="isClear" @change="changeMarkdown"></editor-bar>
                 </el-form-item>
                 <el-form-item :required="true" label="上线状态" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.status">
@@ -303,12 +298,7 @@
                     </el-upload>
                 </el-form-item>
                 <el-form-item :required="true" label="内容" :label-width="formLabelWidth">
-                    <quill-editor
-                        ref="text"
-                        v-model="oContent"
-                        class="myQuillEditor"
-                        :options="editorOption"
-                    />
+                    <editor-bar v-model="oContent" :isClear="isClear" @change="changeFormMarkdown"></editor-bar>
                 </el-form-item>
                 <el-form-item :required="true" label="上线状态" :label-width="formLabelWidth">
                     <el-radio-group v-model="oStatus">
@@ -338,10 +328,12 @@ import 'quill/dist/quill.bubble.css';
 import md5 from 'js-md5';
 import axios from 'axios';
 import https from '../../https';
+import EditorBar from '../common/Editor';
 export default {
     name: 'basetable',
     data() {
         return {
+            isClear: false,
             oBannerType: '',
             oTitle: '',
             oCinemaCode: '',
@@ -492,7 +484,7 @@ export default {
             goType: ''
         };
     },
-    components: { quillEditor },
+    components: { quillEditor,EditorBar },
     created() {},
     mounted() {
         this.getMenu();
@@ -1057,7 +1049,13 @@ export default {
             //分页按钮下一页
             this.query.aPageNo++;
             this.show();
-        }
+        },
+        changeMarkdown(val) {
+            this.oForm.content = val
+        },
+        changeFormMarkdown(val) {
+            this.oContent = val;
+        },
     }
 };
 </script>
