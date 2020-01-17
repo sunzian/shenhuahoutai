@@ -323,7 +323,7 @@
                             type="text"
                             icon="el-icon-delete"
                             class="red"
-                            v-if="scope.row.payStatus=='1'&&scope.row.refundStatus=='0'"
+                            v-if="scope.row.payStatus=='1'&&scope.row.refundStatus=='0'&&scope.row.totalOriginalPrice>0"
                             @click="refundTicket(scope.$index, scope.row)"
                         >退款</el-button>
                         <el-button

@@ -373,6 +373,7 @@
                     <el-form-item :required="true" label="发放原因说明：" :label-width="formLabelWidth">
                         <el-input
                             style="width: 350px"
+                            placeholder="请填写详细的发放原因"
                             type="textarea"
                             v-model="excelCouponForm.sendMemo"
                             autocomplete="off"
@@ -593,6 +594,7 @@
                 <el-form-item :required="true" label="发放原因说明：" :label-width="formLabelWidth">
                     <el-input
                         style="width: 350px"
+                        placeholder="请填写详细的发放原因"
                         type="textarea"
                         v-model="couponForm.sendMemo"
                         autocomplete="off"

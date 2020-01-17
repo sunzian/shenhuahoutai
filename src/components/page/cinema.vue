@@ -299,9 +299,6 @@
                 <el-form-item label="开场前的退票时间限制（分钟）" :label-width="formLabelWidth">
                     <el-input style="width: 250px" onkeyup="this.value=this.value.replace(/\D/g,'')" v-model="oRefundMinutesLimit" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="退票手续费" :label-width="formLabelWidth">
-                    <el-input placeholder="会员卡支付退票不收手续费" style="width: 250px" onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')" v-model="oRefundFee" autocomplete="off"></el-input>
-                </el-form-item>
                 <el-form-item label="第三方支付代售费" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
@@ -355,6 +352,9 @@
                             :value="info.value"
                         ></el-option>
                     </el-select>
+                </el-form-item>
+                <el-form-item v-if="oRefundable==1" label="退票手续费" :label-width="formLabelWidth">
+                    <el-input placeholder="会员卡支付退票不收手续费" style="width: 250px" onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')" v-model="oRefundFee" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="卖品显示开始时间" :label-width="formLabelWidth">
                     <el-time-picker
@@ -990,16 +990,16 @@ export default {
             delivery: [
                 {
                     value: '1',
-                    label: '送至影厅'
+                    label: '送至影厅门口'
+                },
+                {
+                    value: '3',
+                    label: '送至影厅座位'
                 },
                 {
                     value: '2',
                     label: '不配送'
                 },
-                {
-                    value: '3',
-                    label: '送至影厅座位'
-                }
             ],
             miniOnLineList: [
                 {
