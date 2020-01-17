@@ -9,13 +9,13 @@
         </div>
         <div class="container">
             <audio
-                autoplay="autoplay"
-                id="audio"
+                autoplay
                 controls="controls"
                 @click="play"
                 style="display:none"
+                id="audio"
             >
-                <source src="../../assets/notify.mp3" />
+                <source ref="audio" src="../../assets/notify.mp3"  type='audio/mp3'/>
             </audio>
             <el-table
                 :data="tableData"
@@ -128,18 +128,20 @@ export default {
             businessInfoList: [],
             value: '',
             form: [],
-            cinemaCode: ''
+            cinemaCode: '',
+            audioSrc: "../../assets/notify.mp3"
         };
     },
     created() {
         this.cinemaCode = this.$route.query.cinemaCode;
     },
     mounted() {
-        this.getMenu();
-        // this.play();
+        let audio = document.getElementById('audio');
+        audio.volume = 0.0
+        // this.getMenu();
         setInterval(() => {
             this.getMenu();
-        }, 30000);
+        }, 10000);
     },
     methods: {
         addChange(index, row) {
@@ -208,26 +210,23 @@ export default {
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             var params = ParamsAppend(jsonArr);
+            console.log(this.maxId)
             setTimeout(() => {
                 https
                     .fetchPost('/merchandiseOrder/merchandiseOrderNotice', params)
                     .then(data => {
                         if (data.data.code == 'success') {
                             var oData = JSON.parse(Decrypt(data.data.data));
-                            console.log(oData);
                             let tableData = this.tableData;
-                            if (this.maxId > 0) {
-                                if (oData.length > 0) {
-                                    this.maxId = oData[0].id;
-                                    oData.push.apply(oData, tableData);
-                                    this.tableData = oData;
-                                    this.play();
-                                    this.message = '您有新的订单，请及时处理！';
-                                    this.open();
-                                }
-                            } else {
-                                this.tableData = oData;
+                            if (oData.length > 0) {
                                 this.maxId = oData[0].id;
+                                oData.push.apply(oData, tableData);
+                                this.tableData = oData;
+                                let audio = document.getElementById('audio');
+                                audio.volume = 1.0
+                                this.play();
+                                this.message = '您有新的订单，请及时处理！';
+                                this.open();
                             }
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;

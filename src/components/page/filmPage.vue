@@ -1195,8 +1195,6 @@ export default {
             console.log(this.oForm.stagePhoto);
         },
         onPhotoSuccessChange(response, file) {
-            console.log(response);
-            console.log(file);
             if (response.status == '-1') {
                 this.message = response.message;
                 this.open();
