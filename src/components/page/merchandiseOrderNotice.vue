@@ -138,7 +138,9 @@ export default {
     mounted() {
         let audio = document.getElementById('audio');
         audio.volume = 0.0
-        // this.getMenu();
+        setTimeout(() => {
+            this.getMenu();
+        },3000)
         setInterval(() => {
             this.getMenu();
         }, 10000);
