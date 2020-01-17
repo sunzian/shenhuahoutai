@@ -79,7 +79,7 @@
                 <el-select
                     clearable
                     v-model="query.recommendStatus"
-                    placeholder="是否精品推荐"
+                    placeholder="是否置顶"
                     class="handle-select mr10"
                 >
                     <el-option key="1" label="否" value="1"></el-option>
@@ -478,8 +478,9 @@
                             :value="item.value"
                         ></el-option>
                     </el-select>
+                    <div>可在小程序金币商城今日大牌区展示</div>
                 </el-form-item>
-                <el-form-item :required="true" label="是否精品推荐" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="是否置顶" :label-width="formLabelWidth">
                     <el-select v-model="oForm.recommendStatus" placeholder="请选择">
                         <el-option
                             v-for="item in topStatusList"
@@ -940,8 +941,9 @@
                             :value="item.value"
                         ></el-option>
                     </el-select>
+                    <div>可在小程序金币商城今日大牌区展示</div>
                 </el-form-item>
-                <el-form-item :required="true" label="是否精品推荐" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="是否置顶" :label-width="formLabelWidth">
                     <el-select v-model="oRecommendStatus" placeholder="请选择">
                         <el-option
                             v-for="item in topStatusList"
@@ -2199,7 +2201,7 @@ export default {
                 return;
             }
             if (!this.oForm.recommendStatus) {
-                this.message = '是否精品推荐不能为空，请检查！';
+                this.message = '是否置顶不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
@@ -2562,7 +2564,7 @@ export default {
                                     break;
                                 }
                             }
-                            //是否精品推荐下拉选显示对应的选项
+                            //是否置顶下拉选显示对应的选项
                             for (let x in this.topStatusList) {
                                 if (this.topStatusList[x].value == JSON.parse(Decrypt(data.data.data)).goldCommodity.recommendStatus) {
                                     this.oRecommendStatus = this.topStatusList[x].value;
@@ -2822,7 +2824,7 @@ export default {
                 return;
             }
             if (!this.oRecommendStatus) {
-                this.message = '是否精品推荐不能为空，请检查！';
+                this.message = '是否置顶不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;

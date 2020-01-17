@@ -149,6 +149,7 @@
                     <template slot-scope="scope">
                         <el-button
                             type="text"
+                            v-if="scope.row.status!='2'"
                             icon="el-icon-setting"
                             @click="delChange(scope.$index, scope.row)"
                         >删除</el-button>
