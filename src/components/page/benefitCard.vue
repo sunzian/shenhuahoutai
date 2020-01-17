@@ -495,29 +495,20 @@
                             format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
                 </el-form-item>
-                <el-form-item :required="true" v-if="oForm.isGroupJoin==1&&oForm.groupDateType==1" label="券包有效期单位"
-                              :label-width="formLabelWidth">
-                    <el-radio-group v-model="oForm.groupUnit">
-                        <el-radio label="日">日</el-radio>
-                        <el-radio label="周">周</el-radio>
-                        <el-radio label="月">月</el-radio>
-                        <el-radio label="季">季</el-radio>
-                        <el-radio label="年">年</el-radio>
-                    </el-radio-group>
+                <el-form-item :required="true" v-if="oForm.isGroupJoin==1&&oForm.groupDateType==1" label="券包有效期" :label-width="formLabelWidth">
+                    <el-input placeholder="填写数字" style="width: 100px" v-model="oForm.groupNumber" autocomplete="off"></el-input>
+                    <el-select style="width: 90px" v-model="oForm.groupUnit" placeholder="请选择">
+                        <el-option
+                                v-for="item in unitList"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                        ></el-option>
+                    </el-select>
                 </el-form-item>
-                <el-form-item :required="true" v-if="oForm.isGroupJoin==1&&oForm.groupDateType==1" label="券包单位数量"
-                              :label-width="formLabelWidth">
-                    <el-input style="width: 150px" v-model="oForm.groupNumber" autocomplete="off"></el-input>
-                    <div style="color:red;font-size:12px">有效期单位为'日'，券包单位数量输入'2'，即领取券包后券包内的券在2日内有效</div>
-                </el-form-item>
-                <!--<el-form-item v-if="oForm.isGroupJoin==1" :required="true" label="券包权益说明" :label-width="formLabelWidth">-->
-                <!--<el-input :rows="6" placeholder="如：券包的内容及有效期等说明" style="width: 300px"-->
-                <!--v-model="oForm.couponSimpleDesc" maxlength="200" show-word-limit type="textarea"-->
-                <!--autocomplete="off"></el-input>-->
-                <!--</el-form-item>-->
                 <el-form-item :required="true" label="权益卡有效期" :label-width="formLabelWidth">
                     <el-input placeholder="填写数字" style="width: 100px" v-model="oForm.number" autocomplete="off"></el-input>
-                    <el-select style="width: 70px" v-model="oForm.unit" placeholder="请选择">
+                    <el-select style="width: 90px" v-model="oForm.unit" placeholder="请选择">
                         <el-option
                                 v-for="item in unitList"
                                 :key="item.value"
@@ -996,21 +987,32 @@
                             format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
                 </el-form-item>
-                <el-form-item :required="true" v-if="oIsGroupJoin==1&&oGroupDateType==1" label="券包有效期单位"
-                              :label-width="formLabelWidth">
-                    <el-radio-group v-model="oGroupUnit">
-                        <el-radio label="日">日</el-radio>
-                        <el-radio label="周">周</el-radio>
-                        <el-radio label="月">月</el-radio>
-                        <el-radio label="季">季</el-radio>
-                        <el-radio label="年">年</el-radio>
-                    </el-radio-group>
+                <el-form-item :required="true" v-if="oIsGroupJoin==1&&oGroupDateType==1" label="券包有效期" :label-width="formLabelWidth">
+                    <el-input placeholder="填写数字" style="width: 100px" v-model="oGroupNumber" autocomplete="off"></el-input>
+                    <el-select style="width: 90px" v-model="oGroupUnit" placeholder="请选择">
+                        <el-option
+                                v-for="item in unitList"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                        ></el-option>
+                    </el-select>
                 </el-form-item>
-                <el-form-item :required="true" v-if="oIsGroupJoin==1&&oGroupDateType==1" label="券包单位数量"
-                              :label-width="formLabelWidth">
-                    <el-input style="width: 150px" v-model="oGroupNumber" autocomplete="off"></el-input>
-                    <div style="color:red;font-size:12px">有效期单位为'日'，券包单位数量输入'2'，即领取券包后券包内的券在2日内有效</div>
-                </el-form-item>
+                <!--<el-form-item :required="true" v-if="oIsGroupJoin==1&&oGroupDateType==1" label="券包有效期单位"-->
+                              <!--:label-width="formLabelWidth">-->
+                    <!--<el-radio-group v-model="oGroupUnit">-->
+                        <!--<el-radio label="日">日</el-radio>-->
+                        <!--<el-radio label="周">周</el-radio>-->
+                        <!--<el-radio label="月">月</el-radio>-->
+                        <!--<el-radio label="季">季</el-radio>-->
+                        <!--<el-radio label="年">年</el-radio>-->
+                    <!--</el-radio-group>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item :required="true" v-if="oIsGroupJoin==1&&oGroupDateType==1" label="券包单位数量"-->
+                              <!--:label-width="formLabelWidth">-->
+                    <!--<el-input style="width: 150px" v-model="oGroupNumber" autocomplete="off"></el-input>-->
+                    <!--<div style="color:red;font-size:12px">有效期单位为'日'，券包单位数量输入'2'，即领取券包后券包内的券在2日内有效</div>-->
+                <!--</el-form-item>-->
                 <!--<el-form-item v-if="oIsGroupJoin==1" :required="true" label="券包权益说明" :label-width="formLabelWidth">-->
                 <!--<el-input :rows="6" placeholder="如：券包的内容及有效期等说明" style="width: 300px"-->
                 <!--v-model="oCouponSimpleDesc" maxlength="200" show-word-limit type="textarea"-->
@@ -1018,7 +1020,7 @@
                 <!--</el-form-item>-->
                 <el-form-item :required="true" label="权益卡有效期" :label-width="formLabelWidth">
                     <el-input placeholder="填写数字" style="width: 100px" v-model="oNumber" autocomplete="off"></el-input>
-                    <el-select style="width: 70px" v-model="oUnit" placeholder="请选择">
+                    <el-select style="width: 90px" v-model="oUnit" placeholder="请选择">
                         <el-option
                                 v-for="item in unitList"
                                 :key="item.value"
