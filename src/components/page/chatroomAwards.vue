@@ -142,10 +142,10 @@
                     </template>
                 </el-table-column>
                 <el-table-column prop="sort" label="房间最大发送组数" width="140">
-                    <template slot-scope="scope">{{scope.row.groupNumber}}</template>
+                    <template slot-scope="scope">{{scope.row.singleNumber}}</template>
                 </el-table-column>
                 <el-table-column prop="sort" label="每组数量" width="140">
-                    <template slot-scope="scope">{{scope.row.singleNumber}}</template>
+                    <template slot-scope="scope">{{scope.row.groupNumber}}</template>
                 </el-table-column>
                 <el-table-column label="操作" width="140" align="center">
                     <template slot-scope="scope">
