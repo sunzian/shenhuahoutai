@@ -40,13 +40,13 @@
                     ></el-option>
                 </el-select>
                 <el-button style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
-                <!-- <el-button
+                <el-button
                     type="primary"
                     @click="addPage"
                     icon="el-icon-circle-plus-outline"
                     style="float: right;margin-top: 10px"
                 >重新获取影厅</el-button>
-                <el-button type="primary" icon="el-icon-circle-plus-outline" style="float: right;margin-top: 10px" @click="getScreenSeat">获取选中影厅座位</el-button> -->
+                <el-button type="primary" icon="el-icon-circle-plus-outline" style="float: right;margin-top: 10px" @click="getScreenSeat">获取选中影厅座位</el-button>
             </div>
             <el-table
                 :data="tableData"
@@ -58,8 +58,8 @@
                 header-cell-class-name="table-header"
                 @selection-change="selectAll"
             >
-				<!-- <el-table-column type="selection" width="55">
-                </el-table-column> -->
+				<el-table-column type="selection" width="55">
+                </el-table-column>
                 <!-- <el-table-column prop="name" label="影院编码" width="130">
                     <template slot-scope="scope">{{scope.row.cinemaCode}}</template>
                 </el-table-column> -->
@@ -109,16 +109,25 @@
         <!--新增弹出框-->
         <el-dialog :close-on-click-modal="false" title="选择影院" :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
+                <el-form-item label="商家名称" :label-width="formLabelWidth">
+                    <el-select v-model="oForm.businessCode" placeholder="请选择" @change="changeFormBusiness">
+                        <el-option
+                            v-for="info in businessInfo"
+                            :key="info.businessCode"
+                            :value="info.businessCode"
+                            :label="info.businessName"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
                 <el-form-item label="所属影院" :label-width="formLabelWidth">
                     <el-select
                         placeholder="选择影院"
-                        v-model="cinemaInfo.cinemaName"
-                        @change="chengeCinema"
+                        v-model="oForm.cinemaCode"
                     >
                         <el-option
-                            v-for="info in cinemaInfo"
+                            v-for="info in formCinemaInfo"
                             :key="info.cinemaCode"
-                            :value="info.cinemaName"
+                            :value="info.cinemaCode"
                             :label="info.cinemaName"
                         ></el-option>
                     </el-select>
@@ -188,7 +197,8 @@ export default {
             cinemaInfo: [],
             screenInfo: [],
             value: '',
-            businessInfo: []
+            businessInfo: [],
+            formCinemaInfo: []
         };
     },
     created() {},
@@ -206,10 +216,9 @@ export default {
                 target: document.querySelector('.div1')
             });
             https
-                .fetchPost('/screenInfo/addPage', '')
+                .fetchPost('/admin/screenInfo/addPage', '')
                 .then(data => {
                     loading.close();
-                    console.log(data);
                     if (data.data.code == 'success') {
                         this.dialogFormVisible = true;
                         this.getAllCinema();
@@ -229,6 +238,16 @@ export default {
         },
         addRole() {
             //新增按钮操作
+            if (!this.oForm.businessCode || this.oForm.businessCode == '') {
+                this.message = '请选择商家！';
+                this.open();
+                return;
+            }
+            if (!this.oForm.cinemaCode || this.oForm.cinemaCode == '') {
+                this.message = '请选择影院！';
+                this.open();
+                return;
+            }
             const loading = this.$loading({
                 lock: true,
                 text: 'Loading',
@@ -237,17 +256,16 @@ export default {
                 target: document.querySelector('.div1')
             });
             var jsonArr = [];
+            jsonArr.push({ key: 'businessCode', value: this.oForm.businessCode });
             jsonArr.push({ key: 'cinemaCode', value: this.oForm.cinemaCode });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             let params = ParamsAppend(jsonArr);
             if (this.dialogFormVisible == true) {
                 https
-                    .fetchPost('/screenInfo/updateScreenInfo', params)
+                    .fetchPost('/admin/screenInfo/updateScreenInfo', params)
                     .then(data => {
                         loading.close();
-                        //新增
-                        // console.log(data);
                         if (data.data.code == 'success') {
                             this.dialogFormVisible = false;
                             this.$message.success(`获取成功`);
@@ -610,7 +628,7 @@ export default {
             jsonArr.push({ key: 'sign', value: sign });
             var params = ParamsAppend(jsonArr);
             https
-                .fetchPost('/screenSeat/batchUpdateScreenSeat', params)
+                .fetchPost('/admin/screenSeat/batchUpdateScreenSeat', params)
                 .then(data => {
                     loading.close();
                     console.log(data);
@@ -631,12 +649,49 @@ export default {
                 });
         },
         // 选择影院
-        chengeCinema() {
-            for (let i = 0; i < this.cinemaInfo.length; i++) {
-                if (this.cinemaInfo.cinemaName == this.cinemaInfo[i].cinemaName) {
-                    this.oForm.cinemaCode = this.cinemaInfo[i].cinemaCode;
-                }
+        changeFormBusiness(val) {
+            this.oForm.cinemaCode = '';
+            this.formCinemaInfo = [];
+            this.oForm.businessCode = val;
+            this.getAllFormCinema();
+            this.$forceUpdate();
+        },
+        getAllFormCinema() {
+            if (!this.oForm.businessCode) {
+                return;
             }
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
+            var jsonArr = [];
+            jsonArr.push({ key: 'businessCode', value: this.oForm.businessCode });
+            let sign = md5(preSign(jsonArr));
+            jsonArr.push({ key: 'sign', value: sign });
+            let params = ParamsAppend(jsonArr);
+            https
+                .fetchPost('/cinema/getCinemaListByBusinessCode', params)
+                .then(data => {
+                    loading.close();
+                    if (data.data.code == 'success') {
+                        var res = JSON.parse(Decrypt(data.data.data));
+                        this.formCinemaInfo = res;
+                    } else if (data.data.code == 'nologin') {
+                        this.message = data.data.message;
+                        this.open();
+                        this.$router.push('/login');
+                    } else {
+                        this.message = data.data.message;
+                        this.open();
+                    }
+                })
+                .catch(err => {
+                    loading.close();
+                    console.log(err);
+                });
         },
         // 多选操作
         handleSelectionChange(val) {

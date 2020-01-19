@@ -54,11 +54,11 @@
                 </el-table-column>
                 <el-table-column label="操作" width="120" align="center" fixed="right">
                     <template slot-scope="scope">
-                        <!-- <el-button
+                        <el-button
                                 type="text"
                                 icon="el-icon-setting"
                                 @click="UserPassword(scope.$index, scope.row)"
-                        >获取卡等级</el-button> -->
+                        >获取卡等级</el-button>
                         <el-button type="text" icon="el-icon-view" @click="show(scope.row)">查看</el-button>
                     </template>
                 </el-table-column>
@@ -721,7 +721,6 @@
                         .fetchPost('/admin/memberCardLevel/queryCardLevel', params)
                         .then(data => {
                             loading.close();
-                            console.log(data);
                             if (data.data.code == 'success') {
                                 this.$message.success(`获取成功`);
                                 this.getMenu();

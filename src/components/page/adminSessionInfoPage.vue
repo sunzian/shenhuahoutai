@@ -73,25 +73,25 @@
                     @click="showPoster"
                     style="float: right;margin-top: 10px"
                     icon="el-icon-circle-plus-outline"
-                >生成影讯</el-button>
+                >生成影讯</el-button> -->
                 <el-button
                     type="primary"
                     @click="updatePrice"
                     style="float: right;margin-top: 10px"
                     icon="el-icon-circle-plus-outline"
-                >刷新影城会员价</el-button> -->
+                >刷新影城会员价</el-button>
                 <!--<el-button-->
                 <!--type="primary"-->
                 <!--@click="thirdPrice"-->
                 <!--style="float: right;margin-top: 10px"-->
-                <!--icon="el-icon-circle-plus-outline"-->
-                <!--&gt;批量修改展示会员价</el-button>-->
-                <!-- <el-button
+                <!-- icon="el-icon-circle-plus-outline" -->
+                <!-- &gt;批量修改展示会员价</el-button> -->
+                <el-button
                     type="primary"
                     @click="addPage"
                     icon="el-icon-circle-plus-outline"
                     style="float: right;margin-top: 10px"
-                >重新获取排期</el-button> -->
+                >重新获取排期</el-button>
             </div>
             <el-table
                 :data="tableData"
@@ -200,12 +200,22 @@
         <!--新增弹出框-->
         <el-dialog :close-on-click-modal="false" title="获取排期" :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
-                <el-form-item label="影院名称" :label-width="formLabelWidth">
-                    <el-select v-model="oForm.cinemaName" placeholder="请选择">
+                <el-form-item label="商家名称" :label-width="formLabelWidth">
+                    <el-select v-model="oForm.businessCode" placeholder="请选择" @change="changeFormBusiness">
                         <el-option
-                            v-for="info in cinemaInfo"
+                            v-for="info in businessInfo"
+                            :key="info.businessCode"
+                            :value="info.businessCode"
+                            :label="info.businessName"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="影院名称" :label-width="formLabelWidth">
+                    <el-select v-model="oForm.cinemaCode" placeholder="请选择">
+                        <el-option
+                            v-for="info in formCinemaInfo"
                             :key="info.cinemaCode"
-                            :value="info.cinemaName"
+                            :value="info.cinemaCode"
                             :label="info.cinemaName"
                         ></el-option>
                     </el-select>
@@ -354,7 +364,7 @@
             :close-on-press-escape="false"
             :visible.sync="showPosterImg"
             :close-on-click-modal="false"
-        >
+            >
             <div id="posterHtml" ref="posterHtml">
                 <div style="background: linear-gradient(to bottom, #2177b9,#da4e7b);">
                     <div class="poster-head">
@@ -525,6 +535,8 @@ export default {
             id: -1,
             dialogFormVisible: false,
             oForm: {
+                businessCode: '',
+                businessName: '',
                 cinemaName: '',
                 cinemaCode: '',
                 startDate: '',
@@ -544,7 +556,8 @@ export default {
             selectValue: {},
             selectCode: {},
             value: '',
-            businessInfo: []
+            businessInfo: [],
+            formCinemaInfo: []
         };
     },
     components: {
@@ -675,8 +688,6 @@ export default {
                             }
                             this.selectId = this.selectIdList.join(',');
                             this.selectCodes = this.selectCodeList.join(',');
-                            console.log(this.selectId);
-                            console.log(this.selectCodes);
                             this.drawer = true;
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
@@ -718,7 +729,7 @@ export default {
                     jsonArr.push({ key: 'sign', value: sign });
                     let params = ParamsAppend(jsonArr);
                     https
-                        .fetchPost('/sessionInfo/updateMemberPrice', params)
+                        .fetchPost('/admin/sessionInfo/updateMemberPrice', params)
                         .then(data => {
                             loading.close();
                             if (data.data.code == 'success') {
@@ -801,13 +812,11 @@ export default {
                 target: document.querySelector('.div1')
             });
             https
-                .fetchPost('/sessionInfo/updatePage', '')
+                .fetchPost('/admin/sessionInfo/updatePage', '')
                 .then(data => {
                     loading.close();
-                    // console.log(data);
                     if (data.data.code == 'success') {
                         this.dialogFormVisible = true;
-                        this.getAllCinema();
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
@@ -824,6 +833,16 @@ export default {
         },
         addRole() {
             //新增按钮操作
+            if (!this.oForm.businessCode || this.oForm.businessCode == '') {
+                this.message = '请选择商家！';
+                this.open();
+                return;
+            }
+            if (!this.oForm.cinemaCode || this.oForm.cinemaCode == '') {
+                this.message = '请选择影院！';
+                this.open();
+                return;
+            }
             const loading = this.$loading({
                 lock: true,
                 text: 'Loading',
@@ -831,13 +850,8 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            //获取所选影院编码
-            for (let i = 0; i < this.cinemaInfo.length; i++) {
-                if (this.cinemaInfo[i].cinemaName == this.oForm.cinemaName) {
-                    this.oForm.cinemaCode = this.cinemaInfo[i].cinemaCode;
-                }
-            }
             var jsonArr = [];
+            jsonArr.push({ key: 'businessCode', value: this.oForm.businessCode });
             jsonArr.push({ key: 'cinemaCode', value: this.oForm.cinemaCode });
             jsonArr.push({ key: 'startDate', value: this.oForm.startDate });
             jsonArr.push({ key: 'endtDate', value: this.oForm.endDate });
@@ -850,7 +864,6 @@ export default {
                     .fetchPost('/sessionInfo/updateSessionInfo', params)
                     .then(data => {
                         loading.close();
-                        console.log(data);
                         if (data.data.code == 'success') {
                             this.dialogFormVisible = false;
                             this.$message.success(`获取成功`);
@@ -1008,7 +1021,6 @@ export default {
             jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
-            console.log(jsonArr);
             var params = ParamsAppend(jsonArr);
             https
                 .fetchPost('/admin/sessionInfo/sessionInfoPage', params)
@@ -1109,6 +1121,50 @@ export default {
             this.query.businessCode = val;
             this.getAllCinema();
             this.$forceUpdate();
+        },
+        changeFormBusiness(val) {
+            this.oForm.cinemaCode = '';
+            this.formCinemaInfo = [];
+            this.oForm.businessCode = val;
+            this.getAllFormCinema();
+            this.$forceUpdate();
+        },
+        getAllFormCinema() {
+            if (!this.oForm.businessCode) {
+                return;
+            }
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
+            var jsonArr = [];
+            jsonArr.push({ key: 'businessCode', value: this.oForm.businessCode });
+            let sign = md5(preSign(jsonArr));
+            jsonArr.push({ key: 'sign', value: sign });
+            let params = ParamsAppend(jsonArr);
+            https
+                .fetchPost('/cinema/getCinemaListByBusinessCode', params)
+                .then(data => {
+                    loading.close();
+                    if (data.data.code == 'success') {
+                        var res = JSON.parse(Decrypt(data.data.data));
+                        this.formCinemaInfo = res;
+                    } else if (data.data.code == 'nologin') {
+                        this.message = data.data.message;
+                        this.open();
+                        this.$router.push('/login');
+                    } else {
+                        this.message = data.data.message;
+                        this.open();
+                    }
+                })
+                .catch(err => {
+                    loading.close();
+                    console.log(err);
+                });
         },
         chooseCinema(val) {
             this.query.screenCode = '';

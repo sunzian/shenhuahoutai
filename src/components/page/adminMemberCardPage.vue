@@ -121,7 +121,7 @@
                         <el-tag v-else>未绑定</el-tag>
                     </template>
                 </el-table-column>
-                <!-- <el-table-column label="操作" align="center" fixed="right" width="120">
+                <el-table-column label="操作" align="center" fixed="right" width="120">
                     <template slot-scope="scope">
                         <el-button
                             type="text"
@@ -130,7 +130,7 @@
                             v-if="scope.row.bindStatus=='1'"
                         >解绑</el-button>
                     </template>
-                </el-table-column> -->
+                </el-table-column>
             </el-table>
             <div class="pagination">
                 <el-pagination
