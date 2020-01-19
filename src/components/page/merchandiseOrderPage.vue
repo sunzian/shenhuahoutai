@@ -108,15 +108,15 @@
                 <el-button
                         type="primary"
                         @click="showCinema = true"
-                        style="margin-top: 10px;width: 150px;float: right"
+                        style="width: 150px;float: right"
                 >打开卖品通知</el-button>
                 <el-button
                         type="primary"
                         @click="derive"
                         icon="el-icon-circle-plus-outline"
-                        style="float: right;margin-top: 10px;margin-right:10px;"
+                        style="float: right;margin-right:10px;"
                 >导出</el-button>
-                <el-button type="primary" style="float: right;margin-top: 10px;width: 90px;" icon="el-icon-search" @click="Search">搜索</el-button>
+                <el-button type="primary" style="width: 90px;margin-left: 0" icon="el-icon-search" @click="Search">搜索</el-button>
 
             </div>
             <div class="handle-box">
