@@ -123,14 +123,13 @@
                         type="primary"
                         @click="derive"
                         icon="el-icon-circle-plus-outline"
-                        style="float: right;margin-right:10px;margin-top: 10px"
+                        style="float: right;margin-right:10px"
                 >导出</el-button>
                 <el-button
                         type="primary"
                         icon="el-icon-search"
-                        style="float: right;margin-top: 10px;width: 90px;"
+                        style="width: 90px;margin-left: 0"
                         @click="Search"
-                        class="mr10"
                 >搜索</el-button>
             </div>
             <div class="handle-box">
