@@ -51,9 +51,10 @@
                     placeholder="取货方式"
                     class="handle-select mr10"
                 >
-                    <el-option key="0" label="自取" value="0"></el-option>
+                    <el-option key="0" label="马上取参" value="0"></el-option>
                     <el-option key="1" label="送至影厅" value="1"></el-option>
                     <el-option key="2" label="送至座位" value="2"></el-option>
+                    <el-option key="2" label="到店自取" value="2"></el-option>
                 </el-select>
                 <el-select
                     clearable
@@ -213,8 +214,10 @@
                 </el-table-column>
                 <el-table-column label="取货方式" align="center">
                     <template slot-scope="scope">
-                        <el-tag v-if="scope.row.deliveryType=='0'">自取</el-tag>
+                        <el-tag v-if="scope.row.deliveryType=='0'">马上取餐</el-tag>
                         <el-tag v-else-if="scope.row.deliveryType=='1'">送至影厅</el-tag>
+                        <el-tag v-else-if="scope.row.deliveryType=='2'">送至座位</el-tag>
+                        <el-tag type="danger" v-else-if="scope.row.deliveryType=='3'">到店自取</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column prop="memo" label="送货地址" width="90">
@@ -654,9 +657,13 @@ export default {
                                 this.form.refundStatus = '已退款';
                             }
                             if (JSON.parse(Decrypt(data.data.data)).deliveryType == 0) {
-                                this.form.deliveryType = '自取';
+                                this.form.deliveryType = '马上取参';
                             } else if (JSON.parse(Decrypt(data.data.data)).deliveryType == 1) {
                                 this.form.deliveryType = '送至影厅';
+                            } else if (JSON.parse(Decrypt(data.data.data)).deliveryType == 2) {
+                                this.form.deliveryType = '送至座位';
+                            } else if (JSON.parse(Decrypt(data.data.data)).deliveryType == 3) {
+                                this.form.deliveryType = '到店自取';
                             }
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
