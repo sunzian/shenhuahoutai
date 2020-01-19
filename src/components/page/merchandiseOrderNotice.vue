@@ -138,7 +138,9 @@ export default {
     mounted() {
         let audio = document.getElementById('audio');
         audio.volume = 0.0
-        // this.getMenu();
+        setTimeout(() => {
+            this.getMenu();
+        },3000)
         setInterval(() => {
             this.getMenu();
         }, 10000);
@@ -210,7 +212,6 @@ export default {
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             var params = ParamsAppend(jsonArr);
-            console.log(this.maxId)
             setTimeout(() => {
                 https
                     .fetchPost('/merchandiseOrder/merchandiseOrderNotice', params)
