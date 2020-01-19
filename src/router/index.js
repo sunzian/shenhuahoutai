@@ -551,6 +551,11 @@ export default new Router({
                     meta: { title: '大转盘游戏管理' }
                 },
                 {
+                    path: '/shRegisterUserInfoPage',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/shRegisterUserInfoPage.vue'),
+                    meta: { title: '神画活动报名记录' }
+                },
+                {
                     path: '/adminTurnplateGameRule',
                     component: () => import(/* webpackChunkName: "table" */ '../components/page/adminTurnplateGameRule.vue'),
                     meta: { title: '大转盘游戏管理' }
