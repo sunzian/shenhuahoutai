@@ -52,9 +52,10 @@
                         placeholder="取货方式"
                         class="handle-select mr10"
                 >
-                    <el-option key="0" label="自取" value="0"></el-option>
+                    <el-option key="0" label="马上取餐" value="0"></el-option>
                     <el-option key="1" label="送至影厅" value="1"></el-option>
                     <el-option key="2" label="送至座位" value="2"></el-option>
+                    <el-option key="3" label="到店自取" value="3"></el-option>
                 </el-select>
                 <el-select
                         style="margin-bottom: 10px"
@@ -221,11 +222,13 @@
                 </el-table-column>
                 <el-table-column label="取货方式" align="center" fixed="right">
                     <template slot-scope="scope">
-                        <el-tag v-if="scope.row.deliveryType=='0'">自取</el-tag>
+                        <el-tag v-if="scope.row.deliveryType=='0'">马上取餐</el-tag>
                         <el-tag v-else-if="scope.row.deliveryType=='1'">送至影厅</el-tag>
+                        <el-tag v-else-if="scope.row.deliveryType=='2'">送至座位</el-tag>
+                        <el-tag type="danger" v-else-if="scope.row.deliveryType=='3'">到店自取</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" align="center" fixed="right" width="120">
+                <el-table-column label="操作" align="center" fixed="right" width="180">
                     <template slot-scope="scope">
                         <el-button
                             type="text"
@@ -243,13 +246,13 @@
                                 type="text"
                                 icon="el-icon-setting"
                                 @click="updateStatus(scope.$index, scope.row)"
-                                v-if="scope.row.deliveryType==0&&scope.row.deliveryStatus==0&&scope.row.payStatus==1&&scope.row.submitStatus==1"
+                                v-if="(scope.row.deliveryType==0||scope.row.deliveryType==3)&&scope.row.deliveryStatus==0&&scope.row.payStatus==1&&scope.row.submitStatus==1"
                         >取货</el-button>
                         <el-button
                                 type="text"
                                 icon="el-icon-setting"
                                 @click="updateStatus1(scope.$index, scope.row)"
-                                v-if="scope.row.deliveryType==1&&scope.row.deliveryStatus==0&&scope.row.payStatus==1&&scope.row.submitStatus==1"
+                                v-if="(scope.row.deliveryType==1||scope.row.deliveryType==2)&&scope.row.deliveryStatus==0&&scope.row.payStatus==1&&scope.row.submitStatus==1"
                         >确认送达</el-button>
                     </template>
                 </el-table-column>
@@ -720,9 +723,15 @@ export default {
                                 this.form.refundStatus = '已退款';
                             }
                             if (JSON.parse(Decrypt(data.data.data)).deliveryType == 0) {
-                                this.form.deliveryType = '自取';
+                                this.form.deliveryType = '马上取餐';
                             } else if (JSON.parse(Decrypt(data.data.data)).deliveryType == 1) {
                                 this.form.deliveryType = '送至影厅';
+                            }
+                            else if (JSON.parse(Decrypt(data.data.data)).deliveryType == 2) {
+                                this.form.deliveryType = '送至座位';
+                            }
+                            else if (JSON.parse(Decrypt(data.data.data)).deliveryType == 3) {
+                                this.form.deliveryType = '到店自取';
                             }
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
