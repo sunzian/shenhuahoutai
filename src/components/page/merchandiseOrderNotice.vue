@@ -212,7 +212,6 @@ export default {
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             var params = ParamsAppend(jsonArr);
-            console.log(this.maxId)
             setTimeout(() => {
                 https
                     .fetchPost('/merchandiseOrder/merchandiseOrderNotice', params)
