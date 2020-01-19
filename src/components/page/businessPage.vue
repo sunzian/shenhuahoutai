@@ -82,10 +82,10 @@
         <!--新增弹出框-->
         <el-dialog :close-on-click-modal="false" title="新增影城" :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
-                <el-form-item :required="true" label="商家名" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="商家名称" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
-                        maxlength="10"
+                        maxlength="15"
                         show-word-limit
                         v-model="oForm.name"
                         autocomplete="off"
@@ -182,7 +182,7 @@
                 <el-form-item :required="true" label="商家名称">
                     <el-input
                         style="width: 250px"
-                        maxlength="10"
+                        maxlength="15"
                         show-word-limit
                         v-model="oName"
                         autocomplete="off"
