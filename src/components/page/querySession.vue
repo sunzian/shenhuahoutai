@@ -13,14 +13,20 @@
             </div>
             <el-form v-model="oForm">
                 <el-form-item label="影院" :label-width="formLabelWidth">
-                    <el-select style="margin-bottom: 10px" clearable v-model="oForm.cinemaCode" placeholder="请选择影院" class="mr10">
-                        <el-option
-                                v-for="item in cinemaInfo"
-                                :key="item.cinemaCode"
-                                :label="item.cinemaName"
-                                :value="item.cinemaCode"
-                        ></el-option>
-                    </el-select>
+                    <!--<el-select style="margin-bottom: 10px" clearable v-model="oForm.cinemaCode" placeholder="请选择影院" class="mr10">-->
+                    <!--<el-option-->
+                    <!--v-for="item in cinemaInfo"-->
+                    <!--:key="item.cinemaCode"-->
+                    <!--:label="item.cinemaName"-->
+                    <!--:value="item.cinemaCode"-->
+                    <!--&gt;</el-option>-->
+                    <!--</el-select>-->
+                    <el-autocomplete
+                            v-model="state"
+                            :fetch-suggestions="querySearchAsync"
+                            placeholder="请选择影院"
+                            @select="handleSelect"
+                    ></el-autocomplete>
                 </el-form-item>
                 <el-form-item label="开始时间" :label-width="formLabelWidth">
                     <el-date-picker
@@ -48,11 +54,13 @@
                               v-model="oForm.status" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="接口入参" :label-width="formLabelWidth">
-                    <el-input :disabled="true" type="textarea" :rows="8" onkeyup="this.value=this.value.replace(/\D/g,'')"
+                    <el-input :disabled="true" type="textarea" :rows="8"
+                              onkeyup="this.value=this.value.replace(/\D/g,'')"
                               style="width: 600px" v-model="oForm.interfaceInput" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="接口出参" :label-width="formLabelWidth">
-                    <el-input :disabled="true" type="textarea" :rows="8" onkeyup="this.value=this.value.replace(/\D/g,'')"
+                    <el-input :disabled="true" type="textarea" :rows="8"
+                              onkeyup="this.value=this.value.replace(/\D/g,'')"
                               style="width: 600px" v-model="oForm.interfaceOutput" autocomplete="off"></el-input>
                 </el-form-item>
             </el-form>
@@ -61,11 +69,12 @@
 </template>
 
 <script>
-    import {fetchData} from '../../api/index';
-    import {Decrypt, Encrypt, preSign, EncryptReplace, ParamsAppend} from '@/aes/utils';
+    import { fetchData } from '../../api/index';
+    import { Decrypt, Encrypt, preSign, EncryptReplace, ParamsAppend } from '@/aes/utils';
     import md5 from 'js-md5';
     import axios from 'axios';
-    import https from "../../https";
+    import https from '../../https';
+
     export default {
         name: 'basetable',
         data() {
@@ -85,7 +94,7 @@
                 form: {
                     memo: '',
                     sort: '',
-                    id: '',
+                    id: ''
                 },
                 oForm: {
                     userName: '',
@@ -101,7 +110,7 @@
                     interfaceOutput: '',
                     status: '',
                     startDate: '',
-                    endDate: '',
+                    endDate: ''
                 },
                 idx: -1,
                 id: -1,
@@ -118,34 +127,76 @@
                         value: '2',
                         label: '禁用'
                     }],
-                value: ''
+                value: '',
+                restaurants: [],
+                state: '',
+                timeout: null
             };
         },
         created() {
         },
         mounted() {
-            this.getAllCinema()
+            this.getAllCinema();
         },
         methods: {
+            handleSelect(item) {
+                // console.log(item);
+                this.oForm.cinemaCode=item.cinemaCode
+            },
+            createStateFilter(queryString) {
+                return (state) => {
+                    return (state.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+                };
+            },
+            querySearchAsync(queryString, cb) {
+                console.log('获取了');
+                this.getAllCinema();
+                var restaurants = this.restaurants;
+                var results = queryString ? restaurants.filter(this.createStateFilter(queryString)) : restaurants;
+                cb(results);
+            },
             getAllCinema() {
-                https
-                    .fetchPost('/cinema/getAllCinema')
-                    .then(data => {
-                        if (data.data.code == 'success') {
-                            var res = JSON.parse(Decrypt(data.data.data));
-                            this.cinemaInfo = res;
-                        } else if (data.data.code == 'nologin') {
-                            this.message = data.data.message;
-                            this.open();
-                            this.$router.push('/login');
-                        } else {
-                            this.message = data.data.message;
-                            this.open();
-                        }
-                    })
+                var jsonArr = [];
+                jsonArr.push({ key: 'cinemaName', value: this.state });
+                let sign = md5(preSign(jsonArr));
+                jsonArr.push({ key: 'sign', value: sign });
+                let params = ParamsAppend(jsonArr);
+                console.log(jsonArr);
+                https.fetchPost('/cinema/getCinemasByName', params).then(data => {
+                    if (data.data.code == 'success') {
+                        this.restaurants = JSON.parse(Decrypt(data.data.data));
+                        // this.cinemaInfo = res;
+                        // this.restaurants = this.cinemaInfo;
+                        console.log(this.restaurants);
+                    } else if (data.data.code == 'nologin') {
+                        this.message = data.data.message;
+                        this.open();
+                        this.$router.push('/login');
+                    } else {
+                        this.message = data.data.message;
+                        this.open();
+                    }
+                })
                     .catch(err => {
                         console.log(err);
                     });
+                // https.fetchPost('/cinema/getAllCinema').then(data => {
+                //     if (data.data.code == 'success') {
+                //         var res = JSON.parse(Decrypt(data.data.data));
+                //         this.cinemaInfo = res;
+                //         // this.restaurants = this.cinemaInfo;
+                //     } else if (data.data.code == 'nologin') {
+                //         this.message = data.data.message;
+                //         this.open();
+                //         this.$router.push('/login');
+                //     } else {
+                //         this.message = data.data.message;
+                //         this.open();
+                //     }
+                // })
+                //     .catch(err => {
+                //         console.log(err);
+                //     });
             },
             addPage() {
                 //获取新增按钮权限
@@ -157,11 +208,11 @@
                     target: document.querySelector('.div1')
                 });
                 var jsonArr = [];
-                jsonArr.push({key: 'cinemaCode', value: this.oForm.cinemaCode});
-                jsonArr.push({key: 'startDate', value: this.oForm.startDate});
-                jsonArr.push({key: 'endDate', value: this.oForm.endDate});
+                jsonArr.push({ key: 'cinemaCode', value: this.oForm.cinemaCode });
+                jsonArr.push({ key: 'startDate', value: this.oForm.startDate });
+                jsonArr.push({ key: 'endDate', value: this.oForm.endDate });
                 let sign = md5(preSign(jsonArr));
-                jsonArr.push({key: 'sign', value: sign});
+                jsonArr.push({ key: 'sign', value: sign });
                 let params = ParamsAppend(jsonArr);
                 setTimeout(() => {
                     https.fetchPost('/interface/querySessionInfo', params)
@@ -185,7 +236,7 @@
                                     this.open();
                                 }
                             }
-                        )
+                        );
                 }, 500);
             },
             open() {
@@ -193,7 +244,7 @@
                 this.$alert(this.message, '信息提示', {
                     dangerouslyUseHTMLString: true
                 });
-            },
+            }
         }
     };
 </script>

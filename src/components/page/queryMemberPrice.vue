@@ -13,15 +13,21 @@
             </div>
             <el-form v-model="oForm">
                 <el-form-item label="影院" :label-width="formLabelWidth">
-                    <el-select style="margin-bottom: 10px" clearable v-model="oForm.cinemaCode" placeholder="请选择影院"
-                               class="mr10" @change="getFilm">
-                        <el-option
-                                v-for="item in cinemaInfo"
-                                :key="item.cinemaCode"
-                                :label="item.cinemaName"
-                                :value="item.cinemaCode"
-                        ></el-option>
-                    </el-select>
+                    <!--<el-select style="margin-bottom: 10px" clearable v-model="oForm.cinemaCode" placeholder="请选择影院"-->
+                               <!--class="mr10" @change="getFilm">-->
+                        <!--<el-option-->
+                                <!--v-for="item in cinemaInfo"-->
+                                <!--:key="item.cinemaCode"-->
+                                <!--:label="item.cinemaName"-->
+                                <!--:value="item.cinemaCode"-->
+                        <!--&gt;</el-option>-->
+                    <!--</el-select>-->
+                    <el-autocomplete
+                            v-model="state"
+                            :fetch-suggestions="querySearchAsync"
+                            placeholder="请选择影院"
+                            @select="handleSelect"
+                    ></el-autocomplete>
                 </el-form-item>
                 <el-form-item label="影片" :label-width="formLabelWidth">
                     <el-select style="margin-bottom: 10px" clearable v-model="oForm.filmCode" placeholder="请选择影片"
@@ -175,7 +181,10 @@
                         value: '2',
                         label: '禁用'
                     }],
-                value: ''
+                value: '',
+                restaurants: [],
+                state: '',
+                timeout: null
             };
         },
         created() {
@@ -184,6 +193,65 @@
             this.getAllCinema()
         },
         methods: {
+            handleSelect(item) {
+                // console.log(item);
+                this.oForm.cinemaCode=item.cinemaCode;
+                this.getFilm()
+            },
+            createStateFilter(queryString) {
+                return (state) => {
+                    return (state.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+                };
+            },
+            querySearchAsync(queryString, cb) {
+                console.log('获取了');
+                this.getAllCinema();
+                var restaurants = this.restaurants;
+                var results = queryString ? restaurants.filter(this.createStateFilter(queryString)) : restaurants;
+                cb(results);
+            },
+            getAllCinema() {
+                var jsonArr = [];
+                jsonArr.push({ key: 'cinemaName', value: this.state });
+                let sign = md5(preSign(jsonArr));
+                jsonArr.push({ key: 'sign', value: sign });
+                let params = ParamsAppend(jsonArr);
+                https.fetchPost('/cinema/getCinemasByName', params).then(data => {
+                    if (data.data.code == 'success') {
+                        this.restaurants = JSON.parse(Decrypt(data.data.data));
+                        // this.cinemaInfo = res;
+                        // this.restaurants = this.cinemaInfo;
+                        console.log(this.restaurants);
+                    } else if (data.data.code == 'nologin') {
+                        this.message = data.data.message;
+                        this.open();
+                        this.$router.push('/login');
+                    } else {
+                        this.message = data.data.message;
+                        this.open();
+                    }
+                })
+                    .catch(err => {
+                        console.log(err);
+                    });
+                // https.fetchPost('/cinema/getAllCinema').then(data => {
+                //     if (data.data.code == 'success') {
+                //         var res = JSON.parse(Decrypt(data.data.data));
+                //         this.cinemaInfo = res;
+                //         // this.restaurants = this.cinemaInfo;
+                //     } else if (data.data.code == 'nologin') {
+                //         this.message = data.data.message;
+                //         this.open();
+                //         this.$router.push('/login');
+                //     } else {
+                //         this.message = data.data.message;
+                //         this.open();
+                //     }
+                // })
+                //     .catch(err => {
+                //         console.log(err);
+                //     });
+            },
             getCurrentRow(index, index2) {
                 this.sessionId = index;
                 this.sessionTime = index2;
@@ -238,26 +306,26 @@
                         });
                 }, 500);
             },
-            getAllCinema() {
-                https
-                    .fetchPost('/cinema/getAllCinema')
-                    .then(data => {
-                        if (data.data.code == 'success') {
-                            var res = JSON.parse(Decrypt(data.data.data));
-                            this.cinemaInfo = res;
-                        } else if (data.data.code == 'nologin') {
-                            this.message = data.data.message;
-                            this.open();
-                            this.$router.push('/login');
-                        } else {
-                            this.message = data.data.message;
-                            this.open();
-                        }
-                    })
-                    .catch(err => {
-                        console.log(err);
-                    });
-            },
+            // getAllCinema() {
+            //     https
+            //         .fetchPost('/cinema/getAllCinema')
+            //         .then(data => {
+            //             if (data.data.code == 'success') {
+            //                 var res = JSON.parse(Decrypt(data.data.data));
+            //                 this.cinemaInfo = res;
+            //             } else if (data.data.code == 'nologin') {
+            //                 this.message = data.data.message;
+            //                 this.open();
+            //                 this.$router.push('/login');
+            //             } else {
+            //                 this.message = data.data.message;
+            //                 this.open();
+            //             }
+            //         })
+            //         .catch(err => {
+            //             console.log(err);
+            //         });
+            // },
             getFilm() {
                 var jsonArr = [];
                 jsonArr.push({key: 'cinemaCode', value: this.oForm.cinemaCode});
