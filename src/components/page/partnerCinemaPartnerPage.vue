@@ -8,8 +8,8 @@
             </el-breadcrumb>
         </div>
         <div class="container">
-            <div class="handle-box">
-                <!-- <el-select
+            <!-- <div class="handle-box">
+                <el-select
                     clearable
                     v-model="query.cinemaCodes"
                     placeholder="请选择影院"
@@ -21,7 +21,7 @@
                         :label="item.cinemaName"
                         :value="item.cinemaCode"
                     ></el-option>
-                </el-select> -->
+                </el-select>
                 <el-select
                     clearable
                     v-model="query.status"
@@ -61,13 +61,13 @@
                     icon="el-icon-search"
                     @click="Search"
                 >搜索</el-button>
-                <!-- <el-button
+                <el-button
                     type="primary"
                     @click="addPage"
                     icon="el-icon-circle-plus-outline"
                     style="float: right;margin-top: 10px"
-                >新增</el-button> -->
-            </div>
+                >新增</el-button>
+            </div> -->
             <el-table
                 :data="tableData"
                 border
@@ -77,42 +77,42 @@
                 header-cell-class-name="table-header"
                 @selection-change="handleSelectionChange"
             >
-                <el-table-column prop="sort" label="商户名称" width="220">
+                <el-table-column prop="sort" label="商户名称">
                     <template slot-scope="scope">{{scope.row.partnerName}}</template>
                 </el-table-column>
-                <el-table-column label="所属影院名称" width="300">
+                <el-table-column label="所属影院名称">
                     <template slot-scope="scope">{{scope.row.cinemaNames}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="是否显示" width="120">
+                <el-table-column prop="sort" label="是否显示">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status=='1'">启用</el-tag>
                         <el-tag v-else-if="scope.row.status=='2'">停用</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="sort" label="门店电话" width="220">
+                <el-table-column prop="sort" label="门店电话">
                     <template slot-scope="scope">{{scope.row.storeMobile}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="联系人" width="220">
+                <el-table-column prop="sort" label="联系人">
                     <template slot-scope="scope">{{scope.row.concatName}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="联系人电话" width="220">
+                <el-table-column prop="sort" label="联系人电话">
                     <template slot-scope="scope">{{scope.row.concatMobile }}</template>
                 </el-table-column>
-                <!-- <el-table-column label="操作" width="180" align="center" fixed="right">
+                <el-table-column label="操作" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-button
                             type="text"
                             icon="el-icon-edit"
                             @click="addChange(scope.$index, scope.row)"
                         >编辑</el-button>
-                        <el-button
+                        <!-- <el-button
                             type="text"
                             icon="el-icon-delete"
                             class="red"
                             @click="delChange(scope.$index, scope.row)"
-                        >删除</el-button>
+                        >删除</el-button> -->
                     </template>
-                </el-table-column> -->
+                </el-table-column>
             </el-table>
             <div class="pagination">
                 <el-pagination
@@ -129,127 +129,17 @@
                 ></el-pagination>
             </div>
         </div>
-        <!--新增弹出框-->
-        <el-dialog :close-on-click-modal="false" title="新增合作商家" :visible.sync="dialogFormVisible">
-            <el-form :model="oForm">
-                <el-form-item :required="true" label="适用影院" :label-width="formLabelWidth">
-                    <el-checkbox-group v-model="oForm.cinemaCodes" @change="changeCinema">
-                        <el-checkbox
-                            v-for="item in cinemaInfo"
-                            :key="item.cinemaCode"
-                            :label="item.cinemaCode"
-                            :value="item.cinemaCode"
-                        >{{item.cinemaName}}</el-checkbox>
-                    </el-checkbox-group>
-                </el-form-item>
-                <el-form-item :required="true" label="商户名称" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 250px"
-                        maxlength="30"
-                        v-model="oForm.partnerName"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="门店电话" :label-width="formLabelWidth" :required="true">
-                    <el-input
-                        style="width: 250px"
-                        maxlength="30"
-                        v-model="oForm.storeMobile"
-                        autocomplete="off"
-                        onkeyup="this.value=this.value.replace(/[^0-9-]+/,'')"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="联系人" :label-width="formLabelWidth" :required="true">
-                    <el-input
-                        style="width: 250px"
-                        maxlength="30"
-                        v-model="oForm.concatName"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="联系人电话" :label-width="formLabelWidth" :required="true">
-                    <el-input
-                        style="width: 250px"
-                        maxlength="30"
-                        v-model="oForm.concatMobile"
-                        autocomplete="off"
-                        onkeyup="this.value=this.value.replace(/\D/g,'')"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="门店地址" :label-width="formLabelWidth" :required="true">
-                    <el-input
-                        style="width: 250px"
-                        maxlength="200"
-                        v-model="oForm.address"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="营业开始时间" :label-width="formLabelWidth">
-                    <el-time-picker
-                        style="width: 200px"
-                        v-model="oForm.beginTime"
-                        type="datetime"
-                        value-format="HH:mm"
-                        format="HH:mm"
-                        placeholder="选择日期时间"
-                    ></el-time-picker>
-                </el-form-item>
-                <el-form-item label="营业结束时间" :label-width="formLabelWidth">
-                    <el-time-picker
-                        style="width: 200px"
-                        v-model="oForm.endTime"
-                        type="datetime"
-                        value-format="HH:mm"
-                        format="HH:mm"
-                        placeholder="选择日期时间"
-                    ></el-time-picker>
-                </el-form-item>
-                <el-form-item label="商户描述" :label-width="formLabelWidth">
-                    <el-input
-                        style="width: 250px"
-                        type="textarea"
-                        maxlength="200"
-                        v-model="oForm.memo"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="核销码" :label-width="formLabelWidth" :required="true">
-                    <el-input
-                        style="width: 250px"
-                        maxlength="8"
-                        v-model="oForm.verifyCode"
-                        autocomplete="off"
-                        onkeyup="value=value.replace(/[^\w\.\/]/ig,'')"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item :required="true" label="状态" :label-width="formLabelWidth">
-                    <el-select v-model="oForm.status" placeholder="选择是否启用">
-                        <el-option
-                            v-for="item in showStatus"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value"
-                        ></el-option>
-                    </el-select>
-                </el-form-item>
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-                <el-button @click="cancelAdd">取 消</el-button>
-                <el-button type="primary" @click="addRole">确 定</el-button>
-            </div>
-        </el-dialog>
         <!-- 编辑弹出框 -->
         <el-dialog :close-on-click-modal="false" title="编辑" :visible.sync="editVisible">
             <el-form ref="form" :model="changeForm">
                 <el-form-item :required="true" label="适用影院" :label-width="formLabelWidth">
-                    <el-checkbox-group v-model="changeForm.cinemaCodes" @change="changeCinema2">
-                        <el-checkbox
-                            v-for="item in cinemaInfo"
-                            :key="item.cinemaCode"
-                            :label="item.cinemaCode"
-                            :value="item.cinemaCode"
-                        >{{item.cinemaName}}</el-checkbox>
-                    </el-checkbox-group>
+                    <el-input
+                        style="width: 250px"
+                        maxlength="30"
+                        disabled
+                        v-model="changeForm.cinemaNames"
+                        autocomplete="off"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="商户名称" :label-width="formLabelWidth">
                     <el-input
@@ -328,7 +218,7 @@
                         maxlength="8"
                         v-model="changeForm.verifyCode"
                         autocomplete="off"
-                        onkeyup="value=value.replace(/[^\w\.\/]/ig,'')"
+                        onkeyup="this.value=this.value.replace(/[^\w\.\/]/ig,'')"
                     ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="状态" :label-width="formLabelWidth">
@@ -456,162 +346,6 @@ export default {
         this.getMenu();
     },
     methods: {
-        addPage() {
-            //获取新增按钮权限
-            const loading = this.$loading({
-                lock: true,
-                text: 'Loading',
-                spinner: 'el-icon-loading',
-                background: 'rgba(0, 0, 0, 0.7)',
-                target: document.querySelector('.div1')
-            });
-            setTimeout(() => {
-                https
-                    .fetchPost('/cinemaPartner/addPage', '')
-                    .then(data => {
-                        loading.close();
-                        if (data.data.code == 'success') {
-                            this.dialogFormVisible = true;
-                        } else if (data.data.code == 'nologin') {
-                            this.message = data.data.message;
-                            this.open();
-                            this.$router.push('/login');
-                        } else {
-                            this.message = data.data.message;
-                            this.open();
-                        }
-                    })
-                    .catch(err => {
-                        loading.close();
-                        console.log(err);
-                    });
-            }, 500);
-        },
-        cancelAdd() {
-            this.dialogFormVisible = false
-            this.oForm.partnerName = '';
-            this.oForm.cinemaCodes = [];
-            this.oForm.status = '';
-            this.oForm.storeMobile = '';
-            this.oForm.concatName = '';
-            this.oForm.concatMobile = '';
-            this.oForm.address = '';
-            this.oForm.beginTime = '';
-            this.oForm.endTime = '';
-            this.oForm.memo = '';
-            this.oForm.verifyCode = '';
-        },
-        addRole() {
-            //新增按钮操作
-            const loading = this.$loading({
-                lock: true,
-                text: 'Loading',
-                spinner: 'el-icon-loading',
-                background: 'rgba(0, 0, 0, 0.7)',
-                target: document.querySelector('.div1')
-            });
-            if (this.oForm.cinemaCodes.length == 0) {
-                this.message = '请选择影院！';
-                this.open();
-                loading.close();
-                return;
-            }
-            if (this.oForm.partnerName == '') {
-                this.message = '商户名称不能为空！';
-                this.open();
-                loading.close();
-                return;
-            }
-            if (this.oForm.storeMobile == '') {
-                this.message = '门店电话不能为空！';
-                this.open();
-                loading.close();
-                return;
-            }
-            if (this.oForm.concatName == '') {
-                this.message = '联系人不能为空！';
-                this.open();
-                loading.close();
-                return;
-            }
-            if (this.oForm.concatMobile == '') {
-                this.message = '联系人电话不能为空！';
-                this.open();
-                loading.close();
-                return;
-            }
-            if (this.oForm.address == '') {
-                this.message = '门店地址不能为空！';
-                this.open();
-                loading.close();
-                return;
-            }
-            if (this.oForm.verifyCode == '') {
-                this.message = '核销码不能为空！';
-                this.open();
-                loading.close();
-                return;
-            }
-            if (this.oForm.status == '') {
-                this.message = '状态不能为空！';
-                this.open();
-                loading.close();
-                return;
-            }
-            setTimeout(() => {
-                let cinemaCodes = this.oForm.cinemaCodes.join(",")
-                var jsonArr = [];
-                jsonArr.push({ key: 'cinemaCodes', value: cinemaCodes });
-                jsonArr.push({ key: 'status', value: this.oForm.status });;
-                jsonArr.push({ key: 'partnerName', value: this.oForm.partnerName });
-                jsonArr.push({ key: 'storeMobile', value: this.oForm.storeMobile });
-                jsonArr.push({ key: 'concatName', value: this.oForm.concatName });
-                jsonArr.push({ key: 'concatMobile', value: this.oForm.concatMobile });
-                jsonArr.push({ key: 'address', value: this.oForm.address });
-                jsonArr.push({ key: 'beginTime', value: this.oForm.beginTime });
-                jsonArr.push({ key: 'endTime', value: this.oForm.endTime });
-                jsonArr.push({ key: 'memo', value: this.oForm.memo });
-                jsonArr.push({ key: 'verifyCode', value: this.oForm.verifyCode });
-                let sign = md5(preSign(jsonArr));
-                jsonArr.push({ key: 'sign', value: sign });
-                let params = ParamsAppend(jsonArr);
-                if (this.dialogFormVisible == true) {
-                    https
-                        .fetchPost('/cinemaPartner/add', params)
-                        .then(data => {
-                            //新增
-                            loading.close();
-                            if (data.data.code == 'success') {
-                                this.dialogFormVisible = false;
-                                this.$message.success(`新增成功`);
-                                this.oForm.partnerName = '';
-                                this.oForm.cinemaCodes = [];
-                                this.oForm.status = '';
-                                this.oForm.storeMobile = '';
-                                this.oForm.concatName = '';
-                                this.oForm.concatMobile = '';
-                                this.oForm.address = '';
-                                this.oForm.beginTime = '';
-                                this.oForm.endTime = '';
-                                this.oForm.memo = '';
-                                this.oForm.verifyCode = '';
-                                this.getMenu();
-                            } else if (data.data.code == 'nologin') {
-                                this.message = data.data.message;
-                                this.open();
-                                this.$router.push('/login');
-                            } else {
-                                this.message = data.data.message;
-                                this.open();
-                            }
-                        })
-                        .catch(err => {
-                            loading.close();
-                            console.log(err);
-                        });
-                }
-            }, 500);
-        },
         delChange(index, row) {
             //删除数据
             this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
@@ -675,7 +409,6 @@ export default {
             });
             setTimeout(() => {
                 this.idx = index;
-                // this.changeForm = row;
                 var jsonArr = [];
                 jsonArr.push({ key: 'id', value: row.id });
                 let sign = md5(preSign(jsonArr));
@@ -697,6 +430,7 @@ export default {
                             this.changeForm.status = this.showStatus[index].value;
                             this.changeForm.cinemaCodes = JSON.parse(Decrypt(data.data.data)).cinemaCodes.split(",");
                             this.changeForm.partnerName = JSON.parse(Decrypt(data.data.data)).partnerName;
+                            this.changeForm.cinemaNames = JSON.parse(Decrypt(data.data.data)).cinemaNames;
                             this.changeForm.partnerCode = JSON.parse(Decrypt(data.data.data)).partnerCode;
                             this.changeForm.storeMobile = JSON.parse(Decrypt(data.data.data)).storeMobile;
                             this.changeForm.concatName = JSON.parse(Decrypt(data.data.data)).concatName;
@@ -797,7 +531,6 @@ export default {
                 jsonArr.push({ key: 'id', value: this.changeForm.id });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
-                console.log(jsonArr);
                 let params = ParamsAppend(jsonArr);
                 https
                     .fetchPost('/cinemaPartner/updateById', params)
@@ -836,54 +569,14 @@ export default {
                 target: document.querySelector('.div1')
             });
             setTimeout(() => {
-                let partnerName = this.query.partnerName;
-                let cinemaCodes = this.query.cinemaCodes;
-                let concatName = this.query.concatName;
-                let storeMobile = this.query.storeMobile;
-                let concatMobile = this.query.concatMobile;
-                let status = this.query.status;
-                if (!partnerName) {
-                    partnerName = '';
-                }
-                if (!cinemaCodes) {
-                    cinemaCodes = '';
-                }
-                if (!concatName) {
-                    concatName = '';
-                }
-                if (!storeMobile) {
-                    storeMobile = '';
-                }
-                if (!concatMobile) {
-                    concatMobile = '';
-                }
-                if (!status) {
-                    status = '';
-                }
-                let jsonArr = [];
-                jsonArr.push({ key: 'status', value: status });
-                jsonArr.push({ key: 'cinemaCodes', value: cinemaCodes });
-                jsonArr.push({ key: 'partnerName', value: partnerName });
-                jsonArr.push({ key: 'concatName', value: concatName });
-                jsonArr.push({ key: 'storeMobile', value: storeMobile });
-                jsonArr.push({ key: 'concatMobile', value: concatMobile });
-                jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
-                jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
-                let sign = md5(preSign(jsonArr));
-                jsonArr.push({ key: 'sign', value: sign });
-                var params = ParamsAppend(jsonArr);
                 https
-                    .fetchPost('/cinemaPartner/getUserCinemaPartner', params)
+                    .fetchPost('/cinemaPartner/getUserCinemaPartner', '')
                     .then(data => {
                         loading.close();
                         if (data.data.code == 'success') {
                             var oData = JSON.parse(Decrypt(data.data.data));
-                            this.tableData = oData.data;
-                            this.query.pageSize = oData.pageSize;
-                            this.query.pageNo = oData.pageNo;
-                            this.query.totalCount = oData.totalCount;
-                            this.query.totalPage = oData.totalPage;
-                            // this.getAllCinema();
+                            console.log(oData)
+                            this.tableData = oData;
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
                             this.open();
