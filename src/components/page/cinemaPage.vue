@@ -137,7 +137,7 @@
                         <el-tag v-else type="danger">否</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="booleans" label="是否可退票">
+                <el-table-column prop="booleans" label="小程序端是否可退票">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.refundable == 1" type="success">是</el-tag>
                         <el-tag v-else type="danger">否</el-tag>
@@ -453,7 +453,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item prop="refundable" label="是否可退票" :label-width="formLabelWidth">
+                <el-form-item prop="refundable" label="小程序端是否可退票" :label-width="formLabelWidth">
                     <el-select
                             v-model="oForm.refundable"
                     >
@@ -1063,7 +1063,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item prop="refundable" label="是否可退票" :label-width="formLabelWidth">
+                <el-form-item prop="refundable" label="小程序端是否可退票" :label-width="formLabelWidth">
                     <el-select
                             v-model="oRefundable"
                     >
