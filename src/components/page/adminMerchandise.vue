@@ -54,11 +54,11 @@
                 </el-table-column>
                 <el-table-column label="操作" width="160" align="center" fixed="right">
                     <template slot-scope="scope">
-                        <!-- <el-button
+                        <el-button
                             type="text"
                             icon="el-icon-setting"
                             @click="UserPassword(scope.$index, scope.row)"
-                        >同步卖品</el-button> -->
+                        >同步卖品</el-button>
                         <el-button type="text" icon="el-icon-edit" @click="show(scope.row)">编辑</el-button>
                     </template>
                 </el-table-column>
@@ -718,7 +718,7 @@ export default {
                 jsonArr.push({ key: 'sign', value: sign });
                 var params = ParamsAppend(jsonArr);
                 https
-                    .fetchPost('/merchandise/queryMerchandise', params)
+                    .fetchPost('/admin/merchandise/queryMerchandise', params)
                     .then(data => {
                         loading.close();
                         console.log(data);

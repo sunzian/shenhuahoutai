@@ -973,8 +973,8 @@ export default {
         changePrize() {
             //调出编辑奖项页面
             console.log(this.prizeInfoList);
-            if (this.prizeInfoList.length >= 8) {
-                this.message = '奖项数量最多添加8个';
+            if (this.prizeInfoList.length >= 7) {
+                this.message = '奖项数量最多添加7个';
                 this.open();
             } else {
                 this.fileList=[];

@@ -42,10 +42,10 @@
                         <el-tag v-else-if="scope.row.deliveryStatus=='1'">已取货</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="memo" label="卖品内容">
+                <el-table-column prop="memo" label="卖品内容" width="150px">
                     <template slot-scope="scope">{{scope.row.merNames}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="手机号">
+                <el-table-column prop="memo" label="手机号" width="120px">
                     <template slot-scope="scope">{{scope.row.mobile}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="订单号">
@@ -54,30 +54,24 @@
                 <el-table-column prop="memo" label="用户名">
                     <template slot-scope="scope">{{scope.row.userName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="原价">
+                <el-table-column prop="memo" label="原价" width="80px">
                     <template slot-scope="scope">{{scope.row.totalOriginalPrice}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="实付金额">
+                <el-table-column prop="memo" label="实付" width="80px">
                     <template slot-scope="scope">{{scope.row.totalActualPrice}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="活动优惠金额">
+                <el-table-column prop="memo" label="活动优惠金额" width="80px">
                     <template slot-scope="scope">{{scope.row.totalActivityDiscount}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="优惠券优惠金额">
+                <el-table-column prop="memo" label="优惠券优惠金额" width="80px">
                     <template slot-scope="scope">{{scope.row.totalCouponDiscount}}</template>
-                </el-table-column>
-                <el-table-column prop="memo" label="支付状态">
-                    <template slot-scope="scope">
-                        <el-tag v-if="scope.row.payStatus=='0'">未支付</el-tag>
-                        <el-tag v-else-if="scope.row.payStatus=='1'">已支付</el-tag>
-                    </template>
                 </el-table-column>
                 <el-table-column label="支付时间" align="center">
                     <template slot-scope="scope">{{scope.row.payTime}}</template>
                 </el-table-column>
                 <el-table-column label="取货方式" align="center">
                     <template slot-scope="scope">
-                        <el-tag v-if="scope.row.deliveryType=='0'">自取</el-tag>
+                        <el-tag v-if="scope.row.deliveryType=='0'">马上取餐</el-tag>
                         <el-tag v-else-if="scope.row.deliveryType=='1'">送至影厅</el-tag>
                     </template>
                 </el-table-column>
@@ -140,7 +134,7 @@ export default {
         audio.volume = 0.0
         setTimeout(() => {
             this.getMenu();
-        },3000)
+        }, 3000)
         setInterval(() => {
             this.getMenu();
         }, 10000);
