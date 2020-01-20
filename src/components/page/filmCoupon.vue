@@ -804,17 +804,19 @@
                         ref="multipleTable"
                         header-cell-class-name="table-header"
                         @selection-change="handleSelectionChange"
+                        :row-key="getFilmId"
                 >
-                    <el-table-column label="操作" width="50" align="center">
-                        <template slot-scope="scope">
-                            <el-radio
-                                    v-model="id"
-                                    :label="scope.$index"
-                                    @change.native="getCurrentRow(scope.$index)"
-                            >&nbsp;
-                            </el-radio>
-                        </template>
-                    </el-table-column>
+                    <el-table-column type="selection" :reserve-selection="true" width="55"></el-table-column>
+                    <!--<el-table-column label="操作" width="50" align="center">-->
+                    <!--<template slot-scope="scope">-->
+                    <!--<el-radio-->
+                    <!--v-model="id"-->
+                    <!--:label="scope.$index"-->
+                    <!--@change.native="getCurrentRow(scope.$index)"-->
+                    <!--&gt;&nbsp;-->
+                    <!--</el-radio>-->
+                    <!--</template>-->
+                    <!--</el-table-column>-->
                     <el-table-column prop="sort" label="影片名称">
                         <template slot-scope="scope">{{scope.row.filmName}}</template>
                     </el-table-column>
@@ -914,8 +916,8 @@
 </template>
 
 <script>
-    import {fetchData} from '../../api/index';
-    import {Decrypt, Encrypt, preSign, EncryptReplace, ParamsAppend} from '@/aes/utils';
+    import { fetchData } from '../../api/index';
+    import { Decrypt, Encrypt, preSign, EncryptReplace, ParamsAppend } from '@/aes/utils';
     import md5 from 'js-md5';
     import axios from 'axios';
     import https from '../../https';
@@ -1088,6 +1090,10 @@
             this.getMenu();
         },
         methods: {
+            getFilmId(row) {
+                // console.log(row);
+                return row.filmCode;
+            },
             canExportCoupon(index, row) {
                 //是否拥有权限
                 const loading = this.$loading({
@@ -1099,9 +1105,9 @@
                 });
                 this.idx = index;
                 var jsonArr = [];
-                jsonArr.push({key: 'id', value: row.id});
+                jsonArr.push({ key: 'id', value: row.id });
                 let sign = md5(preSign(jsonArr));
-                jsonArr.push({key: 'sign', value: sign});
+                jsonArr.push({ key: 'sign', value: sign });
                 let params = ParamsAppend(jsonArr);
                 https
                     .fetchPost('/CouponBackGround/pageIndex', params)
@@ -1157,14 +1163,14 @@
                     target: document.querySelector('.div1')
                 });
                 var jsonArr = [];
-                jsonArr.push({key: 'validityType', value: this.exportForm.validityType});
-                jsonArr.push({key: 'validityDay', value: this.exportForm.validityDay});
-                jsonArr.push({key: 'startDate', value: this.exportForm.startDate});
-                jsonArr.push({key: 'endDate', value: this.exportForm.endDate});
-                jsonArr.push({key: 'exportNum', value: this.exportForm.exportNum});
-                jsonArr.push({key: 'associatedId', value: this.exportForm.id});
+                jsonArr.push({ key: 'validityType', value: this.exportForm.validityType });
+                jsonArr.push({ key: 'validityDay', value: this.exportForm.validityDay });
+                jsonArr.push({ key: 'startDate', value: this.exportForm.startDate });
+                jsonArr.push({ key: 'endDate', value: this.exportForm.endDate });
+                jsonArr.push({ key: 'exportNum', value: this.exportForm.exportNum });
+                jsonArr.push({ key: 'associatedId', value: this.exportForm.id });
                 let sign = md5(preSign(jsonArr));
-                jsonArr.push({key: 'sign', value: sign});
+                jsonArr.push({ key: 'sign', value: sign });
                 let params = ParamsAppend(jsonArr);
                 let myObj = {
                     method: 'post',
@@ -1207,28 +1213,31 @@
             deleteSell(index) {
                 this.selectedSell.splice(index, 1);
             },
-            getCurrentRow(index) {
-                this.sellIndex = index;
-            },
+            // getCurrentRow(index) {
+            //     this.sellIndex = index;
+            // },
             sureNext() {
-                if (this.sellIndex >= 0) {
-                    // console.log('选了数据');
-                    if (this.selectedSell.length <= 0) {
-                        // console.log('长度为0');
-                        this.selectedSell.push(this.sellTableData[this.sellIndex]);
-                    } else if (this.selectedSell.length > 0) {
-                        // console.log('有数据');
-                        for (let x in this.selectedSell) {
-                            if (this.selectedSell[x].filmCode == this.sellTableData[this.sellIndex].filmCode) {
-                                this.message = '不能添加相同影片！';
-                                this.open();
-                                return;
-                            }
-                        }
-                        // console.log('判断不重复');
-                        this.selectedSell.push(this.sellTableData[this.sellIndex]);
-                    }
-                }
+                // if (this.sellIndex >= 0) {
+                //     // console.log('选了数据');
+                //     if (this.selectedSell.length <= 0) {
+                //         // console.log('长度为0');
+                //         this.selectedSell.push(this.sellTableData[this.sellIndex]);
+                //     } else if (this.selectedSell.length > 0) {
+                //         // console.log('有数据');
+                //         for (let x in this.selectedSell) {
+                //             if (this.selectedSell[x].filmCode == this.sellTableData[this.sellIndex].filmCode) {
+                //                 this.message = '不能添加相同影片！';
+                //                 this.open();
+                //                 return;
+                //             }
+                //         }
+                // console.log('判断不重复');
+                let selectedSell = [];
+                this.selectedSell = selectedSell.concat(this.multipleSelection);
+                console.log(this.selectedSell);
+                // this.selectedSell.push(this.sellTableData[this.sellIndex]);
+                //     }
+                // }
                 this.drawer = false;
             },
             SearchFilm() {
@@ -1250,11 +1259,11 @@
                         filmName = '';
                     }
                     let jsonArr = [];
-                    jsonArr.push({key: 'filmName', value: filmName});
-                    jsonArr.push({key: 'pageNo', value: this.query.aPageNo});
-                    jsonArr.push({key: 'pageSize', value: this.query.aPageSize});
+                    jsonArr.push({ key: 'filmName', value: filmName });
+                    jsonArr.push({ key: 'pageNo', value: this.query.aPageNo });
+                    jsonArr.push({ key: 'pageSize', value: this.query.aPageSize });
                     let sign = md5(preSign(jsonArr));
-                    jsonArr.push({key: 'sign', value: sign});
+                    jsonArr.push({ key: 'sign', value: sign });
                     var params = ParamsAppend(jsonArr);
                     https
                         .fetchPost('film/filmPage', params)
@@ -1587,41 +1596,41 @@
                     this.oForm.achieveMoney = '';
                 }
                 var jsonArr = [];
-                jsonArr.push({key: 'name', value: this.oForm.name});
-                jsonArr.push({key: 'commonType', value: this.oForm.commonType});
-                jsonArr.push({key: 'cinemaCodes', value: this.selectValue});
-                jsonArr.push({key: 'selectHallType', value: this.oForm.selectHallType});
-                jsonArr.push({key: 'screenCode', value: this.selectScreenCode});
-                jsonArr.push({key: 'selectFilmType', value: this.oForm.selectFilmType});
-                jsonArr.push({key: 'filmCode', value: this.oForm.filmCode});
+                jsonArr.push({ key: 'name', value: this.oForm.name });
+                jsonArr.push({ key: 'commonType', value: this.oForm.commonType });
+                jsonArr.push({ key: 'cinemaCodes', value: this.selectValue });
+                jsonArr.push({ key: 'selectHallType', value: this.oForm.selectHallType });
+                jsonArr.push({ key: 'screenCode', value: this.selectScreenCode });
+                jsonArr.push({ key: 'selectFilmType', value: this.oForm.selectFilmType });
+                jsonArr.push({ key: 'filmCode', value: this.oForm.filmCode });
                 // jsonArr.push({ key: 'startDate', value: this.oForm.startDate });
                 // jsonArr.push({ key: 'endDate', value: this.oForm.endDate });
-                jsonArr.push({key: 'reduceType', value: this.oForm.reduceType});
-                jsonArr.push({key: 'validPayType', value: this.oForm.validPayType});
-                jsonArr.push({key: 'achieveMoney', value: this.oForm.achieveMoney});
-                jsonArr.push({key: 'discountMoney', value: this.oForm.discountMoney});
-                jsonArr.push({key: 'status', value: this.oForm.status});
-                jsonArr.push({key: 'holidayValid', value: this.oForm.holidayValid});
-                jsonArr.push({key: 'exceptWeekDay', value: this.checkedDays});
-                jsonArr.push({key: 'activityTogether', value: this.oForm.activityTogether});
-                jsonArr.push({key: 'sendNumber', value: this.oForm.sendNumber});
-                jsonArr.push({key: 'couponDesc', value: this.oForm.couponDesc});
-                jsonArr.push({key: 'selectFilmFormatType', value: this.oForm.selectFilmFormatType});
-                jsonArr.push({key: 'filmFormatCode', value: this.selectFormatCode});
+                jsonArr.push({ key: 'reduceType', value: this.oForm.reduceType });
+                jsonArr.push({ key: 'validPayType', value: this.oForm.validPayType });
+                jsonArr.push({ key: 'achieveMoney', value: this.oForm.achieveMoney });
+                jsonArr.push({ key: 'discountMoney', value: this.oForm.discountMoney });
+                jsonArr.push({ key: 'status', value: this.oForm.status });
+                jsonArr.push({ key: 'holidayValid', value: this.oForm.holidayValid });
+                jsonArr.push({ key: 'exceptWeekDay', value: this.checkedDays });
+                jsonArr.push({ key: 'activityTogether', value: this.oForm.activityTogether });
+                jsonArr.push({ key: 'sendNumber', value: this.oForm.sendNumber });
+                jsonArr.push({ key: 'couponDesc', value: this.oForm.couponDesc });
+                jsonArr.push({ key: 'selectFilmFormatType', value: this.oForm.selectFilmFormatType });
+                jsonArr.push({ key: 'filmFormatCode', value: this.selectFormatCode });
                 if (this.oForm.reduceType == 1) {
-                    jsonArr.push({key: 'fixedSatisfyMoney', value: this.oForm.fixedSatisfyMoney});
-                    jsonArr.push({key: 'fixedAddMoney', value: this.oForm.fixedAddMoney});
+                    jsonArr.push({ key: 'fixedSatisfyMoney', value: this.oForm.fixedSatisfyMoney });
+                    jsonArr.push({ key: 'fixedAddMoney', value: this.oForm.fixedAddMoney });
                 }
                 if (this.oForm.holidayValid == 1) {
                     if (this.oForm.reduceType == 1) {
-                        jsonArr.push({key: 'holidayAddMoney', value: this.oForm.holidayAddMoney});
+                        jsonArr.push({ key: 'holidayAddMoney', value: this.oForm.holidayAddMoney });
                     }
                     if (this.oForm.reduceType == 5) {
-                        jsonArr.push({key: 'holidayAddMoney', value: this.oForm.holidayAddMoney});
+                        jsonArr.push({ key: 'holidayAddMoney', value: this.oForm.holidayAddMoney });
                     }
                 }
                 let sign = md5(preSign(jsonArr));
-                jsonArr.push({key: 'sign', value: sign});
+                jsonArr.push({ key: 'sign', value: sign });
                 console.log(jsonArr);
                 let params = ParamsAppend(jsonArr);
                 if (this.dialogFormVisible == true) {
@@ -1710,9 +1719,9 @@
                             status = '';
                         }
                         let jsonArr = [];
-                        jsonArr.push({key: 'id', value: row.id});
+                        jsonArr.push({ key: 'id', value: row.id });
                         let sign = md5(preSign(jsonArr));
-                        jsonArr.push({key: 'sign', value: sign});
+                        jsonArr.push({ key: 'sign', value: sign });
                         let params = ParamsAppend(jsonArr);
                         https
                             .fetchPost('/filmCoupon/deleteById', params)
@@ -1740,7 +1749,7 @@
                         });
                     });
             },
-            addChange: function (index, row) {
+            addChange: function(index, row) {
                 //是否拥有权限
                 const loading = this.$loading({
                     lock: true,
@@ -1752,9 +1761,9 @@
                 this.idx = index;
                 this.form = row;
                 var jsonArr = [];
-                jsonArr.push({key: 'id', value: row.id});
+                jsonArr.push({ key: 'id', value: row.id });
                 let sign = md5(preSign(jsonArr));
-                jsonArr.push({key: 'sign', value: sign});
+                jsonArr.push({ key: 'sign', value: sign });
                 let params = ParamsAppend(jsonArr);
                 https
                     .fetchPost('/filmCoupon/getFilmCouponById', params)
@@ -2159,42 +2168,42 @@
                     filmCodeList.push(this.selectedSell[x].filmCode);
                 }
                 var jsonArr = [];
-                jsonArr.push({key: 'name', value: this.oName});
-                jsonArr.push({key: 'commonType', value: this.oCommonType});
-                jsonArr.push({key: 'cinemaCodes', value: this.oCinemaCode});
-                jsonArr.push({key: 'selectFilmFormatType', value: this.oSelectFilmFormatType});
-                jsonArr.push({key: 'filmCode', value: filmCodeList.join(',')});
-                jsonArr.push({key: 'selectFilmType', value: this.oSelectFilmType});
-                jsonArr.push({key: 'filmFormatCode', value: this.oFilmFormatCode.join(',')});
-                jsonArr.push({key: 'selectHallType', value: this.oSelectHallType});
-                jsonArr.push({key: 'screenCode', value: this.oScreenCode.join(',')});
-                jsonArr.push({key: 'discountMoney', value: this.oDiscountMoney});
-                jsonArr.push({key: 'achieveMoney', value: this.oAchieveMoney});
+                jsonArr.push({ key: 'name', value: this.oName });
+                jsonArr.push({ key: 'commonType', value: this.oCommonType });
+                jsonArr.push({ key: 'cinemaCodes', value: this.oCinemaCode });
+                jsonArr.push({ key: 'selectFilmFormatType', value: this.oSelectFilmFormatType });
+                jsonArr.push({ key: 'filmCode', value: filmCodeList.join(',') });
+                jsonArr.push({ key: 'selectFilmType', value: this.oSelectFilmType });
+                jsonArr.push({ key: 'filmFormatCode', value: this.oFilmFormatCode.join(',') });
+                jsonArr.push({ key: 'selectHallType', value: this.oSelectHallType });
+                jsonArr.push({ key: 'screenCode', value: this.oScreenCode.join(',') });
+                jsonArr.push({ key: 'discountMoney', value: this.oDiscountMoney });
+                jsonArr.push({ key: 'achieveMoney', value: this.oAchieveMoney });
                 // jsonArr.push({ key: 'startDate', value: this.oStartDate });
                 // jsonArr.push({ key: 'endDate', value: this.oEndDate });
-                jsonArr.push({key: 'status', value: this.oStatus});
-                jsonArr.push({key: 'couponDesc', value: this.oCouponDesc});
-                jsonArr.push({key: 'holidayValid', value: this.oHolidayValid});
-                jsonArr.push({key: 'exceptWeekDay', value: this.oCheckedDays.join(',')});
-                jsonArr.push({key: 'validPayType', value: this.oValidPayType});
-                jsonArr.push({key: 'sendNumber', value: this.oSendNumber});
-                jsonArr.push({key: 'reduceType', value: this.oReduceType});
-                jsonArr.push({key: 'activityTogether', value: this.oActivityTogether});
-                jsonArr.push({key: 'id', value: this.oId});
+                jsonArr.push({ key: 'status', value: this.oStatus });
+                jsonArr.push({ key: 'couponDesc', value: this.oCouponDesc });
+                jsonArr.push({ key: 'holidayValid', value: this.oHolidayValid });
+                jsonArr.push({ key: 'exceptWeekDay', value: this.oCheckedDays.join(',') });
+                jsonArr.push({ key: 'validPayType', value: this.oValidPayType });
+                jsonArr.push({ key: 'sendNumber', value: this.oSendNumber });
+                jsonArr.push({ key: 'reduceType', value: this.oReduceType });
+                jsonArr.push({ key: 'activityTogether', value: this.oActivityTogether });
+                jsonArr.push({ key: 'id', value: this.oId });
                 if (this.oReduceType == 1) {
-                    jsonArr.push({key: 'fixedSatisfyMoney', value: this.oFixedSatisfyMoney});
-                    jsonArr.push({key: 'fixedAddMoney', value: this.oFixedAddMoney});
+                    jsonArr.push({ key: 'fixedSatisfyMoney', value: this.oFixedSatisfyMoney });
+                    jsonArr.push({ key: 'fixedAddMoney', value: this.oFixedAddMoney });
                 }
                 if (this.oHolidayValid == 1) {
                     if (this.oReduceType == 1) {
-                        jsonArr.push({key: 'holidayAddMoney', value: this.oHolidayAddMoney});
+                        jsonArr.push({ key: 'holidayAddMoney', value: this.oHolidayAddMoney });
                     }
                     if (this.oReduceType == 5) {
-                        jsonArr.push({key: 'holidayAddMoney', value: this.oHolidayAddMoney});
+                        jsonArr.push({ key: 'holidayAddMoney', value: this.oHolidayAddMoney });
                     }
                 }
                 let sign = md5(preSign(jsonArr));
-                jsonArr.push({key: 'sign', value: sign});
+                jsonArr.push({ key: 'sign', value: sign });
                 let params = ParamsAppend(jsonArr);
                 https
                     .fetchPost('/filmCoupon/updateCouponById', params)
@@ -2250,10 +2259,10 @@
                         } else if (row.status == 0) {
                             status = 1;
                         }
-                        jsonArr.push({key: 'id', value: row.id});
-                        jsonArr.push({key: 'status', value: status});
+                        jsonArr.push({ key: 'id', value: row.id });
+                        jsonArr.push({ key: 'status', value: status });
                         let sign = md5(preSign(jsonArr));
-                        jsonArr.push({key: 'sign', value: sign});
+                        jsonArr.push({ key: 'sign', value: sign });
                         console.log(jsonArr);
                         let params = ParamsAppend(jsonArr);
                         https
@@ -2319,15 +2328,15 @@
                     status = '';
                 }
                 let jsonArr = [];
-                jsonArr.push({key: 'reduceType', value: reduceType});
-                jsonArr.push({key: 'commonType', value: commonType});
-                jsonArr.push({key: 'name', value: name});
-                jsonArr.push({key: 'status', value: status});
-                jsonArr.push({key: 'cinemaCodes', value: cinemaCode});
-                jsonArr.push({key: 'pageNo', value: this.query.pageNo});
-                jsonArr.push({key: 'pageSize', value: this.query.pageSize});
+                jsonArr.push({ key: 'reduceType', value: reduceType });
+                jsonArr.push({ key: 'commonType', value: commonType });
+                jsonArr.push({ key: 'name', value: name });
+                jsonArr.push({ key: 'status', value: status });
+                jsonArr.push({ key: 'cinemaCodes', value: cinemaCode });
+                jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
+                jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
                 let sign = md5(preSign(jsonArr));
-                jsonArr.push({key: 'sign', value: sign});
+                jsonArr.push({ key: 'sign', value: sign });
                 var params = ParamsAppend(jsonArr);
                 https
                     .fetchPost('/filmCoupon/filmCouponPage', params)
@@ -2412,9 +2421,9 @@
                     return;
                 }
                 let jsonArr = [];
-                jsonArr.push({key: 'cinemaCode', value: value});
+                jsonArr.push({ key: 'cinemaCode', value: value });
                 let sign = md5(preSign(jsonArr));
-                jsonArr.push({key: 'sign', value: sign});
+                jsonArr.push({ key: 'sign', value: sign });
                 var params = ParamsAppend(jsonArr);
                 https
                     .fetchPost('filmCoupon/getScreenInfoByCinemaCode', params)
