@@ -60,13 +60,13 @@
                     @click="thirdPrice"
                     style="float: right;margin-top: 10px"
                     icon="el-icon-circle-plus-outline"
-                >批量修改</el-button>
+                >批量修改</el-button> -->
                 <el-button
                     type="primary"
                     @click="updatePage"
                     icon="el-icon-circle-plus-outline"
                     style="float: right;margin-top: 10px"
-                >同步第三方价格</el-button> -->
+                >同步第三方价格</el-button>
             </div>
             <el-table
                 :data="tableData"
@@ -705,7 +705,6 @@ export default {
             jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
-            console.log(jsonArr)
             var params = ParamsAppend(jsonArr);
             https
                 .fetchPost('/admin/thirdPrice/thirdPricePage', params)
@@ -744,6 +743,12 @@ export default {
                 type: 'warning'
             })
                 .then(() => {
+                    let businessCode = this.query.businessCode;
+                    if (!businessCode) {
+                        this.message = '请选择商家！';
+                        this.open();
+                        return;
+                    }
                     const loading = this.$loading({
                         lock: true,
                         text: 'Loading',
@@ -751,11 +756,15 @@ export default {
                         background: 'rgba(0, 0, 0, 0.7)',
                         target: document.querySelector('.div1')
                     });
+                    let jsonArr = [];
+                    jsonArr.push({ key: 'businessCode', value: businessCode });
+                    let sign = md5(preSign(jsonArr));
+                    jsonArr.push({ key: 'sign', value: sign });
+                    var params = ParamsAppend(jsonArr);
                     https
-                        .fetchPost('/thirdPrice/synchronizedThirdPrice')
+                        .fetchPost('/admin/thirdPrice/synchronizedThirdPrice', params)
                         .then(data => {
                             loading.close();
-                            console.log(data);
                             if (data.data.code == 'success') {
                                 this.$message({
                                     type: 'success',

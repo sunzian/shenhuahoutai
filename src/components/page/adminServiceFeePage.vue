@@ -207,21 +207,21 @@
                 <el-table-column prop="sort" label="会员卡支付代售费" width="140">
                     <template slot-scope="scope">{{scope.row.memberServiceFee}}</template>
                 </el-table-column>
-                <!-- <el-table-column label="操作" width="110" align="center">
+                <el-table-column label="操作" width="110" align="center">
                     <template slot-scope="scope">
                         <el-button
                             type="text"
                             icon="el-icon-circle-plus-outline"
                             @click="addChange(scope.$index, scope.row)"
-                        >编辑</el-button>
-                        <el-button
+                        >查看详情</el-button>
+                        <!-- <el-button
                             type="text"
                             icon="el-icon-delete"
                             class="red"
                             @click="delChange(scope.$index, scope.row)"
-                        >删除</el-button>
+                        >删除</el-button> -->
                     </template>
-                </el-table-column> -->
+                </el-table-column>
             </el-table>
             <div class="pagination">
                 <el-pagination
@@ -375,7 +375,7 @@
                         <el-radio :label="1">全部影厅</el-radio>
                         <el-radio :label="2">部分影厅</el-radio>
                     </el-radio-group>
-                    <el-checkbox-group
+                    <!-- <el-checkbox-group
                         v-model="oScreenCode"
                         @change="selectScreens"
                         v-if="oScreenType == 2"
@@ -386,7 +386,7 @@
                             :key="item.screenName"
                             :value="item.screenName"
                         >{{item.screenName}}</el-checkbox>
-                    </el-checkbox-group>
+                    </el-checkbox-group> -->
                 </el-form-item>
                 <el-form-item :required="true" label="选择影片：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oFilmType">
@@ -394,9 +394,9 @@
                         <el-radio :label="2">部分影片</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item :required="true" v-if="oFilmType == 2" label="选择影片" :label-width="formLabelWidth">
+                <!-- <el-form-item :required="true" v-if="oFilmType == 2" label="选择影片" :label-width="formLabelWidth">
                     <el-button type="primary" @click="openNext">点击选择</el-button>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item :required="true" label="所选影片" :label-width="formLabelWidth" v-if="selectedSell.length>0 && oFilmType == 2">
                     <div
                         v-for="(item, index) in selectedSell"
@@ -411,7 +411,7 @@
                             :disabled="true"
                             :change="one(item.filmCode)"
                         ></el-input>
-                        <span style="color:red;cursor: pointer;" @click="deleteSell()">删除</span>
+                        <!-- <span style="color:red;cursor: pointer;" @click="deleteSell()">删除</span> -->
                     </div>
                 </el-form-item>
                 <el-form-item :required="true" label="有效期：" :label-width="formLabelWidth">
@@ -471,10 +471,10 @@
                     <el-input style="width: 150px" v-model="oMemberServiceFee" autocomplete="off"></el-input>元
                 </el-form-item>
             </el-form>
-            <span slot="footer" class="dialog-footer">
+            <!-- <span slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false">取 消</el-button>
                 <el-button type="primary" @click="exChanger">确 定</el-button>
-            </span>
+            </span> -->
         </el-dialog>
         <!--选择影片弹出框-->
         <el-dialog :close-on-click-modal="false" title="选择影片" :visible.sync="drawer">
@@ -886,13 +886,12 @@ export default {
             jsonArr.push({ key: 'sign', value: sign });
             let params = ParamsAppend(jsonArr);
             https
-                .fetchPost('/serviceFee/modifyServiceFeePage', params)
+                .fetchPost('/admin/serviceFee/modifyServiceFeePage', params)
                 .then(data => {
                     loading.close();
-                    console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.editVisible = true;
-                        this.getAllScreen();
+                        // this.getAllScreen();
                         this.oThirdServiceFee = JSON.parse(Decrypt(data.data.data)).thirdServiceFee;
                         if (JSON.parse(Decrypt(data.data.data)).status == 1) {
                             this.oStatus = '启用';
