@@ -343,7 +343,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item :required="true" label="是否可退票" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="小程序端是否可退票" :label-width="formLabelWidth">
                     <el-select v-model="oRefundable" @change="openServe">
                         <el-option
                             v-for="info in boolean"
@@ -1326,7 +1326,7 @@ export default {
                 return;
             }
             if (!this.oRefundable) {
-                this.message = '是否可退票不能为空，请检查！';
+                this.message = '小程序端是否可退票不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
