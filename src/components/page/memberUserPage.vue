@@ -63,6 +63,15 @@
                         autocomplete="off"
                         class="mr10"
                 ></el-input>
+                <el-select
+                    clearable
+                    v-model="query.userRole"
+                    placeholder="游戏厅角色"
+                    class="handle-select mr10"
+                >
+                    <el-option key="1" label="普通用户" value="1"></el-option>
+                    <el-option key="2" label="管理员" value="2"></el-option>
+                </el-select>
                 <el-button
                     type="primary"
                     icon="el-icon-search"
@@ -362,6 +371,7 @@ export default {
                 let endDate = this.query.endDate;
                 let startRegisterNumber = this.query.startRegisterNumber;
                 let endRegisterNumber = this.query.endRegisterNumber;
+                let userRole = this.query.userRole;
                 if (!cinemaCode) {
                     cinemaCode = '';
                 }
@@ -386,6 +396,9 @@ export default {
                 if (!employeeCode) {
                     employeeCode = '';
                 }
+                if (!userRole) {
+                    userRole = '';
+                }
                 let jsonArr = [];
                 jsonArr.push({ key: 'tableName', value: "member_user" });
                 jsonArr.push({ key: 'exportKeysJson', value: "['id','cinemaCode','cinemaName','userName','userMobile','cnUserSex','birthday','userAge','chMemberType','cnBindMemberCardStatus','cnMiniRegisterStatus','cnAppRegisterStatus','miniRegisterDate','appRegisterDate','country','province','city','loginDate','goldNumber','cnUserRole','remainCoupons','ticketStubNumber','lastConsumeDate','consumptionAmount','cnStatus','employeeCode']"});
@@ -398,6 +411,7 @@ export default {
                 jsonArr.push({ key: 'endDate', value: endDate });
                 jsonArr.push({ key: 'startRegisterNumber', value: startRegisterNumber });
                 jsonArr.push({ key: 'endRegisterNumber', value: endRegisterNumber });
+                jsonArr.push({ key: 'userRole', value: userRole });
                 var params = ParamsAppend(jsonArr);
                 console.log(jsonArr);
                 let myObj = {
@@ -562,6 +576,10 @@ export default {
                 let endDate = this.query.endDate;
                 let startRegisterNumber = this.query.startRegisterNumber;
                 let endRegisterNumber = this.query.endRegisterNumber;
+                let userRole = this.query.userRole;
+                if (!userRole) {
+                    userRole = '';
+                }
                 if (!cinemaCode) {
                     cinemaCode = '';
                 }
@@ -595,6 +613,7 @@ export default {
                 jsonArr.push({ key: 'endDate', value: endDate });
                 jsonArr.push({ key: 'startRegisterNumber', value: startRegisterNumber });
                 jsonArr.push({ key: 'endRegisterNumber', value: endRegisterNumber });
+                jsonArr.push({ key: 'userRole', value: userRole });
                 jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
                 jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
                 let sign = md5(preSign(jsonArr));
@@ -606,7 +625,6 @@ export default {
                         loading.close();
                         if (data.data.code == 'success') {
                             var oData = JSON.parse(Decrypt(data.data.data));
-                            console.log(oData);
                             this.tableData = oData.data;
                             this.query.pageSize = oData.pageSize;
                             this.query.pageNo = oData.pageNo;
