@@ -14,6 +14,7 @@
                     placeholder="请选择商家"
                     class="mr10"
                     clearable
+                    filterable
                     @change="changeBusiness"
                 >
                     <el-option
@@ -24,9 +25,10 @@
                     ></el-option>
                 </el-select>
                 <el-select
+                    filterable
                     clearable
                     v-model="query.cinemaCode"
-                    placeholder="影院"
+                    placeholder="请选择影院"
                     @change="changeSearchCinema"
                     class="handle-select mr10"
                 >
@@ -85,7 +87,7 @@
                 <el-table-column label="活动名称" width="160">
                     <template slot-scope="scope">{{scope.row.name}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="适用影厅"width="160">
+                <el-table-column prop="name" label="适用影厅" width="160">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.selectHallType == 0">全部影厅</el-tag>
                         <el-tag v-else-if="scope.row.selectHallType == 1">{{scope.row.screenName}}</el-tag>

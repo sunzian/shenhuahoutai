@@ -12,6 +12,7 @@
                 <el-select
                     v-model="query.businessCode"
                     placeholder="请选择商家"
+                    filterable
                     class="mr10"
                     clearable
                     @change="changeBusiness"
@@ -23,7 +24,7 @@
                         :value="item.businessCode"
                     ></el-option>
                 </el-select>
-                <el-select clearable v-model="query.cinemaCode" placeholder="请选择注册影院" @change="changeSearchCinema" class="mr10">
+                <el-select filterable clearable v-model="query.cinemaCode" placeholder="请选择注册影院" @change="changeSearchCinema" class="mr10">
                     <el-option
                         v-for="item in cinemaInfo"
                         :key="item.cinemaCode"
@@ -31,7 +32,7 @@
                         :value="item.cinemaCode"
                     ></el-option>
                 </el-select>
-                <el-select clearable v-model="query.rechargeCinemaCode" placeholder="请选择充值影院" @change="changeSearchCinema2" class="mr10">
+                <el-select clearable filterable v-model="query.rechargeCinemaCode" placeholder="请选择充值影院" @change="changeSearchCinema2" class="mr10">
                     <el-option
                             v-for="item in cinemaInfo"
                             :key="item.cinemaCode"

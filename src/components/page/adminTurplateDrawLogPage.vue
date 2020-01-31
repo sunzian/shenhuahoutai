@@ -14,6 +14,7 @@
                     placeholder="请选择商家"
                     class="mr10"
                     clearable
+                    filterable
                     @change="changeBusiness"
                 >
                     <el-option
@@ -23,7 +24,7 @@
                         :value="item.businessCode"
                     ></el-option>
                 </el-select>
-                <el-select clearable v-model="query.cinemaCode" placeholder="请选择影院" @change="changeSearchCinema" class="mr10">
+                <el-select filterable clearable v-model="query.cinemaCode" placeholder="请选择影院" @change="changeSearchCinema" class="mr10">
                     <el-option
                         v-for="item in cinemaInfo"
                         :key="item.cinemaCode"

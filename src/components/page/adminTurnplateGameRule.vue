@@ -15,6 +15,7 @@
                     placeholder="请选择商家"
                     class="mr10"
                     clearable
+                    filterable
                     @change="changeBusiness"
                 >
                     <el-option
