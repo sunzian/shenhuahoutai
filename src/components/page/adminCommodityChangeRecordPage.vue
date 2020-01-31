@@ -13,6 +13,7 @@
                     v-model="query.businessCode"
                     placeholder="请选择商家"
                     class="mr10"
+                    filterable
                     clearable
                     @change="changeBusiness"
                 >
@@ -24,6 +25,7 @@
                     ></el-option>
                 </el-select>
                 <el-select
+                    filterable
                     clearable
                     v-model="query.cinemaCode"
                     placeholder="请选择影院"

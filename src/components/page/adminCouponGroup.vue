@@ -14,6 +14,7 @@
                     placeholder="请选择商家"
                     class="mr10"
                     clearable
+                    filterable
                     @change="changeBusiness"
                 >
                     <el-option
@@ -27,7 +28,7 @@
                     <el-option key="1" label="全部影院" value="1"></el-option>
                     <el-option key="2" label="指定影院" value="2"></el-option>
                 </el-select>
-                <el-select clearable v-model="query.cinemaCode" placeholder="请选择影院" @change="changeSearchCinema" class="handle-input mr10">
+                <el-select filterable clearable v-model="query.cinemaCode" placeholder="请选择影院" @change="changeSearchCinema" class="handle-input mr10">
                     <el-option
                         v-for="item in cinemaData"
                         :key="item.cinemaCode"

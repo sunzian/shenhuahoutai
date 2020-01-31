@@ -168,6 +168,7 @@
                         maxlength="16"
                         v-model="oldPass"
                         autocomplete="off"
+                        show-password
                     ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="新密码" :label-width="formLabelWidth">
@@ -178,6 +179,7 @@
                         maxlength="16"
                         v-model="newPass"
                         autocomplete="off"
+                        show-password
                     ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="确认密码" :label-width="formLabelWidth">
@@ -188,6 +190,7 @@
                         maxlength="16"
                         v-model="surePass"
                         autocomplete="off"
+                        show-password
                     ></el-input>
                 </el-form-item>
             </el-form>
