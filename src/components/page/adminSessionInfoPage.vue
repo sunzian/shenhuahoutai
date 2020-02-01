@@ -203,7 +203,7 @@
         <el-dialog :close-on-click-modal="false" title="获取排期" :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
                 <el-form-item label="商家名称" :label-width="formLabelWidth">
-                    <el-select v-model="oForm.businessCode" placeholder="请选择" @change="changeFormBusiness">
+                    <el-select filterable v-model="oForm.businessCode" placeholder="请选择" @change="changeFormBusiness">
                         <el-option
                             v-for="info in businessInfo"
                             :key="info.businessCode"
@@ -213,7 +213,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="影院名称" :label-width="formLabelWidth">
-                    <el-select v-model="oForm.cinemaCode" placeholder="请选择">
+                    <el-select filterable v-model="oForm.cinemaCode" placeholder="请选择">
                         <el-option
                             v-for="info in formCinemaInfo"
                             :key="info.cinemaCode"
