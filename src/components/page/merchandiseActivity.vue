@@ -154,7 +154,7 @@
             </div>
         </div>
         <!--新增弹出框-->
-        <el-dialog :close-on-click-modal="false" :visible.sync="dialogFormVisible">
+        <el-dialog :close-on-click-modal="false" title="新增" :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
                 <el-form-item :required="true" label="活动名称：" :label-width="formLabelWidth">
                     <el-input
@@ -252,16 +252,6 @@
                         <el-radio label="1">仅非会员卡支付可用</el-radio>
                         <el-radio label="2">仅会员卡支付可用</el-radio>
                     </el-radio-group>
-                </el-form-item>
-                <el-form-item :required="true" label="开启状态：" :label-width="formLabelWidth">
-                    <el-select v-model="oForm.status" placeholder="请选择">
-                        <el-option
-                            v-for="item in options"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value"
-                        ></el-option>
-                    </el-select>
                 </el-form-item>
                 <el-form-item :required="true" label="节假日当天：" :label-width="formLabelWidth">
                     <el-select v-model="oForm.holidayValid" placeholder="请选择">
@@ -391,6 +381,16 @@
                     <el-input style="width: 150px" v-model="oForm.oneNum" autocomplete="off"></el-input>
                     <div>限购时间单位为'日'，单位内限购张数输入'2'，即每日限制使用该活动购买2件商品</div>
                 </el-form-item>
+                <el-form-item :required="true" label="开启状态：" :label-width="formLabelWidth">
+                    <el-select v-model="oForm.status" placeholder="请选择">
+                        <el-option
+                                v-for="item in options"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
                 <el-form-item label="使用须知：" :label-width="formLabelWidth">
                     <el-input
                         type="textarea"
@@ -511,16 +511,6 @@
                         <el-radio label="1">仅非会员卡支付可用</el-radio>
                         <el-radio label="2">仅会员卡支付可用</el-radio>
                     </el-radio-group>
-                </el-form-item>
-                <el-form-item :required="true" label="开启状态：" :label-width="formLabelWidth">
-                    <el-select v-model="oStatus" placeholder="请选择">
-                        <el-option
-                            v-for="item in options"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value"
-                        ></el-option>
-                    </el-select>
                 </el-form-item>
                 <el-form-item :required="true" label="节假日当天：" :label-width="formLabelWidth">
                     <el-select v-model="oIsHolidayValid" placeholder="请选择">
@@ -650,6 +640,16 @@
                 >
                     <el-input style="width: 150px" v-model="oSingleNumber" autocomplete="off"></el-input>
                     <div>限购时间单位为'日'，单位内限购张数输入'2'，即每日限制使用该活动购买2件商品</div>
+                </el-form-item>
+                <el-form-item :required="true" label="开启状态：" :label-width="formLabelWidth">
+                    <el-select v-model="oStatus" placeholder="请选择">
+                        <el-option
+                                v-for="item in options"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                        ></el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item label="使用须知：" :label-width="formLabelWidth">
                     <el-input

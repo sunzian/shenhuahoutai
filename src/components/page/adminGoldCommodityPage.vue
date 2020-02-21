@@ -299,6 +299,16 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item :required="true" label="商品类别" :label-width="formLabelWidth">
+                    <el-select v-model="oForm.commodityCategory" placeholder="请选择商品类型">
+                        <el-option
+                                v-for="item in commodityCategoryType"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
                 <el-form-item
                         v-if="oForm.commodity_type==4"
                         :required="true"
@@ -734,6 +744,16 @@
                     <el-select v-model="form.commodityType" placeholder="商品类型" :disabled="true">
                         <el-option
                                 v-for="item in commodityType"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="商品类别" :label-width="formLabelWidth">
+                    <el-select v-model="oCommodityCategory" placeholder="商品类型">
+                        <el-option
+                                v-for="item in commodityCategoryType"
                                 :key="item.value"
                                 :label="item.label"
                                 :value="item.value"
@@ -1422,6 +1442,7 @@
                     type: ''
                 },
                 oName: '',
+                oCommodityCategory: '',
                 message: '', //弹出框消息
                 query: {
                     partnerCode: '',
@@ -1462,6 +1483,7 @@
                     gold: '',
                     money: '',
                     store: '',
+                    commodityCategory: '',
                     supportExpressStatus: '',
                 },
                 idx: -1,
@@ -1488,6 +1510,7 @@
                     gold: '',
                     money: '',
                     store: '',
+                    commodityCategory: '',
                     supportExpressStatus: '1',
                 },
                 formLabelWidth: '120px',
@@ -1744,6 +1767,28 @@
                     {
                         value: '4',
                         label: '商户商品'
+                    }
+                ],
+                commodityCategoryType: [
+                    {
+                        value: '1',
+                        label: '影院周边'
+                    },
+                    {
+                        value: '2',
+                        label: '超值美食'
+                    },
+                    {
+                        value: '3',
+                        label: '优选精品'
+                    },
+                    {
+                        value: '4',
+                        label: '健身美容'
+                    },
+                    {
+                        value: '5',
+                        label: '休闲娱乐'
                     }
                 ],
                 assignType: [
@@ -2363,6 +2408,7 @@
                 jsonArr.push({key: 'money', value: this.oForm.money});
                 jsonArr.push({key: 'status', value: this.oForm.status});
                 jsonArr.push({key: 'commodityType', value: this.oForm.commodity_type});
+                jsonArr.push({ key: 'commodityCategory', value: this.oForm.commodityCategory });
                 jsonArr.push({key: 'assignType', value: this.oForm.assign_type});
                 jsonArr.push({key: 'assignInfo', value: this.oForm.assign_info});
                 jsonArr.push({key: 'limitType', value: this.oForm.limit_type});
@@ -2627,6 +2673,13 @@
                                 for (let x in this.commodityType) {
                                     if (this.commodityType[x].value == JSON.parse(Decrypt(data.data.data)).goldCommodity.commodityType) {
                                         this.form.commodityType = this.commodityType[x].value;
+                                        break;
+                                    }
+                                }
+                                //商品类别下拉选显示对应的选项
+                                for (let x in this.commodityCategoryType) {
+                                    if (this.commodityCategoryType[x].value == JSON.parse(Decrypt(data.data.data)).goldCommodity.commodityCategory) {
+                                        this.oCommodityCategory = this.commodityCategoryType[x].value;
                                         break;
                                     }
                                 }
@@ -2971,6 +3024,7 @@
                     jsonArr.push({key: 'money', value: this.form.money});
                     jsonArr.push({key: 'cinemaCodes', value: cinemaList.join(',')});
                     jsonArr.push({key: 'status', value: this.form.status});
+                    jsonArr.push({ key: 'commodityCategory', value: this.oCommodityCategory });
                     // jsonArr.push({key: 'commodityType', value: this.form.commodityType});
                     jsonArr.push({key: 'assignType', value: this.form.assignType});
                     jsonArr.push({key: 'assignInfo', value: this.form.assignInfo});

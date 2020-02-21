@@ -32,6 +32,13 @@
                     style="margin-bottom: 10px"
                 ></el-input>
                 <el-input
+                        placeholder="本地订单号"
+                        v-model="query.orderNo"
+                        autocomplete="off"
+                        class="mr10"
+                        style="margin-bottom: 10px"
+                ></el-input>
+                <el-input
                     placeholder="手机号"
                     v-model="query.mobile"
                     autocomplete="off"
@@ -218,6 +225,9 @@
             >
                 <el-table-column label="订单号" width="150">
                     <template slot-scope="scope">{{scope.row.submitOrderCode}}</template>
+                </el-table-column>
+                <el-table-column label="本地订单号" width="150">
+                    <template slot-scope="scope">{{scope.row.orderNo}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="影片名称" width="200">
                     <template slot-scope="scope">{{scope.row.filmName}}</template>
@@ -894,6 +904,10 @@ export default {
                 let sessionEndDate = this.query.sessionEndDate;
                 let filmName = this.query.filmName;
                 let cardNo = this.query.cardNo;
+                let orderNo = this.query.orderNo;
+                if (!orderNo) {
+                    orderNo = '';
+                }
                 if (!filmName) {
                     filmName = '';
                 }
@@ -933,6 +947,7 @@ export default {
                 let jsonArr = [];
                 jsonArr.push({ key: 'filmName', value: filmName });
                 jsonArr.push({ key: 'cardNo', value: cardNo });
+                jsonArr.push({ key: 'orderNo', value: orderNo });
                 jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
                 jsonArr.push({ key: 'submitOrderCode', value: submitOrderCode });
                 jsonArr.push({ key: 'mobile', value: mobile });

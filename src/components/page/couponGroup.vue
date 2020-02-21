@@ -561,7 +561,7 @@ export default {
             let params = ParamsAppend(jsonArr);
             let myObj = {
                     method: 'post',
-                    url: '/CouponBackGround/exportCoupon',
+                    url: '/CouponBackGround/exportCouponGroup',
                     fileName: '券包统计',
                     params: params
                 };

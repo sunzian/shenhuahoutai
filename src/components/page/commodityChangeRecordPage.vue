@@ -662,7 +662,7 @@ export default {
             pageTotal: 0,
             idx: -1,
             id: -1,
-            formLabelWidth: '120px',
+            formLabelWidth: '180px',
             businessInfoList: [],
             value: '',
             form: [],
