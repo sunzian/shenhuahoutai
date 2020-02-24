@@ -114,6 +114,17 @@
                     header-cell-class-name="table-header"
                     @selection-change="handleSelectionChange"
             >
+                <el-table-column prop="sort" label="适用影院类型"  align="center" width="110">
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row.applyType == 1" type="success">全部影院</el-tag>
+                        <el-tag v-else-if="scope.row.applyType == 2" type="success">部分影院</el-tag>
+                    </template>
+                </el-table-column>
+                <!--<el-table-column prop="name" label="适用影院">-->
+                    <!--<template slot-scope="scope">-->
+                        <!--<el-tag type="success">{{scope.row.cinemaNames}}</el-tag>-->
+                    <!--</template>-->
+                <!--</el-table-column>-->
                 <el-table-column prop="name" label="会员卡名称">
                     <template slot-scope="scope">{{scope.row.levelName}}</template>
                 </el-table-column>
@@ -181,6 +192,27 @@
         <!-- 编辑弹出框 -->
         <el-dialog :close-on-click-modal="false" title="编辑" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
+                <el-form-item :required="true" label="通用方式" :label-width="formLabelWidth">
+                    <el-radio-group v-model="oCommonType" @change="selectCinema">
+                        <el-radio :label="1">全部影院</el-radio>
+                        <el-radio :label="2">指定影院</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item
+                        :required="true"
+                        label="选择影院"
+                        :label-width="formLabelWidth"
+                        v-if="oCommonType == 2"
+                >
+                    <el-checkbox-group v-model="oMerchandiseCode" @change="selectGoods">
+                        <el-checkbox
+                                v-for="item in goodsInfo"
+                                :label="item.merchandiseCode"
+                                :key="item.merchandiseCode"
+                                :value="item.merchandiseName"
+                        >{{item.merchandiseName}}</el-checkbox>
+                    </el-checkbox-group>
+                </el-form-item>
                 <el-form-item label="会员卡名称" :label-width="formLabelWidth">
                     <el-input
                             style="width: 250px"
@@ -264,11 +296,15 @@
         data() {
             return {
                 selectValue: [],
+                goodsInfo: [],
                 showSell: true, //卖品信息页面是否展示开关
                 type: {
                     type: ''
                 },
                 oName: '',
+                oCommonType: '',
+                oMerchandiseCode: [],
+                selectGoodsCode: {},
                 message: '', //弹出框消息
                 query: {
                     pageNo: 1,
@@ -323,6 +359,12 @@
             this.getAllCinema();
         },
         methods: {
+            selectGoods(val) {
+                // console.log(val)
+                let selectValue = val.join(',');
+                this.selectGoodsCode = selectValue;
+                console.log(this.selectGoodsCode);
+            },
             updatePrice() {
                 if (!this.cinemaCode) {
                     this.message = '请选择影院！';
@@ -505,6 +547,7 @@
                     target: document.querySelector('.div1')
                 });
                 setTimeout(() => {
+                    this.selectCinema();
                     this.idx = index;
                     this.form = row;
                     var jsonArr = [];
@@ -517,6 +560,11 @@
                             if (data.data.code == 'success') {
                                 console.log(JSON.parse(Decrypt(data.data.data)));
                                 this.editVisible = true;
+                                this.oMerchandiseCode = [];
+                                if(JSON.parse(Decrypt(data.data.data)).cinemaCodes){
+                                    this.oMerchandiseCode = JSON.parse(Decrypt(data.data.data)).cinemaCodes.split(",");
+                                }
+                                this.oCommonType = JSON.parse(Decrypt(data.data.data)).applyType;
                                 this.form.name = JSON.parse(Decrypt(data.data.data)).levelName;
                                 this.oImage = JSON.parse(Decrypt(data.data.data)).cardPicture;
                                 this.form.standardPrice = JSON.parse(Decrypt(data.data.data)).cardCostFee;
@@ -546,10 +594,27 @@
                     background: 'rgba(0, 0, 0, 0.7)',
                     target: document.querySelector('.div1')
                 });
+                if (!this.oCommonType) {
+                    this.message = '通用方式不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if (this.oCommonType == 2) {
+                    var arr = Object.keys(this.selectGoodsCode);
+                    if (arr.length == 0){
+                        this.message = '所选影院不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
                 setTimeout(() => {
                     var jsonArr = [];
                     jsonArr.push({ key: 'id', value: this.form.id });
                     jsonArr.push({ key: 'cardPicture', value: this.oImage });
+                    jsonArr.push({ key: 'applyType', value: this.oCommonType });
+                    jsonArr.push({ key: 'cinemaCodes', value: this.selectGoodsCode });
                     jsonArr.push({ key: 'cardNo', value: this.form.cardNo });
                     jsonArr.push({ key: 'openRuleCode', value: '' });
                     jsonArr.push({ key: 'rechargeRuleCode', value: ''});
@@ -614,6 +679,57 @@
                             this.query.pageNo = oData.pageNo;
                             this.query.totalCount = oData.totalCount;
                             this.query.totalPage = oData.totalPage;
+                        } else if (data.data.code == 'nologin') {
+                            this.message = data.data.message;
+                            this.open();
+                            this.$router.push('/login');
+                        } else {
+                            this.message = data.data.message;
+                            this.open();
+                        }
+                    })
+                        .catch(err => {
+                            loading.close();
+                            console.log(err);
+                        });
+                }, 500);
+            },
+            selectCinema(){
+                const loading = this.$loading({
+                    lock: true,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)',
+                    target: document.querySelector('.div1')
+                });
+                setTimeout(() => {
+                    let levelName = this.query.levelName;
+                    let status = this.query.status;
+                    if (!levelName) {
+                        levelName = '';
+                    }
+                    if (!status) {
+                        status = '';
+                    }
+                    let jsonArr = [];
+                    jsonArr.push({key:"levelName",value:levelName});
+                    jsonArr.push({key:"status",value:status});
+                    jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
+                    jsonArr.push({ key: 'pageSize', value: 200 });
+                    let sign = md5(preSign(jsonArr));
+                    jsonArr.push({ key: 'sign', value: sign });
+                    var params = ParamsAppend(jsonArr);
+                    https.fetchPost('/cinema/myCinemaPage', params).then(data => {
+                        loading.close();
+                        if (data.data.code == 'success') {
+                            let goods = JSON.parse(Decrypt(data.data.data)).data;
+                            this.goodsInfo = [];
+                            for (let i = 0; i < goods.length; i++) {
+                                let goodsList = {};
+                                goodsList.merchandiseCode = goods[i].cinemaCode;
+                                goodsList.merchandiseName = goods[i].cinemaName;
+                                this.goodsInfo.push(goodsList);
+                            }
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
                             this.open();

@@ -203,6 +203,15 @@
                         <el-tag v-else-if="scope.row.benefitStatus=='4'">续卡</el-tag>
                     </template>
                 </el-table-column>
+                <el-table-column label="操作" width="80" align="center" fixed="right">
+                    <template slot-scope="scope">
+                        <el-button
+                                type="text"
+                                icon="el-icon-edit"
+                                @click="delChange(scope.$index, scope.row)"
+                        >删除</el-button>
+                    </template>
+                </el-table-column>
             </el-table>
             <div class="pagination">
                 <el-pagination
@@ -303,6 +312,60 @@ export default {
                         console.log(err);
                     });
             }, 500);
+        },
+        delChange(index, row) {
+            //删除数据
+            this.$confirm('此操作将永久删除该权益卡, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            })
+                .then(() => {
+                    const loading = this.$loading({
+                        lock: true,
+                        text: 'Loading',
+                        spinner: 'el-icon-loading',
+                        background: 'rgba(0, 0, 0, 0.7)',
+                        target: document.querySelector('.div1')
+                    });
+                    setTimeout(() => {
+                        console.log(index);
+                        console.log(row);
+                        this.idx = index;
+                        this.form = row;
+                        let jsonArr = [];
+                        jsonArr.push({ key: 'id', value: row.id });
+                        let sign = md5(preSign(jsonArr));
+                        jsonArr.push({ key: 'sign', value: sign });
+                        let params = ParamsAppend(jsonArr);
+                        https
+                            .fetchPost('/admin/userBenefitCard/delete', params)
+                            .then(data => {
+                                loading.close();
+                                if (data.data.code == 'success') {
+                                    this.$message.error(`删除了`);
+                                    this.getMenu();
+                                } else if (data.data.code == 'nologin') {
+                                    this.message = data.data.message;
+                                    this.open();
+                                    this.$router.push('/login');
+                                } else {
+                                    this.message = data.data.message;
+                                    this.open();
+                                }
+                            })
+                            .catch(err => {
+                                loading.close();
+                                console.log(err);
+                            });
+                    }, 500);
+                })
+                .catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
         },
         Search() {
             this.query.pageNo = 1;
