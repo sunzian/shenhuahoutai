@@ -820,7 +820,7 @@
                 this.query.pageNo=1
                 this.getMenu()
             },
-        getMenu(){//获取菜单栏
+        getMenu() {//获取菜单栏
                 const loading = this.$loading({
                     lock: true,
                     text: 'Loading',

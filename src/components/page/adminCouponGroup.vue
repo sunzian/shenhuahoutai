@@ -24,10 +24,6 @@
                         :value="item.businessCode"
                     ></el-option>
                 </el-select>
-                <el-select clearable v-model="query.commonType" placeholder="通用方式" class="handle-select mr10">
-                    <el-option key="1" label="全部影院" value="1"></el-option>
-                    <el-option key="2" label="指定影院" value="2"></el-option>
-                </el-select>
                 <el-select filterable clearable v-model="query.cinemaCode" placeholder="请选择影院" @change="changeSearchCinema" class="handle-input mr10">
                     <el-option
                         v-for="item in cinemaData"
@@ -35,6 +31,10 @@
                         :label="item.cinemaName"
                         :value="item.cinemaCode"
                     ></el-option>
+                </el-select>
+                <el-select clearable v-model="query.commonType" placeholder="通用方式" class="handle-select mr10">
+                    <el-option key="1" label="全部影院" value="1"></el-option>
+                    <el-option key="2" label="指定影院" value="2"></el-option>
                 </el-select>
                 <el-input placeholder="券包名称" class="mr10" v-model="query.groupName" autocomplete="off"></el-input>
                 <el-select clearable v-model="query.status" placeholder="状态" class="handle-select mr10">

@@ -111,7 +111,7 @@
         <el-dialog :close-on-click-modal="false" title="选择影院" :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
                 <el-form-item label="商家名称" :label-width="formLabelWidth">
-                    <el-select v-model="oForm.businessCode" placeholder="请选择" @change="changeFormBusiness">
+                    <el-select filterable v-model="oForm.businessCode" placeholder="请选择" @change="changeFormBusiness">
                         <el-option
                             v-for="info in businessInfo"
                             :key="info.businessCode"
@@ -122,6 +122,7 @@
                 </el-form-item>
                 <el-form-item label="所属影院" :label-width="formLabelWidth">
                     <el-select
+                        filterable
                         placeholder="选择影院"
                         v-model="oForm.cinemaCode"
                     >
