@@ -273,7 +273,8 @@
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="奖品名称：" :label-width="formLabelWidth">
-                    <el-input style="width: 150px" v-model="oName" autocomplete="off" disabled></el-input>
+                    <el-input v-if="oType=='1'"  style="width: 150px" v-model="oName" autocomplete="off" disabled></el-input>
+                    <el-input v-if="oType=='2'"  style="width: 150px" v-model="oName" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="奖品类型：" :label-width="formLabelWidth">
                     <el-tag v-if="oType=='1'">优惠券</el-tag>
@@ -900,6 +901,7 @@ export default {
             jsonArr.push({ key: 'groupNumber', value: this.oGroupNumber });
             jsonArr.push({ key: 'overDays', value: this.oOverDays });
             jsonArr.push({ key: 'limitStatus', value: this.oLimitStatus });
+            jsonArr.push({ key: 'name', value: this.oName });
             jsonArr.push({ key: 'id', value: this.oId });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });

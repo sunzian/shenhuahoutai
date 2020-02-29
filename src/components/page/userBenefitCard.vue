@@ -107,9 +107,15 @@
                         placeholder="支付时间（止）"
                 ></el-date-picker>
                 <el-button
+                        type="primary"
+                        @click="derive"
+                        icon="el-icon-circle-plus-outline"
+                        style="float: right;margin-right:10px;margin-top: 10px;"
+                >导出</el-button>
+                <el-button
                     type="primary"
                     icon="el-icon-search"
-                    style="margin-top: 10px;width: 90px;"
+                    style="width: 90px;margin-left: 0"
                     @click="Search"
                 >搜索</el-button>
             </div>
@@ -238,6 +244,85 @@ export default {
         this.getMenu();
     },
     methods: {
+        derive(){
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
+            setTimeout(() => {
+                let cinemaCode = this.query.cinemaCode;
+                let userName = this.query.userName;
+                let benefitStatus = this.query.benefitStatus;
+                let payStatus = this.query.payStatus;
+                let orderNumber = this.query.orderNumber;
+                let benefitName = this.query.benefitName;
+                let phone = this.query.phone;
+                let startTime = this.query.startTime;
+                let endTime = this.query.endTime;
+                let payStartTime = this.query.payStartTime;
+                let payEndTime = this.query.payEndTime;
+                if (!cinemaCode) {
+                    cinemaCode = '';
+                }
+                if (!userName) {
+                    userName = '';
+                }
+                if (!benefitStatus) {
+                    benefitStatus = '';
+                }
+                if (!payStatus) {
+                    payStatus = '';
+                }
+                if (!orderNumber) {
+                    orderNumber = '';
+                }
+                if (!benefitName) {
+                    benefitName = '';
+                }
+                if (!phone) {
+                    phone = '';
+                }
+                if (!startTime) {
+                    startTime = '';
+                }
+                if (!endTime) {
+                    endTime = '';
+                }
+                if (!payStartTime) {
+                    payStartTime = '';
+                }
+                if (!payEndTime) {
+                    payEndTime = '';
+                }
+                let jsonArr = [];
+                jsonArr.push({ key: 'tableName', value: "user_benefitCard" });
+                jsonArr.push({ key: 'exportKeysJson', value: "['cinemaName','orderNumber', 'userName', 'phone', 'benefitName','payPrice','totalDiscountMoney','payTime',   'startDate', 'endDate','stringPayStatus','stringBenefitStatus']"});
+                jsonArr.push({ key: 'exportTitlesJson', value:"['影院名称','订单号', '用户', '手机号', '权益卡名称','实付', '累计优惠', '支付时间', '生效时间', '过期时间', '支付状态', '状态']" });
+                jsonArr.push({ key: 'startTime', value: startTime });
+                jsonArr.push({ key: 'endTime', value: endTime });
+                jsonArr.push({ key: 'payStartTime', value: payStartTime });
+                jsonArr.push({ key: 'payEndTime', value: payEndTime });
+                jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
+                jsonArr.push({ key: 'userName', value: userName });
+                jsonArr.push({ key: 'benefitStatus', value: benefitStatus });
+                jsonArr.push({ key: 'payStatus', value: payStatus });
+                jsonArr.push({ key: 'orderNumber', value: orderNumber });
+                jsonArr.push({ key: 'benefitName', value: benefitName });
+                jsonArr.push({ key: 'phone', value: phone });
+                var params = ParamsAppend(jsonArr);
+                let myObj = {
+                    method: 'get',
+                    url: '/exportExcel/userBenefitCard',
+                    fileName: '权益卡用户列表统计',
+                    params: params
+                };
+                https.exportMethod(myObj);
+                loading.close();
+            }, 1500);
+        },
         addChange(index, row) {
             const loading = this.$loading({
                 lock: true,

@@ -1338,7 +1338,7 @@
                 oGroupUnit: '',
                 oGroupNumber: '',
                 oForm: {
-                    groupDateType: '',
+                    groupDateType: '0',
                     groupStartDate: '',
                     groupEndDate: '',
                     groupUnit: '日',
@@ -1620,7 +1620,7 @@
                 this.couponId = '';
                 this.oGroupDateType = '';
                 this.oCouponSimpleDesc = '';
-                this.oForm.groupDateType = '';
+                this.oForm.groupDateType = '0';
                 this.oForm.couponSimpleDesc = '';
             },
             clearGroupDateType() {
@@ -1821,6 +1821,7 @@
                         this.oForm.code = this.cinemaInfo[0].cinemaCode;
                         this.getAllScreen(this.oForm.code);
                         let formats = JSON.parse(Decrypt(data.data.data)).formatList;
+                        console.log(JSON.parse(Decrypt(data.data.data)));
                         this.formatList = [];
                         for (let i = 0; i < formats.length; i++) {
                             let formatArr = {};
@@ -2447,6 +2448,7 @@
                             this.oForm.number = '';
                             this.oForm.expense = '';
                             this.oForm.isFilmJoin = '0';
+                            this.oForm.groupDateType = '0';
                             this.oForm.isMerchandiseJoin = '0';
                             this.oForm.isHolidayValid = '1';
                             this.oForm.validWeekDay = [];

@@ -105,7 +105,8 @@
                 <el-table-column prop="sort" label="状态" width="90" fixed="right">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status == 1" type="success">启用</el-tag>
-                        <el-tag v-else type="danger">未启用</el-tag>
+                        <el-tag v-if="scope.row.status == 0" type="danger">未启用</el-tag>
+                        <el-tag v-if="scope.row.status == 2" type="danger">已过期</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column label="操作" width="100" align="center" fixed="right">
@@ -1096,7 +1097,7 @@ export default {
                 }
             }
             if (!this.oForm.startDate || !this.oForm.endDate) {
-                this.message = '有效期不能为空，请检查！';
+                this.message = '试用活动日期不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
@@ -1561,7 +1562,7 @@ export default {
                 }
             }
             if (!this.oStartDate || !this.oEndDate) {
-                this.message = '有效期不能为空，请检查！';
+                this.message = '试用活动日期不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;

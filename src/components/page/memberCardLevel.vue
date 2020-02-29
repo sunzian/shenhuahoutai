@@ -564,6 +564,7 @@
                                 if(JSON.parse(Decrypt(data.data.data)).cinemaCodes){
                                     this.oMerchandiseCode = JSON.parse(Decrypt(data.data.data)).cinemaCodes.split(",");
                                 }
+                                this.selectGoodsCode= JSON.parse(Decrypt(data.data.data)).cinemaCodes.split(",");
                                 this.oCommonType = JSON.parse(Decrypt(data.data.data)).applyType;
                                 this.form.name = JSON.parse(Decrypt(data.data.data)).levelName;
                                 this.oImage = JSON.parse(Decrypt(data.data.data)).cardPicture;
@@ -602,7 +603,7 @@
                 }
                 if (this.oCommonType == 2) {
                     var arr = Object.keys(this.selectGoodsCode);
-                    if (arr.length == 0){
+                    if (!this.selectGoodsCode){
                         this.message = '所选影院不能为空，请检查！';
                         this.open();
                         loading.close();
@@ -620,6 +621,7 @@
                     jsonArr.push({ key: 'rechargeRuleCode', value: ''});
                     let sign = md5(preSign(jsonArr));
                     jsonArr.push({ key: 'sign', value: sign });
+                    console.log(jsonArr);
                     let params = ParamsAppend(jsonArr);
                     https.fetchPost('/memberCardLevel/modify', params).then(data => {
                             loading.close();

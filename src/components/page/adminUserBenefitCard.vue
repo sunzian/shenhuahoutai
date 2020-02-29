@@ -207,7 +207,6 @@
                     <template slot-scope="scope">
                         <el-button
                                 type="text"
-                                icon="el-icon-edit"
                                 @click="delChange(scope.$index, scope.row)"
                         >删除</el-button>
                     </template>

@@ -682,7 +682,7 @@
                 <!--</el-radio-group>-->
                 <!--</el-form-item>-->
                 <el-form-item :required="true" label="影院奖品核销码" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="oVerificationCode" autocomplete="off"></el-input>
+                    <el-input maxlength="8" style="width: 250px" v-model="oVerificationCode" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="小程序分享标题" :label-width="formLabelWidth">
                     <el-input
@@ -1431,6 +1431,7 @@ export default {
             jsonArr.push({ key: 'id', value: this.oId });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
+            console.log(jsonArr);
             let params = ParamsAppend(jsonArr);
             https
                 .fetchPost('/cinema/updateCinemaFromBusiness', params)

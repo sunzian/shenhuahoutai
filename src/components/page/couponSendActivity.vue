@@ -118,7 +118,7 @@
             </div>
         </div>
         <!--新增弹出框-->
-        <el-dialog :close-on-click-modal="false" title="设置活动" :visible.sync="dialogFormVisible">
+        <el-dialog :close-on-click-modal="false" title="新增" :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
                 <el-form-item :required="true" label="活动名称" :label-width="formLabelWidth">
                     <el-input style="width: 250px" min="1" v-model="oForm.name" autocomplete="off"></el-input>
@@ -273,7 +273,7 @@
             </span>
         </el-dialog>
         <!-- 编辑弹出框 -->
-        <el-dialog :close-on-click-modal="false" title="价格设置" :visible.sync="editVisible">
+        <el-dialog :close-on-click-modal="false" title="修改" :visible.sync="editVisible">
             <el-form :model="form">
                 <el-form-item :required="true" label="活动名称" :label-width="formLabelWidth">
                     <el-input style="width: 250px" min="1" v-model="form.name" autocomplete="off"></el-input>

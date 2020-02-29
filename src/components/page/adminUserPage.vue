@@ -58,7 +58,7 @@
                         >禁用</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" width="120" align="center" fixed="right">
+                <el-table-column label="操作" width="180" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-button
                                 type="text"
@@ -71,6 +71,13 @@
                                 class="red"
                                 @click="delChange(scope.$index, scope.row)"
                         >删除</el-button>
+                        <el-button
+                                type="text"
+                                icon="el-icon-refresh-right"
+                                class="red"
+                                @click="reset(scope.$index, scope.row)"
+                        >重置密码次数
+                        </el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -266,6 +273,54 @@
             this.getMenu()
         },
         methods: {
+            reset(index, row) {//删除数据
+                this.$confirm('此操作将重置用户密码次数, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                })
+                    .then(() => {
+                        const loading = this.$loading({
+                            lock: true,
+                            text: 'Loading',
+                            spinner: 'el-icon-loading',
+                            background: 'rgba(0, 0, 0, 0.7)',
+                            target: document.querySelector('.div1')
+                        });
+                        setTimeout(() => {
+                            this.idx = index;
+                            this.form = row;
+                            let jsonArr = [];
+                            jsonArr.push({ key: 'id', value: row.id });
+                            let sign = md5(preSign(jsonArr));
+                            jsonArr.push({ key: 'sign', value: sign });
+                            let params = ParamsAppend(jsonArr);
+                            https.fetchPost('/user/clearErrorNumber', params).then((data) => {
+                                loading.close();
+                                if (data.data.code == 'success') {
+                                    this.$message.success(`重置成功`);
+                                    this.getMenu();
+                                } else if (data.data.code == 'nologin') {
+                                    this.message = data.data.message;
+                                    this.open();
+                                    this.$router.push('/login');
+                                } else {
+                                    this.message = data.data.message;
+                                    this.open();
+                                }
+                            })
+                                .catch(err => {
+                                    loading.close();
+                                    console.log(err);
+                                });
+                        }, 500);
+                    }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消'
+                    });
+                });
+            },
             addPage(){//获取新增按钮权限
                 const loading = this.$loading({
                     lock: true,

@@ -47,6 +47,7 @@
                     <!--<el-option key="7" label="今日大牌" value="7"></el-option>-->
                     <el-option key="8" label="签到送金币" value="8"></el-option>
                     <el-option key="9" label="邀请好友首页" value="9"></el-option>
+                    <el-option key="11" label="支付后弹窗广告" value="11"></el-option>
                     <!-- <el-option key="10" label="积分换金币" value="10"></el-option> -->
                 </el-select>
                 <el-button
@@ -76,19 +77,6 @@
                 <el-table-column label="适用影院" width="300">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="是否显示" width="120">
-                    <template slot-scope="scope">
-                        <el-tag v-if="scope.row.status=='1'">显示</el-tag>
-                        <el-tag v-else-if="scope.row.status=='2'">不显示</el-tag>
-                        <el-tag v-else-if="scope.row.status=='3'">过期</el-tag>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="sort" label="开始时间" width="220">
-                    <template slot-scope="scope">{{scope.row.startDate}}</template>
-                </el-table-column>
-                <el-table-column prop="sort" label="结束时间" width="220">
-                    <template slot-scope="scope">{{scope.row.endDate}}</template>
-                </el-table-column>
                 <el-table-column prop="sort" label="轮播图类别" width="180">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.category=='1'">卖品首页</el-tag>
@@ -101,6 +89,7 @@
                         <el-tag v-if="scope.row.category=='8'">签到送金币</el-tag>
                         <el-tag v-if="scope.row.category=='9'">邀请好友首页</el-tag>
                         <el-tag v-if="scope.row.category=='10'">积分换金币</el-tag>
+                        <el-tag v-if="scope.row.category=='11'">支付后弹窗广告</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column prop="sort" label="图片地址" width="220">
@@ -116,8 +105,21 @@
                         </el-popover>
                     </template>
                 </el-table-column>
-                <el-table-column prop="sort" label="轮播图排序号" width="160">
+                <el-table-column prop="sort" label="排序号" width="160">
                     <template slot-scope="scope">{{scope.row.sort}}</template>
+                </el-table-column>
+                <el-table-column prop="sort" label="是否显示" width="120">
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row.status=='1'">显示</el-tag>
+                        <el-tag v-else-if="scope.row.status=='2'">不显示</el-tag>
+                        <el-tag v-else-if="scope.row.status=='3'">过期</el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="sort" label="开始时间" width="220">
+                    <template slot-scope="scope">{{scope.row.startDate}}</template>
+                </el-table-column>
+                <el-table-column prop="sort" label="结束时间" width="220">
+                    <template slot-scope="scope">{{scope.row.endDate}}</template>
                 </el-table-column>
                 <el-table-column prop="sort" label="跳转类型" width="160">
                     <template slot-scope="scope">
@@ -214,6 +216,19 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item v-if="oForm.bannerType==11" :required="true" label="是否添加按钮" :label-width="formLabelWidth">
+                    <el-radio-group v-model="oForm.buttonStatus">
+                        <el-radio label="1">不增加</el-radio>
+                        <el-radio label="2">增加</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item v-if="oForm.bannerType==11&&oForm.buttonStatus==2" :required="true" label="按钮名称" :label-width="formLabelWidth">
+                    <el-input
+                            style="width: 250px"
+                            v-model="oForm.buttonName"
+                            autocomplete="off"
+                    ></el-input>
+                </el-form-item>
                 <el-form-item :required="true" label="图片地址" :label-width="formLabelWidth">
                     <el-popover placement="right" title trigger="hover">
                         <img style="width: 400px" :src="oForm.imageUrl"/>
@@ -275,7 +290,7 @@
                             autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="轮播图排序号" :label-width="formLabelWidth" :required="true">
+                <el-form-item label="排序号" :label-width="formLabelWidth" :required="true">
                     <el-input
                             style="width: 250px"
                             type="number"
@@ -356,6 +371,19 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item v-if="oBannerType==11" :required="true" label="是否添加按钮" :label-width="formLabelWidth">
+                    <el-radio-group v-model="oButtonStatus">
+                        <el-radio label="1">不增加</el-radio>
+                        <el-radio label="2">增加</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item v-if="oBannerType==11&&oButtonStatus==2" :required="true" label="按钮名称" :label-width="formLabelWidth">
+                    <el-input
+                            style="width: 250px"
+                            v-model="oButtonName"
+                            autocomplete="off"
+                    ></el-input>
+                </el-form-item>
                 <el-form-item :required="true" label="图片地址" :label-width="formLabelWidth">
                     <el-popover placement="right" title trigger="hover">
                         <img style="width: 400px" :src="imageUrl"/>
@@ -417,7 +445,7 @@
                             autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="轮播图排序号" :label-width="formLabelWidth" :required="true">
+                <el-form-item label="排序号" :label-width="formLabelWidth" :required="true">
                     <el-input
                             style="width: 250px"
                             type="number"
@@ -638,6 +666,8 @@
         data() {
             return {
                 oBannerType: '',
+                oButtonStatus: '',
+                oButtonName: '',
                 oTabType: '',
                 type: {
                     type: ''
@@ -744,6 +774,10 @@
                     {
                         value: '9',
                         label: '邀请好友首页 建议尺寸670*200'
+                    },
+                    {
+                        value: '11',
+                        label: '支付后弹窗广告 建议尺寸670*200'
                     }
                 ],
                 tabType: [
@@ -1399,7 +1433,7 @@
                     return;
                 }
                 if (!this.oForm.sort) {
-                    this.message = '轮播图排序号不能为空，请检查！';
+                    this.message = '排序号不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
@@ -1418,6 +1452,9 @@
                     jsonArr.push({ key: 'imageUrl', value: this.oForm.imageUrl });
                     jsonArr.push({ key: 'redirectType', value: this.oForm.tabType });
                     jsonArr.push({ key: 'redirectGoal', value: this.oForm.redirectGoal });
+                    jsonArr.push({ key: 'buttonStatus', value: this.oForm.buttonStatus });
+                    jsonArr.push({ key: 'buttonName', value: this.oForm.buttonName });
+                    console.log(jsonArr);
                     let sign = md5(preSign(jsonArr));
                     jsonArr.push({ key: 'sign', value: sign });
                     let params = ParamsAppend(jsonArr);
@@ -1558,6 +1595,13 @@
                                 this.changeStartTime = JSON.parse(Decrypt(data.data.data)).banner.startDate; //创建时间
                                 this.changeEndTime = JSON.parse(Decrypt(data.data.data)).banner.endDate; //结束时间
                                 this.form.memo = JSON.parse(Decrypt(data.data.data)).banner.memo; //备注
+                                if (JSON.parse(Decrypt(data.data.data)).banner.buttonStatus == 1) {
+                                    this.oButtonStatus = '1';
+                                }
+                                if (JSON.parse(Decrypt(data.data.data)).banner.buttonStatus == 2) {
+                                    this.oButtonStatus = '2';
+                                }
+                                this.oButtonName = JSON.parse(Decrypt(data.data.data)).banner.buttonName; //按钮名称
                                 this.form.sort = JSON.parse(Decrypt(data.data.data)).banner.sort; //排序
                                 for (let i in this.bannerType) {
                                     //轮播图类型下拉框显示对应的选项
@@ -1660,7 +1704,7 @@
                     return;
                 }
                 if (!this.form.sort) {
-                    this.message = '轮播图排序号不能为空，请检查！';
+                    this.message = '排序号不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
@@ -1680,6 +1724,8 @@
                     jsonArr.push({ key: 'category', value: this.oBannerType });
                     jsonArr.push({ key: 'redirectType', value: this.oTabType });
                     jsonArr.push({ key: 'redirectGoal', value: this.form.redirectGoal });
+                    jsonArr.push({ key: 'buttonStatus', value: this.oButtonStatus });
+                    jsonArr.push({ key: 'buttonName', value: this.oButtonName });
                     let sign = md5(preSign(jsonArr));
                     jsonArr.push({ key: 'sign', value: sign });
                     console.log(jsonArr);

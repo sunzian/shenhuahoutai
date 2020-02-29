@@ -74,6 +74,28 @@
                         <el-radio label="2">否</el-radio>
                     </el-radio-group>
                 </el-form-item>
+                <el-form-item :required="true" v-if="oExtraFlag==1&&oContinuousDays==7" label="额外奖励的礼物类型" :label-width="formLabelWidth">
+                    <el-radio-group v-model="oExtraPrizeType">
+                        <el-radio label="1">优惠券</el-radio>
+                        <el-radio label="2">实物</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item :required="true" v-if="oExtraPrizeType==1&&oContinuousDays==7&&oExtraFlag==1" label="选择优惠券" :label-width="formLabelWidth">
+                    <el-button type="primary" @click="getAllCoupon">选择优惠券</el-button>
+                </el-form-item>
+                <el-form-item :required="true" v-if="oExtraPrizeType==1&&oContinuousDays==7&&oExtraFlag==1" label="所选优惠券：" :label-width="formLabelWidth">
+                    <el-input
+                            style="width: 150px"
+                            v-model="couponInfo.couponName"
+                            autocomplete="off"
+                            disabled
+                    ></el-input>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <span
+                            v-if="couponInfo.couponName"
+                            style="color:red;cursor: pointer;"
+                            @click="deletCoupon"
+                    >删除</span>
+                </el-form-item>
                 <el-form-item :required="true" v-if="oExtraFlag==1&&oContinuousDays==7" label="额外奖励的礼物名称" :label-width="formLabelWidth">
                     <el-input
                             style="width: 250px"
@@ -117,28 +139,6 @@
                             v-model="oExpireDays"
                             autocomplete="off"
                     ></el-input>
-                </el-form-item>
-                <el-form-item :required="true" v-if="oExtraFlag==1&&oContinuousDays==7" label="额外奖励的礼物类型" :label-width="formLabelWidth">
-                    <el-radio-group v-model="oExtraPrizeType">
-                        <el-radio label="1">优惠券</el-radio>
-                        <el-radio label="2">实物</el-radio>
-                    </el-radio-group>
-                </el-form-item>
-                <el-form-item :required="true" v-if="oExtraPrizeType==1&&oContinuousDays==7&&oExtraFlag==1" label="选择优惠券" :label-width="formLabelWidth">
-                    <el-button type="primary" @click="getAllCoupon">选择优惠券</el-button>
-                </el-form-item>
-                <el-form-item :required="true" v-if="oExtraPrizeType==1&&oContinuousDays==7&&oExtraFlag==1" label="所选优惠券：" :label-width="formLabelWidth">
-                    <el-input
-                            style="width: 150px"
-                            v-model="couponInfo.couponName"
-                            autocomplete="off"
-                            disabled
-                    ></el-input>&nbsp;&nbsp;&nbsp;&nbsp;
-                    <span
-                            v-if="couponInfo.couponName"
-                            style="color:red;cursor: pointer;"
-                            @click="deletCoupon"
-                    >删除</span>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">

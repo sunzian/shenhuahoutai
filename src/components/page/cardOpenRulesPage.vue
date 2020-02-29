@@ -195,7 +195,7 @@
                         @click="deletCoupon"
                     >删除</span>
                 </el-form-item>
-                <el-form-item :required="true" v-if="oForm.givenType == 3 || oForm.givenType == 4" label="选择有效时间类型："
+                <el-form-item :required="true" v-if="oForm.givenType == 3 || oForm.givenType == 4" label="券包有效期方式："
                               :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.effectiveTimeType">
                         <el-radio :label="1">固定天数后过期</el-radio>
@@ -331,7 +331,7 @@
                 </el-form-item>
                 <el-form-item :required="true"
                               v-if="oGivenType == 3 || oGivenType == 4|| oGivenType == '赠送券包' || oGivenType == '两者都送'"
-                              label="选择有效时间类型：" :label-width="formLabelWidth">
+                              label="券包有效期方式：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oEffectiveTimeType">
                         <el-radio :label="1">固定天数后过期</el-radio>
                         <el-radio :label="2">指定时间段有效</el-radio>

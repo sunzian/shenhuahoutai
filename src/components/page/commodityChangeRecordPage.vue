@@ -100,7 +100,7 @@
                     placeholder="兑换状态"
                     class="handle-select mr10"
                 >
-                    <el-option key="0" label="待支付" value="0"></el-option>
+                    <!--<el-option key="0" label="待支付" value="0"></el-option>-->
                     <el-option key="1" label="兑换成功" value="1"></el-option>
                     <el-option key="2" label="兑换失败" value="2"></el-option>
                 </el-select>
@@ -416,6 +416,8 @@
                     <el-input
                         :disabled="true"
                         style="width: 250px"
+                        type="textarea"
+                        rows="4"
                         v-model="form.deliveryAddressDetail"
                         autocomplete="off"
                     ></el-input>
@@ -552,6 +554,8 @@
                     <el-input
                         :disabled="true"
                         style="width: 250px"
+                        type="textarea"
+                        rows="4"
                         v-model="form1.deliveryAddressDetail"
                         autocomplete="off"
                     ></el-input>
@@ -574,14 +578,14 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="物流单号" :label-width="formLabelWidth">
+                <el-form-item v-if="(form1.trackingName!='zxps')" label="物流单号" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         v-model="form1.trackingNumber"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="物流状态" :label-width="formLabelWidth">
+                <el-form-item v-if="(form1.trackingName!='zxps')" label="物流状态" :label-width="formLabelWidth">
                     <el-select v-model="form1.trackingStatus" placeholder="请选择商品类型">
                         <el-option
                             v-for="item in commodityType"

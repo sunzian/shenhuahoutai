@@ -204,7 +204,7 @@
             </div>
         </div>
         <!--新增弹出框-->
-        <el-dialog :close-on-click-modal="false" :visible.sync="dialogFormVisible">
+        <el-dialog :close-on-click-modal="false" title="新增"  :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
                 <el-form-item :required="true" label="活动名称" :label-width="formLabelWidth">
                     <el-input

@@ -111,7 +111,7 @@
             </div>
         </div>
         <!--新增弹出框-->
-        <el-dialog :close-on-click-modal="false" :visible.sync="dialogFormVisible">
+        <el-dialog :close-on-click-modal="false" title="新增" :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
                 <el-form-item :required="true" label="券包名称：" :label-width="formLabelWidth">
                     <el-input placeholder="限20个字" maxlength="20" style="width: 250px" v-model="oForm.name" autocomplete="off"></el-input>
@@ -188,7 +188,7 @@
             </div>
         </el-dialog>
         <!-- 编辑弹出框 -->
-        <el-dialog :close-on-click-modal="false" title="详情" :visible.sync="editVisible">
+        <el-dialog :close-on-click-modal="false" title="修改" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
                 <el-form-item :required="true" label="通用方式：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.commonType">

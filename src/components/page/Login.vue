@@ -22,6 +22,7 @@
                     <el-input v-model="param.code" placeholder="验证码" @keyup.enter.native="submitForm()">
                         <span slot="prepend" class="el-icon-picture-outline"></span>
                     </el-input>
+                    <div v-if="show" style="color: red;margin-left: 65px;margin-top: 15px;">{{time}}</div>
                 </el-form-item>
                 <div class="code-img" @click="fresh">
                     <img class="code-image" :src="param.codePic"  alt="" style="">
@@ -42,6 +43,9 @@
 export default {
     data: function() {
         return {
+            message:'',
+            time:'',
+            show:false,
             param: {
                 username: '',
                 password: '',
@@ -88,11 +92,21 @@ export default {
             let params = ParamsAppend(jsonArr);
             https.fetchPost('/admin/login',params).then((data) => {
                 if(data.data.code== 'success'){
+                    this.show=false;
+                    console.log(data);
                     localStorage.setItem('ms_username', this.param.username)
                     this.$router.push('/dashboard');
-
                 }else if(data.data.code=='error'){
-                    alert(data.data.message)
+                    this.show=false;
+                    this.message = data.data.message;
+                    this.open();
+                    this.fresh()
+                }
+                else if(data.data.code=='wrongPassword'){
+                    this.show=true;
+                    this.time='剩余输入密码错误'+JSON.parse(Decrypt(data.data.data))+'次'
+                    this.message =data.data.message;
+                    this.open();
                     this.fresh()
                 }
             }).catch(err=>{

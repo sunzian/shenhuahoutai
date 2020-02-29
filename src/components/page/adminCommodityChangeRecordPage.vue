@@ -507,7 +507,10 @@ export default {
             message: '', //弹出框消息
             query: {
                 pageNo: 1,
-                pageSize: 15
+                pageSize: 15,
+                payStatus: '1',
+                startDate: '',
+                endDate: '',
             },
             editVisible: false,
             pageTotal: 0,
@@ -818,6 +821,17 @@ export default {
                 target: document.querySelector('.div1')
             });
             setTimeout(() => {
+                //获取当前时间
+                var day1 = new Date();
+                day1.setTime(day1.getTime()-24*60*60*1000);
+                var s1 = day1.getFullYear()+"-" + (day1.getMonth()+1) + "-" + day1.getDate();
+                //获取昨天时间
+                var day2 = new Date();
+                day2.setTime(day2.getTime());
+                var s2 = day2.getFullYear()+"-" + (day2.getMonth()+1) + "-" + day2.getDate();
+                //加上早上六点
+                this.query.startDate=this.timestampToTime(new Date(s1).getTime()+21600000)
+                this.query.endDate=this.timestampToTime(new Date(s2).getTime()+21600000)
                 let orderNo = this.query.orderNo;
                 let mobile = this.query.mobile;
                 let payStatus = this.query.payStatus;
@@ -971,6 +985,19 @@ export default {
             oInput.className = "oInput";
             oInput.style.display = "none";
             alert("复制成功！")
+        },
+        timestampToTime (timestamp) {
+            const dateObj = new Date(+timestamp) // ps, 必须是数字类型，不能是字符串, +运算符把字符串转化为数字，更兼容
+            const year = dateObj.getFullYear() // 获取年，
+            const month = dateObj.getMonth() + 1 // 获取月，必须要加1，因为月份是从0开始计算的
+            const date = dateObj.getDate() // 获取日，记得区分getDay()方法是获取星期几的。
+            const hours = this.pad(dateObj.getHours())  // 获取时, pad函数用来补0
+            const minutes =  this.pad(dateObj.getMinutes()) // 获取分
+            const seconds =  this.pad(dateObj.getSeconds()) // 获取秒
+            return year + '-' + month + '-' + date + ' ' + hours + ':' + minutes + ':' + seconds
+        },
+        pad(str) {
+            return +str >= 10 ? str : '0' + str
         }
     }
 };
