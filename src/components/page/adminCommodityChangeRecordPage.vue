@@ -47,6 +47,7 @@
                 ></el-input>
                 <el-input placeholder="订单号" class="mr10" v-model="query.orderNo" autocomplete="off"></el-input>
                 <el-input placeholder="手机号" class="mr10" v-model="query.mobile" autocomplete="off"></el-input>
+                <el-input placeholder="推荐人手机号" class="mr10" v-model="query.shareMobile" autocomplete="off"></el-input>
                 <el-select
                     clearable
                     v-model="query.changeType"
@@ -189,6 +190,9 @@
                 <el-table-column prop="memo" label="会员手机号" width="110">
                     <template slot-scope="scope">{{scope.row.mobile}}</template>
                 </el-table-column>
+                <el-table-column prop="memo" label="推荐人手机号" width="110">
+                    <template slot-scope="scope">{{scope.row.shareMobile}}</template>
+                </el-table-column>
                 <el-table-column prop="memo" label="商品名称" width="180">
                     <template slot-scope="scope">{{scope.row.commodityName}}</template>
                 </el-table-column>
@@ -313,6 +317,14 @@
                         :disabled="true"
                         style="width: 250px"
                         v-model="form.mobile"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="推荐人手机号" :label-width="formLabelWidth">
+                    <el-input
+                        :disabled="true"
+                        style="width: 250px"
+                        v-model="form.shareMobile"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
@@ -543,6 +555,7 @@ export default {
                 let commodityName = this.query.commodityName;
                 let orderNo = this.query.orderNo;
                 let mobile = this.query.mobile;
+                let shareMobile = this.query.shareMobile;
                 let status = this.query.status;
                 let payStatus = this.query.payStatus;
                 let startDate = this.query.startDate;
@@ -583,6 +596,9 @@ export default {
                 if (!mobile) {
                     mobile = '';
                 }
+                if (!shareMobile) {
+                    shareMobile = '';
+                }
                 if (!refundStatus) {
                     refundStatus = '';
                 }
@@ -603,12 +619,12 @@ export default {
                 jsonArr.push({
                     key: 'exportKeysJson',
                     value:
-                        "['cinemaName','partnerName','chSettleStatusString','orderNo','mobile','remark','commodityName','gold','money','getDate','payTime','chPayStatus','chPickupWay','trackingNumber','chTrackingStatus','deliveryName','deliveryMobile','province','city','district','deliveryAddressDetail','tradeNo','payReturnMsg','chChangeType','chStatus','chRefundStatus','refundNo','refundReason','refundApply','refundTime','refundPrice']"
+                        "['cinemaName','partnerName','chSettleStatusString','orderNo','mobile','shareMobile','remark','commodityName','gold','money','getDate','payTime','chPayStatus','chPickupWay','trackingNumber','chTrackingStatus','deliveryName','deliveryMobile','province','city','district','deliveryAddressDetail','tradeNo','payReturnMsg','chChangeType','chStatus','chRefundStatus','refundNo','refundReason','refundApply','refundTime','refundPrice']"
                 });
                 jsonArr.push({
                     key: 'exportTitlesJson',
                     value:
-                        "['影院名称','商户名称','商户订单结算状态','订单号','手机号','用户备注','商品名称','消费金币','支付金额','领取时间','兑换时间','兑换状态','取货方式','物流单号','快递状态','收货人名称','收货人电话','省','市','区','收货人地址','支付交易号','支付回调消息','兑换方式','核销状态','退款状态','退款交易号','退款原因','微信退款回复','退款时间','退款金额']"
+                        "['影院名称','商户名称','商户订单结算状态','订单号','手机号','推荐人手机号','用户备注','商品名称','消费金币','支付金额','领取时间','兑换时间','兑换状态','取货方式','物流单号','快递状态','收货人名称','收货人电话','省','市','区','收货人地址','支付交易号','支付回调消息','兑换方式','核销状态','退款状态','退款交易号','退款原因','微信退款回复','退款时间','退款金额']"
                 });
                 jsonArr.push({ key: 'commodityType', value: commodityType });
                 jsonArr.push({ key: 'businessCode', value: businessCode });
@@ -616,6 +632,7 @@ export default {
                 jsonArr.push({ key: 'orderNo', value: orderNo });
                 jsonArr.push({ key: 'commodityName', value: commodityName });
                 jsonArr.push({ key: 'mobile', value: mobile });
+                jsonArr.push({ key: 'shareMobile', value: shareMobile });
                 jsonArr.push({ key: 'refundStatus', value: refundStatus });
                 jsonArr.push({ key: 'pickupWay', value: pickupWay });
                 jsonArr.push({ key: 'status', value: status });
@@ -834,6 +851,7 @@ export default {
                 this.query.endDate=this.timestampToTime(new Date(s2).getTime()+21600000)
                 let orderNo = this.query.orderNo;
                 let mobile = this.query.mobile;
+                let shareMobile = this.query.shareMobile;
                 let payStatus = this.query.payStatus;
                 let startDate = this.query.startDate;
                 let endDate = this.query.endDate;
@@ -874,6 +892,9 @@ export default {
                 if (!mobile) {
                     mobile = '';
                 }
+                if (!shareMobile) {
+                    shareMobile = '';
+                }
                 if (!status) {
                     status = '';
                 }
@@ -899,6 +920,7 @@ export default {
                 jsonArr.push({ key: 'businessCode', value: businessCode });
                 jsonArr.push({ key: 'commodityName', value: commodityName });
                 jsonArr.push({ key: 'mobile', value: mobile });
+                jsonArr.push({ key: 'shareMobile', value: shareMobile });
                 jsonArr.push({ key: 'pickupWay', value: pickupWay });
                 jsonArr.push({ key: 'payStatus', value: payStatus });
                 jsonArr.push({ key: 'changeType', value: changeType });
