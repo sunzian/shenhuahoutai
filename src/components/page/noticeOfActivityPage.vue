@@ -197,6 +197,7 @@
         <!--文章信息-->
         <div class="container" v-if="lookShow">
             <div class="handle-box" style="margin-bottom: 10px">
+                <i>{{title}}</i>
                 <el-button
                         type="primary"
                         @click="back1"
@@ -520,6 +521,7 @@
                 isClear: false,
                 lookShow: false,
                 oBannerType: '',
+                title: '',
                 lookId: '',
                 oButtonStatus: '',
                 oButtonName: '',
@@ -732,7 +734,7 @@
                     let myObj = {
                         method: 'get',
                         url: '/noticeOfActivity/exportUserExtraInfoList',
-                        fileName: '用户记录列表',
+                        fileName: this.title+'报名表',
                         params: params
                     };
                     https.exportMethod(myObj);
@@ -1043,6 +1045,7 @@
                     this.form = row;
                     var jsonArr = [];
                     this.lookId=row.id;
+                    this.title=row.title;
                     jsonArr.push({ key: 'id', value: row.id });
                     let sign = md5(preSign(jsonArr));
                     jsonArr.push({ key: 'sign', value: sign });
