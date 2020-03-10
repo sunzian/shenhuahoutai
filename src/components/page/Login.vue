@@ -104,7 +104,7 @@ export default {
                 }
                 else if(data.data.code=='wrongPassword'){
                     this.show=true;
-                    this.time='剩余输入密码错误'+JSON.parse(Decrypt(data.data.data))+'次'
+                    this.time='剩余输入密码次数'+JSON.parse(Decrypt(data.data.data))+'次'
                     this.message =data.data.message;
                     this.open();
                     this.fresh()

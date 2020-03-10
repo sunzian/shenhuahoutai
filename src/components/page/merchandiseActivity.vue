@@ -1355,6 +1355,7 @@ export default {
                         jsonarr.push(JSON.parse(Decrypt(data.data.data))[x].endTime);
                         this.dateInfo.push(jsonarr);
                     }
+                    console.log(this.dateInfo);
                     for (let x in this.dateInfo) {
                         this.startArr.push(this.dateInfo[x][0]);
                         this.endArr.push(this.dateInfo[x][1]);

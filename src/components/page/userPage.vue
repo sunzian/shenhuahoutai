@@ -93,7 +93,7 @@
                                 icon="el-icon-refresh-right"
                                 class="red"
                                 @click="reset(scope.$index, scope.row)"
-                        >重置密码次数
+                        >账号解冻
                         </el-button>
                     </template>
                 </el-table-column>

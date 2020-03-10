@@ -141,6 +141,16 @@ export default new Router({
                     meta: { title: '影院管理' }
                 },
                 {
+                    path: '/secondKillActivityPage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/secondKillActivityPage.vue'),
+                    meta: { title: '秒杀活动管理' }
+                },
+                {
+                    path: '/filmOpensPage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/filmOpensPage.vue'),
+                    meta: { title: '专场点映' }
+                },
+                {
                     path: '/wantOrLooketFilmPage',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/wantOrLooketFilmPage.vue'),
                     meta: { title: '影片评论管理' }
