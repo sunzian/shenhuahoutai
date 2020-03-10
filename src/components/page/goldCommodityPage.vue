@@ -66,6 +66,7 @@
                     <el-option key="2" label="优惠券" value="2"></el-option>
                     <el-option key="3" label="券包" value="3"></el-option>
                     <el-option key="4" label="商户商品" value="4"></el-option>
+                    <el-option key="5" label="权益卡" value="5"></el-option>
                 </el-select>
                 <el-select
                     clearable
@@ -252,7 +253,7 @@
                     </el-checkbox-group>
                 </el-form-item>
                 <el-form-item :required="true" label="商品类型" :label-width="formLabelWidth">
-                    <el-select v-model="oForm.commodity_type" placeholder="请选择商品类型">
+                    <el-select v-model="oForm.commodity_type" placeholder="请选择商品类型" @change="changeAddType">
                         <el-option
                             v-for="item in commodityType"
                             :key="item.value"
@@ -262,7 +263,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item :required="true" label="商品类别" :label-width="formLabelWidth">
-                    <el-select v-model="oForm.commodityCategory" placeholder="请选择商品类型">
+                    <el-select v-model="oForm.commodityCategory" placeholder="请选择商品类别">
                         <el-option
                                 v-for="item in commodityCategoryType"
                                 :key="item.value"
@@ -367,13 +368,24 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="兑换方式" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="兑换方式" :label-width="formLabelWidth" v-if="oForm.commodity_type != 5">
                     <el-select v-model="oForm.change_type" placeholder="请选择兑换方式">
                         <el-option
                             v-for="item in showType"
                             :key="item.value"
                             :label="item.label"
                             :value="item.value"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item :required="true" label="兑换方式" :label-width="formLabelWidth" v-else>
+                    <el-select v-model="oForm.change_type" placeholder="请选择兑换方式">
+                        <el-option
+                            v-for="item in showType"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value"
+                            :disabled="item.disabled"
                         ></el-option>
                     </el-select>
                 </el-form-item>
@@ -392,7 +404,7 @@
                 </el-form-item>
                 <el-form-item
                     :required="true"
-                    v-if="oForm.change_type==2||oForm.change_type==3"
+                    v-if="oForm.change_type==2||oForm.change_type==3||oForm.change_type==5"
                     label="所需RMB"
                     :label-width="formLabelWidth"
                 >
@@ -535,7 +547,7 @@
                     v-if="oForm.commodity_type==2"
                     label="选择优惠券"
                     :label-width="formLabelWidth"
-                >
+                    >
                     <el-button type="primary" @click="openNext">点击选择</el-button>
                 </el-form-item>
                 <el-form-item
@@ -543,7 +555,7 @@
                     label="所选优惠券"
                     :label-width="formLabelWidth"
                     v-if="oForm.commodity_type==2&&selectedSell.length>0"
-                >
+                    >
                     <div
                         v-for="(item, index) in selectedSell"
                         style="margin-bottom: 5px"
@@ -565,7 +577,7 @@
                     v-if="oForm.commodity_type==3"
                     label="选择券包"
                     :label-width="formLabelWidth"
-                >
+                    >
                     <el-button type="primary" @click="changeCoupon">点击选择</el-button>
                 </el-form-item>
                 <el-form-item
@@ -573,12 +585,33 @@
                     label="所选券包："
                     :label-width="formLabelWidth"
                     :required="true"
-                >
+                 >
                     <el-input style="width: 150px" v-model="groupName" autocomplete="off" disabled></el-input>&nbsp;&nbsp;&nbsp;&nbsp;
                     <span
                         v-if="groupName"
                         style="color:red;cursor: pointer;"
                         @click="deletCoupon"
+                    >删除</span>
+                </el-form-item>
+                <el-form-item
+                    :required="true"
+                    v-if="oForm.commodity_type==5"
+                    label="选择权益卡"
+                    :label-width="formLabelWidth"
+                    >
+                    <el-button type="primary" @click="changeCard">点击选择</el-button>
+                </el-form-item>
+                <el-form-item
+                    v-if="cardId&&oForm.commodity_type==5"
+                    label="所选权益卡："
+                    :label-width="formLabelWidth"
+                    :required="true"
+                 >
+                    <el-input style="width: 150px" v-model="cardName" autocomplete="off" disabled></el-input>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <span
+                        v-if="cardName"
+                        style="color:red;cursor: pointer;"
+                        @click="deletCard"
                     >删除</span>
                 </el-form-item>
                 <el-form-item :required="true" label="是否指定日期可以兑换" :label-width="formLabelWidth">
@@ -848,13 +881,24 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="兑换方式" :label-width="formLabelWidth">
-                    <el-select v-model="form.changeType" placeholder="请选择兑换方式" @change="change">
+                <el-form-item :required="true" label="兑换方式" :label-width="formLabelWidth" v-if="form.commodityType != 5">
+                    <el-select v-model="form.changeType" placeholder="请选择兑换方式">
                         <el-option
                             v-for="item in showType"
                             :key="item.value"
                             :label="item.label"
                             :value="item.value"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item :required="true" label="兑换方式" :label-width="formLabelWidth" v-else>
+                    <el-select v-model="form.changeType" placeholder="请选择兑换方式">
+                        <el-option
+                            v-for="item in showType"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value"
+                            :disabled="item.disabled"
                         ></el-option>
                     </el-select>
                 </el-form-item>
@@ -872,7 +916,7 @@
                     ></el-input>
                 </el-form-item>
                 <el-form-item
-                    v-if="form.changeType==2||form.changeType==3"
+                    v-if="form.changeType==2||form.changeType==3||form.changeType==5"
                     label="所需RMB"
                     :label-width="formLabelWidth"
                     :required="true"
@@ -1060,6 +1104,27 @@
                         v-if="groupName"
                         style="color:red;cursor: pointer;"
                         @click="deletCoupon"
+                    >删除</span>
+                </el-form-item>
+                <el-form-item
+                    :required="true"
+                    v-if="form.commodityType==5"
+                    label="选择权益卡"
+                    :label-width="formLabelWidth"
+                >
+                    <el-button type="primary" @click="changeCard">点击选择</el-button>
+                </el-form-item>
+                <el-form-item
+                    v-if="cardId&&form.commodityType==5"
+                    label="所选权益卡："
+                    :label-width="formLabelWidth"
+                    :required="true"
+                >
+                    <el-input style="width: 150px" v-model="cardName" autocomplete="off" disabled></el-input>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <span
+                        v-if="cardName"
+                        style="color:red;cursor: pointer;"
+                        @click="deletCard"
                     >删除</span>
                 </el-form-item>
                 <el-form-item :required="true" label="是否指定日期可以兑换" :label-width="formLabelWidth">
@@ -1293,6 +1358,76 @@
                 <el-button type="primary" @click="sureAdd(couponId)">确 定</el-button>
             </div>
         </el-dialog>
+        <!-- 选择权益卡弹出窗 -->
+        <el-dialog :close-on-click-modal="false" title="选择权益卡" :visible.sync="drawerCard">
+            <div class="container">
+                <div class="handle-box">
+                    <el-input
+                        v-model="query.cardName"
+                        placeholder="权益卡名称"
+                        class="handle-input mr12"
+                    ></el-input>
+                    <el-button type="primary" icon="el-icon-search" @click="changeCard">搜索</el-button>
+                </div>
+                <el-table
+                    :data="cardList"
+                    border
+                    class="table"
+                    ref="multipleTable"
+                    highlight-current-row
+                    header-cell-class-name="table-header"
+                    @selection-change="handleSelectionChange"
+                >
+                    <el-table-column label="操作" width="100" align="center">
+                        <template slot-scope="scope">
+                            <el-radio v-model="cardId" :label="scope.row.id">&nbsp;</el-radio>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="权益卡名称" width="150">
+                        <template slot-scope="scope">{{scope.row.name}}</template>
+                    </el-table-column>
+                    <el-table-column label="权益卡有效期" width="150">
+                        <template slot-scope="scope">{{scope.row.number}}{{scope.row.unit}}</template>
+                    </el-table-column>
+                    <el-table-column prop="name" label="影票" width="90">
+                        <template slot-scope="scope">
+                            <el-tag v-if="scope.row.isFilmJoin == 0">不参与</el-tag>
+                            <el-tag v-else-if="scope.row.isFilmJoin == 1">参与</el-tag>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="name" label="卖品" width="90">
+                        <template slot-scope="scope">
+                            <el-tag v-if="scope.row.isMerchandiseJoin == 0">不参与</el-tag>
+                            <el-tag v-else-if="scope.row.isMerchandiseJoin == 1">参与</el-tag>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="name" label="券包" width="90">
+                        <template slot-scope="scope">
+                            <el-tag v-if="scope.row.isGroupJoin == 0">不赠送</el-tag>
+                            <el-tag v-else-if="scope.row.isGroupJoin == 1">赠送</el-tag>
+                        </template>
+                    </el-table-column>
+                </el-table>
+                <div class="pagination">
+                    <el-pagination
+                        background
+                        @size-change="cHandleSizeChange"
+                        layout="total, sizes, prev, pager, next, jumper"
+                        :current-page="query.cPageNo"
+                        :page-sizes="[10, 15, 20, 30]"
+                        :page-size="query.cPageSize"
+                        :total="query.cTotalCount"
+                        @current-change="cCurrentChange"
+                        @prev-click="cPrev"
+                        @next-click="cNext"
+                    ></el-pagination>
+                </div>
+            </div>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="drawerCard = false">取 消</el-button>
+                <el-button type="primary" @click="sureAddCard(cardId)">确 定</el-button>
+            </div>
+        </el-dialog>
         <!-- 选择商户弹出窗 -->
         <el-dialog :close-on-click-modal="false" title="选择商户" :visible.sync="drawerPartner">
             <div class="container">
@@ -1394,6 +1529,8 @@ export default {
                 aPageSize: 15,
                 bPageNo: 1,
                 bPageSize: 15,
+                cPageNo: 1,
+                cPageSize: 15,
                 oPageNo: 1,
                 oPageSize: 15
             },
@@ -1650,15 +1787,17 @@ export default {
             showType: [
                 {
                     value: '1',
-                    label: '纯金币兑换'
+                    label: '纯金币兑换',
+                    disabled: true
                 },
                 {
                     value: '2',
-                    label: '纯RMB兑换'
+                    label: '纯RMB兑换',
                 },
                 {
                     value: '3',
-                    label: '金币 + RMB 兑换'
+                    label: '金币 + RMB 兑换',
+                    disabled: true
                 }
             ],
             showStatus: [
@@ -1711,6 +1850,10 @@ export default {
                 {
                     value: '4',
                     label: '商户商品'
+                },
+                {
+                    value: '5',
+                    label: '权益卡'
                 }
             ],
             commodityCategoryType: [
@@ -1789,9 +1932,13 @@ export default {
             drawer: false, //选择优惠券弹出框,
             ticketIds: '',
             couponList: [],
+            cardList: [],
             drawerCoupon: false,
+            drawerCard: false,
             couponId: '',
-            groupName: ''
+            cardId: '',
+            groupName: '',
+            cardName: ''
         };
     },
     components: { quillEditor,EditorBar },
@@ -1908,6 +2055,10 @@ export default {
             this.groupName = '';
             this.couponId = '';
         },
+        deletCard() {
+            this.cardName = '';
+            this.cardId = '';
+        },
         sureAdd(id) {
             this.couponId = id;
             for (let i = 0; i < this.couponList.length; i++) {
@@ -1916,6 +2067,15 @@ export default {
                 }
             }
             this.drawerCoupon = false;
+        },
+        sureAddCard(id) {
+            this.cardId = id;
+            for (let i = 0; i < this.cardList.length; i++) {
+                if (this.cardList[i].id == this.cardId) {
+                    this.cardName = this.cardList[i].name;
+                }
+            }
+            this.drawerCard = false;
         },
         // 更换券包
         changeCoupon() {
@@ -1949,6 +2109,51 @@ export default {
                         this.query.bTotalCount = res.totalCount;
                         this.query.bTotalPage = res.totalPage;
                         this.drawerCoupon = true;
+                    } else if (data.data.code == 'nologin') {
+                        this.message = data.data.message;
+                        this.open();
+                        this.$router.push('/login');
+                    } else {
+                        this.message = data.data.message;
+                        this.open();
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        },
+        // 更换权益卡
+        changeCard() {
+            let cardName = this.query.cardName;
+            if (!cardName) {
+                cardName = '';
+            }
+            let jsonArr = [];
+            jsonArr.push({ key: 'cinemaCode', value: this.oCheckedCities[0] });
+            jsonArr.push({ key: 'name', value: cardName });
+            jsonArr.push({ key: 'status', value: 1 });
+            jsonArr.push({ key: 'pageNo', value: this.query.cPageNo });
+            jsonArr.push({ key: 'pageSize', value: this.query.cPageSize });
+            let sign = md5(preSign(jsonArr));
+            jsonArr.push({ key: 'sign', value: sign });
+            var params = ParamsAppend(jsonArr);
+            https
+                .fetchPost('/benefitCard/page', params)
+                .then(data => {
+                    if (data.data.code == 'success') {
+                        var res = JSON.parse(Decrypt(data.data.data));
+                        console.log(res);
+                        if (res.pageResult.data.length == 0) {
+                            this.message = '暂无权益卡';
+                            this.open();
+                            return;
+                        }
+                        this.cardList = res.pageResult.data;
+                        this.query.cPageSize = res.pageResult.pageSize;
+                        this.query.cPageNo = res.pageResult.pageNo;
+                        this.query.cTotalCount = res.pageResult.totalCount;
+                        this.query.cTotalPage = res.pageResult.totalPage;
+                        this.drawerCard = true;
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
@@ -2037,8 +2242,17 @@ export default {
                     });
             }, 500);
         },
-        change() {
-            console.log(this.form.changeType);
+        changeAddType() {
+            if (this.oForm.commodity_type == 5) {
+                if(this.oCheckedCities.length > 1) {
+                    this.message = '权益卡只支持单影院！';
+                    this.open();
+                    this.oCheckedCities = [];
+                    return;
+                } else {
+                    this.oForm.change_type = "2"
+                }
+            }
         },
         addPage() {
             //获取新增按钮权限
@@ -2199,7 +2413,7 @@ export default {
                     return;
                 }
             }
-            if (this.oForm.change_type == 2 || this.oForm.change_type == 3) {
+            if (this.oForm.change_type == 2 || this.oForm.change_type == 3 || this.oForm.change_type == 5) {
                 if (!this.oForm.money && this.oForm.money != 0) {
                     this.message = '所需RMB不能为空，请检查！';
                     this.open();
@@ -2290,6 +2504,15 @@ export default {
                     loading.close();
                     return;
                 }
+            }
+            if (this.oForm.commodity_type == 5) {
+                if (!this.cardName) {
+                    this.message = '所选权益卡不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                this.oForm.gold = 0;
             }
             if (!this.oForm.assign_type) {
                 this.message = '是否指定日期可以兑换不能为空，请检查！';
@@ -2385,9 +2608,15 @@ export default {
                 jsonArr.push({ key: 'pickupType', value: this.oForm.pickupType });
                 jsonArr.push({ key: 'supportExpressStatus', value: this.oForm.supportExpressStatus });
             }
-            if (this.oForm.commodity_type == 3) {
-                jsonArr.push({ key: 'ticketIds', value: this.couponId });
-                jsonArr.push({ key: 'name', value: this.groupName });
+            if (this.oForm.commodity_type == 3 || this.oForm.commodity_type == 5) {
+                if (this.oForm.commodity_type == 3) {
+                    jsonArr.push({ key: 'ticketIds', value: this.couponId });
+                    jsonArr.push({ key: 'name', value: this.groupName });
+                }
+                if (this.oForm.commodity_type == 5) {
+                    jsonArr.push({ key: 'ticketIds', value: this.cardId });
+                    jsonArr.push({ key: 'name', value: this.cardName });
+                }
             } else {
                 jsonArr.push({ key: 'name', value: this.oForm.name });
                 jsonArr.push({ key: 'ticketIds', value: this.ticketIds });
@@ -2600,10 +2829,17 @@ export default {
                             this.oCheckedCities = this.form.cinemaCodes.split(',');
                             this.form.status = JSON.parse(Decrypt(data.data.data)).goldCommodity.status;
                             this.form.commodityType = JSON.parse(Decrypt(data.data.data)).goldCommodity.commodityType;
+                            if (JSON.parse(Decrypt(data.data.data)).goldCommodity.commodityType == 3) {
+                                this.ticketIds = JSON.parse(Decrypt(data.data.data)).goldCommodity.ticketIds;
+                                this.couponId = JSON.parse(Decrypt(data.data.data)).goldCommodity.ticketIds;
+                                this.groupName = JSON.parse(Decrypt(data.data.data)).goldCommodity.name;
+                            }
+                            if (JSON.parse(Decrypt(data.data.data)).goldCommodity.commodityType == 5) {
+                                this.ticketIds = JSON.parse(Decrypt(data.data.data)).goldCommodity.ticketIds;
+                                this.cardId = JSON.parse(Decrypt(data.data.data)).goldCommodity.ticketIds;
+                                this.cardName = JSON.parse(Decrypt(data.data.data)).goldCommodity.name;
+                            }
                             this.oTopstatus = JSON.parse(Decrypt(data.data.data)).goldCommodity.topStatus;
-                            this.ticketIds = JSON.parse(Decrypt(data.data.data)).goldCommodity.ticketIds;
-                            this.couponId = JSON.parse(Decrypt(data.data.data)).goldCommodity.ticketIds;
-                            this.groupName = JSON.parse(Decrypt(data.data.data)).goldCommodity.name;
                             this.form.assignType = JSON.parse(Decrypt(data.data.data)).goldCommodity.assignType;
                             this.form.assignInfo = JSON.parse(Decrypt(data.data.data)).goldCommodity.assignInfo;
                             this.form.limitType = JSON.parse(Decrypt(data.data.data)).goldCommodity.limitType;
@@ -2832,7 +3068,7 @@ export default {
                     return;
                 }
             }
-            if (this.form.changeType == 2 || this.form.changeType == 3) {
+            if (this.form.changeType == 2 || this.form.changeType == 3 || this.form.changeType == 5) {
                 if (!this.form.money && this.form.money != 0) {
                     this.message = '所需RMB不能为空，请检查！';
                     this.open();
@@ -2924,6 +3160,15 @@ export default {
                     return;
                 }
             }
+            if (this.form.commodityType == 5) {
+                if (!this.cardName) {
+                    this.message = '所选权益卡不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                this.form.gold = 0;
+            }
             if (!this.form.assignType) {
                 this.message = '是否指定日期可以兑换不能为空，请检查！';
                 this.open();
@@ -2983,7 +3228,6 @@ export default {
                 }
             }
             setTimeout(() => {
-                // console.log(this.from.sort.toString());
                 var jsonArr = [];
                 this.form.cinemaCode = this.oCheckedCities.join(',');
                 jsonArr.push({ key: 'id', value: this.form.id });
@@ -3020,13 +3264,18 @@ export default {
                 if (this.form.commodityType == 2) {
                     jsonArr.push({ key: 'ticketIds', value: this.ticketIds });
                 }
-                if (this.form.commodityType == 3) {
-                    jsonArr.push({ key: 'ticketIds', value: this.couponId });
-                }
-                if (this.form.commodityType == 3) {
-                    jsonArr.push({ key: 'name', value: this.groupName });
+                if (this.form.commodityType == 3 || this.form.commodityType == 5) {
+                    if (this.form.commodityType == 3) {
+                        jsonArr.push({ key: 'ticketIds', value: this.couponId });
+                        jsonArr.push({ key: 'name', value: this.groupName });
+                    }
+                    if (this.form.commodityType == 5) {
+                        jsonArr.push({ key: 'ticketIds', value: this.cardId });
+                        jsonArr.push({ key: 'name', value: this.cardName });
+                    }
                 } else {
                     jsonArr.push({ key: 'name', value: this.oName });
+                    jsonArr.push({ key: 'ticketIds', value: this.ticketIds });
                 }
                 if (this.form.commodityType != 1) {
                     if (this.oEffectiveType == 1) {
@@ -3289,6 +3538,25 @@ export default {
             //分页按钮下一页
             this.query.bPageNo++;
             this.changeCoupon();
+        },
+        cHandleSizeChange(val) {
+            this.query.cPageSize = val;
+            this.changeCard();
+        },
+        cCurrentChange(val) {
+            //点击选择具体页数
+            this.query.cPageNo = val;
+            this.changeCard();
+        },
+        cPrev() {
+            //分页按钮上一页
+            this.query.cPageNo--;
+            this.changeCard();
+        },
+        cNext() {
+            //分页按钮下一页
+            this.query.cPageNo++;
+            this.changeCard();
         },
         oCurrentChange(val) {
             //点击选择具体页数
