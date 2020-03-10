@@ -236,7 +236,7 @@
                     </div>
                 </el-form-item>
                 <el-form-item :required="true" label="是否限制用户限购" :label-width="formLabelWidth">
-                    <el-select v-model="oForm.purchaseType" placeholder="请选择" @change="clearOneNum()">
+                    <el-select v-model="oForm.purchaseType" placeholder="请选择">
                         <el-option
                                 v-for="item in canUse1"
                                 :key="item.value"
@@ -254,7 +254,7 @@
                     <el-input style="width: 150px" v-model="oForm.purchaseCount " autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="是否可发送短信提醒用户" :label-width="formLabelWidth">
-                    <el-select v-model="oForm.smsStatus" placeholder="请选择" @change="clearOneNum()">
+                    <el-select v-model="oForm.smsStatus" placeholder="请选择">
                         <el-option
                                 v-for="item in canUse2"
                                 :key="item.value"
@@ -425,7 +425,7 @@
                     </div>
                 </el-form-item>
                 <el-form-item :required="true" label="是否限制用户限购" :label-width="formLabelWidth">
-                    <el-select v-model="oPurchaseType" placeholder="请选择" @change="clearOneNum()">
+                    <el-select v-model="oPurchaseType" placeholder="请选择">
                         <el-option
                                 v-for="item in canUse1"
                                 :key="item.value"
@@ -443,7 +443,7 @@
                     <el-input style="width: 150px" v-model="oPurchaseCount " autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="是否可发送短信提醒用户" :label-width="formLabelWidth">
-                    <el-select v-model="oSmsStatus" placeholder="请选择" @change="clearOneNum()">
+                    <el-select v-model="oSmsStatus" placeholder="请选择">
                         <el-option
                                 v-for="item in canUse2"
                                 :key="item.value"
@@ -891,24 +891,8 @@
                         });
                 }, 500);
             },
-            clearOneNum() {
-                this.oForm.limitSingleUnit = '';
-                this.oForm.oneNum = '';
-                this.oLimitSingleUnit = '';
-                this.oSingleNumber = '';
-            },
-            clearOnum() {
-                this.oForm.oNum = '';
-                this.oTotalNumber = '';
-            },
             clearSelectedSell() {
                 this.selectedSell = [];
-            },
-            clearDiscountMoney() {
-                this.oForm.discountMoney = '';
-                this.oForm.achieveMoney = '';
-                this.oDiscountMoney = '';
-                this.oAchieveMoney = '';
             },
             deleteSell(index) {
                 this.selectedSell.splice(index, 1);
@@ -1547,6 +1531,29 @@
                         if (data.data.code == 'success') {
                             this.editVisible = false;
                             this.$message.success(`编辑成功`);
+                            this.oActivityName = '';
+                            this.oCommonType = '';
+                            this.selectGoodsCode = {};
+                            this.oStartDate = '';
+                            this.oEndDate = '';
+                            this.dateInfo = [];
+                            this.startArr = [];
+                            this.endArr = [];
+                            this.goodsInfo = [];
+                            this.oMerchandiseCode = [];
+                            this.oPurchaseType = '';
+                            this.oPurchaseCount = '';
+                            this.oSmsStatus = '';
+                            this.oDescription = '';
+                            this.commodityId = '';
+                            this.commodityName = '';
+                            this.value1 = '';
+                            this.oChangeType = '';
+                            this.oGold = '';
+                            this.oMoney = '';
+                            this.oCommodityStore = '';
+                            this.oHasSoldNumber = '';
+                            this.oStatus = '';
                             this.getMenu();
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;

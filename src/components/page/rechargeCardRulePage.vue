@@ -1139,7 +1139,7 @@
                         loading.close();
                         return;
                     }
-                    if (!this.oForm.effectiveTimeType) {
+                    if (!this.oEffectiveTimeType) {
                         this.message = '有效时间类型不能为空，请检查！';
                         this.open();
                         loading.close();

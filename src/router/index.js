@@ -151,6 +151,11 @@ export default new Router({
                     meta: { title: '专场点映' }
                 },
                 {
+                    path: '/filmOpensOrderPage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/filmOpensOrderPage.vue'),
+                    meta: { title: '点映订单' }
+                },
+                {
                     path: '/wantOrLooketFilmPage',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/wantOrLooketFilmPage.vue'),
                     meta: { title: '影片评论管理' }

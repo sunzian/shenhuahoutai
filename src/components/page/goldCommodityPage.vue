@@ -522,6 +522,14 @@
                         format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
                 </el-form-item>
+                <el-form-item label="商品基础销量值" :label-width="formLabelWidth">
+                    <el-input
+                            style="width: 250px"
+                            onkeyup="this.value=this.value.replace(/\D/g,'')"
+                            v-model="oForm.baseSaleNumber"
+                            autocomplete="off"
+                    ></el-input>
+                </el-form-item>
                 <el-form-item
                     :required="true"
                     v-if="oForm.commodity_type==2"
@@ -995,6 +1003,14 @@
                         format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
                 </el-form-item>
+                <el-form-item label="商品基础销量值" :label-width="formLabelWidth">
+                    <el-input
+                            style="width: 250px"
+                            onkeyup="this.value=this.value.replace(/\D/g,'')"
+                            v-model="oBaseSaleNumber"
+                            autocomplete="off"
+                    ></el-input>
+                </el-form-item>
                 <el-form-item
                     :required="true"
                     v-if="form.commodityType==2"
@@ -1358,6 +1374,7 @@ export default {
             },
             img_file: {},
             oTopstatus: '',
+            oBaseSaleNumber: '',
             oRecommendStatus: '',
             oEffectiveType: '',
             oLaterDays: '',
@@ -1436,7 +1453,8 @@ export default {
                 supportExpressStatus: '1',
                 expressFee: '',
                 store: '',
-                endDate: ''
+                endDate: '',
+                baseSaleNumber: ''
             },
 
             formLabelWidth: '120px',
@@ -2361,6 +2379,7 @@ export default {
             jsonArr.push({ key: 'expireDay', value: this.oForm.expireDay });
             jsonArr.push({ key: 'sort', value: this.oForm.sort });
             jsonArr.push({ key: 'endDate', value: this.oForm.endDate });
+            jsonArr.push({ key: 'baseSaleNumber', value: this.oForm.baseSaleNumber });
             if (this.oForm.commodity_type == 4) {
                 jsonArr.push({ key: 'partnerCode', value: this.partnerCode });
                 jsonArr.push({ key: 'pickupType', value: this.oForm.pickupType });
@@ -2596,6 +2615,7 @@ export default {
                             this.oLaterDays = JSON.parse(Decrypt(data.data.data)).goldCommodity.laterDays;
                             this.oStartEffectiveDate = JSON.parse(Decrypt(data.data.data)).goldCommodity.startEffectiveDate;
                             this.oEndEffectiveDate = JSON.parse(Decrypt(data.data.data)).goldCommodity.endEffectiveDate;
+                            this.oBaseSaleNumber = JSON.parse(Decrypt(data.data.data)).goldCommodity.baseSaleNumber;
                             //商品类型下拉选显示对应的选项
                             for (let x in this.commodityType) {
                                 if (this.commodityType[x].value == JSON.parse(Decrypt(data.data.data)).goldCommodity.commodityType) {
@@ -2990,6 +3010,7 @@ export default {
                 jsonArr.push({ key: 'recommendStatus', value: this.oRecommendStatus });
                 jsonArr.push({ key: 'sort', value: this.form.sort });
                 jsonArr.push({ key: 'endDate', value: this.form.endDate });
+                jsonArr.push({ key: 'baseSaleNumber', value: this.oBaseSaleNumber });
                 if (this.form.commodityType == 4) {
                     jsonArr.push({ key: 'partnerCode', value: this.partnerCode });
                     jsonArr.push({ key: 'pickupType', value: this.form.pickupType });

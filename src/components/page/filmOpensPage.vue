@@ -1007,24 +1007,6 @@
                     this.$router.push('/login');
                 }
             },
-            clearOneNum() {
-                this.oForm.limitSingleUnit = '';
-                this.oForm.oneNum = '';
-                this.oLimitSingleUnit = '';
-                this.oSingleNumber = '';
-            },
-            clearOnum() {
-                this.oForm.oNum = '';
-                this.oTotalNumber = '';
-            },
-            clearDiscountMoney() {
-                this.oForm.discountMoney = '';
-                this.oDiscountMoney = '';
-            },
-            clearFormatCode() {
-                this.oForm.formatCode = [];
-                this.oFilmFormatCode = [];
-            },
             deleteSell(index) {
                 this.selectedSell.splice(index, 1);
             },
@@ -1063,9 +1045,7 @@
                     background: 'rgba(0, 0, 0, 0.7)',
                     target: document.querySelector('.div1')
                 });
-                https
-                    .fetchPost('/filmOpens/filmOpensAddPage', '')
-                    .then(data => {
+                https.fetchPost('/filmOpens/filmOpensAddPage', '').then(data => {
                         loading.close();
                         if (data.data.code == 'success') {
                             this.selectedSell = [];
@@ -1140,6 +1120,23 @@
                             if (data.data.code == 'success') {
                                 this.dialogFormVisible = false;
                                 this.$message.success(`新增成功`);
+                                this.oForm.code=[];
+                                this.oForm.screenCode=[];
+                                this.selectedSell=[];
+                                this.oForm.stagePhoto='';
+                                this.oForm.sessionTime='';
+                                this.oForm.ticketPrice='';
+                                this.oForm.filmOpensName='';
+                                this.oForm.startDate='';
+                                this.oForm.endDate='';
+                                this.oForm.agglomerationNumber='';
+                                this.oForm.status='';
+                                this.oForm.filmOpensExplain='';
+                                this.oForm.buyTicketHint='';
+                                this.oForm.printTicketExplain='';
+                                this.oForm.officialAccount='';
+                                this.oForm.filmDirector='';
+                                this.oForm.fullSeatNumber='';
                                 this.getMenu();
                             } else if (data.data.code == 'nologin') {
                                 this.message = data.data.message;
@@ -1283,7 +1280,6 @@
                 var jsonArr = [];
                 jsonArr.push({ key: 'cinemaCode', value: this.oCinemaCode.join(',') });
                 jsonArr.push({ key: 'screenCode', value: this.oScreenCode });
-
                 jsonArr.push({ key: 'filmCode', value: filmCodeList.join(',') });
                 jsonArr.push({ key: 'stagePhoto', value: this.oStagePhoto });
                 jsonArr.push({ key: 'sessionTime', value: this.oSessionTime });
@@ -1312,6 +1308,23 @@
                         if (data.data.code == 'success') {
                             this.editVisible = false;
                             this.$message.success(`编辑成功`);
+                            this.oCinemaCode=[];
+                            this.oScreenCode=[];
+                            this.selectedSell=[];
+                            this.oStagePhoto='';
+                            this.oSessionTime='';
+                            this.oTicketPrice='';
+                            this.oFilmOpensName='';
+                            this.oStartDate='';
+                            this.oEndDate='';
+                            this.oAgglomerationNumber='';
+                            this.oStatus='';
+                            this.oFilmOpensExplain='';
+                            this.oBuyTicketHint='';
+                            this.oPrintTicketExplain='';
+                            this.oOfficialAccount='';
+                            this.oFilmDirector='';
+                            this.oForm.fullSeatNumber='';
                             this.getMenu();
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
