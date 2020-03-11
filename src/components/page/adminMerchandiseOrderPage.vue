@@ -55,7 +55,7 @@
                     <el-option key="0" label="马上取参" value="0"></el-option>
                     <el-option key="1" label="送至影厅" value="1"></el-option>
                     <el-option key="2" label="送至座位" value="2"></el-option>
-                    <el-option key="2" label="到店自取" value="2"></el-option>
+                    <el-option key="3" label="到店自取" value="3"></el-option>
                 </el-select>
                 <el-select
                     clearable
@@ -743,6 +743,17 @@ export default {
                         this.businessInfo = res;
                         this.query.businessCode = res[0].businessCode;
                         this.getAllCinema();
+                        //获取当前时间
+                        var day1 = new Date();
+                        day1.setTime(day1.getTime()-24*60*60*1000);
+                        var s1 = day1.getFullYear()+"-" + (day1.getMonth()+1) + "-" + day1.getDate();
+                        //获取昨天时间
+                        var day2 = new Date();
+                        day2.setTime(day2.getTime());
+                        var s2 = day2.getFullYear()+"-" + (day2.getMonth()+1) + "-" + day2.getDate();
+                        //加上早上六点
+                        this.query.startDate=this.timestampToTime(new Date(s1).getTime()+21600000)
+                        this.query.endDate=this.timestampToTime(new Date(s2).getTime()+21600000)
                         this.getMenu();
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
@@ -862,18 +873,6 @@ export default {
                 target: document.querySelector('.div1')
             });
             setTimeout(() => {
-                //获取当前时间
-                var day1 = new Date();
-                day1.setTime(day1.getTime()-24*60*60*1000);
-                var s1 = day1.getFullYear()+"-" + (day1.getMonth()+1) + "-" + day1.getDate();
-                //获取昨天时间
-                var day2 = new Date();
-                day2.setTime(day2.getTime());
-                var s2 = day2.getFullYear()+"-" + (day2.getMonth()+1) + "-" + day2.getDate();
-                //加上早上六点
-                this.query.startDate=this.timestampToTime(new Date(s1).getTime()+21600000)
-                this.query.endDate=this.timestampToTime(new Date(s2).getTime()+21600000)
-
                 let businessCode = this.query.businessCode;
                 let cinemaCode = this.query.cinemaCode;
                 let submitOrderCode = this.query.submitOrderCode;

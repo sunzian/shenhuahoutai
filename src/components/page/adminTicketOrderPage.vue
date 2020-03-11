@@ -32,6 +32,14 @@
                         :value="item.cinemaCode"
                     ></el-option>
                 </el-select>
+                <el-select clearable v-model="query.screenCode" placeholder="请选择影厅" class="mr10">
+                    <el-option
+                            v-for="item in screenInfo"
+                            :key="item.screenCode"
+                            :label="item.screenName"
+                            :value="item.screenCode"
+                    ></el-option>
+                </el-select>
                 <el-input
                     placeholder="影片名称"
                     v-model="query.filmName"
@@ -219,6 +227,9 @@
                 </el-table-column>
                 <el-table-column prop="memo" label="手机号码" width="110">
                     <template slot-scope="scope">{{scope.row.mobile}}</template>
+                </el-table-column>
+                <el-table-column prop="name" label="影厅名称" width="125">
+                    <template slot-scope="scope">{{scope.row.screenName}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="票数" width="50">
                     <template slot-scope="scope">{{scope.row.number}}</template>
@@ -626,6 +637,7 @@ export default {
         return {
             cinemaInfo: [],
             businessInfo: [],
+            screenInfo: [],
             totalData: [],
             tableData: [],
             message: '', //弹出框消息
@@ -764,6 +776,10 @@ export default {
                 let endDate = this.query.endDate;
                 let sessionStartDate = this.query.sessionStartDate;
                 let sessionEndDate = this.query.sessionEndDate;
+                let screenCode = this.query.screenCode;
+                if (!screenCode) {
+                    screenCode = '';
+                }
                 if (!businessCode) {
                     businessCode = '';
                 }
@@ -802,15 +818,16 @@ export default {
                 jsonArr.push({
                     key: 'exportKeysJson',
                     value:
-                        "['id','cinemaCode','orderNo','submitOrderCode','sessionTime','mobile','filmName','seatName','number','totalOriginalPrice','totalPrice','totalServiceFee','totalPlatHandFee','totalCinemaAllowance','totalLowestPrice','totalActivityDiscount','totalCouponDiscount','totalActualPrice','totalReportPrice','totalSubmitPrice','chPayStatus','chPayWay','payTime','chOrderStatus','submitTime','openCardCinemaName','bindCardCinemaName','chActivityType','activityName','userCouponName','printNo','submitMessage','cancelTime','totalRefundHandFee','refundReason','tradeNo']"
+                        "['id','cinemaCode','screenName','orderNo','submitOrderCode','sessionTime','mobile','filmName','seatName','number','totalOriginalPrice','totalPrice','totalServiceFee','totalPlatHandFee','totalCinemaAllowance','totalLowestPrice','totalActivityDiscount','totalCouponDiscount','totalActualPrice','totalReportPrice','totalSubmitPrice','chPayStatus','chPayWay','payTime','chOrderStatus','submitTime','openCardCinemaName','bindCardCinemaName','chActivityType','activityName','userCouponName','printNo','submitMessage','cancelTime','totalRefundHandFee','refundReason','tradeNo']"
                 });
                 jsonArr.push({
                     key: 'exportTitlesJson',
                     value:
-                        "['ID','影院编码','本地单号','售票系统单号','场次时间','手机号','影片名称','座位','数量','总原价','原票价','服务费','代售费','影院补贴','最低票价','活动优惠金额','优惠券优惠金额','实付金额','上报金额','回传金额','支付状态','支付方式','支付时间','订单状态','下单时间','开卡影院','消费影院','活动类型','活动名称','优惠券名称','取票码','下单失败原因','退票时间','退票手续费','退款原因','支付交易号']"
+                        "['ID','影院编码','影厅名称','本地单号','售票系统单号','场次时间','手机号','影片名称','座位','数量','总原价','原票价','服务费','代售费','影院补贴','最低票价','活动优惠金额','优惠券优惠金额','实付金额','上报金额','回传金额','支付状态','支付方式','支付时间','订单状态','下单时间','开卡影院','消费影院','活动类型','活动名称','优惠券名称','取票码','下单失败原因','退票时间','退票手续费','退款原因','支付交易号']"
                 });
                 jsonArr.push({ key: 'businessCode', value: businessCode });
                 jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
+                jsonArr.push({ key: 'screenCode', value: screenCode });
                 jsonArr.push({ key: 'orderNo', value: orderNo });
                 jsonArr.push({ key: 'mobile', value: mobile });
                 jsonArr.push({ key: 'payWay', value: payWay });
@@ -892,6 +909,17 @@ export default {
                         this.businessInfo = res;
                         this.query.businessCode = res[0].businessCode;
                         this.getAllCinema();
+                        //获取当前时间
+                        var day1 = new Date();
+                        day1.setTime(day1.getTime()-24*60*60*1000);
+                        var s1 = day1.getFullYear()+"-" + (day1.getMonth()+1) + "-" + day1.getDate();
+                        //获取昨天时间
+                        var day2 = new Date();
+                        day2.setTime(day2.getTime());
+                        var s2 = day2.getFullYear()+"-" + (day2.getMonth()+1) + "-" + day2.getDate();
+                        //加上早上六点
+                        this.query.startDate=this.timestampToTime(new Date(s1).getTime()+21600000)
+                        this.query.endDate=this.timestampToTime(new Date(s2).getTime()+21600000)
                         this.getMenu();
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
@@ -915,6 +943,7 @@ export default {
             this.$forceUpdate();
         },
         changeSearchCinema(val) {
+            this.getAllScreen(val);
             this.$forceUpdate();
             this.query.cinemaCode = val;
         },
@@ -928,18 +957,6 @@ export default {
                 target: document.querySelector('.div1')
             });
             setTimeout(() => {
-                //获取当前时间
-                var day1 = new Date();
-                day1.setTime(day1.getTime()-24*60*60*1000);
-                var s1 = day1.getFullYear()+"-" + (day1.getMonth()+1) + "-" + day1.getDate();
-                //获取昨天时间
-                var day2 = new Date();
-                day2.setTime(day2.getTime());
-                var s2 = day2.getFullYear()+"-" + (day2.getMonth()+1) + "-" + day2.getDate();
-                //加上早上六点
-                this.query.startDate=this.timestampToTime(new Date(s1).getTime()+21600000)
-                this.query.endDate=this.timestampToTime(new Date(s2).getTime()+21600000)
-
                 let businessCode = this.query.businessCode;
                 let cinemaCode = this.query.cinemaCode;
                 let submitOrderCode = this.query.submitOrderCode;
@@ -953,6 +970,10 @@ export default {
                 let sessionStartDate = this.query.sessionStartDate;
                 let sessionEndDate = this.query.sessionEndDate;
                 let filmName = this.query.filmName;
+                let screenCode = this.query.screenCode;
+                if (!screenCode) {
+                    screenCode = '';
+                }
                 if (!filmName) {
                     filmName = '';
                 }
@@ -995,6 +1016,7 @@ export default {
                 let jsonArr = [];
                 jsonArr.push({ key: 'filmName', value: filmName });
                 jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
+                jsonArr.push({ key: 'screenCode', value: screenCode });
                 jsonArr.push({ key: 'businessCode', value: businessCode });
                 jsonArr.push({ key: 'submitOrderCode', value: submitOrderCode });
                 jsonArr.push({ key: 'mobile', value: mobile });
@@ -1026,6 +1048,7 @@ export default {
                                 this.query.pageNo = oData.pageResult.pageNo;
                                 this.query.totalCount = oData.pageResult.totalCount;
                                 this.query.totalPage = oData.pageResult.totalPage;
+                                this.getAllScreen();
                             } else {
                                 this.tableData = [];
                                 this.totalData = [];
@@ -1137,7 +1160,36 @@ export default {
         },
         pad(str) {
             return +str >= 10 ? str : '0' + str
-        }
+        },
+        // 获取所有影厅
+        getAllScreen(val) {
+            if (!val) {
+                return;
+            }
+            var jsonArr = [];
+            jsonArr.push({ key: 'cinemaCode', value: val });
+            let sign = md5(preSign(jsonArr));
+            jsonArr.push({ key: 'sign', value: sign });
+            let params = ParamsAppend(jsonArr);
+            https
+                .fetchPost('/screenInfo/getScreenByCinema', params)
+                .then(data => {
+                    if (data.data.code == 'success') {
+                        var res = JSON.parse(Decrypt(data.data.data));
+                        this.screenInfo = res;
+                    } else if (data.data.code == 'nologin') {
+                        this.message = data.data.message;
+                        this.open();
+                        this.$router.push('/login');
+                    } else {
+                        this.message = data.data.message;
+                        this.open();
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        },
     }
 };
 </script>

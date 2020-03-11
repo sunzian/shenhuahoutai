@@ -315,7 +315,8 @@ export default {
             businessInfoList: [],
             value: '',
             form: [],
-            cinemaInfo: []
+            cinemaInfo: [],
+            businessInfo:[]
         };
     },
     created() {},

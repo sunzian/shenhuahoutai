@@ -31,7 +31,7 @@
                 >
                     <el-option key="1" label="未开启" value="1"></el-option>
                     <el-option key="2" label="开启" value="2"></el-option>
-                    <el-option key="3" label="秒杀过期" value="3"></el-option>
+                    <!--<el-option key="3" label="秒杀过期" value="3"></el-option>-->
                 </el-select>
                 <el-date-picker
                         v-model="query.startDate"
@@ -212,7 +212,7 @@
                             format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
                 </el-form-item>
-                <el-form-item label="适用场次时间 ：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="适用场次时间 ：" :label-width="formLabelWidth">
                     <el-time-picker
                             is-range
                             type="date"
@@ -318,7 +318,7 @@
                             autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="商品库存：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="商品库存：" :label-width="formLabelWidth">
                     <el-input
                             show-word-limit
                             style="width: 150px"
@@ -401,7 +401,7 @@
                             format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
                 </el-form-item>
-                <el-form-item label="适用场次时间 ：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="适用场次时间 ：" :label-width="formLabelWidth">
                     <el-time-picker
                             is-range
                             type="date"
@@ -457,7 +457,7 @@
                         label="选择商品"
                         :label-width="formLabelWidth"
                 >
-                    <el-button type="primary" @click="openNext">点击选择</el-button>
+                    <el-button type="primary" @click="openNext1">点击选择</el-button>
                 </el-form-item>
                 <el-form-item
                         label="所选商品："
@@ -507,7 +507,7 @@
                             autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="商品库存：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="商品库存：" :label-width="formLabelWidth">
                     <el-input
                             show-word-limit
                             style="width: 150px"
@@ -713,7 +713,8 @@
                     pageSize: 15,
                     aPageNo: 1,
                     aPageSize: 15,
-                    merchandiseName: ''
+                    merchandiseName: '',
+                    name:'',
                 },
                 restaurants: [],
                 merSelect: [],
@@ -736,10 +737,10 @@
                         value: '2',
                         label: '开启'
                     },
-                    {
-                        value: '3',
-                        label: '过期'
-                    }
+                    // {
+                    //     value: '3',
+                    //     label: '过期'
+                    // }
                 ],
                 canUse: [
                     {
@@ -772,10 +773,10 @@
                     }
                 ],
                 showType: [
-                    {
-                        value: '1',
-                        label: '纯金币兑换'
-                    },
+                    // {
+                    //     value: '1',
+                    //     label: '纯金币兑换'
+                    // },
                     {
                         value: '2',
                         label: '纯RMB兑换'
@@ -919,6 +920,9 @@
                     this.dateInfo.push(this.value1);
                     this.startArr.push(this.value1[0]);
                     this.endArr.push(this.value1[1]);
+                }else{
+                    this.message = '请选择适用场次时间！';
+                    this.open();
                 }
             },
             deletTime(index) {
@@ -940,16 +944,11 @@
                     .then(data => {
                         loading.close();
                         if (data.data.code == 'success') {
-                            // this.selectedSell = [];
-                            // let formats = JSON.parse(Decrypt(data.data.data)).formatList;
-                            // this.formatList = [];
-                            // for (let i = 0; i < formats.length; i++) {
-                            //     let formatList = {};
-                            //     formatList.formatCode = formats[i].formatCode;
-                            //     formatList.formatName = formats[i].formatName;
-                            //     this.formatList.push(formatList);
-                            // }
-                            // this.formatList=JSON.parse(Decrypt(data.data.data)).formatList
+                            this.commodityName = '';
+                            this.commodityId = '';
+                            this.dateInfo=[];
+                            this.startArr=[];
+                            this.endArr=[];
                             this.dialogFormVisible = true;
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
@@ -974,158 +973,6 @@
                     background: 'rgba(0, 0, 0, 0.7)',
                     target: document.querySelector('.div1')
                 });
-                // if (!this.oForm.name) {
-                //     this.message = '活动名称不能为空，请检查！';
-                //     this.open();
-                //     loading.close();
-                //     return;
-                // }
-                // if (this.oForm.code.length == 0) {
-                //     this.message = '所选影院不能为空，请检查！';
-                //     this.open();
-                //     loading.close();
-                //     return;
-                // }
-                // if (!this.oForm.reduceType) {
-                //     this.message = '优惠方式不能为空，请检查！';
-                //     this.open();
-                //     loading.close();
-                //     return;
-                // }
-                // if (this.oForm.reduceType == 1) {
-                //     if (this.oForm.discountMoney >= 0) {
-                //         if (!this.oForm.discountMoney) {
-                //             this.message = '固定金额不能为空，请检查！';
-                //             this.open();
-                //             loading.close();
-                //             return;
-                //         }
-                //     }
-                //     if (this.oForm.discountMoney < 0) {
-                //         this.message = '固定金额不能小于0！';
-                //         this.open();
-                //         loading.close();
-                //         return;
-                //     }
-                //     if (this.oForm.selectFilmType != 1) {
-                //         this.message = '固定金额只能选择部分商品！';
-                //         this.open();
-                //         loading.close();
-                //         return;
-                //     }
-                // }
-                // if (this.oForm.reduceType == 2) {
-                //     if (this.oForm.discountMoney >= 0 || this.oForm.achieveMoney >= 0) {
-                //         if (!this.oForm.discountMoney || !this.oForm.achieveMoney) {
-                //             this.message = '减免金额不能为空，请检查！';
-                //             this.open();
-                //             loading.close();
-                //             return;
-                //         }
-                //     }
-                //     if (this.oForm.discountMoney < 0 || this.oForm.achieveMoney < 0) {
-                //         this.message = '减免金额不能小于0！';
-                //         this.open();
-                //         loading.close();
-                //         return;
-                //     }
-                // }
-                // if (!this.oForm.selectFilmType) {
-                //     this.message = '商品类型不能为空，请检查！';
-                //     this.open();
-                //     loading.close();
-                //     return;
-                // }
-                // if (this.oForm.selectFilmType == 1 || this.oForm.selectFilmType == 2) {
-                //     if (this.selectedSell.length == 0) {
-                //         this.message = '所选卖品不能为空，请检查！';
-                //         this.open();
-                //         loading.close();
-                //         return;
-                //     }
-                // }
-                // if (!this.oForm.startDate || !this.oForm.endDate) {
-                //     this.message = '试用活动日期不能为空，请检查！';
-                //     this.open();
-                //     loading.close();
-                //     return;
-                // }
-                // if (!this.oForm.validPayType) {
-                //     this.message = '可用支付方式不能为空，请检查！';
-                //     this.open();
-                //     loading.close();
-                //     return;
-                // }
-                // if (!this.oForm.status) {
-                //     this.message = '开启状态不能为空，请检查！';
-                //     this.open();
-                //     loading.close();
-                //     return;
-                // }
-                // if (!this.oForm.holidayValid) {
-                //     this.message = '节假日是否可用不能为空，请检查！';
-                //     this.open();
-                //     loading.close();
-                //     return;
-                // }
-                // if (!this.oForm.activityTogether) {
-                //     this.message = '是否和券共用不能为空，请检查！';
-                //     this.open();
-                //     loading.close();
-                //     return;
-                // }
-                // if (this.oForm.reduceType != 2) {
-                //     if (!this.oForm.oCanNum) {
-                //         this.message = '活动总数量不能为空，请检查！';
-                //         this.open();
-                //         loading.close();
-                //         return;
-                //     } else if (this.oForm.oCanNum == 1) {
-                //         if (!this.oForm.oNum) {
-                //             this.message = '限制卖品数量不能为空，请检查！';
-                //             this.open();
-                //             loading.close();
-                //             return;
-                //         }
-                //         if (this.oForm.oNum <= 0) {
-                //             this.message = '限制卖品数量必须大于0！';
-                //             this.open();
-                //             loading.close();
-                //             return;
-                //         }
-                //     }
-                //     if (!this.oForm.oneCanNum) {
-                //         this.message = '是否限制个人张数不能为空，请检查！';
-                //         this.open();
-                //         loading.close();
-                //         return;
-                //     } else if (this.oForm.oneCanNum == 1) {
-                //         if (!this.oForm.limitSingleUnit) {
-                //             this.message = '限购时间不能为空，请检查！';
-                //             this.open();
-                //             loading.close();
-                //             return;
-                //         }
-                //         if (!this.oForm.oneNum) {
-                //             this.message = '个人总张数不能为空，请检查！';
-                //             this.open();
-                //             loading.close();
-                //             return;
-                //         }
-                //         if (this.oForm.oneNum <= 0) {
-                //             this.message = '个人总张数必须大于0！';
-                //             this.open();
-                //             loading.close();
-                //             return;
-                //         }
-                //     }
-                // }
-                // if(!this.oForm.couponDesc){
-                //     this.message = '使用须知不能为空，请检查！';
-                //     this.open();
-                //     loading.close();
-                //     return;
-                // }
                 var jsonArr = [];
                 jsonArr.push({ key: 'activityName', value: this.oForm.activityName });
                 jsonArr.push({ key: 'commonType', value: this.oForm.commonType });
@@ -1350,156 +1197,6 @@
                     background: 'rgba(0, 0, 0, 0.7)',
                     target: document.querySelector('.div1')
                 });
-                // if (!this.oName) {
-                //     this.message = '活动名称不能为空，请检查！';
-                //     this.open();
-                //     loading.close();
-                //     return;
-                // }
-                // if (!this.oCinemaCode) {
-                //     this.message = '所选影院不能为空，请检查！';
-                //     this.open();
-                //     loading.close();
-                //     return;
-                // }
-                // if (!this.oReduceType) {
-                //     this.message = '优惠方式不能为空，请检查！';
-                //     this.open();
-                //     loading.close();
-                //     return;
-                // }
-                // if (this.oReduceType == 1) {
-                //     if (this.oDiscountMoney > 0) {
-                //         if (!this.oDiscountMoney) {
-                //             this.message = '固定金额不能为空，请检查！';
-                //             this.open();
-                //             loading.close();
-                //             return;
-                //         }
-                //     }
-                //     if (this.oDiscountMoney < 0) {
-                //         this.message = '固定金额不能小于0！';
-                //         this.open();
-                //         loading.close();
-                //         return;
-                //     }
-                //     if (this.oSelectMerchandiseType != 1) {
-                //         this.message = '固定金额只能选择部分商品！';
-                //         this.open();
-                //         loading.close();
-                //         return;
-                //     }
-                // }
-                // if (this.oReduceType == 2) {
-                //     if (!this.oDiscountMoney && this.oDiscountMoney != 0) {
-                //         this.message = '减免金额不能为空，请检查！';
-                //         this.open();
-                //         loading.close();
-                //         return;
-                //     }
-                //     if (!this.oAchieveMoney && this.oAchieveMoney != 0) {
-                //         this.message = '减免金额不能为空，请检查！';
-                //         this.open();
-                //         loading.close();
-                //         return;
-                //     }
-                //     if (this.oDiscountMoney < 0 || this.oAchieveMoney < 0) {
-                //         this.message = '减免金额不能小于0！';
-                //         this.open();
-                //         loading.close();
-                //         return;
-                //     }
-                // }
-                // if (!this.oSelectMerchandiseType) {
-                //     this.message = '商品类型不能为空，请检查！';
-                //     this.open();
-                //     loading.close();
-                //     return;
-                // }
-                // if (this.oSelectMerchandiseType == 1 || this.oSelectMerchandiseType == 2) {
-                //     if (this.selectedSell.length == 0) {
-                //         this.message = '所选卖品不能为空，请检查！';
-                //         this.open();
-                //         loading.close();
-                //         return;
-                //     }
-                // }
-                // if (!this.oStartDate || !this.oEndDate) {
-                //     this.message = '试用活动日期不能为空，请检查！';
-                //     this.open();
-                //     loading.close();
-                //     return;
-                // }
-                // if (!this.oValidPayType) {
-                //     this.message = '可用支付方式不能为空，请检查！';
-                //     this.open();
-                //     loading.close();
-                //     return;
-                // }
-                // if (!this.oStatus) {
-                //     this.message = '开启状态不能为空，请检查！';
-                //     this.open();
-                //     loading.close();
-                //     return;
-                // }
-                // if (!this.oIsHolidayValid) {
-                //     this.message = '节假日是否可用不能为空，请检查！';
-                //     this.open();
-                //     loading.close();
-                //     return;
-                // }
-                // if (!this.oIsCouponTogether) {
-                //     this.message = '是否和券共用不能为空，请检查！';
-                //     this.open();
-                //     loading.close();
-                //     return;
-                // }
-                // if (this.oReduceType != 2) {
-                //     if (!this.oIsLimitTotal) {
-                //         this.message = '活动总数量不能为空，请检查！';
-                //         this.open();
-                //         loading.close();
-                //         return;
-                //     } else if (this.oIsLimitTotal == 1) {
-                //         if (!this.oTotalNumber) {
-                //             this.message = '限制卖品数量不能为空，请检查！';
-                //             this.open();
-                //             loading.close();
-                //             return;
-                //         }
-                //         if (this.oTotalNumber <= 0) {
-                //             this.message = '限制卖品数量必须大于0！';
-                //             this.open();
-                //             loading.close();
-                //             return;
-                //         }
-                //     }
-                //     if (!this.oIsLimitSingle) {
-                //         this.message = '是否限制个人张数不能为空，请检查！';
-                //         this.open();
-                //         loading.close();
-                //         return;
-                //     } else if (this.oIsLimitSingle == 1) {
-                //         if (!this.oLimitSingleUnit) {
-                //             this.message = '限购时间不能为空，请检查！';
-                //             this.open();
-                //             loading.close();
-                //             return;
-                //         }
-                //         if (!this.oSingleNumber) {
-                //             this.message = '个人总张数不能为空，请检查！';
-                //             this.open();
-                //             loading.close();
-                //             return;
-                //         }
-                //         if (this.oSingleNumber <= 0) {
-                //             this.message = '个人总张数必须大于0！';
-                //             this.open();
-                //             loading.close();
-                //             return;
-                //         }
-                //     }
-                // }
                 var jsonArr = [];
                 jsonArr.push({ key: 'activityName', value: this.oActivityName });
                 jsonArr.push({ key: 'commonType', value: this.oCommonType });
@@ -1825,25 +1522,28 @@
                 });
                 setTimeout(() => {
                     let jsonArr = [];
-                    let merchandiseName = this.query.merchandiseName;
-                    if (!merchandiseName) {
-                        merchandiseName = '';
+                    let name = this.query.name;
+                    if (!name) {
+                        name = '';
                     }
-                    jsonArr.push({ key: 'merchandiseName', value: merchandiseName });
+                    jsonArr.push({ key: 'name', value: name });
                     jsonArr.push({ key: 'pageNo', value: this.query.aPageNo });
                     jsonArr.push({ key: 'pageSize', value: this.query.aPageSize });
-                    jsonArr.push({ key: 'merchandiseStatus', value: 1 });
-                    jsonArr.push({ key: 'cinemaCode', value: this.oCinemaCode.join(',') });
+                    jsonArr.push({ key: 'commonType', value: this.oCommonType });
+                    jsonArr.push({ key: 'cinemaCode', value: this.selectGoodsCode });
                     let sign = md5(preSign(jsonArr));
                     jsonArr.push({ key: 'sign', value: sign });
+                    console.log(jsonArr);
                     var params = ParamsAppend(jsonArr);
                     https
-                        .fetchPost('/merchandise/list', params)
+                        .fetchPost('/goldCommodity/getByCinemaPage', params)
                         .then(data => {
                             loading.close();
                             if (data.data.code == 'success') {
                                 this.drawer = true;
                                 var oData = JSON.parse(Decrypt(data.data.data));
+                                console.log(oData);
+                                this.query.name = '';
                                 this.sellTableData = oData.data;
                                 this.query.aPageSize = oData.pageSize;
                                 this.query.aPageNo = oData.pageNo;

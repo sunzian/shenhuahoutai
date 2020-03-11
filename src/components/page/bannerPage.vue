@@ -90,6 +90,7 @@
                         <el-tag v-if="scope.row.category=='9'">邀请好友首页</el-tag>
                         <el-tag v-if="scope.row.category=='10'">积分换金币</el-tag>
                         <el-tag v-if="scope.row.category=='11'">支付后弹窗广告</el-tag>
+                        <el-tag v-if="scope.row.category=='12'">秒杀活动列表页</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column prop="sort" label="图片地址" width="220">
@@ -778,6 +779,10 @@
                     {
                         value: '11',
                         label: '支付后弹窗广告 建议尺寸670*200'
+                    },
+                    {
+                        value: '12',
+                        label: '秒杀活动列表页 建议尺寸670*200'
                     }
                 ],
                 tabType: [

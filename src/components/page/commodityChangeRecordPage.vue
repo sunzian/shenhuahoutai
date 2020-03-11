@@ -141,6 +141,7 @@
                     <el-option key="2" label="优惠券" value="2"></el-option>
                     <el-option key="3" label="券包" value="3"></el-option>
                     <el-option key="4" label="商户商品" value="4"></el-option>
+                    <el-option key="5" label="权益卡" value="5"></el-option>
                 </el-select>
                 <el-button
                     style="margin-top: 10px;width: 90px;"

@@ -9,12 +9,20 @@
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-select  style="margin-bottom: 10px" clearable v-model="query.cinemaCode" placeholder="请选择影院" class="mr10">
+                <el-select  style="margin-bottom: 10px" clearable v-model="query.cinemaCode" placeholder="请选择影院" class="mr10" @change="chooseCinema">
                     <el-option
                         v-for="item in cinemaInfo"
                         :key="item.cinemaCode"
                         :label="item.cinemaName"
                         :value="item.cinemaCode"
+                    ></el-option>
+                </el-select>
+                <el-select clearable v-model="query.screenCode" placeholder="请选择影厅" class="mr10">
+                    <el-option
+                            v-for="item in screenInfo"
+                            :key="item.screenCode"
+                            :label="item.screenName"
+                            :value="item.screenCode"
                     ></el-option>
                 </el-select>
                 <el-input
@@ -285,6 +293,9 @@
                 </el-table-column>
                 <el-table-column prop="name" label="消费影院" width="185">
                     <template slot-scope="scope">{{scope.row.bindCardCinemaName}}</template>
+                </el-table-column>
+                <el-table-column prop="name" label="影厅名称" width="125">
+                    <template slot-scope="scope">{{scope.row.screenName}}</template>
                 </el-table-column>
                 <!--<el-table-column label="取票状态" align="center">-->
                     <!--<template slot-scope="scope">-->
@@ -669,6 +680,7 @@ export default {
         return {
             totalData: [],
             tableData: [],
+            screenInfo: [],
             message: '', //弹出框消息
             query: {
                 payStatus:'1',
@@ -803,6 +815,10 @@ export default {
                 let cardNo= this.query.cardNo;
                 let sessionStartDate = this.query.sessionStartDate;
                 let sessionEndDate = this.query.sessionEndDate;
+                let screenCode = this.query.screenCode;
+                if (!screenCode) {
+                    screenCode = '';
+                }
                 if (!cinemaCode) {
                     cinemaCode = '';
                 }
@@ -838,9 +854,10 @@ export default {
                 }
                 let jsonArr = [];
                 jsonArr.push({ key: 'tableName', value: "ticket_order" });
-                jsonArr.push({ key: 'exportKeysJson', value: "['id','cinemaCode','orderNo','submitOrderCode','sessionTime','cardNo','mobile','filmName','seatName','number','totalOriginalPrice','totalPrice','totalServiceFee','totalPlatHandFee','totalCinemaAllowance','totalLowestPrice','realisticPrice','totalActivityDiscount','totalCouponDiscount','totalActualPrice','totalReportPrice','totalSubmitPrice','chPayStatus','chPayWay','payTime','chOrderStatus','submitTime','openCardCinemaName','bindCardCinemaName','chActivityType','activityName','userCouponName','printNo','submitMessage','cancelTime','totalRefundHandFee','refundReason','tradeNo']"});
-                jsonArr.push({ key: 'exportTitlesJson', value:"['ID','影院编码','本地单号','售票系统单号','场次时间','会员卡号','手机号','影片名称','座位','数量','应付','票价','服务费','代售费','影院补贴','最低票价','实际票价','活动优惠','优惠券优惠','实付','上报金额','回传金额','支付状态','支付方式','支付时间','订单状态','下单时间','开卡影院','消费影院','活动类型','活动名称','优惠券名称','取票码','下单失败原因','退票时间','退票手续费','退款原因','支付交易号']" });
+                jsonArr.push({ key: 'exportKeysJson', value: "['id','cinemaCode','screenName','orderNo','submitOrderCode','sessionTime','cardNo','mobile','filmName','seatName','number','totalOriginalPrice','totalPrice','totalServiceFee','totalPlatHandFee','totalCinemaAllowance','totalLowestPrice','realisticPrice','totalActivityDiscount','totalCouponDiscount','totalActualPrice','totalReportPrice','totalSubmitPrice','chPayStatus','chPayWay','payTime','chOrderStatus','submitTime','openCardCinemaName','bindCardCinemaName','chActivityType','activityName','userCouponName','printNo','submitMessage','cancelTime','totalRefundHandFee','refundReason','tradeNo']"});
+                jsonArr.push({ key: 'exportTitlesJson', value:"['ID','影院编码','影厅名称','本地单号','售票系统单号','场次时间','会员卡号','手机号','影片名称','座位','数量','应付','票价','服务费','代售费','影院补贴','最低票价','实际票价','活动优惠','优惠券优惠','实付','上报金额','回传金额','支付状态','支付方式','支付时间','订单状态','下单时间','开卡影院','消费影院','活动类型','活动名称','优惠券名称','取票码','下单失败原因','退票时间','退票手续费','退款原因','支付交易号']" });
                 jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
+                jsonArr.push({ key: 'screenCode', value: screenCode });
                 jsonArr.push({ key: 'submitOrderCode', value: submitOrderCode });
                 jsonArr.push({ key: 'cardNo', value: cardNo });
                 jsonArr.push({ key: 'mobile', value: mobile });
@@ -905,6 +922,10 @@ export default {
                 let filmName = this.query.filmName;
                 let cardNo = this.query.cardNo;
                 let orderNo = this.query.orderNo;
+                let screenCode = this.query.screenCode;
+                if (!screenCode) {
+                    screenCode = '';
+                }
                 if (!orderNo) {
                     orderNo = '';
                 }
@@ -949,6 +970,7 @@ export default {
                 jsonArr.push({ key: 'cardNo', value: cardNo });
                 jsonArr.push({ key: 'orderNo', value: orderNo });
                 jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
+                jsonArr.push({ key: 'screenCode', value: screenCode });
                 jsonArr.push({ key: 'submitOrderCode', value: submitOrderCode });
                 jsonArr.push({ key: 'mobile', value: mobile });
                 jsonArr.push({ key: 'payWay', value: payWay });
@@ -979,6 +1001,7 @@ export default {
                             this.query.totalCount = oData.pageResult.totalCount;
                             this.query.totalPage = oData.pageResult.totalPage;
                             this.getAllCinema();
+                            this.getAllScreen();
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
                             this.open();
@@ -1073,6 +1096,38 @@ export default {
             //分页按钮下一页
             this.query.pageNo++;
             this.getMenu();
+        },
+        // 获取所有影厅
+        getAllScreen(val) {
+            if (!val) {
+                return;
+            }
+            var jsonArr = [];
+            jsonArr.push({ key: 'cinemaCode', value: val });
+            let sign = md5(preSign(jsonArr));
+            jsonArr.push({ key: 'sign', value: sign });
+            let params = ParamsAppend(jsonArr);
+            https
+                .fetchPost('/screenInfo/getScreenByCinema', params)
+                .then(data => {
+                    if (data.data.code == 'success') {
+                        var res = JSON.parse(Decrypt(data.data.data));
+                        this.screenInfo = res;
+                    } else if (data.data.code == 'nologin') {
+                        this.message = data.data.message;
+                        this.open();
+                        this.$router.push('/login');
+                    } else {
+                        this.message = data.data.message;
+                        this.open();
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        },
+        chooseCinema(val) {
+            this.getAllScreen(val);
         },
     }
 };
