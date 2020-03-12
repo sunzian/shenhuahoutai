@@ -31,7 +31,7 @@
                 >
                     <el-option key="1" label="未开启" value="1"></el-option>
                     <el-option key="2" label="开启" value="2"></el-option>
-                    <!--<el-option key="3" label="秒杀过期" value="3"></el-option>-->
+                    <el-option key="3" label="秒杀过期" value="3"></el-option>
                 </el-select>
                 <el-date-picker
                         v-model="query.startDate"
@@ -773,10 +773,10 @@
                     }
                 ],
                 showType: [
-                    // {
-                    //     value: '1',
-                    //     label: '纯金币兑换'
-                    // },
+                    {
+                        value: '1',
+                        label: '纯金币兑换'
+                    },
                     {
                         value: '2',
                         label: '纯RMB兑换'
