@@ -743,7 +743,15 @@
         <el-dialog :close-on-click-modal="false" title="编辑" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
                 <el-form-item :required="true" label="允许兑换的门店" :label-width="formLabelWidth">
-                    <el-checkbox-group v-model="oCheckedCities" @change="changeCinema">
+                    <el-checkbox-group v-model="oCheckedCities" @change="changeCinema" v-if="form.commodityCategory != 5">
+                        <el-checkbox
+                            v-for="city in oCities"
+                            :label="city.cinemaCode"
+                            :key="city.cinemaCode"
+                            :value="city.cinemaCode"
+                        >{{city.cinemaName}}</el-checkbox>
+                    </el-checkbox-group>
+                    <el-checkbox-group v-model="oCheckedCities" @change="changeCinema2" v-else :max="1">
                         <el-checkbox
                             v-for="city in oCities"
                             :label="city.cinemaCode"
@@ -3470,6 +3478,13 @@ export default {
             this.oCheckedCities = val;
             this.partnerCode = '';
             this.partnerName = '';
+            
+        },
+        changeCinema2(val) {
+            this.oCheckedCities = val;
+            this.partnerCode = '';
+            this.partnerName = '';
+            
         },
         open() {
             //信息提示弹出框
