@@ -90,10 +90,11 @@
                         <el-tag v-else-if="scope.row.status == 1">已启动</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="sort" label="是否组团成功" width="90">
+                <el-table-column prop="sort" label="组团状态" width="90">
                     <template slot-scope="scope">
-                        <el-tag v-if="scope.row.groupStatus == 2">未成功</el-tag>
-                        <el-tag v-else-if="scope.row.groupStatus == 1">成功</el-tag>
+                        <el-tag v-if="scope.row.groupStatus == 3">组团成功</el-tag>
+                        <el-tag v-else-if="scope.row.groupStatus == 2">组团失败</el-tag>
+                        <el-tag v-else-if="scope.row.groupStatus == 1">组团中</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column label="操作" width="100" align="center" fixed="right">
@@ -274,7 +275,7 @@
                     <el-input style="width: 300px" v-model="oForm.agglomerationNumber"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="影厅有效座位数量" :label-width="formLabelWidth">
-                    <el-input :disabled="true" style="width: 300px" v-model="oForm.fullSeatNumber "></el-input>
+                    <el-input :disabled="true" style="width: 300px" v-model="oForm.fullSeatNumber"></el-input>
                 </el-form-item>
                 <el-form-item label="点映说明" :label-width="formLabelWidth">
                     <el-input
@@ -369,7 +370,7 @@
                 <el-form-item :required="true" label="开启状态" :label-width="formLabelWidth">
                     <el-select v-model="oForm.status" placeholder="请选择">
                         <el-option
-                                v-for="item in canUse"
+                                v-for="item in options"
                                 :key="item.value"
                                 :label="item.label"
                                 :value="item.value"
@@ -606,7 +607,7 @@
                 <el-form-item :required="true" label="开启状态" :label-width="formLabelWidth">
                     <el-select v-model="oStatus" placeholder="请选择">
                         <el-option
-                                v-for="item in canUse"
+                                v-for="item in options"
                                 :key="item.value"
                                 :label="item.label"
                                 :value="item.value"
@@ -799,8 +800,8 @@
                 dialogFormVisible: false,
                 options: [
                     {
-                        value: '0',
-                        label: '未启用'
+                        value: '2',
+                        label: '停用'
                     },
                     {
                         value: '1',
@@ -1050,6 +1051,7 @@
                         if (data.data.code == 'success') {
                             this.selectedSell = [];
                             console.log(JSON.parse(Decrypt(data.data.data)));
+                            this.oForm.fullSeatNumber='';
                             // let formats = JSON.parse(Decrypt(data.data.data)).formatList;
                             // this.formatList = [];
                             // for (let i = 0; i < formats.length; i++) {
