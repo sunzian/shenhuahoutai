@@ -23,6 +23,25 @@
                     ></el-option>
                 </el-select>
                 <el-input v-model="query.filmName" placeholder="影片名称" class="handle-input mr10"></el-input>
+                <el-select
+                        clearable
+                        v-model="query.groupStatus"
+                        placeholder="组团状态"
+                        class="handle-select mr10"
+                >
+                    <el-option key="1" label="组团中" value="1"></el-option>
+                    <el-option key="2" label="组团失败" value="2"></el-option>
+                    <el-option key="3" label="组团成功" value="3"></el-option>
+                </el-select>
+                <el-select
+                        clearable
+                        v-model="query.status"
+                        placeholder="开启状态"
+                        class="handle-select mr10"
+                >
+                    <el-option key="1" label="启用" value="1"></el-option>
+                    <el-option key="2" label="未启用" value="2"></el-option>
+                </el-select>
                 <el-date-picker
                         v-model="query.sessionStartDate"
                         type="datetime"
@@ -189,7 +208,7 @@
                         label="选择影片"
                         :label-width="formLabelWidth"
                 >
-                    <el-button type="primary" @click="openNext">点击选择</el-button>
+                    <el-button type="primary" @click="openNext">点击新增</el-button>
                 </el-form-item>
                 <el-form-item
                         label="所选影片"
@@ -252,7 +271,7 @@
                     ></el-date-picker>
                 </el-form-item>
                 <el-form-item :required="true" label="票价" :label-width="formLabelWidth">
-                    <el-input style="width: 300px" v-model="oForm.ticketPrice"></el-input>
+                    <el-input style="width: 300px" v-model="oForm.ticketPrice" onkeyup="this.value=this.value.replace(/\D/g,'')"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="报名时间" :label-width="formLabelWidth">
                     <el-date-picker
@@ -272,7 +291,7 @@
                     ></el-date-picker>
                 </el-form-item>
                 <el-form-item :required="true" label="成团人数" :label-width="formLabelWidth">
-                    <el-input style="width: 300px" v-model="oForm.agglomerationNumber"></el-input>
+                    <el-input style="width: 300px" v-model="oForm.agglomerationNumber" onkeyup="this.value=this.value.replace(/\D/g,'')"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="影厅有效座位数量" :label-width="formLabelWidth">
                     <el-input :disabled="true" style="width: 300px" v-model="oForm.fullSeatNumber"></el-input>
@@ -324,8 +343,8 @@
                             drag
                             :limit="1"
                             :on-exceed="exceed"
-                            ref="upload"
                             action="/api/upload/uploadImage"
+                            ref="upload1"
                             :on-success="unSuccess"
                             multiple
                     >
@@ -337,7 +356,7 @@
                         <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过200kb</div>
                     </el-upload>
                 </el-form-item>
-                <el-form-item :required="true" label="联系电影负责人" :label-width="formLabelWidth">
+                <el-form-item label="联系电影负责人" :label-width="formLabelWidth">
                     <el-popover placement="right" title trigger="hover">
                         <img style="width: 400px" :src="oForm.filmDirector"/>
                         <img
@@ -354,8 +373,8 @@
                             drag
                             :limit="1"
                             :on-exceed="exceed"
-                            ref="upload"
                             action="/api/upload/uploadImage"
+                            ref="upload2"
                             :on-success="snSuccess"
                             multiple
                     >
@@ -426,7 +445,7 @@
                         label="选择影片"
                         :label-width="formLabelWidth"
                 >
-                    <el-button type="primary" @click="openNext">点击选择</el-button>
+                    <el-button type="primary" @click="openNext">点击新增</el-button>
                 </el-form-item>
                 <el-form-item
                         label="所选影片"
@@ -467,8 +486,8 @@
                             drag
                             :limit="1"
                             :on-exceed="exceed"
-                            ref="upload"
                             action="/api/upload/uploadImage"
+                            ref="upload3"
                             :on-success="anSuccess"
                             multiple
                     >
@@ -489,7 +508,7 @@
                     ></el-date-picker>
                 </el-form-item>
                 <el-form-item :required="true" label="票价" :label-width="formLabelWidth">
-                    <el-input style="width: 300px" v-model="oTicketPrice"></el-input>
+                    <el-input style="width: 300px" v-model="oTicketPrice" onkeyup="this.value=this.value.replace(/\D/g,'')"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="报名时间" :label-width="formLabelWidth">
                     <el-date-picker
@@ -509,7 +528,7 @@
                     ></el-date-picker>
                 </el-form-item>
                 <el-form-item :required="true" label="成团人数" :label-width="formLabelWidth">
-                    <el-input style="width: 300px" v-model="oAgglomerationNumber"></el-input>
+                    <el-input style="width: 300px" v-model="oAgglomerationNumber" onkeyup="this.value=this.value.replace(/\D/g,'')"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="影厅有效座位数量" :label-width="formLabelWidth">
                     <el-input :disabled="true" style="width: 300px" v-model="oForm.fullSeatNumber "></el-input>
@@ -561,8 +580,8 @@
                             drag
                             :limit="1"
                             :on-exceed="exceed"
-                            ref="upload"
                             action="/api/upload/uploadImage"
+                            ref="upload4"
                             :on-success="bnSuccess"
                             multiple
                     >
@@ -574,7 +593,7 @@
                         <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过200kb</div>
                     </el-upload>
                 </el-form-item>
-                <el-form-item :required="true" label="联系电影负责人" :label-width="formLabelWidth">
+                <el-form-item label="联系电影负责人" :label-width="formLabelWidth">
                     <el-popover placement="right" title trigger="hover">
                         <img style="width: 400px" :src="oFilmDirector"/>
                         <img
@@ -591,8 +610,8 @@
                             drag
                             :limit="1"
                             :on-exceed="exceed"
-                            ref="upload"
                             action="/api/upload/uploadImage"
+                            ref="upload5"
                             :on-success="cnSuccess"
                             multiple
                     >
@@ -692,6 +711,7 @@
         name: 'basetable',
         data() {
             return {
+                fileList:[],
                 type: {
                     type: ''
                 },
@@ -918,7 +938,7 @@
                     this.open();
                 }
             },
-            onSuccess(data) {
+            onSuccess(data,file, fileList) {
                 //上传文件 登录超时
                 if (data.status == '-1') {
                     this.message = data.message;
@@ -927,6 +947,7 @@
                     return;
                 }
                 this.oForm.stagePhoto = data.data;
+                this.$refs.upload.clearFiles();
                 if (data.code == 'nologin') {
                     this.message = data.message;
                     this.open();
@@ -938,9 +959,10 @@
                 if (data.status == '-1') {
                     this.message = data.message;
                     this.open();
-                    this.$refs.upload.clearFiles();
+                    this.$refs.upload1.clearFiles();
                     return;
                 }
+                this.$refs.upload1.clearFiles();
                 this.oForm.officialAccount = data.data;
                 if (data.code == 'nologin') {
                     this.message = data.message;
@@ -953,9 +975,10 @@
                 if (data.status == '-1') {
                     this.message = data.message;
                     this.open();
-                    this.$refs.upload.clearFiles();
+                    this.$refs.upload2.clearFiles();
                     return;
                 }
+                this.$refs.upload2.clearFiles();
                 this.oForm.filmDirector = data.data;
                 if (data.code == 'nologin') {
                     this.message = data.message;
@@ -968,9 +991,10 @@
                 if (data.status == '-1') {
                     this.message = data.message;
                     this.open();
-                    this.$refs.upload.clearFiles();
+                    this.$refs.upload3.clearFiles();
                     return;
                 }
+                this.$refs.upload3.clearFiles();
                 this.oStagePhoto = data.data;
                 if (data.code == 'nologin') {
                     this.message = data.message;
@@ -983,9 +1007,10 @@
                 if (data.status == '-1') {
                     this.message = data.message;
                     this.open();
-                    this.$refs.upload.clearFiles();
+                    this.$refs.upload4.clearFiles();
                     return;
                 }
+                this.$refs.upload4.clearFiles();
                 this.oOfficialAccount = data.data;
                 if (data.code == 'nologin') {
                     this.message = data.message;
@@ -998,9 +1023,10 @@
                 if (data.status == '-1') {
                     this.message = data.message;
                     this.open();
-                    this.$refs.upload.clearFiles();
+                    this.$refs.upload5.clearFiles();
                     return;
                 }
+                this.$refs.upload5.clearFiles();
                 this.oFilmDirector = data.data;
                 if (data.code == 'nologin') {
                     this.message = data.message;
@@ -1432,6 +1458,8 @@
                 jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
                 jsonArr.push({ key: 'filmName', value: this.query.filmName });
                 jsonArr.push({ key: 'cinemaCode', value: this.query.cinemaCode });
+                jsonArr.push({ key: 'groupStatus', value: this.query.groupStatus });
+                jsonArr.push({ key: 'status', value: this.query.status });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
                 console.log(jsonArr);
@@ -1664,26 +1692,32 @@
                 this.oForm.filmCode = a;
             },
             sureNext() {
-                if (this.sellIndex >= 0) {
-                    // console.log('选了数据');
-                    if (this.selectedSell.length <= 0) {
-                        // console.log('长度为0');
-                        this.selectedSell.push(this.sellTableData[this.sellIndex]);
-                    } else if (this.selectedSell.length > 0) {
-                        // console.log('有数据');
-                        for (let x in this.selectedSell) {
-                            if (this.selectedSell[x].filmCode == this.sellTableData[this.sellIndex].filmCode) {
-                                this.message = '不能添加相同影片！';
-                                this.open();
-                                return;
-                            }
-                        }
-                        // console.log('判断不重复');
-                        this.selectedSell.push(this.sellTableData[this.sellIndex]);
-                    }
+                if(this.selectedSell.length>=1){
+                    this.message = '只能添加一部影片！';
+                    this.open();
                 }
-                console.log(this.selectedSell);
-                this.drawer = false;
+                else{
+                    if (this.sellIndex >= 0) {
+                        // console.log('选了数据');
+                        if (this.selectedSell.length <= 0) {
+                            // console.log('长度为0');
+                            this.selectedSell.push(this.sellTableData[this.sellIndex]);
+                        } else if (this.selectedSell.length > 0) {
+                            // console.log('有数据');
+                            for (let x in this.selectedSell) {
+                                if (this.selectedSell[x].filmCode == this.sellTableData[this.sellIndex].filmCode) {
+                                    this.message = '不能添加相同影片！';
+                                    this.open();
+                                    return;
+                                }
+                            }
+                            // console.log('判断不重复');
+                            this.selectedSell.push(this.sellTableData[this.sellIndex]);
+                        }
+                    }
+                    console.log(this.selectedSell);
+                    this.drawer = false;
+                }
             },
             openNext() {
                 //获取商品列表

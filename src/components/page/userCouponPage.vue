@@ -69,6 +69,7 @@
                     <el-option key="10" label="员工推荐充值赠送" value="10"></el-option>
                     <el-option key="11" label="绑定售票系统的券" value="11"></el-option>
                     <el-option key="12" label="绑定本平台的券" value="12"></el-option>
+                    <el-option key="13" label="点映组团成功送券" value="13"></el-option>
                 </el-select>
                 <el-button
                     type="primary"

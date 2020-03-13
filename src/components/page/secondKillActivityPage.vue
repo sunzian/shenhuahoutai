@@ -629,6 +629,7 @@
         data() {
             return {
                 oCommonType: '',
+                num: 0,
                 oActivityName: '',
                 oStartDate: '',
                 oEndDate: '',
@@ -843,12 +844,14 @@
             deletCoupon() {
                 this.commodityName = '';
                 this.commodityId = '';
+                this.key=false
             },
             selectGoods(val) {
                 // console.log(val)
+                this.deletCoupon();
                 let selectValue = val.join(',');
                 this.selectGoodsCode = selectValue;
-                console.log(this.selectGoodsCode);
+                // console.log(this.selectGoodsCode);
             },
             selectCinema() {
                 const loading = this.$loading({
@@ -859,6 +862,9 @@
                     target: document.querySelector('.div1')
                 });
                 setTimeout(() => {
+                    if(this.num!=0){
+                        this.deletCoupon()
+                    }
                     let jsonArr = [];
                     jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
                     jsonArr.push({ key: 'pageSize', value: 200 });
@@ -1087,6 +1093,7 @@
             },
             addChange(index, row) {
                 //是否拥有权限
+                this.num=1;
                 this.selectCinema();
                 const loading = this.$loading({
                     lock: true,
