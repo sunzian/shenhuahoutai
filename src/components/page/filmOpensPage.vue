@@ -160,6 +160,7 @@
                         </el-button>
                         <el-button
                                 type="text"
+                                v-if="scope.row.enrolledNumber == 0"
                                 icon="el-icon-delete"
                                 class="red"
                                 @click="delChange(scope.$index, scope.row)"
@@ -404,16 +405,6 @@
                         <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过200kb</div>
                     </el-upload>
                 </el-form-item>
-                <el-form-item :required="true" label="开启状态" :label-width="formLabelWidth">
-                    <el-select v-model="oForm.status" placeholder="请选择">
-                        <el-option
-                                v-for="item in options"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                        ></el-option>
-                    </el-select>
-                </el-form-item>
                 <el-form-item
                         label="点映返利设置"
                         :label-width="formLabelWidth"
@@ -428,14 +419,26 @@
                                 style="width: 100px"
                                 v-model="item1.shareNumber"
                                 autocomplete="off"
+                                onkeyup="this.value=this.value.replace(/[^0-9]+/,'')"
                         ></el-input>人&nbsp;&nbsp;&nbsp;&nbsp;返利
                         <el-input
                                 style="width: 100px"
                                 v-model="item1.rebateMoney"
                                 autocomplete="off"
+                                onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')"
                         ></el-input>元&nbsp;
                         <span style="color:blue;cursor: pointer;" @click="delSelectedSell(index)">删除</span>
                     </div>
+                </el-form-item>
+                <el-form-item :required="true" label="开启状态" :label-width="formLabelWidth">
+                    <el-select v-model="oForm.status" placeholder="请选择">
+                        <el-option
+                                v-for="item in options"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                        ></el-option>
+                    </el-select>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -546,6 +549,7 @@
                             type="datetime"
                             value-format="yyyy-MM-dd HH:mm:ss"
                             format="yyyy-MM-dd HH:mm:ss"
+                            :disabled="oGroupStatus==2||oGroupStatus==3||oGroupStatus==4||oGroupStatus==5"
                     ></el-date-picker>
                 </el-form-item>
                 <el-form-item :required="true" label="票价" :label-width="formLabelWidth">
@@ -558,6 +562,7 @@
                             placeholder="开始时间"
                             value-format="yyyy-MM-dd HH:mm:ss"
                             format="yyyy-MM-dd HH:mm:ss"
+                            :disabled="oGroupStatus==2||oGroupStatus==3||oGroupStatus==4||oGroupStatus==5"
                     ></el-date-picker>
                     至
                     <el-date-picker
@@ -566,10 +571,11 @@
                             placeholder="结束时间"
                             value-format="yyyy-MM-dd HH:mm:ss"
                             format="yyyy-MM-dd HH:mm:ss"
+                            :disabled="oGroupStatus==2||oGroupStatus==3||oGroupStatus==4||oGroupStatus==5"
                     ></el-date-picker>
                 </el-form-item>
                 <el-form-item :required="true" label="成团人数" :label-width="formLabelWidth">
-                    <el-input style="width: 300px" v-model="oAgglomerationNumber" onkeyup="this.value=this.value.replace(/\D/g,'')"></el-input>
+                    <el-input :disabled="oGroupStatus==2||oGroupStatus==3||oGroupStatus==4||oGroupStatus==5" style="width: 300px" v-model="oAgglomerationNumber" onkeyup="this.value=this.value.replace(/\D/g,'')"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="影厅有效座位数量" :label-width="formLabelWidth">
                     <el-input :disabled="true" style="width: 300px" v-model="oForm.fullSeatNumber "></el-input>
@@ -664,16 +670,6 @@
                         <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过200kb</div>
                     </el-upload>
                 </el-form-item>
-                <el-form-item :required="true" label="开启状态" :label-width="formLabelWidth">
-                    <el-select v-model="oStatus" placeholder="请选择">
-                        <el-option
-                                v-for="item in options"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                        ></el-option>
-                    </el-select>
-                </el-form-item>
                 <el-form-item
                         label="点映返利设置"
                         :label-width="formLabelWidth"
@@ -688,14 +684,27 @@
                                 style="width: 100px"
                                 v-model="item1.shareNumber"
                                 autocomplete="off"
+                                onkeyup="this.value=this.value.replace(/[^0-9]+/,'')"
                         ></el-input>人&nbsp;&nbsp;&nbsp;&nbsp;返利
                         <el-input
                                 style="width: 100px"
                                 v-model="item1.rebateMoney"
                                 autocomplete="off"
+                                onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')"
                         ></el-input>元&nbsp;
                         <span style="color:blue;cursor: pointer;" @click="delSelectedSell(index)">删除</span>
                     </div>
+                </el-form-item>
+                <el-form-item :required="true" label="开启状态" :label-width="formLabelWidth">
+                    <el-select v-model="oStatus" placeholder="请选择">
+                        <el-option
+                                v-for="item in options"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                                :disabled="oGroupStatus==2||oGroupStatus==3||oGroupStatus==4||oGroupStatus==5"
+                        ></el-option>
+                    </el-select>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -781,6 +790,7 @@
                     type: ''
                 },
                 oCinemaCode: '',
+                oGroupStatus: '',
                 oFilmOpensName: '',
                 oStagePhoto: '',
                 oFixedSatisfyMoney: '',
@@ -1398,6 +1408,7 @@
                         this.oPrintTicketExplain = JSON.parse(Decrypt(data.data.data)).filmOpens.printTicketExplain;
                         this.oOfficialAccount = JSON.parse(Decrypt(data.data.data)).filmOpens.officialAccount;
                         this.oFilmDirector = JSON.parse(Decrypt(data.data.data)).filmOpens.filmDirector;
+                        this.oGroupStatus = JSON.parse(Decrypt(data.data.data)).filmOpens.groupStatus;
                         for (let x in this.canUse) {
                             if (this.canUse[x].value == JSON.parse(Decrypt(data.data.data)).filmOpens.status) {
                                 this.oStatus = this.canUse[x].value;
