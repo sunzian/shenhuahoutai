@@ -715,7 +715,7 @@
                     aPageNo: 1,
                     aPageSize: 15,
                     merchandiseName: '',
-                    name:'',
+                    name: ''
                 },
                 restaurants: [],
                 merSelect: [],
@@ -737,7 +737,7 @@
                     {
                         value: '2',
                         label: '开启'
-                    },
+                    }
                     // {
                     //     value: '3',
                     //     label: '过期'
@@ -844,7 +844,6 @@
             deletCoupon() {
                 this.commodityName = '';
                 this.commodityId = '';
-                this.key=false
             },
             selectGoods(val) {
                 // console.log(val)
@@ -862,9 +861,49 @@
                     target: document.querySelector('.div1')
                 });
                 setTimeout(() => {
-                    if(this.num!=0){
-                        this.deletCoupon()
-                    }
+                    this.deletCoupon();
+                    let jsonArr = [];
+                    jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
+                    jsonArr.push({ key: 'pageSize', value: 200 });
+                    let sign = md5(preSign(jsonArr));
+                    jsonArr.push({ key: 'sign', value: sign });
+                    var params = ParamsAppend(jsonArr);
+                    https.fetchPost('/cinema/myCinemaPage', params).then(data => {
+                        loading.close();
+                        if (data.data.code == 'success') {
+                            let goods = JSON.parse(Decrypt(data.data.data)).data;
+                            this.goodsInfo = [];
+                            for (let i = 0; i < goods.length; i++) {
+                                let goodsList = {};
+                                goodsList.merchandiseCode = goods[i].cinemaCode;
+                                goodsList.merchandiseName = goods[i].cinemaName;
+                                this.goodsInfo.push(goodsList);
+                            }
+                            console.log(this.goodsInfo);
+                        } else if (data.data.code == 'nologin') {
+                            this.message = data.data.message;
+                            this.open();
+                            this.$router.push('/login');
+                        } else {
+                            this.message = data.data.message;
+                            this.open();
+                        }
+                    })
+                        .catch(err => {
+                            loading.close();
+                            console.log(err);
+                        });
+                }, 500);
+            },
+            selectCinema1() {
+                const loading = this.$loading({
+                    lock: true,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)',
+                    target: document.querySelector('.div1')
+                });
+                setTimeout(() => {
                     let jsonArr = [];
                     jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
                     jsonArr.push({ key: 'pageSize', value: 200 });
@@ -926,7 +965,7 @@
                     this.dateInfo.push(this.value1);
                     this.startArr.push(this.value1[0]);
                     this.endArr.push(this.value1[1]);
-                }else{
+                } else {
                     this.message = '请选择适用场次时间！';
                     this.open();
                 }
@@ -952,9 +991,9 @@
                         if (data.data.code == 'success') {
                             this.commodityName = '';
                             this.commodityId = '';
-                            this.dateInfo=[];
-                            this.startArr=[];
-                            this.endArr=[];
+                            this.dateInfo = [];
+                            this.startArr = [];
+                            this.endArr = [];
                             this.dialogFormVisible = true;
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
@@ -1093,8 +1132,12 @@
             },
             addChange(index, row) {
                 //是否拥有权限
-                this.num=1;
-                this.selectCinema();
+                // this.num = 1;
+                // if (this.num == 0) {
+                //     this.selectCinema();
+                // } else if (this.num == 1) {
+                    this.selectCinema1();
+                // }
                 const loading = this.$loading({
                     lock: true,
                     text: 'Loading',

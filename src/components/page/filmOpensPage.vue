@@ -32,6 +32,8 @@
                     <el-option key="1" label="组团中" value="1"></el-option>
                     <el-option key="2" label="组团失败" value="2"></el-option>
                     <el-option key="3" label="组团成功" value="3"></el-option>
+                    <el-option key="4" label="已开场" value="4"></el-option>
+                    <el-option key="5" label="已撤销" value="5"></el-option>
                 </el-select>
                 <el-select
                         clearable
@@ -114,9 +116,11 @@
                         <el-tag v-if="scope.row.groupStatus == 3">组团成功</el-tag>
                         <el-tag v-else-if="scope.row.groupStatus == 2">组团失败</el-tag>
                         <el-tag v-else-if="scope.row.groupStatus == 1">组团中</el-tag>
+                        <el-tag v-else-if="scope.row.groupStatus == 4">已开场</el-tag>
+                        <el-tag v-else-if="scope.row.groupStatus == 5">已撤销</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" width="100" align="center" fixed="right">
+                <el-table-column label="操作" width="200" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-button
                                 type="success"
@@ -129,6 +133,20 @@
                                 v-if="scope.row.status == 1"
                                 @click="changeStatus(scope.$index, scope.row)"
                         >停用
+                        </el-button>
+                        <el-button
+                                type="success"
+                                style="margin-top: 10px"
+                                v-if="scope.row.groupStatus == 3"
+                                @click="cancel(scope.$index, scope.row)"
+                        >撤销点映
+                        </el-button>
+                        <el-button
+                                type="success"
+                                style="margin-top: 10px"
+                                v-if="scope.row.groupStatus == 3"
+                                @click="sendMessage(scope.$index, scope.row)"
+                        >发送组团成功短信
                         </el-button>
                     </template>
                 </el-table-column>
@@ -271,7 +289,7 @@
                     ></el-date-picker>
                 </el-form-item>
                 <el-form-item :required="true" label="票价" :label-width="formLabelWidth">
-                    <el-input style="width: 300px" v-model="oForm.ticketPrice" onkeyup="this.value=this.value.replace(/\D/g,'')"></el-input>
+                    <el-input style="width: 300px" v-model="oForm.ticketPrice" onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="报名时间" :label-width="formLabelWidth">
                     <el-date-picker
@@ -326,7 +344,7 @@
                             v-model="oForm.printTicketExplain"
                     ></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="官方公众号(二维码)" :label-width="formLabelWidth">
+                <el-form-item label="官方公众号(二维码)" :label-width="formLabelWidth">
                     <el-popover placement="right" title trigger="hover">
                         <img style="width: 400px" :src="oForm.officialAccount"/>
                         <img
@@ -395,6 +413,29 @@
                                 :value="item.value"
                         ></el-option>
                     </el-select>
+                </el-form-item>
+                <el-form-item
+                        label="点映返利设置"
+                        :label-width="formLabelWidth"
+                >
+                    <el-button type="primary" @click="addSelectedSell">增加</el-button>
+                    <div
+                            v-for="(item1, index) in selectedSell1"
+                            style="margin-bottom: 5px"
+                            :key="index"
+                    >   推荐
+                        <el-input
+                                style="width: 100px"
+                                v-model="item1.shareNumber"
+                                autocomplete="off"
+                        ></el-input>人&nbsp;&nbsp;&nbsp;&nbsp;返利
+                        <el-input
+                                style="width: 100px"
+                                v-model="item1.rebateMoney"
+                                autocomplete="off"
+                        ></el-input>元&nbsp;
+                        <span style="color:blue;cursor: pointer;" @click="delSelectedSell(index)">删除</span>
+                    </div>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -508,7 +549,7 @@
                     ></el-date-picker>
                 </el-form-item>
                 <el-form-item :required="true" label="票价" :label-width="formLabelWidth">
-                    <el-input style="width: 300px" v-model="oTicketPrice" onkeyup="this.value=this.value.replace(/\D/g,'')"></el-input>
+                    <el-input style="width: 300px" v-model="oTicketPrice" onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="报名时间" :label-width="formLabelWidth">
                     <el-date-picker
@@ -563,7 +604,7 @@
                             v-model="oPrintTicketExplain"
                     ></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="官方公众号(二维码)" :label-width="formLabelWidth">
+                <el-form-item label="官方公众号(二维码)" :label-width="formLabelWidth">
                     <el-popover placement="right" title trigger="hover">
                         <img style="width: 400px" :src="oOfficialAccount"/>
                         <img
@@ -632,6 +673,29 @@
                                 :value="item.value"
                         ></el-option>
                     </el-select>
+                </el-form-item>
+                <el-form-item
+                        label="点映返利设置"
+                        :label-width="formLabelWidth"
+                >
+                    <el-button type="primary" @click="addSelectedSell">增加</el-button>
+                    <div
+                            v-for="(item1, index) in selectedSell1"
+                            style="margin-bottom: 5px"
+                            :key="index"
+                    >   推荐
+                        <el-input
+                                style="width: 100px"
+                                v-model="item1.shareNumber"
+                                autocomplete="off"
+                        ></el-input>人&nbsp;&nbsp;&nbsp;&nbsp;返利
+                        <el-input
+                                style="width: 100px"
+                                v-model="item1.rebateMoney"
+                                autocomplete="off"
+                        ></el-input>元&nbsp;
+                        <span style="color:blue;cursor: pointer;" @click="delSelectedSell(index)">删除</span>
+                    </div>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -711,40 +775,11 @@
         name: 'basetable',
         data() {
             return {
+                selectedSell1:[],
                 fileList:[],
                 type: {
                     type: ''
                 },
-                oExceptWeekDay: [
-                    {
-                        index: '1',
-                        value: '星期一'
-                    },
-                    {
-                        index: '2',
-                        value: '星期二'
-                    },
-                    {
-                        index: '3',
-                        value: '星期三'
-                    },
-                    {
-                        index: '4',
-                        value: '星期四'
-                    },
-                    {
-                        index: '5',
-                        value: '星期五'
-                    },
-                    {
-                        index: '6',
-                        value: '星期六'
-                    },
-                    {
-                        index: '7',
-                        value: '星期日'
-                    }
-                ],
                 oCinemaCode: '',
                 oFilmOpensName: '',
                 oStagePhoto: '',
@@ -874,7 +909,6 @@
                     filmCode: '',
                     filmName: '',
                     checkedDays: [],
-                    exceptWeekDay: ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日'],
                     startDate: '',
                     endDate: '',
                     validPayType: '0',
@@ -920,6 +954,102 @@
             this.getMenu();
         },
         methods: {
+            addSelectedSell() {
+                let obj = {
+                    shareNumber: '',
+                    rebateMoney: '',
+                };
+                this.selectedSell1.push(obj);
+            },
+            delSelectedSell(index) {
+                this.selectedSell1.splice(index, 1);
+            },
+            cancel(index, row){
+                this.$confirm('此操作将撤销点映, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                })
+                    .then(() => {
+                        const loading = this.$loading({
+                            lock: true,
+                            text: 'Loading',
+                            spinner: 'el-icon-loading',
+                            background: 'rgba(0, 0, 0, 0.7)',
+                            target: document.querySelector('.div1')
+                        });
+                        var jsonArr = [];
+                        jsonArr.push({ key: 'id', value: row.id });
+                        let sign = md5(preSign(jsonArr));
+                        jsonArr.push({ key: 'sign', value: sign });
+                        console.log(jsonArr);
+                        let params = ParamsAppend(jsonArr);
+                        https
+                            .fetchPost('/filmOpens/opensCancel', params)
+                            .then(data => {
+                                loading.close();
+                                console.log(data);
+                                // console.log(JSON.parse(Decrypt(data.data.data)));
+                                if (data.data.code == 'success') {
+                                    this.$message.success(`撤销成功`);
+                                    this.getMenu();
+                                } else if (data.data.code == 'nologin') {
+                                    this.message = data.data.message;
+                                    this.open();
+                                    this.$router.push('/login');
+                                } else {
+                                    this.message = data.data.message;
+                                    this.open();
+                                }
+                            })
+                            .catch(err => {
+                                loading.close();
+                                console.log(err);
+                            });
+                    }).catch(() => {
+                            this.$message({
+                                type: 'info',
+                                message: '已取消删除'
+                            });
+                        });
+            },
+            sendMessage(index, row){
+                const loading = this.$loading({
+                    lock: true,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)',
+                    target: document.querySelector('.div1')
+                });
+                var jsonArr = [];
+                jsonArr.push({ key: 'id', value: row.id });
+                let sign = md5(preSign(jsonArr));
+                jsonArr.push({ key: 'sign', value: sign });
+                console.log(jsonArr);
+                let params = ParamsAppend(jsonArr);
+                https
+                    .fetchPost('/filmOpens/opensSendMessage', params)
+                    .then(data => {
+                        loading.close();
+                        console.log(data);
+                        // console.log(JSON.parse(Decrypt(data.data.data)));
+                        if (data.data.code == 'success') {
+                            this.$message.success(`发送成功`);
+                            this.getMenu();
+                        } else if (data.data.code == 'nologin') {
+                            this.message = data.data.message;
+                            this.open();
+                            this.$router.push('/login');
+                        } else {
+                            this.message = data.data.message;
+                            this.open();
+                        }
+                    })
+                    .catch(err => {
+                        loading.close();
+                        console.log(err);
+                    });
+            },
             beforeUpload(file) {
                 //上传之前
                 this.type.type = EncryptReplace('activity');
@@ -1076,16 +1206,9 @@
                         loading.close();
                         if (data.data.code == 'success') {
                             this.selectedSell = [];
+                            this.selectedSell1 = [];
                             console.log(JSON.parse(Decrypt(data.data.data)));
                             this.oForm.fullSeatNumber='';
-                            // let formats = JSON.parse(Decrypt(data.data.data)).formatList;
-                            // this.formatList = [];
-                            // for (let i = 0; i < formats.length; i++) {
-                            //     let formatList = {};
-                            //     formatList.formatCode = formats[i].formatCode;
-                            //     formatList.formatName = formats[i].formatName;
-                            //     this.formatList.push(formatList);
-                            // }
                             this.dialogFormVisible = true;
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
@@ -1110,6 +1233,7 @@
                     background: 'rgba(0, 0, 0, 0.7)',
                     target: document.querySelector('.div1')
                 });
+                console.log(this.selectedSell1);
                 let filmeCodes = [];
                 for (let i = 0; i < this.selectedSell.length; i++) {
                     filmeCodes.push(this.selectedSell[i].filmCode);
@@ -1134,6 +1258,7 @@
                 jsonArr.push({ key: 'officialAccount', value: this.oForm.officialAccount });
                 jsonArr.push({ key: 'filmDirector', value: this.oForm.filmDirector });
                 jsonArr.push({ key: 'fullSeatNumber', value: this.oForm.fullSeatNumber });
+                jsonArr.push({ key: 'rebateListJson', value: JSON.stringify(this.selectedSell1) });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
                 console.log(jsonArr);
@@ -1241,6 +1366,7 @@
                     console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.editVisible = true;
+                        this.selectedSell1=JSON.parse(Decrypt(data.data.data)).opensRebateList;
                         this.screenInfo = [];
                         if (
                             JSON.parse(Decrypt(data.data.data)).filmOpens.filmCode &&
@@ -1323,6 +1449,7 @@
                 jsonArr.push({ key: 'officialAccount', value: this.oOfficialAccount });
                 jsonArr.push({ key: 'filmDirector', value: this.oFilmDirector });
                 jsonArr.push({ key: 'fullSeatNumber', value: this.oForm.fullSeatNumber });
+                jsonArr.push({ key: 'rebateListJson', value: JSON.stringify(this.selectedSell1) });
                 jsonArr.push({ key: 'id', value: this.form.id });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
