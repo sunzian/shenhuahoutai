@@ -168,15 +168,15 @@
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" label="选择影院：" :label-width="formLabelWidth" v-if="oForm.commonType == 2">
-                    <el-radio-group v-model="oForm.cinemaCode" @change="selectCinema">
-                        <el-radio
+                    <el-checkbox-group v-model="oForm.cinemaCode" @change="selectCinema">
+                        <el-checkbox
                                 v-for="item in cinemaInfo"
                                 :label="item.cinemaCode"
                                 :key="item.cinemaCode"
                                 :value="item.cinemaName"
                         >{{item.cinemaName}}
-                        </el-radio>
-                    </el-radio-group>
+                        </el-checkbox>
+                    </el-checkbox-group>
                 </el-form-item>
                 <el-form-item :required="true" label="选择商品：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.selectMerchandiseType" @change="clearMerchandiseCode()">
@@ -306,15 +306,15 @@
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" label="选择影院：" :label-width="formLabelWidth" v-if="oCommonType == 2">
-                    <el-radio-group v-model="oCinemaCode" @change="selectCinema">
-                        <el-radio
+                    <el-checkbox-group v-model="oCinemaCode" @change="selectCinema">
+                        <el-checkbox
                                 v-for="item in cinemaInfo"
                                 :label="item.cinemaCode"
                                 :key="item.cinemaCode"
                                 :value="item.cinemaName"
                         >{{item.cinemaName}}
-                        </el-radio>
-                    </el-radio-group>
+                        </el-checkbox>
+                    </el-checkbox-group>
                 </el-form-item>
                 <el-form-item :required="true" label="选择商品：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oSelectMerchandiseType" @change="clearMerchandiseCode2()">
@@ -743,7 +743,14 @@
                 if (this.oForm.commonType == 1) {
                     this.getAllGoods();
                 } else {
-                    this.getAllGoods(this.oForm.cinemaCode);
+                    if (this.oForm.cinemaCode.length == 0) {
+                        this.message = '请选择影院！';
+                        this.open();
+                        this.goodsInfo = [];
+                        return;
+                    } else {
+                        this.getAllGoods(this.oForm.cinemaCode);
+                    }
                 }
             },
             clearMerchandiseCode2() {
@@ -752,7 +759,14 @@
                 if (this.oCommonType == 1) {
                     this.getAllGoods();
                 } else {
-                    this.getAllGoods(this.oCinemaCode);
+                    if (this.oCinemaCode.length == 0) {
+                        this.message = '请选择影院！';
+                        this.open();
+                        this.goodsInfo = [];
+                        return;
+                    } else {
+                        this.getAllGoods(this.oCinemaCode);
+                    }
                 }
             },
             addPage() {
@@ -1073,7 +1087,7 @@
                             }
                             this.oMerchandiseName = JSON.parse(Decrypt(data.data.data)).coupon.merchandiseNames;
                             this.oCommonType = JSON.parse(Decrypt(data.data.data)).coupon.commonType;
-                            this.oCinemaCode = JSON.parse(Decrypt(data.data.data)).coupon.cinemaCodes;
+                            this.oCinemaCode = JSON.parse(Decrypt(data.data.data)).coupon.cinemaCodes.split(",");
                             this.oName = JSON.parse(Decrypt(data.data.data)).coupon.name;
                             // this.oStartDate = JSON.parse(Decrypt(data.data.data)).coupon.startDate;
                             this.oSendNumber = JSON.parse(Decrypt(data.data.data)).coupon.sendNumber;
@@ -1449,7 +1463,6 @@
                                 cinemaList.cinemaName = oData.cinemaList[i].cinemaName;
                                 this.cinemaInfo.push(cinemaList);
                             }
-                            this.oForm.cinemaCode = this.cinemaInfo[0].cinemaCode;
                             this.selectValue = this.cinemaInfo[0].cinemaCode;
                             this.tableData = oData.pageResult.data;
                             this.query.pageSize = oData.pageResult.pageSize;
@@ -1492,13 +1505,17 @@
                 }
             },
             selectCinema(val) {
-                console.log(val);
+                if (val.length == 0) {
+                    this.message = '请选择影院！';
+                    this.open();
+                    this.goodsInfo = [];
+                    return;
+                }
                 this.oMerchandiseCode = [];
-                this.selectValue = val;
+                this.selectValue = val.join(",");
                 this.getAllGoods(val);
             },
             selectGoods(val) {
-                // console.log(val)
                 let selectValue = val.join(',');
                 this.selectGoodsCode = selectValue;
             },
@@ -1531,6 +1548,9 @@
             // 获取所选影院卖品
             getAllGoods(value) {
                 let jsonArr = [];
+                if (value) {
+                    value = value.join(",")
+                }
                 jsonArr.push({key: 'cinemaCode', value: value});
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({key: 'sign', value: sign});
@@ -1547,8 +1567,6 @@
                                 goodsList.merchandiseName = goods[i].merchandiseName;
                                 this.goodsInfo.push(goodsList);
                             }
-                            // console.log(this.goodsInfo);
-                            // console.log(this.oExceptWeekDay);
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
                             this.open();
