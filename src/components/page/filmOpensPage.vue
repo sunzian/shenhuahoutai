@@ -547,7 +547,7 @@
                             type="datetime"
                             value-format="yyyy-MM-dd HH:mm:ss"
                             format="yyyy-MM-dd HH:mm:ss"
-                            :disabled="oGroupStatus==2||oGroupStatus==3||oGroupStatus==4||oGroupStatus==5"
+                            :disabled="oGroupStatus==2||oGroupStatus==3||oGroupStatus==4||oGroupStatus==5||oStatus==1"
                     ></el-date-picker>
                 </el-form-item>
                 <el-form-item :required="true" label="票价" :label-width="formLabelWidth">
@@ -560,7 +560,7 @@
                             placeholder="开始时间"
                             value-format="yyyy-MM-dd HH:mm:ss"
                             format="yyyy-MM-dd HH:mm:ss"
-                            :disabled="oGroupStatus==2||oGroupStatus==3||oGroupStatus==4||oGroupStatus==5"
+                            :disabled="oGroupStatus==2||oGroupStatus==3||oGroupStatus==4||oGroupStatus==5||oStatus==1"
                     ></el-date-picker>
                     至
                     <el-date-picker
@@ -569,11 +569,11 @@
                             placeholder="结束时间"
                             value-format="yyyy-MM-dd HH:mm:ss"
                             format="yyyy-MM-dd HH:mm:ss"
-                            :disabled="oGroupStatus==2||oGroupStatus==3||oGroupStatus==4||oGroupStatus==5"
+                            :disabled="oGroupStatus==2||oGroupStatus==3||oGroupStatus==4||oGroupStatus==5||oStatus==1"
                     ></el-date-picker>
                 </el-form-item>
                 <el-form-item :required="true" label="成团人数" :label-width="formLabelWidth">
-                    <el-input :disabled="oGroupStatus==2||oGroupStatus==3||oGroupStatus==4||oGroupStatus==5" style="width: 300px" v-model="oAgglomerationNumber" onkeyup="this.value=this.value.replace(/\D/g,'')"></el-input>
+                    <el-input :disabled="oGroupStatus==2||oGroupStatus==3||oGroupStatus==4||oGroupStatus==5||oStatus==1" style="width: 300px" v-model="oAgglomerationNumber" onkeyup="this.value=this.value.replace(/\D/g,'')"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="影厅有效座位数量" :label-width="formLabelWidth">
                     <el-input :disabled="true" style="width: 300px" v-model="oForm.fullSeatNumber "></el-input>
@@ -700,7 +700,7 @@
                                 :key="item.value"
                                 :label="item.label"
                                 :value="item.value"
-                                :disabled="oGroupStatus==2||oGroupStatus==3||oGroupStatus==4||oGroupStatus==5"
+                                :disabled="oGroupStatus==2||oGroupStatus==3||oGroupStatus==4||oGroupStatus==5||oStatus==1"
                         ></el-option>
                     </el-select>
                 </el-form-item>
