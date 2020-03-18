@@ -611,6 +611,63 @@
                         show-word-limit
                     ></el-input>
                 </el-form-item>
+                <el-form-item label="点映成功" :label-width="formLabelWidth" v-if="oForm.messagePlatformType">
+                    <el-input
+                            style="width: 250px"
+                            v-model="oForm.messageType7"
+                            autocomplete="off"
+                            v-if='oForm.messagePlatformType==2'
+                            placeholder="短信模板id"
+                    ></el-input>
+                    <el-input
+                            v-if='oForm.messagePlatformType==1'
+                            style="width: 250px"
+                            v-model="oForm.messageType7"
+                            autocomplete="off"
+                            type='textarea'
+                            placeholder="短信内容，长度不超过200个汉字"
+                            maxlength="200"
+                            show-word-limit
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="点映失败" :label-width="formLabelWidth" v-if="oForm.messagePlatformType">
+                    <el-input
+                            style="width: 250px"
+                            v-model="oForm.messageType8"
+                            autocomplete="off"
+                            v-if='oForm.messagePlatformType==2'
+                            placeholder="短信模板id"
+                    ></el-input>
+                    <el-input
+                            v-if='oForm.messagePlatformType==1'
+                            style="width: 250px"
+                            v-model="oForm.messageType8"
+                            autocomplete="off"
+                            type='textarea'
+                            placeholder="短信内容，长度不超过200个汉字"
+                            maxlength="200"
+                            show-word-limit
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="点映助力" :label-width="formLabelWidth" v-if="oForm.messagePlatformType">
+                    <el-input
+                            style="width: 250px"
+                            v-model="oForm.messageType9"
+                            autocomplete="off"
+                            v-if='oForm.messagePlatformType==2'
+                            placeholder="短信模板id"
+                    ></el-input>
+                    <el-input
+                            v-if='oForm.messagePlatformType==1'
+                            style="width: 250px"
+                            v-model="oForm.messageType9"
+                            autocomplete="off"
+                            type='textarea'
+                            placeholder="短信内容，长度不超过200个汉字"
+                            maxlength="200"
+                            show-word-limit
+                    ></el-input>
+                </el-form-item>
                 <el-form-item label="短信平台账号" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
@@ -1219,6 +1276,63 @@
                         show-word-limit
                     ></el-input>
                 </el-form-item>
+                <el-form-item label="点映成功" :label-width="formLabelWidth" v-if="oMessagePlatformType">
+                    <el-input
+                            style="width: 250px"
+                            v-model="oMessageType7"
+                            autocomplete="off"
+                            v-if='oMessagePlatformType==2'
+                            placeholder="短信模板id"
+                    ></el-input>
+                    <el-input
+                            v-if='oMessagePlatformType==1'
+                            style="width: 250px"
+                            v-model="oMessageType7"
+                            autocomplete="off"
+                            type='textarea'
+                            placeholder="短信内容，长度不超过200个汉字"
+                            maxlength="200"
+                            show-word-limit
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="点映失败" :label-width="formLabelWidth" v-if="oMessagePlatformType">
+                    <el-input
+                            style="width: 250px"
+                            v-model="oMessageType8"
+                            autocomplete="off"
+                            v-if='oMessagePlatformType==2'
+                            placeholder="短信模板id"
+                    ></el-input>
+                    <el-input
+                            v-if='oMessagePlatformType==1'
+                            style="width: 250px"
+                            v-model="oMessageType8"
+                            autocomplete="off"
+                            type='textarea'
+                            placeholder="短信内容，长度不超过200个汉字"
+                            maxlength="200"
+                            show-word-limit
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="点映助力" :label-width="formLabelWidth" v-if="oMessagePlatformType">
+                    <el-input
+                            style="width: 250px"
+                            v-model="oMessageType9"
+                            autocomplete="off"
+                            v-if='oMessagePlatformType==2'
+                            placeholder="短信模板id"
+                    ></el-input>
+                    <el-input
+                            v-if='oMessagePlatformType==1'
+                            style="width: 250px"
+                            v-model="oMessageType9"
+                            autocomplete="off"
+                            type='textarea'
+                            placeholder="短信内容，长度不超过200个汉字"
+                            maxlength="200"
+                            show-word-limit
+                    ></el-input>
+                </el-form-item>
                 <el-form-item label="短信平台账号" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
@@ -1637,6 +1751,9 @@ export default {
             oMessageType4: '',
             oMessageType5: '',
             oMessageType6: '',
+            oMessageType7: '',
+            oMessageType8: '',
+            oMessageType9: '',
             oOpenStatus: '',
             oExpireDate: '',
             oPaymentType: '',
@@ -2075,6 +2192,15 @@ export default {
             if (this.oForm.messageType6) {
                 messageInfos.push({ 'messageType': 6 , 'content': this.oForm.messageType6 });
             }
+            if (this.oForm.messageType7) {
+                messageInfos.push({ 'messageType': 7 , 'content': this.oForm.messageType7 });
+            }
+            if (this.oForm.messageType8) {
+                messageInfos.push({ 'messageType': 8 , 'content': this.oForm.messageType8 });
+            }
+            if (this.oForm.messageType9) {
+                messageInfos.push({ 'messageType': 9 , 'content': this.oForm.messageType9 });
+            }
             if (messageInfos.length>0) {
                 jsonArr.push({ key: 'messageInfos', value: JSON.stringify(messageInfos)})
             }
@@ -2412,6 +2538,15 @@ export default {
                             if (JSON.parse(Decrypt(data.data.data)).MessageInfo[i].messageType == 6) {
                                 this.oMessageType6 = JSON.parse(Decrypt(data.data.data)).MessageInfo[i].content
                             }
+                            if (JSON.parse(Decrypt(data.data.data)).MessageInfo[i].messageType == 7) {
+                                this.oMessageType7 = JSON.parse(Decrypt(data.data.data)).MessageInfo[i].content
+                            }
+                            if (JSON.parse(Decrypt(data.data.data)).MessageInfo[i].messageType == 8) {
+                                this.oMessageType8 = JSON.parse(Decrypt(data.data.data)).MessageInfo[i].content
+                            }
+                            if (JSON.parse(Decrypt(data.data.data)).MessageInfo[i].messageType == 9) {
+                                this.oMessageType9 = JSON.parse(Decrypt(data.data.data)).MessageInfo[i].content
+                            }
                         }
                         if(JSON.parse(Decrypt(data.data.data)).CinemaMessagePlatFormInfo){
                             this.oMessagePlatformAccount = JSON.parse(Decrypt(data.data.data)).CinemaMessagePlatFormInfo.messagePlatformAccount;
@@ -2498,6 +2633,9 @@ export default {
                 messageInfos.push({ 'messageType': 4 , 'content': this.oMessageType4 });
                 messageInfos.push({ 'messageType': 5 , 'content': this.oMessageType5 });
                 messageInfos.push({ 'messageType': 6 , 'content': this.oMessageType6 });
+                messageInfos.push({ 'messageType': 7 , 'content': this.oMessageType7 });
+                messageInfos.push({ 'messageType': 8 , 'content': this.oMessageType8 });
+                messageInfos.push({ 'messageType': 9 , 'content': this.oMessageType9 });
                 jsonArr.push({ key: 'messageInfos', value: JSON.stringify(messageInfos)});
             jsonArr.push({ key: 'messagePlatformAccount', value: this.oMessagePlatformAccount });
             jsonArr.push({ key: 'messagePlatformPassword', value: this.oMessagePlatformPassword });

@@ -24,6 +24,12 @@
                         class="mr10"
                 ></el-input>
                 <el-input
+                        placeholder="推荐人手机号"
+                        v-model="query.shareUserMobile"
+                        autocomplete="off"
+                        class="mr10"
+                ></el-input>
+                <el-input
                         placeholder="订单编号"
                         v-model="query.orderNo"
                         autocomplete="off"
@@ -114,6 +120,9 @@
                 </el-table-column>
                 <el-table-column prop="memo" label="用户手机号" width="115">
                     <template slot-scope="scope">{{scope.row.userMobile}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="推荐人手机号" width="115">
+                    <template slot-scope="scope">{{scope.row.shareUserMobile}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="购买数量" width="95">
                     <template slot-scope="scope">{{scope.row.number}}</template>
@@ -540,6 +549,10 @@
                     let sessionEndDate = this.query.sessionEndDate;
                     let payStartDate = this.query.payStartDate;
                     let payEndDate = this.query.payEndDate;
+                    let shareUserMobile = this.query.shareUserMobile;
+                    if (!shareUserMobile) {
+                        shareUserMobile = '';
+                    }
                     if (!orderNo) {
                         orderNo = '';
                     }
@@ -570,6 +583,7 @@
                     let jsonArr = [];
                     jsonArr.push({ key: 'orderNo', value: orderNo });
                     jsonArr.push({ key: 'userMobile', value: userMobile });
+                    jsonArr.push({ key: 'shareUserMobile', value: shareUserMobile });
                     jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
                     jsonArr.push({ key: 'filmName', value: filmName });
                     jsonArr.push({ key: 'payStatus', value: payStatus });

@@ -23,6 +23,27 @@
                     ></el-option>
                 </el-select>
                 <el-input v-model="query.filmName" placeholder="影片名称" class="handle-input mr10"></el-input>
+                <el-select
+                        clearable
+                        v-model="query.groupStatus"
+                        placeholder="组团状态"
+                        class="handle-select mr10"
+                >
+                    <el-option key="1" label="组团中" value="1"></el-option>
+                    <el-option key="2" label="组团失败" value="2"></el-option>
+                    <el-option key="3" label="组团成功" value="3"></el-option>
+                    <el-option key="4" label="已开场" value="4"></el-option>
+                    <el-option key="5" label="已撤销" value="5"></el-option>
+                </el-select>
+                <el-select
+                        clearable
+                        v-model="query.status"
+                        placeholder="开启状态"
+                        class="handle-select mr10"
+                >
+                    <el-option key="1" label="启用" value="1"></el-option>
+                    <el-option key="2" label="未启用" value="2"></el-option>
+                </el-select>
                 <el-date-picker
                         v-model="query.sessionStartDate"
                         type="datetime"
@@ -90,13 +111,16 @@
                         <el-tag v-else-if="scope.row.status == 1">已启动</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="sort" label="是否组团成功" width="90">
+                <el-table-column prop="sort" label="组团状态" width="90">
                     <template slot-scope="scope">
-                        <el-tag v-if="scope.row.groupStatus == 2">未成功</el-tag>
-                        <el-tag v-else-if="scope.row.groupStatus == 1">成功</el-tag>
+                        <el-tag v-if="scope.row.groupStatus == 3">组团成功</el-tag>
+                        <el-tag v-else-if="scope.row.groupStatus == 2">组团失败</el-tag>
+                        <el-tag v-else-if="scope.row.groupStatus == 1">组团中</el-tag>
+                        <el-tag v-else-if="scope.row.groupStatus == 4">已开场</el-tag>
+                        <el-tag v-else-if="scope.row.groupStatus == 5">已撤销</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" width="100" align="center" fixed="right">
+                <el-table-column label="操作" width="200" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-button
                                 type="success"
@@ -106,9 +130,17 @@
                         </el-button>
                         <el-button
                                 type="success"
-                                v-if="scope.row.status == 1"
-                                @click="changeStatus(scope.$index, scope.row)"
-                        >停用
+                                style="margin-top: 10px"
+                                v-if="scope.row.groupStatus == 3"
+                                @click="cancel(scope.$index, scope.row)"
+                        >撤销点映
+                        </el-button>
+                        <el-button
+                                type="success"
+                                style="margin-top: 10px"
+                                v-if="scope.row.groupStatus == 3"
+                                @click="sendMessage(scope.$index, scope.row)"
+                        >发送组团成功短信
                         </el-button>
                     </template>
                 </el-table-column>
@@ -122,6 +154,7 @@
                         </el-button>
                         <el-button
                                 type="text"
+                                v-if="scope.row.enrolledNumber == 0"
                                 icon="el-icon-delete"
                                 class="red"
                                 @click="delChange(scope.$index, scope.row)"
@@ -188,7 +221,7 @@
                         label="选择影片"
                         :label-width="formLabelWidth"
                 >
-                    <el-button type="primary" @click="openNext">点击选择</el-button>
+                    <el-button type="primary" @click="openNext">点击新增</el-button>
                 </el-form-item>
                 <el-form-item
                         label="所选影片"
@@ -251,7 +284,7 @@
                     ></el-date-picker>
                 </el-form-item>
                 <el-form-item :required="true" label="票价" :label-width="formLabelWidth">
-                    <el-input style="width: 300px" v-model="oForm.ticketPrice"></el-input>
+                    <el-input style="width: 300px" v-model="oForm.ticketPrice" onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="报名时间" :label-width="formLabelWidth">
                     <el-date-picker
@@ -271,10 +304,10 @@
                     ></el-date-picker>
                 </el-form-item>
                 <el-form-item :required="true" label="成团人数" :label-width="formLabelWidth">
-                    <el-input style="width: 300px" v-model="oForm.agglomerationNumber"></el-input>
+                    <el-input style="width: 300px" v-model="oForm.agglomerationNumber" onkeyup="this.value=this.value.replace(/\D/g,'')"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="影厅有效座位数量" :label-width="formLabelWidth">
-                    <el-input :disabled="true" style="width: 300px" v-model="oForm.fullSeatNumber "></el-input>
+                    <el-input :disabled="true" style="width: 300px" v-model="oForm.fullSeatNumber"></el-input>
                 </el-form-item>
                 <el-form-item label="点映说明" :label-width="formLabelWidth">
                     <el-input
@@ -306,7 +339,7 @@
                             v-model="oForm.printTicketExplain"
                     ></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="官方公众号(二维码)" :label-width="formLabelWidth">
+                <el-form-item label="官方公众号(二维码)" :label-width="formLabelWidth">
                     <el-popover placement="right" title trigger="hover">
                         <img style="width: 400px" :src="oForm.officialAccount"/>
                         <img
@@ -323,8 +356,8 @@
                             drag
                             :limit="1"
                             :on-exceed="exceed"
-                            ref="upload"
                             action="/api/upload/uploadImage"
+                            ref="upload1"
                             :on-success="unSuccess"
                             multiple
                     >
@@ -336,7 +369,7 @@
                         <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过200kb</div>
                     </el-upload>
                 </el-form-item>
-                <el-form-item :required="true" label="联系电影负责人" :label-width="formLabelWidth">
+                <el-form-item label="联系电影负责人" :label-width="formLabelWidth">
                     <el-popover placement="right" title trigger="hover">
                         <img style="width: 400px" :src="oForm.filmDirector"/>
                         <img
@@ -353,8 +386,8 @@
                             drag
                             :limit="1"
                             :on-exceed="exceed"
-                            ref="upload"
                             action="/api/upload/uploadImage"
+                            ref="upload2"
                             :on-success="snSuccess"
                             multiple
                     >
@@ -366,10 +399,35 @@
                         <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过200kb</div>
                     </el-upload>
                 </el-form-item>
+                <el-form-item
+                        label="点映返利设置"
+                        :label-width="formLabelWidth"
+                >
+                    <el-button type="primary" @click="addSelectedSell">增加</el-button>
+                    <div
+                            v-for="(item1, index) in selectedSell1"
+                            style="margin-bottom: 5px"
+                            :key="index"
+                    >   推荐
+                        <el-input
+                                style="width: 100px"
+                                v-model="item1.shareNumber"
+                                autocomplete="off"
+                                onkeyup="this.value=this.value.replace(/[^0-9]+/,'')"
+                        ></el-input>人&nbsp;&nbsp;&nbsp;&nbsp;返利
+                        <el-input
+                                style="width: 100px"
+                                v-model="item1.rebateMoney"
+                                autocomplete="off"
+                                onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')"
+                        ></el-input>元&nbsp;
+                        <span style="color:blue;cursor: pointer;" @click="delSelectedSell(index)">删除</span>
+                    </div>
+                </el-form-item>
                 <el-form-item :required="true" label="开启状态" :label-width="formLabelWidth">
                     <el-select v-model="oForm.status" placeholder="请选择">
                         <el-option
-                                v-for="item in canUse"
+                                v-for="item in options"
                                 :key="item.value"
                                 :label="item.label"
                                 :value="item.value"
@@ -391,6 +449,7 @@
                             style="width: 250px"
                             v-model="oFilmOpensName"
                             autocomplete="off"
+                            :disabled="oStatus==1"
                     ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="选择影院" :label-width="formLabelWidth">
@@ -400,6 +459,7 @@
                                 :key="item.cinemaCode"
                                 :label="item.cinemaCode"
                                 :value="item.cinemaCode"
+                                :disabled="oStatus==1"
                         >{{item.cinemaName}}
                         </el-checkbox>
                     </el-checkbox-group>
@@ -416,6 +476,7 @@
                                 :label="item.screenCode"
                                 :key="item.screenCode"
                                 :value="item.screenName"
+                                :disabled="oStatus==1"
                         >{{item.screenName}}
                         </el-checkbox>
                     </el-checkbox-group>
@@ -425,7 +486,7 @@
                         label="选择影片"
                         :label-width="formLabelWidth"
                 >
-                    <el-button type="primary" @click="openNext">点击选择</el-button>
+                    <el-button :disabled="oStatus==1" type="primary" @click="openNext">点击新增</el-button>
                 </el-form-item>
                 <el-form-item
                         label="所选影片"
@@ -460,14 +521,15 @@
                         />
                     </el-popover>
                     <el-upload
+                            v-if="oStatus==2"
                             :before-upload="beforeUpload"
                             :data="type"
                             class="upload-demo"
                             drag
                             :limit="1"
                             :on-exceed="exceed"
-                            ref="upload"
                             action="/api/upload/uploadImage"
+                            ref="upload3"
                             :on-success="anSuccess"
                             multiple
                     >
@@ -485,10 +547,11 @@
                             type="datetime"
                             value-format="yyyy-MM-dd HH:mm:ss"
                             format="yyyy-MM-dd HH:mm:ss"
+                            :disabled="oGroupStatus==2||oGroupStatus==3||oGroupStatus==4||oGroupStatus==5"
                     ></el-date-picker>
                 </el-form-item>
                 <el-form-item :required="true" label="票价" :label-width="formLabelWidth">
-                    <el-input style="width: 300px" v-model="oTicketPrice"></el-input>
+                    <el-input :disabled="oStatus==1" style="width: 300px" v-model="oTicketPrice" onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="报名时间" :label-width="formLabelWidth">
                     <el-date-picker
@@ -497,6 +560,7 @@
                             placeholder="开始时间"
                             value-format="yyyy-MM-dd HH:mm:ss"
                             format="yyyy-MM-dd HH:mm:ss"
+                            :disabled="oGroupStatus==2||oGroupStatus==3||oGroupStatus==4||oGroupStatus==5"
                     ></el-date-picker>
                     至
                     <el-date-picker
@@ -505,10 +569,11 @@
                             placeholder="结束时间"
                             value-format="yyyy-MM-dd HH:mm:ss"
                             format="yyyy-MM-dd HH:mm:ss"
+                            :disabled="oGroupStatus==2||oGroupStatus==3||oGroupStatus==4||oGroupStatus==5"
                     ></el-date-picker>
                 </el-form-item>
                 <el-form-item :required="true" label="成团人数" :label-width="formLabelWidth">
-                    <el-input style="width: 300px" v-model="oAgglomerationNumber"></el-input>
+                    <el-input :disabled="oGroupStatus==2||oGroupStatus==3||oGroupStatus==4||oGroupStatus==5" style="width: 300px" v-model="oAgglomerationNumber" onkeyup="this.value=this.value.replace(/\D/g,'')"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="影厅有效座位数量" :label-width="formLabelWidth">
                     <el-input :disabled="true" style="width: 300px" v-model="oForm.fullSeatNumber "></el-input>
@@ -543,7 +608,7 @@
                             v-model="oPrintTicketExplain"
                     ></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="官方公众号(二维码)" :label-width="formLabelWidth">
+                <el-form-item label="官方公众号(二维码)" :label-width="formLabelWidth">
                     <el-popover placement="right" title trigger="hover">
                         <img style="width: 400px" :src="oOfficialAccount"/>
                         <img
@@ -560,8 +625,8 @@
                             drag
                             :limit="1"
                             :on-exceed="exceed"
-                            ref="upload"
                             action="/api/upload/uploadImage"
+                            ref="upload4"
                             :on-success="bnSuccess"
                             multiple
                     >
@@ -573,7 +638,7 @@
                         <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过200kb</div>
                     </el-upload>
                 </el-form-item>
-                <el-form-item :required="true" label="联系电影负责人" :label-width="formLabelWidth">
+                <el-form-item label="联系电影负责人" :label-width="formLabelWidth">
                     <el-popover placement="right" title trigger="hover">
                         <img style="width: 400px" :src="oFilmDirector"/>
                         <img
@@ -590,8 +655,8 @@
                             drag
                             :limit="1"
                             :on-exceed="exceed"
-                            ref="upload"
                             action="/api/upload/uploadImage"
+                            ref="upload5"
                             :on-success="cnSuccess"
                             multiple
                     >
@@ -603,13 +668,39 @@
                         <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过200kb</div>
                     </el-upload>
                 </el-form-item>
+                <el-form-item
+                        label="点映返利设置"
+                        :label-width="formLabelWidth"
+                >
+                    <el-button type="primary" @click="addSelectedSell">增加</el-button>
+                    <div
+                            v-for="(item1, index) in selectedSell1"
+                            style="margin-bottom: 5px"
+                            :key="index"
+                    >   推荐
+                        <el-input
+                                style="width: 100px"
+                                v-model="item1.shareNumber"
+                                autocomplete="off"
+                                onkeyup="this.value=this.value.replace(/[^0-9]+/,'')"
+                        ></el-input>人&nbsp;&nbsp;&nbsp;&nbsp;返利
+                        <el-input
+                                style="width: 100px"
+                                v-model="item1.rebateMoney"
+                                autocomplete="off"
+                                onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')"
+                        ></el-input>元&nbsp;
+                        <span style="color:blue;cursor: pointer;" @click="delSelectedSell(index)">删除</span>
+                    </div>
+                </el-form-item>
                 <el-form-item :required="true" label="开启状态" :label-width="formLabelWidth">
                     <el-select v-model="oStatus" placeholder="请选择">
                         <el-option
-                                v-for="item in canUse"
+                                v-for="item in options"
                                 :key="item.value"
                                 :label="item.label"
                                 :value="item.value"
+                                :disabled="oGroupStatus==2||oGroupStatus==3||oGroupStatus==4||oGroupStatus==5"
                         ></el-option>
                     </el-select>
                 </el-form-item>
@@ -691,40 +782,13 @@
         name: 'basetable',
         data() {
             return {
+                selectedSell1:[],
+                fileList:[],
                 type: {
                     type: ''
                 },
-                oExceptWeekDay: [
-                    {
-                        index: '1',
-                        value: '星期一'
-                    },
-                    {
-                        index: '2',
-                        value: '星期二'
-                    },
-                    {
-                        index: '3',
-                        value: '星期三'
-                    },
-                    {
-                        index: '4',
-                        value: '星期四'
-                    },
-                    {
-                        index: '5',
-                        value: '星期五'
-                    },
-                    {
-                        index: '6',
-                        value: '星期六'
-                    },
-                    {
-                        index: '7',
-                        value: '星期日'
-                    }
-                ],
                 oCinemaCode: '',
+                oGroupStatus: '',
                 oFilmOpensName: '',
                 oStagePhoto: '',
                 oFixedSatisfyMoney: '',
@@ -799,7 +863,7 @@
                 dialogFormVisible: false,
                 options: [
                     {
-                        value: '0',
+                        value: '2',
                         label: '未启用'
                     },
                     {
@@ -853,7 +917,6 @@
                     filmCode: '',
                     filmName: '',
                     checkedDays: [],
-                    exceptWeekDay: ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日'],
                     startDate: '',
                     endDate: '',
                     validPayType: '0',
@@ -867,7 +930,7 @@
                     reduceType: '1',
                     couponDesc: '',
                     id: '',
-                    status: '',
+                    status: '2',
                     oNum: '',
                     holidayAddMoney: '',
                     oneNum: '',
@@ -899,6 +962,102 @@
             this.getMenu();
         },
         methods: {
+            addSelectedSell() {
+                let obj = {
+                    shareNumber: '',
+                    rebateMoney: '',
+                };
+                this.selectedSell1.push(obj);
+            },
+            delSelectedSell(index) {
+                this.selectedSell1.splice(index, 1);
+            },
+            cancel(index, row){
+                this.$confirm('此操作将撤销点映, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                })
+                    .then(() => {
+                        const loading = this.$loading({
+                            lock: true,
+                            text: 'Loading',
+                            spinner: 'el-icon-loading',
+                            background: 'rgba(0, 0, 0, 0.7)',
+                            target: document.querySelector('.div1')
+                        });
+                        var jsonArr = [];
+                        jsonArr.push({ key: 'id', value: row.id });
+                        let sign = md5(preSign(jsonArr));
+                        jsonArr.push({ key: 'sign', value: sign });
+                        console.log(jsonArr);
+                        let params = ParamsAppend(jsonArr);
+                        https
+                            .fetchPost('/filmOpens/opensCancel', params)
+                            .then(data => {
+                                loading.close();
+                                console.log(data);
+                                // console.log(JSON.parse(Decrypt(data.data.data)));
+                                if (data.data.code == 'success') {
+                                    this.$message.success(`撤销成功`);
+                                    this.getMenu();
+                                } else if (data.data.code == 'nologin') {
+                                    this.message = data.data.message;
+                                    this.open();
+                                    this.$router.push('/login');
+                                } else {
+                                    this.message = data.data.message;
+                                    this.open();
+                                }
+                            })
+                            .catch(err => {
+                                loading.close();
+                                console.log(err);
+                            });
+                    }).catch(() => {
+                            this.$message({
+                                type: 'info',
+                                message: '已取消删除'
+                            });
+                        });
+            },
+            sendMessage(index, row){
+                const loading = this.$loading({
+                    lock: true,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)',
+                    target: document.querySelector('.div1')
+                });
+                var jsonArr = [];
+                jsonArr.push({ key: 'id', value: row.id });
+                let sign = md5(preSign(jsonArr));
+                jsonArr.push({ key: 'sign', value: sign });
+                console.log(jsonArr);
+                let params = ParamsAppend(jsonArr);
+                https
+                    .fetchPost('/filmOpens/opensSendMessage', params)
+                    .then(data => {
+                        loading.close();
+                        console.log(data);
+                        // console.log(JSON.parse(Decrypt(data.data.data)));
+                        if (data.data.code == 'success') {
+                            this.$message.success(`发送成功`);
+                            this.getMenu();
+                        } else if (data.data.code == 'nologin') {
+                            this.message = data.data.message;
+                            this.open();
+                            this.$router.push('/login');
+                        } else {
+                            this.message = data.data.message;
+                            this.open();
+                        }
+                    })
+                    .catch(err => {
+                        loading.close();
+                        console.log(err);
+                    });
+            },
             beforeUpload(file) {
                 //上传之前
                 this.type.type = EncryptReplace('activity');
@@ -917,7 +1076,7 @@
                     this.open();
                 }
             },
-            onSuccess(data) {
+            onSuccess(data,file, fileList) {
                 //上传文件 登录超时
                 if (data.status == '-1') {
                     this.message = data.message;
@@ -926,6 +1085,7 @@
                     return;
                 }
                 this.oForm.stagePhoto = data.data;
+                this.$refs.upload.clearFiles();
                 if (data.code == 'nologin') {
                     this.message = data.message;
                     this.open();
@@ -937,9 +1097,10 @@
                 if (data.status == '-1') {
                     this.message = data.message;
                     this.open();
-                    this.$refs.upload.clearFiles();
+                    this.$refs.upload1.clearFiles();
                     return;
                 }
+                this.$refs.upload1.clearFiles();
                 this.oForm.officialAccount = data.data;
                 if (data.code == 'nologin') {
                     this.message = data.message;
@@ -952,9 +1113,10 @@
                 if (data.status == '-1') {
                     this.message = data.message;
                     this.open();
-                    this.$refs.upload.clearFiles();
+                    this.$refs.upload2.clearFiles();
                     return;
                 }
+                this.$refs.upload2.clearFiles();
                 this.oForm.filmDirector = data.data;
                 if (data.code == 'nologin') {
                     this.message = data.message;
@@ -967,9 +1129,10 @@
                 if (data.status == '-1') {
                     this.message = data.message;
                     this.open();
-                    this.$refs.upload.clearFiles();
+                    this.$refs.upload3.clearFiles();
                     return;
                 }
+                this.$refs.upload3.clearFiles();
                 this.oStagePhoto = data.data;
                 if (data.code == 'nologin') {
                     this.message = data.message;
@@ -982,9 +1145,10 @@
                 if (data.status == '-1') {
                     this.message = data.message;
                     this.open();
-                    this.$refs.upload.clearFiles();
+                    this.$refs.upload4.clearFiles();
                     return;
                 }
+                this.$refs.upload4.clearFiles();
                 this.oOfficialAccount = data.data;
                 if (data.code == 'nologin') {
                     this.message = data.message;
@@ -997,9 +1161,10 @@
                 if (data.status == '-1') {
                     this.message = data.message;
                     this.open();
-                    this.$refs.upload.clearFiles();
+                    this.$refs.upload5.clearFiles();
                     return;
                 }
+                this.$refs.upload5.clearFiles();
                 this.oFilmDirector = data.data;
                 if (data.code == 'nologin') {
                     this.message = data.message;
@@ -1049,15 +1214,9 @@
                         loading.close();
                         if (data.data.code == 'success') {
                             this.selectedSell = [];
+                            this.selectedSell1 = [];
                             console.log(JSON.parse(Decrypt(data.data.data)));
-                            // let formats = JSON.parse(Decrypt(data.data.data)).formatList;
-                            // this.formatList = [];
-                            // for (let i = 0; i < formats.length; i++) {
-                            //     let formatList = {};
-                            //     formatList.formatCode = formats[i].formatCode;
-                            //     formatList.formatName = formats[i].formatName;
-                            //     this.formatList.push(formatList);
-                            // }
+                            this.oForm.fullSeatNumber='';
                             this.dialogFormVisible = true;
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
@@ -1082,6 +1241,7 @@
                     background: 'rgba(0, 0, 0, 0.7)',
                     target: document.querySelector('.div1')
                 });
+                console.log(this.selectedSell1);
                 let filmeCodes = [];
                 for (let i = 0; i < this.selectedSell.length; i++) {
                     filmeCodes.push(this.selectedSell[i].filmCode);
@@ -1106,6 +1266,7 @@
                 jsonArr.push({ key: 'officialAccount', value: this.oForm.officialAccount });
                 jsonArr.push({ key: 'filmDirector', value: this.oForm.filmDirector });
                 jsonArr.push({ key: 'fullSeatNumber', value: this.oForm.fullSeatNumber });
+                jsonArr.push({ key: 'rebateListJson', value: JSON.stringify(this.selectedSell1) });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
                 console.log(jsonArr);
@@ -1130,7 +1291,7 @@
                                 this.oForm.startDate='';
                                 this.oForm.endDate='';
                                 this.oForm.agglomerationNumber='';
-                                this.oForm.status='';
+                                this.oForm.status='2';
                                 this.oForm.filmOpensExplain='';
                                 this.oForm.buyTicketHint='';
                                 this.oForm.printTicketExplain='';
@@ -1213,6 +1374,7 @@
                     console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.editVisible = true;
+                        this.selectedSell1=JSON.parse(Decrypt(data.data.data)).opensRebateList;
                         this.screenInfo = [];
                         if (
                             JSON.parse(Decrypt(data.data.data)).filmOpens.filmCode &&
@@ -1244,6 +1406,7 @@
                         this.oPrintTicketExplain = JSON.parse(Decrypt(data.data.data)).filmOpens.printTicketExplain;
                         this.oOfficialAccount = JSON.parse(Decrypt(data.data.data)).filmOpens.officialAccount;
                         this.oFilmDirector = JSON.parse(Decrypt(data.data.data)).filmOpens.filmDirector;
+                        this.oGroupStatus = JSON.parse(Decrypt(data.data.data)).filmOpens.groupStatus;
                         for (let x in this.canUse) {
                             if (this.canUse[x].value == JSON.parse(Decrypt(data.data.data)).filmOpens.status) {
                                 this.oStatus = this.canUse[x].value;
@@ -1295,6 +1458,7 @@
                 jsonArr.push({ key: 'officialAccount', value: this.oOfficialAccount });
                 jsonArr.push({ key: 'filmDirector', value: this.oFilmDirector });
                 jsonArr.push({ key: 'fullSeatNumber', value: this.oForm.fullSeatNumber });
+                jsonArr.push({ key: 'rebateListJson', value: JSON.stringify(this.selectedSell1) });
                 jsonArr.push({ key: 'id', value: this.form.id });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
@@ -1342,13 +1506,7 @@
             },
             // 修改状态
             changeStatus(index, row) {
-                if (row.status == 2) {
-                    this.rowMess = '启用';
-                }
-                if (row.status == 1) {
-                    this.rowMess = '停用';
-                }
-                this.$confirm('是否确定' + this.rowMess + '此活动?', '提示', {
+                this.$confirm('请确认信息，一经启用部分信息不可修改', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
@@ -1430,6 +1588,8 @@
                 jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
                 jsonArr.push({ key: 'filmName', value: this.query.filmName });
                 jsonArr.push({ key: 'cinemaCode', value: this.query.cinemaCode });
+                jsonArr.push({ key: 'groupStatus', value: this.query.groupStatus });
+                jsonArr.push({ key: 'status', value: this.query.status });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
                 console.log(jsonArr);
@@ -1662,26 +1822,32 @@
                 this.oForm.filmCode = a;
             },
             sureNext() {
-                if (this.sellIndex >= 0) {
-                    // console.log('选了数据');
-                    if (this.selectedSell.length <= 0) {
-                        // console.log('长度为0');
-                        this.selectedSell.push(this.sellTableData[this.sellIndex]);
-                    } else if (this.selectedSell.length > 0) {
-                        // console.log('有数据');
-                        for (let x in this.selectedSell) {
-                            if (this.selectedSell[x].filmCode == this.sellTableData[this.sellIndex].filmCode) {
-                                this.message = '不能添加相同影片！';
-                                this.open();
-                                return;
-                            }
-                        }
-                        // console.log('判断不重复');
-                        this.selectedSell.push(this.sellTableData[this.sellIndex]);
-                    }
+                if(this.selectedSell.length>=1){
+                    this.message = '只能添加一部影片！';
+                    this.open();
                 }
-                console.log(this.selectedSell);
-                this.drawer = false;
+                else{
+                    if (this.sellIndex >= 0) {
+                        // console.log('选了数据');
+                        if (this.selectedSell.length <= 0) {
+                            // console.log('长度为0');
+                            this.selectedSell.push(this.sellTableData[this.sellIndex]);
+                        } else if (this.selectedSell.length > 0) {
+                            // console.log('有数据');
+                            for (let x in this.selectedSell) {
+                                if (this.selectedSell[x].filmCode == this.sellTableData[this.sellIndex].filmCode) {
+                                    this.message = '不能添加相同影片！';
+                                    this.open();
+                                    return;
+                                }
+                            }
+                            // console.log('判断不重复');
+                            this.selectedSell.push(this.sellTableData[this.sellIndex]);
+                        }
+                    }
+                    console.log(this.selectedSell);
+                    this.drawer = false;
+                }
             },
             openNext() {
                 //获取商品列表

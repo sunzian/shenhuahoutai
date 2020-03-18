@@ -96,6 +96,9 @@
                         <el-tag v-else-if="scope.row.prizeStatus=='1'">中奖</el-tag>
                     </template>
                 </el-table-column>
+                <el-table-column prop="memo" label="核销状态" width="100">
+                    <template slot-scope="scope">{{scope.row.verifyStatusStr}}</template>
+                </el-table-column>
                 <el-table-column label="奖品类型" align="center" width="100">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.prizeType=='1'">优惠券</el-tag>
