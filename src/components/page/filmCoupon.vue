@@ -130,21 +130,27 @@
                     <template slot-scope="scope">
                         <el-button
                                 type="success"
-                                v-if="scope.row.status == 0"
+                                v-if="scope.row.status == 0&&scope.row.sendType == 1"
                                 @click="changeStatus(scope.$index, scope.row)"
                         >启用
                         </el-button>
                         <el-button
                                 type="success"
-                                v-if="scope.row.status == 1&&scope.row.sendType != 1"
+                                v-if="scope.row.status == 1&&scope.row.sendType == 1"
                                 @click="changeStatus(scope.$index, scope.row)"
                         >停用
                         </el-button>
                         <el-button
-                                v-if="scope.row.createType != 2&&scope.row.sendType != 2"
+                                v-if="scope.row.createType != 2&&scope.row.sendType != 1"
                                 type="success"
                                 @click="canExportCoupon(scope.$index, scope.row)"
                         >导出
+                        </el-button>
+                        <el-button
+                                v-if="scope.row.sendType == 2"
+                                type="success"
+                                @click="canExportCoupon(scope.$index, scope.row)"
+                        >开通
                         </el-button>
                     </template>
                 </el-table-column>
@@ -1582,19 +1588,19 @@
                     loading.close();
                     return;
                 }
-                if (this.oForm.sendNumber != 0) {
-                    if (!this.oForm.sendNumber) {
-                        this.message = '库存不能为空，请检查！';
-                        this.open();
-                        loading.close();
-                        return;
-                    } else if (this.oForm.sendNumber < 0) {
-                        this.message = '库存不能小于0！';
-                        this.open();
-                        loading.close();
-                        return;
-                    }
-                }
+                // if (this.oForm.sendNumber != 0) {
+                //     if (!this.oForm.sendNumber) {
+                //         this.message = '库存不能为空，请检查！';
+                //         this.open();
+                //         loading.close();
+                //         return;
+                //     } else if (this.oForm.sendNumber < 0) {
+                //         this.message = '库存不能小于0！';
+                //         this.open();
+                //         loading.close();
+                //         return;
+                //     }
+                // }
                 // if(this.oForm.reduceType==1&&this.oForm.discountMoney==0){
                 //     if(this.oForm.validPayType==0||this.oForm.validPayType==2){
                 //         this.message = '优惠券0元固定价格的时候只能选择非会员支付！';
@@ -2175,19 +2181,19 @@
                     loading.close();
                     return;
                 }
-                if (this.oSendNumber > 0) {
-                    if (!this.oSendNumber) {
-                        this.message = '库存不能为空，请检查！';
-                        this.open();
-                        loading.close();
-                        return;
-                    } else if (this.oSendNumber < 0) {
-                        this.message = '库存不能小于0！';
-                        this.open();
-                        loading.close();
-                        return;
-                    }
-                }
+                // if (this.oSendNumber > 0) {
+                //     if (!this.oSendNumber) {
+                //         this.message = '库存不能为空，请检查！';
+                //         this.open();
+                //         loading.close();
+                //         return;
+                //     } else if (this.oSendNumber < 0) {
+                //         this.message = '库存不能小于0！';
+                //         this.open();
+                //         loading.close();
+                //         return;
+                //     }
+                // }
                 // if(this.oReduceType==1&&this.oDiscountMoney==0){
                 //     if(this.oValidPayType==0||this.oValidPayType==2){
                 //         this.message = '优惠券0元固定价格的时候只能选择非会员支付！';
