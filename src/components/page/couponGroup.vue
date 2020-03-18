@@ -123,14 +123,14 @@
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" label="选择影院：" :label-width="formLabelWidth" v-if="oForm.commonType == 2">
-                    <el-radio-group v-model="oForm.cinemaCode" @change="selectCinema">
-                        <el-radio
+                    <el-checkbox-group v-model="oForm.cinemaCode" @change="selectCinema">
+                        <el-checkbox
                             v-for="item in cinemaInfo"
                             :label="item.cinemaCode"
                             :key="item.cinemaCode"
                             :value="item.cinemaName"
-                        >{{item.cinemaName}}</el-radio>
-                    </el-radio-group>
+                        >{{item.cinemaName}}</el-checkbox>
+                    </el-checkbox-group>
                 </el-form-item>
                 <el-form-item :required="true" label="选择优惠券" :label-width="formLabelWidth">
                     <el-button type="primary" @click="openNext">点击选择</el-button>
@@ -630,17 +630,13 @@ export default {
                 }
                 let jsonArr = [];
                 jsonArr.push({key:"name",value:name});
-                jsonArr.push({key:"commonType",value:this.oForm.commonType});
-                jsonArr.push({key:"cinemaCode",value:this.oForm.cinemaCode});
-                jsonArr.push({key:"simpleType",value:'1'});
-                jsonArr.push({key:"status",value:'1'});
+                jsonArr.push({key:"cinemaCodes",value:this.oForm.cinemaCode.join(",")});
                 jsonArr.push({key:"pageNo",value:this.query.aPageNo});
                 jsonArr.push({key:"pageSize",value:this.query.aPageSize});
                 let sign =md5(preSign(jsonArr));
-                console.log(jsonArr);
                 jsonArr.push({key:"sign",value:sign});
                 var params = ParamsAppend(jsonArr);
-                https.fetchPost('/merchandiseCoupon/getCouponByCinemaCode',params).then((data) => {
+                https.fetchPost('/merchandiseCoupon/getCouponByCinemaCodeForGroup',params).then((data) => {
                     loading.close();
                     if(data.data.code=='success') {
                         this.drawer=true;
@@ -699,14 +695,13 @@ export default {
                             cinemaInfo.cinemaName = oData[i].cinemaName;
                             this.cinemaInfo.push(cinemaInfo);
                         }
-                        console.log(this.cinemaInfo);
-                        this.oForm.cinemaCode = this.cinemaInfo[0].cinemaCode;
-                        this.selectValue = this.cinemaInfo[0].cinemaCode;
+                        // this.oForm.cinemaCode = this.cinemaInfo[0].cinemaCode;
+                        // this.selectValue = this.cinemaInfo[0].cinemaCode;
                         this.dialogFormVisible = true;
                         this.oForm.name = '';
                         this.oForm.couponName = '';
                         this.oForm.cinemaCode = [];
-                        this.selectValue = '';
+                        this.selectValue = [];
                         this.selectGroup = {};
                         this.oForm.cinemaName = '';
                         this.oForm.status = '';
@@ -748,7 +743,7 @@ export default {
                 return;
             }
             if (this.oForm.commonType == 2) {
-                if (!this.oForm.cinemaCode) {
+                if (this.oForm.cinemaCode.length == 0) {
                     this.message = '所选影院不能为空，请检查！';
                     this.open();
                     loading.close();
@@ -789,7 +784,6 @@ export default {
             jsonArr.push({ key: 'memo', value: this.oForm.memo });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
-            console.log(jsonArr);
             let params = ParamsAppend(jsonArr);
             if (this.dialogFormVisible == true) {
                 https
@@ -1122,8 +1116,12 @@ export default {
             });
         },
         selectCinema(val) {
-            console.log(val);
-            this.selectValue = val;
+            if (val.length == 0) {
+                this.message = '请选择影院！';
+                this.open();
+                return
+            }
+            this.selectValue = val.join(",");
             this.selectedSell = [];
         },
         selectDay(val) {
