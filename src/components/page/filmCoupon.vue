@@ -225,15 +225,15 @@
                         :label-width="formLabelWidth"
                         v-if="oForm.commonType == 2"
                 >
-                    <el-radio-group v-model="oForm.cinemaCode" @change="selectCinema">
-                        <el-radio
+                    <el-checkbox-group v-model="oForm.cinemaCode" @change="selectCinema">
+                        <el-checkbox
                                 v-for="item in cinemaInfo"
                                 :label="item.cinemaCode"
                                 :key="item.cinemaCode"
                                 :value="item.cinemaName"
                         >{{item.cinemaName}}
-                        </el-radio>
-                    </el-radio-group>
+                        </el-checkbox>
+                    </el-checkbox-group>
                 </el-form-item>
                 <el-form-item
                         :required="true"
@@ -243,8 +243,8 @@
                 >
                     <el-radio-group v-model="oForm.selectHallType" @change="clearScreenCode()">
                         <el-radio label="0">全部影厅</el-radio>
-                        <el-radio label="1">指定影厅参加</el-radio>
-                        <el-radio label="2">指定影厅不参加</el-radio>
+                        <el-radio label="1" :disabled="canChooseScreen">指定影厅参加</el-radio>
+                        <el-radio label="2" :disabled="canChooseScreen">指定影厅不参加</el-radio>
                     </el-radio-group>
                     <el-checkbox-group
                             v-model="oForm.screenCode"
@@ -540,15 +540,15 @@
                         :label-width="formLabelWidth"
                         v-if="oCommonType == 2"
                 >
-                    <el-radio-group v-model="oCinemaCode" @change="selectCinema">
-                        <el-radio
+                    <el-checkbox-group v-model="oCinemaCode" @change="selectCinema2">
+                        <el-checkbox
                                 v-for="item in cinemaInfo"
                                 :label="item.cinemaCode"
                                 :key="item.cinemaCode"
                                 :value="item.cinemaName"
                         >{{item.cinemaName}}
-                        </el-radio>
-                    </el-radio-group>
+                        </el-checkbox>
+                    </el-checkbox-group>
                 </el-form-item>
                 <el-form-item
                         :required="true"
@@ -556,10 +556,10 @@
                         :label-width="formLabelWidth"
                         v-if="oCommonType == 2"
                 >
-                    <el-radio-group v-model="oSelectHallType" @change="clearScreenCode()">
+                    <el-radio-group v-model="oSelectHallType" @change="clearScreenCode2()">
                         <el-radio label="0">全部影厅</el-radio>
-                        <el-radio label="1">指定影厅参加</el-radio>
-                        <el-radio label="2">指定影厅不参加</el-radio>
+                        <el-radio label="1" :disabled="canChooseScreen">指定影厅参加</el-radio>
+                        <el-radio label="2" :disabled="canChooseScreen">指定影厅不参加</el-radio>
                     </el-radio-group>
                     <el-checkbox-group
                             v-model="oScreenCode"
@@ -984,9 +984,10 @@
                     }
                 ],
                 showCommonType: false,
+                canChooseScreen: false,
                 oCommonType: '',
                 oSendType: '',
-                oCinemaCode: '',
+                oCinemaCode: [],
                 oCreateType: '',
                 oSelectHallType: '',
                 oScreenCode: [],
@@ -1227,8 +1228,19 @@
             clearFilmList() {
                 this.selectedSell = [];
             },
+
+            // 新增
             clearScreenCode() {
+                if (this.oForm.cinemaCode.length == 0) {
+                    this.message = '请选择影院！';
+                    this.open();
+                    return;
+                }
                 this.oForm.screenCode = [];
+            },
+
+            // 修改
+            clearScreenCode2() {
                 this.oScreenCode = [];
             },
             clearFilmFormatCode() {
@@ -1342,7 +1354,7 @@
                         if (data.data.code == 'success') {
                             this.dialogFormVisible = true;
                             this.selectedSell = [];
-                            this.getAllScreen(this.oForm.cinemaCode);
+                            // this.getAllScreen(this.oForm.cinemaCode);
                             console.log(JSON.parse(Decrypt(data.data.data)));
                             if (JSON.parse(Decrypt(data.data.data)).adminFlag <= 1) {
                                 this.oForm.commonType = 1;
@@ -1828,7 +1840,7 @@
                             this.oCinemaName = JSON.parse(Decrypt(data.data.data)).coupon.cinemaNames;
                             this.oCreateType = JSON.parse(Decrypt(data.data.data)).coupon.createType;
                             this.oScreenName = JSON.parse(Decrypt(data.data.data)).coupon.screenNames;
-                            this.oCinemaCode = JSON.parse(Decrypt(data.data.data)).coupon.cinemaCodes;
+                            this.oCinemaCode = JSON.parse(Decrypt(data.data.data)).coupon.cinemaCodes.split(',');
                             this.oCommonType = JSON.parse(Decrypt(data.data.data)).coupon.commonType;
                             this.oFilmFormatName = JSON.parse(Decrypt(data.data.data)).coupon.filmFormatName;
                             this.oHolidayAddMoney = JSON.parse(Decrypt(data.data.data)).coupon.holidayAddMoney;
@@ -2392,8 +2404,7 @@
                                 cinemaList.cinemaName = oData.cinemaList[i].cinemaName;
                                 this.cinemaInfo.push(cinemaList);
                             }
-                            this.oForm.cinemaCode = this.cinemaInfo[0].cinemaCode;
-                            this.selectValue = this.cinemaInfo[0].cinemaCode;
+                            // this.selectValue = this.cinemaInfo[0].cinemaCode;
                             this.tableData = oData.pageResult.data;
                             this.query.pageSize = oData.pageResult.pageSize;
                             this.query.pageNo = oData.pageResult.pageNo;
@@ -2420,11 +2431,45 @@
                     dangerouslyUseHTMLString: true
                 });
             },
+
+            // 新增
             selectCinema(val) {
+                if (this.oForm.cinemaCode.length == 0) {
+                    this.message = '请选择影院！';
+                    this.open();
+                    this.screenInfo = [];
+                    return
+                }
+                if (this.oForm.cinemaCode.length > 1) {
+                    this.oForm.selectHallType = '0';
+                    this.canChooseScreen = true;
+                    return;
+                }
+                this.canChooseScreen = false;
                 this.oScreenCode = [];
                 this.filmInfo = [];
                 this.oFilmFormatCode = [];
-                this.selectValue = val;
+                this.selectValue = val.join(",");
+                this.getAllScreen(val);
+            },
+
+            // 修改
+            selectCinema2(val) {
+                if (this.oCinemaCode.length == 0) {
+                    this.message = '请选择影院！';
+                    this.open();
+                    return
+                }
+                if (this.oCinemaCode.length > 1) {
+                    this.oSelectHallType = '0';
+                    this.canChooseScreen = true;
+                    return;
+                }
+                this.canChooseScreen = false;
+                this.oScreenCode = [];
+                this.filmInfo = [];
+                this.oFilmFormatCode = [];
+                this.selectValue = val.join(",");
                 this.getAllScreen(val);
             },
             selectScreens(val) {
