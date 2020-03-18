@@ -130,12 +130,6 @@
                         </el-button>
                         <el-button
                                 type="success"
-                                v-if="scope.row.status == 1"
-                                @click="changeStatus(scope.$index, scope.row)"
-                        >停用
-                        </el-button>
-                        <el-button
-                                type="success"
                                 style="margin-top: 10px"
                                 v-if="scope.row.groupStatus == 3"
                                 @click="cancel(scope.$index, scope.row)"
@@ -455,6 +449,7 @@
                             style="width: 250px"
                             v-model="oFilmOpensName"
                             autocomplete="off"
+                            :disabled="oStatus==1"
                     ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="选择影院" :label-width="formLabelWidth">
@@ -464,6 +459,7 @@
                                 :key="item.cinemaCode"
                                 :label="item.cinemaCode"
                                 :value="item.cinemaCode"
+                                :disabled="oStatus==1"
                         >{{item.cinemaName}}
                         </el-checkbox>
                     </el-checkbox-group>
@@ -480,6 +476,7 @@
                                 :label="item.screenCode"
                                 :key="item.screenCode"
                                 :value="item.screenName"
+                                :disabled="oStatus==1"
                         >{{item.screenName}}
                         </el-checkbox>
                     </el-checkbox-group>
@@ -489,7 +486,7 @@
                         label="选择影片"
                         :label-width="formLabelWidth"
                 >
-                    <el-button type="primary" @click="openNext">点击新增</el-button>
+                    <el-button :disabled="oStatus==1" type="primary" @click="openNext">点击新增</el-button>
                 </el-form-item>
                 <el-form-item
                         label="所选影片"
@@ -524,6 +521,7 @@
                         />
                     </el-popover>
                     <el-upload
+                            v-if="oStatus==2"
                             :before-upload="beforeUpload"
                             :data="type"
                             class="upload-demo"
@@ -553,7 +551,7 @@
                     ></el-date-picker>
                 </el-form-item>
                 <el-form-item :required="true" label="票价" :label-width="formLabelWidth">
-                    <el-input style="width: 300px" v-model="oTicketPrice" onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')"></el-input>
+                    <el-input :disabled="oStatus==1" style="width: 300px" v-model="oTicketPrice" onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="报名时间" :label-width="formLabelWidth">
                     <el-date-picker
@@ -866,7 +864,7 @@
                 options: [
                     {
                         value: '2',
-                        label: '停用'
+                        label: '未启用'
                     },
                     {
                         value: '1',
@@ -932,7 +930,7 @@
                     reduceType: '1',
                     couponDesc: '',
                     id: '',
-                    status: '',
+                    status: '2',
                     oNum: '',
                     holidayAddMoney: '',
                     oneNum: '',
@@ -1293,7 +1291,7 @@
                                 this.oForm.startDate='';
                                 this.oForm.endDate='';
                                 this.oForm.agglomerationNumber='';
-                                this.oForm.status='';
+                                this.oForm.status='2';
                                 this.oForm.filmOpensExplain='';
                                 this.oForm.buyTicketHint='';
                                 this.oForm.printTicketExplain='';
@@ -1508,13 +1506,7 @@
             },
             // 修改状态
             changeStatus(index, row) {
-                if (row.status == 2) {
-                    this.rowMess = '启用';
-                }
-                if (row.status == 1) {
-                    this.rowMess = '停用';
-                }
-                this.$confirm('是否确定' + this.rowMess + '此活动?', '提示', {
+                this.$confirm('请确认信息，一经启用部分信息不可修改', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
