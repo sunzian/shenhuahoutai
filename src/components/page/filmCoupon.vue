@@ -1362,7 +1362,7 @@
                                 this.oForm.commonType = 2;
                                 this.showCommonType = true;
                             }
-                            this.oForm.sendType=1;
+                            this.oForm.sendType = 1;
                             let formats = JSON.parse(Decrypt(data.data.data)).formatList;
                             this.formatList = [];
                             for (let i = 0; i < formats.length; i++) {
@@ -1837,11 +1837,15 @@
                                 this.formatList.push(formatArr);
                             }
                             this.editVisible = true;
+                            console.log(JSON.parse(Decrypt(data.data.data)));
                             this.oCinemaName = JSON.parse(Decrypt(data.data.data)).coupon.cinemaNames;
                             this.oCreateType = JSON.parse(Decrypt(data.data.data)).coupon.createType;
                             this.oScreenName = JSON.parse(Decrypt(data.data.data)).coupon.screenNames;
-                            this.oCinemaCode = JSON.parse(Decrypt(data.data.data)).coupon.cinemaCodes.split(',');
                             this.oCommonType = JSON.parse(Decrypt(data.data.data)).coupon.commonType;
+                            if (this.oCommonType == 2) {
+                                this.oCinemaCode = JSON.parse(Decrypt(data.data.data)).coupon.cinemaCodes.split(',');
+                                this.getAllScreen(this.oCinemaCode);
+                            }
                             this.oFilmFormatName = JSON.parse(Decrypt(data.data.data)).coupon.filmFormatName;
                             this.oHolidayAddMoney = JSON.parse(Decrypt(data.data.data)).coupon.holidayAddMoney;
                             this.oName = JSON.parse(Decrypt(data.data.data)).coupon.name;
@@ -1940,7 +1944,6 @@
                                     break;
                                 }
                             }
-                            this.getAllScreen(this.oCinemaCode);
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
                             this.open();

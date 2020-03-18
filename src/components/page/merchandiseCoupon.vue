@@ -1095,7 +1095,9 @@
                             this.oMerchandiseName = JSON.parse(Decrypt(data.data.data)).coupon.merchandiseNames;
                             this.oCreateType = JSON.parse(Decrypt(data.data.data)).coupon.createType;
                             this.oCommonType = JSON.parse(Decrypt(data.data.data)).coupon.commonType;
-                            this.oCinemaCode = JSON.parse(Decrypt(data.data.data)).coupon.cinemaCodes.split(",");
+                            if (this.oCommonType == 2) {
+                                this.oCinemaCode = JSON.parse(Decrypt(data.data.data)).coupon.cinemaCodes.split(",");
+                            }
                             this.oName = JSON.parse(Decrypt(data.data.data)).coupon.name;
                             // this.oStartDate = JSON.parse(Decrypt(data.data.data)).coupon.startDate;
                             this.oSendNumber = JSON.parse(Decrypt(data.data.data)).coupon.sendNumber;
