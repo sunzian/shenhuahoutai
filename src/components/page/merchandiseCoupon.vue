@@ -1217,6 +1217,7 @@ export default {
             jsonArr.push({ key: 'couponDesc', value: this.oForm.couponDesc });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
+            console.log(jsonArr)
             let params = ParamsAppend(jsonArr);
             if (this.dialogFormVisible == true) {
                 https
@@ -1353,12 +1354,13 @@ export default {
                         if (JSON.parse(Decrypt(data.data.data)).coupon.validPayType == 2) {
                             this.oValidPayType = '2';
                         }
-                        if (JSON.parse(Decrypt(data.data.data)).coupon.sendType == 1) {
-                            this.oSendType = '1';
-                        }
-                        if (JSON.parse(Decrypt(data.data.data)).coupon.sendType == 2) {
-                            this.oSendType = '2';
-                        }
+                        this.oSendType = JSON.parse(Decrypt(data.data.data)).coupon.sendType;
+                        // if (JSON.parse(Decrypt(data.data.data)).coupon.sendType == 1) {
+                        //     this.oSendType = '1';
+                        // }
+                        // if (JSON.parse(Decrypt(data.data.data)).coupon.sendType == 2) {
+                        //     this.oSendType = '2';
+                        // }
                         this.oAchieveMoney = JSON.parse(Decrypt(data.data.data)).coupon.achieveMoney;
                         if (JSON.parse(Decrypt(data.data.data)).coupon.reduceType == 1) {
                             this.oReduceType = '1';

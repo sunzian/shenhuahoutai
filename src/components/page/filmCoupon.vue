@@ -1491,8 +1491,6 @@ export default {
                     if (data.data.code == 'success') {
                         this.dialogFormVisible = true;
                         this.selectedSell = [];
-                        // this.getAllScreen(this.oForm.cinemaCode);
-                        console.log(JSON.parse(Decrypt(data.data.data)));
                         if (JSON.parse(Decrypt(data.data.data)).adminFlag <= 1) {
                             this.oForm.commonType = 1;
                         } else {
@@ -1758,9 +1756,6 @@ export default {
             //         return;
             //     }
             // }
-            if (this.oForm.cinemaCode == true) {
-                this.oForm.cinemaCode = this.cinemaInfo[0].cinemaCode;
-            }
             let filmeCodes = [];
             for (let i = 0; i < this.selectedSell.length; i++) {
                 filmeCodes.push(this.selectedSell[i].filmCode);
@@ -2010,12 +2005,13 @@ export default {
                         if (JSON.parse(Decrypt(data.data.data)).coupon.validPayType == 2) {
                             this.oValidPayType = '2';
                         }
-                        if (JSON.parse(Decrypt(data.data.data)).coupon.sendType == 1) {
-                            this.oSendType = '1';
-                        }
-                        if (JSON.parse(Decrypt(data.data.data)).coupon.sendType == 2) {
-                            this.oSendType = '2';
-                        }
+                        this.oSendType = JSON.parse(Decrypt(data.data.data)).coupon.sendType;
+                        // if (JSON.parse(Decrypt(data.data.data)).coupon.sendType == 1) {
+                        //     this.oSendType = '1';
+                        // }
+                        // if (JSON.parse(Decrypt(data.data.data)).coupon.sendType == 2) {
+                        //     this.oSendType = '2';
+                        // }
                         if (JSON.parse(Decrypt(data.data.data)).coupon.selectFilmType == 0) {
                             this.oSelectFilmType = '0';
                         }
@@ -2544,7 +2540,6 @@ export default {
                             cinemaList.cinemaName = oData.cinemaList[i].cinemaName;
                             this.cinemaInfo.push(cinemaList);
                         }
-                        // this.selectValue = this.cinemaInfo[0].cinemaCode;
                         this.tableData = oData.pageResult.data;
                         this.query.pageSize = oData.pageResult.pageSize;
                         this.query.pageNo = oData.pageResult.pageNo;
@@ -2583,6 +2578,7 @@ export default {
             if (this.oForm.cinemaCode.length > 1) {
                 this.oForm.selectHallType = '0';
                 this.canChooseScreen = true;
+                this.selectValue = val.join(',');
                 return;
             }
             this.canChooseScreen = false;

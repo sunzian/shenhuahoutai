@@ -783,6 +783,7 @@ export default {
             jsonArr.push({ key: 'status', value: this.oForm.status });
             jsonArr.push({ key: 'memo', value: this.oForm.memo });
             let sign = md5(preSign(jsonArr));
+            console.log(jsonArr)
             jsonArr.push({ key: 'sign', value: sign });
             let params = ParamsAppend(jsonArr);
             if (this.dialogFormVisible == true) {
