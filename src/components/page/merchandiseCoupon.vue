@@ -592,6 +592,14 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
+                <el-form-item label="已导出数量：" :label-width="formLabelWidth" :required="true">
+                    <span>{{exportForm.totalCount}}</span>
+                </el-form-item>
+                <el-form-item label="序列号范围：" :label-width="formLabelWidth" :required="true">
+                    <span>{{exportForm.startSerialNo}}</span>
+                    -
+                    <span>{{exportForm.endSerialNo}}</span>
+                </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="exportVisible = false">取 消</el-button>
@@ -890,7 +898,10 @@ export default {
             openVisible: false,
             exportForm: {
                 id: '',
-                exportNum: ''
+                exportNum: '',
+                totalCount: '',
+                startSerialNo: '',
+                endSerialNo: ''
             },
             openForm: {
                 id: '',
@@ -901,7 +912,7 @@ export default {
                 startNumber: '',
                 endNumber: '',
                 explain: '',
-                                startSerialNo: '',
+                startSerialNo: '',
                 endSerialNo: '',
                 currentSerialNo: '',
                 validityType: 1,
@@ -1135,6 +1146,9 @@ export default {
                     if (data.data.code == 'success') {
                         this.exportVisible = true;
                         this.exportForm.id = row.id;
+                        this.exportForm.startSerialNo = JSON.parse(Decrypt(data.data.data)).startSerialNo;
+                        this.exportForm.endSerialNo = JSON.parse(Decrypt(data.data.data)).endSerialNo;
+                        this.exportForm.totalCount = JSON.parse(Decrypt(data.data.data)).totalCount;
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
@@ -1177,6 +1191,9 @@ export default {
             https.exportCouponMethod(myObj);
             this.exportForm.id = '';
             this.exportForm.exportNum = '';
+            this.exportForm.startSerialNo = '';
+            this.exportForm.endSerialNo = '';
+            this.exportForm.totalCount = '';
             this.exportVisible = false;
             loading.close();
         },
