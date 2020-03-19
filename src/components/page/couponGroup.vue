@@ -392,7 +392,6 @@ export default {
     data() {
         return {
             showCommonType: false,
-            oCommonType: '',
             oCinemaName: '',
             oGroupName: '',
             oMemo: '',
@@ -481,7 +480,7 @@ export default {
         this.getMenu();
     },
     methods: {
-                canExportCoupon(index, row) {
+        canExportCoupon(index, row) {
             //是否拥有权限
             const loading = this.$loading({
                 lock: true,
@@ -631,6 +630,7 @@ export default {
                 let jsonArr = [];
                 jsonArr.push({key:"name",value:name});
                 jsonArr.push({key:"cinemaCodes",value:this.oForm.cinemaCode.join(",")});
+                jsonArr.push({key:"commonType",value:this.oForm.commonType});
                 jsonArr.push({key:"pageNo",value:this.query.aPageNo});
                 jsonArr.push({key:"pageSize",value:this.query.aPageSize});
                 let sign =md5(preSign(jsonArr));
@@ -873,7 +873,6 @@ export default {
                 .fetchPost('couponGroup/updateCouponGroupPage', params)
                 .then(data => {
                     loading.close();
-                    console.log(data);
                     if (data.data.code == 'success') {
                         this.editVisible = true;
                         console.log(JSON.parse(Decrypt(data.data.data)));
@@ -887,12 +886,10 @@ export default {
                                 json.num=JSON.parse(Decrypt(data.data.data)).couponGroup.couponList[x].number;
                                 this.selectedSell.push(json)
                             }
-                            console.log(this.selectedSell);
                         }
-                        // this.couponList = JSON.parse(Decrypt(data.data.data)).couponGroup.couponList;
                         this.oCinemaName = JSON.parse(Decrypt(data.data.data)).couponGroup.cinemaName;
                         this.oForm.commonType = JSON.parse(Decrypt(data.data.data)).couponGroup.commonType;
-                        this.oForm.cinemaCode = JSON.parse(Decrypt(data.data.data)).couponGroup.cinemaCodes;
+                        this.oForm.cinemaCode = JSON.parse(Decrypt(data.data.data)).couponGroup.cinemaCodes.split(",");
                         this.oGroupName = JSON.parse(Decrypt(data.data.data)).couponGroup.groupName;
                         this.oMemo = JSON.parse(Decrypt(data.data.data)).couponGroup.memo;
                         this.oId = JSON.parse(Decrypt(data.data.data)).couponGroup.id;

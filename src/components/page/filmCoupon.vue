@@ -876,46 +876,6 @@
         <!--导出弹出框-->
         <el-dialog title="导出" :close-on-click-modal="false" :visible.sync="exportVisible">
             <el-form :model="exportForm">
-                <el-form-item :required="true" label="有效期类型：" :label-width="formLabelWidth">
-                    <el-radio-group v-model="exportForm.validityType">
-                        <el-radio :label="1">固定天数后过期</el-radio>
-                        <el-radio :label="2">固定有效时间段</el-radio>
-                    </el-radio-group>
-                </el-form-item>
-                <el-form-item
-                    label="用户绑定后有效期天数："
-                    :label-width="formLabelWidth"
-                    v-if="exportForm.validityType == 1"
-                    :required="true"
-                >
-                    <el-input
-                        onkeyup="this.value=this.value.replace(/[^0-9]+/,'')"
-                        style="width: 150px"
-                        v-model="exportForm.validityDay"
-                        autocomplete="off"
-                    ></el-input>
-                </el-form-item>
-                <el-form-item
-                    label="指定时间段："
-                    :label-width="formLabelWidth"
-                    v-if="exportForm.validityType == 2"
-                    :required="true"
-                >
-                    <el-date-picker
-                        v-model="exportForm.startDate"
-                        type="date"
-                        placeholder="有效期开始时间"
-                        value-format="yyyy-MM-dd"
-                        format="yyyy-MM-dd"
-                    ></el-date-picker>至
-                    <el-date-picker
-                        v-model="exportForm.endDate"
-                        type="date"
-                        placeholder="有效期结束时间"
-                        value-format="yyyy-MM-dd"
-                        format="yyyy-MM-dd"
-                    ></el-date-picker>
-                </el-form-item>
                 <el-form-item label="导出数量：" :label-width="formLabelWidth" :required="true">
                     <el-input
                         onkeyup="this.value=this.value.replace(/[^0-9]+/,'')"
@@ -933,7 +893,7 @@
         <!--开通弹出框-->
         <el-dialog title="开通" :close-on-click-modal="false" :visible.sync="openVisible">
             <el-form :model="openForm">
-                <el-form-item label="开通信息：" :label-width="formLabelWidth" :required="true">
+                <el-form-item label="开通原因：" :label-width="formLabelWidth" :required="true">
                     <textarea
                         style="width: 250px"
                         v-model="openForm.explain"
@@ -949,6 +909,46 @@
                     :label-width="formLabelWidth"
                 >
                     <span>{{openForm.couponName}}</span>
+                </el-form-item>
+                <el-form-item :required="true" label="有效期类型：" :label-width="formLabelWidth">
+                    <el-radio-group v-model="openForm.validityType">
+                        <el-radio :label="1">固定天数后过期</el-radio>
+                        <el-radio :label="2">固定有效时间段</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item
+                    label="用户绑定后有效期天数："
+                    :label-width="formLabelWidth"
+                    v-if="openForm.validityType == 1"
+                    :required="true"
+                >
+                    <el-input
+                        onkeyup="this.value=this.value.replace(/[^0-9]+/,'')"
+                        style="width: 150px"
+                        v-model="openForm.validityDay"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item
+                    label="指定时间段："
+                    :label-width="formLabelWidth"
+                    v-if="openForm.validityType == 2"
+                    :required="true"
+                >
+                    <el-date-picker
+                        v-model="openForm.startDate"
+                        type="date"
+                        placeholder="有效期开始时间"
+                        value-format="yyyy-MM-dd"
+                        format="yyyy-MM-dd"
+                    ></el-date-picker>至
+                    <el-date-picker
+                        v-model="openForm.endDate"
+                        type="date"
+                        placeholder="有效期结束时间"
+                        value-format="yyyy-MM-dd"
+                        format="yyyy-MM-dd"
+                    ></el-date-picker>
                 </el-form-item>
                 <el-form-item label="开通数量：" :label-width="formLabelWidth" :required="true">
                     <span>{{openForm.openCount}}</span>
@@ -970,6 +970,14 @@
                         v-model="openForm.endNumber"
                         autocomplete="off"
                     ></el-input>
+                </el-form-item>
+                <el-form-item label="序列号范围：" :label-width="formLabelWidth" :required="true">
+                    <span>{{openForm.startSerialNo}}</span>
+                    -
+                    <span>{{openForm.endSerialNo}}</span>
+                </el-form-item>
+                <el-form-item label="已开通至：" :label-width="formLabelWidth" :required="true">
+                    <span>{{openForm.currentSerialNo}}序列号</span>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -1145,10 +1153,6 @@ export default {
             rowMess: '',
             exportForm: {
                 id: '',
-                validityType: 1,
-                validityDay: '',
-                startDate: '',
-                endDate: '',
                 exportNum: ''
             },
             openForm: {
@@ -1159,7 +1163,14 @@ export default {
                 notOpenCount: '',
                 startNumber: '',
                 endNumber: '',
-                explain: ''
+                explain: '',
+                startSerialNo: '',
+                endSerialNo: '',
+                currentSerialNo: '',
+                validityType: 1,
+                validityDay: '',
+                startDate: '',
+                endDate: '',
             }
         };
     },
@@ -1188,7 +1199,13 @@ export default {
                 .then(data => {
                     loading.close();
                     if (data.data.code == 'success') {
-                        this.openForm = JSON.parse(Decrypt(data.data.data));
+                        this.openForm.cinemaName = JSON.parse(Decrypt(data.data.data)).cinemaName;
+                        this.openForm.couponName = JSON.parse(Decrypt(data.data.data)).couponName;
+                        this.openForm.openCount = JSON.parse(Decrypt(data.data.data)).openCount;
+                        this.openForm.notOpenCount = JSON.parse(Decrypt(data.data.data)).notOpenCount;
+                        this.openForm.startSerialNo = JSON.parse(Decrypt(data.data.data)).startSerialNo;
+                        this.openForm.endSerialNo = JSON.parse(Decrypt(data.data.data)).endSerialNo;
+                        this.openForm.currentSerialNo = JSON.parse(Decrypt(data.data.data)).currentSerialNo;
                         this.openVisible = true;
                         this.openForm.id = row.id;
                     } else if (data.data.code == 'nologin') {
@@ -1206,13 +1223,32 @@ export default {
                 });
         },
         openCoupon() {
+            if (this.openForm.validityType == 1) {
+                if (this.openForm.validityDay.trim() == '' || this.openForm.validityDay.trim() == 0) {
+                    this.message = '绑定后有效期天数必须大于0！';
+                    this.open();
+                    return;
+                }
+            }
+            if (this.openForm.validityType == 2) {
+                if (
+                    !this.openForm.startDate ||
+                    this.openForm.startDate == '' ||
+                    !this.openForm.endDate ||
+                    this.openForm.endDate == ''
+                ) {
+                    this.message = '指定时间段不能为空！';
+                    this.open();
+                    return;
+                }
+            }
             if (!this.openForm.startNumber || !this.openForm.endNumber) {
                 this.message = '请填写序列号范围！';
                 this.open();
                 return
             }
             if (!this.openForm.explain) {
-                this.message = '请填写开通信息！';
+                this.message = '请填写开通原因！';
                 this.open();
                 return
             }
@@ -1228,6 +1264,10 @@ export default {
             jsonArr.push({ key: 'startNumber', value: this.openForm.startNumber });
             jsonArr.push({ key: 'endNumber', value: this.openForm.endNumber });
             jsonArr.push({ key: 'explain', value: this.openForm.explain });
+            jsonArr.push({ key: 'validityType', value: this.openForm.validityType });
+            jsonArr.push({ key: 'validityDay', value: this.openForm.validityDay });
+            jsonArr.push({ key: 'startDate', value: this.openForm.startDate });
+            jsonArr.push({ key: 'endDate', value: this.openForm.endDate });
             console.log(jsonArr)
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
@@ -1243,6 +1283,10 @@ export default {
                         this.openForm.startNumber = '';
                         this.openForm.endNumber = '';
                         this.openForm.explain = '';
+                        this.openForm.validityType = 1;
+                        this.openForm.validityDay = '';
+                        this.openForm.startDate = '';
+                        this.openForm.endDate = '';
                         this.openVisible = false;
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
@@ -1299,29 +1343,10 @@ export default {
                 });
         },
         exportCoupon() {
-            if (this.exportForm.validityType == 1) {
-                if (this.exportForm.validityDay.trim() == '' || this.exportForm.validityDay.trim() == 0) {
-                    this.message = '绑定后有效期天数必须大于0！';
-                    this.open();
-                    return;
-                }
-            }
             if (this.exportForm.exportNum.trim() == '' || !this.exportForm.exportNum || this.exportForm.exportNum == 0) {
                 this.message = '导出数量必须大于0！';
                 this.open();
                 return;
-            }
-            if (this.exportForm.validityType == 2) {
-                if (
-                    !this.exportForm.startDate ||
-                    this.exportForm.startDate == '' ||
-                    !this.exportForm.endDate ||
-                    this.exportForm.endDate == ''
-                ) {
-                    this.message = '指定时间段不能为空！';
-                    this.open();
-                    return;
-                }
             }
             const loading = this.$loading({
                 lock: true,
@@ -1331,10 +1356,6 @@ export default {
                 target: document.querySelector('.div1')
             });
             var jsonArr = [];
-            jsonArr.push({ key: 'validityType', value: this.exportForm.validityType });
-            jsonArr.push({ key: 'validityDay', value: this.exportForm.validityDay });
-            jsonArr.push({ key: 'startDate', value: this.exportForm.startDate });
-            jsonArr.push({ key: 'endDate', value: this.exportForm.endDate });
             jsonArr.push({ key: 'exportNum', value: this.exportForm.exportNum });
             jsonArr.push({ key: 'associatedId', value: this.exportForm.id });
             let sign = md5(preSign(jsonArr));
@@ -1348,10 +1369,6 @@ export default {
             };
             https.exportCouponMethod(myObj);
             this.exportForm.id = '';
-            this.exportForm.validityType = 1;
-            this.exportForm.validityDay = '';
-            this.exportForm.startDate = '';
-            this.exportForm.endDate = '';
             this.exportForm.exportNum = '';
             this.exportVisible = false;
             loading.close();
