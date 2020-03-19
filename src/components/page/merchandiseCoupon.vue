@@ -698,11 +698,21 @@
                         :row-key="getFilmId"
                 >
                     <el-table-column type="selection" :reserve-selection="true" width="55"></el-table-column>
-                    <el-table-column prop="sort" label="商品名称">
-                        <template slot-scope="scope">{{scope.row.merchandiseName}}</template>
+                    <el-table-column prop="name" label="图片">
+                        <template slot-scope="scope">
+                            <el-popover placement="right" title trigger="hover">
+                                <img style="width:400px" :src="scope.row.merchandisePic" />
+                                <img
+                                        slot="reference"
+                                        :src="scope.row.merchandisePic"
+                                        :alt="scope.row.merchandisePic"
+                                        style="max-height: 50px;max-width: 130px"
+                                />
+                            </el-popover>
+                        </template>
                     </el-table-column>
-                    <el-table-column prop="sort" label="商品图片" width="180">
-                        <template slot-scope="scope">{{scope.row.merchandisePic}}</template>
+                    <el-table-column prop="sort" label="商品名称" width="150">
+                        <template slot-scope="scope">{{scope.row.merchandiseName}}</template>
                     </el-table-column>
                 </el-table>
                 <div class="pagination">
