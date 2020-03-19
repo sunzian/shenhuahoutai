@@ -1758,6 +1758,7 @@ export default {
                         //新增
                         if (data.data.code == 'success') {
                             this.dialogFormVisible = false;
+                            this.$refs.multipleTable.clearSelection();
                             this.selectFilm = {};
                             this.oForm.filmName = '';
                             this.oForm.commonType = '1';
@@ -2342,6 +2343,7 @@ export default {
                     // console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.$message.success(`编辑成功`);
+                        this.$refs.multipleTable.clearSelection();
                         this.editVisible = false;
                         this.getMenu();
                     } else if (data.data.code == 'nologin') {

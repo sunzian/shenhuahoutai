@@ -1191,6 +1191,7 @@ export default {
                     if (data.data.code == 'success') {
                         this.dialogFormVisible = true;
                         this.oForm.merchandiseCode = [];
+                        this.selectedSell=[];
                         if (JSON.parse(Decrypt(data.data.data)).adminFlag <= 1) {
                             this.oForm.commonType = 1;
                         } else {
@@ -1370,6 +1371,7 @@ export default {
                         if (data.data.code == 'success') {
                             this.dialogFormVisible = false;
                             this.$message.success(`新增成功`);
+                            this.$refs.multipleTable.clearSelection();
                             this.oForm.name = '';
                             this.oForm.commonType = '1';
                             this.oForm.cinemaCode = [];
@@ -1739,6 +1741,7 @@ export default {
                     if (data.data.code == 'success') {
                         this.editVisible = false;
                         this.$message.success(`编辑成功`);
+                        this.$refs.multipleTable.clearSelection();
                         this.getMenu();
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
