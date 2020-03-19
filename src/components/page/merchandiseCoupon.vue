@@ -596,7 +596,7 @@
         <!--开通弹出框-->
         <el-dialog title="开通" :close-on-click-modal="false" :visible.sync="openVisible">
             <el-form :model="openForm">
-                <el-form-item label="开通信息：" :label-width="formLabelWidth" :required="true">
+                <el-form-item label="开通原因：" :label-width="formLabelWidth" :required="true">
                     <textarea
                         style="width: 250px"
                         v-model="openForm.explain"
@@ -840,7 +840,7 @@ export default {
                 return;
             }
             if (!this.openForm.explain) {
-                this.message = '请填写开通信息！';
+                this.message = '请填写开通原因！';
                 this.open();
                 return;
             }

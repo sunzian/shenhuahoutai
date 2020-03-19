@@ -481,7 +481,7 @@ export default {
         this.getMenu();
     },
     methods: {
-                canExportCoupon(index, row) {
+        canExportCoupon(index, row) {
             //是否拥有权限
             const loading = this.$loading({
                 lock: true,
