@@ -928,7 +928,8 @@ export default {
     },
     methods: {
         clearSelectedSell(){
-            this.selectedSell=[]
+            this.selectedSell=[];
+            this.$refs.multipleTable.clearSelection();
         },
         getFilmId(row) {
             return row.merchandiseCode;
@@ -1207,11 +1208,13 @@ export default {
             this.oForm.merchandiseCode = [];
             this.oMerchandiseCode = [];
             this.selectedSell = [];
+            this.$refs.multipleTable.clearSelection();
         },
         clearMerchandiseCode2() {
             this.oForm.merchandiseCode = [];
             this.oMerchandiseCode = [];
             this.selectedSell = [];
+            this.$refs.multipleTable.clearSelection();
         },
         addPage() {
             //获取新增按钮权限
@@ -1229,6 +1232,7 @@ export default {
                     if (data.data.code == 'success') {
                         this.dialogFormVisible = true;
                         this.oForm.merchandiseCode = [];
+                        this.selectedSell=[];
                         if (JSON.parse(Decrypt(data.data.data)).adminFlag <= 1) {
                             this.oForm.commonType = 1;
                         } else {
@@ -1408,6 +1412,7 @@ export default {
                         if (data.data.code == 'success') {
                             this.dialogFormVisible = false;
                             this.$message.success(`新增成功`);
+                            this.$refs.multipleTable.clearSelection();
                             this.oForm.name = '';
                             this.oForm.commonType = '1';
                             this.oForm.cinemaCode = [];
@@ -1777,6 +1782,7 @@ export default {
                     if (data.data.code == 'success') {
                         this.editVisible = false;
                         this.$message.success(`编辑成功`);
+                        this.$refs.multipleTable.clearSelection();
                         this.getMenu();
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
@@ -2014,16 +2020,19 @@ export default {
         aCurrentChange(val) {
             //点击选择具体页数
             this.query.aPageNo = val;
+            this.$refs.multipleTable.clearSelection();
             this.openNext();
         },
         aPrev() {
             //分页按钮上一页
             this.query.aPageNo--;
+            this.$refs.multipleTable.clearSelection();
             this.openNext();
         },
         aNext() {
             //分页按钮下一页
             this.query.aPageNo++;
+            this.$refs.multipleTable.clearSelection();
             this.openNext();
         }
     }
