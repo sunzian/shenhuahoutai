@@ -184,7 +184,7 @@
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" label="通用方式：" :label-width="formLabelWidth">
-                    <el-radio-group v-model="oForm.commonType" @change="selectCommonType">
+                    <el-radio-group v-model="oForm.commonType" @change="clearSelectedSell()">
                         <el-radio :label="1" :disabled="showCommonType">全部影院</el-radio>
                         <el-radio :label="2" :disabled="showCommonType">指定影院</el-radio>
                     </el-radio-group>
@@ -215,19 +215,34 @@
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item
-                    :required="true"
-                    v-if="oForm.selectMerchandiseType==1||oForm.selectMerchandiseType==2"
-                    label="适用卖品："
-                    :label-width="formLabelWidth"
+                        :required="true"
+                        v-if="oForm.selectMerchandiseType != 0"
+                        label="选择商品："
+                        :label-width="formLabelWidth"
                 >
-                    <el-checkbox-group v-model="oForm.merchandiseCode" @change="selectGoods">
-                        <el-checkbox
-                            v-for="item in goodsInfo"
-                            :label="item.merchandiseCode"
-                            :key="item.merchandiseCode"
-                            :value="item.merchandiseName"
-                        >{{item.merchandiseName}}</el-checkbox>
-                    </el-checkbox-group>
+                    <el-button type="primary" @click="openNext">点击选择</el-button>
+                </el-form-item>
+                <el-form-item
+                        label="所选商品"
+                        :label-width="formLabelWidth"
+                        v-if="selectedSell.length>0&&oForm.selectMerchandiseType != 0"
+                        :required="true"
+                >
+                    <div
+                            v-for="(item, index) in selectedSell"
+                            style="margin-bottom: 5px"
+                            :key="index"
+                    >
+                        <el-input
+                                style="width: 250px"
+                                v-model="item.merchandiseName"
+                                autocomplete="off"
+                                :value="item.merchandiseCode"
+                                :disabled="true"
+                                :change="one(item.merchandiseCode)"
+                        ></el-input>
+                        <span style="color:red;cursor: pointer;" @click="deleteSell(index)">删除</span>
+                    </div>
                 </el-form-item>
                 <el-form-item :required="true" label="可用支付方式：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.validPayType">
@@ -369,7 +384,7 @@
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item :required="true" label="通用方式：" :label-width="formLabelWidth">
-                    <el-radio-group v-model="oCommonType" @change="selectCommonType2">
+                    <el-radio-group v-model="oCommonType" @change="clearSelectedSell()">
                         <el-radio :label="1" disabled>全部影院</el-radio>
                         <el-radio :label="2" disabled>指定影院</el-radio>
                     </el-radio-group>
@@ -400,20 +415,50 @@
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item
-                    :required="true"
-                    v-if="oSelectMerchandiseType==1||oSelectMerchandiseType==2"
-                    label="适用卖品："
-                    :label-width="formLabelWidth"
+                        :required="true"
+                        v-if="oSelectMerchandiseType != 0"
+                        label="选择商品："
+                        :label-width="formLabelWidth"
                 >
-                    <el-checkbox-group v-model="oMerchandiseCode" @change="selectGoods">
-                        <el-checkbox
-                            v-for="item in goodsInfo"
-                            :label="item.merchandiseCode"
-                            :key="item.merchandiseCode"
-                            :value="item.merchandiseName"
-                        >{{item.merchandiseName}}</el-checkbox>
-                    </el-checkbox-group>
+                    <el-button type="primary" @click="openNext">点击选择</el-button>
                 </el-form-item>
+                <el-form-item
+                        label="所选商品"
+                        :label-width="formLabelWidth"
+                        v-if="selectedSell.length>0&&oSelectMerchandiseType != 0"
+                        :required="true"
+                >
+                    <div
+                            v-for="(item, index) in selectedSell"
+                            style="margin-bottom: 5px"
+                            :key="index"
+                    >
+                        <el-input
+                                style="width: 250px"
+                                v-model="item.merchandiseName"
+                                autocomplete="off"
+                                :value="item.merchandiseCode"
+                                :disabled="true"
+                                :change="one(item.merchandiseCode)"
+                        ></el-input>
+                        <span style="color:red;cursor: pointer;" @click="deleteSell(index)">删除</span>
+                    </div>
+                </el-form-item>
+                <!--<el-form-item-->
+                    <!--:required="true"-->
+                    <!--v-if="oSelectMerchandiseType==1||oSelectMerchandiseType==2"-->
+                    <!--label="适用卖品："-->
+                    <!--:label-width="formLabelWidth"-->
+                <!--&gt;-->
+                    <!--<el-checkbox-group v-model="oMerchandiseCode" @change="selectGoods">-->
+                        <!--<el-checkbox-->
+                            <!--v-for="item in goodsInfo"-->
+                            <!--:label="item.merchandiseCode"-->
+                            <!--:key="item.merchandiseCode"-->
+                            <!--:value="item.merchandiseName"-->
+                        <!--&gt;{{item.merchandiseName}}</el-checkbox>-->
+                    <!--</el-checkbox-group>-->
+                <!--</el-form-item>-->
                 <el-form-item :required="true" label="可用支付方式：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oValidPayType">
                         <el-radio label="0">全部可用</el-radio>
@@ -636,6 +681,50 @@
                 <el-button type="primary" @click="openCoupon">确 定</el-button>
             </div>
         </el-dialog>
+        <!--新增抽屉弹出框-->
+        <el-dialog title="选择商品" :close-on-click-modal="false" :visible.sync="drawer">
+            <div class="container">
+                <div class="handle-box">
+                    <el-input v-model="query.merchandiseName" placeholder="商品名称" class="handle-input mr12"></el-input>
+                    <el-button type="primary" icon="el-icon-search" @click="SearchFilm">搜索</el-button>
+                </div>
+                <el-table
+                        :data="sellTableData"
+                        border
+                        class="table"
+                        ref="multipleTable"
+                        header-cell-class-name="table-header"
+                        @selection-change="handleSelectionChange"
+                        :row-key="getFilmId"
+                >
+                    <el-table-column type="selection" :reserve-selection="true" width="55"></el-table-column>
+                    <el-table-column prop="sort" label="商品名称">
+                        <template slot-scope="scope">{{scope.row.merchandiseName}}</template>
+                    </el-table-column>
+                    <el-table-column prop="sort" label="商品图片" width="180">
+                        <template slot-scope="scope">{{scope.row.merchandisePic}}</template>
+                    </el-table-column>
+                </el-table>
+                <div class="pagination">
+                    <el-pagination
+                            background
+                            @size-change="aHandleSizeChange"
+                            layout="total, sizes, prev, pager, next, jumper"
+                            :current-page="query.aPageNo"
+                            :page-sizes="[10, 15, 20, 30]"
+                            :page-size="query.aPageSize"
+                            :total="query.aTotalCount"
+                            @current-change="aCurrentChange"
+                            @prev-click="aPrev"
+                            @next-click="aNext"
+                    ></el-pagination>
+                </div>
+            </div>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="drawer = false">取 消</el-button>
+                <el-button type="primary" @click="sureNext">确 定</el-button>
+            </div>
+        </el-dialog>
     </div>
 </template>
 
@@ -681,12 +770,15 @@ export default {
                 }
             ],
             oCheckedDays: [],
+            selectedSell: [],
+            sellTableData: [],
             oMerchandiseName: '',
             oSendType: '',
             showCommonType: false,
             oCommonType: '',
             oCreateType: '',
             oCinemaCode: '',
+            drawer: false,
             oMerchandiseCode: [],
             oSelectMerchandiseType: '',
             oCinemaNames: '',
@@ -706,7 +798,10 @@ export default {
             message: '', //弹出框消息
             query: {
                 pageNo: 1,
-                pageSize: 15
+                pageSize: 15,
+                aPageNo: 1,
+                aPageSize: 15,
+                merchandiseName: ''
             },
             tableData: [],
             multipleSelection: [],
@@ -796,6 +891,80 @@ export default {
         this.getMenu();
     },
     methods: {
+        clearSelectedSell(){
+            this.selectedSell=[]
+        },
+        getFilmId(row) {
+            return row.merchandiseCode;
+        },
+        SearchFilm() {
+            this.query.aPageNo = 1;
+            this.openNext();
+        },
+        openNext() {
+            //获取影片列表
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
+            setTimeout(() => {
+                let merchandiseName = this.query.merchandiseName;
+                if (!merchandiseName) {
+                    merchandiseName = '';
+                }
+                let jsonArr = [];
+                jsonArr.push({ key: 'merchandiseName', value: merchandiseName });
+                jsonArr.push({ key: 'cinemaCode', value: this.selectValue });
+                jsonArr.push({ key: 'merchandiseStatus', value: 1 });
+                jsonArr.push({ key: 'pageNo', value: this.query.aPageNo });
+                jsonArr.push({ key: 'pageSize', value: this.query.aPageSize });
+                let sign = md5(preSign(jsonArr));
+                jsonArr.push({ key: 'sign', value: sign });
+                var params = ParamsAppend(jsonArr);
+                https
+                    .fetchPost('/merchandise/list', params)
+                    .then(data => {
+                        loading.close();
+                        if (data.data.code == 'success') {
+                            this.drawer = true;
+                            var oData = JSON.parse(Decrypt(data.data.data));
+                            console.log(oData);
+                            // console.log(this.query);
+                            this.sellTableData = oData.data;
+                            this.query.aPageSize = oData.pageSize;
+                            this.query.aPageNo = oData.pageNo;
+                            this.query.aTotalCount = oData.totalCount;
+                            this.query.aTotalPage = oData.totalPage;
+                            this.query.merchandiseName = '';
+                        } else if (data.data.code == 'nologin') {
+                            this.message = data.data.message;
+                            this.open();
+                            this.$router.push('/login');
+                        } else {
+                            this.message = data.data.message;
+                            this.open();
+                        }
+                    })
+                    .catch(err => {
+                        loading.close();
+                        console.log(err);
+                    });
+            }, 500);
+        },
+        sureNext() {
+            let selectedSell = [];
+            this.selectedSell = selectedSell.concat(this.multipleSelection);
+            this.drawer = false;
+        },
+        one(a) {
+            this.oForm.merchandiseCode = a;
+        },
+        deleteSell(index) {
+            this.selectedSell.splice(index, 1);
+        },
         canOpenCoupon(index, row) {
             //是否拥有权限
             const loading = this.$loading({
@@ -989,34 +1158,12 @@ export default {
         clearMerchandiseCode() {
             this.oForm.merchandiseCode = [];
             this.oMerchandiseCode = [];
-            if (this.oForm.commonType == 1) {
-                this.getAllGoods();
-            } else {
-                if (this.oForm.cinemaCode.length == 0) {
-                    this.message = '请选择影院！';
-                    this.open();
-                    this.goodsInfo = [];
-                    return;
-                } else {
-                    this.getAllGoods(this.oForm.cinemaCode);
-                }
-            }
+            this.selectedSell = [];
         },
         clearMerchandiseCode2() {
             this.oForm.merchandiseCode = [];
             this.oMerchandiseCode = [];
-            if (this.oCommonType == 1) {
-                this.getAllGoods();
-            } else {
-                if (this.oCinemaCode.length == 0) {
-                    this.message = '请选择影院！';
-                    this.open();
-                    this.goodsInfo = [];
-                    return;
-                } else {
-                    this.getAllGoods(this.oCinemaCode);
-                }
-            }
+            this.selectedSell = [];
         },
         addPage() {
             //获取新增按钮权限
@@ -1034,7 +1181,6 @@ export default {
                     if (data.data.code == 'success') {
                         this.dialogFormVisible = true;
                         this.oForm.merchandiseCode = [];
-                        this.getAllGoods();
                         if (JSON.parse(Decrypt(data.data.data)).adminFlag <= 1) {
                             this.oForm.commonType = 1;
                         } else {
@@ -1060,6 +1206,7 @@ export default {
         },
         addRole() {
             //新增按钮操作
+            console.log(this.selectedSell);
             const loading = this.$loading({
                 lock: true,
                 text: 'Loading',
@@ -1067,6 +1214,11 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
+            let filmeCodes = [];
+            for (let i = 0; i < this.selectedSell.length; i++) {
+                filmeCodes.push(this.selectedSell[i].merchandiseCode);
+            }
+            this.oForm.merchandiseCode = filmeCodes.join(',');
             if (!this.oForm.name) {
                 this.message = '优惠券名称不能为空，请检查！';
                 this.open();
@@ -1169,27 +1321,6 @@ export default {
                 loading.close();
                 return;
             }
-            // if (this.oForm.sendNumber != 0) {
-            //     if (!this.oForm.sendNumber) {
-            //         this.message = '库存不能为空，请检查！';
-            //         this.open();
-            //         loading.close();
-            //         return;
-            //     } else if (this.oForm.sendNumber < 0) {
-            //         this.message = '库存不能小于0！';
-            //         this.open();
-            //         loading.close();
-            //         return;
-            //     }
-            // }
-            // if(this.oForm.reduceType==1&&this.oForm.discountMoney==0){
-            //     if(this.oForm.validPayType==0||this.oForm.validPayType==2){
-            //         this.message = '优惠券0元固定价格的时候只能选择非会员支付！';
-            //         this.open();
-            //         loading.close();
-            //         return;
-            //     }
-            // }
             if (this.oForm.cinemaCode == true) {
                 this.oForm.cinemaCode = this.cinemaInfo[0].cinemaCode;
             }
@@ -1201,7 +1332,7 @@ export default {
             jsonArr.push({ key: 'commonType', value: this.oForm.commonType });
             jsonArr.push({ key: 'cinemaCodes', value: this.selectValue });
             jsonArr.push({ key: 'selectMerchandiseType', value: this.oForm.selectMerchandiseType });
-            jsonArr.push({ key: 'merchandiseCode', value: this.selectGoodsCode });
+            jsonArr.push({ key: 'merchandiseCode', value: this.oForm.merchandiseCode });
             jsonArr.push({ key: 'sendType', value: this.oForm.sendType });
             // jsonArr.push({ key: 'startDate', value: this.oForm.startDate });
             // jsonArr.push({ key: 'endDate', value: this.oForm.endDate });
@@ -1217,7 +1348,7 @@ export default {
             jsonArr.push({ key: 'couponDesc', value: this.oForm.couponDesc });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
-            console.log(jsonArr)
+            console.log(jsonArr);
             let params = ParamsAppend(jsonArr);
             if (this.dialogFormVisible == true) {
                 https
@@ -1324,7 +1455,7 @@ export default {
                 .fetchPost('merchandiseCoupon/getMerchandiseCouponById', params)
                 .then(data => {
                     loading.close();
-                    // console.log(JSON.parse(Decrypt(data.data.data)));
+                    console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.editVisible = true;
                         this.cinemaInfo = [];
@@ -1335,6 +1466,20 @@ export default {
                             cinemaList.cinemaName = JSON.parse(Decrypt(data.data.data)).cinemaList[i].cinemaName;
                             this.cinemaInfo.push(cinemaList);
                         }
+
+                        if (JSON.parse(Decrypt(data.data.data)).coupon.merchandiseCode && JSON.parse(Decrypt(data.data.data)).coupon.merchandiseNames) {
+                            let exFilmCodeList = JSON.parse(Decrypt(data.data.data)).coupon.merchandiseCode.split(',');
+                            let exFilmNameList = JSON.parse(Decrypt(data.data.data)).coupon.merchandiseNames.split(',');
+                            this.selectedSell = [];
+                            for (let x in exFilmNameList) {
+                                let json = {};
+                                json.merchandiseName = exFilmNameList[x];
+                                json.merchandiseCode = exFilmCodeList[x];
+                                this.selectedSell.push(json);
+                            }
+                            console.log(this.selectedSell);
+                        }
+
                         this.oMerchandiseName = JSON.parse(Decrypt(data.data.data)).coupon.merchandiseNames;
                         this.oCreateType = JSON.parse(Decrypt(data.data.data)).coupon.createType;
                         this.oCommonType = JSON.parse(Decrypt(data.data.data)).coupon.commonType;
@@ -1406,7 +1551,6 @@ export default {
                                 break;
                             }
                         }
-                        this.getAllGoods(this.oCinemaCode);
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
@@ -1430,6 +1574,11 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
+            let filmeCodes = [];
+            for (let i = 0; i < this.selectedSell.length; i++) {
+                filmeCodes.push(this.selectedSell[i].merchandiseCode);
+            }
+            this.oForm.merchandiseCode = filmeCodes.join(',');
             if (!this.oName) {
                 this.message = '优惠券名称不能为空，请检查！';
                 this.open();
@@ -1553,7 +1702,7 @@ export default {
             jsonArr.push({ key: 'commonType', value: this.oCommonType });
             jsonArr.push({ key: 'cinemaCodes', value: this.oCinemaCode });
             jsonArr.push({ key: 'selectMerchandiseType', value: this.oSelectMerchandiseType });
-            jsonArr.push({ key: 'merchandiseCode', value: this.oMerchandiseCode.join(',') });
+            jsonArr.push({ key: 'merchandiseCode', value: this.oForm.merchandiseCode });
             jsonArr.push({ key: 'reduceType', value: this.oReduceType });
             jsonArr.push({ key: 'achieveMoney', value: this.oAchieveMoney });
             jsonArr.push({ key: 'discountMoney', value: this.oDiscountMoney });
@@ -1745,21 +1894,8 @@ export default {
                 dangerouslyUseHTMLString: true
             });
         },
-        selectCommonType(val) {
-            if (val == 2) {
-                this.getAllGoods(this.oForm.cinemaCode);
-            } else {
-                this.getAllGoods();
-            }
-        },
-        selectCommonType2(val) {
-            if (val == 2) {
-                this.getAllGoods(this.oCinemaCode);
-            } else {
-                this.getAllGoods();
-            }
-        },
         selectCinema(val) {
+            this.selectedSell=[];
             if (val.length == 0) {
                 this.message = '请选择影院！';
                 this.open();
@@ -1768,7 +1904,7 @@ export default {
             }
             this.oMerchandiseCode = [];
             this.selectValue = val.join(',');
-            this.getAllGoods(val);
+            console.log(this.selectValue);
         },
         selectGoods(val) {
             let selectValue = val.join(',');
@@ -1787,41 +1923,6 @@ export default {
                         var res = JSON.parse(Decrypt(data.data.data));
                         console.log(res);
                         this.cinemaData = res;
-                    } else if (data.data.code == 'nologin') {
-                        this.message = data.data.message;
-                        this.open();
-                        this.$router.push('/login');
-                    } else {
-                        this.message = data.data.message;
-                        this.open();
-                    }
-                })
-                .catch(err => {
-                    console.log(err);
-                });
-        },
-        // 获取所选影院卖品
-        getAllGoods(value) {
-            let jsonArr = [];
-            if (value) {
-                value = value.join(',');
-            }
-            jsonArr.push({ key: 'cinemaCode', value: value });
-            let sign = md5(preSign(jsonArr));
-            jsonArr.push({ key: 'sign', value: sign });
-            var params = ParamsAppend(jsonArr);
-            https
-                .fetchPost('merchandiseCoupon/getMerchandiseByCinemaCode', params)
-                .then(data => {
-                    if (data.data.code == 'success') {
-                        let goods = JSON.parse(Decrypt(data.data.data));
-                        this.goodsInfo = [];
-                        for (let i = 0; i < goods.length; i++) {
-                            let goodsList = {};
-                            goodsList.merchandiseCode = goods[i].merchandiseCode;
-                            goodsList.merchandiseName = goods[i].merchandiseName;
-                            this.goodsInfo.push(goodsList);
-                        }
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
@@ -1857,6 +1958,25 @@ export default {
             //分页按钮下一页
             this.query.pageNo++;
             this.getMenu();
+        },
+        aHandleSizeChange(val) {
+            this.query.aPageSize = val;
+            this.openNext();
+        },
+        aCurrentChange(val) {
+            //点击选择具体页数
+            this.query.aPageNo = val;
+            this.openNext();
+        },
+        aPrev() {
+            //分页按钮上一页
+            this.query.aPageNo--;
+            this.openNext();
+        },
+        aNext() {
+            //分页按钮下一页
+            this.query.aPageNo++;
+            this.openNext();
         }
     }
 };
@@ -1876,6 +1996,10 @@ export default {
 
 .mr10 {
     width: 16%;
+    margin-right: 10px;
+}
+.mr12 {
+    width: 30%;
     margin-right: 10px;
 }
 </style>

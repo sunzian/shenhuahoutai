@@ -1392,35 +1392,13 @@ export default {
         deleteSell(index) {
             this.selectedSell.splice(index, 1);
         },
-        // getCurrentRow(index) {
-        //     this.sellIndex = index;
-        // },
         sureNext() {
-            // if (this.sellIndex >= 0) {
-            //     // console.log('选了数据');
-            //     if (this.selectedSell.length <= 0) {
-            //         // console.log('长度为0');
-            //         this.selectedSell.push(this.sellTableData[this.sellIndex]);
-            //     } else if (this.selectedSell.length > 0) {
-            //         // console.log('有数据');
-            //         for (let x in this.selectedSell) {
-            //             if (this.selectedSell[x].filmCode == this.sellTableData[this.sellIndex].filmCode) {
-            //                 this.message = '不能添加相同影片！';
-            //                 this.open();
-            //                 return;
-            //             }
-            //         }
-            // console.log('判断不重复');
             let selectedSell = [];
             this.selectedSell = selectedSell.concat(this.multipleSelection);
-            console.log(this.selectedSell);
-            // this.selectedSell.push(this.sellTableData[this.sellIndex]);
-            //     }
-            // }
             this.drawer = false;
         },
         SearchFilm() {
-            this.query.pageNo = 1;
+            this.query.aPageNo = 1;
             this.openNext();
         },
         openNext() {
@@ -1713,49 +1691,12 @@ export default {
                 loading.close();
                 return;
             }
-            // if (this.oForm.reduceType == 1&&this.oForm.holidayValid==1) {
-            //     if (this.oForm.holidayAddMoney > 0) {
-            //         if (!this.oForm.holidayAddMoney) {
-            //             this.message = '节假日加价金额不能为空，请检查！';
-            //             this.open();
-            //             loading.close();
-            //             return;
-            //         }
-            //         if (this.oForm.holidayAddMoney<0) {
-            //             this.message = '节假日加价金额不能小于0，请检查！';
-            //             this.open();
-            //             loading.close();
-            //             return;
-            //         }
-            //     }
-            // }
             if (!this.oForm.activityTogether) {
                 this.message = '是否和活动共用不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
             }
-            // if (this.oForm.sendNumber != 0) {
-            //     if (!this.oForm.sendNumber) {
-            //         this.message = '库存不能为空，请检查！';
-            //         this.open();
-            //         loading.close();
-            //         return;
-            //     } else if (this.oForm.sendNumber < 0) {
-            //         this.message = '库存不能小于0！';
-            //         this.open();
-            //         loading.close();
-            //         return;
-            //     }
-            // }
-            // if(this.oForm.reduceType==1&&this.oForm.discountMoney==0){
-            //     if(this.oForm.validPayType==0||this.oForm.validPayType==2){
-            //         this.message = '优惠券0元固定价格的时候只能选择非会员支付！';
-            //         this.open();
-            //         loading.close();
-            //         return;
-            //     }
-            // }
             let filmeCodes = [];
             for (let i = 0; i < this.selectedSell.length; i++) {
                 filmeCodes.push(this.selectedSell[i].filmCode);
