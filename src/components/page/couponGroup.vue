@@ -73,10 +73,10 @@
                                 v-if="scope.row.status == 1"
                                 @click="changeStatus(scope.$index, scope.row)"
                         >停用</el-button>
-                        <el-button
+                        <!-- <el-button
                                 type="success"
                                 @click="canExportCoupon(scope.$index, scope.row)"
-                        >导出</el-button>
+                        >导出</el-button> -->
                     </template>
                 </el-table-column>
                 <el-table-column label="操作" width="150" align="center" fixed="right">
