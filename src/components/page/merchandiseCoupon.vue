@@ -82,7 +82,12 @@
                         <el-tag v-else type="danger">代金券</el-tag>
                     </template>
                 </el-table-column>
-
+                <el-table-column prop="name" label="发放方式" width="120">
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row.sendType == 1">线上发放</el-tag>
+                        <el-tag v-if="scope.row.sendType == 2">线下发放</el-tag>
+                    </template>
+                </el-table-column>
                 <!-- <el-table-column prop="memo" label="有效期">
                     <template slot-scope="scope">{{scope.row.startDate}}至{{scope.row.endDate}}</template>
                 </el-table-column>-->
