@@ -669,7 +669,7 @@
                 <el-form-item label="已开通数量：" :label-width="formLabelWidth">
                     <span>{{openForm.openCount}}</span>
                 </el-form-item>
-                <el-form-item label="剩余数量：" :label-width="formLabelWidth">
+                <el-form-item label="剩余未开通数量：" :label-width="formLabelWidth">
                     <span>{{openForm.notOpenCount}}</span>
                 </el-form-item>
                 <el-form-item label="开通序列号：" :label-width="formLabelWidth" :required="true">
@@ -678,6 +678,7 @@
                         style="width: 250px"
                         v-model="openForm.startNumber"
                         autocomplete="off"
+                        placeholder="开始序列号"
                     ></el-input>
                     -
                     <el-input
@@ -685,6 +686,7 @@
                         style="width: 250px"
                         v-model="openForm.endNumber"
                         autocomplete="off"
+                        placeholder="结束序列号"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="序列号范围：" :label-width="formLabelWidth">
@@ -693,7 +695,7 @@
                     <span>{{openForm.endSerialNo}}</span>
                 </el-form-item>
                 <el-form-item label="已开通至：" :label-width="formLabelWidth">
-                    <span>{{openForm.currentSerialNo}}序列号</span>
+                    <span>{{openForm.currentSerialNo}}号</span>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -1052,6 +1054,21 @@ export default {
                     this.open();
                     return;
                 }
+            }
+            if (this.openForm.startNumber < this.openForm.startSerialNo || 
+                this.openForm.startNumber > this.openForm.endSerialNo || 
+                this.openForm.endNumber < this.openForm.startSerialNo || 
+                this.openForm.endNumber > this.openForm.endSerialNo
+                ) {
+                this.message = '请输入范围内的序列号！';
+                    this.open();
+                    return;
+            }
+            if (this.openForm.endNumber < this.openForm.startNumber
+                ) {
+                this.message = '开始序列号不能大于结束序列号！';
+                this.open();
+                return;
             }
             if (this.openForm.validityType == 2) {
                 if (
