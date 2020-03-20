@@ -694,6 +694,9 @@
                     -
                     <span>{{openForm.endSerialNo}}</span>
                 </el-form-item>
+                <el-form-item label="开通数量：" :label-width="formLabelWidth">
+                    <span>{{openForm.endNumber - openForm.startNumber}}</span>
+                </el-form-item>
                 <el-form-item label="已开通至：" :label-width="formLabelWidth">
                     <span>{{openForm.currentSerialNo}}号</span>
                 </el-form-item>

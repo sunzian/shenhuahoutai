@@ -981,6 +981,9 @@
                         placeholder="结束序列号"
                     ></el-input>
                 </el-form-item>
+                <el-form-item label="开通数量：" :label-width="formLabelWidth">
+                    <span>{{openForm.endNumber - openForm.startNumber}}</span>
+                </el-form-item>
                 <el-form-item label="序列号范围：" :label-width="formLabelWidth">
                     <span>{{openForm.startSerialNo}}</span>
                     -
