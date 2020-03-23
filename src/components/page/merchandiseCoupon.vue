@@ -82,7 +82,12 @@
                         <el-tag v-else type="danger">代金券</el-tag>
                     </template>
                 </el-table-column>
-
+                <el-table-column prop="name" label="发放方式" width="120">
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row.sendType == 1">线上发放</el-tag>
+                        <el-tag v-if="scope.row.sendType == 2">线下发放</el-tag>
+                    </template>
+                </el-table-column>
                 <!-- <el-table-column prop="memo" label="有效期">
                     <template slot-scope="scope">{{scope.row.startDate}}至{{scope.row.endDate}}</template>
                 </el-table-column>-->
@@ -612,7 +617,7 @@
                 <el-form-item label="开通原因：" :label-width="formLabelWidth" :required="true">
                     <textarea
                         style="width: 250px"
-                        v-model="openForm.explain"
+                        v-model="openForm.memo"
                         autocomplete="off"
                         maxlength="50"
                     ></textarea>
@@ -666,34 +671,39 @@
                         format="yyyy-MM-dd"
                     ></el-date-picker>
                 </el-form-item>
-                <el-form-item label="开通数量：" :label-width="formLabelWidth" :required="true">
+                <el-form-item label="已开通数量：" :label-width="formLabelWidth">
                     <span>{{openForm.openCount}}</span>
                 </el-form-item>
-                <el-form-item label="剩余数量：" :label-width="formLabelWidth">
+                <el-form-item label="剩余未开通数量：" :label-width="formLabelWidth">
                     <span>{{openForm.notOpenCount}}</span>
                 </el-form-item>
                 <el-form-item label="开通序列号：" :label-width="formLabelWidth" :required="true">
                     <el-input
                         onkeyup="this.value=this.value.replace(/[^0-9]+/,'')"
-                        style="width: 150px"
+                        style="width: 250px"
                         v-model="openForm.startNumber"
                         autocomplete="off"
+                        placeholder="开始序列号"
                     ></el-input>
                     -
                     <el-input
                         onkeyup="this.value=this.value.replace(/[^0-9]+/,'')"
-                        style="width: 150px"
+                        style="width: 250px"
                         v-model="openForm.endNumber"
                         autocomplete="off"
+                        placeholder="结束序列号"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="序列号范围：" :label-width="formLabelWidth" :required="true">
+                <el-form-item label="序列号范围：" :label-width="formLabelWidth">
                     <span>{{openForm.startSerialNo}}</span>
                     -
                     <span>{{openForm.endSerialNo}}</span>
                 </el-form-item>
-                <el-form-item label="已开通至：" :label-width="formLabelWidth" :required="true">
-                    <span>{{openForm.currentSerialNo}}序列号</span>
+                <el-form-item label="开通数量：" :label-width="formLabelWidth">
+                    <span>{{openForm.endNumber - openForm.startNumber}}</span>
+                </el-form-item>
+                <el-form-item label="已开通至：" :label-width="formLabelWidth">
+                    <span>{{openForm.currentSerialNo}}号</span>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -911,7 +921,7 @@ export default {
                 notOpenCount: '',
                 startNumber: '',
                 endNumber: '',
-                explain: '',
+                memo: '',
                 startSerialNo: '',
                 endSerialNo: '',
                 currentSerialNo: '',
@@ -1053,6 +1063,21 @@ export default {
                     return;
                 }
             }
+            if (this.openForm.startNumber < this.openForm.startSerialNo || 
+                this.openForm.startNumber > this.openForm.endSerialNo || 
+                this.openForm.endNumber < this.openForm.startSerialNo || 
+                this.openForm.endNumber > this.openForm.endSerialNo
+                ) {
+                this.message = '请输入范围内的序列号！';
+                    this.open();
+                    return;
+            }
+            if (this.openForm.endNumber < this.openForm.startNumber
+                ) {
+                this.message = '开始序列号不能大于结束序列号！';
+                this.open();
+                return;
+            }
             if (this.openForm.validityType == 2) {
                 if (
                     !this.openForm.startDate ||
@@ -1070,7 +1095,7 @@ export default {
                 this.open();
                 return;
             }
-            if (!this.openForm.explain) {
+            if (!this.openForm.memo) {
                 this.message = '请填写开通原因！';
                 this.open();
                 return;
@@ -1086,7 +1111,7 @@ export default {
             jsonArr.push({ key: 'couponId', value: this.openForm.id });
             jsonArr.push({ key: 'startNumber', value: this.openForm.startNumber });
             jsonArr.push({ key: 'endNumber', value: this.openForm.endNumber });
-            jsonArr.push({ key: 'explain', value: this.openForm.explain });
+            jsonArr.push({ key: 'memo', value: this.openForm.memo });
             jsonArr.push({ key: 'validityType', value: this.openForm.validityType });
             jsonArr.push({ key: 'validityDay', value: this.openForm.validityDay });
             jsonArr.push({ key: 'startDate', value: this.openForm.startDate });
@@ -1105,7 +1130,7 @@ export default {
                         this.openForm.id = '';
                         this.openForm.startNumber = '';
                         this.openForm.endNumber = '';
-                        this.openForm.explain = '';
+                        this.openForm.memo = '';
                         this.openForm.validityType = 1;
                         this.openForm.validityDay = '';
                         this.openForm.startDate = '';
@@ -1170,13 +1195,6 @@ export default {
                 this.open();
                 return;
             }
-            const loading = this.$loading({
-                lock: true,
-                text: 'Loading',
-                spinner: 'el-icon-loading',
-                background: 'rgba(0, 0, 0, 0.7)',
-                target: document.querySelector('.div1')
-            });
             var jsonArr = [];
             jsonArr.push({ key: 'exportNum', value: this.exportForm.exportNum });
             jsonArr.push({ key: 'associatedId', value: this.exportForm.id });
@@ -1196,7 +1214,6 @@ export default {
             this.exportForm.endSerialNo = '';
             this.exportForm.totalCount = '';
             this.exportVisible = false;
-            loading.close();
         },
         clearDiscountMoney() {
             this.oForm.discountMoney = '';
@@ -1297,14 +1314,14 @@ export default {
                 loading.close();
                 return;
             }
-            if (this.oForm.selectMerchandiseType == 1 || this.oForm.selectMerchandiseType == 2) {
-                if (this.oForm.merchandiseCode.length == 0) {
-                    this.message = '所选卖品不能为空，请检查！';
-                    this.open();
-                    loading.close();
-                    return;
-                }
-            }
+            // if (this.oForm.selectMerchandiseType == 1 || this.oForm.selectMerchandiseType == 2) {
+            //     if (this.oForm.merchandiseCode.length == 0) {
+            //         this.message = '所选卖品不能为空，请检查！';
+            //         this.open();
+            //         loading.close();
+            //         return;
+            //     }
+            // }
             if (!this.oForm.validPayType) {
                 this.message = '可用支付方式不能为空，请检查！';
                 this.open();
@@ -1652,14 +1669,14 @@ export default {
                 loading.close();
                 return;
             }
-            if (this.oSelectMerchandiseType == 1 || this.oSelectMerchandiseType == 2) {
-                if (this.oMerchandiseCode.length == 0) {
-                    this.message = '所选卖品不能为空，请检查！';
-                    this.open();
-                    loading.close();
-                    return;
-                }
-            }
+            // if (this.oSelectMerchandiseType == 1 || this.oSelectMerchandiseType == 2) {
+            //     if (this.oMerchandiseCode.length == 0) {
+            //         this.message = '所选卖品不能为空，请检查！';
+            //         this.open();
+            //         loading.close();
+            //         return;
+            //     }
+            // }
             if (!this.oValidPayType) {
                 this.message = '可用支付方式不能为空，请检查！';
                 this.open();

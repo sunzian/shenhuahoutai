@@ -296,6 +296,11 @@ export default new Router({
                     meta: { title: '优惠券发放记录' }
                 },
                 {
+                    path: '/couponOpenRecordPage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/couponOpenRecordPage.vue'),
+                    meta: { title: '优惠券开通记录' }
+                },
+                {
                     path: '/userCouponPage',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/userCouponPage.vue'),
                     meta: { title: '用户优惠券列表' }
