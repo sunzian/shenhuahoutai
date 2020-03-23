@@ -1728,28 +1728,6 @@ export default {
                 loading.close();
                 return;
             }
-            // if (this.oSendNumber != 0) {
-            //     if (!this.oSendNumber) {
-            //         this.message = '库存不能为空，请检查！';
-            //         this.open();
-            //         loading.close();
-            //         return;
-            //     } else if (this.oSendNumber < 0) {
-            //         this.message = '库存不能小于0！';
-            //         this.open();
-            //         loading.close();
-            //         return;
-            //     }
-            // }
-            // if(this.oReduceType==1&&this.oDiscountMoney==0){
-            //     if(this.oValidPayType==0||this.oValidPayType==2){
-            //         this.message = '优惠券0元固定价格的时候只能选择非会员支付！';
-            //         this.open();
-            //         loading.close();
-            //         return;
-            //     }
-            //
-            // }
             var jsonArr = [];
             jsonArr.push({ key: 'name', value: this.oName });
             jsonArr.push({ key: 'commonType', value: this.oCommonType });
