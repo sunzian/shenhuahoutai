@@ -245,7 +245,7 @@
                         <span style="color:red;cursor: pointer;" @click="deleteSell(index)">删除</span>
                     </div>
                 </el-form-item>
-                <el-form-item :required="true" label="电影剧照" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="点映现场" :label-width="formLabelWidth">
                     <el-popover placement="right" title trigger="hover">
                         <img style="width: 400px" :src="oForm.stagePhoto"/>
                         <img
@@ -510,7 +510,7 @@
                         <span style="color:red;cursor: pointer;" @click="deleteSell(index)">删除</span>
                     </div>
                 </el-form-item>
-                <el-form-item :required="true" label="电影剧照" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="点映现场" :label-width="formLabelWidth">
                     <el-popover placement="right" title trigger="hover">
                         <img style="width: 400px" :src="oStagePhoto"/>
                         <img

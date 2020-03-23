@@ -77,6 +77,9 @@
                         <el-tag v-if="scope.row.couponType == 2">卖品</el-tag>
                     </template>
                 </el-table-column>
+                <el-table-column prop="memo" label="开通人" width="180">
+                    <template slot-scope="scope">{{scope.row.openUserName}}</template>
+                </el-table-column>
                 <el-table-column prop="memo" label="开通时间" width="180">
                     <template slot-scope="scope">{{scope.row.createDate}}</template>
                 </el-table-column>
@@ -135,6 +138,9 @@
                 <el-form-item label="优惠券类型：" :label-width="formLabelWidth">
                     <span v-if="form.couponType == 1">影票</span>
                     <span v-if="form.couponType == 2">卖品</span>
+                </el-form-item>
+                <el-form-item label="开通人：" :label-width="formLabelWidth">
+                    <span>{{form.openUserName}}</span>
                 </el-form-item>
                 <el-form-item label="开通原因：" :label-width="formLabelWidth">
                     <span>{{form.memo}}</span>
