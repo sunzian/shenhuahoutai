@@ -243,6 +243,7 @@
         <el-dialog :close-on-click-modal="false" title="新增商品" :visible.sync="dialogFormVisible">
             <el-form v-model="oForm">
                 <el-form-item :required="true" label="允许兑换的门店" :label-width="formLabelWidth">
+                    <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
                     <el-checkbox-group v-model="oCheckedCities" @change="getCinemaCode">
                         <el-checkbox
                             v-for="city in cities"
@@ -743,6 +744,7 @@
         <el-dialog :close-on-click-modal="false" title="编辑" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
                 <el-form-item :required="true" label="允许兑换的门店" :label-width="formLabelWidth">
+                    <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="oHandleCheckAllChange">全选</el-checkbox>
                     <el-checkbox-group v-model="oCheckedCities" @change="changeCinema" v-if="form.commodityCategory != 5">
                         <el-checkbox
                             v-for="city in oCities"
@@ -1508,6 +1510,8 @@ export default {
     data() {
         return {
             isClear: false,
+            isIndeterminate: true,
+            checkAll: false,
             content: '',
             partnerName: '',
             partnerCode: '',
@@ -1955,6 +1959,28 @@ export default {
         this.getMenu();
     },
     methods: {
+        handleCheckAllChange(val) {
+            console.log(val);
+            console.log(this.cities);
+            let arr=[];
+            for(let x in this.cities){
+                arr.push(this.cities[x].cinemaCode)
+            }
+            this.oCheckedCities = val ? arr : [];
+            console.log(this.oCheckedCities);
+            this.isIndeterminate = false;
+        },
+        oHandleCheckAllChange(val) {
+            console.log(val);
+            console.log(this.oCities);
+            let arr=[];
+            for(let x in this.oCities){
+                arr.push(this.oCities[x].cinemaCode)
+            }
+            this.oCheckedCities = val ? arr : [];
+            console.log(this.oCheckedCities);
+            this.isIndeterminate = false;
+        },
         surePartner(id) {
             this.partnerCode = id;
             for (let i = 0; i < this.partnerList.length; i++) {
@@ -2186,6 +2212,9 @@ export default {
             this.oCheckedCities = val;
             this.partnerName = '';
             this.partnerCode = '';
+            let checkedCount = val.length;
+            this.checkAll = checkedCount === this.cities.length;
+            this.isIndeterminate = checkedCount > 0 && checkedCount < this.cities.length;
         },
         getCurrentRow(index) {
             //优惠券弹出框index
@@ -3478,13 +3507,16 @@ export default {
             this.oCheckedCities = val;
             this.partnerCode = '';
             this.partnerName = '';
-            
+            let checkedCount = val.length;
+            this.checkAll = checkedCount === this.oCities.length;
+            this.isIndeterminate = checkedCount > 0 && checkedCount < this.oCities.length;
+
         },
         changeCinema2(val) {
             this.oCheckedCities = val;
             this.partnerCode = '';
             this.partnerName = '';
-            
+
         },
         open() {
             //信息提示弹出框
