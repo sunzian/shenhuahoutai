@@ -2309,7 +2309,9 @@ export default {
                         if (data.data.code == 'success') {
                             this.fileList = [];
                             this.cities = JSON.parse(Decrypt(data.data.data));
+                            this.oCheckedCities=[];
                             this.dialogFormVisible = true;
+                            this.isIndeterminate = false;
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
                             this.open();
