@@ -203,10 +203,10 @@
                     ></el-date-picker>
                 </el-form-item>
                 <el-form-item v-if="oForm.effectiveTimeType==1" :required="true" label="领取后几天过期" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" min="1" v-model="oForm.overDays" autocomplete="off"></el-input>
+                    <el-input style="width: 250px" min="1" v-model="oForm.overDays" autocomplete="off" onkeyup="this.value=this.value.replace(/[^0-9]+/,'')"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="可领取数量" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" min="1" v-model="oForm.store" autocomplete="off"></el-input>
+                    <el-input style="width: 250px" min="1" v-model="oForm.store" autocomplete="off" onkeyup="this.value=this.value.replace(/[^0-9]+/,'')"></el-input>
                 </el-form-item>
                 <el-form-item label="活动说明" :label-width="formLabelWidth">
                     <el-input
@@ -321,7 +321,7 @@
                         <el-radio :label="2">指定时间段</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item v-if="oForm.effectiveTimeType==2" :required="true" label="时间" :label-width="formLabelWidth">
+                <el-form-item v-if="oEffectiveTimeType==2" :required="true" label="时间" :label-width="formLabelWidth">
                     <el-date-picker
                             v-model="oCouponStartDate"
                             type="datetime"
@@ -338,13 +338,13 @@
                     ></el-date-picker>
                 </el-form-item>
                 <el-form-item v-if="oEffectiveTimeType==1" :required="true" label="领取后几天过期" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" min="1" v-model="oOverDays" autocomplete="off"></el-input>
+                    <el-input style="width: 250px" min="1" v-model="oOverDays" autocomplete="off"  onkeyup="this.value=this.value.replace(/[^0-9]+/,'')"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="可领取数量" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" min="1" v-model="oStore" autocomplete="off"></el-input>
+                    <el-input style="width: 250px" min="1" v-model="oStore" autocomplete="off" onkeyup="this.value=this.value.replace(/[^0-9]+/,'')"></el-input>
                 </el-form-item>
                 <el-form-item label="已领取数量" :label-width="formLabelWidth">
-                    <el-input disabled style="width: 250px" min="1" v-model="oStore" autocomplete="off"></el-input>
+                    <el-input disabled style="width: 250px" min="1" v-model="oGetNumber" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="活动说明" :label-width="formLabelWidth">
                     <el-input
@@ -522,15 +522,23 @@
                 dialogFormVisible: false,
                 oForm: {
                     cinemaName: '',
+                    name: '',
                     cinemaCodes: [],
                     levelCode: '',
                     ruleName: '', // 规则名称
                     rechargeAmount: '', // 充值金额
                     givenType: '', // 赠送类型
                     givenMoney: '', //赠送金额
+                    overDays: '', //赠送金额
+                    effectiveTimeType: '', //赠送金额
+                    couponStartDate: '', //赠送金额
+                    couponEndDate: '', //赠送金额
                     givenCouponGroupId: '', //赠送优惠券
                     ruleMemo: '', // 活动描述
+                    commonType: '', // 活动描述
                     status: '', // 启用状态
+                    store: '',
+                    memo: '',
                     id: '',
                     startDate: '',
                     endDate: ''
@@ -898,7 +906,9 @@
                 }
                 let newCoupon = coupon.join(',');
                 jsonArr.push({ key: 'commonType', value: this.oCommonType });
-                jsonArr.push({ key: 'cinemaCodes', value: this.oCinemaCodes.join(',') });
+                if(this.oCommonType==2){
+                    jsonArr.push({ key: 'cinemaCodes', value: this.oCinemaCodes.join(',') });
+                }
                 jsonArr.push({ key: 'name', value: this.oName });
                 jsonArr.push({ key: 'couponList', value: newCoupon });
                 jsonArr.push({ key: 'purchaseNumber', value: 1 });

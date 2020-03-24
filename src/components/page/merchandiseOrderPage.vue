@@ -25,7 +25,7 @@
                         class="mr10"
                 ></el-input>
                 <el-input
-                        placeholder="订单号"
+                        placeholder="售票系统单号"
                         v-model="query.submitOrderCode"
                         autocomplete="off"
                         class="mr10"
@@ -166,7 +166,7 @@
                 header-cell-class-name="table-header"
                 @selection-change="handleSelectionChange"
             >
-                <el-table-column label="订单号" width="150">
+                <el-table-column label="售票系统单号" width="150">
                     <template slot-scope="scope">{{scope.row.submitOrderCode}}</template>
                 </el-table-column>
                 <el-table-column label="本地订单号" width="150">
