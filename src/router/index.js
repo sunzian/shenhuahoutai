@@ -26,6 +26,11 @@ export default new Router({
                     meta: { title: '商家账号管理' }
                 },
                 {
+                    path: '/sweepCodeGetCouponPage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/sweepCodeGetCouponPage.vue'),
+                    meta: { title: '商家账号管理' }
+                },
+                {
                     path: '/queryMemberPrice',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/queryMemberPrice.vue'),
                     meta: { title: '查询影片会员价' }
