@@ -7,7 +7,7 @@
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
-        <div class="container">
+        <div class="container" v-if="!show">
             <div class="handle-box">
                 <el-select
                     clearable
@@ -130,8 +130,13 @@
                         <el-tag v-else type="danger">未启用</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" width="150" align="center" fixed="right">
+                <el-table-column label="操作" width="250" align="center" fixed="right">
                     <template slot-scope="scope">
+                        <el-button
+                            v-if="scope.row.sendType == 2"
+                            type="success"
+                            @click="canDetail(scope.$index, scope.row)"
+                        >详情</el-button>
                         <el-button
                             type="success"
                             v-if="scope.row.status == 0&&scope.row.sendType == 1"
@@ -994,15 +999,154 @@
                     -
                     <span>{{openForm.endSerialNo}}</span>
                 </el-form-item>
-                <el-form-item label="已开通至：" :label-width="formLabelWidth">
+                <!-- <el-form-item label="已开通至：" :label-width="formLabelWidth">
                     <span>{{openForm.currentSerialNo}}号</span>
-                </el-form-item>
+                </el-form-item> -->
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="openVisible = false">取 消</el-button>
                 <el-button type="primary" @click="openCoupon">确 定</el-button>
             </div>
         </el-dialog>
+        <!-- 详情中间页 -->
+        <div class="container" v-if="show">
+            <div class="handle-box">
+                <el-select
+                    clearable
+                    v-model="query.openStatus"
+                    placeholder="开通状态"
+                    class="handle-select mr10"
+                >
+                    <el-option key="1" label="未开通" value="1"></el-option>
+                    <el-option key="2" label="开通" value="2"></el-option>
+                </el-select>
+                <el-select
+                    clearable
+                    v-model="query.bindStatus"
+                    placeholder="绑定状态"
+                    class="handle-select mr10"
+                >
+                    <el-option key="1" label="未绑定" value="1"></el-option>
+                    <el-option key="2" label="绑定" value="2"></el-option>
+                </el-select>
+                <el-select
+                    clearable
+                    v-model="query.dStatus"
+                    placeholder="使用状态"
+                    class="handle-select mr10"
+                >
+                    <el-option key="1" label="未使用" value="1"></el-option>
+                    <el-option key="2" label="使用" value="2"></el-option>
+                    <el-option key="3" label="已过期" value="3"></el-option>
+                </el-select>
+                <el-select clearable v-model="query.cinemaCode" placeholder="使用影院" class="mr10">
+                    <el-option
+                        v-for="item in cinemaData"
+                        :key="item.cinemaCode"
+                        :label="item.cinemaName"
+                        :value="item.cinemaCode"
+                    ></el-option>
+                </el-select>
+                <el-button
+                    style="margin-top: 10px;width: 90px;"
+                    type="primary"
+                    icon="el-icon-search"
+                    @click="dSearch"
+                >搜索</el-button>
+                <el-button
+                    type="primary"
+                    @click="back"
+                    icon="el-icon-circle-plus-outline"
+                    style="float: right;margin-top: 10px"
+                >返回优惠券列表</el-button>
+            </div>
+            <el-table
+                :data="dTableData"
+                border
+                height="500"
+                class="table"
+                ref="multipleTable"
+                highlight-current-row
+                header-cell-class-name="table-header"
+            >
+                <el-table-column label="优惠券序列号">
+                    <template slot-scope="scope">{{scope.row.couponSerialNo}}</template>
+                </el-table-column>
+                <el-table-column label="优惠券券码">
+                    <template slot-scope="scope">{{scope.row.couponCode}}</template>
+                </el-table-column>
+                <el-table-column prop="name" label="有效期类型" width="150">
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row.validityType == 1">固定天数后过期</el-tag>
+                        <el-tag v-else>固定有效时间段</el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column label="用户绑定后有效期天数">
+                    <template slot-scope="scope">{{scope.row.validityDay}}</template>
+                </el-table-column>
+                <el-table-column label="有效期开始时间">
+                    <template slot-scope="scope">{{scope.row.startDate}}</template>
+                </el-table-column>
+                <el-table-column label="有效期结束时间">
+                    <template slot-scope="scope">{{scope.row.endDate}}</template>
+                </el-table-column>
+                <el-table-column prop="name" label="开通状态">
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row.openStatus == 1">未开通</el-tag>
+                        <el-tag v-else-if="scope.row.openStatus == 2">开通</el-tag>
+                        <el-tag v-else>未开通</el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="name" label="绑定状态">
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row.bindStatus == 1">未绑定</el-tag>
+                        <el-tag v-else-if="scope.row.bindStatus == 2">绑定</el-tag>
+                        <el-tag v-else>未绑定</el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column label="绑定时间">
+                    <template slot-scope="scope">{{scope.row.bindDate}}</template>
+                </el-table-column>
+                <el-table-column label="绑定用户手机号">
+                    <template slot-scope="scope">{{scope.row.bindUserMobile}}</template>
+                </el-table-column>
+                <el-table-column prop="name" label="使用状态">
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row.status == 1">未使用</el-tag>
+                        <el-tag v-else-if="scope.row.status == 2">使用</el-tag>
+                        <el-tag v-else-if="scope.row.status == 3">已过期</el-tag>
+                        <el-tag v-else>未使用</el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column label="使用影院名称">
+                    <template slot-scope="scope">{{scope.row.useCinemaName}}</template>
+                </el-table-column>
+                <!-- <el-table-column label="操作" width="130" align="center" fixed="right">
+                    <template slot-scope="scope">
+                        <el-button
+                            v-if="scope.row.createType != 2"
+                            type="text"
+                            icon="el-icon-circle-plus-outline"
+                            @click="addChange(scope.$index, scope.row)"
+                        >修改</el-button>
+                    </template>
+                </el-table-column> -->
+            </el-table>
+            <div class="pagination">
+                <el-pagination
+                    background
+                    @size-change="dHandleSizeChange"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :current-page="query.dPageNo"
+                    :page-sizes="[10, 15, 20, 30]"
+                    :page-size="query.dPageSize"
+                    :total="query.dTotalCount"
+                    @current-change="dCurrentChange"
+                    @prev-click="dPrev"
+                    @next-click="dNext"
+                ></el-pagination>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -1086,7 +1230,9 @@ export default {
                 pageSize: 15,
                 aPageNo: 1,
                 aPageSize: 15,
-                filmName: ''
+                filmName: '',
+                dPageNo: 1,
+                dPageSize: 15
             },
             restaurants: [],
             tableData: [],
@@ -1095,6 +1241,7 @@ export default {
             delList: [],
             editVisible: false,
             drawer: false,
+            show: false,
             pageTotal: 0,
             form: {},
             selectScreen: '', // 选中的影厅
@@ -1192,7 +1339,9 @@ export default {
                 validityDay: '',
                 startDate: '',
                 endDate: '',
-            }
+            },
+            dTableData: [],
+            dId: ''
         };
     },
     created() {
@@ -1201,6 +1350,85 @@ export default {
         this.getMenu();
     },
     methods: {
+        // 详情
+        canDetail(index, row) {
+            //是否拥有权限
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
+            let cinemaCode = this.query.cinemaCode;
+            let couponId = '';
+            if (row) {
+                couponId = row.id;
+                this.dId = row.id;
+            } else {
+                couponId = this.dId;
+            }
+            let status = this.query.dStatus;
+            let openStatus = this.query.openStatus;
+            let bindStatus = this.query.bindStatus;
+            if (!cinemaCode) {
+                cinemaCode = '';
+            }
+            if (!couponId) {
+                couponId = '';
+            }
+            if (!status) {
+                status = '';
+            }
+            if (!openStatus) {
+                openStatus = '';
+            }
+            if (!bindStatus) {
+                bindStatus = '';
+            }
+            let jsonArr = [];
+            jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
+            jsonArr.push({ key: 'couponId', value: couponId });
+            jsonArr.push({ key: 'pageNo', value: this.query.dPageNo });
+            jsonArr.push({ key: 'pageSize', value: this.query.dPageSize });
+            jsonArr.push({ key: 'status', value: status });
+            jsonArr.push({ key: 'openStatus', value: openStatus });
+            jsonArr.push({ key: 'bindStatus', value: bindStatus });
+            console.log(jsonArr)
+            let sign = md5(preSign(jsonArr));
+            jsonArr.push({ key: 'sign', value: sign });
+            let params = ParamsAppend(jsonArr);
+            https
+                .fetchPost('/CouponBackGround/couponBackGroundPage', params)
+                .then(data => {
+                    loading.close();
+                    if (data.data.code == 'success') {
+                        var dData = JSON.parse(Decrypt(data.data.data));
+                        this.show = true;
+                        console.log(dData)
+                        if (dData.data.length > 0) {
+                            this.dTableData = dData.data;
+                            this.query.dPageSize = dData.pageSize;
+                            this.query.dPageNo = dData.pageNo;
+                            this.query.dTotalCount = dData.totalCount;
+                            this.query.dTotalPage = dData.totalPage;
+                        } else {
+                            this.dTableData = []
+                        }
+                    } else if (data.data.code == 'nologin') {
+                        this.message = data.data.message;
+                        this.open();
+                        this.$router.push('/login');
+                    } else {
+                        this.message = data.data.message;
+                        this.open();
+                    }
+                })
+                .catch(err => {
+                    loading.close();
+                    console.log(err);
+                });
+        },
         canOpenCoupon(index, row) {
             //是否拥有权限
             const loading = this.$loading({
@@ -2490,6 +2718,11 @@ export default {
             this.query.pageNo = 1;
             this.getMenu();
         },
+        dSearch() {
+            this.query.dPageNo = 1;
+            this.dData = [];
+            this.canDetail();
+        },
         getMenu() {
             //获取菜单栏
             const loading = this.$loading({
@@ -2721,6 +2954,29 @@ export default {
             //分页按钮下一页
             this.query.aPageNo++;
             this.openNext();
+        },
+        back() {
+            this.show = false;
+            this.getMenu();
+        },
+        dHandleSizeChange(val) {
+            this.query.dPageSize = val;
+            this.canDetail();
+        },
+        dCurrentChange(val) {
+            //点击选择具体页数
+            this.query.dPageNo = val;
+            this.canDetail();
+        },
+        dPrev() {
+            //分页按钮上一页
+            this.query.dPageNo--;
+            this.canDetail();
+        },
+        dNext() {
+            //分页按钮下一页
+            this.query.dPageNo++;
+            this.canDetail();
         }
     }
 };
