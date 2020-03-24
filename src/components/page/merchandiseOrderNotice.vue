@@ -49,7 +49,7 @@
                     <template slot-scope="scope">{{scope.row.mobile}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="订单号">
-                    <template slot-scope="scope">{{scope.row.orderNo}}</template>
+                    <template slot-scope="scope">{{scope.row.submitOrderCode}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="用户名">
                     <template slot-scope="scope">{{scope.row.userName}}</template>

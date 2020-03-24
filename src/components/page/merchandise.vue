@@ -443,12 +443,7 @@ export default {
                                     break;
                                 }
                             }
-                            if (JSON.parse(Decrypt(data.data.data)).merchandise.batchUpdatePic == 1) {
-                                this.form.batchUpdatePic = '1';
-                            }
-                            if (JSON.parse(Decrypt(data.data.data)).merchandise.batchUpdatePic == 2) {
-                                this.form.batchUpdatePic = '2';
-                            }
+                            this.form.batchUpdatePic = 2;
 
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;

@@ -25,11 +25,18 @@
                         class="mr10"
                 ></el-input>
                 <el-input
+                        placeholder="订单号"
+                        v-model="query.submitOrderCode"
+                        autocomplete="off"
+                        class="mr10"
                         style="margin-bottom: 10px"
-                    placeholder="订单号"
-                    v-model="query.submitOrderCode"
-                    autocomplete="off"
-                    class="mr10"
+                ></el-input>
+                <el-input
+                        placeholder="本地订单号"
+                        v-model="query.orderNo"
+                        autocomplete="off"
+                        class="mr10"
+                        style="margin-bottom: 10px"
                 ></el-input>
                 <el-input
                         style="margin-bottom: 10px"
@@ -161,6 +168,9 @@
             >
                 <el-table-column label="订单号" width="150">
                     <template slot-scope="scope">{{scope.row.submitOrderCode}}</template>
+                </el-table-column>
+                <el-table-column label="本地订单号" width="150">
+                    <template slot-scope="scope">{{scope.row.orderNo}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="送餐手机号" width="110">
                     <template slot-scope="scope">{{scope.row.deliveryMobile}}</template>
@@ -817,8 +827,8 @@ export default {
                 }
                 let jsonArr = [];
                 jsonArr.push({ key: 'tableName', value: "merchandise_order" });
-                jsonArr.push({ key: 'exportKeysJson', value: "['id','cinemaCode','orderNo','userName','mobile','merNames','totalOriginalPrice','totalActivityDiscount','totalCouponDiscount','totalActualPrice','chPayStatus','chPayWay','payTime','chSubmitStatus','submitTime','chDeliveryType','submitOrderCode','printNo','userCouponName','deliveryAddress','chActivityType','activityName','tradeNo','deliveryMemo','chCancelStatus','refundReason','refundTime','submitMessage']"});
-                jsonArr.push({ key: 'exportTitlesJson', value:"['ID','影院编码','本地单号','用户','手机号','卖品内容','总原价','活动优惠金额','优惠券优惠金额','实付金额','支付状态','支付方式','支付时间','下单状态','下单时间','取货方式','系统单号','取货码','优惠券名称','送货地址','活动类型','活动名称','支付交易号','备注','退卖品状态','退款原因','退款时间','下单失败原因']" });
+                jsonArr.push({ key: 'exportKeysJson', value: "['id','cinemaCode','orderNo','submitOrderCode','userName','mobile','merNames','totalOriginalPrice','totalActivityDiscount','totalCouponDiscount','totalActualPrice','chPayStatus','chPayWay','payTime','chSubmitStatus','submitTime','chDeliveryType','submitOrderCode','printNo','userCouponName','deliveryAddress','chActivityType','activityName','tradeNo','deliveryMemo','chCancelStatus','refundReason','refundTime','submitMessage']"});
+                jsonArr.push({ key: 'exportTitlesJson', value:"['ID','影院编码','本地单号','售票系统单号','用户','手机号','卖品内容','总原价','活动优惠金额','优惠券优惠金额','实付金额','支付状态','支付方式','支付时间','下单状态','下单时间','取货方式','系统单号','取货码','优惠券名称','送货地址','活动类型','活动名称','支付交易号','备注','退卖品状态','退款原因','退款时间','下单失败原因']" });
                 jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
                 jsonArr.push({ key: 'submitOrderCode', value: submitOrderCode });
                 jsonArr.push({ key: 'mobile', value: mobile });
@@ -850,6 +860,7 @@ export default {
             setTimeout(() => {
                 let cinemaCode = this.query.cinemaCode;
                 let submitOrderCode = this.query.submitOrderCode;
+                let orderNo = this.query.orderNo;
                 let mobile = this.query.mobile;
                 let printNo = this.query.printNo;
                 let payWay = this.query.payWay;
@@ -870,6 +881,9 @@ export default {
                 }
                 if (!submitOrderCode) {
                     submitOrderCode = '';
+                }
+                if (!orderNo) {
+                    orderNo = '';
                 }
                 if (!mobile) {
                     mobile = '';
@@ -903,6 +917,7 @@ export default {
                 jsonArr.push({ key: 'payStatus', value: payStatus });
                 jsonArr.push({ key: 'submitStatus', value: submitStatus });
                 jsonArr.push({ key: 'startDate', value: startDate });
+                jsonArr.push({ key: 'orderNo', value: orderNo });
                 jsonArr.push({ key: 'endDate', value: endDate });
                 jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
                 jsonArr.push({ key: 'pageSize', value: this.query.pageSize });

@@ -28,7 +28,7 @@ export default new Router({
                 {
                     path: '/sweepCodeGetCouponPage',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/sweepCodeGetCouponPage.vue'),
-                    meta: { title: '商家账号管理' }
+                    meta: { title: '扫码领券管理' }
                 },
                 {
                     path: '/queryMemberPrice',
