@@ -1047,12 +1047,33 @@
                         :value="item.cinemaCode"
                     ></el-option>
                 </el-select>
+                <el-date-picker
+                    v-model="query.startDate"
+                    type="datetime"
+                    value-format="yyyy-MM-dd HH:mm:ss"
+                    format="yyyy-MM-dd HH:mm:ss"
+                    placeholder="使用时间（起）"
+                    class="mr10"
+                ></el-date-picker>
+                <el-date-picker
+                    v-model="query.endDate"
+                    type="datetime"
+                    value-format="yyyy-MM-dd HH:mm:ss"
+                    format="yyyy-MM-dd HH:mm:ss"
+                    placeholder="使用时间（止）"
+                    class="mr10"
+                ></el-date-picker>
                 <el-button
                     style="margin-top: 10px;width: 90px;"
                     type="primary"
                     icon="el-icon-search"
                     @click="dSearch"
                 >搜索</el-button>
+                <el-button
+                    style="margin-top: 10px;width: 90px;"
+                    type="primary"
+                    @click="canExportDetailCoupon()"
+                >导出</el-button>
                 <el-button
                     type="primary"
                     @click="back"
@@ -1350,6 +1371,57 @@ export default {
         this.getMenu();
     },
     methods: {
+        // 详情导出
+        canExportDetailCoupon() {
+                let cinemaCode = this.query.cinemaCode;
+                let couponId = this.dId;
+                let status = this.query.dStatus;
+                let openStatus = this.query.openStatus;
+                let bindStatus = this.query.bindStatus;
+                let startDate = this.query.startDate;
+                let endDate = this.query.endDate;
+                if (!cinemaCode) {
+                    cinemaCode = '';
+                }
+                if (!couponId) {
+                    couponId = '';
+                }
+                if (!status) {
+                    status = '';
+                }
+                if (!openStatus) {
+                    openStatus = '';
+                }
+                if (!bindStatus) {
+                    bindStatus = '';
+                }
+                if (!startDate) {
+                    startDate = '';
+                }
+                if (!endDate) {
+                    endDate = '';
+                }
+                let jsonArr = [];
+                jsonArr.push({ key: 'tableName', value: "offline_coupon_usage" });
+                jsonArr.push({ key: 'exportKeysJson', value: "['couponSerialNo','couponCode','openStatusStr','validityTypeStr','validityDay','startDate','endDate','bindStatusStr','bindDate','bindUserMobile','useCinemaName','statusStr','couponName']"});
+                jsonArr.push({ key: 'exportTitlesJson', value:"['序列号','券码','开通状态','有效期类型','用户绑定后有效期天数','有效期开始时间','有效期结束时间','绑定状态','绑定时间','绑定用户手机号','使用影院名称','使用状态','优惠券名称']" });
+                jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
+                jsonArr.push({ key: 'couponId', value: couponId });
+                jsonArr.push({ key: 'status', value: status });
+                jsonArr.push({ key: 'openStatus', value: openStatus });
+                jsonArr.push({ key: 'bindStatus', value: bindStatus });
+                jsonArr.push({ key: 'startDate', value: startDate });
+                jsonArr.push({ key: 'endDate', value: endDate });
+                var params = ParamsAppend(jsonArr);
+                console.log(jsonArr);
+                let myObj = {
+                    method: 'get',
+                    url: '/exportExcel/exportCouponBackGround',
+                    fileName: '影票优惠券详情',
+                    params: params
+                };
+                https.exportCouponMethod(myObj);
+        },
         // 详情
         canDetail(index, row) {
             //是否拥有权限
@@ -1371,6 +1443,8 @@ export default {
             let status = this.query.dStatus;
             let openStatus = this.query.openStatus;
             let bindStatus = this.query.bindStatus;
+            let startDate = this.query.startDate;
+            let endDate = this.query.endDate;
             if (!cinemaCode) {
                 cinemaCode = '';
             }
@@ -1386,6 +1460,12 @@ export default {
             if (!bindStatus) {
                 bindStatus = '';
             }
+            if (!startDate) {
+                startDate = '';
+            }
+            if (!endDate) {
+                endDate = '';
+            }
             let jsonArr = [];
             jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
             jsonArr.push({ key: 'couponId', value: couponId });
@@ -1394,6 +1474,8 @@ export default {
             jsonArr.push({ key: 'status', value: status });
             jsonArr.push({ key: 'openStatus', value: openStatus });
             jsonArr.push({ key: 'bindStatus', value: bindStatus });
+            jsonArr.push({ key: 'startDate', value: startDate });
+            jsonArr.push({ key: 'endDate', value: endDate });
             console.log(jsonArr)
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
@@ -1480,21 +1562,21 @@ export default {
                     return;
                 }
             }
-            if (this.openForm.startNumber < this.openForm.startSerialNo || 
-                this.openForm.startNumber > this.openForm.endSerialNo || 
-                this.openForm.endNumber < this.openForm.startSerialNo || 
-                this.openForm.endNumber > this.openForm.endSerialNo
-                ) {
-                this.message = '请输入范围内的序列号！';
-                    this.open();
-                    return;
-            }
-            if (this.openForm.endNumber < this.openForm.startNumber
-                ) {
-                this.message = '开始序列号不能大于结束序列号！';
-                this.open();
-                return;
-            }
+            // if (this.openForm.startNumber < this.openForm.startSerialNo || 
+            //     this.openForm.startNumber > this.openForm.endSerialNo || 
+            //     this.openForm.endNumber < this.openForm.startSerialNo || 
+            //     this.openForm.endNumber > this.openForm.endSerialNo
+            //     ) {
+            //     this.message = '请输入范围内的序列号！';
+            //         this.open();
+            //         return;
+            // }
+            // if (this.openForm.endNumber < this.openForm.startNumber
+            //     ) {
+            //     this.message = '开始序列号不能大于结束序列号！';
+            //     this.open();
+            //     return;
+            // }
             if (this.openForm.validityType == 2) {
                 if (
                     !this.openForm.startDate ||
@@ -1616,13 +1698,6 @@ export default {
                 this.open();
                 return;
             }
-            // const loading = this.$loading({
-            //     lock: true,
-            //     text: 'Loading',
-            //     spinner: 'el-icon-loading',
-            //     background: 'rgba(0, 0, 0, 0.7)',
-            //     target: document.querySelector('.div1')
-            // });
             var jsonArr = [];
             jsonArr.push({ key: 'exportNum', value: this.exportForm.exportNum });
             jsonArr.push({ key: 'associatedId', value: this.exportForm.id });
