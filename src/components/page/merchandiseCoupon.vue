@@ -801,7 +801,7 @@
                     <el-option key="2" label="使用" value="2"></el-option>
                     <el-option key="3" label="已过期" value="3"></el-option>
                 </el-select>
-                <el-select clearable v-model="query.cinemaCode" placeholder="使用影院" class="mr10">
+                <el-select clearable v-model="query.dCinemaCode" placeholder="使用影院" class="mr10">
                     <el-option
                         v-for="item in cinemaData"
                         :key="item.cinemaCode"
@@ -1009,7 +1009,13 @@ export default {
                 aPageSize: 15,
                 merchandiseName: '',
                 dPageNo: 1,
-                dPageSize: 15
+                dPageSize: 15,
+                dCinemaCode: '',
+                bindStatus: '',
+                openStatus: '',
+                status: '',
+                startDate: '',
+                endDate: ''
             },
             tableData: [],
             multipleSelection: [],
@@ -1114,7 +1120,7 @@ export default {
         },
         // 详情导出
         canExportDetailCoupon() {
-                let cinemaCode = this.query.cinemaCode;
+                let cinemaCode = this.query.dCinemaCode;
                 let couponId = this.dId;
                 let status = this.query.dStatus;
                 let openStatus = this.query.openStatus;
@@ -1173,7 +1179,7 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            let cinemaCode = this.query.cinemaCode;
+            let cinemaCode = this.query.dCinemaCode;
             let couponId = '';
             if (row) {
                 couponId = row.id;
@@ -2345,8 +2351,14 @@ export default {
             this.$refs.multipleTable.clearSelection();
             this.openNext();
         },
-                back() {
+        back() {
             this.show = false;
+            this.query.openStatus = '';
+            this.query.bindStatus = '';
+            this.query.dStatus = '';
+            this.query.dCinemaCode = '';
+            this.query.startDate = '';
+            this.query.endDate = '';
             this.getMenu();
         },
         dHandleSizeChange(val) {
