@@ -48,8 +48,8 @@
                 <el-table-column prop="memo" label="手机号" width="120px">
                     <template slot-scope="scope">{{scope.row.mobile}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="订单号">
-                    <template slot-scope="scope">{{scope.row.orderNo}}</template>
+                <el-table-column prop="memo" label="售票系统单号">
+                    <template slot-scope="scope">{{scope.row.submitOrderCode}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="用户名">
                     <template slot-scope="scope">{{scope.row.userName}}</template>
@@ -212,13 +212,14 @@ export default {
                     .then(data => {
                         if (data.data.code == 'success') {
                             var oData = JSON.parse(Decrypt(data.data.data));
+                            console.log(oData);
                             let tableData = this.tableData;
                             if (oData.length > 0) {
                                 this.maxId = oData[0].id;
                                 oData.push.apply(oData, tableData);
                                 this.tableData = oData;
                                 let audio = document.getElementById('audio');
-                                audio.volume = 1.0
+                                audio.volume = 1.0;
                                 this.play();
                                 this.message = '您有新的订单，请及时处理！';
                                 this.open();
