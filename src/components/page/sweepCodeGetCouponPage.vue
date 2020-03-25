@@ -473,7 +473,7 @@
                 sellTableData: [],
                 oCommonType: '',
                 oGetNumber: '',
-                oCinemaCodes: '',
+                oCinemaCodes:[],
                 oName: '',
                 oStartDate: '',
                 oEndDate: '',
