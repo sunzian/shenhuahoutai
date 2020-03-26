@@ -148,7 +148,7 @@
                         >
                         </el-input>
                         &nbsp;&nbsp;&nbsp;&nbsp;
-                        每人发放数量：
+                        单次扫码领取数量：
                         <el-input
                                 style="width: 70px"
                                 v-model="item.num"
@@ -292,7 +292,7 @@
                         >
                         </el-input>
                         &nbsp;&nbsp;&nbsp;&nbsp;
-                        每人发放数量：
+                        单次扫码领取数量：
                         <el-input
                                 style="width: 70px"
                                 v-model="item.num"
