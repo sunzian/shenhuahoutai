@@ -205,6 +205,15 @@
                 <el-form-item v-if="oForm.effectiveTimeType==1" :required="true" label="领取后几天过期" :label-width="formLabelWidth">
                     <el-input style="width: 250px" min="1" v-model="oForm.overDays" autocomplete="off" onkeyup="this.value=this.value.replace(/[^0-9]+/,'')"></el-input>
                 </el-form-item>
+                <el-form-item :required="true" label="用户限购方式" :label-width="formLabelWidth">
+                    <el-radio-group v-model="oForm.purchaseType">
+                        <el-radio :label="1">总领取次数</el-radio>
+                        <el-radio :label="2">每天领取次数</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item :required="true" label="用户限购次数" :label-width="formLabelWidth">
+                    <el-input style="width: 250px" min="1" v-model="oForm.purchaseNumber" autocomplete="off" onkeyup="this.value=this.value.replace(/[^0-9]+/,'')"></el-input>
+                </el-form-item>
                 <el-form-item :required="true" label="可领取数量" :label-width="formLabelWidth">
                     <el-input style="width: 250px" min="1" v-model="oForm.store" autocomplete="off" onkeyup="this.value=this.value.replace(/[^0-9]+/,'')"></el-input>
                 </el-form-item>
@@ -339,6 +348,15 @@
                 </el-form-item>
                 <el-form-item v-if="oEffectiveTimeType==1" :required="true" label="领取后几天过期" :label-width="formLabelWidth">
                     <el-input style="width: 250px" min="1" v-model="oOverDays" autocomplete="off"  onkeyup="this.value=this.value.replace(/[^0-9]+/,'')"></el-input>
+                </el-form-item>
+                <el-form-item :required="true" label="用户限购方式" :label-width="formLabelWidth">
+                    <el-radio-group v-model="oPurchaseType">
+                        <el-radio :label="1">总领取次数</el-radio>
+                        <el-radio :label="2">每天领取次数</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item :required="true" label="用户限购次数" :label-width="formLabelWidth">
+                    <el-input style="width: 250px" min="1" v-model="oPurchaseNumber" autocomplete="off" onkeyup="this.value=this.value.replace(/[^0-9]+/,'')"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="可领取数量" :label-width="formLabelWidth">
                     <el-input style="width: 250px" min="1" v-model="oStore" autocomplete="off" onkeyup="this.value=this.value.replace(/[^0-9]+/,'')"></el-input>
@@ -477,6 +495,8 @@
                 oName: '',
                 oStartDate: '',
                 oEndDate: '',
+                oPurchaseType: '',
+                oPurchaseNumber: '',
                 oEffectiveTimeType: '',
                 oCouponStartDate: '',
                 oCouponEndDate: '',
@@ -540,6 +560,8 @@
                     store: '',
                     memo: '',
                     id: '',
+                    purchaseType: 1,
+                    purchaseNumber: 1,
                     startDate: '',
                     endDate: ''
                 },
@@ -671,6 +693,8 @@
                             this.oForm.startDate='';
                             this.oForm.endDate='';
                             this.oForm.effectiveTimeType=1;
+                            this.oForm.purchaseType=1;
+                            this.oForm.purchaseNumber=1;
                             this.oForm.couponStartDate='';
                             this.oForm.couponEndDate='';
                             this.oForm.overDays='';
@@ -711,7 +735,6 @@
                 jsonArr.push({ key: 'cinemaCodes', value: this.oForm.cinemaCodes.join(',') });
                 jsonArr.push({ key: 'name', value: this.oForm.name });
                 jsonArr.push({ key: 'couponList', value: newCoupon });
-                jsonArr.push({ key: 'purchaseNumber', value: 1 });
                 jsonArr.push({ key: 'effectiveTimeType', value: this.oForm.effectiveTimeType });
                 jsonArr.push({ key: 'startDate', value: this.oForm.startDate });
                 jsonArr.push({ key: 'endDate', value: this.oForm.endDate });
@@ -720,12 +743,13 @@
                 jsonArr.push({ key: 'couponEndDate', value: this.oForm.couponEndDate });
                 jsonArr.push({ key: 'overDays', value: this.oForm.overDays });
                 jsonArr.push({ key: 'store', value: this.oForm.store });
-                jsonArr.push({ key: 'getNumber', value: this.oForm.getNumber });
+                jsonArr.push({ key: 'purchaseType', value: this.oForm.purchaseType });
+                jsonArr.push({ key: 'purchaseNumber', value: this.oForm.purchaseNumber });
+                jsonArr.push({ key: 'getNumber', value:0 });
                 jsonArr.push({ key: 'memo', value: this.oForm.memo });
                 console.log(jsonArr);
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
-                console.log(jsonArr);
                 let params = ParamsAppend(jsonArr);
                 if (this.dialogFormVisible == true) {
                     https.fetchPost('/sweepCodeGetCoupon/add', params).then(data => {
@@ -861,7 +885,14 @@
                             if (JSON.parse(Decrypt(data.data.data)).effectiveTimeType == 2) {
                                 this.oEffectiveTimeType = 2;
                             }
-                            this.oCouponStartDate = JSON.parse(Decrypt(data.data.data)).couponStartDate;
+                            if (JSON.parse(Decrypt(data.data.data)).purchaseType == 1) {
+                                this.oPurchaseType = 1;
+                            }
+                            if (JSON.parse(Decrypt(data.data.data)).purchaseType == 2) {
+                                this.oPurchaseType = 2;
+                            }
+                            this.oPurchaseNumber = JSON.parse(Decrypt(data.data.data)).purchaseNumber;
+                            this.oPurchaseNumber = JSON.parse(Decrypt(data.data.data)).purchaseNumber;
                             this.oCouponEndDate = JSON.parse(Decrypt(data.data.data)).couponEndDate;
                             this.oOverDays = JSON.parse(Decrypt(data.data.data)).overDays;
                             this.oStore = JSON.parse(Decrypt(data.data.data)).store;
@@ -911,7 +942,6 @@
                 }
                 jsonArr.push({ key: 'name', value: this.oName });
                 jsonArr.push({ key: 'couponList', value: newCoupon });
-                jsonArr.push({ key: 'purchaseNumber', value: 1 });
                 jsonArr.push({ key: 'effectiveTimeType', value: this.oEffectiveTimeType });
                 jsonArr.push({ key: 'startDate', value: this.oStartDate });
                 jsonArr.push({ key: 'endDate', value: this.oEndDate });
@@ -921,6 +951,8 @@
                 jsonArr.push({ key: 'overDays', value: this.oOverDays });
                 jsonArr.push({ key: 'store', value: this.oStore });
                 jsonArr.push({ key: 'getNumber', value: this.oGetNumber });
+                jsonArr.push({ key: 'purchaseType', value: this.oPurchaseType });
+                jsonArr.push({ key: 'purchaseNumber', value: this.oPurchaseNumber });
                 jsonArr.push({ key: 'memo', value: this.oMemo });
                 jsonArr.push({ key: 'oQrCode', value: this.oQrCode });
                 jsonArr.push({ key: 'id', value: this.form.id });
