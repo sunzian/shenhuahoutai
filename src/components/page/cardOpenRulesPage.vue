@@ -1305,8 +1305,8 @@ export default {
         // 获取所有影院会员卡
         getAllCinemaCard() {
             let jsonArr = [];
-            jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
-            jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
+            // jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
+            // jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
             jsonArr.push({ key: 'cinemaCode', value: this.oForm.cinemaCode });
             jsonArr.push({ key: 'status', value: 1 });
             let sign = md5(preSign(jsonArr));
