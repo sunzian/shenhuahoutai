@@ -51,6 +51,19 @@
                 <el-table-column prop="code" label="活动名称" width="210">
                     <template slot-scope="scope">{{scope.row.name}}</template>
                 </el-table-column>
+                <el-table-column prop="code" label="活动二维码" width="210">
+                    <template slot-scope="scope">
+                        <el-popover placement="right" title trigger="hover">
+                            <img style="width:400px" :src="scope.row.qrCode" />
+                            <img
+                                slot="reference"
+                                :src="scope.row.qrCode"
+                                :alt="scope.row.qrCode"
+                                style="max-height: 50px;max-width: 130px"
+                            />
+                        </el-popover>
+                    </template>
+                </el-table-column>
                 <el-table-column prop="sort" label="活动开始时间" width="165">
                     <template slot-scope="scope">{{scope.row.startDate}}</template>
                 </el-table-column>
