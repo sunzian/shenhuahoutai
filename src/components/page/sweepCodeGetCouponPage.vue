@@ -608,7 +608,7 @@ export default {
                 },
                 {
                     value: '3',
-                    label: '未启用'
+                    label: '已过期'
                 }
             ],
             cinemaList: [], //影院列表
