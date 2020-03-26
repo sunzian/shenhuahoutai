@@ -57,7 +57,7 @@
                 <el-table-column prop="name" label="活动结束时间" width="165">
                     <template slot-scope="scope">{{scope.row.endDate}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="库存" width="65">
+                <el-table-column prop="name" label="活动总数量" width="65">
                     <template slot-scope="scope">{{scope.row.store}}</template>
                 </el-table-column>
                 <el-table-column prop="name" label="已领取数量" width="95">
@@ -205,16 +205,16 @@
                 <el-form-item v-if="oForm.effectiveTimeType==1" :required="true" label="领取后几天过期" :label-width="formLabelWidth">
                     <el-input style="width: 250px" min="1" v-model="oForm.overDays" autocomplete="off" onkeyup="this.value=this.value.replace(/[^0-9]+/,'')"></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="用户限购方式" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="用户是否每天可以领取" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.purchaseType">
-                        <el-radio :label="1">总领取次数</el-radio>
-                        <el-radio :label="2">每天领取次数</el-radio>
+                        <el-radio :label="1">是</el-radio>
+                        <el-radio :label="2">否</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item :required="true" label="用户限购次数" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" min="1" v-model="oForm.purchaseNumber" autocomplete="off" onkeyup="this.value=this.value.replace(/[^0-9]+/,'')"></el-input>
-                </el-form-item>
-                <el-form-item :required="true" label="可领取数量" :label-width="formLabelWidth">
+                <!--<el-form-item :required="true" label="用户限购次数" :label-width="formLabelWidth">-->
+                    <!--<el-input style="width: 250px" min="1" v-model="oForm.purchaseNumber" autocomplete="off" onkeyup="this.value=this.value.replace(/[^0-9]+/,'')"></el-input>-->
+                <!--</el-form-item>-->
+                <el-form-item :required="true" label="活动总数量" :label-width="formLabelWidth">
                     <el-input style="width: 250px" min="1" v-model="oForm.store" autocomplete="off" onkeyup="this.value=this.value.replace(/[^0-9]+/,'')"></el-input>
                 </el-form-item>
                 <el-form-item label="活动说明" :label-width="formLabelWidth">
@@ -349,16 +349,16 @@
                 <el-form-item v-if="oEffectiveTimeType==1" :required="true" label="领取后几天过期" :label-width="formLabelWidth">
                     <el-input style="width: 250px" min="1" v-model="oOverDays" autocomplete="off"  onkeyup="this.value=this.value.replace(/[^0-9]+/,'')"></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="用户限购方式" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="用户是否每天可以领取" :label-width="formLabelWidth">
                     <el-radio-group v-model="oPurchaseType">
-                        <el-radio :label="1">总领取次数</el-radio>
-                        <el-radio :label="2">每天领取次数</el-radio>
+                        <el-radio :label="1">是</el-radio>
+                        <el-radio :label="2">否</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item :required="true" label="用户限购次数" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" min="1" v-model="oPurchaseNumber" autocomplete="off" onkeyup="this.value=this.value.replace(/[^0-9]+/,'')"></el-input>
-                </el-form-item>
-                <el-form-item :required="true" label="可领取数量" :label-width="formLabelWidth">
+                <!--<el-form-item :required="true" label="用户限购次数" :label-width="formLabelWidth">-->
+                    <!--<el-input style="width: 250px" min="1" v-model="oPurchaseNumber" autocomplete="off" onkeyup="this.value=this.value.replace(/[^0-9]+/,'')"></el-input>-->
+                <!--</el-form-item>-->
+                <el-form-item :required="true" label="活动总数量" :label-width="formLabelWidth">
                     <el-input style="width: 250px" min="1" v-model="oStore" autocomplete="off" onkeyup="this.value=this.value.replace(/[^0-9]+/,'')"></el-input>
                 </el-form-item>
                 <el-form-item label="已领取数量" :label-width="formLabelWidth">
@@ -744,7 +744,7 @@
                 jsonArr.push({ key: 'overDays', value: this.oForm.overDays });
                 jsonArr.push({ key: 'store', value: this.oForm.store });
                 jsonArr.push({ key: 'purchaseType', value: this.oForm.purchaseType });
-                jsonArr.push({ key: 'purchaseNumber', value: this.oForm.purchaseNumber });
+                jsonArr.push({ key: 'purchaseNumber', value: 1 });
                 jsonArr.push({ key: 'getNumber', value:0 });
                 jsonArr.push({ key: 'memo', value: this.oForm.memo });
                 console.log(jsonArr);
@@ -952,7 +952,7 @@
                 jsonArr.push({ key: 'store', value: this.oStore });
                 jsonArr.push({ key: 'getNumber', value: this.oGetNumber });
                 jsonArr.push({ key: 'purchaseType', value: this.oPurchaseType });
-                jsonArr.push({ key: 'purchaseNumber', value: this.oPurchaseNumber });
+                jsonArr.push({ key: 'purchaseNumber', value: 1 });
                 jsonArr.push({ key: 'memo', value: this.oMemo });
                 jsonArr.push({ key: 'oQrCode', value: this.oQrCode });
                 jsonArr.push({ key: 'id', value: this.form.id });

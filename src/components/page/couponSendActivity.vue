@@ -234,7 +234,10 @@
                     <br>
                     <span style="font-size:12px;">0：即日生效；1：隔天生效；以此类推</span>
                 </el-form-item>
-                <el-form-item :required="true" label="有效期天数" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="设置券包" :label-width="formLabelWidth">
+                    <el-button type="primary" @click="getAllCoupon">选择券包</el-button>
+                </el-form-item>
+                <el-form-item :required="true" label="券包有效期天数" :label-width="formLabelWidth">
                     <el-input
                             style="width: 250px"
                             min="1"
@@ -242,9 +245,6 @@
                             autocomplete="off"
                             placeholder="自生效之日起计算"
                     ></el-input>
-                </el-form-item>
-                <el-form-item :required="true" label="设置券包" :label-width="formLabelWidth">
-                    <el-button type="primary" @click="getAllCoupon">选择券包</el-button>
                 </el-form-item>
                 <el-form-item :required="true" v-if="couponId" label="所选券包" :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="groupName" autocomplete="off" disabled></el-input>&nbsp;&nbsp;&nbsp;&nbsp;
@@ -389,16 +389,16 @@
                     <br>
                     <span style="font-size:12px;">0：即日生效；1：隔天生效；以此类推</span>
                 </el-form-item>
-                <el-form-item :required="true" label="有效期天数" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="设置券包" :label-width="formLabelWidth">
+                    <el-button type="primary" @click="changeCoupon">选择券包</el-button>
+                </el-form-item>
+                <el-form-item :required="true" label="券包有效期天数" :label-width="formLabelWidth">
                     <el-input
                             style="width: 250px"
                             v-model="form.overDays"
                             autocomplete="off"
                             placeholder="自生效之日起计算"
                     ></el-input>
-                </el-form-item>
-                <el-form-item :required="true" label="设置券包" :label-width="formLabelWidth">
-                    <el-button type="primary" @click="changeCoupon">选择券包</el-button>
                 </el-form-item>
                 <el-form-item :required="true" v-if="couponId" label="所选券包" :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="groupName" autocomplete="off" disabled></el-input>&nbsp;&nbsp;&nbsp;&nbsp;
@@ -757,13 +757,13 @@ export default {
                 return;
             }
             if(!this.oForm.overDays&&this.oForm.overDays!=0){
-                this.message = '有效期天数不能为空，请检查！';
+                this.message = '券包有效期天数不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
             }
             if (this.oForm.overDays<=0) {
-                this.message = '有效期天数必须大于0，请检查！';
+                this.message = '券包有效期天数必须大于0，请检查！';
                 this.open();
                 loading.close();
                 return;
@@ -1064,13 +1064,13 @@ export default {
                 return;
             }
             if(!this.form.overDays&&this.form.overDays!=0){
-                this.message = '有效期天数不能为空，请检查！';
+                this.message = '券包有效期天数不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
             }
             if(this.form.overDays<=0){
-                this.message = '有效期天数必须大于0，请检查！';
+                this.message = '券包有效期天数必须大于0，请检查！';
                 this.open();
                 loading.close();
                 return;
