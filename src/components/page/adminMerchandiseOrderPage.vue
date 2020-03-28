@@ -52,7 +52,7 @@
                     placeholder="取货方式"
                     class="handle-select mr10"
                 >
-                    <el-option key="0" label="马上取参" value="0"></el-option>
+                    <el-option key="0" label="马上取餐" value="0"></el-option>
                     <el-option key="1" label="送至影厅" value="1"></el-option>
                     <el-option key="2" label="送至座位" value="2"></el-option>
                     <el-option key="3" label="到店自取" value="3"></el-option>
@@ -660,7 +660,7 @@ export default {
                                 this.form.refundStatus = '已退款';
                             }
                             if (JSON.parse(Decrypt(data.data.data)).deliveryType == 0) {
-                                this.form.deliveryType = '马上取参';
+                                this.form.deliveryType = '马上取餐';
                             } else if (JSON.parse(Decrypt(data.data.data)).deliveryType == 1) {
                                 this.form.deliveryType = '送至影厅';
                             } else if (JSON.parse(Decrypt(data.data.data)).deliveryType == 2) {

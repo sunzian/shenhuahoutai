@@ -322,9 +322,10 @@
                 <el-form-item
                         label="额外信息名称"
                         :label-width="formLabelWidth"
-                        v-if="selectedSell.length>0&&oForm.addInformationStatus==2"
+                        v-if="oForm.addInformationStatus==2"
                         :required="true"
                 >
+                    <el-button type="primary" @click="addSelectedSell">新增</el-button>
                     <div
                             v-for="(item1, index) in selectedSell"
                             style="margin-bottom: 5px"
@@ -352,7 +353,6 @@
                             ></el-option>
                         </el-select>
                         &nbsp;&nbsp;&nbsp;&nbsp;
-                        <span style="color:red;cursor: pointer;" @click="addSelectedSell(index)">增加</span>&nbsp;&nbsp;&nbsp;&nbsp;
                         <span style="color:blue;cursor: pointer;" @click="delSelectedSell(index)">删除</span>
                     </div>
                 </el-form-item>
@@ -448,9 +448,10 @@
                 <el-form-item
                         label="额外信息名称"
                         :label-width="formLabelWidth"
-                        v-if="selectedSell.length>0&&oAddInformationStatus==2"
+                        v-if="oAddInformationStatus==2"
                         :required="true"
                 >
+                    <el-button type="primary" @click="addSelectedSell">新增</el-button>
                     <div
                             v-for="(item1, index) in selectedSell"
                             style="margin-bottom: 5px"
@@ -478,7 +479,6 @@
                             ></el-option>
                         </el-select>
                         &nbsp;&nbsp;&nbsp;&nbsp;
-                        <span style="color:red;cursor: pointer;" @click="addSelectedSell(index)">增加</span>&nbsp;&nbsp;&nbsp;&nbsp;
                         <span style="color:blue;cursor: pointer;" @click="delSelectedSell(index)">删除</span>
                     </div>
                 </el-form-item>
