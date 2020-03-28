@@ -80,7 +80,7 @@
                 <el-table-column prop="name" label="活动结束时间" width="165">
                     <template slot-scope="scope">{{scope.row.endDate}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="活动总数量" width="65">
+                <el-table-column prop="name" label="活动总可领取总份数" width="65">
                     <template slot-scope="scope">{{scope.row.store}}</template>
                 </el-table-column>
                 <el-table-column prop="name" label="已领取数量" width="95">
@@ -149,7 +149,7 @@
                     </el-checkbox-group>
                 </el-form-item>
                 <el-form-item :required="true" label="活动名称" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" min="1" v-model="oForm.name" autocomplete="off"></el-input>
+                    <el-input style="width: 250px" min="1" maxlength="15" placeholder="限15字" v-model="oForm.name" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="活动开始时间" :label-width="formLabelWidth">
                     <el-date-picker
@@ -212,7 +212,7 @@
                 <el-form-item
                     v-if="oForm.effectiveTimeType==2"
                     :required="true"
-                    label="时间"
+                    label="有效时间段"
                     :label-width="formLabelWidth"
                 >
                     <el-date-picker
@@ -233,7 +233,7 @@
                 <el-form-item
                     v-if="oForm.effectiveTimeType==1"
                     :required="true"
-                    label="有效期天数"
+                    label="领取后优惠券有效期天数"
                     :label-width="formLabelWidth"
                 >
                     <el-input
@@ -242,10 +242,10 @@
                         v-model="oForm.overDays"
                         autocomplete="off"
                         onkeyup="this.value=this.value.replace(/[^0-9]+/,'')"
+                        placeholder="请填写正确数字"
                     ></el-input>
                 </el-form-item>
-                <span style="margin-left: 170px;font-size: 12px;color: red;">说明：0：即日生效，1：隔日生效，以此类推</span>
-                <el-form-item :required="true" label="用户是否每天可以领取" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="是否每天可以领取" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.purchaseType">
                         <el-radio :label="1">是</el-radio>
                         <el-radio :label="2">否</el-radio>
@@ -255,13 +255,14 @@
                 <!--<el-form-item :required="true" label="用户限购次数" :label-width="formLabelWidth">-->
                 <!--<el-input style="width: 250px" min="1" v-model="oForm.purchaseNumber" autocomplete="off" onkeyup="this.value=this.value.replace(/[^0-9]+/,'')"></el-input>-->
                 <!--</el-form-item>-->
-                <el-form-item :required="true" label="活动总数量" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="活动总可领取总份数" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
                         v-model="oForm.store"
                         autocomplete="off"
                         onkeyup="this.value=this.value.replace(/[^0-9]+/,'')"
+                        placeholder="请填写大于0的数字"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="活动说明" :label-width="formLabelWidth">
@@ -317,7 +318,7 @@
                     </el-checkbox-group>
                 </el-form-item>
                 <el-form-item :required="true" label="活动名称" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" min="1" v-model="oName" autocomplete="off"></el-input>
+                    <el-input style="width: 250px" min="1" maxlength="15" placeholder="限15字" v-model="oName" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="活动开始时间" :label-width="formLabelWidth">
                     <el-date-picker
@@ -380,7 +381,7 @@
                 <el-form-item
                     v-if="oEffectiveTimeType==2"
                     :required="true"
-                    label="时间"
+                    label="有效时间段"
                     :label-width="formLabelWidth"
                 >
                     <el-date-picker
@@ -401,7 +402,7 @@
                 <el-form-item
                     v-if="oEffectiveTimeType==1"
                     :required="true"
-                    label="有效期天数"
+                    label="领取后优惠券有效期天数"
                     :label-width="formLabelWidth"
                 >
                     <el-input
@@ -410,10 +411,10 @@
                         v-model="oOverDays"
                         autocomplete="off"
                         onkeyup="this.value=this.value.replace(/[^0-9]+/,'')"
+                        placeholder="请填写正确数字"
                     ></el-input>
                 </el-form-item>
-                <span style="margin-left: 170px;font-size: 12px;color: red;">说明：0：即日生效，1：隔日生效，以此类推</span>
-                <el-form-item :required="true" label="用户是否每天可以领取" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="是否每天可以领取" :label-width="formLabelWidth">
                     <el-radio-group v-model="oPurchaseType">
                         <el-radio :label="1">是</el-radio>
                         <el-radio :label="2">否</el-radio>
@@ -425,13 +426,14 @@
                 <!--<el-form-item :required="true" label="用户限购次数" :label-width="formLabelWidth">-->
                 <!--<el-input style="width: 250px" min="1" v-model="oPurchaseNumber" autocomplete="off" onkeyup="this.value=this.value.replace(/[^0-9]+/,'')"></el-input>-->
                 <!--</el-form-item>-->
-                <el-form-item :required="true" label="活动总数量" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="活动总可领取总份数" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
                         v-model="oStore"
                         autocomplete="off"
                         onkeyup="this.value=this.value.replace(/[^0-9]+/,'')"
+                        placeholder="请填写大于0的数字"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="已领取数量" :label-width="formLabelWidth">
@@ -606,7 +608,7 @@ export default {
                 },
                 {
                     value: '3',
-                    label: '未启用'
+                    label: '已过期'
                 }
             ],
             cinemaList: [], //影院列表
@@ -648,7 +650,7 @@ export default {
                 startDate: '',
                 endDate: ''
             },
-            formLabelWidth: '160px',
+            formLabelWidth: '180px',
             couponName: '',
             value: ''
         };
@@ -847,7 +849,7 @@ export default {
                 }
             }
             if (!this.oForm.store || this.oForm.store == '') {
-                this.message = '请填写活动总数量！';
+                this.message = '请填写活动总可领取总份数！';
                 this.open();
                 return;
             }
@@ -1101,7 +1103,7 @@ export default {
                 }
             }
             if (!this.oStore || this.oStore == '') {
-                this.message = '请填写活动总数量！';
+                this.message = '请填写活动总可领取总份数！';
                 this.open();
                 return;
             }
