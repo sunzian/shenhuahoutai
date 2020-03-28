@@ -102,8 +102,8 @@
                 <el-form-item :required="true" label="影片版本" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oForm.dimensional" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="影片时长" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="oForm.duration" autocomplete="off"></el-input>
+                <el-form-item :required="true" label="影片时长(分钟)" :label-width="formLabelWidth">
+                    <el-input style="width: 250px" v-model="oForm.duration" autocomplete="off" onkeyup="this.value=this.value.replace(/[^0-9]+/,'')"></el-input>
                 </el-form-item>
                 <el-form-item label="管理员影片评分" :label-width="formLabelWidth">
                     <el-input style="width: 250px" type="number" v-model="oForm.topScore" autocomplete="off"></el-input>
@@ -264,8 +264,8 @@
                 <el-form-item label="影片版本" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oDimensional" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="影片时长" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="oDuration" autocomplete="off"></el-input>
+                <el-form-item label="影片时长(分钟)" :label-width="formLabelWidth">
+                    <el-input style="width: 250px" v-model="oDuration" autocomplete="off" onkeyup="this.value=this.value.replace(/[^0-9]+/,'')"></el-input>
                 </el-form-item>
                 <el-form-item label="管理员影片评分" :label-width="formLabelWidth">
                     <el-input style="width: 250px" type="number" v-model="oTopScore" autocomplete="off"></el-input>
