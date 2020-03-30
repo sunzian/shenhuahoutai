@@ -18,6 +18,15 @@
                     <el-option key="1" label="全部影院" value="1"></el-option>
                     <el-option key="2" label="指定影院" value="2"></el-option>
                 </el-select>
+                <el-select
+                        clearable
+                        v-model="query.sendType"
+                        placeholder="发放方式"
+                        class="handle-select mr10"
+                >
+                    <el-option key="1" label="线上发放" value="1"></el-option>
+                    <el-option key="2" label="线下发放" value="2"></el-option>
+                </el-select>
                 <el-select clearable v-model="query.cinemaCode" placeholder="请选择影院" class="mr10">
                     <el-option
                         v-for="item in cinemaData"
@@ -1568,9 +1577,9 @@ export default {
                     return;
                 }
             }
-            // if (this.openForm.startNumber < this.openForm.startSerialNo || 
-            //     this.openForm.startNumber > this.openForm.endSerialNo || 
-            //     this.openForm.endNumber < this.openForm.startSerialNo || 
+            // if (this.openForm.startNumber < this.openForm.startSerialNo ||
+            //     this.openForm.startNumber > this.openForm.endSerialNo ||
+            //     this.openForm.endNumber < this.openForm.startSerialNo ||
             //     this.openForm.endNumber > this.openForm.endSerialNo
             //     ) {
             //     this.message = '请输入范围内的序列号！';
@@ -2816,10 +2825,14 @@ export default {
             let cinemaCode = this.query.cinemaCode;
             let reduceType = this.query.reduceType;
             let commonType = this.query.commonType;
+            let sendType = this.query.sendType;
             let name = this.query.name;
             let status = this.query.status;
             if (!cinemaCode) {
                 cinemaCode = '';
+            }
+            if (!sendType) {
+                sendType = '';
             }
             if (!reduceType) {
                 reduceType = '';
@@ -2839,6 +2852,7 @@ export default {
             jsonArr.push({ key: 'name', value: name });
             jsonArr.push({ key: 'status', value: status });
             jsonArr.push({ key: 'cinemaCodes', value: cinemaCode });
+            jsonArr.push({ key: 'sendType', value: sendType });
             jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
             jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
             let sign = md5(preSign(jsonArr));

@@ -139,7 +139,7 @@
                     :label-width="formLabelWidth"
                     v-if="oForm.commonType == 2"
                 >
-                    <el-checkbox-group v-model="oForm.cinemaCodes" @change="clearCinema()">
+                    <el-checkbox-group v-model="oForm.cinemaCodes" @change="clearCinema1()">
                         <el-checkbox
                             v-for="item in cinemaInfo"
                             :label="item.cinemaCode"
@@ -308,7 +308,7 @@
                     :label-width="formLabelWidth"
                     v-if="oCommonType == 2"
                 >
-                    <el-checkbox-group v-model="oCinemaCodes" @change="clearCinema()">
+                    <el-checkbox-group v-model="oCinemaCodes" @change="clearCinema1()">
                         <el-checkbox
                             v-for="item in cinemaInfo"
                             :label="item.cinemaCode"
@@ -645,7 +645,7 @@ export default {
                 store: '',
                 memo: '',
                 id: '',
-                purchaseType: 1,
+                purchaseType: 2,
                 purchaseNumber: 1,
                 startDate: '',
                 endDate: ''
@@ -661,6 +661,11 @@ export default {
     },
     methods: {
         clearCinema() {
+            this.selectedSell = [];
+            this.oForm.cinemaCodes=[];
+            this.oCinemaCodes=[];
+        },
+        clearCinema1() {
             this.selectedSell = [];
         },
         openNext() {
@@ -780,7 +785,7 @@ export default {
                         this.oForm.startDate = '';
                         this.oForm.endDate = '';
                         this.oForm.effectiveTimeType = 1;
-                        this.oForm.purchaseType = 1;
+                        this.oForm.purchaseType = 2;
                         this.oForm.purchaseNumber = 1;
                         this.oForm.couponStartDate = '';
                         this.oForm.couponEndDate = '';
@@ -831,11 +836,11 @@ export default {
                 return;
             }
             if (this.oForm.effectiveTimeType == 1) {
-                if (!this.oForm.overDays || this.oForm.overDays == '') {
-                    this.message = '请填写有效期天数！';
-                    this.open();
-                    return;
-                }
+                // if (!this.oForm.overDays || this.oForm.overDays == '') {
+                //     this.message = '请填写有效期天数！';
+                //     this.open();
+                //     return;
+                // }
             } else {
                 if (!this.oForm.couponStartDate || this.oForm.couponStartDate == '') {
                     this.message = '请选择优惠券开始时间！';
@@ -1029,6 +1034,7 @@ export default {
                         }
                         this.oPurchaseNumber = JSON.parse(Decrypt(data.data.data)).purchaseNumber;
                         this.oPurchaseNumber = JSON.parse(Decrypt(data.data.data)).purchaseNumber;
+                        this.oCouponStartDate = JSON.parse(Decrypt(data.data.data)).couponStartDate;
                         this.oCouponEndDate = JSON.parse(Decrypt(data.data.data)).couponEndDate;
                         this.oOverDays = JSON.parse(Decrypt(data.data.data)).overDays;
                         this.oStore = JSON.parse(Decrypt(data.data.data)).store;
@@ -1085,11 +1091,11 @@ export default {
                 return;
             }
             if (this.oEffectiveTimeType == 1) {
-                if (!this.oOverDays || this.oOverDays == '') {
-                    this.message = '请填写有效期天数！';
-                    this.open();
-                    return;
-                }
+                // if (!this.oOverDays || this.oOverDays == '') {
+                //     this.message = '请填写有效期天数！';
+                //     this.open();
+                //     return;
+                // }
             } else {
                 if (!this.oCouponStartDate || this.oCouponStartDate == '') {
                     this.message = '请选择优惠券开始时间！';
