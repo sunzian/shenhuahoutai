@@ -926,6 +926,7 @@
                         v-model="openForm.memo"
                         autocomplete="off"
                         maxlength="50"
+                        placeholder="限50个汉字"
                     ></textarea>
                 </el-form-item>
                 <el-form-item label="适用影院名称：" :label-width="formLabelWidth">
@@ -954,6 +955,7 @@
                         style="width: 150px"
                         v-model="openForm.validityDay"
                         autocomplete="off"
+                        placeholder="请输入正确的数字"
                     ></el-input>
                 </el-form-item>
                 <el-form-item
@@ -1001,7 +1003,7 @@
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="开通数量：" :label-width="formLabelWidth">
-                    <span>{{openForm.endNumber - openForm.startNumber}}</span>
+                    <span>{{openForm.endNumber - openForm.startNumber+1}}</span>
                 </el-form-item>
                 <el-form-item label="序列号范围：" :label-width="formLabelWidth">
                     <span>{{openForm.startSerialNo}}</span>
@@ -1546,6 +1548,12 @@ export default {
                 .then(data => {
                     loading.close();
                     if (data.data.code == 'success') {
+                        this.openForm.memo='';
+                        this.openForm.validityDay='';
+                        this.openForm.startDate='';
+                        this.openForm.endDate='';
+                        this.openForm.startNumber='';
+                        this.openForm.endNumber='';
                         this.openForm.cinemaName = JSON.parse(Decrypt(data.data.data)).cinemaName;
                         this.openForm.couponName = JSON.parse(Decrypt(data.data.data)).couponName;
                         this.openForm.openCount = JSON.parse(Decrypt(data.data.data)).openCount;
@@ -1710,6 +1718,11 @@ export default {
         exportCoupon() {
             if (this.exportForm.exportNum.trim() == '' || !this.exportForm.exportNum || this.exportForm.exportNum == 0) {
                 this.message = '导出数量必须大于0！';
+                this.open();
+                return;
+            }
+            if (this.exportForm.exportNum > 5000) {
+                this.message = '导出数量最大为5000！';
                 this.open();
                 return;
             }

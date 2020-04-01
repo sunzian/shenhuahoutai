@@ -187,6 +187,7 @@
                             style="width: 250px"
                             v-model="oForm.filmOpensName"
                             autocomplete="off"
+                            placeholder="限20个汉字"
                     ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="选择影院" :label-width="formLabelWidth">
@@ -281,10 +282,11 @@
                             type="datetime"
                             value-format="yyyy-MM-dd HH:mm:ss"
                             format="yyyy-MM-dd HH:mm:ss"
+                            placeholder="请选择日期时间"
                     ></el-date-picker>
                 </el-form-item>
                 <el-form-item :required="true" label="票价" :label-width="formLabelWidth">
-                    <el-input style="width: 300px" v-model="oForm.ticketPrice" onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')"></el-input>
+                    <el-input style="width: 300px" v-model="oForm.ticketPrice" onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')" placeholder="请输入正确的金额"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="报名时间" :label-width="formLabelWidth">
                     <el-date-picker
@@ -304,7 +306,7 @@
                     ></el-date-picker>
                 </el-form-item>
                 <el-form-item :required="true" label="成团人数" :label-width="formLabelWidth">
-                    <el-input style="width: 300px" v-model="oForm.agglomerationNumber" onkeyup="this.value=this.value.replace(/\D/g,'')"></el-input>
+                    <el-input placeholder="请输入正确的数字" style="width: 300px" v-model="oForm.agglomerationNumber" onkeyup="this.value=this.value.replace(/\D/g,'')"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="影厅有效座位数量" :label-width="formLabelWidth">
                     <el-input :disabled="true" style="width: 300px" v-model="oForm.fullSeatNumber"></el-input>
@@ -450,6 +452,7 @@
                             v-model="oFilmOpensName"
                             autocomplete="off"
                             :disabled="oStatus==1"
+                            placeholder="限20个汉字"
                     ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="选择影院" :label-width="formLabelWidth">
@@ -548,10 +551,11 @@
                             value-format="yyyy-MM-dd HH:mm:ss"
                             format="yyyy-MM-dd HH:mm:ss"
                             :disabled="oGroupStatus==2||oGroupStatus==3||oGroupStatus==4||oGroupStatus==5||oStatus==1"
+                            placeholder="请选择日期时间"
                     ></el-date-picker>
                 </el-form-item>
                 <el-form-item :required="true" label="票价" :label-width="formLabelWidth">
-                    <el-input :disabled="oStatus==1" style="width: 300px" v-model="oTicketPrice" onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')"></el-input>
+                    <el-input :disabled="oStatus==1" style="width: 300px" v-model="oTicketPrice" onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')" placeholder="请输入正确的金额"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="报名时间" :label-width="formLabelWidth">
                     <el-date-picker
@@ -573,7 +577,7 @@
                     ></el-date-picker>
                 </el-form-item>
                 <el-form-item :required="true" label="成团人数" :label-width="formLabelWidth">
-                    <el-input :disabled="oGroupStatus==2||oGroupStatus==3||oGroupStatus==4||oGroupStatus==5||oStatus==1" style="width: 300px" v-model="oAgglomerationNumber" onkeyup="this.value=this.value.replace(/\D/g,'')"></el-input>
+                    <el-input placeholder="请输入正确的数字" :disabled="oGroupStatus==2||oGroupStatus==3||oGroupStatus==4||oGroupStatus==5||oStatus==1" style="width: 300px" v-model="oAgglomerationNumber" onkeyup="this.value=this.value.replace(/\D/g,'')"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="影厅有效座位数量" :label-width="formLabelWidth">
                     <el-input :disabled="true" style="width: 300px" v-model="oForm.fullSeatNumber "></el-input>

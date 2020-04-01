@@ -583,16 +583,6 @@
                             format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
                 </el-form-item>
-                <el-form-item :required="true" label="售卖状态" :label-width="formLabelWidth">
-                    <el-select v-model="oForm.status" placeholder="请选择">
-                        <el-option
-                                v-for="item in options"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                        ></el-option>
-                    </el-select>
-                </el-form-item>
                 <el-form-item :required="true" label="限制购买次数" :label-width="formLabelWidth">
                     <el-select v-model="oForm.isLimitBuy" placeholder="请选择" @change="clearLimitBuyNumber()">
                         <el-option
@@ -604,7 +594,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item :required="true" label="限制购买次数" v-if="oForm.isLimitBuy==1" :label-width="formLabelWidth">
-                    <el-input style="width: 150px" v-model="oForm.limitBuyNumber" autocomplete="off"></el-input>
+                    <el-input placeholder="请输入正确的数字" style="width: 150px" v-model="oForm.limitBuyNumber" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="是否推荐" :label-width="formLabelWidth">
                     <el-select v-model="oForm.isRecommend" placeholder="请选择">
@@ -617,7 +607,17 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item :required="true" label="卡费" :label-width="formLabelWidth">
-                    <el-input style="width: 150px" v-model="oForm.expense" autocomplete="off"></el-input>
+                    <el-input placeholder="请输入正确的金额" style="width: 150px" v-model="oForm.expense" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item :required="true" label="售卖状态" :label-width="formLabelWidth">
+                    <el-select v-model="oForm.status" placeholder="请选择">
+                        <el-option
+                                v-for="item in options"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                        ></el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item :required="true" label="使用说明" :label-width="formLabelWidth">
                     <el-input
@@ -1096,16 +1096,6 @@
                             format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
                 </el-form-item>
-                <el-form-item :required="true" label="售卖状态" :label-width="formLabelWidth">
-                    <el-select v-model="oStatus" placeholder="请选择">
-                        <el-option
-                                v-for="item in options"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                        ></el-option>
-                    </el-select>
-                </el-form-item>
                 <el-form-item :required="true" label="限制购买次数" :label-width="formLabelWidth">
                     <el-select v-model="oIsLimitBuy" placeholder="请选择" @change="clearLimitBuyNumber()">
                         <el-option
@@ -1117,7 +1107,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item :required="true" label="限制购买次数" v-if="oIsLimitBuy==1" :label-width="formLabelWidth">
-                    <el-input style="width: 150px" v-model="oLimitBuyNumber" autocomplete="off"></el-input>
+                    <el-input placeholder="请输入正确的数字" style="width: 150px" v-model="oLimitBuyNumber" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="是否推荐" :label-width="formLabelWidth">
                     <el-select v-model="oIsRecommend" placeholder="请选择">
@@ -1130,7 +1120,17 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item :required="true" label="卡费" :label-width="formLabelWidth">
-                    <el-input style="width: 150px" v-model="oExpense" autocomplete="off"></el-input>
+                    <el-input placeholder="请输入正确的金额" style="width: 150px" v-model="oExpense" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item :required="true" label="售卖状态" :label-width="formLabelWidth">
+                    <el-select v-model="oStatus" placeholder="请选择">
+                        <el-option
+                                v-for="item in options"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                        ></el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item :required="true" label="使用说明" :label-width="formLabelWidth">
                     <el-input

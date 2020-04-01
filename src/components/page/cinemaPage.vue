@@ -2829,6 +2829,7 @@ export default {
                 return;
             }
             this.oMiniAppQRCode = data.data;
+            this.$refs.upload.clearFiles();
             if (data.code == 'nologin') {
                 this.message = data.message;
                 this.open();

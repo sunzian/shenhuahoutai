@@ -96,6 +96,7 @@
                     <el-option key="2" label="优惠券" value="2"></el-option>
                     <el-option key="3" label="券包" value="3"></el-option>
                     <el-option key="4" label="商户商品" value="4"></el-option>
+                    <el-option key="5" label="权益卡" value="5"></el-option>
                 </el-select>
                 <el-select
                         clearable
@@ -192,6 +193,7 @@
                         <el-tag v-else-if="scope.row.commodityType=='2'">优惠券</el-tag>
                         <el-tag v-else-if="scope.row.commodityType=='3'">券包</el-tag>
                         <el-tag v-else-if="scope.row.commodityType=='4'">商品</el-tag>
+                        <el-tag v-else-if="scope.row.commodityType=='5'">权益卡</el-tag>
                     </template>
                 </el-table-column>
                 <!-- <el-table-column prop="sort" label="优惠券名称" width="130">
@@ -1752,21 +1754,25 @@
                     // },
                 ],
                 commodityType: [
-                    // {
-                    //     value: '1',
-                    //     label: '实物'
-                    // },
-                    // {
-                    //     value: '2',
-                    //     label: '优惠券'
-                    // },
-                    // {
-                    //     value: '3',
-                    //     label: '券包'
-                    // },
+                    {
+                        value: '1',
+                        label: '实物'
+                    },
+                    {
+                        value: '2',
+                        label: '优惠券'
+                    },
+                    {
+                        value: '3',
+                        label: '券包'
+                    },
                     {
                         value: '4',
                         label: '商户商品'
+                    },
+                    {
+                        value: '5',
+                        label: '权益卡'
                     }
                 ],
                 commodityCategoryType: [

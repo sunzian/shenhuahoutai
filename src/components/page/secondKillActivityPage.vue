@@ -193,6 +193,7 @@
                             style="width: 250px"
                             v-model="oForm.activityName"
                             autocomplete="off"
+                            placeholder="限20个汉字"
                     ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="活动日期" :label-width="formLabelWidth">
@@ -251,7 +252,7 @@
                         v-if="oForm.purchaseType==2"
                         :label-width="formLabelWidth"
                 >
-                    <el-input style="width: 150px" v-model="oForm.purchaseCount " autocomplete="off"></el-input>
+                    <el-input placeholder="请输入正确的的数字" style="width: 150px" v-model="oForm.purchaseCount " autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="是否可发送短信提醒用户" :label-width="formLabelWidth">
                     <el-select v-model="oForm.smsStatus" placeholder="请选择">
@@ -323,6 +324,7 @@
                             show-word-limit
                             style="width: 150px"
                             v-model="oForm.commodityStore"
+                            placeholder="请输入大于0的数字"
                     ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="开启状态：" :label-width="formLabelWidth">
@@ -382,6 +384,7 @@
                             style="width: 250px"
                             v-model="oActivityName"
                             autocomplete="off"
+                            placeholder="限20个汉字"
                     ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="活动日期" :label-width="formLabelWidth">
@@ -440,7 +443,7 @@
                         v-if="oPurchaseType==2"
                         :label-width="formLabelWidth"
                 >
-                    <el-input style="width: 150px" v-model="oPurchaseCount " autocomplete="off"></el-input>
+                    <el-input placeholder="请输入正确的的数字" style="width: 150px" v-model="oPurchaseCount " autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="是否可发送短信提醒用户" :label-width="formLabelWidth">
                     <el-select v-model="oSmsStatus" placeholder="请选择">
@@ -512,6 +515,7 @@
                             show-word-limit
                             style="width: 150px"
                             v-model="oCommodityStore"
+                            placeholder="请输入大于0的数字"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="已售数量：" :label-width="formLabelWidth">
