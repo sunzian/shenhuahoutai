@@ -701,6 +701,14 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item label="电影出票成功通知" :label-width="formLabelWidth">
+                    <el-input
+                            style="width: 350px"
+                            v-model="oForm.templateType"
+                            autocomplete="off"
+                            placeholder="模板id"
+                    ></el-input>
+                </el-form-item>
                 <el-form-item prop="paymentType" label="费用支付类型" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.paymentType">
                         <el-radio label="1">包年</el-radio>
@@ -1366,6 +1374,14 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item label="电影出票成功通知" :label-width="formLabelWidth">
+                    <el-input
+                            style="width: 350px"
+                            v-model="oTemplateType"
+                            autocomplete="off"
+                            placeholder="模板id"
+                    ></el-input>
+                </el-form-item>
                 <el-form-item prop="paymentType" label="费用支付类型" :label-width="formLabelWidth">
                     <el-radio-group v-model="oPaymentType">
                         <el-radio label="1">包年</el-radio>
@@ -1754,6 +1770,7 @@ export default {
             oMessageType7: '',
             oMessageType8: '',
             oMessageType9: '',
+            oTemplateType: '',
             oOpenStatus: '',
             oExpireDate: '',
             oPaymentType: '',
@@ -1867,6 +1884,7 @@ export default {
                 messageType4: '',
                 messageType5: '',
                 messageType6: '',
+                templateType: '',
                 messagePlatformAccount: '',
                 messagePlatformPassword: '',
                 messagePlatformSignId: '',
@@ -2204,6 +2222,13 @@ export default {
             if (messageInfos.length>0) {
                 jsonArr.push({ key: 'messageInfos', value: JSON.stringify(messageInfos)})
             }
+            let templateInfos = [];
+            if (this.oForm.templateType) {
+                templateInfos.push({ 'templateType':  1 , 'templateId': this.oForm.templateType });
+            }
+            if (templateInfos.length>0) {
+                jsonArr.push({ key: 'subscribeTemplateJson', value: JSON.stringify(templateInfos)})
+            }
             jsonArr.push({ key: 'messagePlatformAccount', value: this.oForm.messagePlatformAccount });
             jsonArr.push({ key: 'messagePlatformPassword', value: this.oForm.messagePlatformPassword });
             jsonArr.push({ key: 'messagePlatformSignId', value: this.oForm.messagePlatformSignId });
@@ -2399,7 +2424,7 @@ export default {
                 .fetchPost('/cinema/getCinemaById', params)
                 .then(data => {
                     loading.close();
-                    // console.log(JSON.parse(Decrypt(data.data.data)));
+                    console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.editVisible = true;
                         this.oCinemaName = JSON.parse(Decrypt(data.data.data)).Cinema.cinemaName;
@@ -2548,6 +2573,11 @@ export default {
                                 this.oMessageType9 = JSON.parse(Decrypt(data.data.data)).MessageInfo[i].content
                             }
                         }
+                        for (let i = 0; i < JSON.parse(Decrypt(data.data.data)).subscribeTemplateList.length; i ++) {
+                            if (JSON.parse(Decrypt(data.data.data)).subscribeTemplateList[i].templateType == 1) {
+                                this.oTemplateType = JSON.parse(Decrypt(data.data.data)).subscribeTemplateList[i].templateId
+                            }
+                        }
                         if(JSON.parse(Decrypt(data.data.data)).CinemaMessagePlatFormInfo){
                             this.oMessagePlatformAccount = JSON.parse(Decrypt(data.data.data)).CinemaMessagePlatFormInfo.messagePlatformAccount;
                             this.oMessagePlatformPassword = JSON.parse(Decrypt(data.data.data)).CinemaMessagePlatFormInfo.messagePlatformPassword;
@@ -2637,6 +2667,9 @@ export default {
                 messageInfos.push({ 'messageType': 8 , 'content': this.oMessageType8 });
                 messageInfos.push({ 'messageType': 9 , 'content': this.oMessageType9 });
                 jsonArr.push({ key: 'messageInfos', value: JSON.stringify(messageInfos)});
+            let templateInfos = [];
+            templateInfos.push({ 'templateType':  1 , 'templateId': this.oTemplateType });
+            jsonArr.push({ key: 'subscribeTemplateJson', value: JSON.stringify(templateInfos)});
             jsonArr.push({ key: 'messagePlatformAccount', value: this.oMessagePlatformAccount });
             jsonArr.push({ key: 'messagePlatformPassword', value: this.oMessagePlatformPassword });
             jsonArr.push({ key: 'messagePlatformSignId', value: this.oMessagePlatformSignId });
