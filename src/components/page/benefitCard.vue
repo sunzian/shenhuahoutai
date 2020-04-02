@@ -38,6 +38,7 @@
                 <el-select clearable v-model="query.status" placeholder="状态" class="handle-select mr10">
                     <el-option key="1" label="启用" value="1"></el-option>
                     <el-option key="0" label="未启用" value="0"></el-option>
+                    <el-option key="2" label="已过期" value="2"></el-option>
                 </el-select>
                 <el-button style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="Search">
                     搜索
@@ -101,7 +102,8 @@
                 <el-table-column prop="sort" label="状态" width="90" fixed="right">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status == 1" type="success">启用</el-tag>
-                        <el-tag v-else type="danger">未启用</el-tag>
+                        <el-tag v-else-if="scope.row.status == 0" type="danger">未启用</el-tag>
+                        <el-tag v-else-if="scope.row.status == 2" type="danger">已过期</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column label="操作" width="200" align="center" fixed="right">

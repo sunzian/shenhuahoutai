@@ -311,16 +311,6 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="开启状态：" :label-width="formLabelWidth">
-                    <el-select v-model="oForm.status" placeholder="请选择">
-                        <el-option
-                            v-for="item in options"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value"
-                        ></el-option>
-                    </el-select>
-                </el-form-item>
                 <el-form-item :required="true" label="节假日是否可用：" :label-width="formLabelWidth">
                     <el-select v-model="oForm.holidayValid" placeholder="请选择">
                         <el-option
@@ -362,6 +352,16 @@
                     :label-width="formLabelWidth"
                 >
                     <el-input style="width: 100px" v-model="oForm.sendNumber" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item :required="true" label="开启状态：" :label-width="formLabelWidth">
+                    <el-select v-model="oForm.status" placeholder="请选择">
+                        <el-option
+                                v-for="item in options"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                        ></el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item label="使用须知：" :label-width="formLabelWidth">
                     <el-input
@@ -526,16 +526,6 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="开启状态：" :label-width="formLabelWidth">
-                    <el-select v-model="oStatus" placeholder="请选择">
-                        <el-option
-                            v-for="item in options"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value"
-                        ></el-option>
-                    </el-select>
-                </el-form-item>
                 <el-form-item :required="true" label="节假日是否可用：" :label-width="formLabelWidth">
                     <el-select v-model="oHolidayValid" placeholder="请选择">
                         <el-option
@@ -578,6 +568,16 @@
                     :label-width="formLabelWidth"
                 >
                     <el-input style="width: 100px" v-model="oSendNumber" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item :required="true" label="开启状态：" :label-width="formLabelWidth">
+                    <el-select v-model="oStatus" placeholder="请选择">
+                        <el-option
+                                v-for="item in options"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                        ></el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item label="使用须知：" :label-width="formLabelWidth">
                     <el-input

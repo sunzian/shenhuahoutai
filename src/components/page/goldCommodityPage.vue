@@ -543,7 +543,7 @@
                         :required="true"
                         label="有效期天数"
                         :label-width="formLabelWidth"
-                        v-if="oForm.effectiveType!=2"
+                        v-if="oForm.effectiveType!=2&&oForm.supportExpressStatus==1"
                 >
                     <el-input
                             style="width: 250px"
@@ -1128,7 +1128,7 @@
                         :required="true"
                         label="有效期天数"
                         :label-width="formLabelWidth"
-                        v-if="oEffectiveType!=2"
+                        v-if="oEffectiveType!=2&&form.supportExpressStatus==1"
                 >
                     <el-input
                             style="width: 250px"

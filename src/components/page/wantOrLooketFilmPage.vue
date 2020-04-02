@@ -69,7 +69,7 @@
                         >通过
                         </el-button>
                         <el-button
-                                type="success"
+                                type="danger"
                                 @click="delChange(scope.$index, scope.row)"
                         >不通过
                         </el-button>
