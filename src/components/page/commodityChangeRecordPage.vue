@@ -334,6 +334,22 @@
                             autocomplete="off"
                     ></el-input>
                 </el-form-item>
+                <el-form-item v-if="form.attribute" label="商品属性" :label-width="formLabelWidth">
+                    <el-input
+                            :disabled="true"
+                            style="width: 250px"
+                            v-model="form.attribute"
+                            autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item v-if="form.specifications" label="商品规格" :label-width="formLabelWidth">
+                    <el-input
+                            :disabled="true"
+                            style="width: 250px"
+                            v-model="form.specifications"
+                            autocomplete="off"
+                    ></el-input>
+                </el-form-item>
                 <el-form-item label="领取影院名称" :label-width="formLabelWidth">
                     <el-input
                             :disabled="true"
@@ -980,6 +996,7 @@
                         .then(data => {
                             loading.close();
                             if (data.data.code == 'success') {
+                                console.log(JSON.parse(Decrypt(data.data.data)));
                                 this.editVisible = true;
                                 this.form.id = row.id;
                                 this.form = JSON.parse(Decrypt(data.data.data));

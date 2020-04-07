@@ -336,23 +336,6 @@
                                 v-model="item1.columnName"
                                 autocomplete="off"
                         ></el-input>
-                        <el-select v-model="item1.mustStatus" placeholder="请选择" style="width: 120px">
-                            <el-option
-                                    v-for="item in mustStatusList"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value"
-                            ></el-option>
-                        </el-select>
-                        <el-select v-model="item1.paramType" placeholder="请选择类型" style="width: 120px">
-                            <el-option
-                                    v-for="item in paramTypeList"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value"
-                            ></el-option>
-                        </el-select>
-                        &nbsp;&nbsp;&nbsp;&nbsp;
                         <span style="color:blue;cursor: pointer;" @click="delSelectedSell(index)">删除</span>
                     </div>
                 </el-form-item>

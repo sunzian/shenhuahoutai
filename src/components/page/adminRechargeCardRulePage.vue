@@ -775,7 +775,7 @@ export default {
             this.form = row;
             let jsonArr1 = [];
             jsonArr1.push({ key: 'pageNo', value: this.query.pageNo });
-            jsonArr1.push({ key: 'pageSize', value: this.query.pageSize });
+            jsonArr1.push({ key: 'pageSize', value: 300 });
             jsonArr1.push({ key: 'cinemaCode', value: this.form.cinemaCode});
             jsonArr1.push({ key: 'status', value: 1 });
             let sign1 = md5(preSign(jsonArr1));
@@ -1380,7 +1380,7 @@ export default {
         getAllCinemaCard() {
             let jsonArr = [];
             jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
-            jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
+            jsonArr.push({ key: 'pageSize', value: 300 });
             jsonArr.push({ key: 'cinemaCode', value: this.oForm.cinemaCode});
             jsonArr.push({ key: 'status', value: 1 });
             let sign = md5(preSign(jsonArr));
