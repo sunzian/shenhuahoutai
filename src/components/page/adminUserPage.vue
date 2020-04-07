@@ -274,7 +274,7 @@
         },
         methods: {
             reset(index, row) {//删除数据
-                this.$confirm('此操作将重置用户密码次数, 是否继续?', '提示', {
+                this.$confirm('此操作将重置用户密码错误次数, 是否继续?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'

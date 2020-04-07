@@ -262,7 +262,7 @@
             </div>
         </el-dialog>
         <!-- 编辑弹出框 -->
-        <el-dialog :close-on-click-modal="false" title="详情" :visible.sync="editVisible">
+        <el-dialog :close-on-click-modal="false" title="编辑" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
                 <el-form-item label="影院名称：" :label-width="formLabelWidth">
                     <el-input

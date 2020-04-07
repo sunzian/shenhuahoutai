@@ -1251,7 +1251,7 @@
                     }
                 }
                 if (!this.oForm.startDate || !this.oForm.endDate) {
-                    this.message = '有效期不能为空，请检查！';
+                    this.message = '适用放映日期不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
@@ -1812,7 +1812,7 @@
                     }
                 }
                 if (!this.oStartDate || !this.oEndDate) {
-                    this.message = '有效期不能为空，请检查！';
+                    this.message = '适用放映日期不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;

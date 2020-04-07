@@ -315,6 +315,14 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item
+                        label="设置券包："
+                        :label-width="formLabelWidth"
+                        v-if="oForm.givenType == 3"
+                        :required="true"
+                >
+                    <el-button type="primary" @click="changeCoupon">更换券包</el-button>
+                </el-form-item>
+                <el-form-item
                     label="已设券包："
                     :label-width="formLabelWidth"
                     v-if="oGivenType == 3 || oGivenType == '赠送券包'"
@@ -327,7 +335,6 @@
                         autocomplete="off"
                         disabled
                     ></el-input>
-                    <el-button type="primary" @click="changeCoupon">更换券包</el-button>
                 </el-form-item>
                 <el-form-item :required="true"
                               v-if="oGivenType == 3 || oGivenType == 4|| oGivenType == '赠送券包' || oGivenType == '两者都送'"

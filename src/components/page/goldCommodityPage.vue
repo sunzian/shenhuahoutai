@@ -543,7 +543,7 @@
                         :required="true"
                         label="有效期天数"
                         :label-width="formLabelWidth"
-                        v-if="oForm.effectiveType!=2"
+                        v-if="oForm.effectiveType!=2&&oForm.supportExpressStatus==1"
                 >
                     <el-input
                             style="width: 250px"
@@ -1128,7 +1128,7 @@
                         :required="true"
                         label="有效期天数"
                         :label-width="formLabelWidth"
-                        v-if="oEffectiveType!=2"
+                        v-if="oEffectiveType!=2&&form.supportExpressStatus==1"
                 >
                     <el-input
                             style="width: 250px"
@@ -1891,6 +1891,7 @@
                     store: '',
                     gold: '',
                     money: '',
+                    id: '',
                 },
                 skuList: [],
                 changeSkuList: [],
@@ -2503,6 +2504,7 @@
             },
             changeChangeSku(index,row){
                 this.oSkuChangeForm = row;
+                console.log(row);
                 this.oChangeIndex=index;
                 this.dialogoSkuChangeFormVisible=true
             },
@@ -2602,6 +2604,7 @@
                     this.oSkuChangeForm.money=0
                 }
                 let oneSku = {
+                    id:this.oSkuChangeForm.id,
                     specifications: this.oSkuChangeForm.specifications,
                     attribute: this.oSkuChangeForm.attribute,
                     image: this.oSkuChangeForm.image,
@@ -2611,6 +2614,7 @@
                 };
                 this.changeSkuList[this.oChangeIndex] = oneSku;
                 this.oSkuChangeForm.specifications = '';
+                this.oSkuChangeForm.id = '';
                 this.oSkuChangeForm.attribute = '';
                 this.oSkuChangeForm.image = '';
                 this.oSkuChangeForm.store = '';

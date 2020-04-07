@@ -387,13 +387,13 @@
             </div>
         </div>
         <!-- 优惠券弹出框 -->
-        <el-dialog title="选择优惠券" :visible.sync="editVisible" :show-close="false" :close-on-click-modal="false">
+        <el-dialog title="选择优惠券" :visible.sync="editVisible" :close-on-click-modal="false">
             <div class="container">
                 <div class="handle-box">
                     <el-input
                         v-model="query.couponName"
                         placeholder="优惠券名称"
-                        class="handle-input mr10"
+                        class="handle-input mr12"
                     ></el-input>
                     <el-button type="primary" icon="el-icon-search" @click="getAllCoupon">搜索</el-button>
                 </div>
@@ -519,7 +519,6 @@
         <el-dialog
             title="设置发送条件"
             :visible.sync="sendConditions"
-            :show-close="false"
             :close-on-click-modal="false"
             >
             <el-form :model="couponForm">
@@ -1499,6 +1498,10 @@ export default {
 }
 .filmItem {
     width: 16%;
+}
+.mr12 {
+    width: 30%;
+    margin-right: 10px;
 }
 </style>
 

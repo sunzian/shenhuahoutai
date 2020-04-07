@@ -448,16 +448,6 @@
                     ></el-input>&nbsp;&nbsp;
                     <span style="color: #ccc;">在最低票价基础上加减多少金额 如果是减金额则填负数</span>
                 </el-form-item>
-                <el-form-item :required="true" label="开启状态" :label-width="formLabelWidth">
-                    <el-select v-model="oForm.status" placeholder="请选择">
-                        <el-option
-                            v-for="item in options"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value"
-                        ></el-option>
-                    </el-select>
-                </el-form-item>
                 <el-form-item :required="true" label="节假日是否可用" :label-width="formLabelWidth">
                     <el-select v-model="oForm.holidayValid" placeholder="请选择">
                         <el-option
@@ -507,6 +497,16 @@
                     :label-width="formLabelWidth"
                 >
                     <el-input style="width: 150px" v-model="oForm.sendNumber" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item :required="true" label="开启状态" :label-width="formLabelWidth">
+                    <el-select v-model="oForm.status" placeholder="请选择">
+                        <el-option
+                                v-for="item in options"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                        ></el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item label="使用须知" :label-width="formLabelWidth">
                     <el-input
@@ -750,16 +750,6 @@
                     ></el-input>&nbsp;&nbsp;
                     <span style="color: #ccc;">在最低票价基础上加减多少金额 如果是减金额则填负数</span>
                 </el-form-item>
-                <el-form-item :required="true" label="开启状态" :label-width="formLabelWidth">
-                    <el-select v-model="oStatus" placeholder="请选择">
-                        <el-option
-                            v-for="item in options"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value"
-                        ></el-option>
-                    </el-select>
-                </el-form-item>
                 <el-form-item :required="true" label="节假日是否可用" :label-width="formLabelWidth">
                     <el-select v-model="oHolidayValid" placeholder="请选择">
                         <el-option
@@ -810,6 +800,16 @@
                     :label-width="formLabelWidth"
                 >
                     <el-input style="width: 150px" v-model="oSendNumber" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item :required="true" label="开启状态" :label-width="formLabelWidth">
+                    <el-select v-model="oStatus" placeholder="请选择">
+                        <el-option
+                                v-for="item in options"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                        ></el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item label="使用须知" :label-width="formLabelWidth">
                     <el-input
