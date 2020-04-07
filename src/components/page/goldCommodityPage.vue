@@ -306,7 +306,7 @@
                             @click="deletPartner"
                     >删除</span>
                 </el-form-item>
-                <el-form-item v-if="oForm.commodity_type==4" :required="true" label="取货方式"
+                <el-form-item v-if="oForm.commodity_type==4||oForm.commodity_type==1" :required="true" label="取货方式"
                               :label-width="formLabelWidth">
                     <el-select v-model="oForm.supportExpressStatus" placeholder="请选择取货方式">
                         <el-option
@@ -887,7 +887,7 @@
                             @click="deletPartner"
                     >删除</span>
                 </el-form-item>
-                <el-form-item v-if="form.commodityType==4" :required="true" label="取货方式" :label-width="formLabelWidth">
+                <el-form-item v-if="form.commodityType==4||form.commodityType==1" :required="true" label="取货方式" :label-width="formLabelWidth">
                     <el-select v-model="form.supportExpressStatus" placeholder="请选择取货方式">
                         <el-option
                                 v-for="item in supportType"
@@ -898,7 +898,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item
-                        v-if="form.commodityType==4 && form.supportExpressStatus == 1"
+                        v-if="form.commodityType==4&& form.supportExpressStatus == 1"
                         :required="true"
                         label="领取方式"
                         :label-width="formLabelWidth"
@@ -3302,20 +3302,20 @@
                         return;
                     }
                 }
-                if (this.oForm.effectiveType != 2) {
-                    if (!this.oForm.expireDay || this.oForm.expireDay == '') {
-                        this.message = '有效期天数不能为空，请检查！';
-                        this.open();
-                        loading.close();
-                        return;
-                    }
-                    if (this.oForm.expireDay < 1) {
-                        this.message = '有效期天数不能小于1，请检查！';
-                        this.open();
-                        loading.close();
-                        return;
-                    }
-                }
+                // if (this.oForm.effectiveType != 2) {
+                //     if (!this.oForm.expireDay || this.oForm.expireDay == '') {
+                //         this.message = '有效期天数不能为空，请检查！';
+                //         this.open();
+                //         loading.close();
+                //         return;
+                //     }
+                //     if (this.oForm.expireDay < 1) {
+                //         this.message = '有效期天数不能小于1，请检查！';
+                //         this.open();
+                //         loading.close();
+                //         return;
+                //     }
+                // }
                 if (!this.oForm.topStatus) {
                     this.message = '是否今日大牌不能为空，请检查！';
                     this.open();
@@ -3451,11 +3451,14 @@
                 if (this.oForm.commodity_type == 4||this.oForm.commodity_type==1) {
                     jsonArr.push({key: 'skuListJson', value:JSON.stringify(this.skuList)});
                     jsonArr.push({key: 'isUseSku', value: this.oForm.isUseSku});
+                    jsonArr.push({key: 'supportExpressStatus', value: this.oForm.supportExpressStatus});
                 }
                 if (this.oForm.commodity_type == 4) {
                     jsonArr.push({key: 'partnerCode', value: this.partnerCode});
                     jsonArr.push({key: 'pickupType', value: this.oForm.pickupType});
-                    jsonArr.push({key: 'supportExpressStatus', value: this.oForm.supportExpressStatus});
+                }
+                if (this.oForm.commodity_type == 1) {
+                    jsonArr.push({key: 'pickupType', value: 1});
                 }
                 if (this.oForm.commodity_type == 3 || this.oForm.commodity_type == 5) {
                     if (this.oForm.commodity_type == 3) {
@@ -3664,7 +3667,7 @@
                                 if (JSON.parse(Decrypt(data.data.data)).goldCommodity.pickupType == 2) {
                                     this.form.pickupType = '2';
                                 }
-                                this.changeSkuList=JSON.parse(Decrypt(data.data.data)).commoditySku
+                                this.changeSkuList=JSON.parse(Decrypt(data.data.data)).commoditySku;
                                 if (JSON.parse(Decrypt(data.data.data)).goldCommodity.isUseSku == 1) {
                                     this.form.isUseSku = 1;
                                 }
@@ -3832,14 +3835,6 @@
                         loading.close();
                         return;
                     }
-                }
-                if (this.form.commodityType == 4) {
-                    if (!this.partnerCode) {
-                        this.message = '所选商户不能为空，请检查！';
-                        this.open();
-                        loading.close();
-                        return;
-                    }
                     if (!this.form.pickupType) {
                         this.message = '领取方式不能为空，请检查！';
                         this.open();
@@ -3848,6 +3843,14 @@
                     }
                     if (!this.form.supportExpressStatus) {
                         this.message = '支持快递不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if (this.form.commodityType == 4) {
+                    if (!this.partnerCode) {
+                        this.message = '所选商户不能为空，请检查！';
                         this.open();
                         loading.close();
                         return;
@@ -3967,20 +3970,20 @@
                         return;
                     }
                 }
-                if (this.oEffectiveType != 2) {
-                    if (!this.form.expireDay || this.form.expireDay == '') {
-                        this.message = '有效期天数不能为空，请检查！';
-                        this.open();
-                        loading.close();
-                        return;
-                    }
-                    if (this.form.expireDay < 1) {
-                        this.message = '有效期天数不能小于1，请检查！';
-                        this.open();
-                        loading.close();
-                        return;
-                    }
-                }
+                // if (this.oEffectiveType != 2) {
+                //     if (!this.form.expireDay || this.form.expireDay == '') {
+                //         this.message = '有效期天数不能为空，请检查！';
+                //         this.open();
+                //         loading.close();
+                //         return;
+                //     }
+                //     if (this.form.expireDay < 1) {
+                //         this.message = '有效期天数不能小于1，请检查！';
+                //         this.open();
+                //         loading.close();
+                //         return;
+                //     }
+                // }
                 if (!this.oTopstatus) {
                     this.message = '是否今日大牌不能为空，请检查！';
                     this.open();
@@ -4113,12 +4116,15 @@
                     if (this.form.commodityType == 4) {
                         jsonArr.push({key: 'partnerCode', value: this.partnerCode});
                         jsonArr.push({key: 'pickupType', value: this.form.pickupType});
-                        jsonArr.push({key: 'supportExpressStatus', value: this.form.supportExpressStatus});
                         // jsonArr.push({ key: 'expressFee', value: this.form.expressFee });
+                    }
+                    if (this.form.commodityType == 1) {
+                        jsonArr.push({key: 'pickupType', value: 1});
                     }
                     if (this.form.commodityType == 4||this.form.commodityType==1) {
                         jsonArr.push({key: 'skuListJson', value:JSON.stringify(this.changeSkuList)});
                         jsonArr.push({key: 'isUseSku', value: this.form.isUseSku});
+                        jsonArr.push({key: 'supportExpressStatus', value: this.form.supportExpressStatus});
                     }
                     if (this.form.commodityType == 2) {
                         jsonArr.push({key: 'ticketIds', value: this.ticketIds});
