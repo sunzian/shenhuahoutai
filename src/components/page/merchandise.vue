@@ -264,6 +264,25 @@
                             autocomplete="off"
                     ></el-input>
                 </el-form-item>
+                <el-form-item
+                        label="商品规格"
+                        :label-width="formLabelWidth"
+                >
+                    <el-button type="primary" @click="addSelectedSell">新增</el-button>
+                    <div
+                            v-for="(item1, index) in selectedSell"
+                            style="margin-bottom: 5px"
+                            :key="index"
+                    >
+                        <el-input
+                                style="width: 150px"
+                                v-model="item1.specifications"
+                                autocomplete="off"
+                        ></el-input>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <span style="color:blue;cursor: pointer;" @click="delSelectedSell(index)">删除</span>
+                    </div>
+                </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false">取 消</el-button>
@@ -284,6 +303,7 @@ export default {
     data() {
         return {
             selectValue: [],
+            selectedSell: [],
             showSell: true, //卖品信息页面是否展示开关
             type: {
                 type: ''
@@ -342,6 +362,15 @@ export default {
         this.getAllCinema();
     },
     methods: {
+        delSelectedSell(index) {
+            this.selectedSell.splice(index, 1);
+        },
+        addSelectedSell() {
+            let obj = {
+                specifications: '',
+            };
+            this.selectedSell.push(obj);
+        },
         exceed(data){
             console.log(data);
             if(data.length==1){
@@ -437,6 +466,7 @@ export default {
                             this.form.stockCount = JSON.parse(Decrypt(data.data.data)).merchandise.stockCount;
                             this.selectValue = JSON.parse(Decrypt(data.data.data)).merchandiseType;
                             this.oMerchandiseStatus = JSON.parse(Decrypt(data.data.data)).merchandise.merchandiseStatus;
+                            this.selectedSell = JSON.parse(Decrypt(data.data.data)).specificationsList;
                             for (let x in this.showStatus) {
                                 if (this.showStatus[x].value == JSON.parse(Decrypt(data.data.data)).merchandise.merchandiseStatus) {
                                     this.oMerchandiseStatus = this.showStatus[x].value;
@@ -485,6 +515,7 @@ export default {
                 jsonArr.push({ key: 'typeCode', value: this.form.typeCode });
                 jsonArr.push({ key: 'batchUpdatePic', value: this.form.batchUpdatePic });
                 jsonArr.push({ key: 'merchandiseStatus', value: this.oMerchandiseStatus });
+                jsonArr.push({ key: 'specificationsListJson', value: JSON.stringify(this.selectedSell) });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
                 console.log(jsonArr);

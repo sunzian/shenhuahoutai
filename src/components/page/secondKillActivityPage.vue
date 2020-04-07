@@ -213,29 +213,39 @@
                             format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
                 </el-form-item>
-                <el-form-item :required="true" label="适用场次时间 ：" :label-width="formLabelWidth">
-                    <el-time-picker
-                            is-range
-                            type="date"
-                            format="HH:mm:ss"
-                            value-format="HH:mm:ss"
-                            v-model="value1"
-                            range-separator="至"
-                            start-placeholder="开始时间"
-                            end-placeholder="结束时间"
-                            placeholder="选择时间范围">
-                    </el-time-picker>
-                    <span style="cursor: pointer;color: blue" @click="addTime">添加</span>
+                <el-form-item :required="true" label="显示状态" :label-width="formLabelWidth">
+                    <el-select v-model="oForm.showStatus" placeholder="请选择兑换方式">
+                        <el-option
+                                v-for="item in showStatus"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                        ></el-option>
+                    </el-select>
                 </el-form-item>
-                <el-form-item label="所选时间段：" :label-width="formLabelWidth" v-if="dateInfo.length>0">
-                    <div v-for="(item, index) in dateInfo" :key="index">
-                        {{item}}
-                        <span
-                                style="color:red;cursor: pointer;"
-                                @click="deletTime(index)"
-                        >删除</span>
-                    </div>
-                </el-form-item>
+                <!--<el-form-item :required="true" label="适用场次时间 ：" :label-width="formLabelWidth">-->
+                    <!--<el-time-picker-->
+                            <!--is-range-->
+                            <!--type="date"-->
+                            <!--format="HH:mm:ss"-->
+                            <!--value-format="HH:mm:ss"-->
+                            <!--v-model="value1"-->
+                            <!--range-separator="至"-->
+                            <!--start-placeholder="开始时间"-->
+                            <!--end-placeholder="结束时间"-->
+                            <!--placeholder="选择时间范围">-->
+                    <!--</el-time-picker>-->
+                    <!--<span style="cursor: pointer;color: blue" @click="addTime">添加</span>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item label="所选时间段：" :label-width="formLabelWidth" v-if="dateInfo.length>0">-->
+                    <!--<div v-for="(item, index) in dateInfo" :key="index">-->
+                        <!--{{item}}-->
+                        <!--<span-->
+                                <!--style="color:red;cursor: pointer;"-->
+                                <!--@click="deletTime(index)"-->
+                        <!--&gt;删除</span>-->
+                    <!--</div>-->
+                <!--</el-form-item>-->
                 <el-form-item :required="true" label="是否限制用户限购" :label-width="formLabelWidth">
                     <el-select v-model="oForm.purchaseType" placeholder="请选择">
                         <el-option
@@ -404,29 +414,39 @@
                             format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
                 </el-form-item>
-                <el-form-item :required="true" label="适用场次时间 ：" :label-width="formLabelWidth">
-                    <el-time-picker
-                            is-range
-                            type="date"
-                            format="HH:mm:ss"
-                            value-format="HH:mm:ss"
-                            v-model="value1"
-                            range-separator="至"
-                            start-placeholder="开始时间"
-                            end-placeholder="结束时间"
-                            placeholder="选择时间范围">
-                    </el-time-picker>
-                    <span style="cursor: pointer;color: blue" @click="addTime">添加</span>
+                <el-form-item :required="true" label="显示状态" :label-width="formLabelWidth">
+                    <el-select v-model="oShowStatus" placeholder="请选择兑换方式">
+                        <el-option
+                                v-for="item in showStatus"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                        ></el-option>
+                    </el-select>
                 </el-form-item>
-                <el-form-item label="所选时间段：" :label-width="formLabelWidth" v-if="dateInfo.length>0">
-                    <div v-for="(item, index) in dateInfo" :key="index">
-                        {{item}}
-                        <span
-                                style="color:red;cursor: pointer;"
-                                @click="deletTime(index)"
-                        >删除</span>
-                    </div>
-                </el-form-item>
+                <!--<el-form-item :required="true" label="适用场次时间 ：" :label-width="formLabelWidth">-->
+                    <!--<el-time-picker-->
+                            <!--is-range-->
+                            <!--type="date"-->
+                            <!--format="HH:mm:ss"-->
+                            <!--value-format="HH:mm:ss"-->
+                            <!--v-model="value1"-->
+                            <!--range-separator="至"-->
+                            <!--start-placeholder="开始时间"-->
+                            <!--end-placeholder="结束时间"-->
+                            <!--placeholder="选择时间范围">-->
+                    <!--</el-time-picker>-->
+                    <!--<span style="cursor: pointer;color: blue" @click="addTime">添加</span>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item label="所选时间段：" :label-width="formLabelWidth" v-if="dateInfo.length>0">-->
+                    <!--<div v-for="(item, index) in dateInfo" :key="index">-->
+                        <!--{{item}}-->
+                        <!--<span-->
+                                <!--style="color:red;cursor: pointer;"-->
+                                <!--@click="deletTime(index)"-->
+                        <!--&gt;删除</span>-->
+                    <!--</div>-->
+                <!--</el-form-item>-->
                 <el-form-item :required="true" label="是否限制用户限购" :label-width="formLabelWidth">
                     <el-select v-model="oPurchaseType" placeholder="请选择">
                         <el-option
@@ -690,6 +710,7 @@
                 drawer: false, //新增抽屉弹出框
                 value1: '',
                 oCinemaName: '',
+                oShowStatus: '',
                 oScreenName: '',
                 oFilmFormatName: '',
                 selectFilmFormatType: '',
@@ -777,6 +798,16 @@
                         label: '发送'
                     }
                 ],
+                showStatus:[
+                    {
+                        value: '2',
+                        label: '显示'
+                    },
+                    {
+                        value: '1',
+                        label: '不显示'
+                    }
+                ],
                 showType: [
                     {
                         value: '1',
@@ -794,6 +825,7 @@
                 oForm: {
                     name: '',
                     cinemaName: '',
+                    showStatus: '2',
                     cinemaCode: [],
                     screenName: '',
                     screenCode: [],
@@ -995,6 +1027,7 @@
                         if (data.data.code == 'success') {
                             this.commodityName = '';
                             this.commodityId = '';
+                            this.oForm.showStatus = '2';
                             this.dateInfo = [];
                             this.startArr = [];
                             this.endArr = [];
@@ -1028,8 +1061,9 @@
                 jsonArr.push({ key: 'cinemaCodes', value: this.selectGoodsCode });
                 jsonArr.push({ key: 'startDate', value: this.oForm.startDate });
                 jsonArr.push({ key: 'endDate', value: this.oForm.endDate });
-                jsonArr.push({ key: 'startTimePoints', value: this.startArr.join(',') });
-                jsonArr.push({ key: 'endTimePoints', value: this.endArr.join(',') });
+                jsonArr.push({ key: 'showStatus', value: this.oForm.showStatus });
+                // jsonArr.push({ key: 'startTimePoints', value: this.startArr.join(',') });
+                // jsonArr.push({ key: 'endTimePoints', value: this.endArr.join(',') });
                 jsonArr.push({ key: 'purchaseType', value: this.oForm.purchaseType });
                 jsonArr.push({ key: 'purchaseCount', value: this.oForm.purchaseCount });
                 jsonArr.push({ key: 'smsStatus', value: this.oForm.smsStatus });
@@ -1077,6 +1111,7 @@
                                 this.oForm.commodityStore = '';
                                 this.oForm.hasSoldNumber = '';
                                 this.oForm.status = '';
+                                this.oForm.showStatus = '2';
                                 this.getMenu();
                             } else if (data.data.code == 'nologin') {
                                 this.message = data.data.message;
@@ -1228,6 +1263,12 @@
                                 }
                             }
                             this.oDescription = JSON.parse(Decrypt(data.data.data)).description;
+                            for (let x in this.showStatus) {
+                                if (this.showStatus[x].value == JSON.parse(Decrypt(data.data.data)).showStatus) {
+                                    this.oShowStatus = this.showStatus[x].value;
+                                    break;
+                                }
+                            }
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
                             this.open();
@@ -1270,6 +1311,7 @@
                 jsonArr.push({ key: 'commodityStore', value: this.oCommodityStore });
                 jsonArr.push({ key: 'hasSoldNumber', value: this.oHasSoldNumber });
                 jsonArr.push({ key: 'status', value: this.oStatus });
+                jsonArr.push({ key: 'showStatus', value: this.oShowStatus });
                 jsonArr.push({ key: 'id', value: this.form.id });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
