@@ -317,7 +317,7 @@
                 <el-form-item
                         label="设置券包："
                         :label-width="formLabelWidth"
-                        v-if="oForm.givenType == 3"
+                        v-if="oGivenType == 3"
                         :required="true"
                 >
                     <el-button type="primary" @click="changeCoupon">更换券包</el-button>
@@ -815,6 +815,7 @@ export default {
                         // JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.cinemaCode
                         // this.oForm.cinemaCode=JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.cinemaCode
                         // this.getAllCinemaCard();
+                        console.log(JSON.parse(Decrypt(data.data.data)));
                         this.editVisible = true;
                         this.cardList = JSON.parse(Decrypt(data.data.data)).cardLevelList;
                         this.oCinemaName = JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.cinemaName;
@@ -835,17 +836,24 @@ export default {
                         if (JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.givenMoney) {
                             this.oGivenMoney = JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.givenMoney;
                         }
-                        if (JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.givenType == 1) {
-                            this.oGivenType = '不赠送';
-                        }
-                        if (JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.givenType == 2) {
-                            this.oGivenType = '赠送金额';
-                        }
-                        if (JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.givenType == 3) {
-                            this.oGivenType = '赠送券包';
-                        }
-                        if (JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.givenType == 4) {
-                            this.oGivenType = '两者都送';
+                        // if (JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.givenType == 1) {
+                        //     this.oGivenType = '不赠送';
+                        // }
+                        // if (JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.givenType == 2) {
+                        //     this.oGivenType = '赠送金额';
+                        // }
+                        // if (JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.givenType == 3) {
+                        //     this.oGivenType = '赠送券包';
+                        // }
+                        // if (JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.givenType == 4) {
+                        //     this.oGivenType = '两者都送';
+                        // }
+                        for (let i in this.type) {
+                            //轮播图类型下拉框显示对应的选项
+                            if (this.type[i].value == JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.givenType) {
+                                this.oGivenType = this.type[i].value;
+                                break;
+                            }
                         }
                         if (JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.effectiveTimeType == 1) {
                             this.oEffectiveTimeType = 1;

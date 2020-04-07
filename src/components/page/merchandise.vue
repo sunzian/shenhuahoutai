@@ -369,7 +369,9 @@ export default {
             let obj = {
                 specifications: '',
             };
-            this.selectedSell.push(obj);
+            console.log(obj);
+            console.log(this.selectedSell);
+            this.selectedSell.push(obj)
         },
         exceed(data){
             console.log(data);
