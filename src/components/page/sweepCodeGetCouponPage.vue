@@ -284,6 +284,7 @@
                             :key="item.value"
                             :label="item.label"
                             :value="item.value"
+                            :disabled="item.disabled"
                         ></el-option>
                     </el-select>
                 </el-form-item>
@@ -475,6 +476,7 @@
                             :key="item.value"
                             :label="item.label"
                             :value="item.value"
+                            :disabled="item.disabled"
                         ></el-option>
                     </el-select>
                 </el-form-item>
@@ -608,7 +610,8 @@ export default {
                 },
                 {
                     value: '3',
-                    label: '已过期'
+                    label: '已过期',
+                    disabled: true
                 }
             ],
             cinemaList: [], //影院列表
