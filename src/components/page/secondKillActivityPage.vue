@@ -213,7 +213,7 @@
                             format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
                 </el-form-item>
-                <el-form-item :required="true" label="显示状态" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="是否立即显示" :label-width="formLabelWidth">
                     <el-select v-model="oForm.showStatus" placeholder="请选择兑换方式">
                         <el-option
                                 v-for="item in showStatus"
@@ -414,7 +414,7 @@
                             format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
                 </el-form-item>
-                <el-form-item :required="true" label="显示状态" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="是否立即显示" :label-width="formLabelWidth">
                     <el-select v-model="oShowStatus" placeholder="请选择兑换方式">
                         <el-option
                                 v-for="item in showStatus"
