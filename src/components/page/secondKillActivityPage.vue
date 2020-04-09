@@ -264,7 +264,7 @@
                 >
                     <el-input placeholder="请输入正确的的数字" style="width: 150px" v-model="oForm.purchaseCount " autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="是否可发送短信提醒用户" :label-width="formLabelWidth">
+                <!-- <el-form-item :required="true" label="是否可发送短信提醒用户" :label-width="formLabelWidth">
                     <el-select v-model="oForm.smsStatus" placeholder="请选择">
                         <el-option
                                 v-for="item in canUse2"
@@ -273,7 +273,7 @@
                                 :value="item.value"
                         ></el-option>
                     </el-select>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item
                         :required="true"
                         label="选择商品"
@@ -465,7 +465,7 @@
                 >
                     <el-input placeholder="请输入正确的的数字" style="width: 150px" v-model="oPurchaseCount " autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="是否可发送短信提醒用户" :label-width="formLabelWidth">
+                <!-- <el-form-item :required="true" label="是否可发送短信提醒用户" :label-width="formLabelWidth">
                     <el-select v-model="oSmsStatus" placeholder="请选择">
                         <el-option
                                 v-for="item in canUse2"
@@ -474,7 +474,7 @@
                                 :value="item.value"
                         ></el-option>
                     </el-select>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item
                         :required="true"
                         label="选择商品"
@@ -1066,7 +1066,7 @@
                 // jsonArr.push({ key: 'endTimePoints', value: this.endArr.join(',') });
                 jsonArr.push({ key: 'purchaseType', value: this.oForm.purchaseType });
                 jsonArr.push({ key: 'purchaseCount', value: this.oForm.purchaseCount });
-                jsonArr.push({ key: 'smsStatus', value: this.oForm.smsStatus });
+                jsonArr.push({ key: 'smsStatus', value: 0 });
                 jsonArr.push({ key: 'description', value: this.oForm.description });
                 jsonArr.push({ key: 'commodityId', value: this.commodityId });
                 jsonArr.push({ key: 'changeType', value: this.oForm.changeType });
@@ -1302,7 +1302,7 @@
                 jsonArr.push({ key: 'endTimePoints', value: this.endArr.join(',') });
                 jsonArr.push({ key: 'purchaseType', value: this.oPurchaseType });
                 jsonArr.push({ key: 'purchaseCount', value: this.oPurchaseCount });
-                jsonArr.push({ key: 'smsStatus', value: this.oSmsStatus });
+                jsonArr.push({ key: 'smsStatus', value: 0 });
                 jsonArr.push({ key: 'description', value: this.oDescription });
                 jsonArr.push({ key: 'commodityId', value: this.commodityId });
                 jsonArr.push({ key: 'changeType', value: this.oChangeType });
