@@ -1012,7 +1012,7 @@
                         <el-radio :label="2">否</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item v-if="form.isUseSku==1&&form.commodityType==1||form.commodityType==4" :required="true" label="商品SKU" :label-width="formLabelWidth">
+                <el-form-item v-if="form.commodityType==1||form.commodityType==4&&form.isUseSku==1" :required="true" label="商品SKU" :label-width="formLabelWidth">
                     <el-button
                             type="primary"
                             @click="addChangeUseSku"
@@ -3786,6 +3786,8 @@
                                         break;
                                     }
                                 }
+                                console.log(this.form.commodityType)
+                                console.log(this.form.isUseSku)
                             } else if (data.data.code == 'nologin') {
                                 this.message = data.data.message;
                                 this.open();

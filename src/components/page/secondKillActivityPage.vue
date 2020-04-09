@@ -196,11 +196,11 @@
                             placeholder="限20个汉字"
                     ></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="活动日期" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="活动时间" :label-width="formLabelWidth">
                     <el-date-picker
                             v-model="oForm.startDate"
                             type="datetime"
-                            placeholder="开始日期"
+                            placeholder="开始时间"
                             value-format="yyyy-MM-dd HH:mm:ss"
                             format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
@@ -208,12 +208,12 @@
                     <el-date-picker
                             v-model="oForm.endDate"
                             type="datetime"
-                            placeholder="结束日期"
+                            placeholder="结束时间"
                             value-format="yyyy-MM-dd HH:mm:ss"
                             format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
                 </el-form-item>
-                <el-form-item :required="true" label="显示状态" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="是否立即显示" :label-width="formLabelWidth">
                     <el-select v-model="oForm.showStatus" placeholder="请选择兑换方式">
                         <el-option
                                 v-for="item in showStatus"
@@ -397,11 +397,11 @@
                             placeholder="限20个汉字"
                     ></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="活动日期" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="活动时间" :label-width="formLabelWidth">
                     <el-date-picker
                             v-model="oStartDate"
                             type="datetime"
-                            placeholder="开始日期"
+                            placeholder="开始时间"
                             value-format="yyyy-MM-dd HH:mm:ss"
                             format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
@@ -409,12 +409,12 @@
                     <el-date-picker
                             v-model="oEndDate"
                             type="datetime"
-                            placeholder="结束日期"
+                            placeholder="结束时间"
                             value-format="yyyy-MM-dd HH:mm:ss"
                             format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
                 </el-form-item>
-                <el-form-item :required="true" label="显示状态" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="是否立即显示" :label-width="formLabelWidth">
                     <el-select v-model="oShowStatus" placeholder="请选择兑换方式">
                         <el-option
                                 v-for="item in showStatus"
