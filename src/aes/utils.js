@@ -74,7 +74,6 @@ export function preSign(jsonArr) {
     if(preCodeStr.length>=0){
         preCodeStr+=SIGN_KEY;
     }
-
     return preCodeStr;
 }
 

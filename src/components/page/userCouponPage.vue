@@ -70,6 +70,7 @@
                     <el-option key="11" label="绑定售票系统的券" value="11"></el-option>
                     <el-option key="12" label="绑定本平台的券" value="12"></el-option>
                     <el-option key="13" label="点映组团成功送券" value="13"></el-option>
+                    <el-option key="14" label="扫码领券" value="14"></el-option>
                 </el-select>
                 <el-button
                     type="primary"
@@ -141,6 +142,9 @@
                         <el-tag v-else-if="scope.row.getType=='9'">权益卡券包</el-tag>
                         <el-tag v-else-if="scope.row.getType=='10'">员工推荐充值赠送</el-tag>
                         <el-tag v-else-if="scope.row.getType=='11'">绑定售票系统的券</el-tag>
+                        <el-tag v-else-if="scope.row.getType=='12'">绑定本平台的券</el-tag>
+                        <el-tag v-else-if="scope.row.getType=='13'">点映组团成功送券</el-tag>
+                        <el-tag v-else-if="scope.row.getType=='14'">扫码领券</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column label="使用订单号" align="center" width="200">

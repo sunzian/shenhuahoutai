@@ -92,7 +92,7 @@
                     @click="back"
                     icon="el-icon-circle-plus-outline"
                     style="float: right;margin-top: 10px"
-                >返回卖品列表</el-button>
+                >返回影院列表</el-button>
                 <el-button
                     type="primary"
                     @click="addPage"

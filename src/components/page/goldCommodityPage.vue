@@ -1625,10 +1625,10 @@
         <el-dialog :close-on-click-modal="false" title="新增" :visible.sync="dialogskuFormVisible">
             <el-form :model="skuForm">
                 <el-form-item :required="true" label="规格" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" min="1" v-model.trim="skuForm.specifications" autocomplete="off"></el-input>
+                    <el-input placeholder="请输入商品规格，例如：颜色、包装..." style="width: 250px" min="1" v-model.trim="skuForm.specifications" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="属性" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" min="1" v-model="skuForm.attribute" autocomplete="off"></el-input>
+                    <el-input placeholder="请输入商品属性，例如：尺寸、容量..." style="width: 250px" min="1" v-model="skuForm.attribute" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="图片" :label-width="formLabelWidth">
                     <el-popover placement="right" title trigger="hover">
@@ -1661,13 +1661,13 @@
                     </el-upload>
                 </el-form-item>
                 <el-form-item :required="true" label="库存" :label-width="formLabelWidth">
-                    <el-input onkeyup="this.value=this.value.replace(/[^0-9]+/,'')" style="width: 250px" min="1" v-model="skuForm.store" autocomplete="off"></el-input>
+                    <el-input placeholder="请输入大于0的数字" onkeyup="this.value=this.value.replace(/[^0-9]+/,'')" style="width: 250px" min="1" v-model="skuForm.store" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item v-if="oForm.change_type==1||oForm.change_type==3" :required="true" label="所需金币数量" :label-width="formLabelWidth">
-                    <el-input onkeyup="this.value=this.value.replace(/[^0-9]+/,'')" style="width: 250px" min="1" v-model="skuForm.gold" autocomplete="off"></el-input>
+                    <el-input placeholder="请输入正确的数字" onkeyup="this.value=this.value.replace(/[^0-9]+/,'')" style="width: 250px" min="1" v-model="skuForm.gold" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item v-if="oForm.change_type==2||oForm.change_type==3" :required="true" label="所需RMB" :label-width="formLabelWidth">
-                    <el-input onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')" style="width: 250px" min="1" v-model="skuForm.money" autocomplete="off"></el-input>
+                    <el-input placeholder="请输入正确的数字" onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')" style="width: 250px" min="1" v-model="skuForm.money" autocomplete="off"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -1679,10 +1679,10 @@
         <el-dialog :close-on-click-modal="false" title="修改" :visible.sync="dialogoSkuFormVisible">
             <el-form :model="oSkuForm">
                 <el-form-item :required="true" label="规格" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" min="1" v-model.trim="oSkuForm.specifications" autocomplete="off"></el-input>
+                    <el-input placeholder="请输入商品规格，例如：颜色、包装..." style="width: 250px" min="1" v-model.trim="oSkuForm.specifications" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="属性" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" min="1" v-model="oSkuForm.attribute" autocomplete="off"></el-input>
+                    <el-input placeholder="请输入商品属性，例如：尺寸、容量..." style="width: 250px" min="1" v-model="oSkuForm.attribute" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="图片" :label-width="formLabelWidth">
                     <el-popover placement="right" title trigger="hover">
@@ -1715,13 +1715,13 @@
                     </el-upload>
                 </el-form-item>
                 <el-form-item :required="true" label="库存" :label-width="formLabelWidth">
-                    <el-input onkeyup="this.value=this.value.replace(/[^0-9]+/,'')" style="width: 250px" min="1" v-model="oSkuForm.store" autocomplete="off"></el-input>
+                    <el-input placeholder="请输入大于0的数字" onkeyup="this.value=this.value.replace(/[^0-9]+/,'')" style="width: 250px" min="1" v-model="oSkuForm.store" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item v-if="oForm.change_type==1||oForm.change_type==3" :required="true" label="所需金币数量" :label-width="formLabelWidth">
-                    <el-input onkeyup="this.value=this.value.replace(/[^0-9]+/,'')" style="width: 250px" min="1" v-model="oSkuForm.gold" autocomplete="off"></el-input>
+                    <el-input placeholder="请输入正确的数字" onkeyup="this.value=this.value.replace(/[^0-9]+/,'')" style="width: 250px" min="1" v-model="oSkuForm.gold" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item v-if="oForm.change_type==2||oForm.change_type==3" :required="true" label="所需RMB" :label-width="formLabelWidth">
-                    <el-input onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')" style="width: 250px" min="1" v-model="oSkuForm.money" autocomplete="off"></el-input>
+                    <el-input placeholder="请输入正确的数字" onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')" style="width: 250px" min="1" v-model="oSkuForm.money" autocomplete="off"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -1733,10 +1733,10 @@
         <el-dialog :close-on-click-modal="false" title="新增" :visible.sync="dialogskuChangeFormVisible">
             <el-form :model="skuChangeForm">
                 <el-form-item :required="true" label="规格" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" min="1" v-model.trim="skuChangeForm.specifications" autocomplete="off"></el-input>
+                    <el-input placeholder="请输入商品规格，例如：颜色、包装..." style="width: 250px" min="1" v-model.trim="skuChangeForm.specifications" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="属性" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" min="1" v-model="skuChangeForm.attribute" autocomplete="off"></el-input>
+                    <el-input placeholder="请输入商品属性，例如：尺寸、容量..." style="width: 250px" min="1" v-model="skuChangeForm.attribute" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="图片" :label-width="formLabelWidth">
                     <el-popover placement="right" title trigger="hover">
@@ -1769,13 +1769,13 @@
                     </el-upload>
                 </el-form-item>
                 <el-form-item :required="true" label="库存" :label-width="formLabelWidth">
-                    <el-input onkeyup="this.value=this.value.replace(/[^0-9]+/,'')" style="width: 250px" min="1" v-model="skuChangeForm.store" autocomplete="off"></el-input>
+                    <el-input placeholder="请输入大于0的数字" onkeyup="this.value=this.value.replace(/[^0-9]+/,'')" style="width: 250px" min="1" v-model="skuChangeForm.store" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item v-if="form.changeType==1||form.changeType==3" :required="true" label="所需金币数量" :label-width="formLabelWidth">
-                    <el-input onkeyup="this.value=this.value.replace(/[^0-9]+/,'')" style="width: 250px" min="1" v-model="skuChangeForm.gold" autocomplete="off"></el-input>
+                    <el-input placeholder="请输入正确的数字" onkeyup="this.value=this.value.replace(/[^0-9]+/,'')" style="width: 250px" min="1" v-model="skuChangeForm.gold" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item v-if="form.changeType==2||form.changeType==3" :required="true" label="所需RMB" :label-width="formLabelWidth">
-                    <el-input onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')" style="width: 250px" min="1" v-model="skuChangeForm.money" autocomplete="off"></el-input>
+                    <el-input placeholder="请输入正确的数字" onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')" style="width: 250px" min="1" v-model="skuChangeForm.money" autocomplete="off"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -1787,10 +1787,10 @@
         <el-dialog :close-on-click-modal="false" title="修改" :visible.sync="dialogoSkuChangeFormVisible">
             <el-form :model="oSkuChangeForm">
                 <el-form-item :required="true" label="规格" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" min="1" v-model.trim="oSkuChangeForm.specifications" autocomplete="off"></el-input>
+                    <el-input placeholder="请输入商品规格，例如：颜色、包装..." style="width: 250px" min="1" v-model.trim="oSkuChangeForm.specifications" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="属性" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" min="1" v-model="oSkuChangeForm.attribute" autocomplete="off"></el-input>
+                    <el-input placeholder="请输入商品属性，例如：尺寸、容量..." style="width: 250px" min="1" v-model="oSkuChangeForm.attribute" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="图片" :label-width="formLabelWidth">
                     <el-popover placement="right" title trigger="hover">
@@ -1823,13 +1823,13 @@
                     </el-upload>
                 </el-form-item>
                 <el-form-item :required="true" label="库存" :label-width="formLabelWidth">
-                    <el-input onkeyup="this.value=this.value.replace(/[^0-9]+/,'')" style="width: 250px" min="1" v-model="oSkuChangeForm.store" autocomplete="off"></el-input>
+                    <el-input placeholder="请输入大于0的数字" onkeyup="this.value=this.value.replace(/[^0-9]+/,'')" style="width: 250px" min="1" v-model="oSkuChangeForm.store" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item v-if="form.changeType==1||form.changeType==3" :required="true" label="所需金币数量" :label-width="formLabelWidth">
-                    <el-input onkeyup="this.value=this.value.replace(/[^0-9]+/,'')" style="width: 250px" min="1" v-model="oSkuChangeForm.gold" autocomplete="off"></el-input>
+                    <el-input placeholder="请输入正确的数字" onkeyup="this.value=this.value.replace(/[^0-9]+/,'')" style="width: 250px" min="1" v-model="oSkuChangeForm.gold" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item v-if="form.changeType==2||form.changeType==3" :required="true" label="所需RMB" :label-width="formLabelWidth">
-                    <el-input onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')" style="width: 250px" min="1" v-model="oSkuChangeForm.money" autocomplete="off"></el-input>
+                    <el-input placeholder="请输入正确的数字" onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')" style="width: 250px" min="1" v-model="oSkuChangeForm.money" autocomplete="off"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -3680,7 +3680,7 @@
                                 this.form.expireDay = JSON.parse(Decrypt(data.data.data)).goldCommodity.expireDay;
                                 this.form.originalPrice = JSON.parse(Decrypt(data.data.data)).goldCommodity.originalPrice;
                                 this.form.markdown = JSON.parse(Decrypt(data.data.data)).goldCommodity.details;
-                                this.form.alredyChangedNumber = JSON.parse(Decrypt(data.data.data)).goldCommodity.alredyChangedNumber;
+                                this.form.alreadyChangedNumber = JSON.parse(Decrypt(data.data.data)).goldCommodity.alreadyChangedNumber;
                                 this.form.gold = JSON.parse(Decrypt(data.data.data)).goldCommodity.gold;
                                 this.form.money = JSON.parse(Decrypt(data.data.data)).goldCommodity.money;
                                 this.form.cinemaCodes = JSON.parse(Decrypt(data.data.data)).goldCommodity.cinemaCodes;
@@ -3837,12 +3837,6 @@
                         loading.close();
                         return;
                     }
-                    if (!this.form.pickupType) {
-                        this.message = '领取方式不能为空，请检查！';
-                        this.open();
-                        loading.close();
-                        return;
-                    }
                     if (!this.form.supportExpressStatus) {
                         this.message = '支持快递不能为空，请检查！';
                         this.open();
@@ -3857,20 +3851,12 @@
                         loading.close();
                         return;
                     }
-                    // if(this.form.supportExpressStatus==1){
-                    //     if (!this.form.expressFee&&this.form.expressFee!=0) {
-                    //         this.message = '快递费用不能为空，请检查！';
-                    //         this.open();
-                    //         loading.close();
-                    //         return;
-                    //     }
-                    //     if (this.form.expressFee<0) {
-                    //         this.message = '快递费用不能小于0，请检查！';
-                    //         this.open();
-                    //         loading.close();
-                    //         return;
-                    //     }
-                    // }
+                    if (!this.form.pickupType) {
+                        this.message = '领取方式不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
                 }
                 if (!this.oImageUrl) {
                     this.message = '商品图片不能为空，请检查！';
@@ -4095,7 +4081,7 @@
                     jsonArr.push({key: 'imageUrl', value: this.oImageUrl});
                     jsonArr.push({key: 'memo', value: this.form.memo});
                     jsonArr.push({key: 'store', value: this.form.store});
-                    jsonArr.push({key: 'alredyChangedNumber', value: this.form.alredyChangedNumber});
+                    jsonArr.push({key: 'alreadyChangedNumber', value: this.form.alreadyChangedNumber.toString()});
                     jsonArr.push({key: 'changeType', value: this.form.changeType});
                     jsonArr.push({key: 'gold', value: this.form.gold});
                     jsonArr.push({key: 'money', value: this.form.money});
@@ -4128,9 +4114,9 @@
                         jsonArr.push({key: 'isUseSku', value: this.form.isUseSku});
                         jsonArr.push({key: 'supportExpressStatus', value: this.form.supportExpressStatus});
                     }
-                    if (this.form.commodityType == 2) {
-                        jsonArr.push({key: 'ticketIds', value: this.ticketIds});
-                    }
+                    // if (this.form.commodityType == 2) {
+                    //     jsonArr.push({key: 'ticketIds', value: this.ticketIds});
+                    // }
                     if (this.form.commodityType == 3 || this.form.commodityType == 5) {
                         if (this.form.commodityType == 3) {
                             jsonArr.push({key: 'ticketIds', value: this.couponId});

@@ -106,7 +106,7 @@
                         </el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="sort" label="活动状态" width="90">
+                <el-table-column prop="sort" label="活动状态" width="90" fixed="right">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status == 1">未开启</el-tag>
                         <el-tag v-else-if="scope.row.status == 2">开启</el-tag>
@@ -351,7 +351,7 @@
                     <el-input
                             type="textarea"
                             show-word-limit
-                            maxlength="200"
+                            maxlength="20"
                             :rows="5"
                             style="width: 300px"
                             v-model="oForm.description"
@@ -560,7 +560,7 @@
                     <el-input
                             type="textarea"
                             show-word-limit
-                            maxlength="200"
+                            maxlength="20"
                             :rows="5"
                             style="width: 300px"
                             v-model="oDescription"
