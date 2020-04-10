@@ -709,6 +709,14 @@
                             placeholder="模板id"
                     ></el-input>
                 </el-form-item>
+                <el-form-item label="会员充值成功通知" :label-width="formLabelWidth">
+                    <el-input
+                            style="width: 350px"
+                            v-model="oForm.templateType2"
+                            autocomplete="off"
+                            placeholder="模板id"
+                    ></el-input>
+                </el-form-item>
                 <el-form-item prop="paymentType" label="费用支付类型" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.paymentType">
                         <el-radio label="1">包年</el-radio>
@@ -1382,6 +1390,14 @@
                             placeholder="模板id"
                     ></el-input>
                 </el-form-item>
+                <el-form-item label="会员充值成功通知" :label-width="formLabelWidth">
+                    <el-input
+                            style="width: 350px"
+                            v-model="oTemplateType2"
+                            autocomplete="off"
+                            placeholder="模板id"
+                    ></el-input>
+                </el-form-item>
                 <el-form-item prop="paymentType" label="费用支付类型" :label-width="formLabelWidth">
                     <el-radio-group v-model="oPaymentType">
                         <el-radio label="1">包年</el-radio>
@@ -1771,6 +1787,7 @@ export default {
             oMessageType8: '',
             oMessageType9: '',
             oTemplateType: '',
+            oTemplateType2: '',
             oOpenStatus: '',
             oExpireDate: '',
             oPaymentType: '',
@@ -1885,6 +1902,7 @@ export default {
                 messageType5: '',
                 messageType6: '',
                 templateType: '',
+                templateType2: '',
                 messagePlatformAccount: '',
                 messagePlatformPassword: '',
                 messagePlatformSignId: '',
@@ -2225,6 +2243,9 @@ export default {
             let templateInfos = [];
             if (this.oForm.templateType) {
                 templateInfos.push({ 'templateType':  1 , 'templateId': this.oForm.templateType });
+            }
+            if (this.oForm.templateType2) {
+                templateInfos.push({ 'templateType':  2 , 'templateId': this.oForm.templateType2 });
             }
             if (templateInfos.length>0) {
                 jsonArr.push({ key: 'subscribeTemplateJson', value: JSON.stringify(templateInfos)})
@@ -2577,6 +2598,9 @@ export default {
                             if (JSON.parse(Decrypt(data.data.data)).subscribeTemplateList[i].templateType == 1) {
                                 this.oTemplateType = JSON.parse(Decrypt(data.data.data)).subscribeTemplateList[i].templateId
                             }
+                            if (JSON.parse(Decrypt(data.data.data)).subscribeTemplateList[i].templateType == 2) {
+                                this.oTemplateType2 = JSON.parse(Decrypt(data.data.data)).subscribeTemplateList[i].templateId
+                            }
                         }
                         if(JSON.parse(Decrypt(data.data.data)).CinemaMessagePlatFormInfo){
                             this.oMessagePlatformAccount = JSON.parse(Decrypt(data.data.data)).CinemaMessagePlatFormInfo.messagePlatformAccount;
@@ -2669,6 +2693,7 @@ export default {
                 jsonArr.push({ key: 'messageInfos', value: JSON.stringify(messageInfos)});
             let templateInfos = [];
             templateInfos.push({ 'templateType':  1 , 'templateId': this.oTemplateType });
+            templateInfos.push({ 'templateType':  2 , 'templateId': this.oTemplateType2 });
             jsonArr.push({ key: 'subscribeTemplateJson', value: JSON.stringify(templateInfos)});
             jsonArr.push({ key: 'messagePlatformAccount', value: this.oMessagePlatformAccount });
             jsonArr.push({ key: 'messagePlatformPassword', value: this.oMessagePlatformPassword });
