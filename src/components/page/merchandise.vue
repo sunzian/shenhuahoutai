@@ -265,7 +265,7 @@
                     ></el-input>
                 </el-form-item>
                 <el-form-item
-                        label="商品规格"
+                        label="商品属性(非必填）"
                         :label-width="formLabelWidth"
                 >
                     <el-button type="primary" @click="addSelectedSell">新增</el-button>
@@ -275,9 +275,12 @@
                             :key="index"
                     >
                         <el-input
-                                style="width: 150px"
+                                style="width: 200px;margin-top: 5px;"
                                 v-model="item1.specifications"
                                 autocomplete="off"
+                                placeholder="限12个文字"
+                                maxlength="12"
+                                show-word-limit
                         ></el-input>
                         &nbsp;&nbsp;&nbsp;&nbsp;
                         <span style="color:blue;cursor: pointer;" @click="delSelectedSell(index)">删除</span>

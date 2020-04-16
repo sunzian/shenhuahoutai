@@ -334,7 +334,7 @@
                         label="商品名称"
                         :label-width="formLabelWidth"
                 >
-                    <el-input placeholder="限20个汉字" style="width: 250px" v-model="oForm.name" autocomplete="off"></el-input>
+                    <el-input placeholder="限15个汉字" style="width: 250px" v-model="oForm.name" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="商品图片" :label-width="formLabelWidth">
                     <el-upload
@@ -423,8 +423,8 @@
                 </el-form-item>
                 <el-form-item v-if="oForm.commodity_type==1||oForm.commodity_type==4" :required="true" label="是否使用SKU" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.isUseSku">
-                        <el-radio :label="1">是</el-radio>
                         <el-radio :label="2">否</el-radio>
+                        <el-radio :label="1">是</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item v-if="oForm.isUseSku==1&&(oForm.commodity_type==1||oForm.commodity_type==4)" :required="true" label="商品SKU" :label-width="formLabelWidth">
@@ -491,7 +491,7 @@
                 </el-form-item>
                 <el-form-item
                         :required="true"
-                        label="生效方式"
+                        label="优惠券生效方式"
                         :label-width="formLabelWidth"
                         v-if="oForm.commodity_type!=1&&oForm.commodity_type!=4"
                 >
@@ -519,14 +519,14 @@
                 </el-form-item>
                 <el-form-item
                         :required="true"
-                        label="有效期："
+                        label="优惠券有效期："
                         :label-width="formLabelWidth"
                         v-if="oForm.commodity_type!=1 && oForm.effectiveType==2&&oForm.commodity_type!=4"
                 >
                     <el-date-picker
                             v-model="oForm.startEffectiveDate"
                             type="datetime"
-                            placeholder="开始时间"
+                            placeholder="请选择有效期开始时间"
                             value-format="yyyy-MM-dd HH:mm:ss"
                             format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
@@ -534,7 +534,7 @@
                     <el-date-picker
                             v-model="oForm.endEffectiveDate"
                             type="datetime"
-                            placeholder="结束时间"
+                            placeholder="请选择有效期结束时间"
                             value-format="yyyy-MM-dd HH:mm:ss"
                             format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
@@ -859,7 +859,7 @@
                         :label-width="formLabelWidth"
                         :required="true"
                 >
-                    <el-input placeholder="限20个汉字" style="width: 250px" v-model="oName" autocomplete="off"></el-input>
+                    <el-input placeholder="限15个汉字" style="width: 250px" v-model="oName" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item
                         v-if="form.commodityType==4"
@@ -1008,8 +1008,8 @@
                 </el-form-item>
                 <el-form-item v-if="form.commodityType==1||form.commodityType==4" :required="true" label="是否使用SKU" :label-width="formLabelWidth">
                     <el-radio-group v-model="form.isUseSku">
-                        <el-radio :label="1">是</el-radio>
                         <el-radio :label="2">否</el-radio>
+                        <el-radio :label="1">是</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item v-if="form.commodityType==1||form.commodityType==4&&form.isUseSku==1" :required="true" label="商品SKU" :label-width="formLabelWidth">
@@ -1076,7 +1076,7 @@
                 </el-form-item>
                 <el-form-item
                         :required="true"
-                        label="生效方式"
+                        label="优惠券生效方式"
                         :label-width="formLabelWidth"
                         v-if="form.commodityType!=1&&form.commodityType!=4"
                 >
@@ -1104,14 +1104,14 @@
                 </el-form-item>
                 <el-form-item
                         :required="true"
-                        label="有效期："
+                        label="优惠券有效期："
                         :label-width="formLabelWidth"
                         v-if="form.commodityType!=1 && oEffectiveType==2&&form.commodityType!=4"
                 >
                     <el-date-picker
                             v-model="oStartEffectiveDate"
                             type="datetime"
-                            placeholder="开始时间"
+                            placeholder="请选择有效期开始时间"
                             value-format="yyyy-MM-dd HH:mm:ss"
                             format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
@@ -1119,7 +1119,7 @@
                     <el-date-picker
                             v-model="oEndEffectiveDate"
                             type="datetime"
-                            placeholder="结束时间"
+                            placeholder="请选择有效期结束时间"
                             value-format="yyyy-MM-dd HH:mm:ss"
                             format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
@@ -1625,10 +1625,10 @@
         <el-dialog :close-on-click-modal="false" title="新增" :visible.sync="dialogskuFormVisible">
             <el-form :model="skuForm">
                 <el-form-item :required="true" label="规格" :label-width="formLabelWidth">
-                    <el-input placeholder="请输入商品规格，例如：颜色、包装..." style="width: 250px" min="1" v-model.trim="skuForm.specifications" autocomplete="off"></el-input>
+                    <el-input placeholder="例如：颜色、包装..." style="width: 250px" min="1" v-model.trim="skuForm.specifications" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="属性" :label-width="formLabelWidth">
-                    <el-input placeholder="请输入商品属性，例如：尺寸、容量..." style="width: 250px" min="1" v-model="skuForm.attribute" autocomplete="off"></el-input>
+                    <el-input placeholder="例如：尺寸、容量..." style="width: 250px" min="1" v-model="skuForm.attribute" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="图片" :label-width="formLabelWidth">
                     <el-popover placement="right" title trigger="hover">
@@ -1679,10 +1679,10 @@
         <el-dialog :close-on-click-modal="false" title="修改" :visible.sync="dialogoSkuFormVisible">
             <el-form :model="oSkuForm">
                 <el-form-item :required="true" label="规格" :label-width="formLabelWidth">
-                    <el-input placeholder="请输入商品规格，例如：颜色、包装..." style="width: 250px" min="1" v-model.trim="oSkuForm.specifications" autocomplete="off"></el-input>
+                    <el-input placeholder="例如：颜色、包装..." style="width: 250px" min="1" v-model.trim="oSkuForm.specifications" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="属性" :label-width="formLabelWidth">
-                    <el-input placeholder="请输入商品属性，例如：尺寸、容量..." style="width: 250px" min="1" v-model="oSkuForm.attribute" autocomplete="off"></el-input>
+                    <el-input placeholder="例如：尺寸、容量..." style="width: 250px" min="1" v-model="oSkuForm.attribute" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="图片" :label-width="formLabelWidth">
                     <el-popover placement="right" title trigger="hover">
@@ -1733,10 +1733,10 @@
         <el-dialog :close-on-click-modal="false" title="新增" :visible.sync="dialogskuChangeFormVisible">
             <el-form :model="skuChangeForm">
                 <el-form-item :required="true" label="规格" :label-width="formLabelWidth">
-                    <el-input placeholder="请输入商品规格，例如：颜色、包装..." style="width: 250px" min="1" v-model.trim="skuChangeForm.specifications" autocomplete="off"></el-input>
+                    <el-input placeholder="例如：颜色、包装..." style="width: 250px" min="1" v-model.trim="skuChangeForm.specifications" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="属性" :label-width="formLabelWidth">
-                    <el-input placeholder="请输入商品属性，例如：尺寸、容量..." style="width: 250px" min="1" v-model="skuChangeForm.attribute" autocomplete="off"></el-input>
+                    <el-input placeholder="例如：尺寸、容量..." style="width: 250px" min="1" v-model="skuChangeForm.attribute" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="图片" :label-width="formLabelWidth">
                     <el-popover placement="right" title trigger="hover">
@@ -1787,10 +1787,10 @@
         <el-dialog :close-on-click-modal="false" title="修改" :visible.sync="dialogoSkuChangeFormVisible">
             <el-form :model="oSkuChangeForm">
                 <el-form-item :required="true" label="规格" :label-width="formLabelWidth">
-                    <el-input placeholder="请输入商品规格，例如：颜色、包装..." style="width: 250px" min="1" v-model.trim="oSkuChangeForm.specifications" autocomplete="off"></el-input>
+                    <el-input placeholder="例如：颜色、包装..." style="width: 250px" min="1" v-model.trim="oSkuChangeForm.specifications" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="属性" :label-width="formLabelWidth">
-                    <el-input placeholder="请输入商品属性，例如：尺寸、容量..." style="width: 250px" min="1" v-model="oSkuChangeForm.attribute" autocomplete="off"></el-input>
+                    <el-input placeholder="例如：尺寸、容量..." style="width: 250px" min="1" v-model="oSkuChangeForm.attribute" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="图片" :label-width="formLabelWidth">
                     <el-popover placement="right" title trigger="hover">
@@ -1993,7 +1993,7 @@
                     store: '',
                     endDate: '',
                     baseSaleNumber: '',
-                    isUseSku: '',
+                    isUseSku: 2,
                 },
 
                 formLabelWidth: '120px',

@@ -898,9 +898,11 @@
                 <el-form-item label="导出数量：" :label-width="formLabelWidth" :required="true">
                     <el-input
                         onkeyup="this.value=this.value.replace(/[^0-9]+/,'')"
-                        style="width: 150px"
+                        style="width: 200px"
                         v-model="exportForm.exportNum"
                         autocomplete="off"
+                        maxlength="4"
+                        placeholder="请填写小于5000的数字"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="已导出数量：" :label-width="formLabelWidth" :required="true">
@@ -938,10 +940,10 @@
                 >
                     <span>{{openForm.couponName}}</span>
                 </el-form-item>
-                <el-form-item :required="true" label="有效期类型：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="优惠券生效方式：" :label-width="formLabelWidth">
                     <el-radio-group v-model="openForm.validityType">
-                        <el-radio :label="1">固定天数后过期</el-radio>
-                        <el-radio :label="2">固定有效时间段</el-radio>
+                        <el-radio :label="1">固定有效期天数</el-radio>
+                        <el-radio :label="2">指定时间段有效</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item
@@ -959,7 +961,7 @@
                     ></el-input>
                 </el-form-item>
                 <el-form-item
-                    label="指定时间段："
+                    label="优惠券有效期："
                     :label-width="formLabelWidth"
                     v-if="openForm.validityType == 2"
                     :required="true"
@@ -967,14 +969,14 @@
                     <el-date-picker
                         v-model="openForm.startDate"
                         type="date"
-                        placeholder="有效期开始时间"
+                        placeholder="请选择有效期开始时间"
                         value-format="yyyy-MM-dd"
                         format="yyyy-MM-dd"
                     ></el-date-picker>至
                     <el-date-picker
                         v-model="openForm.endDate"
                         type="date"
-                        placeholder="有效期结束时间"
+                        placeholder="请选择有效期结束时间"
                         value-format="yyyy-MM-dd"
                         format="yyyy-MM-dd"
                     ></el-date-picker>
@@ -1003,7 +1005,7 @@
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="开通数量：" :label-width="formLabelWidth">
-                    <span>{{openForm.endNumber - openForm.startNumber+1}}</span>
+                    <span>{{openForm.endNumber - openForm.startNumber + 1}}</span>
                 </el-form-item>
                 <el-form-item label="序列号范围：" :label-width="formLabelWidth">
                     <span>{{openForm.startSerialNo}}</span>
@@ -1107,10 +1109,10 @@
                 <el-table-column label="优惠券券码">
                     <template slot-scope="scope">{{scope.row.couponCode}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="有效期类型" width="150">
+                <el-table-column prop="name" label="优惠券生效方式" width="150">
                     <template slot-scope="scope">
-                        <el-tag v-if="scope.row.validityType == 1">固定天数后过期</el-tag>
-                        <el-tag v-else>固定有效时间段</el-tag>
+                        <el-tag v-if="scope.row.validityType == 1">固定有效期天数</el-tag>
+                        <el-tag v-else>优惠券有效期</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column label="用户绑定后有效期天数">
@@ -1333,7 +1335,7 @@ export default {
                 achieveMoney: '',
                 discountMoney: '',
                 sendNumber: '',
-                reduceType: '4',
+                reduceType: "4",
                 activityTogether: '1',
                 holidayValid: '1',
                 couponDesc: '',
@@ -1548,6 +1550,7 @@ export default {
                 .then(data => {
                     loading.close();
                     if (data.data.code == 'success') {
+                        console.log(JSON.parse(Decrypt(data.data.data)))
                         this.openForm.memo='';
                         this.openForm.validityDay='';
                         this.openForm.startDate='';
@@ -1973,13 +1976,11 @@ export default {
                 return;
             }
             if (this.oForm.reduceType == 1) {
-                if (this.oForm.discountMoney >= 0) {
-                    if (!this.oForm.discountMoney) {
+                if (!this.oForm.discountMoney || this.oForm.discountMoney.replace(/[^0-9.]+/,'') == '') {
                         this.message = '固定金额不能为空，请检查！';
                         this.open();
                         loading.close();
                         return;
-                    }
                 }
                 if (this.oForm.discountMoney < 0) {
                     this.message = '固定金额不能小于0！';
@@ -1989,13 +1990,11 @@ export default {
                 }
             }
             if (this.oForm.reduceType == 2) {
-                if (this.oForm.discountMoney >= 0) {
-                    if (!this.oForm.discountMoney) {
+                if (!this.oForm.discountMoney || this.oForm.discountMoney.replace(/[^0-9.]+/,'') == '') {
                         this.message = '减免金额不能为空，请检查！';
                         this.open();
                         loading.close();
                         return;
-                    }
                 }
                 if (this.oForm.discountMoney < 0) {
                     this.message = '减免金额不能小于0！';
@@ -2005,19 +2004,17 @@ export default {
                 }
             }
             if (this.oForm.reduceType == 3) {
-                if (this.oForm.discountMoney >= 0 || this.oForm.achieveMoney >= 0) {
-                    if (!this.oForm.achieveMoney) {
-                        this.message = '张数不能为空，请检查！';
-                        this.open();
-                        loading.close();
-                        return;
-                    }
-                    if (!this.oForm.discountMoney) {
-                        this.message = '减免金额不能为空，请检查！';
-                        this.open();
-                        loading.close();
-                        return;
-                    }
+                if (!this.oForm.achieveMoney || this.oForm.achieveMoney.replace(/[^0-9.]+/,'') == '') {
+                    this.message = '张数不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if (!this.oForm.discountMoney || this.oForm.discountMoney.replace(/[^0-9.]+/,'') == '') {
+                    this.message = '减免金额不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
                 }
                 if (this.oForm.achieveMoney < 0 || this.oForm.achieveMoney > 4) {
                     this.message = '张数必须在0-4之间，请检查！';
@@ -2033,14 +2030,12 @@ export default {
                 }
             }
             if (this.oForm.reduceType == 4) {
-                if (this.oForm.discountMoney >= 0 || this.oForm.achieveMoney >= 0) {
-                    if (!this.oForm.discountMoney || !this.oForm.achieveMoney) {
+                if (!this.oForm.discountMoney || !this.oForm.achieveMoney || this.oForm.discountMoney.replace(/[^0-9.]+/,'') == ''.replace(/[^0-9.]+/,'') == '') {
                         this.message = '减免金额不能为空，请检查！';
                         this.open();
                         loading.close();
                         return;
                     }
-                }
                 if (this.oForm.discountMoney < 0 || this.oForm.achieveMoney < 0) {
                     this.message = '减免金额不能小于0！';
                     this.open();
@@ -2061,13 +2056,11 @@ export default {
                 }
             }
             if (this.oForm.reduceType == 5) {
-                if (this.oForm.discountMoney > 0) {
-                    if (!this.oForm.discountMoney) {
+                if (!this.oForm.discountMoney || this.oForm.discountMoney.replace(/[^0-9.]+/,'') == '') {
                         this.message = '增减金额不能为空，请检查！';
                         this.open();
                         loading.close();
                         return;
-                    }
                 }
             }
             if (!this.oForm.status) {
@@ -2151,6 +2144,7 @@ export default {
                             this.dialogFormVisible = false;
                             this.$refs.multipleTable.clearSelection();
                             this.selectFilm = {};
+                            this.oForm.name = '';
                             this.oForm.filmName = '';
                             this.oForm.commonType = '1';
                             this.oForm.selectHallType = '0';
@@ -2163,7 +2157,7 @@ export default {
                             // this.oForm.startDate = '';
                             // this.oForm.endDate = '';
                             this.oForm.validPayType = '0';
-                            this.oForm.reduceType = '1';
+                            this.oForm.reduceType = '4';
                             this.oForm.sendType = '1';
                             this.oForm.achieveMoney = '';
                             this.oForm.holidayAddMoney = '';
@@ -2505,14 +2499,12 @@ export default {
                 return;
             }
             if (this.oReduceType == 1) {
-                if (this.oDiscountMoney > 0) {
-                    if (!this.oDiscountMoney) {
+                if (!this.oDiscountMoney || this.oDiscountMoney.toString().replace(/[^0-9.]+/,'') == '') {
                         this.message = '固定金额不能为空，请检查！';
                         this.open();
                         loading.close();
                         return;
                     }
-                }
                 if (this.oDiscountMoney < 0) {
                     this.message = '固定金额不能小于0！';
                     this.open();
@@ -2521,13 +2513,11 @@ export default {
                 }
             }
             if (this.oReduceType == 2) {
-                if (this.oDiscountMoney > 0) {
-                    if (!this.oDiscountMoney) {
+                if (!this.oDiscountMoney || this.oDiscountMoney.toString().replace(/[^0-9.]+/,'') == '') {
                         this.message = '减免金额不能为空，请检查！';
                         this.open();
                         loading.close();
                         return;
-                    }
                 }
                 if (this.oDiscountMoney < 0) {
                     this.message = '减免金额不能小于0！';
@@ -2537,20 +2527,18 @@ export default {
                 }
             }
             if (this.oReduceType == 3) {
-                if (this.oDiscountMoney >= 0 || this.oAchieveMoney >= 0) {
-                    if (!this.oAchieveMoney) {
+                if (!this.oAchieveMoney || this.oAchieveMoney.toString().replace(/[^0-9.]+/,'') == '') {
                         this.message = '张数不能为空，请检查！';
                         this.open();
                         loading.close();
                         return;
                     }
-                    if (!this.oDiscountMoney) {
+                    if (!this.oDiscountMoney || this.oDiscountMoney.toString().replace(/[^0-9.]+/,'') == '') {
                         this.message = '减免金额不能为空，请检查！';
                         this.open();
                         loading.close();
                         return;
                     }
-                }
                 if (this.oAchieveMoney < 0 || this.oAchieveMoney > 4) {
                     this.message = '张数必须在0-4之间，请检查！';
                     this.open();
@@ -2597,13 +2585,11 @@ export default {
                     loading.close();
                     return;
                 }
-                if (this.oDiscountMoney > 0 || this.oAchieveMoney > 0) {
-                    if (!this.oDiscountMoney || !this.oAchieveMoney) {
+                if (!this.oDiscountMoney || !this.oAchieveMoney || this.oAchieveMoney.toString().replace(/[^0-9.]+/,'') == '' || this.oDiscountMoney.toString().replace(/[^0-9.]+/,'') == '') {
                         this.message = '减免金额不能为空，请检查！';
                         this.open();
                         loading.close();
                         return;
-                    }
                 }
                 if (this.oDiscountMoney < 0 || this.oAchieveMoney < 0) {
                     this.message = '减免金额不能小于0！';
@@ -2619,13 +2605,11 @@ export default {
                 }
             }
             if (this.oReduceType == 5) {
-                if (this.oDiscountMoney > 0) {
-                    if (!this.oDiscountMoney) {
+                if (!this.oDiscountMoney || this.oDiscountMoney.toString().replace(/[^0-9.]+/,'') == '') {
                         this.message = '增减金额不能为空，请检查！';
                         this.open();
                         loading.close();
                         return;
-                    }
                 }
             }
             if (!this.oStatus) {

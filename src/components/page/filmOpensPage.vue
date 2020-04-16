@@ -90,13 +90,13 @@
                 <el-table-column prop="name" label="影院名称" width="220">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
-                <el-table-column label="点映名称" width="200">
+                <el-table-column label="点映活动名称" width="200">
                     <template slot-scope="scope">{{scope.row.filmOpensName}}</template>
                 </el-table-column>
                 <el-table-column prop="name" label="电影名称">
                     <template slot-scope="scope">{{scope.row.filmName}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="放映时间" width="100">
+                <el-table-column prop="name" label="点映放映时间" width="100">
                     <template slot-scope="scope">{{scope.row.sessionTime}}</template>
                 </el-table-column>
                 <el-table-column prop="name" label="已报名人数">
@@ -181,7 +181,7 @@
         <!--新增弹出框-->
         <el-dialog :close-on-click-modal="false" title="新增" :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
-                <el-form-item :required="true" label="点映名称" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="点映活动名称" :label-width="formLabelWidth">
                     <el-input
                             maxlength="20"
                             style="width: 250px"
@@ -201,23 +201,7 @@
                         </el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
-                <el-form-item :required="true" label="选择影厅" :label-width="formLabelWidth">
-                    <el-checkbox-group
-                            :required="true"
-                            v-model="oForm.screenCode"
-                            :max="1"
-                            @change="selectScreens"
-                    >
-                        <el-checkbox
-                                v-for="item in screenInfo"
-                                :label="item.screenCode"
-                                :key="item.screenCode"
-                                :value="item.screenName"
-                        >{{item.screenName}}
-                        </el-checkbox>
-                    </el-checkbox-group>
-                </el-form-item>
-                <el-form-item
+                                <el-form-item
                         :required="true"
                         label="选择影片"
                         :label-width="formLabelWidth"
@@ -246,7 +230,24 @@
                         <span style="color:red;cursor: pointer;" @click="deleteSell(index)">删除</span>
                     </div>
                 </el-form-item>
+                <el-form-item :required="true" label="选择影厅" :label-width="formLabelWidth">
+                    <el-checkbox-group
+                            :required="true"
+                            v-model="oForm.screenCode"
+                            :max="1"
+                            @change="selectScreens"
+                    >
+                        <el-checkbox
+                                v-for="item in screenInfo"
+                                :label="item.screenCode"
+                                :key="item.screenCode"
+                                :value="item.screenName"
+                        >{{item.screenName}}
+                        </el-checkbox>
+                    </el-checkbox-group>
+                </el-form-item>
                 <el-form-item :required="true" label="点映现场" :label-width="formLabelWidth">
+                    <span style="color: red;">请上传点映影片放映现场图片</span>
                     <el-popover placement="right" title trigger="hover">
                         <img style="width: 400px" :src="oForm.stagePhoto"/>
                         <img
@@ -276,16 +277,16 @@
                         <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过200kb</div>
                     </el-upload>
                 </el-form-item>
-                <el-form-item :required="true" label="放映时间" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="点映放映时间" :label-width="formLabelWidth">
                     <el-date-picker
                             v-model="oForm.sessionTime"
                             type="datetime"
                             value-format="yyyy-MM-dd HH:mm:ss"
                             format="yyyy-MM-dd HH:mm:ss"
-                            placeholder="请选择日期时间"
+                            placeholder="请选择点映放映时间"
                     ></el-date-picker>
                 </el-form-item>
-                <el-form-item :required="true" label="票价" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="点映票价" :label-width="formLabelWidth">
                     <el-input style="width: 300px" v-model="oForm.ticketPrice" onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')" placeholder="请输入正确的金额"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="报名时间" :label-width="formLabelWidth">
@@ -305,11 +306,14 @@
                             format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
                 </el-form-item>
-                <el-form-item :required="true" label="成团人数" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="点映成团人数" :label-width="formLabelWidth">
                     <el-input placeholder="请输入正确的数字" style="width: 300px" v-model="oForm.agglomerationNumber" onkeyup="this.value=this.value.replace(/\D/g,'')"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="影厅有效座位数量" :label-width="formLabelWidth">
                     <el-input :disabled="true" style="width: 300px" v-model="oForm.fullSeatNumber"></el-input>
+                </el-form-item>
+                <el-form-item label="点映推荐说明" :label-width="formLabelWidth">
+                    <el-input maxlength="10" style="width: 300px" v-model="oForm.recommendExplain"></el-input>
                 </el-form-item>
                 <el-form-item label="点映说明" :label-width="formLabelWidth">
                     <el-input
@@ -342,6 +346,7 @@
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="官方公众号(二维码)" :label-width="formLabelWidth">
+                    <span style="color: red;">请上传影院公众号或者小程序二维码</span>
                     <el-popover placement="right" title trigger="hover">
                         <img style="width: 400px" :src="oForm.officialAccount"/>
                         <img
@@ -371,7 +376,8 @@
                         <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过200kb</div>
                     </el-upload>
                 </el-form-item>
-                <el-form-item label="联系电影负责人" :label-width="formLabelWidth">
+                <el-form-item label="联系影院负责人" :label-width="formLabelWidth">
+                    <span style="color: red;">请上传影院负责人微信二维码</span>
                     <el-popover placement="right" title trigger="hover">
                         <img style="width: 400px" :src="oForm.filmDirector"/>
                         <img
@@ -410,17 +416,19 @@
                             v-for="(item1, index) in selectedSell1"
                             style="margin-bottom: 5px"
                             :key="index"
-                    >   推荐
+                    >   累计推荐&nbsp;&nbsp;
                         <el-input
                                 style="width: 100px"
                                 v-model="item1.shareNumber"
                                 autocomplete="off"
+                                placeholder="请输入正确的数字"
                                 onkeyup="this.value=this.value.replace(/[^0-9]+/,'')"
-                        ></el-input>人&nbsp;&nbsp;&nbsp;&nbsp;返利
+                        ></el-input>人&nbsp;&nbsp;&nbsp;&nbsp;返利&nbsp;&nbsp;
                         <el-input
                                 style="width: 100px"
                                 v-model="item1.rebateMoney"
                                 autocomplete="off"
+                                placeholder="请输入正确的金额"
                                 onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')"
                         ></el-input>元&nbsp;
                         <span style="color:blue;cursor: pointer;" @click="delSelectedSell(index)">删除</span>
@@ -445,7 +453,7 @@
         <!-- 编辑弹出框 -->
         <el-dialog :close-on-click-modal="false" title="修改" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
-                <el-form-item :required="true" label="点映名称" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="点映活动名称" :label-width="formLabelWidth">
                     <el-input
                             maxlength="20"
                             style="width: 250px"
@@ -467,24 +475,7 @@
                         </el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
-                <el-form-item :required="true" label="选择影厅" :label-width="formLabelWidth">
-                    <el-checkbox-group
-                            :required="true"
-                            v-model="oScreenCode"
-                            :max="1"
-                            @change="selectScreens1"
-                    >
-                        <el-checkbox
-                                v-for="item in screenInfo"
-                                :label="item.screenCode"
-                                :key="item.screenCode"
-                                :value="item.screenName"
-                                :disabled="oStatus==1"
-                        >{{item.screenName}}
-                        </el-checkbox>
-                    </el-checkbox-group>
-                </el-form-item>
-                <el-form-item
+                                <el-form-item
                         :required="true"
                         label="选择影片"
                         :label-width="formLabelWidth"
@@ -513,7 +504,25 @@
                         <span style="color:red;cursor: pointer;" @click="deleteSell(index)">删除</span>
                     </div>
                 </el-form-item>
+                <el-form-item :required="true" label="选择影厅" :label-width="formLabelWidth">
+                    <el-checkbox-group
+                            :required="true"
+                            v-model="oScreenCode"
+                            :max="1"
+                            @change="selectScreens1"
+                    >
+                        <el-checkbox
+                                v-for="item in screenInfo"
+                                :label="item.screenCode"
+                                :key="item.screenCode"
+                                :value="item.screenName"
+                                :disabled="oStatus==1"
+                        >{{item.screenName}}
+                        </el-checkbox>
+                    </el-checkbox-group>
+                </el-form-item>
                 <el-form-item :required="true" label="点映现场" :label-width="formLabelWidth">
+                    <span style="color: red;">请上传点映影片放映现场图片</span>
                     <el-popover placement="right" title trigger="hover">
                         <img style="width: 400px" :src="oStagePhoto"/>
                         <img
@@ -544,17 +553,17 @@
                         <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过200kb</div>
                     </el-upload>
                 </el-form-item>
-                <el-form-item :required="true" label="放映时间" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="点映放映时间" :label-width="formLabelWidth">
                     <el-date-picker
                             v-model="oSessionTime"
                             type="datetime"
                             value-format="yyyy-MM-dd HH:mm:ss"
                             format="yyyy-MM-dd HH:mm:ss"
                             :disabled="oGroupStatus==2||oGroupStatus==3||oGroupStatus==4||oGroupStatus==5||oStatus==1"
-                            placeholder="请选择日期时间"
+                            placeholder="请选择点映放映时间"
                     ></el-date-picker>
                 </el-form-item>
-                <el-form-item :required="true" label="票价" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="点映票价" :label-width="formLabelWidth">
                     <el-input :disabled="oStatus==1" style="width: 300px" v-model="oTicketPrice" onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')" placeholder="请输入正确的金额"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="报名时间" :label-width="formLabelWidth">
@@ -576,11 +585,14 @@
                             :disabled="oGroupStatus==2||oGroupStatus==3||oGroupStatus==4||oGroupStatus==5||oStatus==1"
                     ></el-date-picker>
                 </el-form-item>
-                <el-form-item :required="true" label="成团人数" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="点映成团人数" :label-width="formLabelWidth">
                     <el-input placeholder="请输入正确的数字" :disabled="oGroupStatus==2||oGroupStatus==3||oGroupStatus==4||oGroupStatus==5||oStatus==1" style="width: 300px" v-model="oAgglomerationNumber" onkeyup="this.value=this.value.replace(/\D/g,'')"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="影厅有效座位数量" :label-width="formLabelWidth">
                     <el-input :disabled="true" style="width: 300px" v-model="oForm.fullSeatNumber "></el-input>
+                </el-form-item>
+                <el-form-item label="点映推荐说明" :label-width="formLabelWidth">
+                    <el-input maxlength="10" v-model="oRecommendExplain"></el-input>
                 </el-form-item>
                 <el-form-item label="点映说明" :label-width="formLabelWidth">
                     <el-input
@@ -613,6 +625,7 @@
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="官方公众号(二维码)" :label-width="formLabelWidth">
+                    <span style="color: red;">请上传影院公众号或者小程序二维码</span>
                     <el-popover placement="right" title trigger="hover">
                         <img style="width: 400px" :src="oOfficialAccount"/>
                         <img
@@ -642,7 +655,8 @@
                         <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过200kb</div>
                     </el-upload>
                 </el-form-item>
-                <el-form-item label="联系电影负责人" :label-width="formLabelWidth">
+                <el-form-item label="联系影院负责人" :label-width="formLabelWidth">
+                    <span style="color: red;">请上传影院负责人微信二维码</span>
                     <el-popover placement="right" title trigger="hover">
                         <img style="width: 400px" :src="oFilmDirector"/>
                         <img
@@ -681,17 +695,19 @@
                             v-for="(item1, index) in selectedSell1"
                             style="margin-bottom: 5px"
                             :key="index"
-                    >   推荐
+                    >   累计推荐&nbsp;&nbsp;
                         <el-input
-                                style="width: 100px"
+                                style="width: 150px"
                                 v-model="item1.shareNumber"
                                 autocomplete="off"
+                                placeholder="请输入正确的数字"
                                 onkeyup="this.value=this.value.replace(/[^0-9]+/,'')"
-                        ></el-input>人&nbsp;&nbsp;&nbsp;&nbsp;返利
+                        ></el-input>人&nbsp;&nbsp;&nbsp;&nbsp;返利&nbsp;&nbsp;
                         <el-input
-                                style="width: 100px"
+                                style="width: 150px"
                                 v-model="item1.rebateMoney"
                                 autocomplete="off"
+                                placeholder="请输入正确的金额"
                                 onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')"
                         ></el-input>元&nbsp;
                         <span style="color:blue;cursor: pointer;" @click="delSelectedSell(index)">删除</span>
@@ -805,6 +821,7 @@
                 oFilmDirector: '',
                 oPrintTicketExplain: '',
                 oFilmOpensExplain: '',
+                oRecommendExplain: '',
                 oStatus: '',
                 oSelectFilmFormatType: '',
                 oHolidayValid: '',
@@ -940,6 +957,7 @@
                     oneNum: '',
                     stagePhoto: '',
                     officialAccount: '',
+                    recommendExplain: '',
                     filmDirector: '',
                     fullSeatNumber: ''
                 },
@@ -1026,6 +1044,11 @@
                         });
             },
             sendMessage(index, row){
+                this.$confirm('此操作将发送组团成功短信, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
                 const loading = this.$loading({
                     lock: true,
                     text: 'Loading',
@@ -1061,6 +1084,12 @@
                         loading.close();
                         console.log(err);
                     });
+                }).catch(() => {
+                            this.$message({
+                                type: 'info',
+                                message: '已取消发送'
+                            });
+                        });
             },
             beforeUpload(file) {
                 //上传之前
@@ -1264,6 +1293,7 @@
                 jsonArr.push({ key: 'endDate', value: this.oForm.endDate });
                 jsonArr.push({ key: 'agglomerationNumber', value: this.oForm.agglomerationNumber });
                 jsonArr.push({ key: 'status', value: this.oForm.status });
+                jsonArr.push({ key: 'recommendExplain', value: this.oForm.recommendExplain });
                 jsonArr.push({ key: 'filmOpensExplain', value: this.oForm.filmOpensExplain });
                 jsonArr.push({ key: 'buyTicketHint', value: this.oForm.buyTicketHint });
                 jsonArr.push({ key: 'printTicketExplain', value: this.oForm.printTicketExplain });
@@ -1297,6 +1327,7 @@
                                 this.oForm.agglomerationNumber='';
                                 this.oForm.status='2';
                                 this.oForm.filmOpensExplain='';
+                                this.oForm.recommendExplain = '';
                                 this.oForm.buyTicketHint='';
                                 this.oForm.printTicketExplain='';
                                 this.oForm.officialAccount='';
@@ -1405,6 +1436,7 @@
                         this.oStartDate = JSON.parse(Decrypt(data.data.data)).filmOpens.startDate;
                         this.oEndDate = JSON.parse(Decrypt(data.data.data)).filmOpens.endDate;
                         this.oAgglomerationNumber = JSON.parse(Decrypt(data.data.data)).filmOpens.agglomerationNumber;
+                        this.oRecommendExplain = JSON.parse(Decrypt(data.data.data)).filmOpens.recommendExplain;
                         this.oFilmOpensExplain = JSON.parse(Decrypt(data.data.data)).filmOpens.filmOpensExplain;
                         this.oBuyTicketHint = JSON.parse(Decrypt(data.data.data)).filmOpens.buyTicketHint;
                         this.oPrintTicketExplain = JSON.parse(Decrypt(data.data.data)).filmOpens.printTicketExplain;
@@ -1456,6 +1488,7 @@
                 jsonArr.push({ key: 'endDate', value: this.oEndDate });
                 jsonArr.push({ key: 'agglomerationNumber', value: this.oAgglomerationNumber });
                 jsonArr.push({ key: 'status', value: this.oStatus });
+                jsonArr.push({ key: 'recommendExplain', value: this.oRecommendExplain });
                 jsonArr.push({ key: 'filmOpensExplain', value: this.oFilmOpensExplain });
                 jsonArr.push({ key: 'buyTicketHint', value: this.oBuyTicketHint });
                 jsonArr.push({ key: 'printTicketExplain', value: this.oPrintTicketExplain });

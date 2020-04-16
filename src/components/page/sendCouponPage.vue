@@ -296,14 +296,14 @@
                             >上传模板只能是 xls、xlsx格式!</div>
                         </el-upload>
                     </el-form-item>
-                    <el-form-item :required="true" label="选择有效时间类型：" :label-width="formLabelWidth">
+                    <el-form-item :required="true" label="优惠券生效方式：" :label-width="formLabelWidth">
                         <el-radio-group v-model="excelCouponForm.effectiveTimeType">
-                            <el-radio :label="1">固定天数后过期</el-radio>
+                            <el-radio :label="1">固定有效期天数</el-radio>
                             <el-radio :label="2">指定时间段有效</el-radio>
                         </el-radio-group>
                     </el-form-item>
                     <el-form-item
-                        label="指定时间段："
+                        label="优惠券有效期："
                         :label-width="formLabelWidth"
                         v-if="excelCouponForm.effectiveTimeType == 2"
                         :required="true"
@@ -311,14 +311,14 @@
                         <el-date-picker
                             v-model="excelCouponForm.startDate"
                             type="date"
-                            placeholder="开始时间"
+                            placeholder="请选择有效期开始时间"
                             value-format="yyyy-MM-dd"
                             format="yyyy-MM-dd"
                         ></el-date-picker>至
                         <el-date-picker
                             v-model="excelCouponForm.endDate"
                             type="date"
-                            placeholder="结束时间"
+                            placeholder="请选择有效期结束时间"
                             value-format="yyyy-MM-dd"
                             format="yyyy-MM-dd"
                         ></el-date-picker>
@@ -522,14 +522,14 @@
             :close-on-click-modal="false"
             >
             <el-form :model="couponForm">
-                <el-form-item :required="true" label="选择有效时间类型：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="优惠券生效方式：" :label-width="formLabelWidth">
                     <el-radio-group v-model="couponForm.effectiveTimeType">
-                        <el-radio :label="1">固定天数后过期</el-radio>
+                        <el-radio :label="1">固定有效期天数</el-radio>
                         <el-radio :label="2">指定时间段有效</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item
-                    label="指定时间段："
+                    label="优惠券有效期："
                     :label-width="formLabelWidth"
                     v-if="couponForm.effectiveTimeType == 2"
                     :required="true"
@@ -537,14 +537,14 @@
                     <el-date-picker
                         v-model="couponForm.startDate"
                         type="date"
-                        placeholder="开始时间"
+                        placeholder="请选择有效期开始时间"
                         value-format="yyyy-MM-dd"
                         format="yyyy-MM-dd"
                     ></el-date-picker>至
                     <el-date-picker
                         v-model="couponForm.endDate"
                         type="date"
-                        placeholder="结束时间"
+                        placeholder="请选择有效期结束时间"
                         value-format="yyyy-MM-dd"
                         format="yyyy-MM-dd"
                     ></el-date-picker>

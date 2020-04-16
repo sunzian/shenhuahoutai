@@ -41,6 +41,12 @@
                         autocomplete="off"
                         class="mr10"
                 ></el-input>
+                <el-input
+                        placeholder="点映名称"
+                        v-model="query.filmOpensName"
+                        autocomplete="off"
+                        class="mr10"
+                ></el-input>
                 <el-select
                         clearable
                         v-model="query.payStatus"
@@ -398,6 +404,7 @@
                     let orderNo = this.query.orderNo;
                     let userMobile = this.query.userMobile;
                     let filmName = this.query.filmName;
+                    let filmOpensName = this.query.filmOpensName;
                     let payStatus = this.query.payStatus;
                     let sessionStartDate = this.query.sessionStartDate;
                     let sessionEndDate = this.query.sessionEndDate;
@@ -414,6 +421,9 @@
                     }
                     if (!filmName) {
                         filmName = '';
+                    }
+                    if (!filmOpensName) {
+                        filmOpensName = '';
                     }
                     if (!payStatus) {
                         payStatus = '';
@@ -432,12 +442,13 @@
                     }
                     let jsonArr = [];
                     jsonArr.push({ key: 'tableName', value: "film_opens_order" });
-                    jsonArr.push({ key: 'exportKeysJson', value: "['cinemaName',  'screenName', 'filmName',  'sessionTime', 'orderNo', 'userMobile', 'number','totalOriginalPrice', 'totalActualPrice', 'payStatusText', 'payTime', 'refundReason', 'refundTime', 'totalRefundPrice']"});
-                    jsonArr.push({ key: 'exportTitlesJson', value:"['影院名称', '影厅名称', '电影名称', '放映时间', '订单编号', '用户手机号', '购买数量', '订单总原价', '订单总实付价','支付状态', '支付时间', '退款原因', '退款时间', '退款金额']" });
+                    jsonArr.push({ key: 'exportKeysJson', value: "['cinemaName',  'screenName', 'filmName', 'filmOpensName', 'sessionTime', 'orderNo', 'userMobile', 'number','totalOriginalPrice', 'totalActualPrice', 'payStatusText', 'payTime', 'refundReason', 'refundTime', 'totalRefundPrice']"});
+                    jsonArr.push({ key: 'exportTitlesJson', value:"['影院名称', '影厅名称', '电影名称', '点映名称', '放映时间', '订单编号', '用户手机号', '购买数量', '订单总原价', '订单总实付价','支付状态', '支付时间', '退款原因', '退款时间', '退款金额']" });
                     jsonArr.push({ key: 'orderNo', value: orderNo });
                     jsonArr.push({ key: 'userMobile', value: userMobile });
                     jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
                     jsonArr.push({ key: 'filmName', value: filmName });
+                    jsonArr.push({ key: 'filmOpensName', value: filmOpensName });
                     jsonArr.push({ key: 'payStatus', value: payStatus });
                     jsonArr.push({ key: 'sessionStartDate', value: sessionStartDate });
                     jsonArr.push({ key: 'sessionEndDate', value: sessionEndDate });
@@ -544,6 +555,7 @@
                     let orderNo = this.query.orderNo;
                     let userMobile = this.query.userMobile;
                     let filmName = this.query.filmName;
+                    let filmOpensName = this.query.filmOpensName;
                     let payStatus = this.query.payStatus;
                     let sessionStartDate = this.query.sessionStartDate;
                     let sessionEndDate = this.query.sessionEndDate;
@@ -564,6 +576,9 @@
                     }
                     if (!filmName) {
                         filmName = '';
+                    }
+                    if (!filmOpensName) {
+                        filmOpensName = '';
                     }
                     if (!payStatus) {
                         payStatus = '';
@@ -586,6 +601,7 @@
                     jsonArr.push({ key: 'shareUserMobile', value: shareUserMobile });
                     jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
                     jsonArr.push({ key: 'filmName', value: filmName });
+                    jsonArr.push({ key: 'filmOpensName', value: filmOpensName });
                     jsonArr.push({ key: 'payStatus', value: payStatus });
                     jsonArr.push({ key: 'sessionStartDate', value: sessionStartDate });
                     jsonArr.push({ key: 'sessionEndDate', value: sessionEndDate });

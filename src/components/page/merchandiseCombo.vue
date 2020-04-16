@@ -229,7 +229,7 @@
                     <el-input :disabled="true" style="width: 250px" v-model="oForm.originalPrice" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="套餐类型" :label-width="formLabelWidth">
-                    <el-select v-model="oForm.comboType" placeholder="请选择套餐状态">
+                    <el-select v-model="oForm.comboType" placeholder="请选择套餐类型">
                         <el-option
                             v-for="item in showTypes"
                             :key="item.value"
@@ -318,7 +318,7 @@
                     <el-input :disabled="true" style="width: 250px" v-model="form.originalPrice" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="套餐类型" :label-width="formLabelWidth">
-                    <el-select v-model="form.comboType" placeholder="请选择套餐状态">
+                    <el-select v-model="form.comboType" placeholder="请选择套餐类型">
                         <el-option
                             v-for="item in showTypes"
                             :key="item.value"
@@ -783,7 +783,6 @@ export default {
                         if (data.data.code == 'success') {
                             this.selectedSell=[];
                             this.oForm.merchandiseCode=(JSON.parse(Decrypt(data.data.data))).merchandiseSet;
-                            console.log(this.oForm.merchandiseCode);
                             let json ={
                                 merchandiseName:(JSON.parse(Decrypt(data.data.data))).merchandiseName,
                                 merchandiseCode:(JSON.parse(Decrypt(data.data.data))).merchandiseSet

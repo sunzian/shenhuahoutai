@@ -596,6 +596,11 @@ export default new Router({
                     meta: { title: '签到规则' }
                 },
                 {
+                    path: '/thirdPartySetPage',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/thirdPartySetPage.vue'),
+                    meta: { title: '第三方平台设置' }
+                },
+                {
                     path: '/404',
                     component: () => import(/* webpackChunkName: "404" */ '../components/page/404.vue'),
                     meta: { title: '404' }

@@ -221,15 +221,15 @@
                             @click="deletCoupon"
                     >删除</span>
                 </el-form-item>
-                <el-form-item :required="true" v-if="oForm.givenType == 3 || oForm.givenType == 4" label="券包有效期方式："
+                <el-form-item :required="true" v-if="oForm.givenType == 3 || oForm.givenType == 4" label="券包生效方式："
                               :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.effectiveTimeType">
-                        <el-radio :label="1">固定天数后过期</el-radio>
+                        <el-radio :label="1">固定有效期天数</el-radio>
                         <el-radio :label="2">指定时间段有效</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item
-                        label="指定时间段："
+                        label="券包有效期："
                         :label-width="formLabelWidth"
                         v-if="oForm.effectiveTimeType == 2&&(oForm.givenType == 3 || oForm.givenType == 4)"
                         :required="true"
@@ -237,7 +237,7 @@
                     <el-date-picker
                             v-model="oForm.startEffectDate"
                             type="date"
-                            placeholder="开始时间"
+                            placeholder="请选择有效期开始时间"
                             value-format="yyyy-MM-dd"
                             format="yyyy-MM-dd"
                     ></el-date-picker>
@@ -245,13 +245,13 @@
                     <el-date-picker
                             v-model="oForm.endEffectDate"
                             type="date"
-                            placeholder="结束时间"
+                            placeholder="请选择有效期结束时间"
                             value-format="yyyy-MM-dd"
                             format="yyyy-MM-dd"
                     ></el-date-picker>
                 </el-form-item>
                 <el-form-item
-                        label="有效期天数："
+                        label="券包有效期天数："
                         :label-width="formLabelWidth"
                         v-if="oForm.effectiveTimeType == 1&&(oForm.givenType == 3 || oForm.givenType == 4)"
                         :required="true"
@@ -380,14 +380,14 @@
                 </el-form-item>
                 <el-form-item :required="true"
                               v-if="oGivenType == 3 || oGivenType == 4|| oGivenType == '赠送券包' || oGivenType == '两者都送'"
-                              label="券包有效期方式：" :label-width="formLabelWidth">
+                              label="券包生效方式：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oEffectiveTimeType">
-                        <el-radio :label="1">固定天数后过期</el-radio>
+                        <el-radio :label="1">固定有效期天数</el-radio>
                         <el-radio :label="2">指定时间段有效</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item
-                        label="指定时间段："
+                        label="券包有效期："
                         :label-width="formLabelWidth"
                         v-if="oEffectiveTimeType == 2&&(oGivenType == 3 || oGivenType == 4|| oGivenType == '赠送券包' || oGivenType == '两者都送')"
                         :required="true"
@@ -395,7 +395,7 @@
                     <el-date-picker
                             v-model="oStartEffectDate"
                             type="date"
-                            placeholder="开始时间"
+                            placeholder="请选择有效期开始时间"
                             value-format="yyyy-MM-dd"
                             format="yyyy-MM-dd"
                     ></el-date-picker>
@@ -403,13 +403,13 @@
                     <el-date-picker
                             v-model="oEndEffectDate"
                             type="date"
-                            placeholder="结束时间"
+                            placeholder="请选择有效期结束时间"
                             value-format="yyyy-MM-dd"
                             format="yyyy-MM-dd"
                     ></el-date-picker>
                 </el-form-item>
                 <el-form-item
-                        label="有效期天数："
+                        label="券包有效期天数："
                         :label-width="formLabelWidth"
                         v-if="oEffectiveTimeType == 1&&(oGivenType == 3 || oGivenType == 4|| oGivenType == '赠送券包' || oGivenType == '两者都送')"
                         :required="true"

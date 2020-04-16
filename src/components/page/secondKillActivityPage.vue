@@ -127,6 +127,12 @@
                                 @click="changeStatus(scope.$index, scope.row)"
                         >停用
                         </el-button>
+                        <el-button
+                                type="success"
+                                style="margin-top: 5px;"
+                                @click="copyActivity(scope.$index, scope.row)"
+                        >复制活动
+                        </el-button>
                     </template>
                 </el-table-column>
                 <el-table-column label="操作" width="140" align="center" fixed="right">
@@ -187,7 +193,7 @@
                         </el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
-                <el-form-item :required="true" label="活动名称：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="活动名称" :label-width="formLabelWidth">
                     <el-input
                             maxlength="20"
                             style="width: 250px"
@@ -213,7 +219,7 @@
                             format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
                 </el-form-item>
-                <el-form-item :required="true" label="是否立即显示" :label-width="formLabelWidth">
+                <!-- <el-form-item :required="true" label="是否立即显示" :label-width="formLabelWidth">
                     <el-select v-model="oForm.showStatus" placeholder="请选择兑换方式">
                         <el-option
                                 v-for="item in showStatus"
@@ -222,8 +228,8 @@
                                 :value="item.value"
                         ></el-option>
                     </el-select>
-                </el-form-item>
-                <!--<el-form-item :required="true" label="适用场次时间 ：" :label-width="formLabelWidth">-->
+                </el-form-item> -->
+                <!--<el-form-item :required="true" label="适用场次时间 " :label-width="formLabelWidth">-->
                     <!--<el-time-picker-->
                             <!--is-range-->
                             <!--type="date"-->
@@ -237,7 +243,7 @@
                     <!--</el-time-picker>-->
                     <!--<span style="cursor: pointer;color: blue" @click="addTime">添加</span>-->
                 <!--</el-form-item>-->
-                <!--<el-form-item label="所选时间段：" :label-width="formLabelWidth" v-if="dateInfo.length>0">-->
+                <!--<el-form-item label="所选时间段" :label-width="formLabelWidth" v-if="dateInfo.length>0">-->
                     <!--<div v-for="(item, index) in dateInfo" :key="index">-->
                         <!--{{item}}-->
                         <!--<span-->
@@ -282,7 +288,7 @@
                     <el-button type="primary" @click="openNext">点击选择</el-button>
                 </el-form-item>
                 <el-form-item
-                        label="所选商品："
+                        label="所选商品"
                         :label-width="formLabelWidth"
                         :required="true"
                 >
@@ -329,7 +335,7 @@
                             autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="商品库存：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="秒杀商品数量" :label-width="formLabelWidth">
                     <el-input
                             show-word-limit
                             style="width: 150px"
@@ -337,7 +343,7 @@
                             placeholder="请输入大于0的数字"
                     ></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="开启状态：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="开启状态" :label-width="formLabelWidth">
                     <el-select v-model="oForm.status" placeholder="请选择">
                         <el-option
                                 v-for="item in options"
@@ -347,14 +353,21 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="活动说明：" :label-width="formLabelWidth">
+                <el-form-item label="活动介绍" :label-width="formLabelWidth">
+                    <el-input
+                            maxlength="20"
+                            style="width: 300px"
+                            v-model="oForm.description"
+                            placeholder="限20字，秒杀列表中展示"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="秒杀说明" :label-width="formLabelWidth">
                     <el-input
                             type="textarea"
                             show-word-limit
-                            maxlength="20"
-                            :rows="5"
+                            maxlength="200"
                             style="width: 300px"
-                            v-model="oForm.description"
+                            v-model="oForm.activityNotice"
                     ></el-input>
                 </el-form-item>
             </el-form>
@@ -388,7 +401,7 @@
                         </el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
-                <el-form-item :required="true" label="活动名称：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="活动名称" :label-width="formLabelWidth">
                     <el-input
                             maxlength="20"
                             style="width: 250px"
@@ -414,7 +427,7 @@
                             format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
                 </el-form-item>
-                <el-form-item :required="true" label="是否立即显示" :label-width="formLabelWidth">
+                <!-- <el-form-item :required="true" label="是否立即显示" :label-width="formLabelWidth">
                     <el-select v-model="oShowStatus" placeholder="请选择兑换方式">
                         <el-option
                                 v-for="item in showStatus"
@@ -423,8 +436,8 @@
                                 :value="item.value"
                         ></el-option>
                     </el-select>
-                </el-form-item>
-                <!--<el-form-item :required="true" label="适用场次时间 ：" :label-width="formLabelWidth">-->
+                </el-form-item> -->
+                <!--<el-form-item :required="true" label="适用场次时间" :label-width="formLabelWidth">-->
                     <!--<el-time-picker-->
                             <!--is-range-->
                             <!--type="date"-->
@@ -438,7 +451,7 @@
                     <!--</el-time-picker>-->
                     <!--<span style="cursor: pointer;color: blue" @click="addTime">添加</span>-->
                 <!--</el-form-item>-->
-                <!--<el-form-item label="所选时间段：" :label-width="formLabelWidth" v-if="dateInfo.length>0">-->
+                <!--<el-form-item label="所选时间段" :label-width="formLabelWidth" v-if="dateInfo.length>0">-->
                     <!--<div v-for="(item, index) in dateInfo" :key="index">-->
                         <!--{{item}}-->
                         <!--<span-->
@@ -483,7 +496,7 @@
                     <el-button type="primary" @click="openNext1">点击选择</el-button>
                 </el-form-item>
                 <el-form-item
-                        label="所选商品："
+                        label="所选商品"
                         :label-width="formLabelWidth"
                         :required="true"
                 >
@@ -530,7 +543,7 @@
                             autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="商品库存：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="秒杀商品数量" :label-width="formLabelWidth">
                     <el-input
                             show-word-limit
                             style="width: 150px"
@@ -538,7 +551,7 @@
                             placeholder="请输入大于0的数字"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="已售数量：" :label-width="formLabelWidth">
+                <el-form-item label="已售数量" :label-width="formLabelWidth">
                     <el-input
                             show-word-limit
                             :disabled="true"
@@ -546,7 +559,7 @@
                             v-model="oHasSoldNumber"
                     ></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="开启状态：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="开启状态" :label-width="formLabelWidth">
                     <el-select v-model="oStatus" placeholder="请选择">
                         <el-option
                                 v-for="item in options"
@@ -556,14 +569,21 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="活动说明：" :label-width="formLabelWidth">
+                <el-form-item label="活动介绍" :label-width="formLabelWidth">
+                    <el-input
+                            maxlength="20"
+                            style="width: 300px"
+                            v-model="oDescription"
+                            placeholder="限20字，秒杀列表中展示"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="秒杀说明" :label-width="formLabelWidth">
                     <el-input
                             type="textarea"
                             show-word-limit
-                            maxlength="20"
-                            :rows="5"
+                            maxlength="200"
                             style="width: 300px"
-                            v-model="oDescription"
+                            v-model="oActivityNotice"
                     ></el-input>
                 </el-form-item>
             </el-form>
@@ -667,6 +687,7 @@
                 oHasSoldNumber: '',
                 oStatus: '',
                 oDescription: '',
+                oActivityNotice: '',
                 oExceptWeekDay: [
                     {
                         index: '1',
@@ -823,6 +844,13 @@
                     }
                 ],
                 oForm: {
+                    commonType: '',
+                    purchaseType: '',
+                    purchaseCount: '',
+                    changeType: '',
+                    commodityStore: '',
+                    gold: '',
+                    money: '',
                     name: '',
                     cinemaName: '',
                     showStatus: '2',
@@ -851,7 +879,9 @@
                     id: '',
                     status: '',
                     oNum: '',
-                    oneNum: ''
+                    oneNum: '',
+                    description: '',
+                    activityNotice: ''
                 },
                 formLabelWidth: '150px',
                 selectScreenCode: {},
@@ -1068,6 +1098,7 @@
                 jsonArr.push({ key: 'purchaseCount', value: this.oForm.purchaseCount });
                 jsonArr.push({ key: 'smsStatus', value: 0 });
                 jsonArr.push({ key: 'description', value: this.oForm.description });
+                jsonArr.push({ key: 'activityNotice', value: this.oForm.activityNotice });
                 jsonArr.push({ key: 'commodityId', value: this.commodityId });
                 jsonArr.push({ key: 'changeType', value: this.oForm.changeType });
                 jsonArr.push({ key: 'gold', value: this.oForm.gold });
@@ -1112,6 +1143,7 @@
                                 this.oForm.hasSoldNumber = '';
                                 this.oForm.status = '';
                                 this.oForm.showStatus = '2';
+                                this.oForm.activityNotice = '';
                                 this.getMenu();
                             } else if (data.data.code == 'nologin') {
                                 this.message = data.data.message;
@@ -1170,13 +1202,7 @@
                     });
             },
             addChange(index, row) {
-                //是否拥有权限
-                // this.num = 1;
-                // if (this.num == 0) {
-                //     this.selectCinema();
-                // } else if (this.num == 1) {
-                    this.selectCinema1();
-                // }
+                this.selectCinema1();
                 const loading = this.$loading({
                     lock: true,
                     text: 'Loading',
@@ -1263,6 +1289,7 @@
                                 }
                             }
                             this.oDescription = JSON.parse(Decrypt(data.data.data)).description;
+                            this.oActivityNotice = JSON.parse(Decrypt(data.data.data)).activityNotice;
                             for (let x in this.showStatus) {
                                 if (this.showStatus[x].value == JSON.parse(Decrypt(data.data.data)).showStatus) {
                                     this.oShowStatus = this.showStatus[x].value;
@@ -1304,6 +1331,7 @@
                 jsonArr.push({ key: 'purchaseCount', value: this.oPurchaseCount });
                 jsonArr.push({ key: 'smsStatus', value: 0 });
                 jsonArr.push({ key: 'description', value: this.oDescription });
+                jsonArr.push({ key: 'activityNotice', value: this.oActivityNotice });
                 jsonArr.push({ key: 'commodityId', value: this.commodityId });
                 jsonArr.push({ key: 'changeType', value: this.oChangeType });
                 jsonArr.push({ key: 'gold', value: this.oGold });
@@ -1338,6 +1366,7 @@
                             this.oPurchaseCount = '';
                             this.oSmsStatus = '';
                             this.oDescription = '';
+                            this.oActivityNotice = '';
                             this.commodityId = '';
                             this.commodityName = '';
                             this.value1 = '';
@@ -1348,6 +1377,88 @@
                             this.oHasSoldNumber = '';
                             this.oStatus = '';
                             this.getMenu();
+                        } else if (data.data.code == 'nologin') {
+                            this.message = data.data.message;
+                            this.open();
+                            this.$router.push('/login');
+                        } else {
+                            this.message = data.data.message;
+                            this.open();
+                        }
+                    })
+                    .catch(err => {
+                        loading.close();
+                        console.log(err);
+                    });
+            },
+            // 复制活动
+            copyActivity(index, row) {
+                this.selectCinema1();
+                const loading = this.$loading({
+                    lock: true,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)',
+                    target: document.querySelector('.div1')
+                });
+                this.idx = index;
+                this.form = row;
+                var jsonArr = [];
+                jsonArr.push({ key: 'id', value: row.id });
+                let sign = md5(preSign(jsonArr));
+                jsonArr.push({ key: 'sign', value: sign });
+                let params = ParamsAppend(jsonArr);
+                https
+                    .fetchPost('/secondKillActivity/getCopyActivity', params)
+                    .then(data => {
+                        loading.close();
+                        if (data.data.code == 'success') {
+                            this.dialogFormVisible = true;
+                            this.oForm.commonType = JSON.parse(Decrypt(data.data.data)).commonType;
+                            this.oMerchandiseCode = [];
+                            if (JSON.parse(Decrypt(data.data.data)).cinemaCodes) {
+                                this.oMerchandiseCode = JSON.parse(Decrypt(data.data.data)).cinemaCodes.split(',');
+                            }
+                            this.selectGoodsCode = JSON.parse(Decrypt(data.data.data)).cinemaCodes.split(',');
+                            for (let x in this.canUse1) {
+                                if (this.canUse1[x].value == JSON.parse(Decrypt(data.data.data)).purchaseType) {
+                                    this.oForm.purchaseType = this.canUse1[x].value;
+                                    break;
+                                }
+                            }
+                            this.oPurchaseCount = JSON.parse(Decrypt(data.data.data)).purchaseCount;
+                            for (let x in this.canUse2) {
+                                if (this.canUse2[x].value == JSON.parse(Decrypt(data.data.data)).smsStatus) {
+                                    this.oForm.smsStatus = this.canUse2[x].value;
+                                    break;
+                                }
+                            }
+                            this.commodityId = JSON.parse(Decrypt(data.data.data)).commodityId;
+                            this.commodityName = JSON.parse(Decrypt(data.data.data)).commodityName;
+                            for (let x in this.showType) {
+                                if (this.showType[x].value == JSON.parse(Decrypt(data.data.data)).changeType) {
+                                    this.oForm.changeType = this.showType[x].value;
+                                    break;
+                                }
+                            }
+                            this.oForm.gold = JSON.parse(Decrypt(data.data.data)).gold;
+                            this.oForm.money = JSON.parse(Decrypt(data.data.data)).money;
+                            this.oForm.commodityStore = JSON.parse(Decrypt(data.data.data)).commodityStore;
+                            this.oForm.hasSoldNumber = JSON.parse(Decrypt(data.data.data)).hasSoldNumber;
+                            for (let x in this.options) {
+                                if (this.options[x].value == JSON.parse(Decrypt(data.data.data)).status) {
+                                    this.oForm.status = this.options[x].value;
+                                    break;
+                                }
+                            }
+                            this.oForm.description = JSON.parse(Decrypt(data.data.data)).description;
+                            this.oForm.activityNotice = JSON.parse(Decrypt(data.data.data)).activityNotice;
+                            for (let x in this.showStatus) {
+                                if (this.showStatus[x].value == JSON.parse(Decrypt(data.data.data)).showStatus) {
+                                    this.oForm.showStatus = this.showStatus[x].value;
+                                    break;
+                                }
+                            }
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
                             this.open();

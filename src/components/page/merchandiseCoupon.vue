@@ -606,9 +606,11 @@
                 <el-form-item label="导出数量：" :label-width="formLabelWidth" :required="true">
                     <el-input
                         onkeyup="this.value=this.value.replace(/[^0-9]+/,'')"
-                        style="width: 150px"
+                        style="width: 200px"
                         v-model="exportForm.exportNum"
                         autocomplete="off"
+                        placeholder="请填写小于5000的数字"
+                        maxlength="4"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="已导出数量：" :label-width="formLabelWidth" :required="true">
@@ -634,6 +636,7 @@
                         v-model="openForm.memo"
                         autocomplete="off"
                         maxlength="50"
+                        placeholder="限50个汉字"
                     ></textarea>
                 </el-form-item>
                 <el-form-item label="适用影院名称：" :label-width="formLabelWidth">
@@ -645,10 +648,10 @@
                 >
                     <span>{{openForm.couponName}}</span>
                 </el-form-item>
-                <el-form-item :required="true" label="有效期类型：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="优惠券生效方式：" :label-width="formLabelWidth">
                     <el-radio-group v-model="openForm.validityType">
-                        <el-radio :label="1">固定天数后过期</el-radio>
-                        <el-radio :label="2">固定有效时间段</el-radio>
+                        <el-radio :label="1">固定有效期天数</el-radio>
+                        <el-radio :label="2">指定时间段有效</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item
@@ -662,10 +665,11 @@
                         style="width: 150px"
                         v-model="openForm.validityDay"
                         autocomplete="off"
+                        placeholder="请填写正确的数字"
                     ></el-input>
                 </el-form-item>
                 <el-form-item
-                    label="指定时间段："
+                    label="优惠券有效期："
                     :label-width="formLabelWidth"
                     v-if="openForm.validityType == 2"
                     :required="true"
@@ -673,14 +677,14 @@
                     <el-date-picker
                         v-model="openForm.startDate"
                         type="date"
-                        placeholder="有效期开始时间"
+                        placeholder="请选择有效期开始时间"
                         value-format="yyyy-MM-dd"
                         format="yyyy-MM-dd"
                     ></el-date-picker>至
                     <el-date-picker
                         v-model="openForm.endDate"
                         type="date"
-                        placeholder="有效期结束时间"
+                        placeholder="请选择有效期结束时间"
                         value-format="yyyy-MM-dd"
                         format="yyyy-MM-dd"
                     ></el-date-picker>
@@ -867,10 +871,10 @@
                 <el-table-column label="优惠券券码">
                     <template slot-scope="scope">{{scope.row.couponCode}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="有效期类型" width="150">
+                <el-table-column prop="name" label="优惠券生效方式" width="150">
                     <template slot-scope="scope">
-                        <el-tag v-if="scope.row.validityType == 1">固定天数后过期</el-tag>
-                        <el-tag v-else>固定有效时间段</el-tag>
+                        <el-tag v-if="scope.row.validityType == 1">固定有效期天数</el-tag>
+                        <el-tag v-else>指定时间段有效</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column label="用户绑定后有效期天数">

@@ -80,7 +80,7 @@
                 <el-table-column prop="name" label="活动结束时间" width="165">
                     <template slot-scope="scope">{{scope.row.endDate}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="活动总可领取总份数" width="65">
+                <el-table-column prop="name" label="活动可领取份数" width="65">
                     <template slot-scope="scope">{{scope.row.store}}</template>
                 </el-table-column>
                 <el-table-column prop="name" label="已领取数量" width="95">
@@ -203,7 +203,7 @@
                         <span style="color:red;cursor: pointer;" @click="deleteSell(index)">删除</span>
                     </div>
                 </el-form-item>
-                <el-form-item :required="true" label="时间类型" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="优惠券生效方式" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.effectiveTimeType">
                         <el-radio :label="1">固定有效期天数</el-radio>
                         <el-radio :label="2">指定时间段有效</el-radio>
@@ -212,7 +212,7 @@
                 <el-form-item
                     v-if="oForm.effectiveTimeType==2"
                     :required="true"
-                    label="有效时间段"
+                    label="优惠券有效期"
                     :label-width="formLabelWidth"
                 >
                     <el-date-picker
@@ -220,14 +220,14 @@
                         type="datetime"
                         format="yyyy-MM-dd HH:mm:ss"
                         value-format="yyyy-MM-dd HH:mm:ss"
-                        placeholder="选择开始时间"
+                        placeholder="请选择有效期开始时间"
                     ></el-date-picker>至
                     <el-date-picker
                         v-model="oForm.couponEndDate"
                         type="datetime"
                         format="yyyy-MM-dd HH:mm:ss"
                         value-format="yyyy-MM-dd HH:mm:ss"
-                        placeholder="选择结束时间"
+                        placeholder="请选择有效期结束时间"
                     ></el-date-picker>
                 </el-form-item>
                 <el-form-item
@@ -255,7 +255,7 @@
                 <!--<el-form-item :required="true" label="用户限购次数" :label-width="formLabelWidth">-->
                 <!--<el-input style="width: 250px" min="1" v-model="oForm.purchaseNumber" autocomplete="off" onkeyup="this.value=this.value.replace(/[^0-9]+/,'')"></el-input>-->
                 <!--</el-form-item>-->
-                <el-form-item :required="true" label="活动总可领取总份数" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="活动可领取份数" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -373,7 +373,7 @@
                         <span style="color:red;cursor: pointer;" @click="deleteSell(index)">删除</span>
                     </div>
                 </el-form-item>
-                <el-form-item :required="true" label="时间类型" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="优惠券生效方式" :label-width="formLabelWidth">
                     <el-radio-group v-model="oEffectiveTimeType">
                         <el-radio :label="1">固定有效期天数</el-radio>
                         <el-radio :label="2">指定时间段有效</el-radio>
@@ -382,7 +382,7 @@
                 <el-form-item
                     v-if="oEffectiveTimeType==2"
                     :required="true"
-                    label="有效时间段"
+                    label="优惠券有效期"
                     :label-width="formLabelWidth"
                 >
                     <el-date-picker
@@ -390,14 +390,14 @@
                         type="datetime"
                         format="yyyy-MM-dd HH:mm:ss"
                         value-format="yyyy-MM-dd HH:mm:ss"
-                        placeholder="选择开始时间"
+                        placeholder="请选择有效期开始时间"
                     ></el-date-picker>至
                     <el-date-picker
                         v-model="oCouponEndDate"
                         type="datetime"
                         format="yyyy-MM-dd HH:mm:ss"
                         value-format="yyyy-MM-dd HH:mm:ss"
-                        placeholder="选择结束时间"
+                        placeholder="请选择有效期结束时间"
                     ></el-date-picker>
                 </el-form-item>
                 <el-form-item
@@ -427,7 +427,7 @@
                 <!--<el-form-item :required="true" label="用户限购次数" :label-width="formLabelWidth">-->
                 <!--<el-input style="width: 250px" min="1" v-model="oPurchaseNumber" autocomplete="off" onkeyup="this.value=this.value.replace(/[^0-9]+/,'')"></el-input>-->
                 <!--</el-form-item>-->
-                <el-form-item :required="true" label="活动总可领取总份数" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="活动可领取份数" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -857,7 +857,7 @@ export default {
                 }
             }
             if (!this.oForm.store || this.oForm.store == '') {
-                this.message = '请填写活动总可领取总份数！';
+                this.message = '请填写活动可领取份数！';
                 this.open();
                 return;
             }
@@ -1112,7 +1112,7 @@ export default {
                 }
             }
             if (!this.oStore || this.oStore == '') {
-                this.message = '请填写活动总可领取总份数！';
+                this.message = '请填写活动可领取份数！';
                 this.open();
                 return;
             }

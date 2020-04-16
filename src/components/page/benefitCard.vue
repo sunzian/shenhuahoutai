@@ -291,7 +291,7 @@
                               :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oForm.eachFilmNumber" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item :required="true" v-if="oForm.isFilmJoin==1" label="是否限量" :label-width="formLabelWidth">
+                <el-form-item :required="true" v-if="oForm.isFilmJoin==1" label="单位时间内影票是否限购" :label-width="formLabelWidth">
                     <el-select v-model="oForm.isLimitFilm" placeholder="请选择" @change="clearIsLimitFilm()">
                         <el-option
                                 v-for="item in canUse"
@@ -416,7 +416,7 @@
                     </div>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oForm.isMerchandiseJoin==1&&(oForm.reduceTypeMerchandise!=2)"
-                              label="是否限量" :label-width="formLabelWidth">
+                              label="单位时间内卖品是否限购" :label-width="formLabelWidth">
                     <el-select v-model="oForm.isLimitMerchandise" placeholder="请选择" @change="clearIsLimitMerchandise()">
                         <el-option
                                 v-for="item in canUse"
@@ -436,7 +436,7 @@
                         <el-radio label="日">日</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item :required="true" label="限购次数"
+                <el-form-item :required="true" label="限购数量"
                               v-if="oForm.isLimitMerchandise==1&&oForm.isMerchandiseJoin==1&&(oForm.reduceTypeMerchandise!=2)"
                               :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oForm.numberMerchandise" autocomplete="off"></el-input>
@@ -585,7 +585,7 @@
                             format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
                 </el-form-item>
-                <el-form-item :required="true" label="限制购买次数" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="是否限制购买次数" :label-width="formLabelWidth">
                     <el-select v-model="oForm.isLimitBuy" placeholder="请选择" @change="clearLimitBuyNumber()">
                         <el-option
                                 v-for="item in canUse"
@@ -784,7 +784,7 @@
                               :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oEachFilmNumber" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item :required="true" v-if="oIsFilmJoin==1" label="是否限量"
+                <el-form-item :required="true" v-if="oIsFilmJoin==1" label="单位时间内影票是否限购"
                               :label-width="formLabelWidth">
                     <el-select v-model="oIsLimitFilm" placeholder="请选择" @change="clearIsLimitFilm()">
                         <el-option
@@ -909,7 +909,7 @@
                     </div>
                 </el-form-item>
                 <el-form-item :required="true" v-if="oIsMerchandiseJoin==1&&(oReduceTypeMerchandise!=2)"
-                              label="是否限量" :label-width="formLabelWidth">
+                              label="单位时间内卖品是否限购" :label-width="formLabelWidth">
                     <el-select v-model="oIsLimitMerchandise" placeholder="请选择" @change="clearIsLimitMerchandise()">
                         <el-option
                                 v-for="item in canUse"
@@ -929,7 +929,7 @@
                         <el-radio label="日">日</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item :required="true" label="限购次数"
+                <el-form-item :required="true" label="限购数量"
                               v-if="oIsLimitMerchandise==1&&oIsMerchandiseJoin==1&&(oReduceTypeMerchandise!=2)"
                               :label-width="formLabelWidth">
                     <el-input style="width: 150px" v-model="oNumberMerchandise" autocomplete="off"></el-input>
@@ -1098,7 +1098,7 @@
                             format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
                 </el-form-item>
-                <el-form-item :required="true" label="限制购买次数" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="是否限制购买次数" :label-width="formLabelWidth">
                     <el-select v-model="oIsLimitBuy" placeholder="请选择" @change="clearLimitBuyNumber()">
                         <el-option
                                 v-for="item in canUse"

@@ -725,6 +725,30 @@
                             placeholder="模板id"
                     ></el-input>
                 </el-form-item>
+                <el-form-item label="会员卡积分变动通知" :label-width="formLabelWidth">
+                    <el-input
+                            style="width: 350px"
+                            v-model="oForm.templateType4"
+                            autocomplete="off"
+                            placeholder="模板id"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="电影退票通知" :label-width="formLabelWidth">
+                    <el-input
+                            style="width: 350px"
+                            v-model="oForm.templateType5"
+                            autocomplete="off"
+                            placeholder="模板id"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="金币商品兑换成功通知" :label-width="formLabelWidth">
+                    <el-input
+                            style="width: 350px"
+                            v-model="oForm.templateType6"
+                            autocomplete="off"
+                            placeholder="模板id"
+                    ></el-input>
+                </el-form-item>
                 <el-form-item prop="paymentType" label="费用支付类型" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.paymentType">
                         <el-radio label="1">包年</el-radio>
@@ -1414,6 +1438,30 @@
                             placeholder="模板id"
                     ></el-input>
                 </el-form-item>
+                <el-form-item label="会员卡积分变动通知" :label-width="formLabelWidth">
+                    <el-input
+                            style="width: 350px"
+                            v-model="oTemplateType4"
+                            autocomplete="off"
+                            placeholder="模板id"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="电影退票通知" :label-width="formLabelWidth">
+                    <el-input
+                            style="width: 350px"
+                            v-model="oTemplateType5"
+                            autocomplete="off"
+                            placeholder="模板id"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="金币商品兑换成功通知" :label-width="formLabelWidth">
+                    <el-input
+                            style="width: 350px"
+                            v-model="oTemplateType6"
+                            autocomplete="off"
+                            placeholder="模板id"
+                    ></el-input>
+                </el-form-item>
                 <el-form-item prop="paymentType" label="费用支付类型" :label-width="formLabelWidth">
                     <el-radio-group v-model="oPaymentType">
                         <el-radio label="1">包年</el-radio>
@@ -1805,6 +1853,9 @@ export default {
             oTemplateType: '',
             oTemplateType2: '',
             oTemplateType3: '',
+            oTemplateType4: '',
+            oTemplateType5: '',
+            oTemplateType6: '',
             oOpenStatus: '',
             oExpireDate: '',
             oPaymentType: '',
@@ -1921,6 +1972,9 @@ export default {
                 templateType: '',
                 templateType2: '',
                 templateType3: '',
+                templateType4: '',
+                templateType5: '',
+                templateType6: '',
                 messagePlatformAccount: '',
                 messagePlatformPassword: '',
                 messagePlatformSignId: '',
@@ -2267,6 +2321,15 @@ export default {
             }
             if (this.oForm.templateType3) {
                 templateInfos.push({ 'templateType':  3 , 'templateId': this.oForm.templateType3 });
+            }
+            if (this.oForm.templateType4) {
+                templateInfos.push({ 'templateType':  4 , 'templateId': this.oForm.templateType4 });
+            }
+            if (this.oForm.templateType5) {
+                templateInfos.push({ 'templateType':  5 , 'templateId': this.oForm.templateType5 });
+            }
+            if (this.oForm.templateType6) {
+                templateInfos.push({ 'templateType':  6 , 'templateId': this.oForm.templateType6 });
             }
             if (templateInfos.length>0) {
                 jsonArr.push({ key: 'subscribeTemplateJson', value: JSON.stringify(templateInfos)})
@@ -2625,6 +2688,15 @@ export default {
                             if (JSON.parse(Decrypt(data.data.data)).subscribeTemplateList[i].templateType == 3) {
                                 this.oTemplateType3 = JSON.parse(Decrypt(data.data.data)).subscribeTemplateList[i].templateId
                             }
+                            if (JSON.parse(Decrypt(data.data.data)).subscribeTemplateList[i].templateType == 4) {
+                                this.oTemplateType4 = JSON.parse(Decrypt(data.data.data)).subscribeTemplateList[i].templateId
+                            }
+                            if (JSON.parse(Decrypt(data.data.data)).subscribeTemplateList[i].templateType == 5) {
+                                this.oTemplateType5 = JSON.parse(Decrypt(data.data.data)).subscribeTemplateList[i].templateId
+                            }
+                            if (JSON.parse(Decrypt(data.data.data)).subscribeTemplateList[i].templateType == 6) {
+                                this.oTemplateType6 = JSON.parse(Decrypt(data.data.data)).subscribeTemplateList[i].templateId
+                            }
                         }
                         if(JSON.parse(Decrypt(data.data.data)).CinemaMessagePlatFormInfo){
                             this.oMessagePlatformAccount = JSON.parse(Decrypt(data.data.data)).CinemaMessagePlatFormInfo.messagePlatformAccount;
@@ -2705,20 +2777,23 @@ export default {
             jsonArr.push({ key: 'equityCardAgreement', value: this.oEquityCardAgreement });
             jsonArr.push({ key: 'ticketingSystemTypeVersion', value: this.oTicketingSystemTypeVersion });
             let messageInfos = [];
-                messageInfos.push({ 'messageType':  1 , 'content': this.oMessageType1 });
-                messageInfos.push({ 'messageType': 2 ,  'content': this.oMessageType2 });
-                messageInfos.push({ 'messageType': 3 , 'content': this.oMessageType3 });
-                messageInfos.push({ 'messageType': 4 , 'content': this.oMessageType4 });
-                messageInfos.push({ 'messageType': 5 , 'content': this.oMessageType5 });
-                messageInfos.push({ 'messageType': 6 , 'content': this.oMessageType6 });
-                messageInfos.push({ 'messageType': 7 , 'content': this.oMessageType7 });
-                messageInfos.push({ 'messageType': 8 , 'content': this.oMessageType8 });
-                messageInfos.push({ 'messageType': 9 , 'content': this.oMessageType9 });
-                jsonArr.push({ key: 'messageInfos', value: JSON.stringify(messageInfos)});
+            messageInfos.push({ 'messageType': 1 , 'content': this.oMessageType1 });
+            messageInfos.push({ 'messageType': 2 , 'content': this.oMessageType2 });
+            messageInfos.push({ 'messageType': 3 , 'content': this.oMessageType3 });
+            messageInfos.push({ 'messageType': 4 , 'content': this.oMessageType4 });
+            messageInfos.push({ 'messageType': 5 , 'content': this.oMessageType5 });
+            messageInfos.push({ 'messageType': 6 , 'content': this.oMessageType6 });
+            messageInfos.push({ 'messageType': 7 , 'content': this.oMessageType7 });
+            messageInfos.push({ 'messageType': 8 , 'content': this.oMessageType8 });
+            messageInfos.push({ 'messageType': 9 , 'content': this.oMessageType9 });
+            jsonArr.push({ key: 'messageInfos', value: JSON.stringify(messageInfos)});
             let templateInfos = [];
             templateInfos.push({ 'templateType':  1 , 'templateId': this.oTemplateType });
             templateInfos.push({ 'templateType':  2 , 'templateId': this.oTemplateType2 });
             templateInfos.push({ 'templateType':  3 , 'templateId': this.oTemplateType3 });
+            templateInfos.push({ 'templateType':  4 , 'templateId': this.oTemplateType4 });
+            templateInfos.push({ 'templateType':  5 , 'templateId': this.oTemplateType5 });
+            templateInfos.push({ 'templateType':  6 , 'templateId': this.oTemplateType6 });
             jsonArr.push({ key: 'subscribeTemplateJson', value: JSON.stringify(templateInfos)});
             jsonArr.push({ key: 'messagePlatformAccount', value: this.oMessagePlatformAccount });
             jsonArr.push({ key: 'messagePlatformPassword', value: this.oMessagePlatformPassword });
