@@ -601,6 +601,11 @@ export default new Router({
                     meta: { title: '第三方平台设置' }
                 },
                 {
+                    path: '/ticketOrderStatisticsPage',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/ticketOrderStatisticsPage.vue'),
+                    meta: { title: '影票账单' }
+                },
+                {
                     path: '/404',
                     component: () => import(/* webpackChunkName: "404" */ '../components/page/404.vue'),
                     meta: { title: '404' }

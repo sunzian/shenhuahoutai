@@ -41,20 +41,20 @@
             >
                 <!-- <el-table-column type="selection" width="55"></el-table-column> -->
                 <el-table-column prop="code" label="小程序名称">
-                    <template slot-scope="scope">{{scope.row.mimiProgramName}}</template>
+                    <template slot-scope="scope">{{scope.row.miniName}}</template>
                 </el-table-column>
                 <el-table-column prop="time" label="小程序appId">
-                    <template slot-scope="scope">{{scope.row.mimiProgramAppId}}</template>
+                    <template slot-scope="scope">{{scope.row.miniAppId}}</template>
                 </el-table-column>
                 <el-table-column prop="name" label="版本代号">
-                    <template slot-scope="scope">{{scope.row.mimiProgramVersion}}</template>
+                    <template slot-scope="scope">{{scope.row.versionCode}}</template>
                 </el-table-column>
                 <el-table-column prop="number" label="审核状态">
                     <template slot-scope="scope">
-                        <el-tag v-if="scope.row.mimiProgramStatus=='1'" type="info">未审核</el-tag>
-                        <el-tag v-else-if="scope.row.mimiProgramStatus=='2'">审核中</el-tag>
-                        <el-tag v-else-if="scope.row.mimiProgramStatus=='3'" type="success">审核成功</el-tag>
-                        <el-tag v-else-if="scope.row.mimiProgramStatus=='4'" type="danger">审核失败</el-tag>
+                        <el-tag v-if="scope.row.status=='1'" type="info">未审核</el-tag>
+                        <el-tag v-else-if="scope.row.status=='2'">审核中</el-tag>
+                        <el-tag v-else-if="scope.row.status=='3'" type="success">审核成功</el-tag>
+                        <el-tag v-else-if="scope.row.status=='4'" type="danger">审核失败</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column label="操作" align="center">
@@ -94,22 +94,20 @@
                         :label-width="formLabelWidth"
                         :required="true"
                     >
+                        <el-input style="width:300px;margin-bottom:5px;" v-model="setForm.addRequestUrl">
+                                    <template slot="prepend">https://</template>
+                        </el-input>
+                        <el-button type="primary" style="margin-left: 10px;" @click="addRequestUrl">确认添加</el-button>
                         <div
                             v-for="(item, index) in setForm.requestList"
-                            style="margin-bottom: 5px"
+                            style="margin-bottom: 5px;"
                             :key="index"
-                        >
+                            >
                             <div>
-                                <el-input style="width:300px;" v-model="item.url">
+                                <el-input style="width:300px;" v-model="item.url" :disabled="true">
                                     <template slot="prepend">https://</template>
                                 </el-input>
                                 <span
-                                    v-if="index == 0"
-                                    style="color: red;cursor: pointer;margin-left: 10px;"
-                                    @click="addRequestUrl"
-                                >添加</span>
-                                <span
-                                    v-else
                                     style="color: red;cursor: pointer;margin-left: 10px;"
                                     @click="deleteRequestUrl(index)"
                                 >删除</span>
@@ -117,6 +115,10 @@
                         </div>
                     </el-form-item>
                     <el-form-item label="socket合法域名:" :label-width="formLabelWidth">
+                        <el-input style="width:300px;margin-bottom:5px;" v-model="setForm.addSocketUrl">
+                                    <template slot="prepend">https://</template>
+                        </el-input>
+                        <el-button type="primary" style="margin-left: 10px;" @click="addSocketUrl">确认添加</el-button>
                         <div
                             v-for="(item, index) in setForm.socketList"
                             style="margin-bottom: 5px"
@@ -127,12 +129,6 @@
                                     <template slot="prepend">wss://</template>
                                 </el-input>
                                 <span
-                                    v-if="index == 0"
-                                    style="color:red;cursor: pointer;margin-left: 10px;"
-                                    @click="addSocketUrl"
-                                >添加</span>
-                                <span
-                                    v-else
                                     style="color:red;cursor: pointer;margin-left: 10px;"
                                     @click="deleteSocketUrl(index)"
                                 >删除</span>
@@ -140,6 +136,10 @@
                         </div>
                     </el-form-item>
                     <el-form-item label="uploadFile合法域名:" :label-width="formLabelWidth">
+                        <el-input style="width:300px;margin-bottom:5px;" v-model="setForm.addUploadFileUrl">
+                                    <template slot="prepend">https://</template>
+                        </el-input>
+                        <el-button type="primary" style="margin-left: 10px;" @click="addUploadFileUrl">确认添加</el-button>
                         <div
                             v-for="(item, index) in setForm.uploadFileList"
                             style="margin-bottom: 5px"
@@ -150,12 +150,6 @@
                                     <template slot="prepend">https://</template>
                                 </el-input>
                                 <span
-                                    v-if="index == 0"
-                                    style="color:red;cursor: pointer;margin-left: 10px;"
-                                    @click="addUploadFileUrl"
-                                >添加</span>
-                                <span
-                                    v-else
                                     style="color:red;cursor: pointer;margin-left: 10px;"
                                     @click="deleteUploadFileUrl(index)"
                                 >删除</span>
@@ -163,6 +157,10 @@
                         </div>
                     </el-form-item>
                     <el-form-item label="downloadFile合法域名:" :label-width="formLabelWidth">
+                        <el-input style="width:300px;margin-bottom:5px;" v-model="setForm.addDownloadFileUrl">
+                                    <template slot="prepend">https://</template>
+                        </el-input>
+                        <el-button type="primary" style="margin-left: 10px;" @click="addDownloadFileUrl">确认添加</el-button>
                         <div
                             v-for="(item, index) in setForm.downloadFileList"
                             style="margin-bottom: 5px"
@@ -173,19 +171,13 @@
                                     <template slot="prepend">https://</template>
                                 </el-input>
                                 <span
-                                    v-if="index == 0"
-                                    style="color:red;cursor: pointer;margin-left: 10px;"
-                                    @click="addDownloadFileUrl"
-                                >添加</span>
-                                <span
-                                    v-else
                                     style="color:red;cursor: pointer;margin-left: 10px;"
                                     @click="deleteDownloadFileUrl(index)"
                                 >删除</span>
                             </div>
                         </div>
                     </el-form-item>
-                    <el-form-item label="udp合法域名:" :label-width="formLabelWidth">
+                    <!-- <el-form-item label="udp合法域名:" :label-width="formLabelWidth">
                         <div
                             v-for="(item, index) in setForm.udpList"
                             style="margin-bottom: 5px"
@@ -207,7 +199,7 @@
                                 >删除</span>
                             </div>
                         </div>
-                    </el-form-item>
+                    </el-form-item> -->
                 </el-form>
             </div>
             <div>
@@ -260,61 +252,16 @@ export default {
     data() {
         return {
             message: '', //弹出框消息
-            tableData: [
-                {
-                    mimiProgramName: 'aaa',
-                    mimiProgramAppId: '111111',
-                    mimiProgramVersion: '1.0.0',
-                    mimiProgramStatus: 1
-                },
-                {
-                    mimiProgramName: 'bbb',
-                    mimiProgramAppId: '222222',
-                    mimiProgramVersion: '1.0.0',
-                    mimiProgramStatus: 2
-                },
-                {
-                    mimiProgramName: 'ccc',
-                    mimiProgramAppId: '333333',
-                    mimiProgramVersion: '1.0.0',
-                    mimiProgramStatus: 3
-                },
-                {
-                    mimiProgramName: 'ddd',
-                    mimiProgramAppId: '444444',
-                    mimiProgramVersion: '1.0.0',
-                    mimiProgramStatus: 4
-                },
-                {
-                    mimiProgramName: 'eee',
-                    mimiProgramAppId: '555555',
-                    mimiProgramVersion: '1.0.0',
-                    mimiProgramStatus: 1
-                },
-                {
-                    mimiProgramName: 'fff',
-                    mimiProgramAppId: '666666',
-                    mimiProgramVersion: '1.0.0',
-                    mimiProgramStatus: 2
-                },
-                {
-                    mimiProgramName: 'ggg',
-                    mimiProgramAppId: '777777',
-                    mimiProgramVersion: '1.0.0',
-                    mimiProgramStatus: 3
-                },
-                {
-                    mimiProgramName: 'hhh',
-                    mimiProgramAppId: '888888',
-                    mimiProgramVersion: '1.0.0',
-                    mimiProgramStatus: 4
-                }
-            ],
+            tableData: [],
             query: {
                 pageNo: 1,
                 pageSize: 15
             },
             setForm: {
+                addRequestUrl: '',
+                addSocketUrl: '',
+                addUploadFileUrl: '',
+                addDownloadFileUrl: '',
                 requestList: [
                     {
                         url: ''
@@ -335,17 +282,17 @@ export default {
                         url: ''
                     }
                 ],
-                udpList: [
-                    {
-                        url: ''
-                    }
-                ]
+                // udpList: [
+                //     {
+                //         url: ''
+                //     }
+                // ]
             },
             requestUrlList: [],
             socketUrlList: [],
             uploadFileUrlList: [],
             downloadFileUrlList: [],
-            udpUrlList: [],
+            // udpUrlList: [],
             experienceForm: {
                 wxIdList: [
                     {
@@ -361,15 +308,206 @@ export default {
         };
     },
     created() {},
-    mounted() {},
+    mounted() {
+        this.getMenu();
+    },
     methods: {
-        setProgram() {
-            this.editVisible = true;
+        // 列表页数据
+        getMenu() {
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
+            let name = this.query.name;
+            let appId = this.query.appId;
+            let version = this.query.version;
+            let status = this.query.status;
+            if (!name) {
+                name = '';
+            }
+            if (!appId) {
+                appId = '';
+            }
+            if (!version) {
+                version = '';
+            }
+            if (!status) {
+                status = '';
+            }
+            let jsonArr = [];
+            jsonArr.push({ key: 'name', value: name });
+            jsonArr.push({ key: 'appId', value: appId });
+            jsonArr.push({ key: 'version', value: version });
+            jsonArr.push({ key: 'status', value: status });
+            jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
+            jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
+            let sign = md5(preSign(jsonArr));
+            jsonArr.push({ key: 'sign', value: sign });
+            var params = ParamsAppend(jsonArr);
+            https
+                .fetchPost('/WXThirdParty/getPage',params)
+                .then(data => {
+                    loading.close();
+                    if (data.data.code == 'success') {
+                        let oData = JSON.parse(Decrypt(data.data.data));
+                        this.tableData = oData.data;
+                        this.query.pageSize = oData.pageSize;
+                        this.query.pageNo = oData.pageNo;
+                        this.query.totalCount = oData.totalCount;
+                        this.query.totalPage = oData.totalPage;
+                    } else if (data.data.code == 'nologin') {
+                        this.message = data.data.message;
+                        this.open();
+                        this.$router.push('/login');
+                    } else {
+                        this.message = data.data.message;
+                        this.open();
+                    }
+                })
+                .catch(err => {
+                    loading.close();
+                    console.log(err);
+                });
+        },
+
+        // 进入设置弹窗
+        setProgram(index, row) {
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
+            // 获取域名
+            var jsonArr = [];
+            jsonArr.push({ key: 'miniAppId', value: row.miniAppId });
+            let sign = md5(preSign(jsonArr));
+            jsonArr.push({ key: 'sign', value: sign });
+            let params = ParamsAppend(jsonArr);
+            https
+                .fetchPost('/WXThirdParty/getDoMain', params)
+                .then(data => {
+                    loading.close();
+                    if (data.data.code == 'success') {
+                        this.editVisible = true;
+                        let urlList = JSON.parse(Decrypt(data.data.data));
+                        if (urlList.alreadyrequestdomain.length > 0) {
+                            let newArr = [];
+                            for (let i = 0;i < urlList.alreadyrequestdomain.length; i ++) {
+                                newArr.push({url: urlList.alreadyrequestdomain[i]})
+                            }
+                            this.setForm.requestList = newArr;
+                        }
+                        if (urlList.alreadywsrequestdomain.length > 0) {
+                            let newArr = [];
+                            for (let i = 0;i < urlList.alreadywsrequestdomain.length; i ++) {
+                                newArr.push({url: urlList.alreadywsrequestdomain[i]})
+                            }
+                            this.setForm.socketList = newArr;
+                        }
+                        if (urlList.alreadyuploaddomain.length > 0) {
+                            let newArr = [];
+                            for (let i = 0;i < urlList.alreadyuploaddomain.length; i ++) {
+                                newArr.push({url: urlList.alreadyuploaddomain[i]})
+                            }
+                            this.setForm.uploadFileList = newArr;
+                        }
+                        if (urlList.alreadydownloaddomain.length > 0) {
+                            let newArr = [];
+                            for (let i = 0;i < urlList.alreadydownloaddomain.length; i ++) {
+                                newArr.push({url: urlList.alreadydownloaddomain[i]})
+                            }
+                            this.setForm.downloadFileList = newArr;
+                        }
+                    } else if (data.data.code == 'nologin') {
+                        this.message = data.data.message;
+                        this.open();
+                        this.$router.push('/login');
+                    } else {
+                        this.message = data.data.message;
+                        this.open();
+                    }
+                })
+                .catch(err => {
+                    loading.close();
+                    console.log(err);
+                });
+
+            // 获取体验者
+            var jsonArr2 = [];
+            jsonArr2.push({ key: 'miniAppId', value: row.miniAppId });
+            let sign2 = md5(preSign(jsonArr2));
+            jsonArr2.push({ key: 'sign', value: sign2 });
+            let params2 = ParamsAppend(jsonArr2);
+            https
+                .fetchPost('/WXThirdParty/queryMemberAuth', params2)
+                .then(data => {
+                    loading.close();
+                    if (data.data.code == 'success') {
+                        this.editVisible = true;
+                        let wxIdList = JSON.parse(Decrypt(data.data.data));
+                        if (wxIdList.members.length > 0) {
+                            let newArr = [];
+                            for (let i = 0;i < wxIdList.members.length; i ++) {
+                                newArr.push({id: wxIdList.members[i]})
+                            }
+                            this.experienceForm.wxIdList = newArr;
+                        }
+                    } else if (data.data.code == 'nologin') {
+                        this.message = data.data.message;
+                        this.open();
+                        this.$router.push('/login');
+                    } else {
+                        this.message = data.data.message;
+                        this.open();
+                    }
+                })
+                .catch(err => {
+                    loading.close();
+                    console.log(err);
+                });
         },
 
         // 添加删除request合法域名
         addRequestUrl() {
-            this.setForm.requestList.push({ url: '' });
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
+            // 获取域名
+            var jsonArr = [];
+            jsonArr.push({ key: 'requestdomain', value: this.setForm.addRequestUrl });
+            // jsonArr.push({ key: 'miniAppId', value: })
+            let sign = md5(preSign(jsonArr));
+            jsonArr.push({ key: 'sign', value: sign });
+            let params = ParamsAppend(jsonArr);
+            https
+                .fetchPost('/WXThirdParty/addDoMain', params)
+                .then(data => {
+                    loading.close();
+                    if (data.data.code == 'success') {
+                        console.log(JSON.parse(Decrypt(data.data.data)));
+                    } else if (data.data.code == 'nologin') {
+                        this.message = data.data.message;
+                        this.open();
+                        this.$router.push('/login');
+                    } else {
+                        this.message = data.data.message;
+                        this.open();
+                    }
+                })
+                .catch(err => {
+                    loading.close();
+                    console.log(err);
+                });
+                this.setForm.requestList.push({ url: '' });
         },
         deleteRequestUrl(index) {
             this.setForm.requestList.splice(index, 1);
@@ -400,12 +538,12 @@ export default {
         },
 
         // 添加删除udp合法域名
-        addUdpUrl() {
-            this.setForm.udpList.push({ url: '' });
-        },
-        deleteUdpUrl(index) {
-            this.setForm.udpList.splice(index, 1);
-        },
+        // addUdpUrl() {
+        //     this.setForm.udpList.push({ url: '' });
+        // },
+        // deleteUdpUrl(index) {
+        //     this.setForm.udpList.splice(index, 1);
+        // },
 
         // 添加删除体验者
         addWxId() {
@@ -421,6 +559,8 @@ export default {
             this.requestUrlList = [];
             this.editVisible = false;
         },
+
+        // 确认修改
         sureUrl() {
             for (let i = 0; i < this.setForm.requestList.length; i++) {
                 if (this.setForm.requestList[i].url == '') {
@@ -447,11 +587,11 @@ export default {
             for (let i = 0; i < this.downloadFileUrlList.length; i++) {
                 this.downloadFileUrlList[i].url = 'https://' + this.downloadFileUrlList[i].url;
             }
-            let udpUrlList = JSON.stringify(this.setForm.udpList);
-            this.udpUrlList = JSON.parse(udpUrlList);
-            for (let i = 0; i < this.udpUrlList.length; i++) {
-                this.udpUrlList[i].url = 'udp://' + this.udpUrlList[i].url;
-            }
+            // let udpUrlList = JSON.stringify(this.setForm.udpList);
+            // this.udpUrlList = JSON.parse(udpUrlList);
+            // for (let i = 0; i < this.udpUrlList.length; i++) {
+            //     this.udpUrlList[i].url = 'udp://' + this.udpUrlList[i].url;
+            // }
             this.editVisible = false;
         },
         // setProgram(index, row) {
@@ -501,68 +641,6 @@ export default {
         Search() {
             this.query.pageNo = 1;
             this.getMenu();
-        },
-        getMenu() {
-            //获取菜单栏
-            const loading = this.$loading({
-                lock: true,
-                text: 'Loading',
-                spinner: 'el-icon-loading',
-                background: 'rgba(0, 0, 0, 0.7)',
-                target: document.querySelector('.div1')
-            });
-            let cinemaCode = this.query.cinemaCode;
-            let screenName = this.query.screenName;
-            let typeCode = this.query.typeCode;
-            let filmName = this.query.filmName;
-            if (!cinemaCode) {
-                cinemaCode = '';
-            }
-            if (!screenName) {
-                screenName = '';
-            }
-            if (!typeCode) {
-                typeCode = '';
-            }
-            if (!filmName) {
-                filmName = '';
-            }
-            let jsonArr = [];
-            jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
-            jsonArr.push({ key: 'screenName', value: screenName });
-            jsonArr.push({ key: 'dataType', value: typeCode });
-            jsonArr.push({ key: 'filmName', value: filmName });
-            jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
-            jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
-            let sign = md5(preSign(jsonArr));
-            jsonArr.push({ key: 'sign', value: sign });
-            var params = ParamsAppend(jsonArr);
-            https
-                .fetchPost('/thirdPrice/thirdPricePage', params)
-                .then(data => {
-                    loading.close();
-                    if (data.data.code == 'success') {
-                        var oData = JSON.parse(Decrypt(data.data.data));
-                        console.log(oData);
-                        this.tableData = oData.data;
-                        this.query.pageSize = oData.pageSize;
-                        this.query.pageNo = oData.pageNo;
-                        this.query.totalCount = oData.totalCount;
-                        this.query.totalPage = oData.totalPage;
-                        this.getAllCinema();
-                    } else if (data.data.code == 'nologin') {
-                        this.message = data.data.message;
-                        this.open();
-                        this.$router.push('/login');
-                    } else {
-                        this.message = data.data.message;
-                        this.open();
-                    }
-                })
-                .catch(err => {
-                    loading.close();
-                    console.log(err);
-                });
         },
         open() {
             //信息提示弹出框

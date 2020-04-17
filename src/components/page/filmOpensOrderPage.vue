@@ -118,6 +118,9 @@
                 <el-table-column label="订单编号" width="150">
                     <template slot-scope="scope">{{scope.row.orderNo}}</template>
                 </el-table-column>
+                <el-table-column prop="name" label="点映名称" width="150">
+                    <template slot-scope="scope">{{scope.row.filmOpensName}}</template>
+                </el-table-column>
                 <el-table-column prop="memo" label="电影名称" width="150">
                     <template slot-scope="scope">{{scope.row.filmName}}</template>
                 </el-table-column>

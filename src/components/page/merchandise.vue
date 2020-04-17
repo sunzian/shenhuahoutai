@@ -265,10 +265,11 @@
                     ></el-input>
                 </el-form-item>
                 <el-form-item
-                        label="商品属性(非必填）"
+                        label="商品属性"
                         :label-width="formLabelWidth"
                 >
                     <el-button type="primary" @click="addSelectedSell">新增</el-button>
+                    <span style="color: red;">示例：奶茶，规格：常温、加冰、加热等，可不填</span>
                     <div
                             v-for="(item1, index) in selectedSell"
                             style="margin-bottom: 5px"

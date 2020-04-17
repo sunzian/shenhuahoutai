@@ -421,13 +421,13 @@
                             placeholder="请输入正确的数字"
                     ></el-input>
                 </el-form-item>
-                <el-form-item v-if="oForm.commodity_type==1||oForm.commodity_type==4" :required="true" label="是否使用SKU" :label-width="formLabelWidth">
+                <el-form-item v-if="oForm.commodity_type==1||oForm.commodity_type==4" :required="true" label="是否有多种规格属性" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.isUseSku">
                         <el-radio :label="2">否</el-radio>
                         <el-radio :label="1">是</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item v-if="oForm.isUseSku==1&&(oForm.commodity_type==1||oForm.commodity_type==4)" :required="true" label="商品SKU" :label-width="formLabelWidth">
+                <el-form-item v-if="oForm.isUseSku==1&&(oForm.commodity_type==1||oForm.commodity_type==4)" :required="true" label="商品规格属性" :label-width="formLabelWidth">
                     <el-button
                             type="primary"
                             @click="addUseSku"
@@ -1006,13 +1006,13 @@
                             placeholder="请输入正确的数字"
                     ></el-input>
                 </el-form-item>
-                <el-form-item v-if="form.commodityType==1||form.commodityType==4" :required="true" label="是否使用SKU" :label-width="formLabelWidth">
+                <el-form-item v-if="form.commodityType==1||form.commodityType==4" :required="true" label="是否有多种规格属性" :label-width="formLabelWidth">
                     <el-radio-group v-model="form.isUseSku">
                         <el-radio :label="2">否</el-radio>
                         <el-radio :label="1">是</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item v-if="form.commodityType==1||form.commodityType==4&&form.isUseSku==1" :required="true" label="商品SKU" :label-width="formLabelWidth">
+                <el-form-item v-if="form.commodityType==1||form.commodityType==4&&form.isUseSku==1" :required="true" label="商品规格属性" :label-width="formLabelWidth">
                     <el-button
                             type="primary"
                             @click="addChangeUseSku"
