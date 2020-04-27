@@ -88,6 +88,19 @@
                 <el-table-column prop="sort" label="商品名称" width="150">
                     <template slot-scope="scope">{{scope.row.commodityName}}</template>
                 </el-table-column>
+                <el-table-column prop="sort" label="秒杀商品图片" width="90">
+                    <template slot-scope="scope">
+                        <el-popover placement="right" title trigger="hover">
+                            <img style="width:400px" :src="scope.row.activityImage"/>
+                            <img
+                                    slot="reference"
+                                    :src="scope.row.activityImage"
+                                    :alt="scope.row.activityImage"
+                                    style="max-height: 50px;max-width: 130px"
+                            />
+                        </el-popover>
+                    </template>
+                </el-table-column>
                 <el-table-column prop="name" label="活动名称" width="150">
                     <template slot-scope="scope">{{scope.row.activityName}}</template>
                 </el-table-column>
@@ -97,12 +110,12 @@
                 <el-table-column prop="memo" label="结束日期" width="180">
                     <template slot-scope="scope">{{scope.row.endDate}}</template>
                 </el-table-column>
-                <el-table-column prop="sort" label="是否限制用户限购" width="160">
+                <el-table-column prop="sort" label="限制用户限购" width="160">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.purchaseType == 1">不限购</el-tag>
                         <el-tag
                                 v-else-if="scope.row.purchaseType == 2"
-                        >限购{{scope.row.purchaseCount}}
+                        >{{scope.row.purchaseCount}}
                         </el-tag>
                     </template>
                 </el-table-column>
@@ -353,6 +366,28 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item label="秒杀商品图片" :label-width="formLabelWidth">
+                    <span>可空，若不上传则默认显示商品图片</span>
+                    <el-upload
+                            class="upload-demo"
+                            action="/api/upload/uploadImage"
+                            :before-upload="beforeUpload"
+                            :data="type"
+                            :limit="1"
+                            :on-exceed="exceed"
+                            ref="download"
+                            :on-success="onSuccess"
+                            :file-list="fileList"
+                            list-type="picture"
+                    >
+                        <el-button size="small" type="primary">点击上传</el-button>
+                        <div
+                                slot="tip"
+                                class="el-upload__tip"
+                        >只能上传jpg/png文件，且不超过200kb 建议尺寸200*200或按比例上传
+                        </div>
+                    </el-upload>
+                </el-form-item>
                 <el-form-item label="活动介绍" :label-width="formLabelWidth">
                     <el-input
                             maxlength="20"
@@ -361,7 +396,7 @@
                             placeholder="限20字，秒杀列表中展示"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="秒杀说明" :label-width="formLabelWidth">
+                <el-form-item label="秒杀详情" :label-width="formLabelWidth">
                     <el-input
                             type="textarea"
                             show-word-limit
@@ -569,6 +604,45 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item label="秒杀商品图片" :label-width="formLabelWidth">
+                    <el-popover placement="right" title trigger="hover">
+                        <img :src="oActivityImg"/>
+                        <img
+                                slot="reference"
+                                :src="oActivityImg"
+                                :alt="oActivityImg"
+                                style="max-height: 50px;max-width: 130px"
+                        />
+                    </el-popover>
+                    <span
+                            v-if="oActivityImg"
+                            style="color:red;cursor: pointer;margin-left:20px;"
+                            @click="deletImg"
+                    >删除</span>
+                    <span>可空，若不上传则默认显示商品图片</span>
+                    <el-upload
+                            :before-upload="beforeUpload"
+                            :data="type"
+                            class="upload-demo"
+                            drag
+                            action="/api/upload/uploadImage"
+                            ref="download"
+                            :limit="1"
+                            :on-exceed="exceed"
+                            :on-success="unSuccess"
+                            multiple
+                    >
+                        <i class="el-icon-upload"></i>
+                        <div class="el-upload__text">
+                            <em>点击上传</em>
+                        </div>
+                        <div
+                                class="el-upload__tip"
+                                slot="tip"
+                        >只能上传jpg/png文件，且不超过200kb 建议尺寸200*200或按比例上传
+                        </div>
+                    </el-upload>
+                </el-form-item>
                 <el-form-item label="活动介绍" :label-width="formLabelWidth">
                     <el-input
                             maxlength="20"
@@ -577,7 +651,7 @@
                             placeholder="限20字，秒杀列表中展示"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="秒杀说明" :label-width="formLabelWidth">
+                <el-form-item label="秒杀详情" :label-width="formLabelWidth">
                     <el-input
                             type="textarea"
                             show-word-limit
@@ -753,6 +827,11 @@
                 oTotalSurplus: '',
                 oIsLimitSingle: '', ////
                 oSingleNumber: '',
+                oActivityImg: '',
+                fileList: [],
+                type: {
+                    type: ''
+                },
                 formatList: [], //电影制式列表
                 message: '', //弹出框消息
                 query: {
@@ -858,10 +937,12 @@
                     screenName: '',
                     screenCode: [],
                     formatCode: [],
+                    type: [],
                     selectFilmType: '0', //选择影片
                     code: [], //选择影院
                     filmCode: '',
                     filmName: '',
+                    activityImage: '',
                     checkedDays: [],
                     exceptWeekDay: ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日'],
                     startDate: '',
@@ -1092,6 +1173,7 @@
                 jsonArr.push({ key: 'startDate', value: this.oForm.startDate });
                 jsonArr.push({ key: 'endDate', value: this.oForm.endDate });
                 jsonArr.push({ key: 'showStatus', value: this.oForm.showStatus });
+                jsonArr.push({ key: 'activityImage', value: this.oForm.activityImage });
                 // jsonArr.push({ key: 'startTimePoints', value: this.startArr.join(',') });
                 // jsonArr.push({ key: 'endTimePoints', value: this.endArr.join(',') });
                 jsonArr.push({ key: 'purchaseType', value: this.oForm.purchaseType });
@@ -1120,6 +1202,7 @@
                                 this.dialogFormVisible = false;
                                 this.$message.success(`新增成功`);
                                 this.oForm.activityName = '';
+                                this.oForm.activityImage = '';
                                 this.oForm.commonType = '';
                                 this.selectGoodsCode = {};
                                 this.oForm.startDate = '';
@@ -1218,30 +1301,6 @@
                 jsonArr.push({ key: 'sign', value: sign });
                 let params = ParamsAppend(jsonArr);
                 https
-                    .fetchPost('/secondKillActivity/getTimesById', params)
-                    .then(data => {
-                        //查询可用时间段
-                        loading.close();
-                        this.dateInfo = [];
-                        this.startArr = [];
-                        this.endArr = [];
-                        for (let x in JSON.parse(Decrypt(data.data.data))) {
-                            let jsonarr = [];
-                            jsonarr.push(JSON.parse(Decrypt(data.data.data))[x].startTime);
-                            jsonarr.push(JSON.parse(Decrypt(data.data.data))[x].endTime);
-                            this.dateInfo.push(jsonarr);
-                        }
-                        console.log(this.dateInfo);
-                        for (let x in this.dateInfo) {
-                            this.startArr.push(this.dateInfo[x][0]);
-                            this.endArr.push(this.dateInfo[x][1]);
-                        }
-                    })
-                    .catch(err => {
-                        loading.close();
-                        console.log(err);
-                    });
-                https
                     .fetchPost('/secondKillActivity/updatePage', params)
                     .then(data => {
                         loading.close();
@@ -1255,6 +1314,7 @@
                             }
                             this.selectGoodsCode = JSON.parse(Decrypt(data.data.data)).cinemaCodes.split(',');
                             this.oActivityName = JSON.parse(Decrypt(data.data.data)).activityName;
+                            this.oActivityImg = JSON.parse(Decrypt(data.data.data)).activityImage;
                             this.oStartDate = JSON.parse(Decrypt(data.data.data)).startDate;
                             this.oEndDate = JSON.parse(Decrypt(data.data.data)).endDate;
                             for (let x in this.canUse1) {
@@ -1332,6 +1392,7 @@
                 jsonArr.push({ key: 'smsStatus', value: 0 });
                 jsonArr.push({ key: 'description', value: this.oDescription });
                 jsonArr.push({ key: 'activityNotice', value: this.oActivityNotice });
+                jsonArr.push({ key: 'activityImage', value: this.oActivityImg });
                 jsonArr.push({ key: 'commodityId', value: this.commodityId });
                 jsonArr.push({ key: 'changeType', value: this.oChangeType });
                 jsonArr.push({ key: 'gold', value: this.oGold });
@@ -1770,6 +1831,56 @@
                             console.log(err);
                         });
                 }, 500);
+            },
+            exceed(data) {
+                if (data.length == 1) {
+                    this.message = '只能上传一张图片，如需重新上传请删除第一张图！';
+                    this.open();
+                }
+            },
+            beforeUpload(file) {
+                //上传之前
+                this.type.type = EncryptReplace('business');
+                const isLt200Kb = file.size / 1024 < 200;
+                if (!isLt200Kb) {
+                    this.message = '图片大小不能超过200kb！';
+                    this.open();
+                    return false;
+                }
+                return isLt200Kb;
+            },
+            onSuccess(data) {
+                //上传文件 登录超时
+                if (data.status == '-1') {
+                    this.message = data.message;
+                    this.open();
+                    this.$refs.upload.clearFiles();
+                    return;
+                }
+                this.oForm.activityImage = data.data;
+                if (data.code == 'nologin') {
+                    this.message = data.message;
+                    this.open();
+                    this.$router.push('/login');
+                }
+            },
+            unSuccess(data) {
+                //修改上传文件 登录超时
+                if (data.status == '-1') {
+                    this.message = data.message;
+                    this.open();
+                    this.$refs.download.clearFiles();
+                    return;
+                }
+                this.oActivityImg = data.data;
+                if (data.code == 'nologin') {
+                    this.message = data.message;
+                    this.open();
+                    this.$router.push('/login');
+                }
+            },
+            deletImg() {
+                this.oActivityImg = '';
             },
             //新增套餐选择卖品页面
             aHandleSizeChange(val) {

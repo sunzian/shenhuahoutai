@@ -790,7 +790,7 @@
                             style="width: 360px"
                             type="textarea"
                             show-word-limit
-                            maxlength="200"
+                            maxlength="400"
                             :rows="5"
                             v-model="oForm.memo"
                             placeholder="1.可领取时间段2.领取地址3.其他注意事项"
@@ -1376,7 +1376,7 @@
                             type="textarea"
                             show-word-limit
                             :rows="5"
-                            maxlength="200"
+                            maxlength="400"
                             placeholder="1.可领取时间段2.领取地址3.其他注意事项"
                             v-model="form.memo"
                             autocomplete="off"
@@ -3514,6 +3514,7 @@
                                 this.oForm.limit_type = '';
                                 this.oForm.limit_number = '';
                                 this.oForm.details = '';
+                                this.oForm.baseSaleNumber = '';
                                 this.oForm.originalPrice = '';
                                 this.oForm.topStatus = '';
                                 this.oForm.recommendStatus = '';
@@ -3522,6 +3523,7 @@
                                 this.oForm.endDate = '';
                                 this.oForm.supportExpressStatus = '1';
                                 this.dialogFormVisible = false;
+                                this.checkAll = false;
                                 this.$message.success(`新增成功`);
                                 this.getMenu();
                             } else if (data.data.code == 'nologin') {

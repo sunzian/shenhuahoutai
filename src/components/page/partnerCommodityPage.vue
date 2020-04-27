@@ -259,7 +259,7 @@
                         style="width: 360px"
                         type="textarea"
                         show-word-limit
-                        maxlength="200"
+                        maxlength="400"
                         v-model="oForm.memo"
                         placeholder="1.可领取时间段2.领取地址3.其他注意事项"
                         autocomplete="off"
@@ -690,7 +690,7 @@
                         style="width: 360px"
                         type="textarea"
                         show-word-limit
-                        maxlength="200"
+                        maxlength="400"
                         placeholder="1.可领取时间段2.领取地址3.其他注意事项"
                         v-model="form.memo"
                         autocomplete="off"

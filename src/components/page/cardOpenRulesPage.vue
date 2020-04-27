@@ -684,7 +684,7 @@ export default {
                     }
                 } else if (this.oForm.effectiveTimeType == 2) {
                     if (!this.oForm.startEffectDate || !this.oForm.endEffectDate) {
-                        this.message = '指定时间段不能为空，请检查！';
+                        this.message = '券包有效期时间段不能为空，请检查！';
                         this.open();
                         loading.close();
                         return;
@@ -951,7 +951,7 @@ export default {
                     }
                 } else if (this.oEffectiveTimeType == 2) {
                     if (!this.oStartEffectDate || !this.oEndEffectDate) {
-                        this.message = '指定时间段不能为空，请检查！';
+                        this.message = '券包有效期时间段不能为空，请检查！';
                         this.open();
                         loading.close();
                         return;

@@ -1608,6 +1608,16 @@ export default {
                 return;
             }
             let day = this.oForm.startDay + '至' + this.oForm.endDay;
+            var result = this.date.some(item => {
+                if (item == day) {
+                    return true;
+                }
+            });
+            if (result) {
+                this.message = '请选择不同时间段';
+                this.open();
+                return;
+            }
             this.date.push(day);
             this.oForm.startDay = '';
             this.oForm.endDay = '';
@@ -1624,6 +1634,16 @@ export default {
                 return;
             }
             let day = this.oStartDay + '至' + this.oEndDay;
+            var result = this.date.some(item => {
+                if (item == day) {
+                    return true;
+                }
+            });
+            if (result) {
+                this.message = '请选择不同时间段';
+                this.open();
+                return;
+            }
             this.date.push(day);
             this.oStartDay = '';
             this.oEndDay = '';

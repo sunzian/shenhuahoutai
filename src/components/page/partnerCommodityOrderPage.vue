@@ -172,6 +172,9 @@
                     @selection-change="handleSelectionChange"
             >
                 <el-table-column prop="name" label="兑换影院名称" width="210">
+                    <template slot-scope="scope">{{scope.row.cinemaName}}</template>
+                </el-table-column>
+                <el-table-column prop="name" label="领取影院名称" width="210">
                     <template slot-scope="scope">{{scope.row.exchangeCinemaName}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="会员手机号" width="110">
@@ -815,12 +818,12 @@
                     jsonArr.push({
                         key: 'exportKeysJson',
                         value:
-                            '[\'cinemaName\',\'partnerName\',\'chSettleStatusString\',\'orderNo\',\'mobile\',\'remark\',\'commodityName\',\'gold\',\'number\',\'money\',\'getDate\',\'payTime\',\'chPayStatus\',\'chPickupWay\',\'trackingNumber\',\'chTrackingStatus\',\'deliveryName\',\'deliveryMobile\',\'province\',\'city\',\'district\',\'deliveryAddressDetail\',\'tradeNo\',\'payReturnMsg\',\'chChangeType\',\'chStatus\',\'chRefundStatus\',\'orderTypeName\',\'refundNo\',\'refundReason\',\'refundApply\',\'refundTime\',\'refundPrice\']'
+                            '[\'cinemaName\',\'exchangeCinemaName\',\'partnerName\',\'chSettleStatusString\',\'orderNo\',\'mobile\',\'remark\',\'commodityName\',\'gold\',\'number\',\'money\',\'getDate\',\'payTime\',\'chPayStatus\',\'chPickupWay\',\'trackingNumber\',\'chTrackingStatus\',\'deliveryName\',\'deliveryMobile\',\'province\',\'city\',\'district\',\'deliveryAddressDetail\',\'tradeNo\',\'payReturnMsg\',\'chChangeType\',\'chStatus\',\'chRefundStatus\',\'orderTypeName\',\'refundNo\',\'refundReason\',\'refundApply\',\'refundTime\',\'refundPrice\']'
                     });
                     jsonArr.push({
                         key: 'exportTitlesJson',
                         value:
-                            '[\'影院名称\',\'商户名称\',\'商户订单结算状态\',\'订单号\',\'手机号\',\'用户备注\',\'商品名称\',\'消费金币\',\'购买数量\',\'支付金额\',\'领取时间\',\'兑换时间\',\'兑换状态\',\'取货方式\',\'物流单号\',\'快递状态\',\'收货人名称\',\'收货人电话\',\'省\',\'市\',\'区\',\'收货人地址\',\'支付交易号\',\'支付回调消息\',\'兑换方式\',\'核销状态\',\'退款状态\',\'订单类型\',\'退款交易号\',\'退款原因\',\'微信退款回复\',\'退款时间\',\'退款金额\']'
+                            '[\'兑换影院名称\',\'领取影院名称\',\'商户名称\',\'商户订单结算状态\',\'订单号\',\'手机号\',\'用户备注\',\'商品名称\',\'消费金币\',\'购买数量\',\'支付金额\',\'领取时间\',\'兑换时间\',\'兑换状态\',\'取货方式\',\'物流单号\',\'快递状态\',\'收货人名称\',\'收货人电话\',\'省\',\'市\',\'区\',\'收货人地址\',\'支付交易号\',\'支付回调消息\',\'兑换方式\',\'核销状态\',\'退款状态\',\'订单类型\',\'退款交易号\',\'退款原因\',\'微信退款回复\',\'退款时间\',\'退款金额\']'
                     });
                     jsonArr.push({ key: 'settleStatus', value: settleStatus });
                     jsonArr.push({ key: 'orderNo', value: orderNo });

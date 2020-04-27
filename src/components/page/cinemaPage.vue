@@ -807,7 +807,7 @@
                         <!--&gt;</el-option>-->
                     <!--</el-select>-->
                 <!--</el-form-item>-->
-                <el-form-item prop="memberCardCommonUseStatus" label="会员卡是否门店通用" :label-width="formLabelWidth">
+                <!-- <el-form-item prop="memberCardCommonUseStatus" label="会员卡是否门店通用" :label-width="formLabelWidth">
                     <el-select
                             v-model="oForm.memberCardCommonUseStatus"
                     >
@@ -818,6 +818,12 @@
                                 :value="info.value"
                         ></el-option>
                     </el-select>
+                </el-form-item> -->
+                <el-form-item prop="memberCardCommonUseStatus" label="会员卡简单密码是否可以绑定到小程序" :label-width="formLabelWidth">
+                    <el-radio-group v-model="oForm.simpleCardPassword">
+                        <el-radio label="1">是</el-radio>
+                        <el-radio label="2">否</el-radio>
+                    </el-radio-group>
                 </el-form-item>
                 <el-form-item prop="ticketsForMemberCardPayStatus" label="会员卡支付是否可用优惠券" :label-width="formLabelWidth">
                     <el-select
@@ -1536,7 +1542,7 @@
                         <!--&gt;</el-option>-->
                     <!--</el-select>-->
                 <!--</el-form-item>-->
-                <el-form-item prop="memberCardCommonUseStatus" label="会员卡是否门店通用" :label-width="formLabelWidth">
+                <!-- <el-form-item prop="memberCardCommonUseStatus" label="会员卡是否门店通用" :label-width="formLabelWidth">
                     <el-select
                             v-model="oMemberCardCommonUseStatus"
                     >
@@ -1547,6 +1553,12 @@
                                 :value="info.value"
                         ></el-option>
                     </el-select>
+                </el-form-item> -->
+                <el-form-item prop="memberCardCommonUseStatus" label="会员卡简单密码是否可以绑定到小程序" :label-width="formLabelWidth">
+                    <el-radio-group v-model="oSimpleCardPassword">
+                        <el-radio label="1">是</el-radio>
+                        <el-radio label="2">否</el-radio>
+                    </el-radio-group>
                 </el-form-item>
                 <el-form-item prop="ticketsForMemberCardPayStatus" label="会员卡支付是否可用优惠券" :label-width="formLabelWidth">
                     <el-select
@@ -1777,7 +1789,7 @@ export default {
                 reportedType: [{required: true, message: '请选择', trigger: 'change'}],
                 openMemberCardStatus: [{required: true, message: '请选择', trigger: 'change'}],
                 videoStatus: [{required: true, message: '请选择', trigger: 'change'}],
-                memberCardCommonUseStatus: [{required: true, message: '请选择', trigger: 'change'}],
+                // memberCardCommonUseStatus: [{required: true, message: '请选择', trigger: 'change'}],
                 ticketsForMemberCardPayStatus: [{required: true, message: '请选择', trigger: 'change'}],
                 miniAppId: [{required: true, message: '请输入appId', trigger: 'blur'}],
                 miniAppSecret: [{required: true, message: '请输入appSecret', trigger: 'blur'}],
@@ -1862,6 +1874,7 @@ export default {
             oReportedType: '',
             oOpenMemberCardStatus: '',
             oMemberCardCommonUseStatus: '',
+            oSimpleCardPassword: '',
             oTicketsForMemberCardPayStatus: '',
             oMiniAppSecret: '',
             oMiniMerchantNo: '',
@@ -1984,6 +1997,7 @@ export default {
                 reportedType: '',
                 openMemberCardStatus: '',
                 memberCardCommonUseStatus: '',
+                simpleCardPassword: '2',
                 ticketsForMemberCardPayStatus: '',
                 miniAppSecret: '',
                 miniMerchantNo: '',
@@ -2342,7 +2356,7 @@ export default {
             jsonArr.push({ key: 'paymentType', value: this.oForm.paymentType });
             jsonArr.push({ key: 'reportedType', value: this.oForm.reportedType });
             jsonArr.push({ key: 'openMemberCardStatus', value: this.oForm.openMemberCardStatus });
-            jsonArr.push({ key: 'memberCardCommonUseStatus', value: this.oForm.memberCardCommonUseStatus });
+            jsonArr.push({ key: 'simpleCardPassword', value: this.oForm.simpleCardPassword });
             jsonArr.push({ key: 'ticketsForMemberCardPayStatus', value: this.oForm.ticketsForMemberCardPayStatus });
             jsonArr.push({ key: 'miniMerchantNo', value: this.oForm.miniMerchantNo });
             jsonArr.push({ key: 'miniMerchantSecret', value: this.oForm.miniMerchantSecret });
@@ -2418,7 +2432,7 @@ export default {
                             this.oForm.paymentType = '';
                             this.oForm.reportedType = '';
                             this.oForm.openMemberCardStatus = '';
-                            this.oForm.memberCardCommonUseStatus = '';
+                            this.oForm.simpleCardPassword = '2';
                             this.oForm.ticketsForMemberCardPayStatus = '';
                             this.oForm.miniAppSecret = '';
                             this.oForm.miniMerchantNo = '';
@@ -2563,18 +2577,19 @@ export default {
                         this.oExpireDate = JSON.parse(Decrypt(data.data.data)).Cinema.expireDate;
                         this.oPaymentType = JSON.parse(Decrypt(data.data.data)).Cinema.paymentType;
                         this.oReportedType = JSON.parse(Decrypt(data.data.data)).Cinema.reportedType;
+                        this.oSimpleCardPassword = JSON.parse(Decrypt(data.data.data)).Cinema.simpleCardPassword;
                         this.oBelongBusinessCode = JSON.parse(Decrypt(data.data.data)).Cinema.belongBusinessCode;
                         this.oRemainTicketsNumber = JSON.parse(Decrypt(data.data.data)).Cinema.remainTicketsNumber;
                         this.oRemainTicketPrice = JSON.parse(Decrypt(data.data.data)).Cinema.remainTicketPrice;
                         this.oMemberCardPayFee = JSON.parse(Decrypt(data.data.data)).Cinema.memberCardPayFee;
                         this.oThirdPartyPayFee = JSON.parse(Decrypt(data.data.data)).Cinema.thirdPartyPayFee;
                         this.oEquityCardAgreement = JSON.parse(Decrypt(data.data.data)).Cinema.equityCardAgreement;
-                        for (let x in this.boolean) {
-                            if (this.boolean[x].value == JSON.parse(Decrypt(data.data.data)).Cinema.memberCardCommonUseStatus) {
-                                this.oMemberCardCommonUseStatus = this.boolean[x].value;
-                                break;
-                            }
-                        }
+                        // for (let x in this.boolean) {
+                        //     if (this.boolean[x].value == JSON.parse(Decrypt(data.data.data)).Cinema.memberCardCommonUseStatus) {
+                        //         this.oMemberCardCommonUseStatus = this.boolean[x].value;
+                        //         break;
+                        //     }
+                        // }
                         for (let x in this.businessInfo) {
                             if (this.businessInfo[x].businessCode == JSON.parse(Decrypt(data.data.data)).Cinema.belongBusinessCode) {
                                 this.oBelongBusinessCode = this.businessInfo[x].businessCode;
@@ -2638,6 +2653,12 @@ export default {
                         for (let x in this.boolean) {
                             if (this.boolean[x].value == JSON.parse(Decrypt(data.data.data)).Cinema.reportedType) {
                                 this.oReportedType = this.boolean[x].value;
+                                break;
+                            }
+                        }
+                        for (let x in this.boolean) {
+                            if (this.boolean[x].value == JSON.parse(Decrypt(data.data.data)).Cinema.simpleCardPassword) {
+                                this.oSimpleCardPassword = this.boolean[x].value;
                                 break;
                             }
                         }
@@ -2768,7 +2789,7 @@ export default {
             jsonArr.push({ key: 'buyTicketHint', value: this.oBuyTicketHint });
             jsonArr.push({ key: 'rechargeMemo', value: this.oRechargeMemo });
             jsonArr.push({ key: 'goldActivityMemo', value: this.oGoldActivityMemo });
-            // jsonArr.push({ key: 'openSnackStatus', value: this.oOpenSnackStatus });
+            jsonArr.push({ key: 'simpleCardPassword', value: this.oSimpleCardPassword });
             jsonArr.push({ key: 'snackDispatcherStatus', value: this.oSnackDispatcherStatus });
             jsonArr.push({ key: 'refundable', value: this.oRefundable });
             jsonArr.push({ key: 'snackBeginTime', value: this.oSnackBeginTime });

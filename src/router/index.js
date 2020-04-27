@@ -606,6 +606,16 @@ export default new Router({
                     meta: { title: '影票账单' }
                 },
                 {
+                    path: '/groupActivityPage',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/groupActivityPage.vue'),
+                    meta: { title: '拼团活动管理' }
+                },
+                {
+                    path: '/groupOrderPage',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/groupOrderPage.vue'),
+                    meta: { title: '拼团订单' }
+                },
+                {
                     path: '/404',
                     component: () => import(/* webpackChunkName: "404" */ '../components/page/404.vue'),
                     meta: { title: '404' }
