@@ -247,7 +247,6 @@
                     </el-checkbox-group>
                 </el-form-item>
                 <el-form-item :required="true" label="点映现场" :label-width="formLabelWidth">
-                    <span style="color: red;">请上传点映影片放映现场图片</span>
                     <el-popover placement="right" title trigger="hover">
                         <img style="width: 400px" :src="oForm.stagePhoto"/>
                         <img
@@ -257,6 +256,7 @@
                                 style="max-height: 50px;max-width: 130px"
                         />
                     </el-popover>
+                    <span style="color: red;">请上传点映影片放映现场图片</span>
                     <el-upload
                             :before-upload="beforeUpload"
                             :data="type"
@@ -313,7 +313,7 @@
                     <el-input :disabled="true" style="width: 300px" v-model="oForm.fullSeatNumber"></el-input>
                 </el-form-item>
                 <el-form-item label="点映推荐说明" :label-width="formLabelWidth">
-                    <el-input maxlength="10" style="width: 300px" v-model="oForm.recommendExplain"></el-input>
+                    <el-input maxlength="10" placeholder="限10个字" style="width: 300px" v-model="oForm.recommendExplain"></el-input>
                 </el-form-item>
                 <el-form-item label="点映说明" :label-width="formLabelWidth">
                     <el-input
@@ -346,7 +346,6 @@
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="官方公众号(二维码)" :label-width="formLabelWidth">
-                    <span style="color: red;">请上传影院公众号或者小程序二维码</span>
                     <el-popover placement="right" title trigger="hover">
                         <img style="width: 400px" :src="oForm.officialAccount"/>
                         <img
@@ -356,6 +355,7 @@
                                 style="max-height: 50px;max-width: 130px"
                         />
                     </el-popover>
+                    <span style="color: red;">请上传影院公众号或者小程序二维码</span>
                     <el-upload
                             :before-upload="beforeUpload"
                             :data="type"
@@ -377,7 +377,6 @@
                     </el-upload>
                 </el-form-item>
                 <el-form-item label="联系影院负责人" :label-width="formLabelWidth">
-                    <span style="color: red;">请上传影院负责人微信二维码</span>
                     <el-popover placement="right" title trigger="hover">
                         <img style="width: 400px" :src="oForm.filmDirector"/>
                         <img
@@ -387,6 +386,7 @@
                                 style="max-height: 50px;max-width: 130px"
                         />
                     </el-popover>
+                    <span style="color: red;">请上传影院负责人微信二维码</span>
                     <el-upload
                             :before-upload="beforeUpload"
                             :data="type"
@@ -522,7 +522,6 @@
                     </el-checkbox-group>
                 </el-form-item>
                 <el-form-item :required="true" label="点映现场" :label-width="formLabelWidth">
-                    <span style="color: red;">请上传点映影片放映现场图片</span>
                     <el-popover placement="right" title trigger="hover">
                         <img style="width: 400px" :src="oStagePhoto"/>
                         <img
@@ -532,6 +531,7 @@
                                 style="max-height: 50px;max-width: 130px"
                         />
                     </el-popover>
+                    <span style="color: red;">请上传点映影片放映现场图片</span>
                     <el-upload
                             v-if="oStatus==2"
                             :before-upload="beforeUpload"
@@ -592,7 +592,7 @@
                     <el-input :disabled="true" style="width: 300px" v-model="oForm.fullSeatNumber "></el-input>
                 </el-form-item>
                 <el-form-item label="点映推荐说明" :label-width="formLabelWidth">
-                    <el-input maxlength="10" v-model="oRecommendExplain"></el-input>
+                    <el-input maxlength="10" placeholder="限10个字" style="width: 300px" v-model="oRecommendExplain"></el-input>
                 </el-form-item>
                 <el-form-item label="点映说明" :label-width="formLabelWidth">
                     <el-input
@@ -625,7 +625,6 @@
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="官方公众号(二维码)" :label-width="formLabelWidth">
-                    <span style="color: red;">请上传影院公众号或者小程序二维码</span>
                     <el-popover placement="right" title trigger="hover">
                         <img style="width: 400px" :src="oOfficialAccount"/>
                         <img
@@ -635,6 +634,7 @@
                                 style="max-height: 50px;max-width: 130px"
                         />
                     </el-popover>
+                    <span style="color: red;">请上传影院公众号或者小程序二维码</span>
                     <el-upload
                             :before-upload="beforeUpload"
                             :data="type"
@@ -656,7 +656,6 @@
                     </el-upload>
                 </el-form-item>
                 <el-form-item label="联系影院负责人" :label-width="formLabelWidth">
-                    <span style="color: red;">请上传影院负责人微信二维码</span>
                     <el-popover placement="right" title trigger="hover">
                         <img style="width: 400px" :src="oFilmDirector"/>
                         <img
@@ -666,6 +665,7 @@
                                 style="max-height: 50px;max-width: 130px"
                         />
                     </el-popover>
+                    <span style="color: red;">请上传影院负责人微信二维码</span>
                     <el-upload
                             :before-upload="beforeUpload"
                             :data="type"

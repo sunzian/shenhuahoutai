@@ -39,7 +39,7 @@
                 ></el-input>
                 <el-input placeholder="订单号" class="mr10" v-model="query.orderNo" autocomplete="off"></el-input>
                 <el-input placeholder="团单id" class="mr10" v-model="query.groupFoundId" autocomplete="off"></el-input>
-                <el-input placeholder="手机号" class="mr10" v-model="query.mobile" autocomplete="off"></el-input>
+                <el-input placeholder="手机号" class="mr10" v-model="query.userMobile" autocomplete="off"></el-input>
                 <el-input placeholder="推荐人手机号" class="mr10" v-model="query.shareMobile" autocomplete="off"></el-input>
                 <el-select
                         clearable
@@ -104,6 +104,17 @@
                 >
                     <el-option key="1" label="兑换成功" value="1"></el-option>
                     <el-option key="2" label="兑换失败" value="2"></el-option>
+                </el-select>
+                <el-select
+                        clearable
+                        v-model="query.groupStatus"
+                        placeholder="拼团状态"
+                        class="handle-select mr10"
+                >
+                    <!-- <el-option key="0" label="待拼团" value="0"></el-option> -->
+                    <el-option key="1" label="拼团中" value="1"></el-option>
+                    <el-option key="2" label="拼团成功" value="2"></el-option>
+                    <el-option key="3" label="拼团失败" value="3"></el-option>
                 </el-select>
                 <el-select
                         clearable
@@ -204,7 +215,7 @@
                     <template slot-scope="scope">{{scope.row.exchangeCinemaName}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="会员手机号" width="110">
-                    <template slot-scope="scope">{{scope.row.mobile}}</template>
+                    <template slot-scope="scope">{{scope.row.userMobile}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="推荐人手机号" width="110">
                     <template slot-scope="scope">{{scope.row.shareMobile}}</template>
@@ -212,13 +223,13 @@
                 <el-table-column prop="memo" label="商品名称" width="180">
                     <template slot-scope="scope">{{scope.row.commodityName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="消耗金币" width="80">
-                    <template slot-scope="scope">{{scope.row.gold}}</template>
-                </el-table-column>
                 <el-table-column prop="memo" label="购买数量" width="80">
                     <template slot-scope="scope">{{scope.row.number}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="实付" width="60">
+                <el-table-column prop="memo" label="消耗金币" width="80">
+                    <template slot-scope="scope">{{scope.row.gold}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="实付RMB" width="60">
                     <template slot-scope="scope">{{scope.row.money}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="兑换时间" width="160">
@@ -226,9 +237,17 @@
                 </el-table-column>
                 <el-table-column label="兑换状态" align="center" width="80">
                     <template slot-scope="scope">
-                        <el-tag v-if="scope.row. payStatus=='0'">待支付</el-tag>
-                        <el-tag v-else-if="scope.row. payStatus=='1'">兑换成功</el-tag>
-                        <el-tag v-else-if="scope.row. payStatus=='2'">兑换失败</el-tag>
+                        <el-tag v-if="scope.row.payStatus=='0'">待支付</el-tag>
+                        <el-tag v-else-if="scope.row.payStatus=='1'">兑换成功</el-tag>
+                        <el-tag v-else-if="scope.row.payStatus=='2'">兑换失败</el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column label="拼团状态" align="center" width="80">
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row.groupStatus=='0'">待拼团</el-tag>
+                        <el-tag v-else-if="scope.row.groupStatus=='1'">拼团中</el-tag>
+                        <el-tag v-else-if="scope.row.groupStatus=='2'">拼团成功</el-tag>
+                        <el-tag v-else-if="scope.row.groupStatus=='3'">拼团失败</el-tag>
                     </template>
                 </el-table-column>
                 <!--<el-table-column prop="memo" label="兑换方式" width="120">-->
@@ -280,14 +299,14 @@
                         >查看
                         </el-button>
                         <el-button
-                                v-if="scope.row.pickupWay=='2'"
+                                v-if="scope.row.pickupWay=='2'&&scope.row.groupStatus=='2' && scope.row.refundStatus != '1'"
                                 type="text"
                                 icon="el-icon-setting"
                                 @click="logChange(scope.$index, scope.row)"
                         >修改
                         </el-button>
                         <el-button
-                                v-if="scope.row.pickupWay=='1' && scope.row.status=='1'"
+                                v-if="scope.row.pickupWay=='1' && scope.row.groupStatus=='2' && scope.row.status=='1' && scope.row.refundStatus=='0'"
                                 type="text"
                                 icon="el-icon-setting"
                                 @click="statusChange(scope.$index, scope.row)"
@@ -363,7 +382,7 @@
                     <el-input
                             :disabled="true"
                             style="width: 250px"
-                            v-model="form.mobile"
+                            v-model="form.userMobile"
                             autocomplete="off"
                     ></el-input>
                 </el-form-item>
@@ -380,6 +399,14 @@
                             :disabled="true"
                             style="width: 250px"
                             v-model="form.remark"
+                            autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="团单id" :label-width="formLabelWidth">
+                    <el-input
+                            :disabled="true"
+                            style="width: 250px"
+                            v-model="form.groupFoundId"
                             autocomplete="off"
                     ></el-input>
                 </el-form-item>
@@ -477,7 +504,7 @@
                     <el-input
                             :disabled="true"
                             style="width: 250px"
-                            v-model="form.tradeNo"
+                            v-model="form.payTradeNo"
                             autocomplete="off"
                     ></el-input>
                 </el-form-item>
@@ -486,6 +513,14 @@
                             :disabled="true"
                             style="width: 250px"
                             v-model="form.payStatus"
+                            autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="拼团状态" :label-width="formLabelWidth">
+                    <el-input
+                            :disabled="true"
+                            style="width: 250px"
+                            v-model="form.groupStatus"
                             autocomplete="off"
                     ></el-input>
                 </el-form-item>
@@ -705,7 +740,7 @@
                 },
                 excelForm: {},
                 excelVisible: false,
-                uploadAction: 'api/commodityChangeRecord/importExcelTrackingInfo',
+                uploadAction: 'api/groupOrder/importExcelTrackingInfo',
                 hasExcel: false,
                 successUpLoad: false,
                 query: {
@@ -765,10 +800,12 @@
                     let settleStatus = this.query.settleStatus;
                     let orderNo = this.query.orderNo;
                     let commodityName = this.query.commodityName;
-                    let mobile = this.query.mobile;
+                    let userMobile = this.query.userMobile;
                     let shareMobile = this.query.shareMobile;
                     let status = this.query.status;
                     let payStatus = this.query.payStatus;
+                    let groupStatus = this.query.groupStatus;
+                    let groupFoundId = this.query.groupFoundId;
                     let startDate = this.query.startDate;
                     let endDate = this.query.endDate;
                     let commodityType = this.query.commodityType;
@@ -777,6 +814,9 @@
                     let pickupWay = this.query.pickupWay;
                     let trackingStatus = this.query.trackingStatus;
                     let trackingNumber = this.query.trackingNumber;
+                    if (!groupFoundId) {
+                        groupFoundId = '';
+                    }
                     if (!commodityType) {
                         commodityType = '';
                     }
@@ -807,8 +847,8 @@
                     if (!commodityName) {
                         commodityName = '';
                     }
-                    if (!mobile) {
-                        mobile = '';
+                    if (!userMobile) {
+                        userMobile = '';
                     }
                     if (!shareMobile) {
                         shareMobile = '';
@@ -822,6 +862,9 @@
                     if (!payStatus) {
                         payStatus = '';
                     }
+                    if (!groupStatus) {
+                        groupStatus = '';
+                    }
                     if (!startDate) {
                         startDate = '';
                     }
@@ -833,12 +876,12 @@
                     jsonArr.push({
                         key: 'exportKeysJson',
                         value:
-                            '[\'cinemaName\',\'exchangeCinemaName\',\'partnerName\',\'chSettleStatusString\',\'orderNo\',\'mobile\',\'shareMobile\',\'remark\',\'commodityName\',\'gold\',\'number\',\'money\',\'getDate\',\'payTime\',\'chPayStatus\',\'chPickupWay\',\'trackingNumber\',\'chTrackingStatus\',\'deliveryName\',\'deliveryMobile\',\'province\',\'city\',\'district\',\'deliveryAddressDetail\',\'tradeNo\',\'payReturnMsg\',\'chChangeType\',\'chStatus\',\'chRefundStatus\',\'orderTypeName\',\'refundNo\',\'refundReason\',\'refundApply\',\'refundTime\',\'refundPrice\']'
+                            '[\'cinemaName\',\'exchangeCinemaName\',\'partnerName\',\'chSettleStatusString\',\'orderNo\',\'userMobile\',\'shareMobile\',\'remark\',\'commodityName\',\'gold\',\'number\',\'money\',\'getDate\',\'payTime\',\'chPayStatus\',\'chGroupStatus\',\'chPickupWay\',\'trackingNumber\',\'chTrackingStatus\',\'deliveryName\',\'deliveryMobile\',\'province\',\'city\',\'district\',\'deliveryAddressDetail\',\'payTradeNo\',\'payReturnMsg\',\'chChangeType\',\'chStatus\',\'chRefundStatus\',\'refundNo\',\'refundReason\',\'refundApply\',\'refundTime\',\'refundPrice\']'
                     });
                     jsonArr.push({
                         key: 'exportTitlesJson',
                         value:
-                            '[\'兑换影院名称\',\'领取影院名称\',\'商户名称\',\'商户订单结算状态\',\'订单号\',\'手机号\',\'推荐人手机号\',\'用户备注\',\'商品名称\',\'消费金币\',\'购买数量\',\'支付金额\',\'领取时间\',\'兑换时间\',\'兑换状态\',\'取货方式\',\'物流单号\',\'快递状态\',\'收货人名称\',\'收货人电话\',\'省\',\'市\',\'区\',\'收货人地址\',\'支付交易号\',\'支付回调消息\',\'兑换方式\',\'核销状态\',\'退款状态\',\'订单类型\',\'退款交易号\',\'退款原因\',\'微信退款回复\',\'退款时间\',\'退款金额\']'
+                            '[\'兑换影院名称\',\'领取影院名称\',\'商户名称\',\'商户订单结算状态\',\'订单号\',\'手机号\',\'推荐人手机号\',\'用户备注\',\'商品名称\',\'消费金币\',\'购买数量\',\'支付金额\',\'领取时间\',\'兑换时间\',\'兑换状态\',\'拼团状态\',\'取货方式\',\'物流单号\',\'快递状态\',\'收货人名称\',\'收货人电话\',\'省\',\'市\',\'区\',\'收货人地址\',\'支付交易号\',\'支付回调消息\',\'兑换方式\',\'核销状态\',\'退款状态\',\'退款交易号\',\'退款原因\',\'微信退款回复\',\'退款时间\',\'退款金额\']'
                     });
                     jsonArr.push({ key: 'commodityType', value: commodityType });
                     jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
@@ -846,13 +889,15 @@
                     jsonArr.push({ key: 'settleStatus', value: settleStatus });
                     jsonArr.push({ key: 'orderNo', value: orderNo });
                     jsonArr.push({ key: 'commodityName', value: commodityName });
-                    jsonArr.push({ key: 'mobile', value: mobile });
+                    jsonArr.push({ key: 'userMobile', value: userMobile });
                     jsonArr.push({ key: 'shareMobile', value: shareMobile });
                     jsonArr.push({ key: 'refundStatus', value: refundStatus });
                     jsonArr.push({ key: 'status', value: status });
                     jsonArr.push({ key: 'changeType', value: changeType });
                     jsonArr.push({ key: 'pickupWay', value: pickupWay });
                     jsonArr.push({ key: 'payStatus', value: payStatus });
+                    jsonArr.push({ key: 'groupStatus', value: groupStatus });
+                    jsonArr.push({ key: 'groupFoundId', value: groupFoundId });
                     jsonArr.push({ key: 'startDate', value: startDate });
                     jsonArr.push({ key: 'endDate', value: endDate });
                     jsonArr.push({ key: 'trackingStatus', value: trackingStatus });
@@ -860,8 +905,8 @@
                     var params = ParamsAppend(jsonArr);
                     let myObj = {
                         method: 'get',
-                        url: '/exportExcel/commodityChangeRecord',
-                        fileName: '金币商城订单统计',
+                        url: '/exportExcel/groupOrder',
+                        fileName: '金币商城拼团订单统计',
                         params: params
                     };
                     https.exportMethod(myObj);
@@ -1006,6 +1051,15 @@
                                 } else if (JSON.parse(Decrypt(data.data.data)).groupOrder.payStatus == 3) {
                                     this.form.payStatus = '支付过期';
                                 }
+                                if (JSON.parse(Decrypt(data.data.data)).groupOrder.groupStatus == 0) {
+                                    this.form.groupStatus = '待拼团';
+                                } else if (JSON.parse(Decrypt(data.data.data)).groupOrder.groupStatus == 1) {
+                                    this.form.groupStatus = '拼团中';
+                                } else if (JSON.parse(Decrypt(data.data.data)).groupOrder.groupStatus == 2) {
+                                    this.form.groupStatus = '拼团成功';
+                                } else if (JSON.parse(Decrypt(data.data.data)).groupOrder.groupStatus == 3) {
+                                    this.form.groupStatus = '拼团失败';
+                                }
                                 if (JSON.parse(Decrypt(data.data.data)).groupOrder.refundStatus == 0) {
                                     this.form.refundStatus = '未退款';
                                 } else if (JSON.parse(Decrypt(data.data.data)).groupOrder.refundStatus == 1) {
@@ -1059,18 +1113,18 @@
                     jsonArr.push({ key: 'sign', value: sign });
                     let params = ParamsAppend(jsonArr);
                     https
-                        .fetchPost('/commodityChangeRecord/updateTrackingInfoPage', params)
+                        .fetchPost('/groupOrder/queryTrackingInfo', params)
                         .then(data => {
                             loading.close();
                             if (data.data.code == 'success') {
                                 this.logVisible = true;
                                 console.log(JSON.parse(Decrypt(data.data.data)));
                                 this.form1.id = row.id;
-                                this.form1 = JSON.parse(Decrypt(data.data.data)).commodityChangeRecord;
+                                this.form1 = JSON.parse(Decrypt(data.data.data)).groupOrder;
                                 this.supportDeliveryList = JSON.parse(Decrypt(data.data.data)).supportDeliveryList;
                                 for (let x in this.commodityType) {
                                     if (
-                                        this.commodityType[x].value == JSON.parse(Decrypt(data.data.data)).commodityChangeRecord.trackingStatus
+                                        this.commodityType[x].value == JSON.parse(Decrypt(data.data.data)).groupOrder.trackingStatus
                                     ) {
                                         this.form1.trackingStatus = this.commodityType[x].value;
                                         break;
@@ -1111,7 +1165,7 @@
                     console.log(jsonArr);
                     let params = ParamsAppend(jsonArr);
                     https
-                        .fetchPost('/commodityChangeRecord/updateTrackingInfo', params)
+                        .fetchPost('/groupOrder/updateTrackingInfo', params)
                         .then(data => {
                             loading.close();
                             // console.log(data);
@@ -1197,9 +1251,11 @@
                 });
                 setTimeout(() => {
                     let orderNo = this.query.orderNo;
-                    let mobile = this.query.mobile;
+                    let userMobile = this.query.userMobile;
                     let shareMobile = this.query.shareMobile;
                     let payStatus = this.query.payStatus;
+                    let groupStatus = this.query.groupStatus;
+                    let groupFoundId = this.query.groupFoundId;
                     let startDate = this.query.startDate;
                     let endDate = this.query.endDate;
                     let commodityType = this.query.commodityType;
@@ -1240,8 +1296,8 @@
                     if (!orderNo) {
                         orderNo = '';
                     }
-                    if (!mobile) {
-                        mobile = '';
+                    if (!userMobile) {
+                        userMobile = '';
                     }
                     if (!shareMobile) {
                         shareMobile = '';
@@ -1254,6 +1310,12 @@
                     }
                     if (!payStatus) {
                         payStatus = '';
+                    }
+                    if (!groupStatus) {
+                        groupStatus = '';
+                    }
+                    if (!groupFoundId) {
+                        groupFoundId = '';
                     }
                     if (!refundStatus) {
                         refundStatus = '';
@@ -1271,9 +1333,11 @@
                     jsonArr.push({ key: 'settleStatus', value: settleStatus });
                     jsonArr.push({ key: 'commodityName', value: commodityName });
                     jsonArr.push({ key: 'commodityType', value: commodityType });
-                    jsonArr.push({ key: 'mobile', value: mobile });
+                    jsonArr.push({ key: 'userMobile', value: userMobile });
                     jsonArr.push({ key: 'shareMobile', value: shareMobile });
                     jsonArr.push({ key: 'payStatus', value: payStatus });
+                    jsonArr.push({ key: 'groupStatus', value: groupStatus });
+                    jsonArr.push({ key: 'groupFoundId', value: groupFoundId });
                     jsonArr.push({ key: 'changeType', value: changeType });
                     jsonArr.push({ key: 'status', value: status });
                     jsonArr.push({ key: 'refundStatus', value: refundStatus });

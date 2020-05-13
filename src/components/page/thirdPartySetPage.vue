@@ -195,6 +195,11 @@
                             icon="el-icon-thumb"
                             @click="publishCode(scope.row)"
                         >发布代码</el-button>
+                        <!-- <el-button
+                            type="text"
+                            icon="el-icon-thumb"
+                            @click="showLimitNum(scope.row)"
+                        >查询审核次数</el-button> -->
                     </template>
                 </el-table-column>
             </el-table>
@@ -650,6 +655,42 @@ export default {
                         this.query.totalCount = oData.totalCount;
                         this.query.totalPage = oData.totalPage;
                         this.tableData = oData.data;
+                    } else if (data.data.code == 'nologin') {
+                        this.message = data.data.message;
+                        this.open();
+                        this.$router.push('/login');
+                    } else {
+                        this.message = data.data.message;
+                        this.open();
+                    }
+                })
+                .catch(err => {
+                    loading.close();
+                    console.log(err);
+                });
+        },
+
+        // 查询服务平台当月提审限额和加急次数
+        showLimitNum(row) {
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
+            var jsonArr = [];
+            jsonArr.push({ key: 'miniAppId', value: row.miniAppId });
+            let sign = md5(preSign(jsonArr));
+            jsonArr.push({ key: 'sign', value: sign });
+            let params = ParamsAppend(jsonArr);
+            https
+                .fetchPost('/WXThirdParty/showLimitNum', params)
+                .then(data => {
+                    loading.close();
+                    if (data.data.code == 'success') {
+                        this.message = JSON.parse(Decrypt(data.data.data));
+                        this.open();
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
@@ -1355,6 +1396,7 @@ export default {
                     loading.close();
                     if (data.data.code == 'success') {
                         this.message = '提交成功！';
+                        this.open();
                         this.auditVisible = false;
                         this.miniAppId = '';
                         this.auditForm.versionDesc = '';

@@ -110,7 +110,7 @@
                 <el-select
                         clearable
                         v-model="query.recommendStatus"
-                        placeholder="是否置顶"
+                        placeholder="是否推荐"
                         class="handle-select mr10"
                 >
                     <el-option key="1" label="否" value="1"></el-option>
@@ -228,7 +228,7 @@
                         >限制每周可兑换数量</el-tag>
                     </template>
                 </el-table-column>-->
-                <!-- <el-table-column prop="sort" label="对应上方的限制兑换数量" width="160">
+                <!-- <el-table-column prop="sort" label="限购数量" width="160">
                     <template slot-scope="scope">{{scope.row.limitNumber}}</template>
                 </el-table-column>-->
                 <el-table-column label="操作" width="140" align="center" fixed="right">
@@ -519,7 +519,7 @@
                     </el-select>
                     <div>可在小程序金币商城今日大牌区展示</div>
                 </el-form-item>
-                <el-form-item :required="true" label="是否置顶" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="是否推荐" :label-width="formLabelWidth">
                     <el-select v-model="oForm.recommendStatus" placeholder="请选择">
                         <el-option
                                 v-for="item in topStatusList"
@@ -675,7 +675,7 @@
                 </el-form-item>
                 <el-form-item
                         v-if="oForm.limit_type==2||oForm.limit_type==3||oForm.limit_type==4"
-                        label="对应上方的限制兑换数量"
+                        label="限购数量"
                         :label-width="formLabelWidth"
                         :required="true"
                 >
@@ -983,7 +983,7 @@
                     </el-select>
                     <div>可在小程序金币商城今日大牌区展示</div>
                 </el-form-item>
-                <el-form-item :required="true" label="是否置顶" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="是否推荐" :label-width="formLabelWidth">
                     <el-select v-model="oRecommendStatus" placeholder="请选择">
                         <el-option
                                 v-for="item in topStatusList"
@@ -1139,7 +1139,7 @@
                 </el-form-item>
                 <el-form-item
                         v-if="form.limitType==2||form.limitType==3||form.limitType==4"
-                        label="对应上方的限制兑换数量"
+                        label="限购数量"
                         :label-width="formLabelWidth"
                         :required="true"
                 >
@@ -1825,17 +1825,21 @@
                         label: '不限制'
                     },
                     {
-                        value: '2',
-                        label: '限制每年可兑换数量'
-                    },
-                    {
-                        value: '3',
-                        label: '限制每月可兑换数量'
+                        value: '5',
+                        label: '每个会员每天可兑换数量'
                     },
                     {
                         value: '4',
-                        label: '限制每周可兑换数量'
-                    }
+                        label: '每个会员每周可兑换数量'
+                    },
+                    {
+                        value: '3',
+                        label: '每个会员每月可兑换数量'
+                    },
+                    {
+                        value: '2',
+                        label: '每个会员每年可兑换数量'
+                    },
                 ],
                 value: '',
                 restaurants: [],
@@ -2304,7 +2308,7 @@
                     return;
                 }
                 if (!this.oForm.recommendStatus) {
-                    this.message = '是否置顶不能为空，请检查！';
+                    this.message = '是否推荐不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
@@ -2699,7 +2703,7 @@
                                         break;
                                     }
                                 }
-                                //是否置顶下拉选显示对应的选项
+                                //是否推荐下拉选显示对应的选项
                                 for (let x in this.topStatusList) {
                                     if (this.topStatusList[x].value == JSON.parse(Decrypt(data.data.data)).goldCommodity.recommendStatus) {
                                         this.oRecommendStatus = this.topStatusList[x].value;
@@ -2933,7 +2937,7 @@
                     return;
                 }
                 if (!this.oRecommendStatus) {
-                    this.message = '是否置顶不能为空，请检查！';
+                    this.message = '是否推荐不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;

@@ -624,8 +624,14 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
+            let jsonArr = [];
+            jsonArr.push({ key: 'pageNo', value: 1 });
+            jsonArr.push({ key: 'pageSize', value: 50 });
+            let sign = md5(preSign(jsonArr));
+            jsonArr.push({ key: 'sign', value: sign });
+            var params = ParamsAppend(jsonArr);
             https
-                .fetchPost('/cinema/myCinemaPage', '')
+                .fetchPost('/cinema/myCinemaPage', params)
                 .then(data => {
                     loading.close();
                     this.cinemaList = JSON.parse(Decrypt(data.data.data)).data;
@@ -805,8 +811,14 @@ export default {
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             let params = ParamsAppend(jsonArr);
+            let jsonArr2 = [];
+            jsonArr2.push({ key: 'pageNo', value: 1 });
+            jsonArr2.push({ key: 'pageSize', value: 50 });
+            let sign2 = md5(preSign(jsonArr2));
+            jsonArr2.push({ key: 'sign', value: sign2 });
+            var params2 = ParamsAppend(jsonArr2);
             https
-                .fetchPost('/cinema/myCinemaPage', '')
+                .fetchPost('/cinema/myCinemaPage', params)
                 .then(data => {
                     this.cinemaList = JSON.parse(Decrypt(data.data.data)).data;
                 })

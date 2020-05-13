@@ -1606,11 +1606,17 @@ export default {
             if (this.openForm.validityType == 2) {
                 if (
                     !this.openForm.startDate ||
-                    this.openForm.startDate == '' ||
+                    this.openForm.startDate == ''
+                ) {
+                    this.message = '请填写优惠券有效期开始时间！';
+                    this.open();
+                    return;
+                }
+                if (
                     !this.openForm.endDate ||
                     this.openForm.endDate == ''
                 ) {
-                    this.message = '指定时间段不能为空！';
+                    this.message = '请填写优惠券有效期结束时间！';
                     this.open();
                     return;
                 }

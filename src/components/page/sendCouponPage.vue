@@ -848,8 +848,13 @@ export default {
                 return;
             }
             if (this.couponForm.effectiveTimeType == 2) {
-                if (this.couponForm.startDate == '' || this.couponForm.endDate == '') {
-                    this.message = '请填写时间段';
+                if (this.couponForm.startDate == '') {
+                    this.message = '请填写优惠券有效期开始时间';
+                    this.open();
+                    return;
+                }
+                if (this.couponForm.endDate == '') {
+                    this.message = '请填写优惠券有效期结束时间';
                     this.open();
                     return;
                 }

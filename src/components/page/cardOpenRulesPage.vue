@@ -664,14 +664,14 @@ export default {
                     return;
                 }
                 if (!this.oForm.effectiveTimeType) {
-                    this.message = '有效时间类型不能为空，请检查！';
+                    this.message = '券包生效方式不能为空！';
                     this.open();
                     loading.close();
                     return;
                 }
                 if (this.oForm.effectiveTimeType == 1) {
                     if (!this.oForm.overDays && this.oForm.overDays != 0) {
-                        this.message = '优惠券领取后有效期天数不能为空，请检查！';
+                        this.message = '券包有效期天数不能为空！';
                         this.open();
                         loading.close();
                         return;
@@ -938,7 +938,7 @@ export default {
                 }
                 if (this.oEffectiveTimeType == 1) {
                     if (!this.oOverDays && this.oOverDays != 0) {
-                        this.message = '优惠券领取后有效期天数不能为空，请检查！';
+                        this.message = '券包有效期天数不能为空！';
                         this.open();
                         loading.close();
                         return;

@@ -784,14 +784,14 @@
                         return;
                     }
                     if (!this.oForm.effectiveTimeType) {
-                        this.message = '有效时间类型不能为空，请检查！';
+                        this.message = '券包生效方式不能为空！';
                         this.open();
                         loading.close();
                         return;
                     }
                     if (this.oForm.effectiveTimeType == 1) {
                         if (!this.oForm.overDays && this.oForm.overDays != 0) {
-                            this.message = '优惠券领取后有效期天数不能为空，请检查！';
+                            this.message = '券包有效期天数不能为空！';
                             this.open();
                             loading.close();
                             return;
@@ -803,8 +803,14 @@
                             return;
                         }
                     } else if (this.oForm.effectiveTimeType == 2) {
-                        if (!this.oForm.startEffectDate || !this.oForm.endEffectDate) {
-                            this.message = '指定时间段不能为空，请检查！';
+                        if (!this.oForm.startEffectDate) {
+                            this.message = '请填写券包有效期开始时间！';
+                            this.open();
+                            loading.close();
+                            return;
+                        }
+                        if (!this.oForm.endEffectDate) {
+                            this.message = '请填写券包有效期结束时间！';
                             this.open();
                             loading.close();
                             return;
@@ -830,14 +836,14 @@
                         return;
                     }
                     if (!this.oForm.effectiveTimeType) {
-                        this.message = '有效时间类型不能为空，请检查！';
+                        this.message = '券包生效方式不能为空！';
                         this.open();
                         loading.close();
                         return;
                     }
                     if (this.oForm.effectiveTimeType == 1) {
                         if (!this.oForm.overDays && this.oForm.overDays != 0) {
-                            this.message = '优惠券领取后有效期天数不能为空，请检查！';
+                            this.message = '券包有效期天数不能为空！';
                             this.open();
                             loading.close();
                             return;
@@ -849,8 +855,14 @@
                             return;
                         }
                     } else if (this.oForm.effectiveTimeType == 2) {
-                        if (!this.oForm.startEffectDate || !this.oForm.endEffectDate) {
-                            this.message = '指定时间段不能为空，请检查！';
+                        if (!this.oForm.startEffectDate) {
+                            this.message = '请填写券包有效期开始时间！';
+                            this.open();
+                            loading.close();
+                            return;
+                        }
+                        if (!this.oForm.endEffectDate) {
+                            this.message = '请填写券包有效期结束时间！';
                             this.open();
                             loading.close();
                             return;
@@ -1140,14 +1152,14 @@
                         return;
                     }
                     if (!this.oEffectiveTimeType) {
-                        this.message = '有效时间类型不能为空，请检查！';
+                        this.message = '券包生效方式不能为空！';
                         this.open();
                         loading.close();
                         return;
                     }
                     if (this.oEffectiveTimeType == 1) {
                         if (!this.oOverDays && this.oOverDays != 0) {
-                            this.message = '优惠券领取后有效期天数不能为空，请检查！';
+                            this.message = '券包有效期天数不能为空！';
                             this.open();
                             loading.close();
                             return;
@@ -1159,8 +1171,14 @@
                             return;
                         }
                     } else if (this.oEffectiveTimeType == 2) {
-                        if (!this.oStartEffectDate || !this.oEndEffectDate) {
-                            this.message = '指定时间段不能为空，请检查！';
+                        if (!this.oStartEffectDate) {
+                            this.message = '请填写券包有效期开始时间！';
+                            this.open();
+                            loading.close();
+                            return;
+                        }
+                        if (!this.oEndEffectDate) {
+                            this.message = '请填写券包有效期结束时间！';
                             this.open();
                             loading.close();
                             return;
@@ -1186,14 +1204,14 @@
                         return;
                     }
                     if (!this.oForm.effectiveTimeType) {
-                        this.message = '有效时间类型不能为空，请检查！';
+                        this.message = '券包生效方式不能为空！';
                         this.open();
                         loading.close();
                         return;
                     }
                     if (this.oEffectiveTimeType == 1) {
                         if (!this.oOverDays && this.oOverDays != 0) {
-                            this.message = '优惠券领取后有效期天数不能为空，请检查！';
+                            this.message = '券包有效期天数不能为空！';
                             this.open();
                             loading.close();
                             return;
@@ -1205,8 +1223,14 @@
                             return;
                         }
                     } else if (this.oEffectiveTimeType == 2) {
-                        if (!this.oStartEffectDate || !this.oEndEffectDate) {
-                            this.message = '指定时间段不能为空，请检查！';
+                        if (!this.oStartEffectDate) {
+                            this.message = '请填写券包有效期开始时间！';
+                            this.open();
+                            loading.close();
+                            return;
+                        }
+                        if (!this.oEndEffectDate) {
+                            this.message = '请填写券包有效期结束时间！';
                             this.open();
                             loading.close();
                             return;

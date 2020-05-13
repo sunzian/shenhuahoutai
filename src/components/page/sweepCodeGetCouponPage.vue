@@ -846,12 +846,12 @@ export default {
                 // }
             } else {
                 if (!this.oForm.couponStartDate || this.oForm.couponStartDate == '') {
-                    this.message = '请选择优惠券开始时间！';
+                    this.message = '请选择优惠券有效期开始时间！';
                     this.open();
                     return;
                 }
                 if (!this.oForm.couponEndDate || this.oForm.couponEndDate == '') {
-                    this.message = '请选择优惠券结束时间！';
+                    this.message = '请选择优惠券有效期结束时间！';
                     this.open();
                     return;
                 }
@@ -1101,12 +1101,12 @@ export default {
                 // }
             } else {
                 if (!this.oCouponStartDate || this.oCouponStartDate == '') {
-                    this.message = '请选择优惠券开始时间！';
+                    this.message = '请选择优惠券有效期开始时间！';
                     this.open();
                     return;
                 }
                 if (!this.oCouponEndDate || this.oCouponEndDate == '') {
-                    this.message = '请选择优惠券结束时间！';
+                    this.message = '请选择优惠券有效期结束时间！';
                     this.open();
                     return;
                 }

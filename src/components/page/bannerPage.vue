@@ -48,6 +48,8 @@
                     <el-option key="8" label="签到送金币" value="8"></el-option>
                     <el-option key="9" label="邀请好友首页" value="9"></el-option>
                     <el-option key="11" label="支付后弹窗广告" value="11"></el-option>
+                    <el-option key="12" label="秒杀活动列表页" value="11"></el-option>
+                    <el-option key="13" label="团购活动列表页" value="11"></el-option>
                     <!-- <el-option key="10" label="积分换金币" value="10"></el-option> -->
                 </el-select>
                 <el-button
@@ -91,9 +93,10 @@
                         <el-tag v-if="scope.row.category=='10'">积分换金币</el-tag>
                         <el-tag v-if="scope.row.category=='11'">支付后弹窗广告</el-tag>
                         <el-tag v-if="scope.row.category=='12'">秒杀活动列表页</el-tag>
+                        <el-tag v-if="scope.row.category=='13'">团购活动列表页</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="sort" label="图片地址" width="220">
+                <el-table-column prop="sort" label="轮播图图片地址" width="220">
                     <template slot-scope="scope">
                         <el-popover placement="right" title trigger="hover">
                             <img style="width: 400px" :src="scope.row.imageUrl"/>
@@ -230,7 +233,7 @@
                             autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="图片地址" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="轮播图图片地址" :label-width="formLabelWidth">
                     <el-popover placement="right" title trigger="hover">
                         <img style="width: 400px" :src="oForm.imageUrl"/>
                         <img
@@ -385,7 +388,7 @@
                             autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="图片地址" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="轮播图图片地址" :label-width="formLabelWidth">
                     <el-popover placement="right" title trigger="hover">
                         <img style="width: 400px" :src="imageUrl"/>
                         <img
@@ -783,6 +786,10 @@
                     {
                         value: '12',
                         label: '秒杀活动列表页 建议尺寸670*200'
+                    },
+                    {
+                        value: '13',
+                        label: '团购活动列表页 建议尺寸670*200'
                     }
                 ],
                 tabType: [
@@ -933,7 +940,7 @@
                             });
                     }
                     //跳转到电影
-                    if (this.oForm.tabType == 2) {
+                    else if (this.oForm.tabType == 2) {
                         let filmName = this.query.filmName;
                         if (!filmName) {
                             filmName = '';
@@ -984,7 +991,7 @@
                             });
                     }
                     //跳转到金币商品
-                    if (this.oForm.tabType == 3) {
+                    else if (this.oForm.tabType == 3) {
                         let name = this.query.name;
                         if (!name) {
                             name = '';
@@ -1034,150 +1041,150 @@
                                 console.log(err);
                             });
                     }
-                    //跳转到修改文章
-                    if (this.oTabType == 1) {
-                        let title = this.query.title;
-                        if (!title) {
-                            title = '';
-                        }
-                        if (this.form.cinemaCodes.length == 0) {
-                            this.message = '请选择影院!';
-                            loading.close();
-                            this.open();
-                            return;
-                        }
-                        let cinemaCodes = this.form.cinemaCodes.join(',');
-                        let jsonArr = [];
-                        jsonArr.push({ key: 'title', value: title });
-                        jsonArr.push({ key: 'cinemaCode', value: cinemaCodes });
-                        jsonArr.push({ key: 'pageNo', value: this.query.aPageNo });
-                        jsonArr.push({ key: 'pageSize', value: this.query.aPageSize });
-                        let sign = md5(preSign(jsonArr));
-                        jsonArr.push({ key: 'sign', value: sign });
-                        var params = ParamsAppend(jsonArr);
-                        https
-                            .fetchPost('/noticeOfActivity/getOnlineStatusByCinemaCode', params)
-                            .then(data => {
-                                loading.close();
-                                if (data.data.code == 'success') {
-                                    this.drawer1 = true;
-                                    var oData = JSON.parse(Decrypt(data.data.data));
-                                    this.goldData = oData.data;
-                                    this.query.aPageSize = oData.pageSize;
-                                    this.query.aPageNo = oData.pageNo;
-                                    this.query.aTotalCount = oData.totalCount;
-                                    this.query.aTotalPage = oData.totalPage;
-                                } else if (data.data.code == 'nologin') {
-                                    this.message = data.data.message;
-                                    this.open();
-                                    this.$router.push('/login');
-                                } else {
-                                    this.message = data.data.message;
-                                    this.open();
-                                }
-                            })
-                            .catch(err => {
-                                loading.close();
-                                console.log(err);
-                            });
-                    }
-                    //跳转到修改电影
-                    if (this.oTabType == 2) {
-                        let filmName = this.query.filmName;
-                        if (!filmName) {
-                            filmName = '';
-                        }
-                        if (this.form.cinemaCodes.length == 0) {
-                            this.message = '请选择影院!';
-                            loading.close();
-                            this.open();
-                            return;
-                        }
-                        let cinemaCodes = this.form.cinemaCodes.join(',');
-                        let jsonArr = [];
-                        jsonArr.push({ key: 'filmName', value: filmName });
-                        jsonArr.push({ key: 'cinemaCode', value: cinemaCodes });
-                        jsonArr.push({ key: 'pageNo', value: this.query.aPageNo });
-                        jsonArr.push({ key: 'pageSize', value: this.query.aPageSize });
-                        let sign = md5(preSign(jsonArr));
-                        jsonArr.push({ key: 'sign', value: sign });
-                        var params = ParamsAppend(jsonArr);
-                        https
-                            .fetchPost('/film/getByCinemaCode', params)
-                            .then(data => {
-                                loading.close();
-                                if (data.data.code == 'success') {
-                                    this.drawer2 = true;
-                                    var oData = JSON.parse(Decrypt(data.data.data));
-                                    console.log(oData);
-                                    console.log(this.query);
-                                    this.goldData = oData.data;
-                                    console.log(this.sellTableData);
-                                    this.query.aPageSize = oData.pageSize;
-                                    this.query.aPageNo = oData.pageNo;
-                                    this.query.aTotalCount = oData.totalCount;
-                                    this.query.aTotalPage = oData.totalPage;
-                                } else if (data.data.code == 'nologin') {
-                                    this.message = data.data.message;
-                                    this.open();
-                                    this.$router.push('/login');
-                                } else {
-                                    this.message = data.data.message;
-                                    this.open();
-                                }
-                            })
-                            .catch(err => {
-                                loading.close();
-                                console.log(err);
-                            });
-                    }
-                    //跳转到修改金币商品
-                    if (this.oTabType == 3) {
-                        let name = this.query.name;
-                        if (!name) {
-                            name = '';
-                        }
-                        if (this.form.cinemaCodes.length == 0) {
-                            this.message = '请选择影院!';
-                            loading.close();
-                            this.open();
-                            return;
-                        }
-                        let cinemaCodes = this.form.cinemaCodes.join(',');
-                        let jsonArr = [];
-                        jsonArr.push({ key: 'name', value: name });
-                        jsonArr.push({ key: 'cinemaCode', value: cinemaCodes });
-                        jsonArr.push({ key: 'pageNo', value: this.query.aPageNo });
-                        jsonArr.push({ key: 'pageSize', value: this.query.aPageSize });
-                        let sign = md5(preSign(jsonArr));
-                        jsonArr.push({ key: 'sign', value: sign });
-                        var params = ParamsAppend(jsonArr);
-                        https
-                            .fetchPost('/goldCommodity/getByCinemaPage', params)
-                            .then(data => {
-                                loading.close();
-                                if (data.data.code == 'success') {
-                                    this.drawer = true;
-                                    var oData = JSON.parse(Decrypt(data.data.data));
-                                    this.goldData = oData.data;
-                                    this.query.aPageSize = oData.pageSize;
-                                    this.query.aPageNo = oData.pageNo;
-                                    this.query.aTotalCount = oData.totalCount;
-                                    this.query.aTotalPage = oData.totalPage;
-                                } else if (data.data.code == 'nologin') {
-                                    this.message = data.data.message;
-                                    this.open();
-                                    this.$router.push('/login');
-                                } else {
-                                    this.message = data.data.message;
-                                    this.open();
-                                }
-                            })
-                            .catch(err => {
-                                loading.close();
-                                console.log(err);
-                            });
-                    }
+                    // //跳转到修改文章
+                    // if (this.oTabType == 1) {
+                    //     let title = this.query.title;
+                    //     if (!title) {
+                    //         title = '';
+                    //     }
+                    //     if (this.form.cinemaCodes.length == 0) {
+                    //         this.message = '请选择影院!';
+                    //         loading.close();
+                    //         this.open();
+                    //         return;
+                    //     }
+                    //     let cinemaCodes = this.form.cinemaCodes.join(',');
+                    //     let jsonArr = [];
+                    //     jsonArr.push({ key: 'title', value: title });
+                    //     jsonArr.push({ key: 'cinemaCode', value: cinemaCodes });
+                    //     jsonArr.push({ key: 'pageNo', value: this.query.aPageNo });
+                    //     jsonArr.push({ key: 'pageSize', value: this.query.aPageSize });
+                    //     let sign = md5(preSign(jsonArr));
+                    //     jsonArr.push({ key: 'sign', value: sign });
+                    //     var params = ParamsAppend(jsonArr);
+                    //     https
+                    //         .fetchPost('/noticeOfActivity/getOnlineStatusByCinemaCode', params)
+                    //         .then(data => {
+                    //             loading.close();
+                    //             if (data.data.code == 'success') {
+                    //                 this.drawer1 = true;
+                    //                 var oData = JSON.parse(Decrypt(data.data.data));
+                    //                 this.goldData = oData.data;
+                    //                 this.query.aPageSize = oData.pageSize;
+                    //                 this.query.aPageNo = oData.pageNo;
+                    //                 this.query.aTotalCount = oData.totalCount;
+                    //                 this.query.aTotalPage = oData.totalPage;
+                    //             } else if (data.data.code == 'nologin') {
+                    //                 this.message = data.data.message;
+                    //                 this.open();
+                    //                 this.$router.push('/login');
+                    //             } else {
+                    //                 this.message = data.data.message;
+                    //                 this.open();
+                    //             }
+                    //         })
+                    //         .catch(err => {
+                    //             loading.close();
+                    //             console.log(err);
+                    //         });
+                    // }
+                    // //跳转到修改电影
+                    // else if (this.oTabType == 2) {
+                    //     let filmName = this.query.filmName;
+                    //     if (!filmName) {
+                    //         filmName = '';
+                    //     }
+                    //     if (this.form.cinemaCodes.length == 0) {
+                    //         this.message = '请选择影院!';
+                    //         loading.close();
+                    //         this.open();
+                    //         return;
+                    //     }
+                    //     let cinemaCodes = this.form.cinemaCodes.join(',');
+                    //     let jsonArr = [];
+                    //     jsonArr.push({ key: 'filmName', value: filmName });
+                    //     jsonArr.push({ key: 'cinemaCode', value: cinemaCodes });
+                    //     jsonArr.push({ key: 'pageNo', value: this.query.aPageNo });
+                    //     jsonArr.push({ key: 'pageSize', value: this.query.aPageSize });
+                    //     let sign = md5(preSign(jsonArr));
+                    //     jsonArr.push({ key: 'sign', value: sign });
+                    //     var params = ParamsAppend(jsonArr);
+                    //     https
+                    //         .fetchPost('/film/getByCinemaCode', params)
+                    //         .then(data => {
+                    //             loading.close();
+                    //             if (data.data.code == 'success') {
+                    //                 this.drawer2 = true;
+                    //                 var oData = JSON.parse(Decrypt(data.data.data));
+                    //                 console.log(oData);
+                    //                 console.log(this.query);
+                    //                 this.goldData = oData.data;
+                    //                 console.log(this.sellTableData);
+                    //                 this.query.aPageSize = oData.pageSize;
+                    //                 this.query.aPageNo = oData.pageNo;
+                    //                 this.query.aTotalCount = oData.totalCount;
+                    //                 this.query.aTotalPage = oData.totalPage;
+                    //             } else if (data.data.code == 'nologin') {
+                    //                 this.message = data.data.message;
+                    //                 this.open();
+                    //                 this.$router.push('/login');
+                    //             } else {
+                    //                 this.message = data.data.message;
+                    //                 this.open();
+                    //             }
+                    //         })
+                    //         .catch(err => {
+                    //             loading.close();
+                    //             console.log(err);
+                    //         });
+                    // }
+                    // //跳转到修改金币商品
+                    // else if (this.oTabType == 3) {
+                    //     let name = this.query.name;
+                    //     if (!name) {
+                    //         name = '';
+                    //     }
+                    //     if (this.form.cinemaCodes.length == 0) {
+                    //         this.message = '请选择影院!';
+                    //         loading.close();
+                    //         this.open();
+                    //         return;
+                    //     }
+                    //     let cinemaCodes = this.form.cinemaCodes.join(',');
+                    //     let jsonArr = [];
+                    //     jsonArr.push({ key: 'name', value: name });
+                    //     jsonArr.push({ key: 'cinemaCode', value: cinemaCodes });
+                    //     jsonArr.push({ key: 'pageNo', value: this.query.aPageNo });
+                    //     jsonArr.push({ key: 'pageSize', value: this.query.aPageSize });
+                    //     let sign = md5(preSign(jsonArr));
+                    //     jsonArr.push({ key: 'sign', value: sign });
+                    //     var params = ParamsAppend(jsonArr);
+                    //     https
+                    //         .fetchPost('/goldCommodity/getByCinemaPage', params)
+                    //         .then(data => {
+                    //             loading.close();
+                    //             if (data.data.code == 'success') {
+                    //                 this.drawer = true;
+                    //                 var oData = JSON.parse(Decrypt(data.data.data));
+                    //                 this.goldData = oData.data;
+                    //                 this.query.aPageSize = oData.pageSize;
+                    //                 this.query.aPageNo = oData.pageNo;
+                    //                 this.query.aTotalCount = oData.totalCount;
+                    //                 this.query.aTotalPage = oData.totalPage;
+                    //             } else if (data.data.code == 'nologin') {
+                    //                 this.message = data.data.message;
+                    //                 this.open();
+                    //                 this.$router.push('/login');
+                    //             } else {
+                    //                 this.message = data.data.message;
+                    //                 this.open();
+                    //             }
+                    //         })
+                    //         .catch(err => {
+                    //             loading.close();
+                    //             console.log(err);
+                    //         });
+                    // }
                 }, 500);
             },
             openNext1() {
@@ -1239,7 +1246,7 @@
                             });
                     }
                     //跳转到电影
-                    if (this.oTabType == 2) {
+                    else if (this.oTabType == 2) {
                         let filmName = this.query.filmName;
                         if (!filmName) {
                             filmName = '';
@@ -1289,7 +1296,7 @@
                             });
                     }
                     //跳转到金币商品
-                    if (this.oTabType == 3) {
+                    else if (this.oTabType == 3) {
                         let name = this.query.name;
                         if (!name) {
                             name = '';
@@ -1309,6 +1316,7 @@
                         let sign = md5(preSign(jsonArr));
                         jsonArr.push({ key: 'sign', value: sign });
                         var params = ParamsAppend(jsonArr);
+                        console.log(jsonArr)
                         https
                             .fetchPost('/goldCommodity/getByCinemaPage', params)
                             .then(data => {
@@ -1406,7 +1414,7 @@
                     return;
                 }
                 if (!this.oForm.imageUrl) {
-                    this.message = '图片地址不能为空，请检查！';
+                    this.message = '轮播图图片地址不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
@@ -1597,6 +1605,7 @@
                                 //是否显示下拉选显示对应的选项
                                 this.cinemaList = JSON.parse(Decrypt(data.data.data)).cinemaList; //适用影院编码
                                 this.form.cinemaCodes = JSON.parse(Decrypt(data.data.data)).banner.cinemaCodes.split(',');
+                                console.log(JSON.parse(Decrypt(data.data.data)))
                                 this.changeStartTime = JSON.parse(Decrypt(data.data.data)).banner.startDate; //创建时间
                                 this.changeEndTime = JSON.parse(Decrypt(data.data.data)).banner.endDate; //结束时间
                                 this.form.memo = JSON.parse(Decrypt(data.data.data)).banner.memo; //备注
@@ -1677,7 +1686,7 @@
                     return;
                 }
                 if (!this.imageUrl) {
-                    this.message = '图片地址不能为空，请检查！';
+                    this.message = '轮播图图片地址不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;

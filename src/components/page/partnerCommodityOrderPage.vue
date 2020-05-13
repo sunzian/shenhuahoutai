@@ -161,6 +161,13 @@
                         :disabled="true"
                         autocomplete="off"
                 ></el-input>
+                总购买数量：
+                <el-input
+                        style="width: 150px"
+                        v-model="totalData.totalNumber"
+                        :disabled="true"
+                        autocomplete="off"
+                ></el-input>
             </div>
             <el-table
                     :data="tableData"
@@ -202,13 +209,13 @@
                         <el-tag v-else-if="scope.row. payStatus=='2'">兑换失败</el-tag>
                     </template>
                 </el-table-column>
-                <!--<el-table-column prop="memo" label="兑换方式" width="120">-->
-                <!--<template slot-scope="scope">-->
-                <!--<el-tag v-if="scope.row.changeType=='1'">纯金币兑换</el-tag>-->
-                <!--<el-tag v-else-if="scope.row.changeType=='2'">纯RMB兑换</el-tag>-->
-                <!--<el-tag v-else-if="scope.row.changeType=='3'">金币加RMB兑换</el-tag>-->
-                <!--</template>-->
-                <!--</el-table-column>-->
+                <el-table-column prop="memo" label="退款状态" width="120">
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row.refundStatus=='0'">未退款</el-tag>
+                        <el-tag v-else-if="scope.row.refundStatus=='1'">退款成功</el-tag>
+                        <el-tag v-else-if="scope.row.refundStatus=='2'">退款失败</el-tag>
+                    </template>
+                </el-table-column>
                 <el-table-column label="取货方式" align="center" width="80">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.pickupWay=='1'">自提</el-tag>
@@ -281,7 +288,7 @@
                         >查看详情
                         </el-button>
                         <el-button
-                                v-if="scope.row.pickupWay=='2'"
+                                v-if="scope.row.pickupWay=='2' && scope.row.refundStatus != '1'"
                                 type="text"
                                 icon="el-icon-setting"
                                 @click="logChange(scope.$index, scope.row)"
@@ -433,6 +440,7 @@
                 <el-form-item label="收货人地址" :label-width="formLabelWidth">
                     <el-input
                             :disabled="true"
+                            type="textarea"
                             style="width: 250px"
                             v-model="form.deliveryAddressDetail"
                             autocomplete="off"
@@ -569,6 +577,7 @@
                 <el-form-item label="收货人地址" :label-width="formLabelWidth">
                     <el-input
                             :disabled="true"
+                            type="textarea"
                             style="width: 250px"
                             v-model="form1.deliveryAddressDetail"
                             autocomplete="off"

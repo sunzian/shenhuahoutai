@@ -82,6 +82,9 @@
                         <el-tag v-else-if="scope.row.commonType == 2">部分影院</el-tag>
                     </template>
                 </el-table-column>
+                <el-table-column prop="sort" label="排序" width="80">
+                    <template slot-scope="scope">{{scope.row.sortNo}}</template>
+                </el-table-column>
                 <el-table-column prop="sort" label="影院名称" width="260">
                     <template slot-scope="scope">{{scope.row.cinemaNames}}</template>
                 </el-table-column>
@@ -208,11 +211,11 @@
                 </el-form-item>
                 <el-form-item :required="true" label="活动名称" :label-width="formLabelWidth">
                     <el-input
-                            maxlength="20"
+                            maxlength="50"
                             style="width: 250px"
                             v-model="oForm.activityName"
                             autocomplete="off"
-                            placeholder="限20个汉字"
+                            placeholder="限50个汉字"
                     ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="活动时间" :label-width="formLabelWidth">
@@ -278,6 +281,7 @@
                 <el-form-item
                         :required="true"
                         label="限购数量"
+                        onkeyup="this.value=this.value.replace(/\D/g,'')"
                         v-if="oForm.purchaseType==2"
                         :label-width="formLabelWidth"
                 >
@@ -353,8 +357,17 @@
                             show-word-limit
                             style="width: 150px"
                             v-model="oForm.commodityStore"
+                            onkeyup="this.value=this.value.replace(/\D/g,'')"
                             placeholder="请输入大于0的数字"
                     ></el-input>
+                </el-form-item>
+                <el-form-item :required="true" label="排序" :label-width="formLabelWidth">
+                    <el-input
+                            style="width: 150px"
+                            v-model="oForm.sortNo"
+                            maxlength="9"
+                    ></el-input>
+                    <span style="color:red">请输入大于等于0的数字，数值越大越靠前</span>
                 </el-form-item>
                 <el-form-item :required="true" label="开启状态" :label-width="formLabelWidth">
                     <el-select v-model="oForm.status" placeholder="请选择">
@@ -438,11 +451,11 @@
                 </el-form-item>
                 <el-form-item :required="true" label="活动名称" :label-width="formLabelWidth">
                     <el-input
-                            maxlength="20"
+                            maxlength="50"
                             style="width: 250px"
                             v-model="oActivityName"
                             autocomplete="off"
-                            placeholder="限20个汉字"
+                            placeholder="限50个汉字"
                     ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="活动时间" :label-width="formLabelWidth">
@@ -508,6 +521,7 @@
                 <el-form-item
                         :required="true"
                         label="限购数量"
+                        onkeyup="this.value=this.value.replace(/\D/g,'')"
                         v-if="oPurchaseType==2"
                         :label-width="formLabelWidth"
                 >
@@ -583,6 +597,7 @@
                             show-word-limit
                             style="width: 150px"
                             v-model="oCommodityStore"
+                            onkeyup="this.value=this.value.replace(/\D/g,'')"
                             placeholder="请输入大于0的数字"
                     ></el-input>
                 </el-form-item>
@@ -593,6 +608,14 @@
                             style="width: 150px"
                             v-model="oHasSoldNumber"
                     ></el-input>
+                </el-form-item>
+                <el-form-item :required="true" label="排序" :label-width="formLabelWidth">
+                    <el-input
+                            style="width: 150px"
+                            v-model="oSortNo"
+                            maxlength="9"
+                    ></el-input>
+                    <span style="color:red">请输入大于等于0的数字，数值越大越靠前</span>
                 </el-form-item>
                 <el-form-item :required="true" label="开启状态" :label-width="formLabelWidth">
                     <el-select v-model="oStatus" placeholder="请选择">
@@ -812,6 +835,7 @@
                 selectFilmType: '',
                 oFilmName: '',
                 oName: '',
+                oSortNo: '',
                 oCreateDate: '',
                 oValidPayType: '',
                 oReduceType: '',
@@ -931,6 +955,7 @@
                     gold: '',
                     money: '',
                     name: '',
+                    sortNo: '0',
                     cinemaName: '',
                     showStatus: '2',
                     cinemaCode: [],
@@ -1174,6 +1199,7 @@
                 jsonArr.push({ key: 'endDate', value: this.oForm.endDate });
                 jsonArr.push({ key: 'showStatus', value: this.oForm.showStatus });
                 jsonArr.push({ key: 'activityImage', value: this.oForm.activityImage });
+                jsonArr.push({ key: 'sortNo', value: this.oForm.sortNo.toString() });
                 // jsonArr.push({ key: 'startTimePoints', value: this.startArr.join(',') });
                 // jsonArr.push({ key: 'endTimePoints', value: this.endArr.join(',') });
                 jsonArr.push({ key: 'purchaseType', value: this.oForm.purchaseType });
@@ -1201,12 +1227,16 @@
                             if (data.data.code == 'success') {
                                 this.dialogFormVisible = false;
                                 this.$message.success(`新增成功`);
+                                if (this.oForm.activityImage != '') {
+                                    this.$refs.download.clearFiles();
+                                };
                                 this.oForm.activityName = '';
                                 this.oForm.activityImage = '';
                                 this.oForm.commonType = '';
                                 this.selectGoodsCode = {};
                                 this.oForm.startDate = '';
                                 this.oForm.endDate = '';
+                                this.oForm.sortNo = '0';
                                 this.dateInfo = [];
                                 this.startArr = [];
                                 this.endArr = [];
@@ -1309,13 +1339,16 @@
                             console.log(JSON.parse(Decrypt(data.data.data)));
                             this.oCommonType = JSON.parse(Decrypt(data.data.data)).commonType;
                             this.oMerchandiseCode = [];
-                            if (JSON.parse(Decrypt(data.data.data)).cinemaCodes) {
-                                this.oMerchandiseCode = JSON.parse(Decrypt(data.data.data)).cinemaCodes.split(',');
+                            if (this.oCommonType == 2) {
+                                if (JSON.parse(Decrypt(data.data.data)).cinemaCodes) {
+                                    this.oMerchandiseCode = JSON.parse(Decrypt(data.data.data)).cinemaCodes.split(',');
+                                }
+                                this.selectGoodsCode = JSON.parse(Decrypt(data.data.data)).cinemaCodes.split(',');
                             }
-                            this.selectGoodsCode = JSON.parse(Decrypt(data.data.data)).cinemaCodes.split(',');
                             this.oActivityName = JSON.parse(Decrypt(data.data.data)).activityName;
                             this.oActivityImg = JSON.parse(Decrypt(data.data.data)).activityImage;
                             this.oStartDate = JSON.parse(Decrypt(data.data.data)).startDate;
+                            this.oSortNo = JSON.parse(Decrypt(data.data.data)).sortNo;
                             this.oEndDate = JSON.parse(Decrypt(data.data.data)).endDate;
                             for (let x in this.canUse1) {
                                 if (this.canUse1[x].value == JSON.parse(Decrypt(data.data.data)).purchaseType) {
@@ -1396,6 +1429,7 @@
                 jsonArr.push({ key: 'commodityId', value: this.commodityId });
                 jsonArr.push({ key: 'changeType', value: this.oChangeType });
                 jsonArr.push({ key: 'gold', value: this.oGold });
+                jsonArr.push({ key: 'sortNo', value: this.oSortNo });
                 jsonArr.push({ key: 'money', value: this.oMoney });
                 jsonArr.push({ key: 'commodityStore', value: this.oCommodityStore });
                 jsonArr.push({ key: 'hasSoldNumber', value: this.oHasSoldNumber });
@@ -1413,7 +1447,11 @@
                         if (data.data.code == 'success') {
                             this.editVisible = false;
                             this.$message.success(`编辑成功`);
+                            if (this.oActivityImg != '') {
+                                this.$refs.download.clearFiles();
+                            };
                             this.oActivityName = '';
+                            this.oActivityImg = '';
                             this.oCommonType = '';
                             this.selectGoodsCode = {};
                             this.oStartDate = '';
