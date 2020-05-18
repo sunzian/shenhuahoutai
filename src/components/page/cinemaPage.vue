@@ -677,6 +677,7 @@
                 </el-form-item>
                 <el-form-item label="短信平台密码" :label-width="formLabelWidth">
                     <el-input
+                        type="password"
                         style="width: 250px"
                         v-model="oForm.messagePlatformPassword"
                         autocomplete="off"
@@ -745,6 +746,22 @@
                     <el-input
                             style="width: 350px"
                             v-model="oForm.templateType6"
+                            autocomplete="off"
+                            placeholder="模板id"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="开团结果通知" :label-width="formLabelWidth">
+                    <el-input
+                            style="width: 350px"
+                            v-model="oForm.templateType7"
+                            autocomplete="off"
+                            placeholder="模板id"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="拼团结果通知" :label-width="formLabelWidth">
+                    <el-input
+                            style="width: 350px"
+                            v-model="oForm.templateType8"
                             autocomplete="off"
                             placeholder="模板id"
                     ></el-input>
@@ -874,6 +891,7 @@
                 </el-form-item>
                 <el-form-item prop="miniAppSecret" label="小程序appSecret" :label-width="formLabelWidth">
                     <el-input
+                        type="password"
                         style="width: 250px"
                         v-model="oForm.miniAppSecret"
                         autocomplete="off"
@@ -888,6 +906,7 @@
                 </el-form-item>
                 <el-form-item prop="miniMerchantSecret" label="小程序支付密钥" :label-width="formLabelWidth">
                     <el-input
+                        type="password"
                         style="width: 250px"
                         v-model="oForm.miniMerchantSecret"
                         autocomplete="off"
@@ -1396,6 +1415,7 @@
                 </el-form-item>
                 <el-form-item label="短信平台密码" :label-width="formLabelWidth">
                     <el-input
+                        type="password"
                         style="width: 250px"
                         v-model="oMessagePlatformPassword"
                         autocomplete="off"
@@ -1464,6 +1484,22 @@
                     <el-input
                             style="width: 350px"
                             v-model="oTemplateType6"
+                            autocomplete="off"
+                            placeholder="模板id"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="开团结果通知" :label-width="formLabelWidth">
+                    <el-input
+                            style="width: 350px"
+                            v-model="oTemplateType7"
+                            autocomplete="off"
+                            placeholder="模板id"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="拼团结果通知" :label-width="formLabelWidth">
+                    <el-input
+                            style="width: 350px"
+                            v-model="oTemplateType8"
                             autocomplete="off"
                             placeholder="模板id"
                     ></el-input>
@@ -1613,6 +1649,7 @@
                 </el-form-item>
                 <el-form-item prop="miniAppSecret" label="小程序appSecret" :label-width="formLabelWidth">
                     <el-input
+                        type="password"
                         style="width: 250px"
                         v-model="oMiniAppSecret"
                         autocomplete="off"
@@ -1627,6 +1664,7 @@
                 </el-form-item>
                 <el-form-item prop="miniMerchantSecret" label="小程序支付密钥" :label-width="formLabelWidth">
                     <el-input
+                        type="password"
                         style="width: 250px"
                         v-model="oMiniMerchantSecret"
                         autocomplete="off"
@@ -1684,6 +1722,7 @@
                 </el-form-item>
                 <el-form-item prop="ticketingSystemPassword" label="售票系统密码" :label-width="formLabelWidth">
                     <el-input
+                            type="password"
                             style="width: 150px"
                             v-model="oTicketingSystemPassword"
                             autocomplete="off"
@@ -1868,6 +1907,8 @@ export default {
             oTemplateType4: '',
             oTemplateType5: '',
             oTemplateType6: '',
+            oTemplateType7: '',
+            oTemplateType8: '',
             oOpenStatus: '',
             oExpireDate: '',
             oPaymentType: '',
@@ -1988,6 +2029,8 @@ export default {
                 templateType4: '',
                 templateType5: '',
                 templateType6: '',
+                templateType7: '',
+                templateType8: '',
                 messagePlatformAccount: '',
                 messagePlatformPassword: '',
                 messagePlatformSignId: '',
@@ -2344,6 +2387,12 @@ export default {
             }
             if (this.oForm.templateType6) {
                 templateInfos.push({ 'templateType':  6 , 'templateId': this.oForm.templateType6 });
+            }
+            if (this.oForm.templateType7) {
+                templateInfos.push({ 'templateType':  7 , 'templateId': this.oForm.templateType7 });
+            }
+            if (this.oForm.templateType8) {
+                templateInfos.push({ 'templateType':  8 , 'templateId': this.oForm.templateType8 });
             }
             if (templateInfos.length>0) {
                 jsonArr.push({ key: 'subscribeTemplateJson', value: JSON.stringify(templateInfos)})
@@ -2718,6 +2767,12 @@ export default {
                             if (JSON.parse(Decrypt(data.data.data)).subscribeTemplateList[i].templateType == 6) {
                                 this.oTemplateType6 = JSON.parse(Decrypt(data.data.data)).subscribeTemplateList[i].templateId
                             }
+                            if (JSON.parse(Decrypt(data.data.data)).subscribeTemplateList[i].templateType == 7) {
+                                this.oTemplateType7 = JSON.parse(Decrypt(data.data.data)).subscribeTemplateList[i].templateId
+                            }
+                            if (JSON.parse(Decrypt(data.data.data)).subscribeTemplateList[i].templateType == 8) {
+                                this.oTemplateType8 = JSON.parse(Decrypt(data.data.data)).subscribeTemplateList[i].templateId
+                            }
                         }
                         if(JSON.parse(Decrypt(data.data.data)).CinemaMessagePlatFormInfo){
                             this.oMessagePlatformAccount = JSON.parse(Decrypt(data.data.data)).CinemaMessagePlatFormInfo.messagePlatformAccount;
@@ -2815,6 +2870,8 @@ export default {
             templateInfos.push({ 'templateType':  4 , 'templateId': this.oTemplateType4 });
             templateInfos.push({ 'templateType':  5 , 'templateId': this.oTemplateType5 });
             templateInfos.push({ 'templateType':  6 , 'templateId': this.oTemplateType6 });
+            templateInfos.push({ 'templateType':  7 , 'templateId': this.oTemplateType7 });
+            templateInfos.push({ 'templateType':  8 , 'templateId': this.oTemplateType8 });
             jsonArr.push({ key: 'subscribeTemplateJson', value: JSON.stringify(templateInfos)});
             jsonArr.push({ key: 'messagePlatformAccount', value: this.oMessagePlatformAccount });
             jsonArr.push({ key: 'messagePlatformPassword', value: this.oMessagePlatformPassword });

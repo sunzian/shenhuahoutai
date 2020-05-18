@@ -621,6 +621,11 @@ export default new Router({
                     meta: { title: '影院APP信息维护' }
                 },
                 {
+                    path: '/partnerGroupOrderPage',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/partnerGroupOrderPage.vue'),
+                    meta: { title: '商户拼团订单' }
+                },
+                {
                     path: '/404',
                     component: () => import(/* webpackChunkName: "404" */ '../components/page/404.vue'),
                     meta: { title: '404' }

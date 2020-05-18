@@ -281,11 +281,10 @@
                 <el-form-item
                         :required="true"
                         label="限购数量"
-                        onkeyup="this.value=this.value.replace(/\D/g,'')"
                         v-if="oForm.purchaseType==2"
                         :label-width="formLabelWidth"
                 >
-                    <el-input placeholder="请输入正确的的数字" style="width: 150px" v-model="oForm.purchaseCount " autocomplete="off"></el-input>
+                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" placeholder="请输入正确的的数字" style="width: 150px" v-model="oForm.purchaseCount " autocomplete="off"></el-input>
                 </el-form-item>
                 <!-- <el-form-item :required="true" label="是否可发送短信提醒用户" :label-width="formLabelWidth">
                     <el-select v-model="oForm.smsStatus" placeholder="请选择">
@@ -521,11 +520,10 @@
                 <el-form-item
                         :required="true"
                         label="限购数量"
-                        onkeyup="this.value=this.value.replace(/\D/g,'')"
                         v-if="oPurchaseType==2"
                         :label-width="formLabelWidth"
                 >
-                    <el-input placeholder="请输入正确的的数字" style="width: 150px" v-model="oPurchaseCount " autocomplete="off"></el-input>
+                    <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" placeholder="请输入正确的的数字" style="width: 150px" v-model="oPurchaseCount " autocomplete="off"></el-input>
                 </el-form-item>
                 <!-- <el-form-item :required="true" label="是否可发送短信提醒用户" :label-width="formLabelWidth">
                     <el-select v-model="oSmsStatus" placeholder="请选择">

@@ -321,6 +321,13 @@
                                 @click="statusChange(scope.$index, scope.row)"
                         >核销
                         </el-button>
+                        <el-button
+                                v-if="scope.row.groupStatus=='2' && scope.row.settleStatus=='1'"
+                                type="text"
+                                icon="el-icon-setting"
+                                @click="settle(scope.$index, scope.row)"
+                        >订单结算
+                        </el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -932,6 +939,53 @@
             },
             changeExcel(file, fileList) {
                 this.hasExcel = true;
+            },
+            settle(index, row) {
+                this.$confirm('此操作将结算订单, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                })
+                    .then(() => {
+                        const loading = this.$loading({
+                            lock: true,
+                            text: 'Loading',
+                            spinner: 'el-icon-loading',
+                            background: 'rgba(0, 0, 0, 0.7)',
+                            target: document.querySelector('.div1')
+                        });
+                        var jsonArr = [];
+                        jsonArr.push({ key: 'id', value: row.id });
+                        let sign = md5(preSign(jsonArr));
+                        jsonArr.push({ key: 'sign', value: sign });
+                        let params = ParamsAppend(jsonArr);
+                        https
+                            .fetchPost('/groupOrder/settleOrder', params)
+                            .then(data => {
+                                loading.close();
+                                if (data.data.code == 'success') {
+                                    this.message = `订单结算成功！`;
+                                    this.open();
+                                    this.getMenu();
+                                } else if (data.data.code == 'nologin') {
+                                    this.message = data.data.message;
+                                    this.open();
+                                    this.$router.push('/login');
+                                } else {
+                                    this.message = data.data.message;
+                                    this.open();
+                                }
+                            })
+                            .catch(err => {
+                                console.log(err);
+                            });
+                    })
+                    .catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '已取消操作'
+                        });
+                    });
             },
             beforeExcel(file) {
                 const extension = file.name.split('.')[file.name.split('.').length - 1] === 'xls';

@@ -170,25 +170,21 @@
                     <el-input
                         :rows="5"
                         min="1"
-                        type="textarea"
+                        type="password"
                         v-model="oForm.aliAppSecret"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="支付宝公钥" :label-width="formLabelWidth">
                     <el-input
-                        :rows="5"
-                        min="1"
-                        type="textarea"
+                        type="password"
                         v-model="oForm.aliPublicKey"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="支付宝私钥" :label-width="formLabelWidth">
                     <el-input
-                        :rows="5"
-                        min="1"
-                        type="textarea"
+                        type="password"
                         v-model="oForm.aliPrivateKey"
                         autocomplete="off"
                     ></el-input>
@@ -201,6 +197,7 @@
                 </el-form-item>
                 <el-form-item :required="true" label="微信appSecret" :label-width="formLabelWidth">
                     <el-input
+                        type="password"
                         v-model="oForm.wechatAppSecret"
                         autocomplete="off"
                     ></el-input>
@@ -213,6 +210,7 @@
                 </el-form-item>
                 <el-form-item :required="true" label="微信支付密钥" :label-width="formLabelWidth">
                     <el-input
+                        type="password"
                         v-model="oForm.wechatPaySecret"
                         autocomplete="off"
                     ></el-input>
@@ -297,25 +295,21 @@
                     <el-input
                         :rows="5"
                         min="1"
-                        type="textarea"
+                        type="password"
                         v-model="eForm.aliAppSecret"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="支付宝公钥" :label-width="formLabelWidth">
                     <el-input
-                        :rows="5"
-                        min="1"
-                        type="textarea"
+                        type="password"
                         v-model="eForm.aliPublicKey"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="支付宝私钥" :label-width="formLabelWidth">
                     <el-input
-                        :rows="5"
-                        min="1"
-                        type="textarea"
+                        type="password"
                         v-model="eForm.aliPrivateKey"
                         autocomplete="off"
                     ></el-input>
@@ -328,6 +322,7 @@
                 </el-form-item>
                 <el-form-item :required="true" label="微信appSecret" :label-width="formLabelWidth">
                     <el-input
+                        type="password"
                         v-model="eForm.wechatAppSecret"
                         autocomplete="off"
                     ></el-input>
@@ -340,6 +335,7 @@
                 </el-form-item>
                 <el-form-item :required="true" label="微信支付密钥" :label-width="formLabelWidth">
                     <el-input
+                        type="password"
                         v-model="eForm.wechatPaySecret"
                         autocomplete="off"
                     ></el-input>

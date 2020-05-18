@@ -216,7 +216,7 @@
                 <!-- <el-table-column prop="sort" label="对应上方参数的具体日期信息" width="160">
                     <template slot-scope="scope">{{scope.row.assignInfo}}</template>
                 </el-table-column>-->
-                <!-- <el-table-column prop="sort" label="是否限制一段时间内可兑换数量" width="160">
+                <!-- <el-table-column prop="sort" label="是否限购" width="160">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.limitType=='0'"
                         >不限制</el-tag>
@@ -663,7 +663,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item :required="true" label="是否限制一段时间内可兑换数量" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="是否限购" :label-width="formLabelWidth">
                     <el-select v-model="oForm.limit_type" placeholder="请选择限制时间">
                         <el-option
                                 v-for="item in limitType"
@@ -1127,7 +1127,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item :required="true" label="是否限制一段时间内可兑换数量" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="是否限购" :label-width="formLabelWidth">
                     <el-select v-model="form.limitType" placeholder="请选择限制时间">
                         <el-option
                                 v-for="item in limitType"
@@ -1822,7 +1822,7 @@
                 limitType: [
                     {
                         value: '1',
-                        label: '不限制'
+                        label: '不限购'
                     },
                     {
                         value: '5',
@@ -2374,7 +2374,7 @@
                     }
                 }
                 if (!this.oForm.limit_type) {
-                    this.message = '是否限制一段时间内可兑换数量不能为空，请检查！';
+                    this.message = '是否限购不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
@@ -2741,7 +2741,7 @@
                                     }
                                 }
 
-                                //是否限制一段时间内可兑换数量下拉选显示对应的选项
+                                //是否限购下拉选显示对应的选项
                                 for (let x in this.limitType) {
                                     if (this.limitType[x].value == JSON.parse(Decrypt(data.data.data)).goldCommodity.limitType) {
                                         this.form.limitType = this.limitType[x].value;
@@ -3003,7 +3003,7 @@
                     }
                 }
                 if (!this.form.limitType) {
-                    this.message = '是否限制一段时间内可兑换数量不能为空，请检查！';
+                    this.message = '是否限购不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;

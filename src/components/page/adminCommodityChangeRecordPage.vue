@@ -105,9 +105,10 @@
                     placeholder="兑换状态"
                     class="handle-select mr10"
                 >
-                    <el-option key="0" label="待支付" value="0"></el-option>
+                    <!-- <el-option key="0" label="待支付" value="0"></el-option> -->
                     <el-option key="1" label="兑换成功" value="1"></el-option>
                     <el-option key="2" label="兑换失败" value="2"></el-option>
+                    <el-option key="3" label="兑换超时" value="3"></el-option>
                 </el-select>
                 <el-select
                     clearable
@@ -237,6 +238,7 @@
                         <el-tag v-if="scope.row. payStatus=='0'">待支付</el-tag>
                         <el-tag v-else-if="scope.row. payStatus=='1'">兑换成功</el-tag>
                         <el-tag v-else-if="scope.row. payStatus=='2'">兑换失败</el-tag>
+                        <el-tag v-else-if="scope.row. payStatus=='3'">兑换超时</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column prop="memo" label="退款状态" width="120">
