@@ -244,14 +244,14 @@
                 <el-table-column prop="memo" label="兑换时间" width="160">
                     <template slot-scope="scope">{{scope.row.payTime}}</template>
                 </el-table-column>
-                <el-table-column label="兑换状态" align="center" width="80">
+                <el-table-column label="兑换状态" align="center" width="120">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.payStatus=='0'">待支付</el-tag>
                         <el-tag v-else-if="scope.row.payStatus=='1'">兑换成功</el-tag>
                         <el-tag v-else-if="scope.row.payStatus=='2'">兑换失败</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="拼团状态" align="center" width="80">
+                <el-table-column label="拼团状态" align="center" width="120">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.groupStatus=='0'">待拼团</el-tag>
                         <el-tag v-else-if="scope.row.groupStatus=='1'">拼团中</el-tag>

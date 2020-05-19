@@ -10,6 +10,7 @@
         <div class="container">
             <div class="handle-box">
                 <el-input placeholder="用户名" class="mr10" v-model="query.userName" autocomplete="off"></el-input>
+                <el-input placeholder="角色名" class="mr10" v-model="query.roleName" autocomplete="off"></el-input>
                 <el-input placeholder="真实姓名" class="mr10" v-model="query.realName" autocomplete="off"></el-input>
                 <el-select clearable v-model="query.status" placeholder="状态" class="handle-select mr10">
                     <el-option key="1" label="正常" value="1"></el-option>
@@ -37,6 +38,9 @@
             >
                 <el-table-column prop="name" label="用户名" width="190">
                     <template slot-scope="scope">{{scope.row.userName}}</template>
+                </el-table-column>
+                <el-table-column prop="name" label="角色名" width="190">
+                    <template slot-scope="scope">{{scope.row.roleName}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="真实姓名" width="190">
                     <template slot-scope="scope">{{scope.row.realName}}</template>
@@ -918,10 +922,14 @@
                 });
                 setTimeout(() => {
                     let realName = this.query.realName;
+                    let roleName = this.query.roleName;
                     let userName = this.query.userName;
                     let status = this.query.status;
                     if (!realName) {
                         realName = '';
+                    }
+                    if (!roleName) {
+                        roleName = '';
                     }
                     if (!userName) {
                         userName = '';
@@ -931,6 +939,7 @@
                     }
                     let jsonArr = [];
                     jsonArr.push({ key: 'realName', value: realName });
+                    jsonArr.push({ key: 'roleName', value: roleName });
                     jsonArr.push({ key: 'userName', value: userName });
                     jsonArr.push({ key: 'status', value: status });
                     jsonArr.push({ key: 'pageNo', value: this.query.pageNo });

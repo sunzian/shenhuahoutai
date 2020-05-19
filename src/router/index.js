@@ -626,6 +626,16 @@ export default new Router({
                     meta: { title: '商户拼团订单' }
                 },
                 {
+                    path: '/adminGroupActivityPage',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/adminGroupActivityPage.vue'),
+                    meta: { title: '拼团活动管理' }
+                },
+                {
+                    path: '/adminGroupOrder',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/adminGroupOrder.vue'),
+                    meta: { title: '拼团订单' }
+                },
+                {
                     path: '/404',
                     component: () => import(/* webpackChunkName: "404" */ '../components/page/404.vue'),
                     meta: { title: '404' }

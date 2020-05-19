@@ -124,7 +124,7 @@
                     <template slot-scope="scope">
                         <el-button
                                 type="success"
-                                v-if="scope.row.status == 2"
+                                v-if="scope.row.status == 2 && scope.row.groupStatus == 1"
                                 @click="changeStatus(scope.$index, scope.row)"
                         >启用
                         </el-button>

@@ -213,14 +213,23 @@
                     label="选择影院"
                     :label-width="formLabelWidth"
                 >
-                    <el-radio-group v-model="oForm.cinemaCode" @change="selectCinema">
+                    <!-- <el-radio-group v-model="oForm.cinemaCode" @change="selectCinema">
                         <el-radio
                             v-for="item in cinemaInfo"
                             :label="item.cinemaCode"
                             :key="item.cinemaCode"
                             :value="item.cinemaName"
                         >{{item.cinemaName}}</el-radio>
-                    </el-radio-group>
+                    </el-radio-group> -->
+                    <el-checkbox-group v-model="oForm.cinemaCode" @change="selectCinema">
+                        <el-checkbox
+                                v-for="item in cinemaInfo"
+                                :key="item.cinemaCode"
+                                :label="item.cinemaCode"
+                                :value="item.cinemaName"
+                        >{{item.cinemaName}}
+                        </el-checkbox>
+                    </el-checkbox-group>
                 </el-form-item>
                 <!--<el-form-item :required="true" label="权益类型" :label-width="formLabelWidth">-->
                 <!--<el-radio-group v-model="oForm.cardType" @change="clearCardType()">-->
@@ -949,14 +958,23 @@
                     label="选择影院"
                     :label-width="formLabelWidth"
                 >
-                    <el-radio-group v-model="oForm.cinemaCode" @change="selectCinema">
+                    <!-- <el-radio-group v-model="oForm.cinemaCode" @change="selectCinema">
                         <el-radio
                             v-for="item in cinemaInfo"
                             :label="item.cinemaCode"
                             :key="item.cinemaCode"
                             :value="item.cinemaName"
                         >{{item.cinemaName}}</el-radio>
-                    </el-radio-group>
+                    </el-radio-group> -->
+                    <el-checkbox-group v-model="oForm.cinemaCode" @change="selectCinema">
+                        <el-checkbox
+                                v-for="item in cinemaInfo"
+                                :key="item.cinemaCode"
+                                :label="item.cinemaCode"
+                                :value="item.cinemaName"
+                        >{{item.cinemaName}}
+                        </el-checkbox>
+                    </el-checkbox-group>
                 </el-form-item>
                 <!--<el-form-item :required="true" label="权益类型" :label-width="formLabelWidth">-->
                 <!--<el-radio-group v-model="oCardType" @change="clearCardType()">-->
@@ -2173,7 +2191,7 @@ export default {
             this.oSelectedSell = [];
         },
         changeCommonType() {
-            if (this.oForm.commonType == '2') {
+            if (this.oForm.commonType == '2' || this.oForm.cinemaCode.length > 1) {
                 this.showCommonType = true;
                 this.oForm.selectHallType = '0';
                 this.oForm.selectFilmFormatType = '0';
@@ -2189,7 +2207,10 @@ export default {
                 this.groupName = '';
             }
         },
+
+        // 影票是否参加
         clearFilmJoin() {
+            this.changeCommonType();
             this.oForm.filmSimpleDesc = '';
             this.oForm.selectHallType = '0';
             this.clearScreenCode();
@@ -2215,7 +2236,10 @@ export default {
             this.oLimitFilmUnit = '';
             this.oNumberFilm = '';
         },
+
+        // 卖品是否参加
         clearMerchandiseJoin() {
+            this.changeCommonType();
             this.clearDiscountMoneyMerchandise();
             this.oForm.merchandiseSimpleDesc = '';
             this.oForm.reduceTypeMerchandise = '';
@@ -2231,27 +2255,39 @@ export default {
             this.oNumberMerchandise = '';
             this.oSelectedSell = [];
         },
+
+        // 卖品优惠方式
         clearDiscountMoneyMerchandise() {
             this.oForm.discountMoneyMerchandise = '';
             this.oForm.achieveMoneyMerchandise = '';
             this.oDiscountMoneyMerchandise = '';
             this.oAchieveMoneyMerchandise = '';
         },
+
+        // 影票优惠方式
         clearDiscountMoneyFilm() {
             this.oForm.discountMoneyFilm = '';
             this.oDiscountMoneyFilm = '';
         },
+
+        // 选择影片
         clearSelectedSell() {
             this.selectedSell = [];
         },
+
+        // 选择制式
         clearFilmFormatCode() {
             this.oForm.filmFormatCode = [];
             this.oFilmFormatCode = [];
         },
+
+        // 选择影厅
         clearScreenCode() {
             this.oForm.screenCode = [];
             this.oScreenCode = [];
         },
+
+        // 是否限制购买次数
         clearLimitBuyNumber() {
             this.oForm.limitBuyNumber = '';
             this.oLimitBuyNumber = '';
@@ -2279,7 +2315,8 @@ export default {
             if (this.oForm.commonType == '2') {
                 jsonArr.push({ key: 'commonType', value: 1 });
             } else {
-                jsonArr.push({ key: 'cinemaCodes', value: this.oForm.cinemaCode });
+                jsonArr.push({ key: 'commonType', value: 2 });
+                jsonArr.push({ key: 'cinemaCodes', value: this.oForm.cinemaCode.join(",") });
             }
             jsonArr.push({ key: 'groupName', value: groupName });
             jsonArr.push({ key: 'status', value: 1 });
@@ -2435,7 +2472,7 @@ export default {
                 loading.close();
                 return;
             }
-            if (!this.oForm.cinemaCode) {
+            if (this.oForm.cinemaCode.length == 0) {
                 this.message = '所选影院不能为空，请检查！';
                 this.open();
                 loading.close();
@@ -2884,7 +2921,7 @@ export default {
             }
             var jsonArr = [];
             jsonArr.push({ key: 'name', value: this.oForm.name });
-            jsonArr.push({ key: 'cinemaCode', value: this.oForm.cinemaCode });
+            jsonArr.push({ key: 'cinemaCode', value: this.oForm.cinemaCode.join(",") });
             jsonArr.push({ key: 'commonType', value: this.oForm.commonType });
             jsonArr.push({ key: 'startDate', value: this.oForm.startDate });
             jsonArr.push({ key: 'endDate', value: this.oForm.endDate });
@@ -2980,7 +3017,7 @@ export default {
                             this.dialogFormVisible = false;
                             this.$message.success(`新增成功`);
                             this.oForm.name = '';
-                            this.oForm.cinemaCode = '';
+                            this.oForm.cinemaCode = [];
                             this.oForm.commonType = '1';
                             this.groupName = '';
                             this.couponId = '';
@@ -2988,7 +3025,6 @@ export default {
                             this.oForm.filmSimpleDesc = '';
                             this.oForm.merchandiseSimpleDesc = '';
                             this.oForm.value1 = '';
-                            this.oForm.cinemaCode = '';
                             this.oForm.cardType = '1';
                             this.oForm.startDate = '';
                             this.oForm.endDate = '';
@@ -3179,16 +3215,16 @@ export default {
                         this.oName = JSON.parse(Decrypt(data.data.data)).benefitCard.name;
                         this.oSimpleDesc = JSON.parse(Decrypt(data.data.data)).benefitCard.simpleDesc;
                         this.oForm.commonType = JSON.parse(Decrypt(data.data.data)).benefitCard.commonType.toString();
-                        this.oForm.cinemCode = JSON.parse(Decrypt(data.data.data)).benefitCard.cinemaCode;
+                        this.oForm.cinemaCode = JSON.parse(Decrypt(data.data.data)).benefitCard.cinemaCode.split(",");
                         this.couponId = JSON.parse(Decrypt(data.data.data)).benefitCard.couponGroupId;
-                        this.getAllScreen(this.oForm.cinemCode);
+                        this.getAllScreen(JSON.parse(Decrypt(data.data.data)).benefitCard.cinemaCode);
                         // if (JSON.parse(Decrypt(data.data.data)).benefitCard.cardType == 1) {
                         //     this.oCardType = '1';
                         // }
                         // if (JSON.parse(Decrypt(data.data.data)).benefitCard.cardType == 2) {
                         //     this.oCardType = '2';
                         // }
-                        if (this.oForm.commonType == '2') {
+                        if (this.oForm.commonType == '2' || this.oForm.cinemaCode.length > 1) {
                             this.showCommonType = true;
                             this.oForm.selectHallType = '0';
                             this.oForm.selectFilmFormatType = '0';
@@ -3453,7 +3489,7 @@ export default {
                 loading.close();
                 return;
             }
-            if (!this.oForm.cinemCode) {
+            if (this.oForm.cinemaCode.length == 0) {
                 this.message = '所选影院不能为空，请检查！';
                 this.open();
                 loading.close();
@@ -3903,7 +3939,7 @@ export default {
             }
             var jsonArr = [];
             jsonArr.push({ key: 'name', value: this.oName });
-            jsonArr.push({ key: 'cinemaCode', value: this.oForm.cinemCode });
+            jsonArr.push({ key: 'cinemaCode', value: this.oForm.cinemaCode.join(",") });
             jsonArr.push({ key: 'commonType', value: this.oForm.commonType });
             jsonArr.push({ key: 'startDate', value: this.oStartDate });
             jsonArr.push({ key: 'endDate', value: this.oEndDate });
@@ -4128,8 +4164,6 @@ export default {
                             cinemaList.cinemaName = oData.cinemaList[i].cinemaName;
                             this.cinemaInfo.push(cinemaList);
                         }
-                        console.log(this.cinemaInfo);
-                        this.oForm.cinemaCode = this.cinemaInfo[0].cinemaCode;
                         this.selectValue = this.cinemaInfo[0].cinemaCode;
                         this.tableData = oData.pageResult.data;
                         this.query.pageSize = oData.pageResult.pageSize;
@@ -4156,11 +4190,12 @@ export default {
                 dangerouslyUseHTMLString: true
             });
         },
-        selectCinema(val) {
-            console.log(val);
-            // let selectValue = val.join(',');
-            this.selectValue = val;
-            this.getAllScreen(val);
+        selectCinema() {
+            let selectValue = this.oForm.cinemaCode.join(',');
+            // this.selectValue = val;
+            this.getAllScreen(selectValue);
+            console.log(this.oForm.cinemaCode)
+            this.changeCommonType();
             this.groupName = '';
         },
         selectScreens(val) {
@@ -4459,8 +4494,8 @@ export default {
                 if (this.oForm.cinemaCode) {
                     cinemaCode = this.oForm.cinemaCode;
                 }
-                if (this.oForm.cinemCode) {
-                    cinemaCode = this.oForm.cinemCode;
+                if (this.oForm.cinemaCode) {
+                    cinemaCode = this.oForm.cinemaCode;
                 }
                 if (!merchandiseName) {
                     merchandiseName = '';

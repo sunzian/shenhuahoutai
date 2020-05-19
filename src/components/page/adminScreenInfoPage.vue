@@ -481,7 +481,7 @@ export default {
                 });
                 },1000)
         },
-                // 获取所有影院
+        // 获取所有商家
         getAllBusiness() {
             const loading = this.$loading({
                 lock: true,

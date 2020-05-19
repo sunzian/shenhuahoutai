@@ -206,10 +206,10 @@
                         <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过100kb 建议尺寸600*480或按比例上传</div>
                     </el-upload>
                 </el-form-item>
-                <el-form-item :required="true" label="同步商品图片至其他影院" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="同步商品图片到商家下的其他影院" :label-width="formLabelWidth">
                     <el-radio-group v-model="form.batchUpdatePic">
-                        <el-radio :label="1">同步</el-radio>
                         <el-radio :label="2">不同步</el-radio>
+                        <el-radio :label="1">同步</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item label="零售价" :label-width="formLabelWidth">
@@ -230,6 +230,12 @@
                 </el-form-item>
                 <el-form-item label="展示顺序" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="form.showSeqNo" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item :required="true" label="同步展示顺序到商家下的其他影院" :label-width="formLabelWidth">
+                    <el-radio-group v-model="form.synchronizeSort">
+                        <el-radio :label="2">不同步</el-radio>
+                        <el-radio :label="1">同步</el-radio>
+                    </el-radio-group>
                 </el-form-item>
                 <!--<el-form-item label="库存" :label-width="formLabelWidth">-->
                     <!--<el-input style="width: 250px" v-model="form.stockCount" autocomplete="off" type="number"></el-input>-->
@@ -253,6 +259,12 @@
                             :value="item.typeCode"
                         ></el-option>
                     </el-select>
+                </el-form-item>
+                <el-form-item :required="true" label="同步卖品分类到商家下的其他影院" :label-width="formLabelWidth">
+                    <el-radio-group v-model="form.synchronizeType">
+                        <el-radio :label="2">不同步</el-radio>
+                        <el-radio :label="1">同步</el-radio>
+                    </el-radio-group>
                 </el-form-item>
                 <el-form-item label="商品描述" :label-width="formLabelWidth">
                     <el-input
@@ -338,7 +350,7 @@ export default {
             idx: -1,
             id: -1,
             dialogFormVisible: false,
-            formLabelWidth: '120px',
+            formLabelWidth: '160px',
             showStatus: [
                 {
                     value: '1',
@@ -480,6 +492,8 @@ export default {
                                 }
                             }
                             this.form.batchUpdatePic = 2;
+                            this.form.synchronizeSort = 2;
+                            this.form.synchronizeType = 2;
 
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
@@ -520,6 +534,8 @@ export default {
                 jsonArr.push({ key: 'merchandisePic', value: this.oImageUrl });
                 jsonArr.push({ key: 'typeCode', value: this.form.typeCode });
                 jsonArr.push({ key: 'batchUpdatePic', value: this.form.batchUpdatePic });
+                jsonArr.push({ key: 'synchronizeSort', value: this.form.synchronizeSort });
+                jsonArr.push({ key: 'synchronizeType', value: this.form.synchronizeType });
                 jsonArr.push({ key: 'merchandiseStatus', value: this.oMerchandiseStatus });
                 jsonArr.push({ key: 'specificationsListJson', value: JSON.stringify(this.selectedSell) });
                 let sign = md5(preSign(jsonArr));

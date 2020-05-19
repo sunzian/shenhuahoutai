@@ -232,11 +232,11 @@
                 <el-table-column prop="memo" label="商品名称" width="180">
                     <template slot-scope="scope">{{scope.row.commodityName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="消耗金币" width="80">
-                    <template slot-scope="scope">{{scope.row.gold}}</template>
-                </el-table-column>
                 <el-table-column prop="memo" label="购买数量" width="80">
                     <template slot-scope="scope">{{scope.row.number}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="消耗金币" width="80">
+                    <template slot-scope="scope">{{scope.row.gold}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="实付" width="60">
                     <template slot-scope="scope">{{scope.row.money}}</template>
@@ -314,7 +314,7 @@
                         >修改
                         </el-button>
                         <el-button
-                                v-if="scope.row.pickupWay=='1' && scope.row.status=='1'"
+                                v-if="scope.row.pickupWay=='1' && scope.row.status=='1' && scope.row.refundStatus!='1'"
                                 type="text"
                                 icon="el-icon-setting"
                                 @click="statusChange(scope.$index, scope.row)"
