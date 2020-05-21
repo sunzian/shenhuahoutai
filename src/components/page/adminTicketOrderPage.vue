@@ -68,6 +68,9 @@
                 >
                     <el-option key="0" label="微信" value="0"></el-option>
                     <el-option key="1" label="会员卡" value="1"></el-option>
+                    <el-option key="2" label="app会员卡" value="2"></el-option>
+                    <el-option key="3" label="app微信" value="3"></el-option>
+                    <el-option key="4" label="app支付宝" value="4"></el-option>
                 </el-select>
                 <el-select
                     clearable
@@ -269,8 +272,11 @@
                 </el-table-column>
                 <el-table-column label="支付方式" align="center" width="80">
                     <template slot-scope="scope">
-                        <el-tag v-if="scope.row. payWay=='0'">微信</el-tag>
-                        <el-tag v-else-if="scope.row. payWay=='1'">会员卡</el-tag>
+                        <el-tag v-if="scope.row.payWay=='0'">微信</el-tag>
+                        <el-tag v-else-if="scope.row.payWay=='1'">会员卡</el-tag>
+                        <el-tag v-else-if="scope.row.payWay=='2'">app会员卡</el-tag>
+                        <el-tag v-else-if="scope.row.payWay=='3'">app微信</el-tag>
+                        <el-tag v-else-if="scope.row.payWay=='4'">app支付宝</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column label="支付状态" align="center">
@@ -694,6 +700,12 @@ export default {
                                 this.form.payWay = '微信';
                             } else if (JSON.parse(Decrypt(data.data.data)).payWay == 1) {
                                 this.form.payWay = '会员卡';
+                            } else if (JSON.parse(Decrypt(data.data.data)).payWay == 2) {
+                                this.form.payWay = 'app会员卡';
+                            } else if (JSON.parse(Decrypt(data.data.data)).payWay == 3) {
+                                this.form.payWay = 'app微信';
+                            } else if (JSON.parse(Decrypt(data.data.data)).payWay == 4) {
+                                this.form.payWay = 'app支付宝';
                             }
                             if (JSON.parse(Decrypt(data.data.data)).payStatus == 0) {
                                 this.form.payStatus = '未支付';

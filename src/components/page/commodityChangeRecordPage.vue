@@ -61,6 +61,16 @@
                 </el-select>
                 <el-select
                         clearable
+                        v-model="query.payWay"
+                        placeholder="支付方式"
+                        class="handle-select mr10"
+                >
+                    <el-option key="1" label="微信小程序支付" value="1"></el-option>
+                    <el-option key="2" label="app微信支付" value="2"></el-option>
+                    <el-option key="3" label="app支付宝支付" value="3"></el-option>
+                </el-select>
+                <el-select
+                        clearable
                         v-model="query.status"
                         placeholder="核销状态"
                         class="handle-select mr10"
@@ -244,6 +254,13 @@
                 <el-table-column prop="memo" label="兑换时间" width="160">
                     <template slot-scope="scope">{{scope.row.payTime}}</template>
                 </el-table-column>
+                <el-table-column prop="memo" label="支付方式" width="120">
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row.payWay=='1'">微信小程序支付</el-tag>
+                        <el-tag v-else-if="scope.row.payWay=='2'">app微信支付</el-tag>
+                        <el-tag v-else-if="scope.row.payWay=='3'">app支付宝支付</el-tag>
+                    </template>
+                </el-table-column>
                 <el-table-column label="兑换状态" align="center" width="80">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row. payStatus=='0'">待支付</el-tag>
@@ -415,6 +432,14 @@
                             :disabled="true"
                             style="width: 250px"
                             v-model="form.changeType"
+                            autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="兑换方式" :label-width="formLabelWidth">
+                    <el-input
+                            :disabled="true"
+                            style="width: 250px"
+                            v-model="form.payWay"
                             autocomplete="off"
                     ></el-input>
                 </el-form-item>
@@ -801,6 +826,7 @@
                     let commodityType = this.query.commodityType;
                     let refundStatus = this.query.refundStatus;
                     let changeType = this.query.changeType;
+                    let payWay = this.query.payWay;
                     let pickupWay = this.query.pickupWay;
                     let trackingStatus = this.query.trackingStatus;
                     let trackingNumber = this.query.trackingNumber;
@@ -819,6 +845,9 @@
                     }
                     if (!changeType) {
                         changeType = '';
+                    }
+                    if (!payWay) {
+                        payWay = '';
                     }
                     if (!pickupWay) {
                         pickupWay = '';
@@ -864,12 +893,12 @@
                     jsonArr.push({
                         key: 'exportKeysJson',
                         value:
-                            '[\'cinemaName\',\'exchangeCinemaName\',\'partnerName\',\'payCinemaName\',\'chSettleStatusString\',\'orderNo\',\'mobile\',\'shareMobile\',\'remark\',\'commodityName\',\'gold\',\'number\',\'money\',\'getDate\',\'payTime\',\'chPayStatus\',\'chPickupWay\',\'trackingNumber\',\'chTrackingStatus\',\'deliveryName\',\'deliveryMobile\',\'province\',\'city\',\'district\',\'deliveryAddressDetail\',\'tradeNo\',\'payReturnMsg\',\'chChangeType\',\'chStatus\',\'chRefundStatus\',\'orderTypeName\',\'refundNo\',\'refundReason\',\'refundApply\',\'refundTime\',\'refundPrice\']'
+                            '[\'cinemaName\',\'exchangeCinemaName\',\'partnerName\',\'payCinemaName\',\'chSettleStatusString\',\'orderNo\',\'mobile\',\'stringPayWay\',\'shareMobile\',\'remark\',\'commodityName\',\'gold\',\'number\',\'money\',\'getDate\',\'payTime\',\'chPayStatus\',\'chPickupWay\',\'trackingNumber\',\'chTrackingStatus\',\'deliveryName\',\'deliveryMobile\',\'province\',\'city\',\'district\',\'deliveryAddressDetail\',\'tradeNo\',\'payReturnMsg\',\'chChangeType\',\'chStatus\',\'chRefundStatus\',\'orderTypeName\',\'refundNo\',\'refundReason\',\'refundApply\',\'refundTime\',\'refundPrice\']'
                     });
                     jsonArr.push({
                         key: 'exportTitlesJson',
                         value:
-                            '[\'兑换影院名称\',\'领取影院名称\',\'商户名称\',\'收款影院名称\',\'商户订单结算状态\',\'订单号\',\'手机号\',\'推荐人手机号\',\'用户备注\',\'商品名称\',\'消费金币\',\'购买数量\',\'支付金额\',\'领取时间\',\'兑换时间\',\'兑换状态\',\'取货方式\',\'物流单号\',\'快递状态\',\'收货人名称\',\'收货人电话\',\'省\',\'市\',\'区\',\'收货人地址\',\'支付交易号\',\'支付回调消息\',\'兑换方式\',\'核销状态\',\'退款状态\',\'订单类型\',\'退款交易号\',\'退款原因\',\'微信退款回复\',\'退款时间\',\'退款金额\']'
+                            '[\'兑换影院名称\',\'领取影院名称\',\'商户名称\',\'收款影院名称\',\'商户订单结算状态\',\'订单号\',\'手机号\',\'支付方式\',\'推荐人手机号\',\'用户备注\',\'商品名称\',\'消费金币\',\'购买数量\',\'支付金额\',\'领取时间\',\'兑换时间\',\'兑换状态\',\'取货方式\',\'物流单号\',\'快递状态\',\'收货人名称\',\'收货人电话\',\'省\',\'市\',\'区\',\'收货人地址\',\'支付交易号\',\'支付回调消息\',\'兑换方式\',\'核销状态\',\'退款状态\',\'订单类型\',\'退款交易号\',\'退款原因\',\'微信退款回复\',\'退款时间\',\'退款金额\']'
                     });
                     jsonArr.push({ key: 'commodityType', value: commodityType });
                     jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
@@ -882,6 +911,7 @@
                     jsonArr.push({ key: 'refundStatus', value: refundStatus });
                     jsonArr.push({ key: 'status', value: status });
                     jsonArr.push({ key: 'changeType', value: changeType });
+                    jsonArr.push({ key: 'payWay', value: payWay });
                     jsonArr.push({ key: 'pickupWay', value: pickupWay });
                     jsonArr.push({ key: 'payStatus', value: payStatus });
                     jsonArr.push({ key: 'startDate', value: startDate });
@@ -1021,6 +1051,13 @@
                                     this.form.changeType = '纯RMB兑换';
                                 } else if (JSON.parse(Decrypt(data.data.data)).changeType == 3) {
                                     this.form.changeType = '金币加RMB兑换';
+                                }
+                                if (JSON.parse(Decrypt(data.data.data)).payWay == 1) {
+                                    this.form.payWay = '微信小程序支付';
+                                } else if (JSON.parse(Decrypt(data.data.data)).payWay == 2) {
+                                    this.form.payWay = 'app微信支付';
+                                } else if (JSON.parse(Decrypt(data.data.data)).payWay == 3) {
+                                    this.form.payWay = 'app支付宝支付';
                                 }
                                 if (JSON.parse(Decrypt(data.data.data)).status == 1) {
                                     this.form.status = '未领取';
@@ -1237,6 +1274,7 @@
                     let endDate = this.query.endDate;
                     let commodityType = this.query.commodityType;
                     let changeType = this.query.changeType;
+                    let payWay = this.query.payWay;
                     let status = this.query.status;
                     let refundStatus = this.query.refundStatus;
                     let cinemaCode = this.query.cinemaCode;
@@ -1289,6 +1327,9 @@
                     if (!changeType) {
                         changeType = '';
                     }
+                    if (!payWay) {
+                        payWay = '';
+                    }
                     if (!payStatus) {
                         payStatus = '';
                     }
@@ -1312,6 +1353,7 @@
                     jsonArr.push({ key: 'shareMobile', value: shareMobile });
                     jsonArr.push({ key: 'payStatus', value: payStatus });
                     jsonArr.push({ key: 'changeType', value: changeType });
+                    jsonArr.push({ key: 'payWay', value: payWay });
                     jsonArr.push({ key: 'status', value: status });
                     jsonArr.push({ key: 'refundStatus', value: refundStatus });
                     jsonArr.push({ key: 'startDate', value: startDate });

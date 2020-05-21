@@ -2850,6 +2850,7 @@
                     cinemaCode = '';
                 }
                 let jsonArr = [];
+                jsonArr.push({key: 'pageSize', value: 200});
                 jsonArr.push({key: 'cinemaCodes', value: cinemaCode});
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({key: 'sign', value: sign});

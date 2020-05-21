@@ -562,6 +562,17 @@
                         @click="deletCoupon"
                     >删除</span>
                 </el-form-item>
+                <el-form-item label="兑换须知" :label-width="formLabelWidth">
+                    <el-input
+                        style="width: 250px;"
+                        type="textarea"
+                        show-word-limit
+                        rows="6"
+                        maxlength="200"
+                        v-model="form.memo"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false">取 消</el-button>
@@ -664,6 +675,17 @@
                         style="color:red;cursor: pointer;"
                         @click="deletCoupon"
                     >删除</span>
+                </el-form-item>
+                <el-form-item label="兑换须知" :label-width="formLabelWidth">
+                    <el-input
+                        style="width: 250px;"
+                        type="textarea"
+                        show-word-limit
+                        rows="6"
+                        maxlength="200"
+                        v-model="pForm.memo"
+                        autocomplete="off"
+                    ></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -1249,7 +1271,8 @@ export default {
                 prizeType: this.form.prizeType,
                 expireDay: this.form.expireDay,
                 couponId: this.couponInfo.id,
-                couponName: this.couponInfo.couponName
+                couponName: this.couponInfo.couponName,
+                memo: this.form.memo
             };
             this.prizeInfoList.push(onePrize);
             this.form.prizeLevel = '';
@@ -1261,6 +1284,7 @@ export default {
             this.form.prizeType = '';
             this.couponInfo.id = '';
             this.couponInfo.couponName = '';
+            this.form.memo = '';
             this.editVisible = false;
         },
         sureChanger() {
@@ -1329,7 +1353,8 @@ export default {
                 couponId: this.couponInfo.id,
                 couponName: this.couponInfo.couponName,
                 hasTheNumber: this.prizeInfoList[this.oIndex].hasTheNumber,
-                id: this.prizeInfoList[this.oIndex].id
+                id: this.prizeInfoList[this.oIndex].id,
+                memo: this.pForm.memo
             };
             this.prizeInfoList[this.oIndex] = onePrize;
             this.pForm.prizeLevel = '';
@@ -1339,6 +1364,7 @@ export default {
             this.pForm.prizeNumber = '';
             this.pForm.percent = '';
             this.pForm.prizeType = '';
+            this.pForm.memo = '';
             this.couponInfo.id = '';
             this.couponInfo.couponName = '';
             this.showModify = false;

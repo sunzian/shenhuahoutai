@@ -10,15 +10,6 @@
         <div class="container" v-if="!show">
             <div class="handle-box">
                 <el-select
-                    clearable
-                    v-model="query.commonType"
-                    placeholder="通用方式"
-                    class="handle-select mr10"
-                >
-                    <el-option key="1" label="全部影院" value="1"></el-option>
-                    <el-option key="2" label="指定影院" value="2"></el-option>
-                </el-select>
-                <el-select
                         clearable
                         v-model="query.sendType"
                         placeholder="发放方式"
@@ -26,6 +17,15 @@
                 >
                     <el-option key="1" label="线上发放" value="1"></el-option>
                     <el-option key="2" label="线下发放" value="2"></el-option>
+                </el-select>
+                <el-select
+                    clearable
+                    v-model="query.commonType"
+                    placeholder="通用方式"
+                    class="handle-select mr10"
+                >
+                    <el-option key="1" label="全部影院" value="1"></el-option>
+                    <el-option key="2" label="指定影院" value="2"></el-option>
                 </el-select>
                 <el-select clearable v-model="query.cinemaCode" placeholder="请选择影院" class="mr10">
                     <el-option

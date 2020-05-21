@@ -176,6 +176,14 @@
                         :disabled="true"
                     ></el-input>
                 </el-form-item>
+                <el-form-item label="商品编码" :label-width="formLabelWidth">
+                    <el-input
+                        style="width: 450px"
+                        v-model="form.merchandiseCode"
+                        autocomplete="off"
+                        :disabled="true"
+                    ></el-input>
+                </el-form-item>
                 <el-form-item label="商品图片" :label-width="formLabelWidth">
                     <el-popover placement="right" title trigger="hover">
                         <img style="width:400px" :src="oImageUrl" />
@@ -211,6 +219,7 @@
                         <el-radio :label="2">不同步</el-radio>
                         <el-radio :label="1">同步</el-radio>
                     </el-radio-group>
+                    <span style="margin-left: 20px;color: red">根据相同的卖品编码同步</span>
                 </el-form-item>
                 <el-form-item label="零售价" :label-width="formLabelWidth">
                     <el-input
@@ -236,6 +245,7 @@
                         <el-radio :label="2">不同步</el-radio>
                         <el-radio :label="1">同步</el-radio>
                     </el-radio-group>
+                    <span style="margin-left: 20px;color: red">根据相同的卖品编码同步</span>
                 </el-form-item>
                 <!--<el-form-item label="库存" :label-width="formLabelWidth">-->
                     <!--<el-input style="width: 250px" v-model="form.stockCount" autocomplete="off" type="number"></el-input>-->
@@ -265,6 +275,7 @@
                         <el-radio :label="2">不同步</el-radio>
                         <el-radio :label="1">同步</el-radio>
                     </el-radio-group>
+                    <span style="margin-left: 20px;color: red">根据相同的卖品编码同步</span>
                 </el-form-item>
                 <el-form-item label="商品描述" :label-width="formLabelWidth">
                     <el-input
@@ -475,6 +486,7 @@ export default {
                         if (data.data.code == 'success') {
                             this.editVisible = true;
                             this.form.name = JSON.parse(Decrypt(data.data.data)).merchandise.merchandiseName;
+                            this.form.merchandiseCode = JSON.parse(Decrypt(data.data.data)).merchandise.merchandiseCode;
                             this.oImageUrl = JSON.parse(Decrypt(data.data.data)).merchandise.merchandisePic;
                             this.form.merchandiseDesc = JSON.parse(Decrypt(data.data.data)).merchandise.merchandiseDesc;
                             this.form.standardPrice = JSON.parse(Decrypt(data.data.data)).merchandise.standardPrice;
