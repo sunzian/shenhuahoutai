@@ -754,7 +754,8 @@
                 successUpLoad: false,
                 query: {
                     pageNo: 1,
-                    pageSize: 15
+                    pageSize: 15,
+                    payStatus: '1'
                 },
                 editVisible: false,
                 logVisible: false,

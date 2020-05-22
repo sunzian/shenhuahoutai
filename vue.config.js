@@ -5,8 +5,8 @@ module.exports = {
     devServer: {
         proxy: {
             '/api':{
-                target: 'http://test.legendpicture.com',
-                // target: 'https://wonder.legendpicture.com',
+                // target: 'http://test.legendpicture.com',
+                target: 'https://wonder.legendpicture.com',
                 // target: 'http://192.168.1.106:8080',  // gw
                 // target: 'http://192.168.101.57:8080',  // zy heloo2
                 // target: 'http://192.168.31.221:8080',  // zy jzkj

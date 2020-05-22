@@ -2472,7 +2472,7 @@ export default {
                 loading.close();
                 return;
             }
-            if (this.oForm.cinemaCode.length == 0) {
+            if (this.oForm.commonType == '1' && this.oForm.cinemaCode.length == 0) {
                 this.message = '所选影院不能为空，请检查！';
                 this.open();
                 loading.close();
@@ -3489,7 +3489,7 @@ export default {
                 loading.close();
                 return;
             }
-            if (this.oForm.cinemaCode.length == 0) {
+            if (this.oForm.commonType == '1' && this.oForm.cinemaCode.length == 0) {
                 this.message = '所选影院不能为空，请检查！';
                 this.open();
                 loading.close();

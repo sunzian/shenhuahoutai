@@ -240,7 +240,7 @@
                 <el-table-column prop="memo" label="实付" width="60">
                     <template slot-scope="scope">{{scope.row.money}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="兑换时间" width="160">
+                <el-table-column prop="memo" label="下单时间" width="160">
                     <template slot-scope="scope">{{scope.row.payTime}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="支付方式" width="120">
@@ -312,7 +312,7 @@
                             @click="addChange(scope.$index, scope.row)"
                         >查看</el-button>
                         <el-button
-                            v-if="scope.row.pickupWay=='2'"
+                            v-if="scope.row.pickupWay=='2' && scope.row.payStatus=='1'"
                             type="text"
                             icon="el-icon-setting"
                             @click="logChange(scope.$index, scope.row)"
@@ -710,7 +710,7 @@ export default {
                 jsonArr.push({
                     key: 'exportTitlesJson',
                     value:
-                        "['兑换影院名称','领取影院名称','商户名称','商户订单结算状态','订单号','手机号','支付方式','推荐人手机号','用户备注','商品名称','消费金币','购买数量','支付金额','领取时间','兑换时间','兑换状态','取货方式','物流单号','快递状态','收货人名称','收货人电话','省','市','区','收货人地址','支付交易号','支付回调消息','兑换方式','核销状态','退款状态','订单类型','退款交易号','退款原因','微信退款回复','退款时间','退款金额']"
+                        "['兑换影院名称','领取影院名称','商户名称','商户订单结算状态','订单号','手机号','支付方式','推荐人手机号','用户备注','商品名称','消费金币','购买数量','支付金额','领取时间','下单时间','兑换状态','取货方式','物流单号','快递状态','收货人名称','收货人电话','省','市','区','收货人地址','支付交易号','支付回调消息','兑换方式','核销状态','退款状态','订单类型','退款交易号','退款原因','微信退款回复','退款时间','退款金额']"
                 });
                 jsonArr.push({ key: 'commodityType', value: commodityType });
                 jsonArr.push({ key: 'businessCode', value: businessCode });

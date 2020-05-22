@@ -410,6 +410,15 @@
                         v-model="oForm.detailDescription"
                     ></el-input>
                 </el-form-item>
+                <el-form-item label="团购分享标题" :label-width="formLabelWidth">
+                    <el-input
+                        maxlength="25"
+                        style="width: 250px"
+                        v-model="oForm.shareTitle"
+                        autocomplete="off"
+                        placeholder="最多显示25个字"
+                    ></el-input>
+                </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -689,6 +698,15 @@
                         v-model="oActivityNotice"
                     ></el-input>
                 </el-form-item>
+                <el-form-item label="团购分享标题" :label-width="formLabelWidth">
+                    <el-input
+                        maxlength="25"
+                        style="width: 250px"
+                        v-model="oShareTitle"
+                        autocomplete="off"
+                        placeholder="最多显示25个字"
+                    ></el-input>
+                </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="cancelChange">取 消</el-button>
@@ -787,6 +805,7 @@ export default {
             oGold: '',
             oMoney: '',
             oCommodityStore: '',
+            oShareTitle: '',
             // oHasSoldNumber: '',
             oStatus: '',
             oDescription: '',
@@ -996,7 +1015,8 @@ export default {
                 oNum: '',
                 oneNum: '',
                 description: '',
-                detailDescription: ''
+                detailDescription: '',
+                shareTitle: ''
             },
             formLabelWidth: '200px',
             selectScreenCode: {},
@@ -1224,6 +1244,7 @@ export default {
             jsonArr.push({ key: 'money', value: this.oForm.money });
             jsonArr.push({ key: 'commodityStore', value: this.oForm.commodityStore });
             jsonArr.push({ key: 'status', value: this.oForm.status });
+            jsonArr.push({ key: 'shareTitle', value: this.oForm.shareTitle });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             console.log(jsonArr);
@@ -1265,6 +1286,7 @@ export default {
                             this.oForm.status = '';
                             this.oForm.showStatus = '2';
                             this.oForm.detailDescription = '';
+                            this.oForm.shareTitle = '';
                             this.getMenu();
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
@@ -1391,6 +1413,7 @@ export default {
                         this.oGold = JSON.parse(Decrypt(data.data.data)).gold;
                         this.oMoney = JSON.parse(Decrypt(data.data.data)).money;
                         this.oCommodityStore = JSON.parse(Decrypt(data.data.data)).commodityStore;
+                        this.oShareTitle = JSON.parse(Decrypt(data.data.data)).shareTitle;
                         // this.oHasSoldNumber = JSON.parse(Decrypt(data.data.data)).hasSoldNumber;
                         for (let x in this.options) {
                             if (this.options[x].value == JSON.parse(Decrypt(data.data.data)).status) {
@@ -1450,6 +1473,7 @@ export default {
             this.oCommodityStore = '';
             this.oStatus = '';
             this.oActivityImg = '';
+            this.oShareTitle = '';
         },
         // 编辑操作
         exChanger() {
@@ -1487,7 +1511,7 @@ export default {
             jsonArr.push({ key: 'commodityStore', value: this.oCommodityStore });
             // jsonArr.push({ key: 'hasSoldNumber', value: this.oHasSoldNumber });
             jsonArr.push({ key: 'status', value: this.oStatus });
-            // jsonArr.push({ key: 'showStatus', value: this.oShowStatus });
+            jsonArr.push({ key: 'shareTitle', value: this.oShareTitle });
             jsonArr.push({ key: 'id', value: this.form.id });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
@@ -1528,6 +1552,7 @@ export default {
                         this.oCommodityStore = '';
                         this.oStatus = '';
                         this.oActivityImg = '';
+                        this.oShareTitle = '';
                         this.getMenu();
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
