@@ -2196,6 +2196,7 @@ export default {
             this.query.pageSize = val;
             this.getMenu();
         },
+        
         currentChange(val) {
             //点击选择具体页数
             this.query.pageNo = val;

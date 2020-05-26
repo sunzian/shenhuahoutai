@@ -2036,7 +2036,7 @@ export default {
                 }
             }
             if (this.oForm.reduceType == 4) {
-                if (!this.oForm.discountMoney || !this.oForm.achieveMoney || this.oForm.discountMoney.replace(/[^0-9.]+/,'') == ''.replace(/[^0-9.]+/,'') == '') {
+                if (!this.oForm.discountMoney || !this.oForm.achieveMoney || this.oForm.discountMoney.replace(/[^0-9.]+/,'') == '') {
                         this.message = '减免金额不能为空，请检查！';
                         this.open();
                         loading.close();

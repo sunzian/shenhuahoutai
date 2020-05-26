@@ -636,6 +636,16 @@ export default new Router({
                     meta: { title: '拼团订单' }
                 },
                 {
+                    path: '/ownMerchandiseSetPage',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/ownMerchandiseSetPage.vue'),
+                    meta: { title: '自选套餐' }
+                },
+                {
+                    path: '/commodityOrderSettlePage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/commodityOrderSettlePage.vue'),
+                    meta: { title: '批量结算订单' }
+                },
+                {
                     path: '/404',
                     component: () => import(/* webpackChunkName: "404" */ '../components/page/404.vue'),
                     meta: { title: '404' }

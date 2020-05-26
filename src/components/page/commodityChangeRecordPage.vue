@@ -111,7 +111,6 @@
                         placeholder="兑换状态"
                         class="handle-select mr10"
                 >
-                    <!--<el-option key="0" label="待支付" value="0"></el-option>-->
                     <el-option key="1" label="兑换成功" value="1"></el-option>
                     <el-option key="2" label="兑换失败" value="2"></el-option>
                     <el-option key="3" label="兑换超时" value="3"></el-option>
@@ -163,13 +162,6 @@
                     <el-option key="1" label="商品订单" value="1"></el-option>
                     <el-option key="2" label="秒杀订单" value="2"></el-option>
                 </el-select>
-                <!-- <el-button
-                        style="margin-top: 10px;width: 90px;"
-                        type="primary"
-                        icon="el-icon-search"
-                        @click="Search"
-                >批量修改订单结算 
-                </el-button> -->
                 <el-button
                         style="margin-top: 10px;width: 90px;"
                         type="primary"
@@ -190,6 +182,13 @@
                         icon="el-icon-circle-plus-outline"
                         style="float: right;margin-top: 10px;margin-left:10px"
                 >导出
+                </el-button>
+                <el-button
+                        style="margin-top: 10px;"
+                        type="primary"
+                        icon="el-icon-search"
+                        @click="openOrderSettle"
+                >打开批量修改订单结算
                 </el-button>
             </div>
             <div class="handle-box">
@@ -1051,6 +1050,7 @@
                 }
                 let jsonArr = [];
                 jsonArr.push({ key: 'cinemaCodes', value: cinemaCode });
+                jsonArr.push({key: 'pageSize', value: 200});
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
                 var params = ParamsAppend(jsonArr);
@@ -1509,8 +1509,15 @@
                 oInput.className = 'oInput';
                 oInput.style.display = 'none';
                 alert('复制成功！');
-            }
-        }
+            },
+            // 打开批量结算页面
+            openOrderSettle() {
+                const { href } = this.$router.resolve({
+                    path: `/commodityOrderSettlePage`
+                });
+                window.open(href, '_blank');
+            },
+        },
     };
 </script>
 

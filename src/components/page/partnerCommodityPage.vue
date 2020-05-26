@@ -1602,6 +1602,7 @@ export default {
             }
             let jsonArr = [];
             jsonArr.push({ key: 'cinemaCodes', value: cinemaCode });
+            jsonArr.push({key: 'pageSize', value: 200});
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             var params = ParamsAppend(jsonArr);

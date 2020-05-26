@@ -9,7 +9,7 @@
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-select clearable v-model="query.cinemaCode" placeholder="请选择影院" class="mr10">
+                <el-select clearable v-model="query.cinemaCode" placeholder="请选择影院" class="mr10" style="margin-bottom:10px">
                     <el-option
                             v-for="item in cinemaInfo"
                             :key="item.cinemaCode"
@@ -22,36 +22,42 @@
                         v-model="query.userMobile"
                         autocomplete="off"
                         class="mr10"
+                        style="margin-bottom:10px"
                 ></el-input>
                 <el-input
                         placeholder="推荐人手机号"
                         v-model="query.shareUserMobile"
                         autocomplete="off"
                         class="mr10"
+                        style="margin-bottom:10px"
                 ></el-input>
                 <el-input
                         placeholder="订单编号"
                         v-model="query.orderNo"
                         autocomplete="off"
                         class="mr10"
+                        style="margin-bottom:10px"
                 ></el-input>
                 <el-input
                         placeholder="电影名称"
                         v-model="query.filmName"
                         autocomplete="off"
                         class="mr10"
+                        style="margin-bottom:10px"
                 ></el-input>
                 <el-input
                         placeholder="点映名称"
                         v-model="query.filmOpensName"
                         autocomplete="off"
                         class="mr10"
+                        style="margin-bottom:10px"
                 ></el-input>
                 <el-select
                         clearable
                         v-model="query.groupStatus"
                         placeholder="组团状态"
                         class="handle-select mr10"
+                        style="margin-bottom:10px"
                 >
                     <el-option key="1" label="组团中" value="1"></el-option>
                     <el-option key="2" label="组团失败" value="2"></el-option>
@@ -64,6 +70,7 @@
                         v-model="query.payStatus"
                         placeholder="支付状态"
                         class="handle-select mr10"
+                        style="margin-bottom:10px"
                 >
                     <el-option key="0" label="未支付" value="0"></el-option>
                     <el-option key="1" label="支付成功" value="1"></el-option>
@@ -77,6 +84,7 @@
                         value-format="yyyy-MM-dd HH:mm:ss"
                         format="yyyy-MM-dd HH:mm:ss"
                         placeholder="放映开始时间（起）"
+                        style="margin-bottom:10px"
                 ></el-date-picker>
                 <el-date-picker
                         v-model="query.sessionEndDate"
@@ -85,6 +93,7 @@
                         value-format="yyyy-MM-dd HH:mm:ss"
                         format="yyyy-MM-dd HH:mm:ss"
                         placeholder="放映结束时间（止）"
+                        style="margin-bottom:10px"
                 ></el-date-picker>
                 <el-date-picker
                         v-model="query.payStartDate"
@@ -93,6 +102,7 @@
                         value-format="yyyy-MM-dd HH:mm:ss"
                         format="yyyy-MM-dd HH:mm:ss"
                         placeholder="支付开始时间（起）"
+                        style="margin-bottom:10px"
                 ></el-date-picker>
                 <el-date-picker
                         v-model="query.payEndDate"
@@ -101,6 +111,7 @@
                         value-format="yyyy-MM-dd HH:mm:ss"
                         format="yyyy-MM-dd HH:mm:ss"
                         placeholder="支付结束时间（止）"
+                        style="margin-bottom:10px"
                 ></el-date-picker>
                 <el-button
                         type="primary"
