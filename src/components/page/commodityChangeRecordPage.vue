@@ -163,6 +163,13 @@
                     <el-option key="1" label="商品订单" value="1"></el-option>
                     <el-option key="2" label="秒杀订单" value="2"></el-option>
                 </el-select>
+                <!-- <el-button
+                        style="margin-top: 10px;width: 90px;"
+                        type="primary"
+                        icon="el-icon-search"
+                        @click="Search"
+                >批量修改订单结算 
+                </el-button> -->
                 <el-button
                         style="margin-top: 10px;width: 90px;"
                         type="primary"
@@ -224,6 +231,11 @@
                     header-cell-class-name="table-header"
                     @selection-change="handleSelectionChange"
             >
+                <!-- <el-table-column
+                    type="selection"
+                    :reserve-selection="true"
+                    width="55"
+                ></el-table-column> -->
                 <el-table-column prop="name" label="兑换影院名称" width="210">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
@@ -303,6 +315,12 @@
                         <el-tag v-else-if="scope.row.trackingStatus=='4'">已收货</el-tag>
                     </template>
                 </el-table-column>
+                <el-table-column prop="memo" label="订单结算状态" width="120">
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row.settleStatus=='1'">未结算</el-tag>
+                        <el-tag v-else-if="scope.row.settleStatus=='2'">已结算</el-tag>
+                    </template>
+                </el-table-column>
                 <el-table-column prop="memo" label="收货人手机号" width="110">
                     <template slot-scope="scope">{{scope.row.deliveryMobile}}</template>
                 </el-table-column>
@@ -322,6 +340,13 @@
                                 icon="el-icon-setting"
                                 @click="addChange(scope.$index, scope.row)"
                         >查看
+                        </el-button>
+                        <el-button
+                                v-if="scope.row.settleStatus=='1' && scope.row.commodityType=='4'"
+                                type="text"
+                                icon="el-icon-setting"
+                                @click="settle(scope.$index, scope.row)"
+                        >订单结算
                         </el-button>
                         <el-button
                                 v-if="scope.row.pickupWay=='2' && scope.row.refundStatus != '1' && scope.row.payStatus == '1'"
@@ -804,6 +829,54 @@
             this.getMenu();
         },
         methods: {
+            // 订单结算
+            settle(index, row) {
+                this.$confirm('此操作将结算订单, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                })
+                    .then(() => {
+                        const loading = this.$loading({
+                            lock: true,
+                            text: 'Loading',
+                            spinner: 'el-icon-loading',
+                            background: 'rgba(0, 0, 0, 0.7)',
+                            target: document.querySelector('.div1')
+                        });
+                        var jsonArr = [];
+                        jsonArr.push({ key: 'id', value: row.id });
+                        let sign = md5(preSign(jsonArr));
+                        jsonArr.push({ key: 'sign', value: sign });
+                        let params = ParamsAppend(jsonArr);
+                        https
+                            .fetchPost('/cinemaPartner/orderSettleAccounts', params)
+                            .then(data => {
+                                loading.close();
+                                if (data.data.code == 'success') {
+                                    this.message = `订单结算成功！`;
+                                    this.open();
+                                    this.getMenu();
+                                } else if (data.data.code == 'nologin') {
+                                    this.message = data.data.message;
+                                    this.open();
+                                    this.$router.push('/login');
+                                } else {
+                                    this.message = data.data.message;
+                                    this.open();
+                                }
+                            })
+                            .catch(err => {
+                                console.log(err);
+                            });
+                    })
+                    .catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '已取消操作'
+                        });
+                    });
+            },
             derive() {
                 const loading = this.$loading({
                     lock: true,

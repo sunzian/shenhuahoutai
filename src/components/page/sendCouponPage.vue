@@ -163,6 +163,9 @@
                 >搜索</el-button>
             </div>
             <div style="margin-bottom: 10px; margin-top: 10px;height: 42px; float: right;">
+                <el-button type="primary" style="margin-right: 10px;" @click="derive">导出</el-button>
+            </div>
+            <div style="margin-bottom: 10px; margin-top: 10px;height: 42px; float: right;">
                 <el-button type="primary" style="margin-right: 10px;" @click="setConditions">发放优惠券</el-button>
             </div>
             <div style="float: right;">
@@ -723,6 +726,91 @@ export default {
         }
     },
     methods: {
+        // 导出
+        derive(){
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
+            setTimeout(() => {
+                let cinemaCode = this.query.cinemaCode;
+                let mobile = this.query.mobile;
+                let consumeStartDate = this.query.consumeStartDate;
+                let consumeEndDate = this.query.consumeEndDate;
+                let consumeStartAmount = this.query.consumeStartAmount;
+                let consumeEndAmount = this.query.consumeEndAmount;
+                let couponStartNumber = this.query.couponStartNumber;
+                let couponEndNumber = this.query.couponEndNumber;
+                let userRole= this.query.userRole;
+                let bindCardStatus = this.query.bindCardStatus;
+                let startRegisterNumber = this.query.startRegisterNumber;
+                let endRegisterNumber = this.query.endRegisterNumber;
+                if (!cinemaCode) {
+                    cinemaCode = '';
+                }
+                if (!mobile) {
+                    mobile = '';
+                }
+                if (!consumeStartDate) {
+                    consumeStartDate = '';
+                }
+                if (!consumeEndDate) {
+                    consumeEndDate = '';
+                }
+                if (!consumeStartAmount) {
+                    consumeStartAmount = '';
+                }
+                if (!consumeEndAmount) {
+                    consumeEndAmount = '';
+                }
+                if (!couponStartNumber) {
+                    couponStartNumber = '';
+                }
+                if (!couponEndNumber) {
+                    couponEndNumber = '';
+                }
+                if (!userRole) {
+                    userRole = '';
+                }
+                if (!bindCardStatus) {
+                    bindCardStatus = '';
+                }
+                if (!startRegisterNumber) {
+                    startRegisterNumber = '';
+                }
+                if (!endRegisterNumber) {
+                    endRegisterNumber = '';
+                }
+                let jsonArr = [];
+                jsonArr.push({ key: 'tableName', value: "优惠券发放用户列表" });
+                jsonArr.push({ key: 'exportKeysJson', value: "['id','userName','userMobile','cinemaName','miniRegisterDate','loginDate','goldNumber','consumptionAmount','lastConsumeDate','remainCoupons','shareRegisterNumber','cnUserRole','cnBindMemberCardStatus']"});
+                jsonArr.push({ key: 'exportTitlesJson', value:"['ID','昵称','手机号','注册影院','注册时间','最近登陆时间','金币数量','累计消费金额','最近一次消费','有效优惠券数量','邀请注册人数','游戏厅角色','绑定会员卡']" });
+                jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
+                jsonArr.push({ key: 'mobile', value: mobile });
+                jsonArr.push({ key: 'consumeStartDate', value: consumeStartDate });
+                jsonArr.push({ key: 'consumeEndDate', value: consumeEndDate });
+                jsonArr.push({ key: 'consumeStartAmount', value: consumeStartAmount });
+                jsonArr.push({ key: 'consumeEndAmount', value: consumeEndAmount });
+                jsonArr.push({ key: 'couponStartNumber', value: couponStartNumber });
+                jsonArr.push({ key: 'couponEndNumber', value: couponEndNumber });
+                jsonArr.push({ key: 'userRole', value: userRole });
+                jsonArr.push({ key: 'bindCardStatus', value: bindCardStatus });
+                jsonArr.push({ key: 'startRegisterNumber', value: startRegisterNumber });
+                jsonArr.push({ key: 'endRegisterNumber', value: endRegisterNumber });
+                var params = ParamsAppend(jsonArr);
+                let myObj = {
+                    method: 'get',
+                    url: '/exportExcel/sendCouponUser',
+                    fileName: '优惠券发放用户列表',
+                    params: params
+                };
+                https.exportMethod(myObj);
+                loading.close();
+            }, 1500);
+        },
         chooseOtherType() {
             this.showType = true;
             this.dialogVisible = true;

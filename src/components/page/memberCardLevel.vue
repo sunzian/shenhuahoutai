@@ -297,6 +297,7 @@
             return {
                 selectValue: [],
                 goodsInfo: [],
+                businessCode: '', // 商家编码
                 showSell: true, //卖品信息页面是否展示开关
                 type: {
                     type: ''
@@ -547,7 +548,6 @@
                     target: document.querySelector('.div1')
                 });
                 setTimeout(() => {
-                    this.selectCinema();
                     this.idx = index;
                     this.form = row;
                     var jsonArr = [];
@@ -561,10 +561,13 @@
                                 console.log(JSON.parse(Decrypt(data.data.data)));
                                 this.editVisible = true;
                                 this.oMerchandiseCode = [];
-                                if(JSON.parse(Decrypt(data.data.data)).cinemaCodes){
-                                    this.oMerchandiseCode = JSON.parse(Decrypt(data.data.data)).cinemaCodes.split(",");
+                                this.businessCode = JSON.parse(Decrypt(data.data.data)).businessCode;
+                                if (JSON.parse(Decrypt(data.data.data)).applyType == 2) {
+                                    if(JSON.parse(Decrypt(data.data.data)).cinemaCodes){
+                                        this.oMerchandiseCode = JSON.parse(Decrypt(data.data.data)).cinemaCodes.split(",");
+                                        this.selectGoodsCode= JSON.parse(Decrypt(data.data.data)).cinemaCodes.split(",");
+                                    }
                                 }
-                                this.selectGoodsCode= JSON.parse(Decrypt(data.data.data)).cinemaCodes.split(",");
                                 this.oCommonType = JSON.parse(Decrypt(data.data.data)).applyType;
                                 this.form.name = JSON.parse(Decrypt(data.data.data)).levelName;
                                 this.oImage = JSON.parse(Decrypt(data.data.data)).cardPicture;
@@ -579,6 +582,8 @@
                                 this.message = data.data.message;
                                 this.open();
                             }
+                        }).then(() =>{
+                            this.selectCinema();
                         })
                         .catch(err => {
                             loading.close();
@@ -716,6 +721,7 @@
                     let jsonArr = [];
                     jsonArr.push({key:"levelName",value:levelName});
                     jsonArr.push({key:"status",value:status});
+                    jsonArr.push({key:"businessCode",value:this.businessCode});
                     jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
                     jsonArr.push({ key: 'pageSize', value: 200 });
                     let sign = md5(preSign(jsonArr));

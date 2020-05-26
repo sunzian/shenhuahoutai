@@ -334,7 +334,7 @@
                         label="商品名称"
                         :label-width="formLabelWidth"
                 >
-                    <el-input placeholder="限15个汉字" style="width: 250px" v-model="oForm.name" autocomplete="off"></el-input>
+                    <el-input placeholder="请输入商品名称" style="width: 250px" v-model="oForm.name" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="商品图片" :label-width="formLabelWidth">
                     <el-upload
@@ -859,7 +859,7 @@
                         :label-width="formLabelWidth"
                         :required="true"
                 >
-                    <el-input placeholder="限15个汉字" style="width: 250px" v-model="oName" autocomplete="off"></el-input>
+                    <el-input placeholder="请输入商品名称" style="width: 250px" v-model="oName" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item
                         v-if="form.commodityType==4"
@@ -2016,7 +2016,7 @@
                     isUseSku: 2,
                 },
 
-                formLabelWidth: '120px',
+                formLabelWidth: '180px',
                 selectValue: {},
                 days: [
                     {
@@ -2259,23 +2259,23 @@
                 commodityType: [
                     {
                         value: '1',
-                        label: '实物'
+                        label: '实物（影城礼品如卖品、后产品）'
                     },
                     {
                         value: '2',
-                        label: '优惠券'
+                        label: '优惠券（兑换后直接券包中查询）'
                     },
                     {
                         value: '3',
-                        label: '券包'
+                        label: '券包（兑换后券包中查询）'
                     },
                     {
                         value: '4',
-                        label: '商户商品'
+                        label: '商户商品（周边商户合作产品）'
                     },
                     {
                         value: '5',
-                        label: '权益卡'
+                        label: '权益卡（兑换后自动开卡）'
                     }
                 ],
                 commodityCategoryType: [

@@ -49,6 +49,18 @@
                 ></el-input>
                 <el-select
                         clearable
+                        v-model="query.groupStatus"
+                        placeholder="组团状态"
+                        class="handle-select mr10"
+                >
+                    <el-option key="1" label="组团中" value="1"></el-option>
+                    <el-option key="2" label="组团失败" value="2"></el-option>
+                    <el-option key="3" label="组团成功" value="3"></el-option>
+                    <el-option key="4" label="已开场" value="4"></el-option>
+                    <el-option key="5" label="已撤销" value="5"></el-option>
+                </el-select>
+                <el-select
+                        clearable
                         v-model="query.payStatus"
                         placeholder="支付状态"
                         class="handle-select mr10"
@@ -93,14 +105,14 @@
                 <el-button
                         type="primary"
                         icon="el-icon-search"
-                        style="margin-top: 10px;width: 90px;"
+                        style="float: right;margin-top: 10px;width: 90px;"
                         @click="Search"
                 >搜索</el-button>
                 <el-button
                         type="primary"
                         @click="derive"
                         icon="el-icon-circle-plus-outline"
-                        style="float: right;margin-top: 10px"
+                        style="float: right;margin-top: 10px;margin-right: 10px;"
                 >导出</el-button>
             </div>
             <el-table
@@ -144,6 +156,15 @@
                 </el-table-column>
                 <el-table-column prop="memo" label="支付时间" width="160">
                     <template slot-scope="scope">{{scope.row.payTime}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="组团状态" width="100">
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row.groupStatus=='1'" type="danger">组团中</el-tag>
+                        <el-tag v-else-if="scope.row.groupStatus=='2'" type="success">组团失败</el-tag>
+                        <el-tag v-else-if="scope.row.groupStatus=='3'" type="danger">组团成功</el-tag>
+                        <el-tag v-else-if="scope.row.groupStatus=='4'" type="success">已开场</el-tag>
+                        <el-tag v-else-if="scope.row.groupStatus=='5'" type="success">已撤销</el-tag>
+                    </template>
                 </el-table-column>
                 <el-table-column prop="memo" label="支付状态" width="100">
                     <template slot-scope="scope">
@@ -257,6 +278,14 @@
                             :disabled="true"
                             style="width: 250px"
                             v-model="form.totalActualPrice"
+                            autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="组团状态" :label-width="formLabelWidth">
+                    <el-input
+                            :disabled="true"
+                            style="width: 250px"
+                            v-model="form.groupStatus"
                             autocomplete="off"
                     ></el-input>
                 </el-form-item>
@@ -409,6 +438,7 @@
                     let filmName = this.query.filmName;
                     let filmOpensName = this.query.filmOpensName;
                     let payStatus = this.query.payStatus;
+                    let groupStatus = this.query.groupStatus;
                     let sessionStartDate = this.query.sessionStartDate;
                     let sessionEndDate = this.query.sessionEndDate;
                     let payStartDate = this.query.payStartDate;
@@ -431,6 +461,9 @@
                     if (!payStatus) {
                         payStatus = '';
                     }
+                    if (!groupStatus) {
+                        groupStatus = '';
+                    }
                     if (!sessionStartDate) {
                         sessionStartDate = '';
                     }
@@ -445,14 +478,15 @@
                     }
                     let jsonArr = [];
                     jsonArr.push({ key: 'tableName', value: "film_opens_order" });
-                    jsonArr.push({ key: 'exportKeysJson', value: "['cinemaName',  'screenName', 'filmName', 'filmOpensName', 'sessionTime', 'orderNo', 'userMobile', 'number','totalOriginalPrice', 'totalActualPrice', 'payStatusText', 'payTime', 'refundReason', 'refundTime', 'totalRefundPrice']"});
-                    jsonArr.push({ key: 'exportTitlesJson', value:"['影院名称', '影厅名称', '电影名称', '点映名称', '放映时间', '订单编号', '用户手机号', '购买数量', '订单总原价', '订单总实付价','支付状态', '支付时间', '退款原因', '退款时间', '退款金额']" });
+                    jsonArr.push({ key: 'exportKeysJson', value: "['cinemaName',  'screenName', 'filmName', 'filmOpensName', 'sessionTime', 'orderNo', 'userMobile', 'number','totalOriginalPrice', 'totalActualPrice', 'groupStatusText', 'payStatusText', 'payTime', 'refundReason', 'refundTime', 'totalRefundPrice']"});
+                    jsonArr.push({ key: 'exportTitlesJson', value:"['影院名称', '影厅名称', '电影名称', '点映名称', '放映时间', '订单编号', '用户手机号', '购买数量', '订单总原价', '订单总实付价', '组团状态', '支付状态', '支付时间', '退款原因', '退款时间', '退款金额']" });
                     jsonArr.push({ key: 'orderNo', value: orderNo });
                     jsonArr.push({ key: 'userMobile', value: userMobile });
                     jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
                     jsonArr.push({ key: 'filmName', value: filmName });
                     jsonArr.push({ key: 'filmOpensName', value: filmOpensName });
                     jsonArr.push({ key: 'payStatus', value: payStatus });
+                    jsonArr.push({ key: 'groupStatus', value: groupStatus });
                     jsonArr.push({ key: 'sessionStartDate', value: sessionStartDate });
                     jsonArr.push({ key: 'sessionEndDate', value: sessionEndDate });
                     jsonArr.push({ key: 'payStartDate', value: payStartDate });
@@ -503,6 +537,17 @@
                                     this.form.payStatus = '支付失败';
                                 } else if (JSON.parse(Decrypt(data.data.data)).payStatus == 3) {
                                     this.form.payStatus = '退款成功';
+                                }
+                                if (JSON.parse(Decrypt(data.data.data)).groupStatus == 1) {
+                                    this.form.groupStatus = '组团中';
+                                } else if (JSON.parse(Decrypt(data.data.data)).groupStatus == 2) {
+                                    this.form.groupStatus = '组团失败';
+                                } else if (JSON.parse(Decrypt(data.data.data)).groupStatus == 3) {
+                                    this.form.groupStatus = '组团成功';
+                                } else if (JSON.parse(Decrypt(data.data.data)).groupStatus == 4) {
+                                    this.form.groupStatus = '已开场';
+                                } else if (JSON.parse(Decrypt(data.data.data)).groupStatus == 5) {
+                                    this.form.groupStatus = '已撤销';
                                 }
                             } else if (data.data.code == 'nologin') {
                                 this.message = data.data.message;
@@ -560,6 +605,7 @@
                     let filmName = this.query.filmName;
                     let filmOpensName = this.query.filmOpensName;
                     let payStatus = this.query.payStatus;
+                    let groupStatus = this.query.groupStatus;
                     let sessionStartDate = this.query.sessionStartDate;
                     let sessionEndDate = this.query.sessionEndDate;
                     let payStartDate = this.query.payStartDate;
@@ -586,6 +632,9 @@
                     if (!payStatus) {
                         payStatus = '';
                     }
+                    if (!groupStatus) {
+                        groupStatus = '';
+                    }
                     if (!sessionStartDate) {
                         sessionStartDate = '';
                     }
@@ -606,6 +655,7 @@
                     jsonArr.push({ key: 'filmName', value: filmName });
                     jsonArr.push({ key: 'filmOpensName', value: filmOpensName });
                     jsonArr.push({ key: 'payStatus', value: payStatus });
+                    jsonArr.push({ key: 'groupStatus', value: groupStatus });
                     jsonArr.push({ key: 'sessionStartDate', value: sessionStartDate });
                     jsonArr.push({ key: 'sessionEndDate', value: sessionEndDate });
                     jsonArr.push({ key: 'payStartDate', value: payStartDate });
