@@ -87,6 +87,7 @@
                     <el-option key="1" label="上架" value="1"></el-option>
                     <el-option key="2" label="下架" value="2"></el-option>
                 </el-select>
+                <el-input v-model="query.typeName" placeholder="卖品分类" class="handle-input mr10"></el-input>
                 <el-button style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
                 <el-button
                     type="primary"
@@ -600,15 +601,20 @@ export default {
             setTimeout(() => {
                 let merchandiseName = this.query.merchandiseName;
                 let merchandiseStatus = this.query.merchandiseStatus;
+                let typeName = this.query.typeName;
                 if (!merchandiseName) {
                     merchandiseName = '';
                 }
                 if (!merchandiseStatus) {
                     merchandiseStatus = '';
                 }
+                if (!typeName) {
+                    typeName = '';
+                }
                 let jsonArr = [];
                 jsonArr.push({ key: 'merchandiseName', value: merchandiseName });
                 jsonArr.push({ key: 'merchandiseStatus', value: merchandiseStatus });
+                jsonArr.push({ key: 'typeName', value: typeName });
                 jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
                 jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
                 jsonArr.push({ key: 'cinemaCode', value: this.cinemaCode });

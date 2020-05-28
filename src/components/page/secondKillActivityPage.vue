@@ -729,7 +729,7 @@
                             </el-popover>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="sort" label="商品名称" width="150">
+                    <el-table-column prop="sort" label="商品名称">
                         <template slot-scope="scope">{{scope.row.name}}</template>
                     </el-table-column>
                 </el-table>

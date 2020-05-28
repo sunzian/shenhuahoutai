@@ -30,7 +30,8 @@ export default {
         return {
             tagsList: [],
             collapse: false,
-            key:false
+            key:false,
+            message: '', //弹出框消息
         };
     },
     components: {
@@ -41,6 +42,8 @@ export default {
     mounted() {
         https.fetchPost('/admin/getMenus','').then((data) => {//获取菜单栏
             if(data.data.code=='nologin'){
+                this.message = data.data.message;
+                this.open();
                 this.$router.push('/login');
             }
             else if(data.data.code == 'success'){
@@ -54,6 +57,14 @@ export default {
             this.$router.push('/login');
             }
         )
+    },
+    methods: {
+        open() {
+            //信息提示弹出框
+            this.$alert(this.message, '信息提示', {
+                dangerouslyUseHTMLString: true
+            });
+        },
     },
     created() {
         bus.$on('collapse-content', msg => {

@@ -60,11 +60,14 @@ export default {
         return {
             collapse: false,
             menuList:[],
+            message: '', //弹出框消息
         };
     },
     mounted() {
         https.fetchPost('/admin/getMenus','').then((data) => {//获取菜单栏
             if(data.data.code=='nologin'){
+                this.message = data.data.message;
+                this.open();
                 this.$router.push('/login');
             }
            else if(data.data.code == 'success'){
@@ -85,6 +88,12 @@ export default {
         }
     },
     methods:{
+        open() {
+            //信息提示弹出框
+            this.$alert(this.message, '信息提示', {
+                dangerouslyUseHTMLString: true
+            });
+        },
     },
     created() {
         this.cinemaCode = this.$route.query.cinemaCode
