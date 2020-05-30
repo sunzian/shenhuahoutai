@@ -2340,7 +2340,7 @@ export default {
             jsonArr.push({ key: 'messagePlatformType', value: this.oForm.messagePlatformType });
             let messageInfos = [];
             if (this.oForm.messageType1) {
-                messageInfos.push({ 'messageType':  1 , 'content': this.oForm.messageType1 });
+                messageInfos.push({ 'messageType': 1 , 'content': this.oForm.messageType1 });
             }
             if (this.oForm.messageType2) {
                 messageInfos.push({ 'messageType': 2 ,  'content': this.oForm.messageType2 });

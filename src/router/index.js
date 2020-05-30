@@ -646,6 +646,11 @@ export default new Router({
                     meta: { title: '批量结算订单' }
                 },
                 {
+                    path: '/adminSecondKillActivityPage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/adminSecondKillActivityPage.vue'),
+                    meta: { title: '秒杀活动管理' }
+                },
+                {
                     path: '/404',
                     component: () => import(/* webpackChunkName: "404" */ '../components/page/404.vue'),
                     meta: { title: '404' }

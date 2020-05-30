@@ -2505,7 +2505,7 @@ export default {
                 return;
             }
             if (this.oReduceType == 1) {
-                if (!this.oDiscountMoney || this.oDiscountMoney.toString().replace(/[^0-9.]+/,'') == '') {
+                if (this.oDiscountMoney === false || this.oDiscountMoney.toString().replace(/[^0-9.]+/,'') == '') {
                         this.message = '固定金额不能为空，请检查！';
                         this.open();
                         loading.close();

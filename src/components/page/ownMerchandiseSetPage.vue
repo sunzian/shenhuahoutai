@@ -62,6 +62,9 @@
                 <el-table-column prop="code" label="影院名称">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
+                <el-table-column prop="code" label="套餐名称">
+                    <template slot-scope="scope">{{scope.row.comboName}}</template>
+                </el-table-column>
                 <el-table-column prop="name" label="套餐图片">
                     <template slot-scope="scope">
                         <el-popover placement="right" title trigger="hover">
@@ -131,36 +134,109 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item :required="true" label="新增套餐：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="套餐名称：" :label-width="formLabelWidth">
+                    <el-input v-model="oForm.comboName" autocomplete="off" style="width: 220px"></el-input>
+                </el-form-item>
+                <el-form-item :required="true" label="套餐图片：" :label-width="formLabelWidth">
+                    <el-upload
+                        class="upload-demo"
+                        action="/api/upload/uploadImage"
+                        :before-upload="beforeUpload"
+                        :data="type"
+                        :limit="1"
+                        :on-exceed="exceed"
+                        ref="download"
+                        :on-success="onSuccess"
+                        :file-list="fileList"
+                        list-type="picture"
+                    >
+                        <el-button size="small" type="primary">点击上传</el-button>
+                        <div
+                            slot="tip"
+                            class="el-upload__tip"
+                        >只能上传jpg/png文件，且不超过200kb 建议尺寸200*200或按比例上传</div>
+                    </el-upload>
+                </el-form-item>
+                <el-form-item :required="true" label="套餐：" :label-width="formLabelWidth">
                     <div v-for="(item, index) in comboList" style="margin-bottom: 5px" :key="index">
                         <span>{{item.name}}</span>
-                        <!-- <span style="color:red;cursor: pointer;" @click="deleteSell(index)">删除</span> -->
+                        <span class="deleteGoodsItem" @click="deleteGoodsItem(index)">删除该商品</span>
+                        <br />
                         <span class="addGoodsItem" @click="openNext(item.id)">点击添加</span>
+                        <div v-for="(goodsItem, inx) in item.itemList" :key="inx">
+                            <div>
+                                <el-input
+                                    v-model="goodsItem.name"
+                                    autocomplete="off"
+                                    :value="goodsItem.code"
+                                    :disabled="true"
+                                    style="width: 150px"
+                                ></el-input>&nbsp;&nbsp;&nbsp;&nbsp;
+                                数量：
+                                <el-input
+                                    v-model="goodsItem.count"
+                                    autocomplete="off"
+                                    :value="goodsItem.count"
+                                    style="width: 100px"
+                                    onkeyup="this.value=this.value.replace(/\D/g,'')"
+                                    @input="changeInput($event, index, inx)"
+                                ></el-input>浮动价格：
+                                <el-input
+                                    v-model="goodsItem.price"
+                                    autocomplete="off"
+                                    :value="goodsItem.price"
+                                    style="width: 100px"
+                                    onkeyup="this.value=this.value.replace(/[^0-9-]+/,'')"
+                                    @input="changeInput($event, index, inx)"
+                                ></el-input>
+                                <span
+                                    style="color:red;cursor: pointer;"
+                                    @click="deleteSell(index, inx)"
+                                >删除</span>
+                            </div>
+                        </div>
                     </div>
                     <el-button type="primary" @click="addComboGoods">添加主商品</el-button>
                 </el-form-item>
-                <!-- <el-form-item
-                        label="商品1："
-                        :label-width="formLabelWidth"
-                        :required="true"
-                        >
-                        <div
-                            v-for="(item, index) in selectedSell"
-                            style="margin-bottom: 5px"
-                            :key="index"
-                            >
-                            <el-input
-                                style="width: 250px"
-                                v-model="item.merchandiseName"
-                                autocomplete="off"
-                                :value="item.merchandiseCode"
-                                :disabled="true"
-                                :change="one(item.merchandiseCode)"
-                            ></el-input>
-                            <span style="color:red;cursor: pointer;" @click="deleteSell(index)">删除</span>
-                        </div>
-                        <el-button type="primary" @click="openNext">点击添加</el-button>
-                </el-form-item>-->
+                <el-form-item :required="true" label="套餐默认价格：" :label-width="formLabelWidth">
+                    <el-input
+                        v-model="oForm.basePrice"
+                        autocomplete="off"
+                        style="width: 220px"
+                        onkeyup="this.value=this.value.replace(/\D/g,'')"
+                    ></el-input>
+                    <span
+                        style="font-size:16px;color:red;margin-left:10px"
+                    >套餐实际价格 = 套餐默认价格 +/- 商品浮动价格</span>
+                </el-form-item>
+                <el-form-item label="展示顺序(越小越靠前)：" :label-width="formLabelWidth">
+                    <el-input
+                        v-model="oForm.showSeqNo"
+                        autocomplete="off"
+                        style="width: 220px"
+                        onkeyup="this.value=this.value.replace(/\D/g,'')"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="套餐描述：" :label-width="formLabelWidth">
+                    <el-input
+                            v-model="oForm.comboDesc"
+                            type="textarea"
+                            show-word-limit
+                            maxlength="200"
+                            :rows="5"
+                            style="width: 300px"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="卖品分类：" :label-width="formLabelWidth">
+                    <el-select v-model="oForm.typeCode" placeholder="请选择分类">
+                        <el-option
+                            v-for="item in selectValue"
+                            :key="item.typeName"
+                            :label="item.typeName"
+                            :value="item.typeCode"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
                 <el-form-item :required="true" label="上架状态：" :label-width="formLabelWidth">
                     <el-select v-model="oForm.status" placeholder="请选择">
                         <el-option
@@ -173,13 +249,144 @@
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="cancel">取 消</el-button>
+                <el-button @click="dialogFormVisible = false">取 消</el-button>
                 <el-button type="primary" @click="addRole">确 定</el-button>
             </span>
         </el-dialog>
         <!-- 编辑弹出框 -->
-        <el-dialog :close-on-click-modal="false" title="修改规则" :visible.sync="editVisible">
-            <el-form ref="form" :model="form"></el-form>
+        <el-dialog :close-on-click-modal="false" title="修改套餐" :visible.sync="editVisible">
+            <el-form :model="updateForm">
+                <el-form-item :required="true" label="影院名称：" :label-width="formLabelWidth">
+                    <el-input v-model="updateForm.cinemaName" autocomplete="off" :disabled="true" style="width: 220px"></el-input>
+                </el-form-item>
+                <el-form-item :required="true" label="套餐名称：" :label-width="formLabelWidth">
+                    <el-input v-model="updateForm.comboName" autocomplete="off" style="width: 220px"></el-input>
+                </el-form-item>
+                <el-form-item :required="true" label="套餐图片：" :label-width="formLabelWidth">
+                    <el-popover placement="right" title trigger="hover">
+                        <img :src="updateForm.comboImage"/>
+                        <img
+                                slot="reference"
+                                :src="updateForm.comboImage"
+                                :alt="updateForm.comboImage"
+                                style="max-height: 50px;max-width: 130px"
+                        />
+                    </el-popover>
+                    <el-upload
+                            :before-upload="beforeUpload"
+                            :data="type"
+                            class="upload-demo"
+                            drag
+                            action="/api/upload/uploadImage"
+                            ref="download"
+                            :limit="1"
+                            :on-exceed="exceed"
+                            :on-success="unSuccess"
+                            multiple
+                    >
+                        <i class="el-icon-upload"></i>
+                        <div class="el-upload__text">
+                            将文件拖到此处，或
+                            <em>点击上传</em>
+                        </div>
+                        <div
+                                class="el-upload__tip"
+                                slot="tip"
+                        >只能上传jpg/png文件，且不超过200kb 建议尺寸200*200或按比例上传
+                        </div>
+                    </el-upload>
+                </el-form-item>
+                <el-form-item :required="true" label="套餐：" :label-width="formLabelWidth">
+                    <div v-for="(item, index) in comboList" style="margin-bottom: 5px" :key="index">
+                        <span>{{item.name}}</span>
+                        <span class="deleteGoodsItem" @click="deleteGoodsItem(index)">删除该商品</span>
+                        <br />
+                        <span class="addGoodsItem" @click="openNext(item.id)">点击添加</span>
+                        <div v-for="(goodsItem, inx) in item.itemList" :key="inx">
+                            <div>
+                                <el-input
+                                    v-model="goodsItem.name"
+                                    autocomplete="off"
+                                    :value="goodsItem.code"
+                                    :disabled="true"
+                                    style="width: 150px"
+                                ></el-input>&nbsp;&nbsp;&nbsp;&nbsp;
+                                数量：
+                                <el-input
+                                    v-model="goodsItem.count"
+                                    autocomplete="off"
+                                    :value="goodsItem.count"
+                                    style="width: 100px"
+                                    onkeyup="this.value=this.value.replace(/\D/g,'')"
+                                    @input="changeInput($event, index, inx)"
+                                ></el-input>浮动价格：
+                                <el-input
+                                    v-model="goodsItem.price"
+                                    autocomplete="off"
+                                    :value="goodsItem.price"
+                                    style="width: 100px"
+                                    onkeyup="this.value=this.value.replace(/[^0-9-]+/,'')"
+                                    @input="changeInput($event, index, inx)"
+                                ></el-input>
+                                <span
+                                    style="color:red;cursor: pointer;"
+                                    @click="deleteSell(index, inx)"
+                                >删除</span>
+                            </div>
+                        </div>
+                    </div>
+                    <el-button type="primary" @click="addComboGoods">添加主商品</el-button>
+                </el-form-item>
+                <el-form-item :required="true" label="套餐默认价格：" :label-width="formLabelWidth">
+                    <el-input
+                        v-model="updateForm.basePrice"
+                        autocomplete="off"
+                        style="width: 220px"
+                        onkeyup="this.value=this.value.replace(/\D/g,'')"
+                    ></el-input>
+                    <span
+                        style="font-size:16px;color:red;margin-left:10px"
+                    >套餐实际价格 = 套餐默认价格 +/- 商品浮动价格</span>
+                </el-form-item>
+                <el-form-item label="展示顺序(越小越靠前)：" :label-width="formLabelWidth">
+                    <el-input
+                        v-model="updateForm.showSeqNo"
+                        autocomplete="off"
+                        style="width: 220px"
+                        onkeyup="this.value=this.value.replace(/\D/g,'')"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="套餐描述：" :label-width="formLabelWidth">
+                    <el-input
+                            type="textarea"
+                            show-word-limit
+                            maxlength="200"
+                            :rows="5"
+                            style="width: 300px"
+                            v-model="updateForm.comboDesc"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="卖品分类：" :label-width="formLabelWidth">
+                    <el-select v-model="updateForm.typeCode" placeholder="请选择分类">
+                        <el-option
+                            v-for="item in selectValue"
+                            :key="item.typeName"
+                            :label="item.typeName"
+                            :value="item.typeCode"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item :required="true" label="上架状态：" :label-width="formLabelWidth">
+                    <el-select v-model="updateForm.status" placeholder="请选择">
+                        <el-option
+                            v-for="item in options"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
+            </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false">取 消</el-button>
                 <el-button type="primary" @click="exChanger">确 定</el-button>
@@ -226,7 +433,7 @@
                             </el-popover>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="sort" label="卖品名称" width="150">
+                    <el-table-column prop="sort" label="卖品名称">
                         <template slot-scope="scope">{{scope.row.merchandiseName}}</template>
                     </el-table-column>
                 </el-table>
@@ -281,7 +488,10 @@ export default {
                     label: '不上架'
                 }
             ],
-            type: [
+            type: {
+                type: ''
+            },
+            status: [
                 {
                     value: '1',
                     label: '上架'
@@ -293,6 +503,7 @@ export default {
             ],
             cinemaInfo: [],
             cardList: [],
+            selectValue: [], // 卖品分类
             form: [],
             tableData: [],
             multipleSelection: [],
@@ -316,6 +527,7 @@ export default {
             delList: [],
             couponList: [],
             couponInfo: [],
+            fileList: [],
             editVisible: false,
             pageTotal: 0,
             idx: -1,
@@ -324,22 +536,25 @@ export default {
             dialogFormVisible: false,
             oForm: {
                 cinemaName: '',
-                levelCode: '',
-                ruleName: '', // 规则名称
-                rechargeAmount: '', // 充值金额
-                givenType: '', // 赠送类型
-                givenMoney: '', //赠送金额
-                givenCouponGroupId: '', //赠送优惠券
-                ruleMemo: '', // 活动描述
+                cinemaCode: '',
+                comboName: '', // 套餐名称
+                comboImage: '', // 套餐图片
+                basePrice: '', // 套餐默认价格
+                showSeqNo: '0', // 展示顺序
                 status: '', // 启用状态
+                comboDesc: '', // 套餐描述
+                typeCode: '' // 套餐分类
+            },
+            updateForm: {
+                cinemaCode: '',
+                comboName: '', // 套餐名称
+                comboImage: '', // 套餐图片
+                basePrice: '', // 套餐默认价格
+                showSeqNo: '0', // 展示顺序
+                status: '', // 启用状态
+                comboDesc: '', // 套餐描述
                 id: '',
-                effectiveTimeType: '',
-                startEffectDate: '',
-                endEffectDate: '',
-                startDate: '',
-                endDate: '',
-                synchronizeRule: '2',
-                syncCinemaCode: []
+                typeCode: '' // 套餐分类
             },
             formLabelWidth: '160px',
             selectValue: {},
@@ -370,6 +585,9 @@ export default {
                 .fetchPost('/ownMerchandiseSet/addPage', '')
                 .then(data => {
                     this.cardList = [];
+                    this.fileList = [];
+                    this.comboList = [];
+                    this.comboList.push({'name': '商品1', 'id': 1, 'itemList': []},{'name': '商品2', 'id': 2, 'itemList': []});
                     loading.close();
                     if (data.data.code == 'success') {
                         this.dialogFormVisible = true;
@@ -396,35 +614,55 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            if (!this.oForm.cinemaName) {
-                this.message = '影院名称不能为空，请检查！';
+            if (!this.oForm.cinemaCode || this.oForm.cinemaCode == '') {
+                this.message = '请选择影院！';
                 this.open();
                 loading.close();
                 return;
             }
-            if (!this.oForm.levelName) {
-                this.message = '会员卡名称不能为空，请检查！';
+            if (!this.oForm.comboName || this.oForm.comboName == '') {
+                this.message = '套餐名称不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
             }
-            if (!this.oForm.ruleName) {
-                this.message = '开卡规则名称不能为空，请检查！';
+            if (!this.oForm.comboImage || this.oForm.comboImage == '') {
+                this.message = '套餐图片不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
             }
-            if (!this.oForm.givenType) {
-                this.message = '赠送类型不能为空，请检查！';
+            if (!this.oForm.basePrice || this.oForm.basePrice <= 0) {
+                this.message = '套餐基础价格必须大于0，请检查！';
                 this.open();
                 loading.close();
                 return;
             }
-            if (!this.oForm.startDate || !this.oForm.endDate) {
-                this.message = '开卡规则有效期不能为空，请检查！';
-                this.open();
-                loading.close();
-                return;
+            for (let i = 0; i < this.comboList.length; i++) {
+                if (this.comboList[i].itemList.length == 0) {
+                    this.message = '套餐内商品不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                for (let j = 0; j < this.comboList[i].itemList.length; j++) {
+                    if (
+                        !this.comboList[i].itemList[j].count ||
+                        this.comboList[i].itemList[j].count == '' ||
+                        this.comboList[i].itemList[j].count == 0
+                    ) {
+                        this.message = '套餐内卖品数量必须大于0，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                    if (this.comboList[i].itemList[j].price === false || this.comboList[i].itemList[j].price === '') {
+                        this.message = '套餐内浮动价格不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
             }
             if (!this.oForm.status) {
                 this.message = '状态不能为空，请检查！';
@@ -432,143 +670,63 @@ export default {
                 loading.close();
                 return;
             }
-            if (this.oForm.givenType == 3) {
-                if (!this.groupName) {
-                    this.message = '所选券包不能为空，请检查！';
-                    this.open();
-                    loading.close();
-                    return;
-                }
-                if (!this.oForm.effectiveTimeType) {
-                    this.message = '券包生效方式不能为空！';
-                    this.open();
-                    loading.close();
-                    return;
-                }
-                if (this.oForm.effectiveTimeType == 1) {
-                    if (!this.oForm.overDays && this.oForm.overDays != 0) {
-                        this.message = '券包有效期天数不能为空！';
-                        this.open();
-                        loading.close();
-                        return;
-                    }
-                    if (this.oForm.overDays <= 0) {
-                        this.message = '优惠券领取后有效期天数必须大于0，请检查！';
-                        this.open();
-                        loading.close();
-                        return;
-                    }
-                } else if (this.oForm.effectiveTimeType == 2) {
-                    if (!this.oForm.startEffectDate || !this.oForm.endEffectDate) {
-                        this.message = '券包有效期时间段不能为空，请检查！';
-                        this.open();
-                        loading.close();
-                        return;
-                    }
-                }
-            }
             var jsonArr = [];
-            if (this.couponId != '') {
-                jsonArr.push({ key: 'givenCouponGroupId', value: this.couponId });
-            }
             jsonArr.push({ key: 'cinemaCode', value: this.oForm.cinemaCode });
-            jsonArr.push({ key: 'ruleName', value: this.oForm.ruleName });
-            jsonArr.push({ key: 'rechargeAmount', value: '0' });
-            jsonArr.push({ key: 'cardLevelCode', value: this.oForm.levelName });
-            jsonArr.push({ key: 'synchronizeRule', value: this.oForm.synchronizeRule });
-            if (this.oForm.synchronizeRule == 1) {
-                if (this.oForm.syncCinemaCode.length == 0) {
-                    this.message = '请选择同步影院~';
-                    this.open();
-                    loading.close();
-                    return;
-                }
-                jsonArr.push({ key: 'cinemaCodes', value: this.oForm.syncCinemaCode.join(',') });
-            }
-            jsonArr.push({ key: 'givenType', value: this.oForm.givenType });
-            jsonArr.push({ key: 'effectiveTimeType', value: this.oForm.effectiveTimeType });
-            if (this.oForm.effectiveTimeType == 1) {
-                jsonArr.push({ key: 'overDays', value: this.oForm.overDays });
-            }
-            if (this.oForm.effectiveTimeType == 2) {
-                jsonArr.push({ key: 'startEffectDate', value: this.oForm.startEffectDate });
-                jsonArr.push({ key: 'endEffectDate', value: this.oForm.endEffectDate });
-            }
-            jsonArr.push({ key: 'ruleMemo', value: this.oForm.ruleMemo });
-            jsonArr.push({ key: 'startDate', value: this.oForm.startDate });
-            jsonArr.push({ key: 'endDate', value: this.oForm.endDate });
+            jsonArr.push({ key: 'comboName', value: this.oForm.comboName });
+            jsonArr.push({ key: 'comboImage', value: this.oForm.comboImage });
+            jsonArr.push({ key: 'basePrice', value: this.oForm.basePrice });
             jsonArr.push({ key: 'status', value: this.oForm.status });
+            jsonArr.push({ key: 'showSeqNo', value: this.oForm.showSeqNo });
+            jsonArr.push({ key: 'comboDesc', value: this.oForm.comboDesc });
+            jsonArr.push({ key: 'typeCode', value: this.oForm.typeCode });
+            let merSetDetailsJson = [];
+            for (let i = 0; i < this.comboList.length; i++) {
+                for (let j = 0; j < this.comboList[i].itemList.length; j++) {
+                    merSetDetailsJson.push({
+                        inCode: this.comboList[i].id,
+                        merCode: this.comboList[i].itemList[j].code,
+                        merNumber: this.comboList[i].itemList[j].count,
+                        floatPrice: this.comboList[i].itemList[j].price
+                    });
+                }
+            }
+            jsonArr.push({ key: 'merSetDetailsJson', value: JSON.stringify(merSetDetailsJson)});
             console.log(jsonArr);
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             let params = ParamsAppend(jsonArr);
-            if (this.adminFlag == 1 && this.oForm.synchronizeRule == 1) {
-                this.$confirm('是否同步到所选影院？', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
+            https
+                .fetchPost('/ownMerchandiseSet/add', params)
+                .then(data => {
+                    loading.close();
+                    if (data.data.code == 'success') {
+                        this.dialogFormVisible = false;
+                        this.$message.success(`新增成功`);
+                        this.getMenu();
+                        this.oForm.cinemaCode = '';
+                        this.oForm.cinemaName = '';
+                        this.oForm.comboName = ''; // 套餐名称
+                        this.oForm.comboImage = ''; // 套餐图片
+                        this.oForm.basePrice = ''; // 套餐默认价格
+                        this.oForm.showSeqNo = '0'; // 展示顺序
+                        this.oForm.status = ''; // 启用状态
+                        this.oForm.comboDesc = ''; // 套餐描述
+                        this.oForm.typeCode = ''; // 卖品分类
+                        this.comboList = [];
+                        this.comboList.push({'name': '商品1', 'id': 1, 'itemList': []},{'name': '商品2', 'id': 2, 'itemList': []});
+                    } else if (data.data.code == 'nologin') {
+                        this.message = data.data.message;
+                        this.open();
+                        this.$router.push('/login');
+                    } else {
+                        this.message = data.data.message;
+                        this.open();
+                    }
                 })
-                    .then(() => {
-                        if (this.dialogFormVisible == true) {
-                            https
-                                .fetchPost('/openCardRule/addOpenCardRule', params)
-                                .then(data => {
-                                    loading.close();
-                                    if (data.data.code == 'success') {
-                                        this.dialogFormVisible = false;
-                                        this.$message.success(`新增成功`);
-                                        this.oForm.syncCinemaCode = [];
-                                        this.checkAll = false;
-                                        this.getMenu();
-                                    } else if (data.data.code == 'nologin') {
-                                        this.message = data.data.message;
-                                        this.open();
-                                        this.$router.push('/login');
-                                    } else {
-                                        this.message = data.data.message;
-                                        this.open();
-                                    }
-                                })
-                                .catch(err => {
-                                    loading.close();
-                                    console.log(err);
-                                });
-                        }
-                    })
-                    .catch(() => {
-                        loading.close();
-                        this.$message({
-                            type: 'info',
-                            message: '已取消'
-                        });
-                    });
-            } else {
-                if (this.dialogFormVisible == true) {
-                    https
-                        .fetchPost('/openCardRule/addOpenCardRule', params)
-                        .then(data => {
-                            loading.close();
-                            if (data.data.code == 'success') {
-                                this.dialogFormVisible = false;
-                                this.$message.success(`新增成功`);
-                                this.checkAll = false;
-                                this.oForm.syncCinemaCode = [];
-                                this.getMenu();
-                            } else if (data.data.code == 'nologin') {
-                                this.message = data.data.message;
-                                this.open();
-                                this.$router.push('/login');
-                            } else {
-                                this.message = data.data.message;
-                                this.open();
-                            }
-                        })
-                        .catch(err => {
-                            loading.close();
-                            console.log(err);
-                        });
-                }
-            }
+                .catch(err => {
+                    loading.close();
+                    console.log(err);
+                });
         },
         delChange(index, row) {
             this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
@@ -593,7 +751,7 @@ export default {
                     jsonArr.push({ key: 'sign', value: sign });
                     let params = ParamsAppend(jsonArr);
                     https
-                        .fetchDelete('/openCardRule/deleteOpenCardRule', params)
+                        .fetchDelete('/ownMerchandiseSet/delete', params)
                         .then(data => {
                             loading.close();
                             if (data.data.code == 'success') {
@@ -637,69 +795,99 @@ export default {
             jsonArr.push({ key: 'sign', value: sign });
             let params = ParamsAppend(jsonArr);
             https
-                .fetchPost('/openCardRule/modifyPage', params)
+                .fetchPost('/ownMerchandiseSet/updatePage', params)
                 .then(data => {
                     loading.close();
                     if (data.data.code == 'success') {
                         console.log(JSON.parse(Decrypt(data.data.data)));
                         this.editVisible = true;
-                        this.cardList = JSON.parse(Decrypt(data.data.data)).cardLevelList;
-                        this.oCinemaName = JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.cinemaName;
-                        this.oForm.cinemaCode = JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.cinemaCode;
-                        this.oSynchronizeRule = '2';
-                        for (let x in JSON.parse(Decrypt(data.data.data)).cardLevelList) {
-                            if (
-                                JSON.parse(Decrypt(data.data.data)).cardLevelList[x].levelCode ==
-                                JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.cardLevelCode
-                            ) {
-                                this.oCardLevelName = JSON.parse(Decrypt(data.data.data)).cardLevelList[x].levelCode;
+                        this.updateForm.cinemaName = JSON.parse(Decrypt(data.data.data)).ownMerchandiseSet.cinemaName;
+                        this.oForm.cinemaCode = JSON.parse(Decrypt(data.data.data)).ownMerchandiseSet.cinemaCode;
+                        this.updateForm.comboName = JSON.parse(Decrypt(data.data.data)).ownMerchandiseSet.comboName;
+                        this.updateForm.comboImage = JSON.parse(Decrypt(data.data.data)).ownMerchandiseSet.comboImage;
+                        this.updateForm.basePrice = JSON.parse(Decrypt(data.data.data)).ownMerchandiseSet.basePrice;
+                        this.updateForm.typeCode = JSON.parse(Decrypt(data.data.data)).ownMerchandiseSet.typeCode;
+                        for (let i in this.status) {
+                            //下拉框显示对应的选项
+                            if (this.status[i].value == JSON.parse(Decrypt(data.data.data)).ownMerchandiseSet.status) {
+                                this.updateForm.status = this.status[i].value;
                                 break;
                             }
                         }
-                        this.oRuleName = JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.ruleName;
-                        this.oOverDays = JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.overDays;
-                        this.oRechargeAmount = JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.rechargeAmount;
-                        this.groupName = JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.couponGroupName;
-                        this.couponId = JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.givenCouponGroupId;
-                        this.oStartEffectDate = JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.startEffectDate;
-                        this.oEndEffectDate = JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.endEffectDate;
-                        if (JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.givenMoney) {
-                            this.oGivenMoney = JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.givenMoney;
+                        this.updateForm.showSeqNo = JSON.parse(Decrypt(data.data.data)).ownMerchandiseSet.showSeqNo;
+                        this.updateForm.comboDesc = JSON.parse(Decrypt(data.data.data)).ownMerchandiseSet.comboDesc;
+                        this.updateForm.id = JSON.parse(Decrypt(data.data.data)).ownMerchandiseSet.id;
+                        let arr = JSON.parse(Decrypt(data.data.data)).merSetDetails;
+                        let list = [];
+                        let arr1 = [];
+                        let arr2 = [];
+                        let arr3 = [];
+                        let arr4 = [];
+                        let arr5 = [];
+                        for (let i = 0; i < arr.length; i ++) {
+                            if (arr[i].inCode == 1) {
+                                arr1.push({
+                                        'name': arr[i].merName,
+                                        'code': arr[i].merCode,
+                                        'count': arr[i].merNumber,
+                                        'price': arr[i].floatPrice
+                                    }
+                                )
+                            };
+                            if (arr[i].inCode == 2) {
+                                arr2.push({
+                                        'name': arr[i].merName,
+                                        'code': arr[i].merCode,
+                                        'count': arr[i].merNumber,
+                                        'price': arr[i].floatPrice
+                                    }
+                                )
+                            };
+                            if (arr[i].inCode == 3) {
+                                arr3.push({
+                                        'name': arr[i].merName,
+                                        'code': arr[i].merCode,
+                                        'count': arr[i].merNumber,
+                                        'price': arr[i].floatPrice
+                                    }
+                                )
+                            };
+                            if (arr[i].inCode == 4) {
+                                arr4.push({
+                                        'name': arr[i].merName,
+                                        'code': arr[i].merCode,
+                                        'count': arr[i].merNumber,
+                                        'price': arr[i].floatPrice
+                                    }
+                                )
+                            };
+                            if (arr[i].inCode == 5) {
+                                arr5.push({
+                                        'name': arr[i].merName,
+                                        'code': arr[i].merCode,
+                                        'count': arr[i].merNumber,
+                                        'price': arr[i].floatPrice
+                                    }
+                                )
+                            };
                         }
-                        // if (JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.givenType == 1) {
-                        //     this.oGivenType = '不赠送';
-                        // }
-                        // if (JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.givenType == 2) {
-                        //     this.oGivenType = '赠送金额';
-                        // }
-                        // if (JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.givenType == 3) {
-                        //     this.oGivenType = '赠送券包';
-                        // }
-                        // if (JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.givenType == 4) {
-                        //     this.oGivenType = '两者都送';
-                        // }
-                        for (let i in this.type) {
-                            //轮播图类型下拉框显示对应的选项
-                            if (this.type[i].value == JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.givenType) {
-                                this.oGivenType = this.type[i].value;
-                                break;
-                            }
-                        }
-                        if (JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.effectiveTimeType == 1) {
-                            this.oEffectiveTimeType = 1;
-                        }
-                        if (JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.effectiveTimeType == 2) {
-                            this.oEffectiveTimeType = 2;
-                        }
-                        this.oRuleMemo = JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.ruleMemo;
-                        this.oStartDate = JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.startDate;
-                        this.oEndDate = JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.endDate;
-                        if (JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.status == 1) {
-                            this.oStatus = '启用';
-                        } else {
-                            this.oStatus = '未启用';
-                        }
-                        this.oId = JSON.parse(Decrypt(data.data.data)).memberCardOpenRules.id;
+                        if (arr1.length > 0) {
+                            list.push({'name': '商品1', 'id': 1, 'itemList': arr1})
+                        };
+                        if (arr2.length > 0) {
+                            list.push({'name': '商品2', 'id': 2, 'itemList': arr2})
+                        };
+                        if (arr3.length > 0) {
+                            list.push({'name': '商品3', 'id': 3, 'itemList': arr3})
+                        };
+                        if (arr4.length > 0) {
+                            list.push({'name': '商品4', 'id': 4, 'itemList': arr4})
+                        };
+                        if (arr5.length > 0) {
+                            list.push({'name': '商品5', 'id': 5, 'itemList': arr5})
+                        };
+                        this.comboList = list;
+                        this.queryMerType();
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
@@ -723,227 +911,111 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            if (!this.oCinemaName) {
-                this.message = '影院名称不能为空，请检查！';
+            if (!this.oForm.cinemaCode || this.oForm.cinemaCode == '') {
+                this.message = '请选择影院！';
                 this.open();
                 loading.close();
                 return;
             }
-            if (!this.oCardLevelName) {
-                this.message = '会员卡名称不能为空，请检查！';
+            if (!this.updateForm.comboName || this.updateForm.comboName == '') {
+                this.message = '套餐名称不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
             }
-            if (!this.oRuleName) {
-                this.message = '开卡规则名称不能为空，请检查！';
+            if (!this.updateForm.comboImage || this.updateForm.comboImage == '') {
+                this.message = '套餐图片不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
             }
-            if (!this.oGivenType) {
-                this.message = '赠送类型不能为空，请检查！';
+            if (!this.updateForm.basePrice || this.updateForm.basePrice <= 0) {
+                this.message = '套餐基础价格必须大于0，请检查！';
                 this.open();
                 loading.close();
                 return;
             }
-            if (!this.oStartDate || !this.oEndDate) {
-                this.message = '开卡规则有效期不能为空，请检查！';
-                this.open();
-                loading.close();
-                return;
+            for (let i = 0; i < this.comboList.length; i++) {
+                if (this.comboList[i].itemList.length == 0) {
+                    this.message = '套餐内商品不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                for (let j = 0; j < this.comboList[i].itemList.length; j++) {
+                    if (
+                        !this.comboList[i].itemList[j].count ||
+                        this.comboList[i].itemList[j].count == '' ||
+                        this.comboList[i].itemList[j].count == 0
+                    ) {
+                        this.message = '套餐内卖品数量必须大于0，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                    if (this.comboList[i].itemList[j].price === false || this.comboList[i].itemList[j].price === '') {
+                        this.message = '套餐内浮动价格不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
             }
-            if (!this.oStartDate) {
+            if (!this.updateForm.status) {
                 this.message = '状态不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
             }
-            if (this.oGivenType == '赠送券包') {
-                if (!this.groupName) {
-                    this.message = '所选券包不能为空，请检查！';
-                    this.open();
-                    loading.close();
-                    return;
-                }
-                if (this.oEffectiveTimeType == 1) {
-                    if (!this.oOverDays && this.oOverDays != 0) {
-                        this.message = '券包有效期天数不能为空！';
-                        this.open();
-                        loading.close();
-                        return;
-                    }
-                    if (this.oOverDays <= 0) {
-                        this.message = '优惠券领取后有效期天数必须大于0，请检查！';
-                        this.open();
-                        loading.close();
-                        return;
-                    }
-                } else if (this.oEffectiveTimeType == 2) {
-                    if (!this.oStartEffectDate || !this.oEndEffectDate) {
-                        this.message = '券包有效期时间段不能为空，请检查！';
-                        this.open();
-                        loading.close();
-                        return;
-                    }
-                }
-            }
-            var jsonArr = [];
-            if (this.oGivenType == '不赠送') {
-                jsonArr.push({ key: 'givenType', value: 1 });
-                this.oGivenMoney = '';
-                this.couponId = '';
-                this.groupName = '';
-            } else if (this.oGivenType == '赠送金额') {
-                jsonArr.push({ key: 'givenType', value: 2 });
-                this.couponId = '';
-                this.groupName = '';
-                if (this.oGivenMoney == '') {
-                    alert('请输入赠送金额');
-                    loading.close();
-                    return;
-                }
-            } else if (this.oGivenType == '赠送券包') {
-                jsonArr.push({ key: 'givenType', value: 3 });
-                this.oGivenMoney = '';
-                if (this.couponId == '' || !this.couponId) {
-                    alert('请选择券包');
-                    loading.close();
-                    return;
-                }
-            } else if (this.oGivenType == '两者都送') {
-                jsonArr.push({ key: 'givenType', value: 4 });
-                if (this.oGivenMoney == '') {
-                    alert('请输入赠送金额');
-                    loading.close();
-                    return;
-                }
-                if (this.couponId == '' || !this.couponId) {
-                    alert('请选择券包');
-                    loading.close();
-                    return;
-                }
-            } else {
-                jsonArr.push({ key: 'givenType', value: this.oGivenType });
-            }
-            if (this.oGivenType == 1) {
-                this.couponId = '';
-                this.groupName = '';
-            }
-            if (this.oGivenType == 3) {
-                if (this.couponId == '' || !this.couponId) {
-                    alert('请选择券包');
-                    loading.close();
-                    return;
-                }
-            }
-            if (this.oStatus == '启用') {
-                jsonArr.push({ key: 'status', value: 1 });
-            } else if (this.oStatus == '未启用') {
-                jsonArr.push({ key: 'status', value: 2 });
-            } else {
-                jsonArr.push({ key: 'status', value: this.oStatus });
-            }
-            // if (this.oGivenMoney != '') {
-            //     jsonArr.push({ key: 'givenMoney', value: this.oGivenMoney });
-            // }
-            if (this.couponId != '') {
-                jsonArr.push({ key: 'givenCouponGroupId', value: this.couponId });
-            }
-            jsonArr.push({ key: 'synchronizeRule', value: this.oSynchronizeRule });
-            if (this.oSynchronizeRule == 1) {
-                if (this.oSyncCinemaCode.length == 0) {
-                    this.message = '请选择同步影院~';
-                    this.open();
-                    loading.close();
-                    return;
-                }
-                jsonArr.push({ key: 'cinemaCodes', value: this.oSyncCinemaCode.join(',') });
-            }
-            jsonArr.push({ key: 'ruleName', value: this.oRuleName });
+            let jsonArr = [];
             jsonArr.push({ key: 'cinemaCode', value: this.oForm.cinemaCode });
-            jsonArr.push({ key: 'startDate', value: this.oStartDate });
-            jsonArr.push({ key: 'endDate', value: this.oEndDate });
-            jsonArr.push({ key: 'rechargeAmount', value: '0' });
-            jsonArr.push({ key: 'ruleMemo', value: this.oRuleMemo });
-            jsonArr.push({ key: 'effectiveTimeType', value: this.oEffectiveTimeType });
-            if (this.oEffectiveTimeType == 1) {
-                jsonArr.push({ key: 'overDays', value: this.oOverDays });
+            jsonArr.push({ key: 'comboName', value: this.updateForm.comboName });
+            jsonArr.push({ key: 'comboImage', value: this.updateForm.comboImage });
+            jsonArr.push({ key: 'basePrice', value: this.updateForm.basePrice });
+            jsonArr.push({ key: 'status', value: this.updateForm.status });
+            jsonArr.push({ key: 'showSeqNo', value: this.updateForm.showSeqNo });
+            jsonArr.push({ key: 'comboDesc', value: this.updateForm.comboDesc });
+            jsonArr.push({ key: 'typeCode', value: this.updateForm.typeCode });
+            jsonArr.push({ key: 'id', value: this.updateForm.id });
+            let merSetDetailsJson = [];
+            for (let i = 0; i < this.comboList.length; i++) {
+                for (let j = 0; j < this.comboList[i].itemList.length; j++) {
+                    merSetDetailsJson.push({
+                        inCode: this.comboList[i].id,
+                        merCode: this.comboList[i].itemList[j].code,
+                        merNumber: this.comboList[i].itemList[j].count,
+                        floatPrice: this.comboList[i].itemList[j].price
+                    });
+                }
             }
-            if (this.oEffectiveTimeType == 2) {
-                jsonArr.push({ key: 'startEffectDate', value: this.oStartEffectDate });
-                jsonArr.push({ key: 'endEffectDate', value: this.oEndEffectDate });
-            }
-            jsonArr.push({ key: 'cardLevelCode', value: this.oCardLevelName });
-            // jsonArr.push({ key: 'cardLevelName', value: this.oCardLevelName });
-            jsonArr.push({ key: 'id', value: this.oId });
+            jsonArr.push({ key: 'merSetDetailsJson', value: JSON.stringify(merSetDetailsJson)});
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             console.log(jsonArr);
             let params = ParamsAppend(jsonArr);
-            if (this.adminFlag == 1 && this.oSynchronizeRule == 1) {
-                this.$confirm('是否同步到所选影院？', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
+            https
+                .fetchPost('/ownMerchandiseSet/update', params)
+                .then(data => {
+                    loading.close();
+                    if (data.data.code == 'success') {
+                        this.editVisible = false;
+                        this.$message.success(`编辑成功`);
+                        this.oForm.cinemaCode = '';
+                        this.oForm.cinemaName = '';
+                        this.getMenu();
+                    } else if (data.data.code == 'nologin') {
+                        this.message = data.data.message;
+                        this.open();
+                        this.$router.push('/login');
+                    } else {
+                        this.message = data.data.message;
+                        this.open();
+                    }
                 })
-                    .then(() => {
-                        https
-                            .fetchPost('/openCardRule/modifyOpenCardRule', params)
-                            .then(data => {
-                                loading.close();
-                                if (data.data.code == 'success') {
-                                    this.editVisible = false;
-                                    this.$message.success(`编辑成功`);
-                                    this.oSyncCinemaCode = [];
-                                    this.checkAll = false;
-                                    this.getMenu();
-                                } else if (data.data.code == 'nologin') {
-                                    this.message = data.data.message;
-                                    this.open();
-                                    this.$router.push('/login');
-                                } else {
-                                    this.message = data.data.message;
-                                    this.open();
-                                }
-                            })
-                            .catch(err => {
-                                loading.close();
-                                console.log(err);
-                            });
-                    })
-                    .catch(() => {
-                        loading.close();
-                        this.$message({
-                            type: 'info',
-                            message: '已取消'
-                        });
-                    });
-            } else {
-                https
-                    .fetchPost('/openCardRule/modifyOpenCardRule', params)
-                    .then(data => {
-                        loading.close();
-                        if (data.data.code == 'success') {
-                            this.editVisible = false;
-                            this.$message.success(`编辑成功`);
-                            this.oSyncCinemaCode = [];
-                            this.checkAll = false;
-                            this.getMenu();
-                        } else if (data.data.code == 'nologin') {
-                            this.message = data.data.message;
-                            this.open();
-                            this.$router.push('/login');
-                        } else {
-                            this.message = data.data.message;
-                            this.open();
-                        }
-                    })
-                    .catch(err => {
-                        loading.close();
-                        console.log(err);
-                    });
-            }
+                .catch(err => {
+                    loading.close();
+                    console.log(err);
+                });
         },
         Search() {
             this.query.pageNo = 1;
@@ -955,146 +1027,11 @@ export default {
                 if (this.cinemaInfo[i].cinemaName == e) {
                     this.oForm.cinemaCode = this.cinemaInfo[i].cinemaCode;
                 }
-            }
-        },
-        getCardInfo(e) {
-            if (e) {
-                this.oForm.synchronizeRule = '2';
-                this.checkAll = false;
-                this.oForm.syncCinemaCode = [];
-            }
-        },
-        getCardInfo2(e) {
-            if (e) {
-                this.oSynchronizeRule = '2';
-                this.checkAll = false;
-                this.oSyncCinemaCode = [];
-            }
+            };
+            this.oForm.typeCode = '';
+            this.queryMerType();
         },
 
-        // 获取同步影院
-        chooseSync() {
-            if (!this.oForm.levelName || this.oForm.levelName == '') {
-                this.message = '请选择会员卡~';
-                this.open();
-                this.oForm.synchronizeRule = '2';
-                return;
-            }
-            this.groupName = '';
-            if (this.oForm.synchronizeRule == 1) {
-                const loading = this.$loading({
-                    lock: true,
-                    text: 'Loading',
-                    spinner: 'el-icon-loading',
-                    background: 'rgba(0, 0, 0, 0.7)',
-                    target: document.querySelector('.div1')
-                });
-                let jsonArr = [];
-                jsonArr.push({ key: 'levelCode', value: this.oForm.levelName });
-                jsonArr.push({ key: 'cinemaCode', value: this.oForm.cinemaCode });
-                let sign = md5(preSign(jsonArr));
-                jsonArr.push({ key: 'sign', value: sign });
-                var params = ParamsAppend(jsonArr);
-                https
-                    .fetchPost('/openCardRule/queryCinemaByLevel', params)
-                    .then(data => {
-                        loading.close();
-                        if (data.data.code == 'success') {
-                            var oData = JSON.parse(Decrypt(data.data.data));
-                            this.syncCinemaList = oData;
-                        } else if (data.data.code == 'nologin') {
-                            this.message = data.data.message;
-                            this.open();
-                            this.$router.push('/login');
-                        } else {
-                            this.message = data.data.message;
-                            this.open();
-                        }
-                    })
-                    .catch(err => {
-                        loading.close();
-                        console.log(err);
-                    });
-            }
-        },
-
-        chooseSync2() {
-            if (!this.oCardLevelName || this.oCardLevelName == '') {
-                this.message = '请选择会员卡~';
-                this.open();
-                this.oForm.synchronizeRule = '2';
-                return;
-            }
-            this.groupName = '';
-            if (this.oSynchronizeRule == 1) {
-                const loading = this.$loading({
-                    lock: true,
-                    text: 'Loading',
-                    spinner: 'el-icon-loading',
-                    background: 'rgba(0, 0, 0, 0.7)',
-                    target: document.querySelector('.div1')
-                });
-                let jsonArr = [];
-                jsonArr.push({ key: 'levelCode', value: this.oCardLevelName });
-                jsonArr.push({ key: 'cinemaCode', value: this.oForm.cinemaCode });
-                let sign = md5(preSign(jsonArr));
-                jsonArr.push({ key: 'sign', value: sign });
-                var params = ParamsAppend(jsonArr);
-                https
-                    .fetchPost('/openCardRule/queryCinemaByLevel', params)
-                    .then(data => {
-                        loading.close();
-                        if (data.data.code == 'success') {
-                            var oData = JSON.parse(Decrypt(data.data.data));
-                            console.log(oData);
-                            this.syncCinemaList = oData;
-                        } else if (data.data.code == 'nologin') {
-                            this.message = data.data.message;
-                            this.open();
-                            this.$router.push('/login');
-                        } else {
-                            this.message = data.data.message;
-                            this.open();
-                        }
-                    })
-                    .catch(err => {
-                        loading.close();
-                        console.log(err);
-                    });
-            }
-        },
-        handleCheckAllChange(val) {
-            let arr = [];
-            for (let x in this.syncCinemaList) {
-                arr.push(this.syncCinemaList[x].cinemaCode);
-            }
-            this.oForm.syncCinemaCode = val ? arr : [];
-            this.groupName = '';
-            this.isIndeterminate = false;
-        },
-        handleCheckAllChange2(val) {
-            let arr = [];
-            for (let x in this.syncCinemaList) {
-                arr.push(this.syncCinemaList[x].cinemaCode);
-            }
-            this.oSyncCinemaCode = val ? arr : [];
-            this.groupName = '';
-            this.isIndeterminate = false;
-        },
-        getSyncCinemaCode(val) {
-            this.oForm.syncCinemaCode = val;
-            this.groupName = '';
-            let checkedCount = val.length;
-            this.checkAll = checkedCount === this.syncCinemaList.length;
-            this.isIndeterminate = checkedCount > 0 && checkedCount < this.syncCinemaList.length;
-        },
-        getSyncCinemaCode2(val) {
-            this.oSyncCinemaCode = val;
-            this.groupName = '';
-            let checkedCount = val.length;
-            this.checkAll = checkedCount === this.syncCinemaList.length;
-            this.isIndeterminate = checkedCount > 0 && checkedCount < this.syncCinemaList.length;
-        },
         getMenu() {
             //获取菜单栏
             const loading = this.$loading({
@@ -1214,29 +1151,70 @@ export default {
         sureNext() {
             if (this.sellIndex >= 0) {
                 // 选了数据
+                let a = false;
                 for (let i = 0; i < this.comboList.length; i++) {
-                    // 判断选择的是哪一个商品
-                    if (this.comboList[i].id == this.comboItemId) {
-                        // 如果已经选择过了商品
-                        if (this.comboList[i].itemList.length > 0) {
-                            for (let j = 0; j < this.comboList[i].itemList.length; j ++) {
-                                if (this.comboList[i].itemList[j].code == this.sellTableData[this.sellIndex].merchandiseCode) {
-                                    this.message = '不能添加相同卖品！';
-                                    this.open();
-                                    return;
-                                }
-                            }
-                        } else {
-                            this.comboList[i].itemList.push({
-                                name: this.sellTableData[this.sellIndex].merchandiseName,
-                                code: this.sellTableData[this.sellIndex].merchandiseCode,
-                                count: 1
-                            });
+                    for (let j = 0; j < this.comboList[i].itemList.length; j++) {
+                        if (this.sellTableData[this.sellIndex].merchandiseCode == this.comboList[i].itemList[j].code) {
+                            a = true;
                         }
                     }
                 }
+                if (a) {
+                    this.message = '不能添加相同卖品！';
+                    this.open();
+                    return;
+                } else {
+                    this.comboList[this.comboItemId - 1].itemList.push({
+                        name: this.sellTableData[this.sellIndex].merchandiseName,
+                        code: this.sellTableData[this.sellIndex].merchandiseCode,
+                        count: 1,
+                        price: 0
+                    });
+                }
+                this.drawer = false;
             }
-            this.drawer = false;
+        },
+        // 查询卖品分类
+        queryMerType() {
+            if (!this.oForm.cinemaCode) {
+                this.message = '请选择影院~';
+                this.open();
+                return;
+            }
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)',
+                target: document.querySelector('.div1')
+            });
+            setTimeout(() => {
+                let jsonArr = [];
+                jsonArr.push({ key: 'cinemaCode', value: this.oForm.cinemaCode });
+                let sign = md5(preSign(jsonArr));
+                jsonArr.push({ key: 'sign', value: sign });
+                var params = ParamsAppend(jsonArr);
+                https
+                    .fetchPost('/ownMerchandiseSet/queryMerType', params)
+                    .then(data => {
+                        loading.close();
+                        if (data.data.code == 'success') {
+                            var oData = JSON.parse(Decrypt(data.data.data));
+                            this.selectValue = oData;
+                        } else if (data.data.code == 'nologin') {
+                            this.message = data.data.message;
+                            this.open();
+                            this.$router.push('/login');
+                        } else {
+                            this.message = data.data.message;
+                            this.open();
+                        }
+                    })
+                    .catch(err => {
+                        loading.close();
+                        console.log(err);
+                    });
+            }, 500);
         },
         one(a) {
             //获取卖品绑定的value值
@@ -1266,6 +1244,14 @@ export default {
         },
         openNext(e) {
             //获取商品列表
+            // index = e - 1
+            if (e) {
+                if (this.comboList[e - 1].itemList.length > 5) {
+                    this.message = '商品内最多六个卖品~';
+                    this.open();
+                    return;
+                }
+            }
             const loading = this.$loading({
                 lock: true,
                 text: 'Loading',
@@ -1318,9 +1304,26 @@ export default {
                     });
             }, 500);
         },
+        // 删除商品
+        deleteGoodsItem(index) {
+            if (this.comboList.length < 3) {
+                this.message = '套餐内至少含有两个商品~';
+                this.open();
+                return;
+            }
+            this.comboList.splice(index, 1);
+            for (let i = 0; i < this.comboList.length; i++) {
+                this.comboList[i].name = '商品' + (i + 1);
+                this.comboList[i].id = i + 1;
+            }
+        },
         // 删除所选卖品
-        deleteSell(index) {
-            this.selectedSell.splice(index, 1);
+        deleteSell(index, inx) {
+            this.comboList[index].itemList.splice(inx, 1);
+        },
+        // 更改卖品数量
+        changeInput(e, index, inx) {
+            this.$forceUpdate();
         },
         //新增套餐选择卖品页面
         aHandleSizeChange(val) {
@@ -1342,6 +1345,7 @@ export default {
             this.query.aPageNo++;
             this.openNext();
         },
+        // 新增主商品
         addComboGoods() {
             if (this.comboList.length > 4) {
                 this.message = '套餐内最多五个商品~';
@@ -1350,7 +1354,54 @@ export default {
             } else {
                 this.comboList.push({ name: '商品' + (this.comboList.length + 1), id: this.comboList.length + 1, itemList: [] });
             }
-        }
+        },
+        exceed(data) {
+            if (data.length == 1) {
+                this.message = '只能上传一张图片，如需重新上传请删除第一张图！';
+                this.open();
+            }
+        },
+        beforeUpload(file) {
+            //上传之前
+            this.type.type = EncryptReplace('business');
+            const isLt200Kb = file.size / 1024 < 200;
+            if (!isLt200Kb) {
+                this.message = '图片大小不能超过200kb！';
+                this.open();
+                return false;
+            }
+            return isLt200Kb;
+        },
+        onSuccess(data) {
+            //上传文件 登录超时
+            if (data.status == '-1') {
+                this.message = data.message;
+                this.open();
+                this.$refs.upload.clearFiles();
+                return;
+            }
+            this.oForm.comboImage = data.data;
+            if (data.code == 'nologin') {
+                this.message = data.message;
+                this.open();
+                this.$router.push('/login');
+            }
+        },
+        unSuccess(data) {
+            //修改上传文件 登录超时
+            if (data.status == '-1') {
+                this.message = data.message;
+                this.open();
+                this.$refs.download.clearFiles();
+                return;
+            }
+            this.oImageUrl = data.data;
+            if (data.code == 'nologin') {
+                this.message = data.message;
+                this.open();
+                this.$router.push('/login');
+            }
+        },
     }
 };
 </script>
@@ -1377,6 +1428,13 @@ export default {
     width: 20px;
     height: 20px;
     color: #409eff;
+    cursor: pointer;
+}
+
+.deleteGoodsItem {
+    width: 20px;
+    height: 20px;
+    color: red;
     cursor: pointer;
 }
 </style>

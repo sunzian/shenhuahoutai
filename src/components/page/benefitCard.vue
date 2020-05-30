@@ -213,14 +213,6 @@
                     label="选择影院"
                     :label-width="formLabelWidth"
                 >
-                    <!-- <el-radio-group v-model="oForm.cinemaCode" @change="selectCinema">
-                        <el-radio
-                            v-for="item in cinemaInfo"
-                            :label="item.cinemaCode"
-                            :key="item.cinemaCode"
-                            :value="item.cinemaName"
-                        >{{item.cinemaName}}</el-radio>
-                    </el-radio-group> -->
                     <el-checkbox-group v-model="oForm.cinemaCode" @change="selectCinema">
                         <el-checkbox
                                 v-for="item in cinemaInfo"

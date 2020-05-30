@@ -70,11 +70,12 @@
             <el-table
                     :data="tableData"
                     border
-                    class="table"
+                    class="table tb-edit"
                     ref="multipleTable"
                     highlight-current-row
                     header-cell-class-name="table-header"
                     @selection-change="handleSelectionChange"
+                    @row-click="handleCurrentChange"
             >
                 <el-table-column label="适用影院" width="300">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
@@ -110,7 +111,11 @@
                     </template>
                 </el-table-column>
                 <el-table-column prop="sort" label="排序号" width="160">
-                    <template slot-scope="scope">{{scope.row.sort}}</template>
+                    <template slot-scope="scope">
+                        <div v-if="scope.row.showSort" @click="handleEdit(scope.$index, scope.row)">{{scope.row.sort}}</div>
+                        <el-input v-if="scope.row.showEdit" class="sortInp" size="small" v-model="scope.row.sort" @keyup.enter.native="changeScope(scope.$index, scope.row)" @change="handleEdit(scope.$index, scope.row)"></el-input> 
+                        <el-button v-if="scope.row.showEdit" class="sortBtn" style="position: absolute;left: 93px;" @click="changeScope(scope.$index, scope.row)">确定</el-button>
+                    </template>
                 </el-table-column>
                 <el-table-column prop="sort" label="是否显示" width="120">
                     <template slot-scope="scope">
@@ -669,6 +674,8 @@
         name: 'basetable',
         data() {
             return {
+                showEdit: false,
+                showSort: true,
                 oBannerType: '',
                 oButtonStatus: '',
                 oButtonName: '',
@@ -749,47 +756,47 @@
                 bannerType: [
                     {
                         value: '1',
-                        label: '卖品首页 建议尺寸750*360'
+                        label: '卖品首页 尺寸750*360'
                     },
                     {
                         value: '2',
-                        label: '金币商场首页 建议尺寸750*360'
+                        label: '金币商场首页 尺寸750*360'
                     },
                     {
                         value: '3',
-                        label: '个人中心首页 建议尺寸750*320'
+                        label: '个人中心首页 尺寸750*320'
                     },
                     {
                         value: '4',
-                        label: '支付成功页 建议尺寸670*160'
+                        label: '支付成功页 尺寸670*160'
                     },
                     {
                         value: '5',
-                        label: '游戏室首页 建议尺寸750*360'
+                        label: '游戏室首页 尺寸750*360'
                     },
                     {
                         value: '6',
-                        label: '首页广告弹窗 建议尺寸520*690'
+                        label: '首页广告弹窗 尺寸520*690'
                     },
                     {
                         value: '8',
-                        label: '签到送金币 建议尺寸670*200'
+                        label: '签到送金币 尺寸670*200'
                     },
                     {
                         value: '9',
-                        label: '邀请好友首页 建议尺寸670*200'
+                        label: '邀请好友首页 尺寸670*200'
                     },
                     {
                         value: '11',
-                        label: '支付后弹窗广告 建议尺寸670*200'
+                        label: '支付后弹窗广告 尺寸670*200'
                     },
                     {
                         value: '12',
-                        label: '秒杀活动列表页 建议尺寸670*200'
+                        label: '秒杀活动列表页 尺寸670*200'
                     },
                     {
                         value: '13',
-                        label: '团购活动列表页 建议尺寸670*200'
+                        label: '团购活动列表页 尺寸670*200'
                     }
                 ],
                 tabType: [
@@ -823,6 +830,64 @@
             this.getMenu();
         },
         methods: {
+            handleCurrentChange(row, event, column) {
+            },
+            handleEdit(index, row) {
+                this.tableData[index].showSort = false;
+                this.tableData[index].showEdit = true;
+            },
+            changeScope(index, row) {
+                this.$confirm('此操作将该文件排序号, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                })
+                    .then(() => {
+                        const loading = this.$loading({
+                            lock: true,
+                            text: 'Loading',
+                            spinner: 'el-icon-loading',
+                            background: 'rgba(0, 0, 0, 0.7)',
+                            target: document.querySelector('.div1')
+                        });
+                        setTimeout(() => {
+                            let jsonArr = [];
+                            jsonArr.push({ key: 'id', value: row.id });
+                            jsonArr.push({ key: 'sort', value: row.sort });
+                            let sign = md5(preSign(jsonArr));
+                            jsonArr.push({ key: 'sign', value: sign });
+                            let params = ParamsAppend(jsonArr);
+                            https
+                                .fetchPost('/banner/updateSortById', params)
+                                .then(data => {
+                                    loading.close();
+                                    if (data.data.code == 'success') {
+                                        this.$message.success(`修改成功`);
+                                        this.tableData[index].showEdit = false;
+                                        this.tableData[index].showSort = true;
+                                        this.getMenu();
+                                    } else if (data.data.code == 'nologin') {
+                                        this.message = data.data.message;
+                                        this.open();
+                                        this.$router.push('/login');
+                                    } else {
+                                        this.message = data.data.message;
+                                        this.open();
+                                    }
+                                })
+                                .catch(err => {
+                                    loading.close();
+                                    console.log(err);
+                                });
+                        }, 500);
+                    })
+                    .catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '已取消删除'
+                        });
+                    });
+            },
             exceed(data) {
                 console.log(data);
                 if (data.length == 1) {
@@ -1852,6 +1917,10 @@
                                 var oData = JSON.parse(Decrypt(data.data.data));
                                 console.log(oData);
                                 this.tableData = oData.data;
+                                for (let i = 0; i < this.tableData.length; i ++) {
+                                    this.tableData[i].showEdit = false;
+                                    this.tableData[i].showSort = true;
+                                }
                                 this.query.pageSize = oData.pageSize;
                                 this.query.pageNo = oData.pageNo;
                                 this.query.totalCount = oData.totalCount;

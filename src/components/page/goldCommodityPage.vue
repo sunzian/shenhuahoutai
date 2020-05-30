@@ -3024,7 +3024,7 @@
                 if (this.oCheckedCities.length > 1) {
                     jsonArr.push({key: 'commonType', value: '2'});
                 } else {
-                    jsonArr.push({key: 'cinemaCode', value: this.oCheckedCities[0]});
+                    jsonArr.push({key: 'merCinemaCodes', value: this.oCheckedCities[0]});
                 }
                 jsonArr.push({key: 'name', value: cardName});
                 jsonArr.push({key: 'status', value: 1});

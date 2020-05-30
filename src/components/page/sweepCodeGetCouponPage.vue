@@ -217,16 +217,16 @@
                 >
                     <el-date-picker
                         v-model="oForm.couponStartDate"
-                        type="datetime"
-                        format="yyyy-MM-dd HH:mm:ss"
-                        value-format="yyyy-MM-dd HH:mm:ss"
+                        type="date"
+                        format="yyyy-MM-dd"
+                        value-format="yyyy-MM-dd"
                         placeholder="请选择有效期开始时间"
                     ></el-date-picker>至
                     <el-date-picker
                         v-model="oForm.couponEndDate"
-                        type="datetime"
-                        format="yyyy-MM-dd HH:mm:ss"
-                        value-format="yyyy-MM-dd HH:mm:ss"
+                        type="date"
+                        format="yyyy-MM-dd"
+                        value-format="yyyy-MM-dd"
                         placeholder="请选择有效期结束时间"
                     ></el-date-picker>
                 </el-form-item>
@@ -387,16 +387,16 @@
                 >
                     <el-date-picker
                         v-model="oCouponStartDate"
-                        type="datetime"
-                        format="yyyy-MM-dd HH:mm:ss"
-                        value-format="yyyy-MM-dd HH:mm:ss"
+                        type="date"
+                        format="yyyy-MM-dd"
+                        value-format="yyyy-MM-dd"
                         placeholder="请选择有效期开始时间"
                     ></el-date-picker>至
                     <el-date-picker
                         v-model="oCouponEndDate"
-                        type="datetime"
-                        format="yyyy-MM-dd HH:mm:ss"
-                        value-format="yyyy-MM-dd HH:mm:ss"
+                        type="date"
+                        format="yyyy-MM-dd"
+                        value-format="yyyy-MM-dd"
                         placeholder="请选择有效期结束时间"
                     ></el-date-picker>
                 </el-form-item>

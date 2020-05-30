@@ -23,7 +23,7 @@
                             :value="item.cinemaCode"
                     ></el-option>
                 </el-select>
-                <el-select clearable v-model="query.partnerCode" placeholder="请选择商家" class="mr10">
+                <el-select clearable filterable @change="getSearchPartner" v-model="query.partnerCode" placeholder="请选择商家" class="mr10">
                     <el-option
                             v-for="item in partnerInfo"
                             :key="item.partnerCode"
@@ -1041,12 +1041,14 @@
             },
             changeSearchCinema(val) {
                 this.partnerInfo = [];
-                this.getSearchPartner(val);
+                this.query.partnerCode = '';
+                this.getSearchPartner();
             },
-            getSearchPartner(val) {
-                let cinemaCode = val;
-                if (!cinemaCode) {
-                    cinemaCode = '';
+            getSearchPartner() {
+                this.$forceUpdate();
+                let cinemaCode = '';
+                if (this.query.cinemaCode) {
+                    cinemaCode = this.query.cinemaCode;
                 }
                 let jsonArr = [];
                 jsonArr.push({ key: 'cinemaCodes', value: cinemaCode });
@@ -1059,6 +1061,7 @@
                     .then(data => {
                         if (data.data.code == 'success') {
                             var res = JSON.parse(Decrypt(data.data.data));
+                            console.log(res)
                             this.partnerInfo = res.data;
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
@@ -1455,6 +1458,7 @@
                                 this.query.totalCount = oData.pageResult.totalCount;
                                 this.query.totalPage = oData.pageResult.totalPage;
                                 this.getAllCinema();
+                                this.getSearchPartner();
                             } else if (data.data.code == 'nologin') {
                                 this.message = data.data.message;
                                 this.open();
