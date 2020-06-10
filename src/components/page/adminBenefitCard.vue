@@ -811,7 +811,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item :required="true" label="是否限制购买次数：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="是否限制每人购买次数：" :label-width="formLabelWidth">
                     <el-select
                         v-model="oForm.isLimitBuy"
                         placeholder="请选择"
@@ -2572,7 +2572,7 @@ export default {
                 return;
             }
             if (!this.oForm.isLimitBuy) {
-                this.message = '是否限制购买次数不能为空，请检查！';
+                this.message = '是否限制每人购买次数不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
@@ -3527,7 +3527,7 @@ export default {
                 return;
             }
             if (!this.oIsLimitBuy) {
-                this.message = '是否限制购买次数不能为空，请检查！';
+                this.message = '是否限制每人购买次数不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;

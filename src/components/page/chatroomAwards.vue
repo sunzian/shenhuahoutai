@@ -228,10 +228,10 @@
                         <!--&gt;只能上传jpg/png文件，且不超过200kb 建议尺寸150*150或按比例上传</div>-->
                     <!--</el-upload>-->
                 <!--</el-form-item>-->
-                <el-form-item :required="true" label="每场活动发放次数：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="每次发放数量：" :label-width="formLabelWidth">
                     <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 150px" v-model="oForm.groupNumber" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="每次发放数量：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="每场活动发放次数：" :label-width="formLabelWidth">
                     <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 150px" v-model="oForm.singleNumber" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="领取后多少天过期：" :label-width="formLabelWidth">
@@ -291,10 +291,10 @@
                         <!--/>-->
                     <!--</el-popover>-->
                 <!--</el-form-item>-->
-                <el-form-item :required="true" label="每场活动发放次数：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="每次发放数量：" :label-width="formLabelWidth">
                     <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 75px" v-model="oSingleNumber" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="每次发放数量：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="每场活动发放次数：" :label-width="formLabelWidth">
                     <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 75px" v-model="oGroupNumber" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="领取后多少天过期：" :label-width="formLabelWidth">

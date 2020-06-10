@@ -17,6 +17,7 @@
                 ></el-input>
                 <el-input placeholder="订单号" class="mr10" v-model="query.orderNo" autocomplete="off"></el-input>
                 <el-input placeholder="手机号" class="mr10" v-model="query.mobile" autocomplete="off"></el-input>
+                <el-input placeholder="商品规格/属性" class="mr10" v-model="query.skuKeyWords" autocomplete="off"></el-input>
                 <el-select
                         clearable
                         v-model="query.settleStatus"
@@ -58,14 +59,18 @@
                 <el-select
                         clearable
                         v-model="query.status"
-                        placeholder="核销状态"
+                        placeholder="订单状态"
                         class="handle-select mr10"
                 >
                     <el-option key="1" label="未核销" value="1"></el-option>
                     <el-option key="2" label="已核销" value="2"></el-option>
                     <el-option key="3" label="已过期" value="3"></el-option>
+                    <el-option key="4" label="待发货" value="4"></el-option>
+                    <el-option key="5" label="快递中" value="5"></el-option>
+                    <el-option key="6" label="已送达" value="6"></el-option>
+                    <el-option key="7" label="已收货" value="7"></el-option>
                 </el-select>
-                <el-select
+                <!-- <el-select
                         clearable
                         v-model="query.trackingStatus"
                         placeholder="快递状态"
@@ -75,7 +80,7 @@
                     <el-option key="2" label="快递中" value="2"></el-option>
                     <el-option key="3" label="已送达" value="3"></el-option>
                     <el-option key="4" label="已收货" value="4"></el-option>
-                </el-select>
+                </el-select> -->
                 <el-input
                         placeholder="快递单号"
                         class="mr10"
@@ -127,6 +132,22 @@
                         value-format="yyyy-MM-dd HH:mm:ss"
                         format="yyyy-MM-dd HH:mm:ss"
                         placeholder="兑换结束时间（止）"
+                ></el-date-picker>
+                <el-date-picker
+                        class="mr10"
+                        v-model="query.startGetDate"
+                        type="datetime"
+                        value-format="yyyy-MM-dd HH:mm:ss"
+                        format="yyyy-MM-dd HH:mm:ss"
+                        placeholder="核销开始时间（起）"
+                ></el-date-picker>
+                <el-date-picker
+                        class="mr10"
+                        v-model="query.endGetDate"
+                        type="datetime"
+                        value-format="yyyy-MM-dd HH:mm:ss"
+                        format="yyyy-MM-dd HH:mm:ss"
+                        placeholder="核销结束时间（止）"
                 ></el-date-picker>
                 <el-button
                         style="margin-top: 10px;width: 90px;"
@@ -241,21 +262,25 @@
                         <el-tag v-else-if="scope.row.pickupWay=='2'">快递</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="memo" label="核销状态" width="80">
+                <el-table-column prop="memo" label="订单状态" width="80">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status=='1'">未核销</el-tag>
                         <el-tag v-else-if="scope.row.status=='2'">已核销</el-tag>
                         <el-tag v-else-if="scope.row.status=='3'">已过期</el-tag>
+                        <el-tag v-else-if="scope.row.status=='4'">待发货</el-tag>
+                        <el-tag v-else-if="scope.row.status=='5'">快递中</el-tag>
+                        <el-tag v-else-if="scope.row.status=='6'">已送达</el-tag>
+                        <el-tag v-else-if="scope.row.status=='7'">已收货</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="memo" label="快递状态" width="80">
+                <!-- <el-table-column prop="memo" label="快递状态" width="80">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.trackingStatus=='1'">待发货</el-tag>
                         <el-tag v-else-if="scope.row.trackingStatus=='2'">快递中</el-tag>
                         <el-tag v-else-if="scope.row.trackingStatus=='3'">已送达</el-tag>
                         <el-tag v-else-if="scope.row.trackingStatus=='4'">已收货</el-tag>
                     </template>
-                </el-table-column>
+                </el-table-column> -->
                 <el-table-column prop="memo" label="订单类型" width="80">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.orderType=='1'">商品订单</el-tag>
@@ -400,7 +425,7 @@
                             autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="兑换方式" :label-width="formLabelWidth">
+                <el-form-item label="支付方式" :label-width="formLabelWidth">
                     <el-input
                             :disabled="true"
                             style="width: 250px"
@@ -432,7 +457,7 @@
                             autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="领取状态" :label-width="formLabelWidth">
+                <el-form-item label="订单状态" :label-width="formLabelWidth">
                     <el-input
                             :disabled="true"
                             style="width: 250px"
@@ -448,6 +473,14 @@
                             autocomplete="off"
                     ></el-input>
                 </el-form-item>
+                <el-form-item label="快递公司" :label-width="formLabelWidth">
+                    <el-input
+                            :disabled="true"
+                            style="width: 250px"
+                            v-model="form.trackingName"
+                            autocomplete="off"
+                    ></el-input>
+                </el-form-item>
                 <el-form-item label="物流单号" :label-width="formLabelWidth">
                     <el-input
                             :disabled="true"
@@ -456,14 +489,14 @@
                             autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="快递状态" :label-width="formLabelWidth">
+                <!-- <el-form-item label="快递状态" :label-width="formLabelWidth">
                     <el-input
                             :disabled="true"
                             style="width: 250px"
                             v-model="form.trackingStatus"
                             autocomplete="off"
                     ></el-input>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item label="收货人名称" :label-width="formLabelWidth">
                     <el-input
                             :disabled="true"
@@ -825,6 +858,9 @@
                     let trackingStatus = this.query.trackingStatus;
                     let trackingNumber = this.query.trackingNumber;
                     let orderType = this.query.orderType;
+                    let skuKeyWords = this.query.skuKeyWords;
+                    let startGetDate = this.query.startGetDate;
+                    let endGetDate = this.query.endGetDate;
                     if (!orderType) {
                         orderType = '';
                     }
@@ -870,17 +906,26 @@
                     if (!endDate) {
                         endDate = '';
                     }
+                    if (!skuKeyWords) {
+                        skuKeyWords = '';
+                    }
+                    if (!startGetDate) {
+                        startGetDate = '';
+                    }
+                    if (!endGetDate) {
+                        endGetDate = '';
+                    }
                     let jsonArr = [];
                     jsonArr.push({ key: 'tableName', value: 'commodity_change_record' });
                     jsonArr.push({
                         key: 'exportKeysJson',
                         value:
-                            '[\'cinemaName\',\'exchangeCinemaName\',\'partnerName\',\'chSettleStatusString\',\'orderNo\',\'mobile\',\'stringPayWay\',\'remark\',\'commodityName\',\'gold\',\'number\',\'money\',\'getDate\',\'payTime\',\'chPayStatus\',\'chPickupWay\',\'trackingNumber\',\'chTrackingStatus\',\'deliveryName\',\'deliveryMobile\',\'province\',\'city\',\'district\',\'deliveryAddressDetail\',\'tradeNo\',\'payReturnMsg\',\'chChangeType\',\'chStatus\',\'chRefundStatus\',\'orderTypeName\',\'refundNo\',\'refundReason\',\'refundApply\',\'refundTime\',\'refundPrice\']'
+                            '[\'cinemaName\',\'exchangeCinemaName\',\'partnerName\',\'chSettleStatusString\',\'orderNo\',\'mobile\',\'stringPayWay\',\'remark\',\'commodityName\',\'gold\',\'number\',\'money\',\'getDate\',\'payTime\',\'chPayStatus\',\'chPickupWay\',\'trackingNumber\',\'deliveryName\',\'deliveryMobile\',\'province\',\'city\',\'district\',\'deliveryAddressDetail\',\'tradeNo\',\'payReturnMsg\',\'chChangeType\',\'chStatus\',\'chRefundStatus\',\'orderTypeName\',\'refundNo\',\'refundReason\',\'refundApply\',\'refundTime\',\'refundPrice\']'
                     });
                     jsonArr.push({
                         key: 'exportTitlesJson',
                         value:
-                            '[\'兑换影院名称\',\'领取影院名称\',\'商户名称\',\'商户订单结算状态\',\'订单号\',\'手机号\',\'支付方式\',\'用户备注\',\'商品名称\',\'消费金币\',\'购买数量\',\'支付金额\',\'领取时间\',\'下单时间\',\'兑换状态\',\'取货方式\',\'物流单号\',\'快递状态\',\'收货人名称\',\'收货人电话\',\'省\',\'市\',\'区\',\'收货人地址\',\'支付交易号\',\'支付回调消息\',\'兑换方式\',\'核销状态\',\'退款状态\',\'订单类型\',\'退款交易号\',\'退款原因\',\'微信退款回复\',\'退款时间\',\'退款金额\']'
+                            '[\'兑换影院名称\',\'领取影院名称\',\'商户名称\',\'商户订单结算状态\',\'订单号\',\'手机号\',\'支付方式\',\'用户备注\',\'商品名称\',\'消费金币\',\'购买数量\',\'支付金额\',\'领取时间\',\'下单时间\',\'兑换状态\',\'取货方式\',\'物流单号\',\'收货人名称\',\'收货人电话\',\'省\',\'市\',\'区\',\'收货人地址\',\'支付交易号\',\'支付回调消息\',\'兑换方式\',\'订单状态\',\'退款状态\',\'订单类型\',\'退款交易号\',\'退款原因\',\'微信退款回复\',\'退款时间\',\'退款金额\']'
                     });
                     jsonArr.push({ key: 'settleStatus', value: settleStatus });
                     jsonArr.push({ key: 'orderNo', value: orderNo });
@@ -896,6 +941,9 @@
                     jsonArr.push({ key: 'endDate', value: endDate });
                     jsonArr.push({ key: 'trackingStatus', value: trackingStatus });
                     jsonArr.push({ key: 'trackingNumber', value: trackingNumber });
+                    jsonArr.push({ key: 'skuKeyWords', value: skuKeyWords });
+                    jsonArr.push({ key: 'startGetDate', value: startGetDate });
+                    jsonArr.push({ key: 'endGetDate', value: endGetDate });
                     jsonArr.push({ key: 'orderType', value: orderType });
                     var params = ParamsAppend(jsonArr);
                     let myObj = {
@@ -1007,6 +1055,14 @@
                                     this.form.status = '已领取';
                                 } else if (JSON.parse(Decrypt(data.data.data)).status == 3) {
                                     this.form.status = '已过期';
+                                } else if (JSON.parse(Decrypt(data.data.data)).status == 4) {
+                                    this.form.status = '待发货';
+                                } else if (JSON.parse(Decrypt(data.data.data)).status == 5) {
+                                    this.form.status = '快递中';
+                                } else if (JSON.parse(Decrypt(data.data.data)).status == 6) {
+                                    this.form.status = '已送达';
+                                } else if (JSON.parse(Decrypt(data.data.data)).status == 7) {
+                                    this.form.status = '已收货';
                                 }
                                 if (JSON.parse(Decrypt(data.data.data)).payStatus == 0) {
                                     this.form.payStatus = '未支付';
@@ -1266,6 +1322,9 @@
                     let trackingStatus = this.query.trackingStatus;
                     let trackingNumber = this.query.trackingNumber;
                     let orderType = this.query.orderType;
+                    let skuKeyWords = this.query.skuKeyWords;
+                    let startGetDate = this.query.startGetDate;
+                    let endGetDate = this.query.endGetDate;
                     if (!orderType) {
                         orderType = '';
                     }
@@ -1311,6 +1370,15 @@
                     if (!endDate) {
                         endDate = '';
                     }
+                    if (!skuKeyWords) {
+                        skuKeyWords = '';
+                    }
+                    if (!startGetDate) {
+                        startGetDate = '';
+                    }
+                    if (!endGetDate) {
+                        endGetDate = '';
+                    }
                     let jsonArr = [];
                     jsonArr.push({ key: 'orderNo', value: orderNo });
                     jsonArr.push({ key: 'pickupWay', value: pickupWay });
@@ -1327,6 +1395,9 @@
                     jsonArr.push({ key: 'trackingStatus', value: trackingStatus });
                     jsonArr.push({ key: 'trackingNumber', value: trackingNumber });
                     jsonArr.push({ key: 'orderType', value: orderType });
+                    jsonArr.push({ key: 'skuKeyWords', value: skuKeyWords });
+                    jsonArr.push({ key: 'startGetDate', value: startGetDate });
+                    jsonArr.push({ key: 'endGetDate', value: endGetDate });
                     jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
                     jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
                     let sign = md5(preSign(jsonArr));

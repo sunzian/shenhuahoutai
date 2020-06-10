@@ -239,7 +239,8 @@
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="展示顺序" :label-width="formLabelWidth">
-                    <el-input style="width: 250px" v-model="form.showSeqNo" autocomplete="off"></el-input>
+                    <el-input placeholder="请输入大于等于0的数值" style="width: 250px" v-model="form.showSeqNo" autocomplete="off"></el-input>
+                    <span style="color: red;margin-left:10px">数值越小越靠前，不填默认为0</span>
                 </el-form-item>
                 <el-form-item :required="true" label="同步展示顺序到商家下的其他影院" :label-width="formLabelWidth">
                     <el-radio-group v-model="form.synchronizeSort">
@@ -293,7 +294,7 @@
                         :label-width="formLabelWidth"
                 >
                     <el-button type="primary" @click="addSelectedSell">新增</el-button>
-                    <span style="color: red;">示例：奶茶，规格：常温、加冰、加热等，可不填</span>
+                    <span style="color: red;margin-left:10px;">示例：奶茶，规格：常温、加冰、加热等，可不填</span>
                     <div
                             v-for="(item1, index) in selectedSell"
                             style="margin-bottom: 5px"

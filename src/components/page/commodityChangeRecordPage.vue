@@ -40,6 +40,7 @@
                 <el-input placeholder="订单号" class="mr10" v-model="query.orderNo" autocomplete="off"></el-input>
                 <el-input placeholder="手机号" class="mr10" v-model="query.mobile" autocomplete="off"></el-input>
                 <el-input placeholder="推荐人手机号" class="mr10" v-model="query.shareMobile" autocomplete="off"></el-input>
+                <el-input placeholder="商品规格/属性" class="mr10" v-model="query.skuKeyWords" autocomplete="off"></el-input>
                 <el-select
                         clearable
                         v-model="query.settleStatus"
@@ -72,12 +73,16 @@
                 <el-select
                         clearable
                         v-model="query.status"
-                        placeholder="核销状态"
+                        placeholder="订单状态"
                         class="handle-select mr10"
                 >
                     <el-option key="1" label="未核销" value="1"></el-option>
                     <el-option key="2" label="已核销" value="2"></el-option>
                     <el-option key="3" label="已过期" value="3"></el-option>
+                    <el-option key="4" label="待发货" value="4"></el-option>
+                    <el-option key="5" label="快递中" value="5"></el-option>
+                    <el-option key="6" label="已送达" value="6"></el-option>
+                    <el-option key="7" label="已收货" value="7"></el-option>
                 </el-select>
                 <el-select
                         clearable
@@ -88,7 +93,7 @@
                     <el-option key="1" label="自提" value="1"></el-option>
                     <el-option key="2" label="快递" value="2"></el-option>
                 </el-select>
-                <el-select
+                <!-- <el-select
                         clearable
                         v-model="query.trackingStatus"
                         placeholder="快递状态"
@@ -98,7 +103,7 @@
                     <el-option key="2" label="快递中" value="2"></el-option>
                     <el-option key="3" label="已送达" value="3"></el-option>
                     <el-option key="4" label="已收货" value="4"></el-option>
-                </el-select>
+                </el-select> -->
                 <el-input
                         placeholder="快递单号"
                         class="mr10"
@@ -140,6 +145,22 @@
                         value-format="yyyy-MM-dd HH:mm:ss"
                         format="yyyy-MM-dd HH:mm:ss"
                         placeholder="兑换结束时间（止）"
+                ></el-date-picker>
+                <el-date-picker
+                        class="mr10"
+                        v-model="query.startGetDate"
+                        type="datetime"
+                        value-format="yyyy-MM-dd HH:mm:ss"
+                        format="yyyy-MM-dd HH:mm:ss"
+                        placeholder="核销开始时间（起）"
+                ></el-date-picker>
+                <el-date-picker
+                        class="mr10"
+                        v-model="query.endGetDate"
+                        type="datetime"
+                        value-format="yyyy-MM-dd HH:mm:ss"
+                        format="yyyy-MM-dd HH:mm:ss"
+                        placeholder="核销结束时间（止）"
                 ></el-date-picker>
                 <el-select
                         clearable
@@ -230,33 +251,25 @@
                     header-cell-class-name="table-header"
                     @selection-change="handleSelectionChange"
             >
-                <!-- <el-table-column
-                    type="selection"
-                    :reserve-selection="true"
-                    width="55"
-                ></el-table-column> -->
+                <el-table-column label="订单号" width="190">
+                    <template slot-scope="scope">{{scope.row.orderNo}}</template>
+                </el-table-column>
                 <el-table-column prop="name" label="兑换影院名称" width="210">
                     <template slot-scope="scope">{{scope.row.cinemaName}}</template>
                 </el-table-column>
                 <el-table-column prop="name" label="领取影院名称" width="210">
                     <template slot-scope="scope">{{scope.row.exchangeCinemaName}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="收款影院名称" width="210">
-                    <template slot-scope="scope">{{scope.row.payCinemaName}}</template>
-                </el-table-column>
                 <el-table-column prop="memo" label="会员手机号" width="110">
                     <template slot-scope="scope">{{scope.row.mobile}}</template>
-                </el-table-column>
-                <el-table-column prop="memo" label="推荐人手机号" width="110">
-                    <template slot-scope="scope">{{scope.row.shareMobile}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="商品名称" width="180">
                     <template slot-scope="scope">{{scope.row.commodityName}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="购买数量" width="80">
+                <el-table-column prop="memo" label="数量" width="60">
                     <template slot-scope="scope">{{scope.row.number}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="消耗金币" width="80">
+                <el-table-column prop="memo" label="金币" width="60">
                     <template slot-scope="scope">{{scope.row.gold}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="实付" width="60">
@@ -272,15 +285,7 @@
                         <el-tag v-else-if="scope.row.payWay=='3'">app支付宝支付</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="兑换状态" align="center" width="80">
-                    <template slot-scope="scope">
-                        <el-tag v-if="scope.row. payStatus=='0'">待支付</el-tag>
-                        <el-tag v-else-if="scope.row. payStatus=='1'">兑换成功</el-tag>
-                        <el-tag v-else-if="scope.row. payStatus=='2'">兑换失败</el-tag>
-                        <el-tag v-else-if="scope.row. payStatus=='3'">兑换超时</el-tag>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="memo" label="退款状态" width="120">
+                <el-table-column prop="memo" label="退款状态" width="80">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.refundStatus=='0'">未退款</el-tag>
                         <el-tag v-else-if="scope.row.refundStatus=='1'">退款成功</el-tag>
@@ -293,27 +298,20 @@
                         <el-tag v-else-if="scope.row.pickupWay=='2'">快递</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="memo" label="核销状态" width="80">
-                    <template slot-scope="scope">
-                        <el-tag v-if="scope.row.status=='1'">未核销</el-tag>
-                        <el-tag v-else-if="scope.row.status=='2'">已核销</el-tag>
-                        <el-tag v-else-if="scope.row.status=='3'">已过期</el-tag>
-                    </template>
-                </el-table-column>
                 <el-table-column prop="memo" label="订单类型" width="80">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.orderType=='1'">商品订单</el-tag>
                         <el-tag v-else-if="scope.row.orderType=='2'">秒杀订单</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="memo" label="快递状态" width="80">
+                <!-- <el-table-column prop="memo" label="快递状态" width="80">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.trackingStatus=='1'">待发货</el-tag>
                         <el-tag v-else-if="scope.row.trackingStatus=='2'">快递中</el-tag>
                         <el-tag v-else-if="scope.row.trackingStatus=='3'">已送达</el-tag>
                         <el-tag v-else-if="scope.row.trackingStatus=='4'">已收货</el-tag>
                     </template>
-                </el-table-column>
+                </el-table-column> -->
                 <el-table-column prop="memo" label="订单结算状态" width="120">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.settleStatus=='1'">未结算</el-tag>
@@ -323,14 +321,36 @@
                 <el-table-column prop="memo" label="收货人手机号" width="110">
                     <template slot-scope="scope">{{scope.row.deliveryMobile}}</template>
                 </el-table-column>
-                <el-table-column prop="memo" label="收货人名称" width="120">
+                <el-table-column prop="memo" label="收货人" width="80">
                     <template slot-scope="scope">{{scope.row.deliveryName}}</template>
                 </el-table-column>
                 <el-table-column prop="memo" label="领取时间" width="160">
                     <template slot-scope="scope">{{scope.row.getDate}}</template>
                 </el-table-column>
-                <el-table-column label="订单号" width="190">
-                    <template slot-scope="scope">{{scope.row.orderNo}}</template>
+                <el-table-column prop="name" label="收款影院名称" width="210">
+                    <template slot-scope="scope">{{scope.row.payCinemaName}}</template>
+                </el-table-column>
+                <el-table-column prop="memo" label="推荐人手机号" width="110">
+                    <template slot-scope="scope">{{scope.row.shareMobile}}</template>
+                </el-table-column>
+                <el-table-column label="兑换状态" align="center" width="80" fixed="right">
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row. payStatus=='0'">待支付</el-tag>
+                        <el-tag v-else-if="scope.row. payStatus=='1'">兑换成功</el-tag>
+                        <el-tag v-else-if="scope.row. payStatus=='2'">兑换失败</el-tag>
+                        <el-tag v-else-if="scope.row. payStatus=='3'">兑换超时</el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="memo" label="订单状态" width="80" fixed="right">
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row.status=='1'">未核销</el-tag>
+                        <el-tag v-else-if="scope.row.status=='2'">已核销</el-tag>
+                        <el-tag v-else-if="scope.row.status=='3'">已过期</el-tag>
+                        <el-tag v-else-if="scope.row.status=='4'">待发货</el-tag>
+                        <el-tag v-else-if="scope.row.status=='5'">快递中</el-tag>
+                        <el-tag v-else-if="scope.row.status=='6'">已送达</el-tag>
+                        <el-tag v-else-if="scope.row.status=='7'">已收货</el-tag>
+                    </template>
                 </el-table-column>
                 <el-table-column label="操作" align="center" fixed="right" width="120">
                     <template slot-scope="scope">
@@ -459,7 +479,7 @@
                             autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="兑换方式" :label-width="formLabelWidth">
+                <el-form-item label="支付方式" :label-width="formLabelWidth">
                     <el-input
                             :disabled="true"
                             style="width: 250px"
@@ -491,7 +511,7 @@
                             autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="领取状态" :label-width="formLabelWidth">
+                <el-form-item label="订单状态" :label-width="formLabelWidth">
                     <el-input
                             :disabled="true"
                             style="width: 250px"
@@ -507,6 +527,14 @@
                             autocomplete="off"
                     ></el-input>
                 </el-form-item>
+                <el-form-item label="快递公司" :label-width="formLabelWidth">
+                    <el-input
+                            :disabled="true"
+                            style="width: 250px"
+                            v-model="form.trackingName"
+                            autocomplete="off"
+                    ></el-input>
+                </el-form-item>
                 <el-form-item label="物流单号" :label-width="formLabelWidth">
                     <el-input
                             :disabled="true"
@@ -515,14 +543,14 @@
                             autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="快递状态" :label-width="formLabelWidth">
+                <!-- <el-form-item label="快递状态" :label-width="formLabelWidth">
                     <el-input
                             :disabled="true"
                             style="width: 250px"
                             v-model="form.trackingStatus"
                             autocomplete="off"
                     ></el-input>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item label="收货人名称" :label-width="formLabelWidth">
                     <el-input
                             :disabled="true"
@@ -891,6 +919,9 @@
                     let orderNo = this.query.orderNo;
                     let commodityName = this.query.commodityName;
                     let mobile = this.query.mobile;
+                    let skuKeyWords = this.query.skuKeyWords;
+                    let startGetDate = this.query.startGetDate;
+                    let endGetDate = this.query.endGetDate;
                     let shareMobile = this.query.shareMobile;
                     let status = this.query.status;
                     let payStatus = this.query.payStatus;
@@ -961,17 +992,26 @@
                     if (!endDate) {
                         endDate = '';
                     }
+                    if (!skuKeyWords) {
+                        skuKeyWords = '';
+                    }
+                    if (!startGetDate) {
+                        startGetDate = '';
+                    }
+                    if (!endGetDate) {
+                        endGetDate = '';
+                    }
                     let jsonArr = [];
                     jsonArr.push({ key: 'tableName', value: 'commodity_change_record' });
                     jsonArr.push({
                         key: 'exportKeysJson',
                         value:
-                            '[\'cinemaName\',\'exchangeCinemaName\',\'partnerName\',\'payCinemaName\',\'chSettleStatusString\',\'orderNo\',\'mobile\',\'stringPayWay\',\'shareMobile\',\'remark\',\'commodityName\',\'gold\',\'number\',\'money\',\'getDate\',\'payTime\',\'chPayStatus\',\'chPickupWay\',\'trackingNumber\',\'chTrackingStatus\',\'deliveryName\',\'deliveryMobile\',\'province\',\'city\',\'district\',\'deliveryAddressDetail\',\'tradeNo\',\'payReturnMsg\',\'chChangeType\',\'chStatus\',\'chRefundStatus\',\'orderTypeName\',\'refundNo\',\'refundReason\',\'refundApply\',\'refundTime\',\'refundPrice\']'
+                            '[\'cinemaName\',\'exchangeCinemaName\',\'partnerName\',\'payCinemaName\',\'chSettleStatusString\',\'orderNo\',\'mobile\',\'stringPayWay\',\'shareMobile\',\'remark\',\'commodityName\',\'gold\',\'number\',\'money\',\'getDate\',\'payTime\',\'chPayStatus\',\'chPickupWay\',\'trackingNumber\',\'deliveryName\',\'deliveryMobile\',\'province\',\'city\',\'district\',\'deliveryAddressDetail\',\'tradeNo\',\'payReturnMsg\',\'chChangeType\',\'chStatus\',\'chRefundStatus\',\'orderTypeName\',\'refundNo\',\'refundReason\',\'refundApply\',\'refundTime\',\'refundPrice\']'
                     });
                     jsonArr.push({
                         key: 'exportTitlesJson',
                         value:
-                            '[\'兑换影院名称\',\'领取影院名称\',\'商户名称\',\'收款影院名称\',\'商户订单结算状态\',\'订单号\',\'手机号\',\'支付方式\',\'推荐人手机号\',\'用户备注\',\'商品名称\',\'消费金币\',\'购买数量\',\'支付金额\',\'领取时间\',\'下单时间\',\'兑换状态\',\'取货方式\',\'物流单号\',\'快递状态\',\'收货人名称\',\'收货人电话\',\'省\',\'市\',\'区\',\'收货人地址\',\'支付交易号\',\'支付回调消息\',\'兑换方式\',\'核销状态\',\'退款状态\',\'订单类型\',\'退款交易号\',\'退款原因\',\'微信退款回复\',\'退款时间\',\'退款金额\']'
+                            '[\'兑换影院名称\',\'领取影院名称\',\'商户名称\',\'收款影院名称\',\'商户订单结算状态\',\'订单号\',\'手机号\',\'支付方式\',\'推荐人手机号\',\'用户备注\',\'商品名称\',\'消费金币\',\'购买数量\',\'支付金额\',\'领取时间\',\'下单时间\',\'兑换状态\',\'取货方式\',\'物流单号\',\'收货人名称\',\'收货人电话\',\'省\',\'市\',\'区\',\'收货人地址\',\'支付交易号\',\'支付回调消息\',\'兑换方式\',\'订单状态\',\'退款状态\',\'订单类型\',\'退款交易号\',\'退款原因\',\'微信退款回复\',\'退款时间\',\'退款金额\']'
                     });
                     jsonArr.push({ key: 'commodityType', value: commodityType });
                     jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
@@ -989,6 +1029,9 @@
                     jsonArr.push({ key: 'payStatus', value: payStatus });
                     jsonArr.push({ key: 'startDate', value: startDate });
                     jsonArr.push({ key: 'endDate', value: endDate });
+                    jsonArr.push({ key: 'skuKeyWords', value: skuKeyWords });
+                    jsonArr.push({ key: 'startGetDate', value: startGetDate });
+                    jsonArr.push({ key: 'endGetDate', value: endGetDate });
                     jsonArr.push({ key: 'trackingStatus', value: trackingStatus });
                     jsonArr.push({ key: 'trackingNumber', value: trackingNumber });
                     jsonArr.push({ key: 'orderType', value: orderType });
@@ -1063,6 +1106,7 @@
                             var res = JSON.parse(Decrypt(data.data.data));
                             console.log(res)
                             this.partnerInfo = res.data;
+                            // this.getAllCinema2();
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
                             this.open();
@@ -1075,6 +1119,36 @@
                     .catch(err => {
                         console.log(err);
                     });
+            },
+            getAllCinema2() {
+                console.log(this.query.cinemaCode)
+                if (this.query.cinemaCode && this.query.cinemaCode != '') {
+                    return;
+                } else {
+                    var jsonArr = [];
+                    jsonArr.push({ key: 'partnerCode', value: this.query.partnerCode });
+                    let sign = md5(preSign(jsonArr));
+                    jsonArr.push({ key: 'sign', value: sign });
+                    let params = ParamsAppend(jsonArr);
+                    https
+                        .fetchPost('/cinemaPartner/getCinemaByPartnerCode', params)
+                        .then(data => {
+                            if (data.data.code == 'success') {
+                                var res = JSON.parse(Decrypt(data.data.data));
+                                this.cinemaInfo = res;
+                            } else if (data.data.code == 'nologin') {
+                                this.message = data.data.message;
+                                this.open();
+                                this.$router.push('/login');
+                            } else {
+                                this.message = data.data.message;
+                                this.open();
+                            }
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        });
+                }
             },
             getAllCinema() {
                 https
@@ -1142,6 +1216,14 @@
                                     this.form.status = '已领取';
                                 } else if (JSON.parse(Decrypt(data.data.data)).status == 3) {
                                     this.form.status = '已过期';
+                                } else if (JSON.parse(Decrypt(data.data.data)).status == 4) {
+                                    this.form.status = '待发货';
+                                } else if (JSON.parse(Decrypt(data.data.data)).status == 5) {
+                                    this.form.status = '快递中';
+                                } else if (JSON.parse(Decrypt(data.data.data)).status == 6) {
+                                    this.form.status = '已送达';
+                                } else if (JSON.parse(Decrypt(data.data.data)).status == 7) {
+                                    this.form.status = '已收货';
                                 }
                                 if (JSON.parse(Decrypt(data.data.data)).payStatus == 0) {
                                     this.form.payStatus = '未支付';
@@ -1159,15 +1241,15 @@
                                 } else if (JSON.parse(Decrypt(data.data.data)).refundStatus == 2) {
                                     this.form.refundStatus = '退款失败';
                                 }
-                                if (JSON.parse(Decrypt(data.data.data)).trackingStatus == 1) {
-                                    this.form.trackingStatus = '待发货';
-                                } else if (JSON.parse(Decrypt(data.data.data)).trackingStatus == 2) {
-                                    this.form.trackingStatus = '快递中';
-                                } else if (JSON.parse(Decrypt(data.data.data)).trackingStatus == 3) {
-                                    this.form.trackingStatus = '已送达';
-                                } else if (JSON.parse(Decrypt(data.data.data)).trackingStatus == 4) {
-                                    this.form.trackingStatus = '已收货';
-                                }
+                                // if (JSON.parse(Decrypt(data.data.data)).trackingStatus == 1) {
+                                //     this.form.trackingStatus = '待发货';
+                                // } else if (JSON.parse(Decrypt(data.data.data)).trackingStatus == 2) {
+                                //     this.form.trackingStatus = '快递中';
+                                // } else if (JSON.parse(Decrypt(data.data.data)).trackingStatus == 3) {
+                                //     this.form.trackingStatus = '已送达';
+                                // } else if (JSON.parse(Decrypt(data.data.data)).trackingStatus == 4) {
+                                //     this.form.trackingStatus = '已收货';
+                                // }
                                 if (JSON.parse(Decrypt(data.data.data)).pickupWay == 1) {
                                     this.form.pickupWay = '自提';
                                 } else if (JSON.parse(Decrypt(data.data.data)).pickupWay == 2) {
@@ -1362,6 +1444,9 @@
                     let trackingStatus = this.query.trackingStatus;
                     let trackingNumber = this.query.trackingNumber;
                     let orderType = this.query.orderType;
+                    let skuKeyWords = this.query.skuKeyWords;
+                    let startGetDate = this.query.startGetDate;
+                    let endGetDate = this.query.endGetDate;
                     if (!orderType) {
                         orderType = '';
                     }
@@ -1419,6 +1504,15 @@
                     if (!endDate) {
                         endDate = '';
                     }
+                    if (!skuKeyWords) {
+                        skuKeyWords = '';
+                    }
+                    if (!startGetDate) {
+                        startGetDate = '';
+                    }
+                    if (!endGetDate) {
+                        endGetDate = '';
+                    }
                     let jsonArr = [];
                     jsonArr.push({ key: 'orderNo', value: orderNo });
                     jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
@@ -1439,6 +1533,9 @@
                     jsonArr.push({ key: 'trackingStatus', value: trackingStatus });
                     jsonArr.push({ key: 'trackingNumber', value: trackingNumber });
                     jsonArr.push({ key: 'orderType', value: orderType });
+                    jsonArr.push({ key: 'skuKeyWords', value: skuKeyWords });
+                    jsonArr.push({ key: 'startGetDate', value: startGetDate });
+                    jsonArr.push({ key: 'endGetDate', value: endGetDate });
                     jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
                     jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
                     let sign = md5(preSign(jsonArr));

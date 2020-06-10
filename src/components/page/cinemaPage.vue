@@ -380,6 +380,17 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
+                <el-form-item prop="buyMerHint" label="购买卖品须知" :label-width="formLabelWidth">
+                    <el-input
+                        style="width: 250px"
+                        type="textarea"
+                        rows="6"
+                        maxlength="200"
+                        show-word-limit
+                        v-model="oForm.buyMerHint"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
                 <el-form-item label="影院会员服务协议" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
@@ -1121,6 +1132,17 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
+                <el-form-item label="购买卖品须知" :label-width="formLabelWidth">
+                    <el-input
+                        style="width: 250px"
+                        type="textarea"
+                        rows="6"
+                        maxlength="200"
+                        show-word-limit
+                        v-model="oBuyMerHint"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
                 <el-form-item label="影院会员服务协议" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
@@ -1817,7 +1839,6 @@ export default {
                 latitude: [{required: true, message: '请输入纬度', trigger: 'blur'}],
                 belongBusinessCode: [{required: true, message: '请选择', trigger: 'change'}],
                 serviceMobile: [{required: true, message: '请输入客服电话', trigger: 'blur'}],
-                // openSnackStatus: [{required: true, message: '请选择', trigger: 'change'}],
                 snackDispatcherStatus: [{required: true, message: '请选择', trigger: 'change'}],
                 refundable: [{required: true, message: '请选择', trigger: 'change'}],
                 snackBeginTime: [{required: true, message: '请选择开始时间', trigger: 'blur'}],
@@ -1846,6 +1867,7 @@ export default {
             type: {
                 type: 'bussiness'
             },
+            oBuyMerHint: '',
             oMiniOnLine:'',
             oMiniAppName:'',
             oMiniAppQRCode:'',
@@ -2011,6 +2033,7 @@ export default {
                 buyTicketHint: '',
                 memberCardPayFee: '',
                 thirdPartyPayFee: '',
+                buyMerHint: '',
                 // openSnackStatus: '',
                 snackDispatcherStatus: '',
                 refundable: '',
@@ -2290,6 +2313,7 @@ export default {
                 target: document.querySelector('.div1')
             });
             var jsonArr = [];
+            jsonArr.push({ key: 'buyMerHint', value: this.oForm.buyMerHint });
             jsonArr.push({ key: 'cinemaName', value: this.oForm.cinemaName });
             jsonArr.push({ key: 'cinemaCode', value: this.oForm.cinemaCode });
             jsonArr.push({ key: 'province', value: this.oForm.province });
@@ -2441,6 +2465,7 @@ export default {
                             this.dialogFormVisible = false;
                             this.$message.success(`新增成功`);
                             this.$refs.upload.clearFiles();//清除已上传文件
+                            this.oForm.buyMerHint = '';
                             this.oForm.cinemaName = '';
                             this.oForm.cinemaCode = '';
                             this.oForm.province = '';
@@ -2595,6 +2620,16 @@ export default {
                     console.log(JSON.parse(Decrypt(data.data.data)));
                     if (data.data.code == 'success') {
                         this.editVisible = true;
+                        this.oMessageType1 = '';
+                        this.oMessageType2 = '';
+                        this.oMessageType3 = '';
+                        this.oMessageType4 = '';
+                        this.oMessageType5 = '';
+                        this.oMessageType6 = '';
+                        this.oMessageType7 = '';
+                        this.oMessageType8 = '';
+                        this.oMessageType9 = '';
+                        this.oBuyMerHint = JSON.parse(Decrypt(data.data.data)).Cinema.buyMerHint;
                         this.oCinemaName = JSON.parse(Decrypt(data.data.data)).Cinema.cinemaName;
                         this.oCinemaCode = JSON.parse(Decrypt(data.data.data)).Cinema.cinemaCode;
                         this.oProvince = JSON.parse(Decrypt(data.data.data)).Cinema.province;
@@ -2816,6 +2851,11 @@ export default {
         },
         // 编辑操作
         exChanger() {
+            // if (!this.oBuyMerHint || this.oBuyMerHint == '') {
+            //     this.message = '请输入购买卖品须知';
+            //     this.open();
+            //     return;
+            // }
             const loading = this.$loading({
                 lock: true,
                 text: 'Loading',
@@ -2824,6 +2864,7 @@ export default {
                 target: document.querySelector('.div1')
             });
             var jsonArr = [];
+            jsonArr.push({ key: 'buyMerHint', value: this.oBuyMerHint });
             jsonArr.push({ key: 'cinemaName', value: this.oCinemaName });
             jsonArr.push({ key: 'province', value: this.oProvince });
             jsonArr.push({ key: 'city', value: this.oCity });

@@ -3,7 +3,7 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
-                    <i class="el-icon-lx-cascades"></i> 扫码领券管理
+                    <i class="el-icon-lx-cascades"></i> 影院APP信息维护
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
@@ -166,12 +166,12 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="支付宝appSecret" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="支付宝支付公钥" :label-width="formLabelWidth">
                     <el-input
                         :rows="5"
                         min="1"
                         type="password"
-                        v-model="oForm.aliAppSecret"
+                        v-model="oForm.aliPayKey"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
@@ -291,12 +291,12 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="支付宝appSecret" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="支付宝支付公钥" :label-width="formLabelWidth">
                     <el-input
                         :rows="5"
                         min="1"
                         type="password"
-                        v-model="eForm.aliAppSecret"
+                        v-model="eForm.aliPayKey"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
@@ -423,7 +423,7 @@ export default {
                 redirectType: '1',
                 redirectGoal: '',
                 aliAppId: '',
-                aliAppSecret: '',
+                aliPayKey: '',
                 aliPublicKey: '',
                 aliPrivateKey: '',
                 wechatAppId: '',
@@ -439,7 +439,7 @@ export default {
                 redirectType: '',
                 redirectGoal: '',
                 aliAppId: '',
-                aliAppSecret: '',
+                aliPayKey: '',
                 aliPublicKey: '',
                 aliPrivateKey: '',
                 wechatAppId: '',
@@ -543,8 +543,8 @@ export default {
                 this.open();
                 return;
             }
-            if (this.oForm.aliAppSecret == '') {
-                this.message = '请填写支付宝appSecret';
+            if (this.oForm.aliPayKey == '') {
+                this.message = '请填写支付宝支付公钥';
                 this.open();
                 return;
             }
@@ -600,7 +600,7 @@ export default {
                 jsonArr.push({ key: 'redirectGoal', value: this.oForm.redirectGoal });
             }
             jsonArr.push({ key: 'aliAppId', value: this.oForm.aliAppId });
-            jsonArr.push({ key: 'aliAppSecret', value: this.oForm.aliAppSecret });
+            jsonArr.push({ key: 'aliPayKey', value: this.oForm.aliPayKey });
             jsonArr.push({ key: 'aliPublicKey', value: this.oForm.aliPublicKey });
             jsonArr.push({ key: 'aliPrivateKey', value: this.oForm.aliPrivateKey });
             jsonArr.push({ key: 'wechatAppId', value: this.oForm.wechatAppId });
@@ -625,7 +625,7 @@ export default {
                             this.oForm.redirectType = '1';
                             this.oForm.redirectGoal = '';
                             this.oForm.aliAppId = '';
-                            this.oForm.aliAppSecret = '';
+                            this.oForm.aliPayKey = '';
                             this.oForm.aliPublicKey = '';
                             this.oForm.aliPrivateKey = '';
                             this.oForm.wechatAppId = '';
@@ -728,7 +728,7 @@ export default {
                         this.eForm.redirectType = JSON.parse(Decrypt(data.data.data)).redirectType.toString();
                         this.eForm.redirectGoal = JSON.parse(Decrypt(data.data.data)).redirectGoal;
                         this.eForm.aliAppId = JSON.parse(Decrypt(data.data.data)).aliAppId;
-                        this.eForm.aliAppSecret = JSON.parse(Decrypt(data.data.data)).aliAppSecret;
+                        this.eForm.aliPayKey = JSON.parse(Decrypt(data.data.data)).aliPayKey;
                         this.eForm.aliPublicKey = JSON.parse(Decrypt(data.data.data)).aliPublicKey;
                         this.eForm.aliPrivateKey = JSON.parse(Decrypt(data.data.data)).aliPrivateKey;
                         this.eForm.wechatAppId = JSON.parse(Decrypt(data.data.data)).wechatAppId;
@@ -776,8 +776,8 @@ export default {
                 this.open();
                 return;
             }
-            if (this.eForm.aliAppSecret == '') {
-                this.message = '请填写支付宝appSecret';
+            if (this.eForm.aliPayKey == '') {
+                this.message = '请填写支付宝支付公钥';
                 this.open();
                 return;
             }
@@ -832,7 +832,7 @@ export default {
                 jsonArr.push({ key: 'redirectGoal', value: this.eForm.redirectGoal });
             }
             jsonArr.push({ key: 'aliAppId', value: this.eForm.aliAppId });
-            jsonArr.push({ key: 'aliAppSecret', value: this.eForm.aliAppSecret });
+            jsonArr.push({ key: 'aliPayKey', value: this.eForm.aliPayKey });
             jsonArr.push({ key: 'aliPublicKey', value: this.eForm.aliPublicKey });
             jsonArr.push({ key: 'aliPrivateKey', value: this.eForm.aliPrivateKey });
             jsonArr.push({ key: 'wechatAppId', value: this.eForm.wechatAppId });

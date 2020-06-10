@@ -39,6 +39,15 @@
                         :value="item.cinemaCode"
                     ></el-option>
                 </el-select>
+                <el-select
+                    clearable
+                    v-model="query.commonType"
+                    placeholder="通用方式"
+                    class="handle-select mr10"
+                >
+                    <el-option key="1" label="全部影院" value="1"></el-option>
+                    <el-option key="2" label="指定影院" value="2"></el-option>
+                </el-select>
                 <el-input v-model="query.name" placeholder="活动名称" class="handle-input mr10"></el-input>
                 <el-select
                     clearable
@@ -486,15 +495,22 @@
                 <el-form-item :required="true" label="活动名称：" :label-width="formLabelWidth">
                     <el-input style="width: 250px" v-model="oName" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="选择影院：" :label-width="formLabelWidth">
-                    <el-radio-group v-model="oCinemaCode" @change="selectCinema">
-                        <el-radio
-                            v-for="item in cinemaInfo"
-                            :label="item.cinemaCode"
-                            :key="item.cinemaCode"
-                            :value="item.cinemaName"
-                        >{{item.cinemaName}}</el-radio>
+                <el-form-item :required="true" label="通用方式" :label-width="formLabelWidth">
+                    <el-radio-group v-model="oCommonType">
+                        <el-radio :label="1">全部影院</el-radio>
+                        <el-radio :label="2">指定影院</el-radio>
                     </el-radio-group>
+                </el-form-item>
+                <el-form-item :required="true" label="选择影院：" :label-width="formLabelWidth" v-if="oCommonType == 2">
+                    <el-checkbox-group v-model="oCinemaCode" @change="selectCinema2">
+                        <el-checkbox
+                                v-for="item in cinemaInfo"
+                                :key="item.cinemaCode"
+                                :label="item.cinemaCode"
+                                :value="item.cinemaCode"
+                        >{{item.cinemaName}}
+                        </el-checkbox>
+                    </el-checkbox-group>
                 </el-form-item>
                 <el-form-item :required="true" label="选择影厅：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oSelectHallType" @change="clearScreenCode()">
@@ -859,7 +875,8 @@ export default {
                     value: '星期日'
                 }
             ],
-            oCinemaCode: '',
+            oCommonType: '',
+            oCinemaCode: [],
             oSelectHallType: '',
             oSelectFilmFormatType: '',
             oActivityDesc: '',
@@ -1512,8 +1529,11 @@ export default {
                             this.formatList.push(formatList);
                         }
                         this.oName = JSON.parse(Decrypt(data.data.data)).discountActivity.name;
-                        this.oCinemaCode = JSON.parse(Decrypt(data.data.data)).discountActivity.cinemaCode;
-                        this.getAllScreen(this.oCinemaCode);
+                        this.oCommonType = JSON.parse(Decrypt(data.data.data)).discountActivity.commonType;
+                        if (this.oCommonType == 2) {
+                            this.oCinemaCode = JSON.parse(Decrypt(data.data.data)).discountActivity.cinemaCode.split(",");
+                        }
+                        this.getAllScreen(this.oCinemaCode.join(","));
                         if (JSON.parse(Decrypt(data.data.data)).discountActivity.selectHallType == 0) {
                             this.oSelectHallType = '0';
                         }
@@ -2048,6 +2068,7 @@ export default {
                 let jsonArr = [];
                 jsonArr.push({ key: 'businessCode', value: this.query.businessCode });
                 jsonArr.push({ key: 'name', value: this.query.name });
+                jsonArr.push({ key: 'commonType', value: this.query.commonType });
                 jsonArr.push({ key: 'status', value: this.query.status });
                 jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
                 jsonArr.push({ key: 'reduceType', value: this.query.reduceType });

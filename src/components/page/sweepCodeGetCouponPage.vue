@@ -80,7 +80,7 @@
                 <el-table-column prop="name" label="活动结束时间" width="165">
                     <template slot-scope="scope">{{scope.row.endDate}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="活动可领取份数" width="65">
+                <el-table-column prop="name" label="总份数" width="65">
                     <template slot-scope="scope">{{scope.row.store}}</template>
                 </el-table-column>
                 <el-table-column prop="name" label="已领取数量" width="95">
@@ -255,7 +255,7 @@
                 <!--<el-form-item :required="true" label="用户限购次数" :label-width="formLabelWidth">-->
                 <!--<el-input style="width: 250px" min="1" v-model="oForm.purchaseNumber" autocomplete="off" onkeyup="this.value=this.value.replace(/[^0-9]+/,'')"></el-input>-->
                 <!--</el-form-item>-->
-                <el-form-item :required="true" label="活动可领取份数" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="活动领取优惠券总数量" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -427,7 +427,7 @@
                 <!--<el-form-item :required="true" label="用户限购次数" :label-width="formLabelWidth">-->
                 <!--<el-input style="width: 250px" min="1" v-model="oPurchaseNumber" autocomplete="off" onkeyup="this.value=this.value.replace(/[^0-9]+/,'')"></el-input>-->
                 <!--</el-form-item>-->
-                <el-form-item :required="true" label="活动可领取份数" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="活动领取优惠券总数量" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
                         min="1"
@@ -857,7 +857,7 @@ export default {
                 }
             }
             if (!this.oForm.store || this.oForm.store == '') {
-                this.message = '请填写活动可领取份数！';
+                this.message = '请填写活动领取优惠券总数量！';
                 this.open();
                 return;
             }
@@ -1112,7 +1112,7 @@ export default {
                 }
             }
             if (!this.oStore || this.oStore == '') {
-                this.message = '请填写活动可领取份数！';
+                this.message = '请填写活动领取优惠券总数量！';
                 this.open();
                 return;
             }

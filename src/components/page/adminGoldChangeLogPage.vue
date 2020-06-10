@@ -491,8 +491,16 @@
                 this.getMenu();
             },
             getAllCinema() {
+                if (!this.query.businessCode) {
+                    return;
+                }
+                var jsonArr = [];
+                jsonArr.push({ key: 'businessCode', value: this.query.businessCode });
+                let sign = md5(preSign(jsonArr));
+                jsonArr.push({ key: 'sign', value: sign });
+                let params = ParamsAppend(jsonArr);
                 https
-                    .fetchPost('/cinema/getAllCinema')
+                    .fetchPost('/cinema/getCinemaListByBusinessCode', params)
                     .then(data => {
                         if (data.data.code == 'success') {
                             var res = JSON.parse(Decrypt(data.data.data));

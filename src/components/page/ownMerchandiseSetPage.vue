@@ -186,7 +186,7 @@
                                     autocomplete="off"
                                     :value="goodsItem.price"
                                     style="width: 100px"
-                                    onkeyup="this.value=this.value.replace(/[^0-9-]+/,'')"
+                                    onkeyup="this.value=this.value.replace(/[^0-9-.]+/,'')"
                                     @input="changeInput($event, index, inx)"
                                 ></el-input>
                                 <span
@@ -198,16 +198,16 @@
                     </div>
                     <el-button type="primary" @click="addComboGoods">添加主商品</el-button>
                 </el-form-item>
-                <el-form-item :required="true" label="套餐默认价格：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="套餐基础价格：" :label-width="formLabelWidth">
                     <el-input
                         v-model="oForm.basePrice"
                         autocomplete="off"
                         style="width: 220px"
-                        onkeyup="this.value=this.value.replace(/\D/g,'')"
+                        onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')"
                     ></el-input>
                     <span
                         style="font-size:16px;color:red;margin-left:10px"
-                    >套餐实际价格 = 套餐默认价格 +/- 商品浮动价格</span>
+                    >套餐实际价格 = 套餐基础价格 + 商品浮动价格</span>
                 </el-form-item>
                 <el-form-item label="展示顺序(越小越靠前)：" :label-width="formLabelWidth">
                     <el-input
@@ -219,16 +219,16 @@
                 </el-form-item>
                 <el-form-item label="套餐描述：" :label-width="formLabelWidth">
                     <el-input
-                            v-model="oForm.comboDesc"
-                            type="textarea"
-                            show-word-limit
-                            maxlength="200"
-                            :rows="5"
-                            style="width: 300px"
+                        v-model="oForm.comboDesc"
+                        type="textarea"
+                        show-word-limit
+                        maxlength="200"
+                        :rows="5"
+                        style="width: 300px"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="卖品分类：" :label-width="formLabelWidth">
-                    <el-select v-model="oForm.typeCode" placeholder="请选择分类">
+                    <el-select clearable v-model="oForm.typeCode" placeholder="请选择分类">
                         <el-option
                             v-for="item in selectValue"
                             :key="item.typeName"
@@ -257,32 +257,41 @@
         <el-dialog :close-on-click-modal="false" title="修改套餐" :visible.sync="editVisible">
             <el-form :model="updateForm">
                 <el-form-item :required="true" label="影院名称：" :label-width="formLabelWidth">
-                    <el-input v-model="updateForm.cinemaName" autocomplete="off" :disabled="true" style="width: 220px"></el-input>
+                    <el-input
+                        v-model="updateForm.cinemaName"
+                        autocomplete="off"
+                        :disabled="true"
+                        style="width: 220px"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="套餐名称：" :label-width="formLabelWidth">
-                    <el-input v-model="updateForm.comboName" autocomplete="off" style="width: 220px"></el-input>
+                    <el-input
+                        v-model="updateForm.comboName"
+                        autocomplete="off"
+                        style="width: 220px"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="套餐图片：" :label-width="formLabelWidth">
                     <el-popover placement="right" title trigger="hover">
-                        <img :src="updateForm.comboImage"/>
+                        <img :src="updateForm.comboImage" />
                         <img
-                                slot="reference"
-                                :src="updateForm.comboImage"
-                                :alt="updateForm.comboImage"
-                                style="max-height: 50px;max-width: 130px"
+                            slot="reference"
+                            :src="updateForm.comboImage"
+                            :alt="updateForm.comboImage"
+                            style="max-height: 50px;max-width: 130px"
                         />
                     </el-popover>
                     <el-upload
-                            :before-upload="beforeUpload"
-                            :data="type"
-                            class="upload-demo"
-                            drag
-                            action="/api/upload/uploadImage"
-                            ref="download"
-                            :limit="1"
-                            :on-exceed="exceed"
-                            :on-success="unSuccess"
-                            multiple
+                        :before-upload="beforeUpload"
+                        :data="type"
+                        class="upload-demo"
+                        drag
+                        action="/api/upload/uploadImage"
+                        ref="download"
+                        :limit="1"
+                        :on-exceed="exceed"
+                        :on-success="unSuccess"
+                        multiple
                     >
                         <i class="el-icon-upload"></i>
                         <div class="el-upload__text">
@@ -290,10 +299,9 @@
                             <em>点击上传</em>
                         </div>
                         <div
-                                class="el-upload__tip"
-                                slot="tip"
-                        >只能上传jpg/png文件，且不超过200kb 建议尺寸200*200或按比例上传
-                        </div>
+                            class="el-upload__tip"
+                            slot="tip"
+                        >只能上传jpg/png文件，且不超过200kb 建议尺寸200*200或按比例上传</div>
                     </el-upload>
                 </el-form-item>
                 <el-form-item :required="true" label="套餐：" :label-width="formLabelWidth">
@@ -325,7 +333,7 @@
                                     autocomplete="off"
                                     :value="goodsItem.price"
                                     style="width: 100px"
-                                    onkeyup="this.value=this.value.replace(/[^0-9-]+/,'')"
+                                    onkeyup="this.value=this.value.replace(/[^0-9-.]+/,'')"
                                     @input="changeInput($event, index, inx)"
                                 ></el-input>
                                 <span
@@ -337,16 +345,16 @@
                     </div>
                     <el-button type="primary" @click="addComboGoods">添加主商品</el-button>
                 </el-form-item>
-                <el-form-item :required="true" label="套餐默认价格：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="套餐基础价格：" :label-width="formLabelWidth">
                     <el-input
                         v-model="updateForm.basePrice"
                         autocomplete="off"
                         style="width: 220px"
-                        onkeyup="this.value=this.value.replace(/\D/g,'')"
+                        onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')"
                     ></el-input>
                     <span
                         style="font-size:16px;color:red;margin-left:10px"
-                    >套餐实际价格 = 套餐默认价格 +/- 商品浮动价格</span>
+                    >套餐实际价格 = 套餐基础价格 + 商品浮动价格</span>
                 </el-form-item>
                 <el-form-item label="展示顺序(越小越靠前)：" :label-width="formLabelWidth">
                     <el-input
@@ -358,16 +366,16 @@
                 </el-form-item>
                 <el-form-item label="套餐描述：" :label-width="formLabelWidth">
                     <el-input
-                            type="textarea"
-                            show-word-limit
-                            maxlength="200"
-                            :rows="5"
-                            style="width: 300px"
-                            v-model="updateForm.comboDesc"
+                        type="textarea"
+                        show-word-limit
+                        maxlength="200"
+                        :rows="5"
+                        style="width: 300px"
+                        v-model="updateForm.comboDesc"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="卖品分类：" :label-width="formLabelWidth">
-                    <el-select v-model="updateForm.typeCode" placeholder="请选择分类">
+                    <el-select clearable v-model="updateForm.typeCode" placeholder="请选择分类">
                         <el-option
                             v-for="item in selectValue"
                             :key="item.typeName"
@@ -539,7 +547,7 @@ export default {
                 cinemaCode: '',
                 comboName: '', // 套餐名称
                 comboImage: '', // 套餐图片
-                basePrice: '', // 套餐默认价格
+                basePrice: '', // 套餐基础价格
                 showSeqNo: '0', // 展示顺序
                 status: '', // 启用状态
                 comboDesc: '', // 套餐描述
@@ -549,7 +557,7 @@ export default {
                 cinemaCode: '',
                 comboName: '', // 套餐名称
                 comboImage: '', // 套餐图片
-                basePrice: '', // 套餐默认价格
+                basePrice: '', // 套餐基础价格
                 showSeqNo: '0', // 展示顺序
                 status: '', // 启用状态
                 comboDesc: '', // 套餐描述
@@ -587,7 +595,7 @@ export default {
                     this.cardList = [];
                     this.fileList = [];
                     this.comboList = [];
-                    this.comboList.push({'name': '商品1', 'id': 1, 'itemList': []},{'name': '商品2', 'id': 2, 'itemList': []});
+                    this.comboList.push({ name: '商品1', id: 1, itemList: [] }, { name: '商品2', id: 2, itemList: [] });
                     loading.close();
                     if (data.data.code == 'success') {
                         this.dialogFormVisible = true;
@@ -690,7 +698,7 @@ export default {
                     });
                 }
             }
-            jsonArr.push({ key: 'merSetDetailsJson', value: JSON.stringify(merSetDetailsJson)});
+            jsonArr.push({ key: 'merSetDetailsJson', value: JSON.stringify(merSetDetailsJson) });
             console.log(jsonArr);
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
@@ -707,13 +715,13 @@ export default {
                         this.oForm.cinemaName = '';
                         this.oForm.comboName = ''; // 套餐名称
                         this.oForm.comboImage = ''; // 套餐图片
-                        this.oForm.basePrice = ''; // 套餐默认价格
+                        this.oForm.basePrice = ''; // 套餐基础价格
                         this.oForm.showSeqNo = '0'; // 展示顺序
                         this.oForm.status = ''; // 启用状态
                         this.oForm.comboDesc = ''; // 套餐描述
                         this.oForm.typeCode = ''; // 卖品分类
                         this.comboList = [];
-                        this.comboList.push({'name': '商品1', 'id': 1, 'itemList': []},{'name': '商品2', 'id': 2, 'itemList': []});
+                        this.comboList.push({ name: '商品1', id: 1, itemList: [] }, { name: '商品2', id: 2, itemList: [] });
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
                         this.open();
@@ -824,68 +832,63 @@ export default {
                         let arr3 = [];
                         let arr4 = [];
                         let arr5 = [];
-                        for (let i = 0; i < arr.length; i ++) {
+                        for (let i = 0; i < arr.length; i++) {
                             if (arr[i].inCode == 1) {
                                 arr1.push({
-                                        'name': arr[i].merName,
-                                        'code': arr[i].merCode,
-                                        'count': arr[i].merNumber,
-                                        'price': arr[i].floatPrice
-                                    }
-                                )
-                            };
+                                    name: arr[i].merName,
+                                    code: arr[i].merCode,
+                                    count: arr[i].merNumber,
+                                    price: arr[i].floatPrice
+                                });
+                            }
                             if (arr[i].inCode == 2) {
                                 arr2.push({
-                                        'name': arr[i].merName,
-                                        'code': arr[i].merCode,
-                                        'count': arr[i].merNumber,
-                                        'price': arr[i].floatPrice
-                                    }
-                                )
-                            };
+                                    name: arr[i].merName,
+                                    code: arr[i].merCode,
+                                    count: arr[i].merNumber,
+                                    price: arr[i].floatPrice
+                                });
+                            }
                             if (arr[i].inCode == 3) {
                                 arr3.push({
-                                        'name': arr[i].merName,
-                                        'code': arr[i].merCode,
-                                        'count': arr[i].merNumber,
-                                        'price': arr[i].floatPrice
-                                    }
-                                )
-                            };
+                                    name: arr[i].merName,
+                                    code: arr[i].merCode,
+                                    count: arr[i].merNumber,
+                                    price: arr[i].floatPrice
+                                });
+                            }
                             if (arr[i].inCode == 4) {
                                 arr4.push({
-                                        'name': arr[i].merName,
-                                        'code': arr[i].merCode,
-                                        'count': arr[i].merNumber,
-                                        'price': arr[i].floatPrice
-                                    }
-                                )
-                            };
+                                    name: arr[i].merName,
+                                    code: arr[i].merCode,
+                                    count: arr[i].merNumber,
+                                    price: arr[i].floatPrice
+                                });
+                            }
                             if (arr[i].inCode == 5) {
                                 arr5.push({
-                                        'name': arr[i].merName,
-                                        'code': arr[i].merCode,
-                                        'count': arr[i].merNumber,
-                                        'price': arr[i].floatPrice
-                                    }
-                                )
-                            };
+                                    name: arr[i].merName,
+                                    code: arr[i].merCode,
+                                    count: arr[i].merNumber,
+                                    price: arr[i].floatPrice
+                                });
+                            }
                         }
                         if (arr1.length > 0) {
-                            list.push({'name': '商品1', 'id': 1, 'itemList': arr1})
-                        };
+                            list.push({ name: '商品1', id: 1, itemList: arr1 });
+                        }
                         if (arr2.length > 0) {
-                            list.push({'name': '商品2', 'id': 2, 'itemList': arr2})
-                        };
+                            list.push({ name: '商品2', id: 2, itemList: arr2 });
+                        }
                         if (arr3.length > 0) {
-                            list.push({'name': '商品3', 'id': 3, 'itemList': arr3})
-                        };
+                            list.push({ name: '商品3', id: 3, itemList: arr3 });
+                        }
                         if (arr4.length > 0) {
-                            list.push({'name': '商品4', 'id': 4, 'itemList': arr4})
-                        };
+                            list.push({ name: '商品4', id: 4, itemList: arr4 });
+                        }
                         if (arr5.length > 0) {
-                            list.push({'name': '商品5', 'id': 5, 'itemList': arr5})
-                        };
+                            list.push({ name: '商品5', id: 5, itemList: arr5 });
+                        }
                         this.comboList = list;
                         this.queryMerType();
                     } else if (data.data.code == 'nologin') {
@@ -988,7 +991,7 @@ export default {
                     });
                 }
             }
-            jsonArr.push({ key: 'merSetDetailsJson', value: JSON.stringify(merSetDetailsJson)});
+            jsonArr.push({ key: 'merSetDetailsJson', value: JSON.stringify(merSetDetailsJson) });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             console.log(jsonArr);
@@ -1027,7 +1030,7 @@ export default {
                 if (this.cinemaInfo[i].cinemaName == e) {
                     this.oForm.cinemaCode = this.cinemaInfo[i].cinemaCode;
                 }
-            };
+            }
             this.oForm.typeCode = '';
             this.queryMerType();
         },
@@ -1401,7 +1404,7 @@ export default {
                 this.open();
                 this.$router.push('/login');
             }
-        },
+        }
     }
 };
 </script>

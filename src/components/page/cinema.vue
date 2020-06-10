@@ -737,6 +737,17 @@
                             show-word-limit
                     ></el-input>
                 </el-form-item>
+                <el-form-item label="购买卖品须知" :label-width="formLabelWidth">
+                    <el-input
+                            style="width: 250px"
+                            type="textarea"
+                            :rows="3"
+                            v-model="oBuyMerHint"
+                            maxlength="100"
+                            show-word-limit
+                            autocomplete="off"
+                    ></el-input>
+                </el-form-item>
                 <el-form-item label="购票提示" :label-width="formLabelWidth">
                     <el-input
                             style="width: 250px"
@@ -922,6 +933,7 @@ export default {
             oCinemaCode: '',
             oProvince: '',
             oCity: '',
+            oBuyMerHint: '',
             oAddress: '',
             oLongitude: '',
             oLatitude: '',
@@ -1143,6 +1155,7 @@ export default {
                         this.oBuyTicketHint = JSON.parse(Decrypt(data.data.data)).Cinema.buyTicketHint;
                         this.oSnackBeginTime = JSON.parse(Decrypt(data.data.data)).Cinema.snackBeginTime;
                         this.oSnackEndTime = JSON.parse(Decrypt(data.data.data)).Cinema.snackEndTime;
+                        this.oBuyMerHint = JSON.parse(Decrypt(data.data.data)).Cinema.buyMerHint;
                         this.oEquityCardAgreement = JSON.parse(Decrypt(data.data.data)).Cinema.equityCardAgreement;
                         this.oGoldActivityMemo = JSON.parse(Decrypt(data.data.data)).Cinema.goldActivityMemo;
                         this.oRemainTicketPrice = JSON.parse(Decrypt(data.data.data)).Cinema.remainTicketPrice;
@@ -1349,6 +1362,12 @@ export default {
                 loading.close();
                 return;
             }
+            // if (!this.oBuyMerHint) {
+            //     this.message = '购买卖品须知不能为空，请检查！';
+            //     this.open();
+            //     loading.close();
+            //     return;
+            // }
             if (!this.oVerificationCode) {
                 this.message = '影院奖品核销码不能为空，请检查！';
                 this.open();
@@ -1378,7 +1397,7 @@ export default {
             jsonArr.push({ key: 'membershipServiceAgreement', value: this.oMembershipServiceAgreement });
             jsonArr.push({ key: 'buyTicketHint', value: this.oBuyTicketHint });
             jsonArr.push({ key: 'rechargeMemo', value: this.oRechargeMemo });
-            // jsonArr.push({ key: 'openSnackStatus', value: this.oOpenSnackStatus });
+            jsonArr.push({ key: 'buyMerHint', value: this.oBuyMerHint });
             jsonArr.push({ key: 'snackDispatcherStatus', value: this.oSnackDispatcherStatus });
             jsonArr.push({ key: 'refundable', value: this.oRefundable });
             jsonArr.push({ key: 'snackBeginTime', value: this.oSnackBeginTime });

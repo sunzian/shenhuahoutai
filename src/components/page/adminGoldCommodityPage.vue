@@ -502,7 +502,7 @@
                 >
                     <el-input
                             style="width: 250px"
-                            placeholder="自领取之日起计算"
+                            placeholder="如仅限当天兑换，填0"
                             v-model.trim="oForm.expireDay"
                             autocomplete="off"
                             onkeyup="this.value=this.value.replace(/\D/g,'')"
@@ -966,7 +966,7 @@
                 >
                     <el-input
                             style="width: 250px"
-                            placeholder="自领取之日起计算"
+                            placeholder="如仅限当天兑换，填0"
                             v-model.trim="form.expireDay"
                             autocomplete="off"
                             onkeyup="this.value=this.value.replace(/\D/g,'')"

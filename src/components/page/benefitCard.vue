@@ -762,7 +762,7 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item :required="true" label="权益卡有效期" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="权益卡有效期" :label-width="formLabelWidth" v-if="this.oForm.isMerchandiseJoin == '1' || this.oForm.isFilmJoin == '1'">
                     <el-input
                         placeholder="填写数字"
                         style="width: 100px"
@@ -816,7 +816,7 @@
                         >{{day}}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
-                <el-form-item :required="true" label="是否和券共用" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="是否和券共用" :label-width="formLabelWidth" v-if="this.oForm.isMerchandiseJoin == '1' || this.oForm.isFilmJoin == '1'">
                     <el-select v-model="oForm.isCouponTogether" placeholder="请选择">
                         <el-option
                             v-for="item in canUse"
@@ -825,6 +825,8 @@
                             :value="item.value"
                         ></el-option>
                     </el-select>
+                    <br>
+                    <span style="color: red; font-size: 16px">下单时权益卡优惠是否和其他优惠券共用</span>
                 </el-form-item>
                 <el-form-item :required="true" label="售卖时间" :label-width="formLabelWidth">
                     <el-date-picker
@@ -842,7 +844,7 @@
                         format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
                 </el-form-item>
-                <el-form-item :required="true" label="是否限制购买次数" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="是否限制每人购买次数" :label-width="formLabelWidth">
                     <el-select
                         v-model="oForm.isLimitBuy"
                         placeholder="请选择"
@@ -878,6 +880,8 @@
                             :value="item.value"
                         ></el-option>
                     </el-select>
+                    <br>
+                    <span style="color: red; font-size: 16px">（是，权益卡显示“荐”并优先展示在最前面）</span>
                 </el-form-item>
                 <el-form-item :required="true" label="卡费" :label-width="formLabelWidth">
                     <el-input
@@ -1505,7 +1509,7 @@
                 <!--v-model="oCouponSimpleDesc" maxlength="200" show-word-limit type="textarea"-->
                 <!--autocomplete="off"></el-input>-->
                 <!--</el-form-item>-->
-                <el-form-item :required="true" label="权益卡有效期" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="权益卡有效期" :label-width="formLabelWidth" v-if="this.oIsMerchandiseJoin == '1' && this.oIsFilmJoin == '1'">
                     <el-input
                         placeholder="填写数字"
                         style="width: 100px"
@@ -1560,7 +1564,7 @@
                         >{{item.value}}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
-                <el-form-item :required="true" label="是否和券共用" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="是否和券共用" :label-width="formLabelWidth" v-if="this.oIsMerchandiseJoin == '1' && this.oIsFilmJoin == '1'">
                     <el-select v-model="oIsCouponTogether" placeholder="请选择">
                         <el-option
                             v-for="item in canUse"
@@ -1569,6 +1573,8 @@
                             :value="item.value"
                         ></el-option>
                     </el-select>
+                    <br>
+                    <span style="color: red; font-size: 16px">下单时权益卡优惠是否和其他优惠券共用</span>
                 </el-form-item>
                 <el-form-item :required="true" label="售卖时间" :label-width="formLabelWidth">
                     <el-date-picker
@@ -1586,7 +1592,7 @@
                         format="yyyy-MM-dd HH:mm:ss"
                     ></el-date-picker>
                 </el-form-item>
-                <el-form-item :required="true" label="是否限制购买次数" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="是否限制每人购买次数" :label-width="formLabelWidth">
                     <el-select
                         v-model="oIsLimitBuy"
                         placeholder="请选择"
@@ -1622,6 +1628,8 @@
                             :value="item.value"
                         ></el-option>
                     </el-select>
+                    <br>
+                    <span style="color: red; font-size: 16px">（是，权益卡显示“荐”并优先展示在最前面）</span>
                 </el-form-item>
                 <el-form-item :required="true" label="卡费" :label-width="formLabelWidth">
                     <el-input
@@ -2279,7 +2287,7 @@ export default {
             this.oScreenCode = [];
         },
 
-        // 是否限制购买次数
+        // 是否限制每人购买次数
         clearLimitBuyNumber() {
             this.oForm.limitBuyNumber = '';
             this.oLimitBuyNumber = '';
@@ -2512,11 +2520,13 @@ export default {
                 loading.close();
                 return;
             }
-            if (!this.oForm.isCouponTogether) {
-                this.message = '是否和券共用不能为空，请检查！';
-                this.open();
-                loading.close();
-                return;
+            if (this.oForm.isFilmJoin == '1' || this.oForm.isMerchandiseJoin == '1') {
+                if (!this.oForm.isCouponTogether) {
+                    this.message = '是否和券共用不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
             }
             //赠送券包下的判断
             if (this.oForm.isGroupJoin == 1) {
@@ -2847,16 +2857,18 @@ export default {
                 loading.close();
                 return;
             }
-            if (!this.oForm.number) {
-                this.message = '有效期数量不能为空，请检查！';
-                this.open();
-                loading.close();
-                return;
-            } else if (this.oForm.number <= 0) {
-                this.message = '有效期数量必须大于0，请检查！';
-                this.open();
-                loading.close();
-                return;
+            if (this.oForm.isFilmJoin == '1' || this.oForm.isMerchandiseJoin == '1') {
+                if (!this.oForm.number) {
+                    this.message = '有效期数量不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                } else if (this.oForm.number <= 0) {
+                    this.message = '有效期数量必须大于0，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
             }
             if (!this.oForm.expense) {
                 this.message = '卡费不能为空，请检查！';
@@ -3530,11 +3542,13 @@ export default {
                 loading.close();
                 return;
             }
-            if (!this.oIsCouponTogether) {
-                this.message = '是否和券共用不能为空，请检查！';
-                this.open();
-                loading.close();
-                return;
+            if (this.oIsFilmJoin == '1' || this.oIsMerchandiseJoin == '1') {
+                if (!this.oIsCouponTogether) {
+                    this.message = '是否和券共用不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
             }
             //赠送券包下的判断
             if (this.oIsGroupJoin == 1) {
@@ -3865,16 +3879,18 @@ export default {
                 loading.close();
                 return;
             }
-            if (!this.oNumber) {
-                this.message = '有效期数量不能为空，请检查！';
-                this.open();
-                loading.close();
-                return;
-            } else if (this.oNumber <= 0) {
-                this.message = '有效期数量必须大于0，请检查！';
-                this.open();
-                loading.close();
-                return;
+            if (this.oIsFilmJoin == '1' || this.oIsMerchandiseJoin == '1') {
+                if (!this.oNumber) {
+                    this.message = '有效期数量不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                } else if (this.oNumber <= 0) {
+                    this.message = '有效期数量必须大于0，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
             }
             if (!this.oExpense) {
                 this.message = '卡费不能为空，请检查！';

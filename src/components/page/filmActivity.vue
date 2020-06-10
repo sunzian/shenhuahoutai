@@ -10,6 +10,15 @@
         <div class="container">
             <div class="handle-box">
                 <el-select
+                    clearable
+                    v-model="query.commonType"
+                    placeholder="通用方式"
+                    class="handle-select mr10"
+                >
+                    <el-option key="1" label="全部影院" value="1"></el-option>
+                    <el-option key="2" label="指定影院" value="2"></el-option>
+                </el-select>
+                <el-select
                         clearable
                         v-model="query.cinemaCode"
                         placeholder="影院"
@@ -215,7 +224,13 @@
                             autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="选择影院" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="通用方式" :label-width="formLabelWidth">
+                    <el-radio-group v-model="oForm.commonType" @change="selectCommonType">
+                        <el-radio :label="1">全部影院</el-radio>
+                        <el-radio :label="2">指定影院</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item :required="true" label="选择影院" v-if="oForm.commonType == 2" :label-width="formLabelWidth">
                     <el-checkbox-group v-model="oForm.code" @change="selectCinema">
                         <el-checkbox
                                 v-for="item in cinemaInfo"
@@ -320,7 +335,7 @@
                 </el-form-item>
                 <el-form-item :required="true" label="固定金额" :label-width="formLabelWidth" v-if="oForm.reduceType == 1">
                     <el-input placeholder="每张票固定金额*张数" style="width: 250px" v-model="oForm.discountMoney"
-                              autocomplete="off"></el-input>
+                              onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item
                         label="加价规则"
@@ -529,7 +544,13 @@
                             autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="选择影院" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="通用方式" :label-width="formLabelWidth">
+                    <el-radio-group v-model="oCommonType" @change="selectCommonType2">
+                        <el-radio :label="1">全部影院</el-radio>
+                        <el-radio :label="2">指定影院</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item :required="true" label="选择影院" :label-width="formLabelWidth" v-if="oCommonType == 2">
                     <el-checkbox-group v-model="oCinemaCode" @change="selectCinema2">
                         <el-checkbox
                                 v-for="item in cinemaInfo"
@@ -633,7 +654,7 @@
                 </el-form-item>
                 <el-form-item :required="true" label="固定金额" :label-width="formLabelWidth" v-if="oReduceType == 1">
                     <el-input placeholder="每张票固定金额*张数" style="width: 250px" v-model="oDiscountMoney"
-                              autocomplete="off"></el-input>
+                              onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item
                         label="加价规则"
@@ -933,7 +954,8 @@
                         value: '星期日'
                     }
                 ],
-                oCinemaCode: '',
+                oCommonType: '',
+                oCinemaCode: [],
                 oFixedSatisfyMoney: '',
                 oFixedAddMoney: '',
                 oSelectHallType: '',
@@ -1038,6 +1060,7 @@
                 ],
                 oForm: {
                     name: '',
+                    commonType: 2,
                     cinemaName: '',
                     fixedSatisfyMoney: '',
                     fixedAddMoney: '',
@@ -1202,11 +1225,19 @@
                     loading.close();
                     return;
                 }
-                if (this.oForm.code.length == 0) {
-                    this.message = '所选影院不能为空，请检查！';
+                if (!this.oForm.commonType) {
+                    this.message = '通用方式不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
+                }
+                if (this.oForm.commonType == 2) {
+                    if (this.oForm.code.length == 0) {
+                        this.message = '所选影院不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
                 }
                 if (!this.oForm.selectHallType) {
                     this.message = '影厅类型不能为空，请检查！';
@@ -1269,16 +1300,14 @@
                     return;
                 }
                 if (this.oForm.reduceType == 1) {
-                    if (this.oForm.discountMoney >= 0) {
-                        if (!this.oForm.discountMoney) {
-                            this.message = '固定金额不能为空，请检查！';
-                            this.open();
-                            loading.close();
-                            return;
-                        }
+                    if (!this.oForm.discountMoney) {
+                        this.message = '固定金额不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
                     }
-                    if (this.oForm.discountMoney < 0) {
-                        this.message = '固定金额不能小于0！';
+                    if (this.oForm.discountMoney <= 0) {
+                        this.message = '固定金额不能小于等于0！';
                         this.open();
                         loading.close();
                         return;
@@ -1392,10 +1421,13 @@
                 if (this.oForm.reduceType == 1) {
                     this.oForm.achieveMoney = '';
                 }
-                let cinemaCodes = this.oForm.code.join(',')
                 var jsonArr = [];
                 jsonArr.push({key: 'name', value: this.oForm.name});
-                jsonArr.push({key: 'cinemaCode', value: cinemaCodes});
+                jsonArr.push({key: 'commonType', value: this.oForm.commonType});
+                if (this.oForm.commonType == 2) {
+                    let cinemaCodes = this.oForm.code.join(',');
+                    jsonArr.push({key: 'cinemaCode', value: cinemaCodes});
+                }
                 jsonArr.push({key: 'selectHallType', value: this.oForm.selectHallType});
                 if (this.oForm.selectHallType != 0) {
                     jsonArr.push({key: 'screenCode', value: this.selectScreenCode});
@@ -1454,6 +1486,7 @@
                                 this.oForm.selectFilmType = '0';
                                 this.oForm.selectHallType = '0';
                                 this.hallType = false;
+                                this.oForm.commonType = 2;
                                 this.oForm.selectMovieType = '0';
                                 this.oForm.validPayType = '0';
                                 this.oForm.holidayValid = '1';
@@ -1480,7 +1513,6 @@
                                 this.oForm.couponDesc = '';
                                 this.oForm.oNum = '';
                                 this.oForm.oneNum = '';
-                                this.oForm.code = '';
                                 this.oForm.formatCode = [];
                                 this.oForm.screenCode = [];
                                 this.getMenu();
@@ -1619,7 +1651,10 @@
                                 this.formatList.push(formatList);
                             }
                             this.oName = JSON.parse(Decrypt(data.data.data)).discountActivity.name;
-                            this.oCinemaCode = JSON.parse(Decrypt(data.data.data)).discountActivity.cinemaCode.split(",");
+                            this.oCommonType = JSON.parse(Decrypt(data.data.data)).discountActivity.commonType;
+                            if (this.oCommonType == 2) {
+                                this.oCinemaCode = JSON.parse(Decrypt(data.data.data)).discountActivity.cinemaCode.split(",");
+                            }
                             this.oHolidayAddMoney = JSON.parse(Decrypt(data.data.data)).discountActivity.holidayAddMoney;
                             this.oFixedSatisfyMoney = JSON.parse(Decrypt(data.data.data)).discountActivity.fixedSatisfyMoney;
                             this.oFixedAddMoney = JSON.parse(Decrypt(data.data.data)).discountActivity.fixedAddMoney;
@@ -1763,11 +1798,19 @@
                     loading.close();
                     return;
                 }
-                if (this.oCinemaCode.length == 0) {
-                    this.message = '所选影院不能为空，请检查！';
+                if (!this.oCommonType) {
+                    this.message = '通用方式不能为空，请检查！';
                     this.open();
                     loading.close();
                     return;
+                }
+                if (this.oCommonType == 2) {
+                    if (this.oCinemaCode.length == 0) {
+                        this.message = '所选影院不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
                 }
                 if (!this.oSelectHallType) {
                     this.message = '影厅类型不能为空，请检查！';
@@ -1830,14 +1873,14 @@
                     return;
                 }
                 if (this.oReduceType == 1) {
-                    if (!this.oDiscountMoney && this.oDiscountMoney != 0) {
+                    if (!this.oDiscountMoney) {
                         this.message = '固定金额不能为空，请检查！';
                         this.open();
                         loading.close();
                         return;
                     }
-                    if (this.oDiscountMoney < 0) {
-                        this.message = '固定金额不能小于0！';
+                    if (this.oDiscountMoney <= 0) {
+                        this.message = '固定金额不能小于等于0！';
                         this.open();
                         loading.close();
                         return;
@@ -1943,7 +1986,10 @@
                 }
                 var jsonArr = [];
                 jsonArr.push({key: 'name', value: this.oName});
-                jsonArr.push({key: 'cinemaCode', value: this.oCinemaCode.join(',')});
+                jsonArr.push({key: 'commonType', value: this.oCommonType});
+                if (this.oCommonType == 2) {
+                    jsonArr.push({key: 'cinemaCode', value: this.oCinemaCode.join(',')});
+                }
                 jsonArr.push({key: 'selectHallType', value: this.oSelectHallType});
                 if (this.oSelectHallType != 0) {
                     jsonArr.push({key: 'screenCode', value: this.oScreenCode.join(',')});
@@ -2105,6 +2151,7 @@
                     target: document.querySelector('.div1')
                 });
                 let jsonArr = [];
+                jsonArr.push({key: 'commonType', value: this.query.commonType});
                 jsonArr.push({key: 'name', value: this.query.name});
                 jsonArr.push({key: 'status', value: this.query.status});
                 jsonArr.push({key: 'pageNo', value: this.query.pageNo});
@@ -2158,6 +2205,22 @@
                 this.$alert(this.message, '信息提示', {
                     dangerouslyUseHTMLString: true
                 });
+            },
+            selectCommonType() {
+                if (this.oForm.commonType == 1) {
+                    this.oForm.selectHallType = '0';
+                    this.hallType = true;
+                } else {
+                    this.hallType = false;
+                }
+            },
+            selectCommonType2() {
+                if (this.oCommonType == 1) {
+                    this.oSelectHallType = '0';
+                    this.hallType = true;
+                } else {
+                    this.hallType = false;
+                }
             },
             selectCinema(val) {
                 if (val.length > 1) {
@@ -2279,7 +2342,7 @@
                 this.drawer = false;
             },
             openNext() {
-                //获取商品列表
+                //获取影片列表
                 const loading = this.$loading({
                     lock: true,
                     text: 'Loading',

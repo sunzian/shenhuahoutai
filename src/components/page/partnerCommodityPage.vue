@@ -355,6 +355,7 @@
                         style="width: 250px"
                         v-model="oForm.laterDays"
                         autocomplete="off"
+                        placeholder="如马上生效，请填 0"
                         onkeyup="this.value=this.value.replace(/\D/g,'')"
                     ></el-input>
                 </el-form-item>
@@ -387,7 +388,7 @@
                 >
                     <el-input
                         style="width: 250px"
-                        placeholder="自领取之日起计算"
+                        placeholder="如仅限当天兑换，填0"
                         v-model.trim="oForm.expireDay"
                         autocomplete="off"
                         onkeyup="this.value=this.value.replace(/\D/g,'')"
@@ -787,6 +788,7 @@
                         style="width: 250px"
                         v-model="oLaterDays"
                         autocomplete="off"
+                        placeholder="如马上生效，请填 0"
                         onkeyup="this.value=this.value.replace(/\D/g,'')"
                     ></el-input>
                 </el-form-item>
@@ -819,7 +821,7 @@
                 >
                     <el-input
                         style="width: 250px"
-                        placeholder="自领取之日起计算"
+                        placeholder="如仅限当天兑换，填0"
                         v-model.trim="form.expireDay"
                         autocomplete="off"
                         onkeyup="this.value=this.value.replace(/\D/g,'')"
@@ -2004,20 +2006,20 @@ export default {
                     return;
                 }
             }
-            if (this.oForm.effectiveType != 2) {
-                if (!this.oForm.expireDay || this.oForm.expireDay == '') {
-                    this.message = '有效期天数不能为空，请检查！';
-                    this.open();
-                    loading.close();
-                    return;
-                }
-                if (this.oForm.expireDay < 1) {
-                    this.message = '有效期天数不能小于1，请检查！';
-                    this.open();
-                    loading.close();
-                    return;
-                }
-            }
+            // if (this.oForm.effectiveType != 2) {
+            //     if (!this.oForm.expireDay || this.oForm.expireDay == '') {
+            //         this.message = '有效期天数不能为空，请检查！';
+            //         this.open();
+            //         loading.close();
+            //         return;
+            //     }
+            //     if (this.oForm.expireDay < 1) {
+            //         this.message = '有效期天数不能小于1，请检查！';
+            //         this.open();
+            //         loading.close();
+            //         return;
+            //     }
+            // }
             if (!this.oForm.topStatus) {
                 this.message = '是否今日大牌不能为空，请检查！';
                 this.open();
@@ -2591,20 +2593,6 @@ export default {
             if (this.form.commodityType != 1 && this.oEffectiveType == 2 && this.form.commodityType != 4) {
                 if (!this.oStartEffectiveDate || !this.oEndEffectiveDate) {
                     this.message = '有效期不能为空，请检查！';
-                    this.open();
-                    loading.close();
-                    return;
-                }
-            }
-            if (this.oEffectiveType != 2) {
-                if (!this.form.expireDay || this.form.expireDay == '') {
-                    this.message = '有效期天数不能为空，请检查！';
-                    this.open();
-                    loading.close();
-                    return;
-                }
-                if (this.form.expireDay < 1) {
-                    this.message = '有效期天数不能小于1，请检查！';
                     this.open();
                     loading.close();
                     return;

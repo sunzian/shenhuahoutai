@@ -156,15 +156,22 @@
                         >只能上传jpg/png文件，且不超过200kb 建议尺寸520*690或按比例上传</div>
                     </el-upload>
                 </el-form-item>
-                <el-form-item :required="true" label="选择影院" :label-width="formLabelWidth">
-                    <el-select v-model="oForm.cinemaCode" placeholder="请选择" @change="getCardInfo">
-                        <el-option
-                            v-for="info in cinemaList"
-                            :key="info.cinemaCode"
-                            :value="info.cinemaCode"
-                            :label="info.cinemaName"
-                        ></el-option>
-                    </el-select>
+                <el-form-item :required="true" label="通用方式" :label-width="formLabelWidth">
+                    <el-radio-group v-model="oForm.commonType" @change="changeCinema">
+                        <el-radio :label="1">全部影院</el-radio>
+                        <el-radio :label="2">指定影院</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item :required="true" label="选择影院" :label-width="formLabelWidth" v-if="oForm.commonType == 2">
+                    <el-checkbox-group v-model="oForm.cinemaCode" @change="changeCinema">
+                        <el-checkbox
+                                v-for="item in cinemaList"
+                                :key="item.cinemaCode"
+                                :label="item.cinemaCode"
+                                :value="item.cinemaCode"
+                        >{{item.cinemaName}}
+                        </el-checkbox>
+                    </el-checkbox-group>
                 </el-form-item>
                 <!--<el-form-item label="送券活动类型" :label-width="formLabelWidth">-->
                 <!--<el-select v-model="oForm.type" placeholder="请选择" @change="getCardInfo">-->
@@ -311,18 +318,25 @@
                         >只能上传jpg/png文件，且不超过200kb 建议尺寸520*690或按比例上传</div>
                     </el-upload>
                 </el-form-item>
-                <el-form-item :required="true" label="选择影院" :label-width="formLabelWidth">
-                    <el-select v-model="form.cinemaCode" placeholder="请选择" @change="getCardInfo">
-                        <el-option
-                            v-for="info in cinemaList"
-                            :key="info.cinemaCode"
-                            :value="info.cinemaCode"
-                            :label="info.cinemaName"
-                        ></el-option>
-                    </el-select>
+                <el-form-item :required="true" label="通用方式" :label-width="formLabelWidth">
+                    <el-radio-group v-model="oCommonType" @change="changeCinema">
+                        <el-radio :label="1">全部影院</el-radio>
+                        <el-radio :label="2">指定影院</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item :required="true" label="选择影院" :label-width="formLabelWidth" v-if="this.oCommonType == 2">
+                    <el-checkbox-group v-model="oCinemaCode" @change="changeCinema">
+                        <el-checkbox
+                                v-for="item in cinemaList"
+                                :key="item.cinemaCode"
+                                :label="item.cinemaCode"
+                                :value="item.cinemaCode"
+                        >{{item.cinemaName}}
+                        </el-checkbox>
+                    </el-checkbox-group>
                 </el-form-item>
                 <el-form-item :required="true" label="送券活动类型" :label-width="formLabelWidth">
-                    <el-select v-model="form.type" placeholder="请选择" @change="getCardInfo">
+                    <el-select v-model="form.type" placeholder="请选择">
                         <el-option
                             v-for="info in type"
                             :key="info.value"
@@ -494,6 +508,8 @@ export default {
             imgType: {
                 type: ''
             },
+            oCinemaCode: [],
+            oCommonType: '',
             oCinemaName: '',
             oCardLevelName: '',
             oRuleName: '', // 规则名称
@@ -556,8 +572,9 @@ export default {
             couponId: '',
             dialogFormVisible: false,
             oForm: {
+                commonType: 2,
                 cinemaName: '',
-                cinemaCode: '',
+                cinemaCode: [],
                 levelCode: '',
                 ruleName: '', // 规则名称
                 rechargeAmount: '', // 充值金额
@@ -667,7 +684,8 @@ export default {
                         this.couponId = '';
                         this.groupName = '';
                         this.oActivityImageUrl = '';
-                        this.oForm.cinemaCode='';
+                        this.oForm.commonType = 2;
+                        this.oForm.cinemaCode=[];
                         if (this.$refs.download) {
                             this.$refs.download.clearFiles(); //清除已上传文件
                         }
@@ -707,11 +725,19 @@ export default {
                 loading.close();
                 return;
             }
-            if(!this.oForm.cinemaCode){
-                this.message = '所选影院不能为空，请检查！';
+            if (!this.oForm.commonType) {
+                this.message = '通用方式不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
+            }
+            if (this.oForm.commonType == 2) {
+                if(this.oForm.cinemaCode.length == 0){
+                    this.message = '所选影院不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
             }
             if(!this.oForm.startDate){
                 this.message = '活动开始时间不能为空，请检查！';
@@ -782,7 +808,11 @@ export default {
                 return;
             }
             var jsonArr = [];
-            jsonArr.push({ key: 'cinemaCode', value: this.oForm.cinemaCode });
+            jsonArr.push({key: 'commonType', value: this.oForm.commonType});
+            if (this.oForm.commonType == 2) {
+                let cinemaCodes = this.oForm.code.join(',');
+                jsonArr.push({key: 'cinemaCode', value: cinemaCodes});
+            }
             jsonArr.push({ key: 'activityImageUrl', value: this.oActivityImageUrl });
             jsonArr.push({ key: 'name', value: this.oForm.name });
             jsonArr.push({ key: 'type', value: '1' });
@@ -795,7 +825,6 @@ export default {
             jsonArr.push({ key: 'validDay', value: this.oForm.validDay });
             jsonArr.push({ key: 'overDays', value: this.oForm.overDays });
             jsonArr.push({ key: 'couponGroupId', value: this.couponId });
-            console.log(jsonArr);
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             console.log(jsonArr);
@@ -893,7 +922,6 @@ export default {
             });
             this.idx = index;
             this.form = row;
-            this.oForm.cinemaCode=row.cinemaCode
             var jsonArr = [];
             jsonArr.push({ key: 'id', value: row.id });
             let sign = md5(preSign(jsonArr));
@@ -917,15 +945,22 @@ export default {
                 .fetchPost('/couponSendActivity/updatePage', params)
                 .then(data => {
                     loading.close();
-                    console.log(data);
                     if (data.data.code == 'success') {
                         console.log(JSON.parse(Decrypt(data.data.data)));
                         this.editVisible = true;
                         this.couponId = JSON.parse(Decrypt(data.data.data)).couponGroupId;
                         this.oActivityImageUrl = JSON.parse(Decrypt(data.data.data)).activityImageUrl;
+                        if (JSON.parse(Decrypt(data.data.data)).commonType == 1) {
+                            this.oCommonType = 1;
+                        } else {
+                            this.oCommonType = 2;
+                        }
+                        if (this.oCommonType == 2) {
+                            this.oCinemaCode = JSON.parse(Decrypt(data.data.data)).cinemaCode.split(",");
+                        }
                         //获取券包
                         let jsonArr = [];
-                        jsonArr.push({ key: 'cinemaCodes', value: this.form.cinemaCode });
+                        jsonArr.push({ key: 'cinemaCodes', value: this.oCinemaCode.join(",") });
                         jsonArr.push({ key: 'status', value: 1 });
                         let sign = md5(preSign(jsonArr));
                         jsonArr.push({ key: 'sign', value: sign });
@@ -941,7 +976,6 @@ export default {
                                         return;
                                     }
                                     this.couponList = res.data;
-                                    console.log(this.couponList);
                                     for (let i = 0; i < this.couponList.length; i++) {
                                         if (this.couponList[i].id == this.couponId) {
                                             this.groupName = this.couponList[i].groupName;
@@ -1014,11 +1048,19 @@ export default {
                 loading.close();
                 return;
             }
-            if(!this.form.cinemaCode){
-                this.message = '所选影院不能为空，请检查！';
+            if (!this.oCommonType) {
+                this.message = '通用方式不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
+            }
+            if (this.oCommonType == 2) {
+                if(this.oCinemaCode.length == 0){
+                    this.message = '所选影院不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
             }
             if(!this.form.type){
                 this.message = '送券活动类型不能为空，请检查！';
@@ -1095,7 +1137,10 @@ export default {
                 return;
             }
             var jsonArr = [];
-            jsonArr.push({ key: 'cinemaCode', value: this.form.cinemaCode });
+            jsonArr.push({key: 'commonType', value: this.oCommonType});
+            if (this.oCommonType == 2) {
+                jsonArr.push({key: 'cinemaCode', value: this.oCinemaCode.join(',')});
+            }
             jsonArr.push({ key: 'activityImageUrl', value: this.oActivityImageUrl });
             jsonArr.push({ key: 'name', value: this.form.name });
             jsonArr.push({ key: 'type', value: this.form.type });
@@ -1143,23 +1188,9 @@ export default {
             this.query.pageNo = 1;
             this.getMenu();
         },
-        getCinemaCode(e) {
-            //获取所选影院编码
-            for (let i = 0; i < this.cinemaInfo.length; i++) {
-                if (this.cinemaInfo[i].cinemaName == e) {
-                    this.oForm.cinemaCode = this.cinemaInfo[i].cinemaCode;
-                }
-            }
-            this.getAllCinemaCard();
-        },
-        getCardInfo(e) {
-            this.oForm.levelName = e;
-            // 获取所选会员卡名称
-            for (let i = 0; i < this.cardList.length; i++) {
-                if (this.cardList[i].levelName == e) {
-                    this.oForm.levelCode = this.cardList[i].levelCode;
-                }
-            }
+        changeCinema() {
+            this.couponId = '';
+            this.groupName = '';
         },
         getMenu() {
             //获取菜单栏
@@ -1318,16 +1349,23 @@ export default {
             if(!couponName){
                 couponName=''
             }
-            if (!this.oForm.cinemaCode || this.oForm.cinemaCode == '') {
-                this.message = '请选择影院';
-                this.open();
-                return;
-            }
             let jsonArr = [];
+            if (this.oForm.commonType == 1) {
+                jsonArr.push({ key: 'commonType', value: 1 });
+            } else if (this.oForm.commonType == 2) {
+                if (this.oForm.cinemaCode.length == 0) {
+                    this.message = '请选择影院';
+                    this.open();
+                    return;
+                } else {
+                    jsonArr.push({ key: 'commonType', value: 2 });
+                    jsonArr.push({ key: 'cinemaCodes', value: this.oForm.cinemaCode.join(",") });
+                }
+            }
             jsonArr.push({ key: 'groupName', value: couponName });
             jsonArr.push({ key: 'pageNo', value: this.query.aPageNo });
             jsonArr.push({ key: 'pageSize', value: this.query.aPageSize });
-            jsonArr.push({ key: 'cinemaCodes', value: this.oForm.cinemaCode });
+            
             jsonArr.push({ key: 'status', value: 1 });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
@@ -1367,10 +1405,22 @@ export default {
         // 更换券包
         changeCoupon() {
             let jsonArr = [];
-            jsonArr.push({ key: 'cinemaCodes', value: this.form.cinemaCode });
+            if (this.oCommonType == 1) {
+                jsonArr.push({ key: 'commonType', value: 1 });
+            } else if (this.oCommonType == 2) {
+                if (this.oCinemaCode.length == 0) {
+                    this.message = '请选择影院';
+                    this.open();
+                    return;
+                } else {
+                    jsonArr.push({ key: 'commonType', value: 2 });
+                    jsonArr.push({ key: 'cinemaCodes', value: this.oCinemaCode.join(",") });
+                }
+            }
             jsonArr.push({ key: 'status', value: 1 });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
+            console.log(jsonArr)
             var params = ParamsAppend(jsonArr);
             https
                 .fetchPost('/couponGroup/couponGroupPage', params)

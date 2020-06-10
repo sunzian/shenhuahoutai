@@ -183,7 +183,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="营业开始时间" :label-width="formLabelWidth">
+                <!-- <el-form-item label="营业开始时间" :label-width="formLabelWidth">
                     <el-time-picker
                         style="width: 200px"
                         v-model="changeForm.beginTime"
@@ -202,6 +202,18 @@
                         format="HH:mm"
                         placeholder="选择日期时间"
                     ></el-time-picker>
+                </el-form-item> -->
+                <el-form-item label="营业时间描述" :label-width="formLabelWidth">
+                    <el-input
+                            style="width: 300px"
+                            type="textarea"
+                            maxlength="50"
+                            :rows="3"
+                            show-word-limit
+                            v-model="changeForm.saleTime"
+                            autocomplete="off"
+                            placeholder="如：周一至周五8：00-22：00；周六周日9：00-21：00"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item label="商户描述" :label-width="formLabelWidth">
                     <el-input
@@ -289,6 +301,7 @@ export default {
                 statusValue: '',
                 beginTime: '',
                 endTime: '',
+                saleTime: '',
                 status: '',
                 cinemaCodes: [],
                 id: ''
@@ -436,8 +449,7 @@ export default {
                             this.changeForm.concatName = JSON.parse(Decrypt(data.data.data)).concatName;
                             this.changeForm.concatMobile = JSON.parse(Decrypt(data.data.data)).concatMobile;
                             this.changeForm.address = JSON.parse(Decrypt(data.data.data)).address;
-                            this.changeForm.beginTime = JSON.parse(Decrypt(data.data.data)).beginTime;
-                            this.changeForm.endTime = JSON.parse(Decrypt(data.data.data)).endTime;
+                            this.changeForm.saleTime = JSON.parse(Decrypt(data.data.data)).saleTime;
                             this.changeForm.memo = JSON.parse(Decrypt(data.data.data)).memo;
                             this.changeForm.verifyCode = JSON.parse(Decrypt(data.data.data)).verifyCode;
                             this.changeForm.id = JSON.parse(Decrypt(data.data.data)).id;
@@ -524,8 +536,7 @@ export default {
                 jsonArr.push({ key: 'concatName', value: this.changeForm.concatName });
                 jsonArr.push({ key: 'concatMobile', value: this.changeForm.concatMobile });
                 jsonArr.push({ key: 'address', value: this.changeForm.address });
-                jsonArr.push({ key: 'beginTime', value: this.changeForm.beginTime });
-                jsonArr.push({ key: 'endTime', value: this.changeForm.endTime });
+                jsonArr.push({ key: 'saleTime', value: this.changeForm.saleTime });
                 jsonArr.push({ key: 'memo', value: this.changeForm.memo });
                 jsonArr.push({ key: 'verifyCode', value: this.changeForm.verifyCode });
                 jsonArr.push({ key: 'id', value: this.changeForm.id });

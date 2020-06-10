@@ -11,6 +11,15 @@
             <div class="handle-box">
                 <el-select
                         clearable
+                        v-model="query.bannerLevel"
+                        placeholder="通用方式"
+                        class="handle-select mr10"
+                >
+                    <el-option key="1" label="全部影院" value="1"></el-option>
+                    <el-option key="2" label="部分影院" value="2"></el-option>
+                </el-select>
+                <el-select
+                        clearable
                         v-model="query.cinemaCode"
                         placeholder="请选择影院"
                         class="handle-input mr10"
@@ -113,11 +122,11 @@
                 <el-table-column prop="sort" label="排序号" width="160">
                     <template slot-scope="scope">
                         <div v-if="scope.row.showSort" @click="handleEdit(scope.$index, scope.row)">{{scope.row.sort}}</div>
-                        <el-input v-if="scope.row.showEdit" class="sortInp" size="small" v-model="scope.row.sort" @keyup.enter.native="changeScope(scope.$index, scope.row)" @change="handleEdit(scope.$index, scope.row)"></el-input> 
-                        <el-button v-if="scope.row.showEdit" class="sortBtn" style="position: absolute;left: 93px;" @click="changeScope(scope.$index, scope.row)">确定</el-button>
+                        <el-input v-if="scope.row.showEdit" size="small" v-model="scope.row.sort" @keyup.enter.native="changeScope(scope.$index, scope.row)" @change="handleEdit(scope.$index, scope.row)"></el-input> 
+                        <el-button v-if="scope.row.showEdit" style="position: absolute;left: 93px;" @click="changeScope(scope.$index, scope.row)">确定</el-button>
                     </template>
                 </el-table-column>
-                <el-table-column prop="sort" label="是否显示" width="120">
+                <el-table-column prop="sort" label="是否显示" width="80">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status=='1'">显示</el-tag>
                         <el-tag v-else-if="scope.row.status=='2'">不显示</el-tag>
@@ -174,7 +183,13 @@
         <!--新增弹出框-->
         <el-dialog :close-on-click-modal="false" title="新增轮播图" :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
-                <el-form-item :required="true" label="适用影院" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="通用方式" :label-width="formLabelWidth">
+                    <el-radio-group v-model="oForm.bannerLevel" @change="changeBannerLevel">
+                        <el-radio label="2">指定影院</el-radio>
+                        <el-radio label="1">全部影院</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item v-if="oForm.bannerLevel == 2" :required="true" label="适用影院" :label-width="formLabelWidth">
                     <el-checkbox-group v-model="oForm.cinemaCodes" @change="changeCinema">
                         <el-checkbox
                                 v-for="item in cinemaList"
@@ -294,7 +309,7 @@
                 >
                     <el-input
                             style="width: 150px"
-                            v-model.number="oForm.goType"
+                            v-model="oForm.goType"
                             :disabled="true"
                             autocomplete="off"
                     ></el-input>
@@ -329,8 +344,14 @@
         <!-- 编辑弹出框 -->
         <el-dialog :close-on-click-modal="false" title="编辑" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
-                <el-form-item :required="true" label="适用影院" :label-width="formLabelWidth">
-                    <el-checkbox-group v-model="form.cinemaCodes" @change="changeCinema2">
+                <el-form-item :required="true" label="通用方式" :label-width="formLabelWidth">
+                    <el-radio-group v-model="oBannerLevel" @change="changeBannerLevel">
+                        <el-radio label="2">指定影院</el-radio>
+                        <el-radio label="1">全部影院</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item :required="true"  v-if="oBannerLevel == 2" label="适用影院" :label-width="formLabelWidth">
+                    <el-checkbox-group v-model="oCinemaCodes" @change="changeCinema2">
                         <el-checkbox
                                 v-for="item in cinemaList"
                                 :key="item.cinemaCode"
@@ -677,8 +698,10 @@
                 showEdit: false,
                 showSort: true,
                 oBannerType: '',
+                oBannerLevel: '',
                 oButtonStatus: '',
                 oButtonName: '',
+                oCinemaCodes: [],
                 oTabType: '',
                 type: {
                     type: ''
@@ -717,6 +740,7 @@
                 dialogFormVisible: false,
                 oForm: {
                     name: '',
+                    bannerLevel: '2',
                     memo: '',
                     sort: '',
                     delivery: false,
@@ -724,6 +748,8 @@
                     resource: '',
                     desc: '',
                     value: '',
+                    goType: '',
+                    redirectGoal:'',
                     statusValue: '',
                     cinemaCode: '',
                     imageUrl: '',
@@ -819,6 +845,7 @@
                 ],
                 value: '',
                 goType: '',
+                oRedirectGoal:'',
                 goldData: [],
                 selectedSell: [],
                 sellIndex: ''
@@ -882,9 +909,11 @@
                         }, 500);
                     })
                     .catch(() => {
+                        this.tableData[index].showEdit = false;
+                        this.tableData[index].showSort = true;
                         this.$message({
                             type: 'info',
-                            message: '已取消删除'
+                            message: '已取消'
                         });
                     });
             },
@@ -958,17 +987,21 @@
                         if (!title) {
                             title = '';
                         }
-                        console.log(this.oForm.cinemaCodes);
-                        if (this.oForm.cinemaCodes.length == 0) {
+                        if (this.oForm.bannerLevel == 2 && this.oForm.cinemaCodes.length == 0) {
                             this.message = '请选择影院!';
                             loading.close();
                             this.open();
                             return;
                         }
-                        let cinemaCodes = this.oForm.cinemaCodes.join(',');
                         let jsonArr = [];
+                        if (this.oForm.bannerLevel == 1) {
+                            jsonArr.push({ key: 'commonType', value: 1 });
+                        }
+                        if (this.oForm.bannerLevel == 2) {
+                            let cinemaCodes = this.oForm.cinemaCodes.join(',');
+                            jsonArr.push({ key: 'cinemaCode', value: cinemaCodes });
+                        }
                         jsonArr.push({ key: 'title', value: title });
-                        jsonArr.push({ key: 'cinemaCode', value: cinemaCodes });
                         jsonArr.push({ key: 'pageNo', value: this.query.aPageNo });
                         jsonArr.push({ key: 'pageSize', value: this.query.aPageSize });
                         let sign = md5(preSign(jsonArr));
@@ -982,10 +1015,7 @@
                                 if (data.data.code == 'success') {
                                     this.drawer1 = true;
                                     var oData = JSON.parse(Decrypt(data.data.data));
-                                    console.log(oData);
-                                    console.log(this.query);
                                     this.goldData = oData.data;
-                                    console.log(this.sellTableData);
                                     this.query.aPageSize = oData.pageSize;
                                     this.query.aPageNo = oData.pageNo;
                                     this.query.aTotalCount = oData.totalCount;
@@ -1010,16 +1040,21 @@
                         if (!filmName) {
                             filmName = '';
                         }
-                        if (this.oForm.cinemaCodes.length == 0) {
+                        if (this.oForm.bannerLevel == 2 && this.oForm.cinemaCodes.length == 0) {
                             this.message = '请选择影院!';
                             loading.close();
                             this.open();
                             return;
                         }
-                        let cinemaCodes = this.oForm.cinemaCodes.join(',');
                         let jsonArr = [];
+                        if (this.oForm.bannerLevel == 1) {
+                            jsonArr.push({ key: 'commonType', value: 1 });
+                        }
+                        if (this.oForm.bannerLevel == 2) {
+                            let cinemaCodes = this.oForm.cinemaCodes.join(',');
+                            jsonArr.push({ key: 'cinemaCode', value: cinemaCodes });
+                        }
                         jsonArr.push({ key: 'filmName', value: filmName });
-                        jsonArr.push({ key: 'cinemaCode', value: cinemaCodes });
                         jsonArr.push({ key: 'pageNo', value: this.query.aPageNo });
                         jsonArr.push({ key: 'pageSize', value: this.query.aPageSize });
                         let sign = md5(preSign(jsonArr));
@@ -1034,9 +1069,7 @@
                                     this.drawer2 = true;
                                     var oData = JSON.parse(Decrypt(data.data.data));
                                     console.log(oData);
-                                    console.log(this.query);
                                     this.goldData = oData.data;
-                                    console.log(this.sellTableData);
                                     this.query.aPageSize = oData.pageSize;
                                     this.query.aPageNo = oData.pageNo;
                                     this.query.aTotalCount = oData.totalCount;
@@ -1061,16 +1094,21 @@
                         if (!name) {
                             name = '';
                         }
-                        if (this.oForm.cinemaCodes.length == 0) {
+                        if (this.oForm.bannerLevel == 2 && this.oForm.cinemaCodes.length == 0) {
                             this.message = '请选择影院!';
                             loading.close();
                             this.open();
                             return;
                         }
-                        let cinemaCodes = this.oForm.cinemaCodes.join(',');
                         let jsonArr = [];
+                        if (this.oForm.bannerLevel == 1) {
+                            jsonArr.push({ key: 'commonType', value: 1 });
+                        }
+                        if (this.oForm.bannerLevel == 2) {
+                            let cinemaCodes = this.oForm.cinemaCodes.join(',');
+                            jsonArr.push({ key: 'cinemaCode', value: cinemaCodes });
+                        }
                         jsonArr.push({ key: 'name', value: name });
-                        jsonArr.push({ key: 'cinemaCode', value: cinemaCodes });
                         jsonArr.push({ key: 'pageNo', value: this.query.aPageNo });
                         jsonArr.push({ key: 'pageSize', value: this.query.aPageSize });
                         let sign = md5(preSign(jsonArr));
@@ -1085,9 +1123,7 @@
                                     this.drawer = true;
                                     var oData = JSON.parse(Decrypt(data.data.data));
                                     console.log(oData);
-                                    console.log(this.query);
                                     this.goldData = oData.data;
-                                    console.log(this.sellTableData);
                                     this.query.aPageSize = oData.pageSize;
                                     this.query.aPageNo = oData.pageNo;
                                     this.query.aTotalCount = oData.totalCount;
@@ -1106,150 +1142,6 @@
                                 console.log(err);
                             });
                     }
-                    // //跳转到修改文章
-                    // if (this.oTabType == 1) {
-                    //     let title = this.query.title;
-                    //     if (!title) {
-                    //         title = '';
-                    //     }
-                    //     if (this.form.cinemaCodes.length == 0) {
-                    //         this.message = '请选择影院!';
-                    //         loading.close();
-                    //         this.open();
-                    //         return;
-                    //     }
-                    //     let cinemaCodes = this.form.cinemaCodes.join(',');
-                    //     let jsonArr = [];
-                    //     jsonArr.push({ key: 'title', value: title });
-                    //     jsonArr.push({ key: 'cinemaCode', value: cinemaCodes });
-                    //     jsonArr.push({ key: 'pageNo', value: this.query.aPageNo });
-                    //     jsonArr.push({ key: 'pageSize', value: this.query.aPageSize });
-                    //     let sign = md5(preSign(jsonArr));
-                    //     jsonArr.push({ key: 'sign', value: sign });
-                    //     var params = ParamsAppend(jsonArr);
-                    //     https
-                    //         .fetchPost('/noticeOfActivity/getOnlineStatusByCinemaCode', params)
-                    //         .then(data => {
-                    //             loading.close();
-                    //             if (data.data.code == 'success') {
-                    //                 this.drawer1 = true;
-                    //                 var oData = JSON.parse(Decrypt(data.data.data));
-                    //                 this.goldData = oData.data;
-                    //                 this.query.aPageSize = oData.pageSize;
-                    //                 this.query.aPageNo = oData.pageNo;
-                    //                 this.query.aTotalCount = oData.totalCount;
-                    //                 this.query.aTotalPage = oData.totalPage;
-                    //             } else if (data.data.code == 'nologin') {
-                    //                 this.message = data.data.message;
-                    //                 this.open();
-                    //                 this.$router.push('/login');
-                    //             } else {
-                    //                 this.message = data.data.message;
-                    //                 this.open();
-                    //             }
-                    //         })
-                    //         .catch(err => {
-                    //             loading.close();
-                    //             console.log(err);
-                    //         });
-                    // }
-                    // //跳转到修改电影
-                    // else if (this.oTabType == 2) {
-                    //     let filmName = this.query.filmName;
-                    //     if (!filmName) {
-                    //         filmName = '';
-                    //     }
-                    //     if (this.form.cinemaCodes.length == 0) {
-                    //         this.message = '请选择影院!';
-                    //         loading.close();
-                    //         this.open();
-                    //         return;
-                    //     }
-                    //     let cinemaCodes = this.form.cinemaCodes.join(',');
-                    //     let jsonArr = [];
-                    //     jsonArr.push({ key: 'filmName', value: filmName });
-                    //     jsonArr.push({ key: 'cinemaCode', value: cinemaCodes });
-                    //     jsonArr.push({ key: 'pageNo', value: this.query.aPageNo });
-                    //     jsonArr.push({ key: 'pageSize', value: this.query.aPageSize });
-                    //     let sign = md5(preSign(jsonArr));
-                    //     jsonArr.push({ key: 'sign', value: sign });
-                    //     var params = ParamsAppend(jsonArr);
-                    //     https
-                    //         .fetchPost('/film/getByCinemaCode', params)
-                    //         .then(data => {
-                    //             loading.close();
-                    //             if (data.data.code == 'success') {
-                    //                 this.drawer2 = true;
-                    //                 var oData = JSON.parse(Decrypt(data.data.data));
-                    //                 console.log(oData);
-                    //                 console.log(this.query);
-                    //                 this.goldData = oData.data;
-                    //                 console.log(this.sellTableData);
-                    //                 this.query.aPageSize = oData.pageSize;
-                    //                 this.query.aPageNo = oData.pageNo;
-                    //                 this.query.aTotalCount = oData.totalCount;
-                    //                 this.query.aTotalPage = oData.totalPage;
-                    //             } else if (data.data.code == 'nologin') {
-                    //                 this.message = data.data.message;
-                    //                 this.open();
-                    //                 this.$router.push('/login');
-                    //             } else {
-                    //                 this.message = data.data.message;
-                    //                 this.open();
-                    //             }
-                    //         })
-                    //         .catch(err => {
-                    //             loading.close();
-                    //             console.log(err);
-                    //         });
-                    // }
-                    // //跳转到修改金币商品
-                    // else if (this.oTabType == 3) {
-                    //     let name = this.query.name;
-                    //     if (!name) {
-                    //         name = '';
-                    //     }
-                    //     if (this.form.cinemaCodes.length == 0) {
-                    //         this.message = '请选择影院!';
-                    //         loading.close();
-                    //         this.open();
-                    //         return;
-                    //     }
-                    //     let cinemaCodes = this.form.cinemaCodes.join(',');
-                    //     let jsonArr = [];
-                    //     jsonArr.push({ key: 'name', value: name });
-                    //     jsonArr.push({ key: 'cinemaCode', value: cinemaCodes });
-                    //     jsonArr.push({ key: 'pageNo', value: this.query.aPageNo });
-                    //     jsonArr.push({ key: 'pageSize', value: this.query.aPageSize });
-                    //     let sign = md5(preSign(jsonArr));
-                    //     jsonArr.push({ key: 'sign', value: sign });
-                    //     var params = ParamsAppend(jsonArr);
-                    //     https
-                    //         .fetchPost('/goldCommodity/getByCinemaPage', params)
-                    //         .then(data => {
-                    //             loading.close();
-                    //             if (data.data.code == 'success') {
-                    //                 this.drawer = true;
-                    //                 var oData = JSON.parse(Decrypt(data.data.data));
-                    //                 this.goldData = oData.data;
-                    //                 this.query.aPageSize = oData.pageSize;
-                    //                 this.query.aPageNo = oData.pageNo;
-                    //                 this.query.aTotalCount = oData.totalCount;
-                    //                 this.query.aTotalPage = oData.totalPage;
-                    //             } else if (data.data.code == 'nologin') {
-                    //                 this.message = data.data.message;
-                    //                 this.open();
-                    //                 this.$router.push('/login');
-                    //             } else {
-                    //                 this.message = data.data.message;
-                    //                 this.open();
-                    //             }
-                    //         })
-                    //         .catch(err => {
-                    //             loading.close();
-                    //             console.log(err);
-                    //         });
-                    // }
                 }, 500);
             },
             openNext1() {
@@ -1269,16 +1161,21 @@
                         if (!title) {
                             title = '';
                         }
-                        if (this.form.cinemaCodes.length == 0) {
+                        if (this.oBannerLevel == 2 && this.oCinemaCodes.length == 0) {
                             this.message = '请选择影院!';
                             loading.close();
                             this.open();
                             return;
                         }
-                        let cinemaCodes = this.form.cinemaCodes.join(',');
                         let jsonArr = [];
+                        if (this.oBannerLevel == 1) {
+                            jsonArr.push({ key: 'commonType', value: 1 });
+                        }
+                        if (this.oBannerLevel == 2) {
+                            let cinemaCodes = this.oCinemaCodes.join(',');
+                            jsonArr.push({ key: 'cinemaCode', value: cinemaCodes });
+                        }
                         jsonArr.push({ key: 'title', value: title });
-                        jsonArr.push({ key: 'cinemaCode', value: cinemaCodes });
                         jsonArr.push({ key: 'pageNo', value: this.query.aPageNo });
                         jsonArr.push({ key: 'pageSize', value: this.query.aPageSize });
                         let sign = md5(preSign(jsonArr));
@@ -1316,16 +1213,21 @@
                         if (!filmName) {
                             filmName = '';
                         }
-                        if (this.form.cinemaCodes.length == 0) {
+                        if (this.oBannerLevel == 2 && this.oCinemaCodes.length == 0) {
                             this.message = '请选择影院!';
                             loading.close();
                             this.open();
                             return;
                         }
-                        let cinemaCodes = this.form.cinemaCodes.join(',');
                         let jsonArr = [];
+                        if (this.oBannerLevel == 1) {
+                            jsonArr.push({ key: 'commonType', value: 1 });
+                        }
+                        if (this.oBannerLevel == 2) {
+                            let cinemaCodes = this.oCinemaCodes.join(',');
+                            jsonArr.push({ key: 'cinemaCode', value: cinemaCodes });
+                        }
                         jsonArr.push({ key: 'filmName', value: filmName });
-                        jsonArr.push({ key: 'cinemaCode', value: cinemaCodes });
                         jsonArr.push({ key: 'pageNo', value: this.query.aPageNo });
                         jsonArr.push({ key: 'pageSize', value: this.query.aPageSize });
                         let sign = md5(preSign(jsonArr));
@@ -1339,9 +1241,7 @@
                                     this.drawer2 = true;
                                     var oData = JSON.parse(Decrypt(data.data.data));
                                     console.log(oData);
-                                    console.log(this.query);
                                     this.goldData = oData.data;
-                                    console.log(this.sellTableData);
                                     this.query.aPageSize = oData.pageSize;
                                     this.query.aPageNo = oData.pageNo;
                                     this.query.aTotalCount = oData.totalCount;
@@ -1366,16 +1266,21 @@
                         if (!name) {
                             name = '';
                         }
-                        if (this.form.cinemaCodes.length == 0) {
+                        if (this.oBannerLevel == 2 && this.oCinemaCodes.length == 0) {
                             this.message = '请选择影院!';
                             loading.close();
                             this.open();
                             return;
                         }
-                        let cinemaCodes = this.form.cinemaCodes.join(',');
                         let jsonArr = [];
+                        if (this.oBannerLevel == 1) {
+                            jsonArr.push({ key: 'commonType', value: 1 });
+                        }
+                        if (this.oBannerLevel == 2) {
+                            let cinemaCodes = this.oCinemaCodes.join(',');
+                            jsonArr.push({ key: 'cinemaCode', value: cinemaCodes });
+                        }
                         jsonArr.push({ key: 'name', value: name });
-                        jsonArr.push({ key: 'cinemaCode', value: cinemaCodes });
                         jsonArr.push({ key: 'pageNo', value: this.query.aPageNo });
                         jsonArr.push({ key: 'pageSize', value: this.query.aPageSize });
                         let sign = md5(preSign(jsonArr));
@@ -1454,6 +1359,20 @@
                     background: 'rgba(0, 0, 0, 0.7)',
                     target: document.querySelector('.div1')
                 });
+                if (!this.oForm.bannerLevel) {
+                    this.message = '通用方式不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if (this.oForm.bannerLevel == 2) {
+                    if (this.oForm.cinemaCodes.length == 0) {
+                        this.message = '请选择影院！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
                 if (!this.oForm.statusValue) {
                     this.message = '是否显示不能为空，请检查！';
                     this.open();
@@ -1498,12 +1417,6 @@
                         return;
                     }
                 }
-                if (this.oForm.cinemaCodes.length == 0) {
-                    this.message = '请选择影院！';
-                    this.open();
-                    loading.close();
-                    return;
-                }
                 if (this.oForm.sort <= 0) {
                     this.message = '排序号必须大于0！';
                     this.open();
@@ -1517,10 +1430,12 @@
                     return;
                 }
                 setTimeout(() => {
-                    let cinemaCodes = this.oForm.cinemaCodes.join(',');
                     var jsonArr = [];
-                    jsonArr.push({ key: 'cinemaCodes', value: cinemaCodes });
-                    jsonArr.push({ key: 'bannerLevel', value: 2 });
+                    jsonArr.push({ key: 'bannerLevel', value: this.oForm.bannerLevel });
+                    if (this.oForm.bannerLevel == 2) {
+                        let cinemaCodes = this.oForm.cinemaCodes.join(',');
+                        jsonArr.push({ key: 'cinemaCodes', value: cinemaCodes });
+                    }
                     jsonArr.push({ key: 'status', value: this.oForm.statusValue });
                     jsonArr.push({ key: 'startDate', value: this.startTime });
                     jsonArr.push({ key: 'endDate', value: this.endTime });
@@ -1650,6 +1565,7 @@
                             loading.close();
                             if (data.data.code == 'success') {
                                 this.editVisible = true;
+                                console.log(JSON.parse(Decrypt(data.data.data)))
                                 let oIndex = 0; //轮播图级别下拉选显示对应的选项
                                 for (let i in this.options) {
                                     if (this.options[i].value == JSON.parse(Decrypt(data.data.data)).banner.bannerLevel) {
@@ -1657,7 +1573,7 @@
                                         break;
                                     }
                                 }
-                                this.form.bannerLevel = this.options[oIndex].value;
+                                this.oBannerLevel = this.options[oIndex].value;
                                 this.businessOptiones = JSON.parse(Decrypt(data.data.data)).businessInfos;
                                 let index = 0; //是否显示下拉选显示对应的选项
                                 for (let i in this.showStatus) {
@@ -1669,8 +1585,9 @@
                                 this.form.status = this.showStatus[index].value;
                                 //是否显示下拉选显示对应的选项
                                 this.cinemaList = JSON.parse(Decrypt(data.data.data)).cinemaList; //适用影院编码
-                                this.form.cinemaCodes = JSON.parse(Decrypt(data.data.data)).banner.cinemaCodes.split(',');
-                                console.log(JSON.parse(Decrypt(data.data.data)))
+                                if (JSON.parse(Decrypt(data.data.data)).banner.cinemaCodes && JSON.parse(Decrypt(data.data.data)).banner.cinemaCodes.length > 0) {
+                                    this.oCinemaCodes = JSON.parse(Decrypt(data.data.data)).banner.cinemaCodes.split(',');
+                                }
                                 this.changeStartTime = JSON.parse(Decrypt(data.data.data)).banner.startDate; //创建时间
                                 this.changeEndTime = JSON.parse(Decrypt(data.data.data)).banner.endDate; //结束时间
                                 this.form.memo = JSON.parse(Decrypt(data.data.data)).banner.memo; //备注
@@ -1726,6 +1643,20 @@
                     background: 'rgba(0, 0, 0, 0.7)',
                     target: document.querySelector('.div1')
                 });
+                if (!this.oBannerLevel) {
+                    this.message = '通用方式不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+                if (this.oBannerLevel == 2) {
+                    if (this.oCinemaCodes.length == 0) {
+                        this.message = '请选择影院！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
                 if (!this.form.status) {
                     this.message = '是否显示不能为空，请检查！';
                     this.open();
@@ -1770,12 +1701,6 @@
                         return;
                     }
                 }
-                if (this.form.cinemaCodes.length == 0) {
-                    this.message = '请选择影院！';
-                    this.open();
-                    loading.close();
-                    return;
-                }
                 if (this.form.sort <= 0) {
                     this.message = '排序必须大于0！';
                     this.open();
@@ -1789,11 +1714,13 @@
                     return;
                 }
                 setTimeout(() => {
-                    let cinemaCodes = this.form.cinemaCodes.join(',');
                     var jsonArr = [];
                     jsonArr.push({ key: 'id', value: this.form.id });
-                    jsonArr.push({ key: 'bannerLevel', value: 2 });
-                    jsonArr.push({ key: 'cinemaCodes', value: cinemaCodes });
+                    jsonArr.push({ key: 'bannerLevel', value: this.oBannerLevel });
+                    if (this.oBannerLevel == 2) {
+                        let cinemaCodes = this.oCinemaCodes.join(',');
+                        jsonArr.push({ key: 'cinemaCodes', value: cinemaCodes });
+                    }
                     jsonArr.push({ key: 'status', value: this.form.status });
                     jsonArr.push({ key: 'startDate', value: this.changeStartTime });
                     jsonArr.push({ key: 'imageUrl', value: this.imageUrl });
@@ -1889,10 +1816,14 @@
                 });
                 setTimeout(() => {
                     let status = this.query.status;
+                    let bannerLevel = this.query.bannerLevel;
                     let cinemaCode = this.query.cinemaCode;
                     let category = this.query.category;
                     if (!status) {
                         status = '';
+                    }
+                    if (!bannerLevel) {
+                        bannerLevel = '';
                     }
                     if (!cinemaCode) {
                         cinemaCode = '';
@@ -1902,6 +1833,7 @@
                     }
                     let jsonArr = [];
                     jsonArr.push({ key: 'status', value: status });
+                    jsonArr.push({ key: 'bannerLevel', value: bannerLevel });
                     jsonArr.push({ key: 'cinemaCodes', value: cinemaCode });
                     jsonArr.push({ key: 'category', value: category });
                     jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
@@ -1947,11 +1879,22 @@
                     dangerouslyUseHTMLString: true
                 });
             },
+            changeBannerLevel() {
+                this.oForm.goType = '';
+                this.oForm.redirectGoal = '';
+                this.goType = '';
+                this.oRedirectGol = '';
+            },
+
             changeCinema(val) {
                 this.oForm.cinemaCodes = val;
+                this.oForm.goType = '';
+                this.oForm.redirectGoal = '';
             },
             changeCinema2(val) {
-                this.form.cinemaCodes = val;
+                this.oCinemaCodes = val;
+                this.goType = '';
+                this.oRedirectGol = '';
             },
             // 获取所有影院
             getAllCinema() {

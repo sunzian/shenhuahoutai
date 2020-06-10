@@ -25,6 +25,8 @@
                 </el-select>
                 <el-select
                         clearable
+                        filterable 
+                        @change="getSearchPartner"
                         v-model="query.partnerCode"
                         placeholder="请选择商户"
                         class="handle-input mr10"
@@ -142,6 +144,13 @@
                         <el-tag v-else-if="scope.row.changeType=='3'">金币+RMB 兑换</el-tag>
                     </template>
                 </el-table-column>
+                <el-table-column prop="sort" label="排序" width="160">
+                    <template slot-scope="scope">
+                        <div v-if="scope.row.showSort" @click="handleEdit(scope.$index, scope.row)">{{scope.row.sort}}</div>
+                        <el-input v-if="scope.row.showEdit" size="small" v-model="scope.row.sort" @keyup.enter.native="changeScope(scope.$index, scope.row)" @change="handleEdit(scope.$index, scope.row)"></el-input> 
+                        <el-button v-if="scope.row.showEdit" style="position: absolute;left: 93px;" @click="changeScope(scope.$index, scope.row)">确定</el-button>
+                    </template>
+                </el-table-column>
                 <el-table-column prop="sort" label="取货方式" width="130">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.supportExpressStatus=='1'">自提</el-tag>
@@ -163,9 +172,6 @@
                         <el-tag v-if="scope.row.status=='1'" type="success">上架</el-tag>
                         <el-tag v-else type="danger">未上架</el-tag>
                     </template>
-                </el-table-column>
-                <el-table-column prop="sort" label="排序" width="90">
-                    <template slot-scope="scope">{{scope.row.sort}}</template>
                 </el-table-column>
                 <el-table-column prop="sort" label="商品类型" width="90">
                     <template slot-scope="scope">
@@ -493,7 +499,7 @@
                         :required="true"
                         label="优惠券生效方式"
                         :label-width="formLabelWidth"
-                        v-if="oForm.commodity_type!=1&&oForm.commodity_type!=4"
+                        v-if="oForm.commodity_type!=1 && oForm.commodity_type!=4 && oForm.commodity_type!=5"
                 >
                     <el-select v-model="oForm.effectiveType" placeholder="请选择生效方式">
                         <el-option
@@ -506,7 +512,7 @@
                 </el-form-item>
                 <el-form-item
                         :required="true"
-                        v-if="oForm.effectiveType==1 && oForm.commodity_type!=1&&oForm.commodity_type!=4"
+                        v-if="oForm.effectiveType==1 && oForm.commodity_type!=1 && oForm.commodity_type!=4 && oForm.commodity_type!=5"
                         label="领取后几天开始生效"
                         :label-width="formLabelWidth"
                 >
@@ -514,6 +520,7 @@
                             style="width: 250px"
                             v-model="oForm.laterDays"
                             autocomplete="off"
+                            placeholder="如马上生效，请填 0"
                             onkeyup="this.value=this.value.replace(/\D/g,'')"
                     ></el-input>
                 </el-form-item>
@@ -521,7 +528,7 @@
                         :required="true"
                         label="优惠券有效期："
                         :label-width="formLabelWidth"
-                        v-if="oForm.commodity_type!=1 && oForm.effectiveType==2&&oForm.commodity_type!=4"
+                        v-if="oForm.commodity_type!=1 && oForm.effectiveType==2 && oForm.commodity_type!=4 && oForm.commodity_type!=5"
                 >
                     <el-date-picker
                             v-model="oForm.startEffectiveDate"
@@ -543,11 +550,11 @@
                         :required="true"
                         label="有效期天数"
                         :label-width="formLabelWidth"
-                        v-if="oForm.effectiveType!=2&&oForm.supportExpressStatus==1"
+                        v-if="oForm.effectiveType!=2&&oForm.supportExpressStatus==1 && oForm.commodity_type!=5"
                 >
                     <el-input
                             style="width: 250px"
-                            placeholder="自兑换之日起计算"
+                            placeholder="如仅限当天核销，填0"
                             v-model.trim="oForm.expireDay"
                             autocomplete="off"
                             onkeyup="this.value=this.value.replace(/\D/g,'')"
@@ -1078,7 +1085,7 @@
                         :required="true"
                         label="优惠券生效方式"
                         :label-width="formLabelWidth"
-                        v-if="form.commodityType!=1&&form.commodityType!=4"
+                        v-if="form.commodityType!=1 && form.commodityType!=4 && form.commodityType!=5"
                 >
                     <el-select v-model="oEffectiveType" placeholder="请选择生效方式">
                         <el-option
@@ -1091,7 +1098,7 @@
                 </el-form-item>
                 <el-form-item
                         :required="true"
-                        v-if="oEffectiveType==1 && form.commodityType!=1&&form.commodityType!=4"
+                        v-if="oEffectiveType==1 && form.commodityType!=1 && form.commodityType!=4 && form.commodityType!=5"
                         label="领取后几天开始生效"
                         :label-width="formLabelWidth"
                 >
@@ -1099,6 +1106,7 @@
                             style="width: 250px"
                             v-model="oLaterDays"
                             autocomplete="off"
+                            placeholder="如马上生效，请填 0"
                             onkeyup="this.value=this.value.replace(/\D/g,'')"
                     ></el-input>
                 </el-form-item>
@@ -1106,7 +1114,7 @@
                         :required="true"
                         label="优惠券有效期："
                         :label-width="formLabelWidth"
-                        v-if="form.commodityType!=1 && oEffectiveType==2&&form.commodityType!=4"
+                        v-if="form.commodityType!=1 && oEffectiveType==2 && form.commodityType!=4 && form.commodityType!=5"
                 >
                     <el-date-picker
                             v-model="oStartEffectiveDate"
@@ -1128,11 +1136,11 @@
                         :required="true"
                         label="有效期天数"
                         :label-width="formLabelWidth"
-                        v-if="oEffectiveType!=2&&form.supportExpressStatus==1"
+                        v-if="oEffectiveType!=2&&form.supportExpressStatus==1 && form.commodityType!=5"
                 >
                     <el-input
                             style="width: 250px"
-                            placeholder="自兑换之日起计算"
+                            placeholder="如仅限当天核销，填0"
                             v-model.trim="form.expireDay"
                             autocomplete="off"
                             onkeyup="this.value=this.value.replace(/\D/g,'')"
@@ -2374,6 +2382,65 @@
             this.getMenu();
         },
         methods: {
+            handleCurrentChange(row, event, column) {
+            },
+            handleEdit(index, row) {
+                this.tableData[index].showSort = false;
+                this.tableData[index].showEdit = true;
+            },
+            changeScope(index, row) {
+                this.$confirm('此操作将该文件排序号, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                })
+                    .then(() => {
+                        const loading = this.$loading({
+                            lock: true,
+                            text: 'Loading',
+                            spinner: 'el-icon-loading',
+                            background: 'rgba(0, 0, 0, 0.7)',
+                            target: document.querySelector('.div1')
+                        });
+                        setTimeout(() => {
+                            let jsonArr = [];
+                            jsonArr.push({ key: 'id', value: row.id });
+                            jsonArr.push({ key: 'sort', value: row.sort });
+                            let sign = md5(preSign(jsonArr));
+                            jsonArr.push({ key: 'sign', value: sign });
+                            let params = ParamsAppend(jsonArr);
+                            https
+                                .fetchPost('/goldCommodity/updateSortById', params)
+                                .then(data => {
+                                    loading.close();
+                                    if (data.data.code == 'success') {
+                                        this.$message.success(`修改成功`);
+                                        this.tableData[index].showEdit = false;
+                                        this.tableData[index].showSort = true;
+                                        this.getMenu();
+                                    } else if (data.data.code == 'nologin') {
+                                        this.message = data.data.message;
+                                        this.open();
+                                        this.$router.push('/login');
+                                    } else {
+                                        this.message = data.data.message;
+                                        this.open();
+                                    }
+                                })
+                                .catch(err => {
+                                    loading.close();
+                                    console.log(err);
+                                });
+                        }, 500);
+                    })
+                    .catch(() => {
+                        this.getMenu();
+                        this.$message({
+                            type: 'info',
+                            message: '已取消'
+                        });
+                    });
+            },
             clearList(){
                 this.skuList=[];
                 this.changeSkuList=[];
@@ -2842,12 +2909,13 @@
             changeSearchCinema(val) {
                 this.query.partnerCode = '';
                 this.partnerInfo = [];
-                this.getSearchPartner(val);
+                this.getSearchPartner();
             },
-            getSearchPartner(val) {
-                let cinemaCode = val;
-                if (!cinemaCode) {
-                    cinemaCode = '';
+            getSearchPartner() {
+                this.$forceUpdate();
+                let cinemaCode = '';
+                if (this.query.cinemaCode) {
+                    cinemaCode = this.query.cinemaCode;
                 }
                 let jsonArr = [];
                 jsonArr.push({key: 'pageSize', value: 200});
@@ -3348,7 +3416,7 @@
                         return;
                     }
                 }
-                if (this.oForm.effectiveType == 1 && this.oForm.commodity_type != 1 && this.oForm.commodity_type != 4) {
+                if (this.oForm.effectiveType == 1 && this.oForm.commodity_type != 1 && this.oForm.commodity_type != 4 && this.oForm.commodity_type != 5) {
                     if (!this.oForm.laterDays) {
                         this.message = '领取后几天开始生效不能为空，请检查！';
                         this.open();
@@ -3362,7 +3430,7 @@
                         return;
                     }
                 }
-                if (this.oForm.commodity_type != 1 && this.oForm.commodity_type != 4 && this.oForm.effectiveType == 2) {
+                if (this.oForm.commodity_type != 1 && this.oForm.commodity_type != 4 && this.oForm.commodity_type != 5 && this.oForm.effectiveType == 2) {
                     if (!this.oForm.startEffectiveDate || !this.oForm.endEffectiveDate) {
                         this.message = '有效期不能为空，请检查！';
                         this.open();
@@ -4004,7 +4072,7 @@
                         return;
                     }
                 }
-                if (this.oEffectiveType == 1 && this.form.commodityType != 1 && this.form.commodityType != 4) {
+                if (this.oEffectiveType == 1 && this.form.commodityType != 1 && this.form.commodityType != 4 && this.form.commodityType != 5) {
                     if (!this.oLaterDays && this.oLaterDays != 0) {
                         this.message = '领取后几天开始生效不能为空，请检查！';
                         this.open();
@@ -4305,11 +4373,16 @@
                             if (data.data.code == 'success') {
                                 var oData = JSON.parse(Decrypt(data.data.data));
                                 this.tableData = oData.data;
+                                for (let i = 0; i < this.tableData.length; i ++) {
+                                    this.tableData[i].showEdit = false;
+                                    this.tableData[i].showSort = true;
+                                }
                                 this.query.pageSize = oData.pageSize;
                                 this.query.pageNo = oData.pageNo;
                                 this.query.totalCount = oData.totalCount;
                                 this.query.totalPage = oData.totalPage;
                                 this.getAllCinema();
+                                this.getSearchPartner();
                             } else if (data.data.code == 'nologin') {
                                 this.message = data.data.message;
                                 this.open();

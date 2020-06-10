@@ -11,6 +11,15 @@
             <div class="handle-box">
                 <el-select
                     clearable
+                    v-model="query.commonType"
+                    placeholder="通用方式"
+                    class="handle-select mr10"
+                >
+                    <el-option key="1" label="全部影院" value="1"></el-option>
+                    <el-option key="2" label="指定影院" value="2"></el-option>
+                </el-select>
+                <el-select
+                    clearable
                     v-model="query.reduceType"
                     placeholder="优惠方式"
                     class="handle-select mr10"
@@ -166,7 +175,13 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="选择影院：" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="通用方式" :label-width="formLabelWidth">
+                    <el-radio-group v-model="oForm.commonType" @change="selectCommonType">
+                        <el-radio :label="1">全部影院</el-radio>
+                        <el-radio :label="2">指定影院</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item :required="true" label="选择影院：" v-if="oForm.commonType == 2" :label-width="formLabelWidth">
                     <el-checkbox-group v-model="oForm.code" @change="selectCinema">
                         <el-checkbox
                             v-for="item in cinemaInfo"
@@ -178,7 +193,7 @@
                 </el-form-item>
                 <el-form-item :required="true" label="优惠方式：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oForm.reduceType" @change="clearDiscountMoney()">
-                        <el-radio label="1">固定价格（特惠价格）</el-radio>
+                        <el-radio label="1" :disabled="hallType">固定价格（特惠价格）</el-radio>
                         <el-radio label="2">满减（满减金额）</el-radio>
                     </el-radio-group>
                 </el-form-item>
@@ -211,7 +226,7 @@
                     <el-input style="width: 150px" v-model="oForm.discountMoney" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="选择商品：" :label-width="formLabelWidth">
-                    <el-radio-group v-model="oForm.selectFilmType" @change="clearSelectedSell()">
+                    <el-radio-group v-model="oForm.selectFilmType" @change="clearSelectedSell()" :disabled="hallType">
                         <el-radio label="0">全部商品</el-radio>
                         <el-radio label="1">部分商品</el-radio>
                         <el-radio label="2">排除商品</el-radio>
@@ -425,8 +440,14 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item :required="true" label="选择影院：" :label-width="formLabelWidth">
-                    <el-checkbox-group v-model="oCinemaCode" @change="selectCinema2">
+                <el-form-item :required="true" label="通用方式" :label-width="formLabelWidth">
+                    <el-radio-group v-model="oCommonType" @change="selectCommonType2">
+                        <el-radio :label="1">全部影院</el-radio>
+                        <el-radio :label="2">指定影院</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item :required="true" label="选择影院：" v-if="this.oCommonType == 2" :label-width="formLabelWidth">
+                    <el-checkbox-group v-model="oForm.code" @change="selectCinema2">
                         <el-checkbox
                             v-for="item in cinemaInfo"
                             :key="item.cinemaCode"
@@ -437,7 +458,7 @@
                 </el-form-item>
                 <el-form-item :required="true" label="优惠方式：" :label-width="formLabelWidth">
                     <el-radio-group v-model="oReduceType" @change="clearDiscountMoney()">
-                        <el-radio label="1">固定价格（特惠价格）</el-radio>
+                        <el-radio label="1" :disabled="hallType">固定价格（特惠价格）</el-radio>
                         <el-radio label="2">满减（满减金额）</el-radio>
                     </el-radio-group>
                 </el-form-item>
@@ -470,7 +491,7 @@
                     <el-input style="width: 150px" v-model="oDiscountMoney" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="选择商品：" :label-width="formLabelWidth">
-                    <el-radio-group v-model="oSelectMerchandiseType" @change="clearSelectedSell()">
+                    <el-radio-group v-model="oSelectMerchandiseType" @change="clearSelectedSell()" :disabled="hallType">
                         <el-radio label="0">全部商品</el-radio>
                         <el-radio label="1">部分商品</el-radio>
                         <el-radio label="2">排除商品</el-radio>
@@ -482,7 +503,7 @@
                     label="选择商品"
                     :label-width="formLabelWidth"
                 >
-                    <el-button type="primary" @click="openNext1">点击选择</el-button>
+                    <el-button type="primary" @click="openNext">点击选择</el-button>
                 </el-form-item>
                 <el-form-item
                     label="所选商品"
@@ -781,7 +802,7 @@ export default {
                     value: '星期日'
                 }
             ],
-            oCinemaCode: [],
+            oCommonType: '',
             oStartDate: '',
             oLimitSingleUnit: '',
             oEndDate: '',
@@ -879,6 +900,7 @@ export default {
             ],
             oForm: {
                 name: '',
+                commonType: 2,
                 cinemaName: '',
                 cinemaCode: [],
                 screenName: '',
@@ -899,7 +921,7 @@ export default {
                 limitSingleUnit: '年',
                 achieveMoney: '',
                 discountMoney: '',
-                reduceType: '1',
+                reduceType: '2',
                 holidayValid: '1',
                 couponDesc: '',
                 id: '',
@@ -919,7 +941,8 @@ export default {
             endArr: [],
             value: '',
             canTimeList: [], //可用时间段列表
-            rowMess: ''
+            rowMess: '',
+            hallType: false
         };
     },
     created() {},
@@ -990,6 +1013,7 @@ export default {
                     loading.close();
                     if (data.data.code == 'success') {
                         this.selectedSell = [];
+                        this.oForm.code = [];
                         // let formats = JSON.parse(Decrypt(data.data.data)).formatList;
                         // this.formatList = [];
                         // for (let i = 0; i < formats.length; i++) {
@@ -1032,11 +1056,19 @@ export default {
                 loading.close();
                 return;
             }
-            if (this.oForm.code.length == 0) {
-                this.message = '所选影院不能为空，请检查！';
+            if (!this.oForm.commonType) {
+                this.message = '通用方式不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
+            }
+            if (this.oForm.commonType == 2) {
+                if (this.oForm.code.length == 0) {
+                    this.message = '所选影院不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
             }
             if (!this.oForm.reduceType) {
                 this.message = '优惠方式不能为空，请检查！';
@@ -1187,7 +1219,10 @@ export default {
             }
             var jsonArr = [];
             jsonArr.push({ key: 'name', value: this.oForm.name });
-            jsonArr.push({ key: 'cinemaCode', value: this.oForm.code.join(',') });
+            jsonArr.push({ key: 'commonType', value: this.oForm.commonType });
+            if (this.oForm.commonType == 2) {
+                jsonArr.push({ key: 'cinemaCode', value: this.oForm.code.join(',') });
+            }
             jsonArr.push({ key: 'selectMerchandiseType', value: this.oForm.selectFilmType });
             if (this.oForm.selectFilmType != 0) {
                 jsonArr.push({ key: 'merchandiseCode', value: this.merSelect.join(',') });
@@ -1234,6 +1269,7 @@ export default {
                             this.selectedSell = [];
                             this.merSelect = [];
                             this.oForm.name = '';
+                            this.oForm.commonType = 2;
                             this.oForm.code = [];
                             this.selectScreenCode = '';
                             this.value1 = '';
@@ -1242,7 +1278,7 @@ export default {
                             this.oForm.startDate = '';
                             this.oForm.endDate = '';
                             this.oForm.validPayType = '0';
-                            this.oForm.reduceType = '1';
+                            this.oForm.reduceType = '2';
                             this.oForm.achieveMoney = '';
                             this.oForm.discountMoney = '';
                             this.oForm.holidayValid = '1';
@@ -1373,7 +1409,13 @@ export default {
                         this.editVisible = true;
                         console.log(JSON.parse(Decrypt(data.data.data)));
                         this.oName = JSON.parse(Decrypt(data.data.data)).name;
-                        this.oCinemaCode = JSON.parse(Decrypt(data.data.data)).cinemaCode.split(',');
+                        this.oCommonType = JSON.parse(Decrypt(data.data.data)).commonType;
+                        if (this.oCommonType == 1) {
+                            this.hallType = true;
+                        }
+                        if (this.oCommonType == 2) {
+                            this.oForm.code = JSON.parse(Decrypt(data.data.data)).cinemaCode.split(',');
+                        }
                         if (JSON.parse(Decrypt(data.data.data)).reduceType == 1) {
                             this.oReduceType = '1';
                         }
@@ -1494,11 +1536,19 @@ export default {
                 loading.close();
                 return;
             }
-            if (!this.oCinemaCode) {
-                this.message = '所选影院不能为空，请检查！';
+            if (!this.oCommonType) {
+                this.message = '通用方式不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
+            }
+            if (this.oCommonType == 2) {
+                if (!this.oForm.code) {
+                    this.message = '所选影院不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
             }
             if (!this.oReduceType) {
                 this.message = '优惠方式不能为空，请检查！';
@@ -1646,7 +1696,10 @@ export default {
             // }
             var jsonArr = [];
             jsonArr.push({ key: 'name', value: this.oName });
-            jsonArr.push({ key: 'cinemaCode', value: this.oCinemaCode.join(',') });
+            jsonArr.push({ key: 'commonType', value: this.oCommonType });
+            if (this.oCommonType == 2) {
+                jsonArr.push({ key: 'cinemaCode', value: this.oForm.code.join(',') });
+            }
             jsonArr.push({ key: 'selectMerchandiseType', value: this.oSelectMerchandiseType });
             if (this.oSelectFilmType != 0) {
                 jsonArr.push({ key: 'merchandiseCode', value: merchandiseCodeList.join(',') });
@@ -1788,6 +1841,7 @@ export default {
                 target: document.querySelector('.div1')
             });
             let jsonArr = [];
+            jsonArr.push({key: 'commonType', value: this.query.commonType});
             jsonArr.push({ key: 'name', value: this.query.name });
             jsonArr.push({ key: 'status', value: this.query.status });
             jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
@@ -1837,11 +1891,31 @@ export default {
                 dangerouslyUseHTMLString: true
             });
         },
+        selectCommonType() {
+            if (this.oForm.commonType == 1) {
+                this.oForm.reduceType = '2';
+                this.oForm.discountMoney = '';
+                this.oForm.selectFilmType = '0';
+                this.hallType = true;
+            } else {
+                this.hallType = false;
+            }
+        },
+        selectCommonType2() {
+            if (this.oCommonType == 1) {
+                this.oReduceType = '2';
+                this.oDiscountMoney = '';
+                this.oSelectFilmType = '0';
+                this.hallType = true;
+            } else {
+                this.hallType = false;
+            }
+        },
         selectCinema(val) {
             this.oForm.code = val;
         },
         selectCinema2(val) {
-            this.oCinemaCode = val;
+            this.oForm.code = val;
         },
         selectFormat(val) {
             this.selectFormatCode = val.join(',');
@@ -1928,56 +2002,6 @@ export default {
                             this.drawer = true;
                             var oData = JSON.parse(Decrypt(data.data.data));
                             this.query.merchandiseName = '';
-                            this.sellTableData = oData.data;
-                            this.query.aPageSize = oData.pageSize;
-                            this.query.aPageNo = oData.pageNo;
-                            this.query.aTotalCount = oData.totalCount;
-                            this.query.aTotalPage = oData.totalPage;
-                        } else if (data.data.code == 'nologin') {
-                            this.message = data.data.message;
-                            this.open();
-                            this.$router.push('/login');
-                        } else {
-                            this.message = data.data.message;
-                            this.open();
-                        }
-                    })
-                    .catch(err => {
-                        loading.close();
-                        console.log(err);
-                    });
-            }, 500);
-        },
-        openNext1() {
-            //获取商品列表
-            const loading = this.$loading({
-                lock: true,
-                text: 'Loading',
-                spinner: 'el-icon-loading',
-                background: 'rgba(0, 0, 0, 0.7)',
-                target: document.querySelector('.div1')
-            });
-            setTimeout(() => {
-                let jsonArr = [];
-                let merchandiseName = this.query.merchandiseName;
-                if (!merchandiseName) {
-                    merchandiseName = '';
-                }
-                jsonArr.push({ key: 'merchandiseName', value: merchandiseName });
-                jsonArr.push({ key: 'pageNo', value: this.query.aPageNo });
-                jsonArr.push({ key: 'pageSize', value: this.query.aPageSize });
-                jsonArr.push({ key: 'merchandiseStatus', value: 1 });
-                jsonArr.push({ key: 'cinemaCode', value: this.oCinemaCode.join(',') });
-                let sign = md5(preSign(jsonArr));
-                jsonArr.push({ key: 'sign', value: sign });
-                var params = ParamsAppend(jsonArr);
-                https
-                    .fetchPost('/merchandise/list', params)
-                    .then(data => {
-                        loading.close();
-                        if (data.data.code == 'success') {
-                            this.drawer = true;
-                            var oData = JSON.parse(Decrypt(data.data.data));
                             this.sellTableData = oData.data;
                             this.query.aPageSize = oData.pageSize;
                             this.query.aPageNo = oData.pageNo;

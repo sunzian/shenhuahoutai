@@ -96,10 +96,10 @@
                 <el-table-column prop="name" label="电影名称">
                     <template slot-scope="scope">{{scope.row.filmName}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="点映放映时间" width="100">
+                <el-table-column prop="name" label="点映放映时间">
                     <template slot-scope="scope">{{scope.row.sessionTime}}</template>
                 </el-table-column>
-                <el-table-column prop="name" label="已报名人数">
+                <el-table-column prop="name" label="已报名人数" width="100">
                     <template slot-scope="scope">{{scope.row.enrolledNumber}}</template>
                 </el-table-column>
                 <el-table-column prop="sort" label="成团人数" width="90">
@@ -120,7 +120,7 @@
                         <el-tag v-else-if="scope.row.groupStatus == 5">已撤销</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" width="200" align="center" fixed="right">
+                <el-table-column label="操作" width="140" align="center" fixed="right">
                     <template slot-scope="scope">
                         <el-button
                                 type="success"
@@ -142,10 +142,6 @@
                                 @click="sendMessage(scope.$index, scope.row)"
                         >发送组团成功短信
                         </el-button>
-                    </template>
-                </el-table-column>
-                <el-table-column label="操作" width="140" align="center" fixed="right">
-                    <template slot-scope="scope">
                         <el-button
                                 type="text"
                                 icon="el-icon-circle-plus-outline"

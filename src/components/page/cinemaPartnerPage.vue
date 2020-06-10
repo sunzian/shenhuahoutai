@@ -11,6 +11,15 @@
             <div class="handle-box">
                 <el-select
                     clearable
+                    v-model="query.commonType"
+                    placeholder="通用方式"
+                    class="handle-select mr10"
+                >
+                    <el-option key="1" label="全部影院" value="1"></el-option>
+                    <el-option key="2" label="部分影院" value="2"></el-option>
+                </el-select>
+                <el-select
+                    clearable
                     v-model="query.cinemaCodes"
                     placeholder="请选择影院"
                     class="handle-input mr10"
@@ -132,7 +141,13 @@
         <!--新增弹出框-->
         <el-dialog :close-on-click-modal="false" title="新增合作商家" :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
-                <el-form-item :required="true" label="适用影院" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="通用方式" :label-width="formLabelWidth">
+                    <el-radio-group v-model="oForm.commonType">
+                        <el-radio label="2">指定影院</el-radio>
+                        <el-radio label="1">全部影院</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item v-if="oForm.commonType==2" :required="true" label="适用影院" :label-width="formLabelWidth">
                     <el-checkbox-group v-model="oForm.cinemaCodes" @change="changeCinema">
                         <el-checkbox
                             v-for="item in cinemaInfo"
@@ -202,7 +217,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="营业开始时间" :label-width="formLabelWidth">
+                <!-- <el-form-item label="营业开始时间" :label-width="formLabelWidth">
                     <el-time-picker
                         style="width: 200px"
                         v-model="oForm.beginTime"
@@ -221,6 +236,18 @@
                         format="HH:mm"
                         placeholder="选择日期时间"
                     ></el-time-picker>
+                </el-form-item> -->
+                <el-form-item label="营业时间描述" :label-width="formLabelWidth">
+                    <el-input
+                            style="width: 300px"
+                            type="textarea"
+                            maxlength="50"
+                            :rows="3"
+                            show-word-limit
+                            v-model="oForm.saleTime"
+                            autocomplete="off"
+                            placeholder="如：周一至周五8：00-22：00；周六周日9：00-21：00"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item label="核销码" :label-width="formLabelWidth" :required="true">
                     <el-input
@@ -261,7 +288,13 @@
         <!-- 编辑弹出框 -->
         <el-dialog :close-on-click-modal="false" title="编辑" :visible.sync="editVisible">
             <el-form ref="form" :model="changeForm">
-                <el-form-item :required="true" label="适用影院" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="通用方式" :label-width="formLabelWidth">
+                    <el-radio-group v-model="changeForm.commonType">
+                        <el-radio label="2">指定影院</el-radio>
+                        <el-radio label="1">全部影院</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item :required="true" v-if="changeForm.commonType==2" label="适用影院" :label-width="formLabelWidth">
                     <el-checkbox-group v-model="changeForm.cinemaCodes" @change="changeCinema2">
                         <el-checkbox
                             v-for="item in cinemaInfo"
@@ -331,7 +364,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="营业开始时间" :label-width="formLabelWidth">
+                <!-- <el-form-item label="营业开始时间" :label-width="formLabelWidth">
                     <el-time-picker
                         style="width: 200px"
                         v-model="changeForm.beginTime"
@@ -350,6 +383,18 @@
                         format="HH:mm"
                         placeholder="选择日期时间"
                     ></el-time-picker>
+                </el-form-item> -->
+                <el-form-item label="营业时间描述" :label-width="formLabelWidth">
+                    <el-input
+                            style="width: 300px"
+                            type="textarea"
+                            maxlength="50"
+                            :rows="3"
+                            show-word-limit
+                            v-model="changeForm.saleTime"
+                            autocomplete="off"
+                            placeholder="如：周一至周五8：00-22：00；周六周日9：00-21：00"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item label="核销码" :label-width="formLabelWidth" :required="true">
                     <el-input
@@ -428,6 +473,8 @@ export default {
             drawer2: false,
             pageTotal: 0,
             changeForm: {
+                saleTime: '',
+                commonType: '',
                 partnerName: '',
                 partnerCode: '',
                 memo: '',
@@ -449,6 +496,8 @@ export default {
             id: -1,
             dialogFormVisible: false,
             oForm: {
+                saleTime: '',
+                commonType: '1',
                 partnerName: '',
                 memo: '',
                 storeMobile: '',
@@ -545,7 +594,9 @@ export default {
             this.oForm.beginTime = '';
             this.oForm.endTime = '';
             this.oForm.memo = '';
+            this.oForm.saleTime = '';
             this.oForm.verifyCode = '';
+            this.oForm.commonType = '1'
         },
         addRole() {
             //新增按钮操作
@@ -556,8 +607,8 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            if (this.oForm.cinemaCodes.length == 0) {
-                this.message = '请选择影院！';
+            if (this.oForm.commonType == '2' && this.oForm.cinemaCodes.length == 0) {
+                this.message = '所选影院不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
@@ -605,9 +656,12 @@ export default {
                 return;
             }
             setTimeout(() => {
-                let cinemaCodes = this.oForm.cinemaCodes.join(",")
                 var jsonArr = [];
-                jsonArr.push({ key: 'cinemaCodes', value: cinemaCodes });
+                jsonArr.push({ key: 'commonType', value: this.oForm.commonType });
+                if (this.oForm.commonType == '2') {
+                    let cinemaCodes = this.oForm.cinemaCodes.join(",");
+                    jsonArr.push({ key: 'cinemaCodes', value: cinemaCodes });
+                }
                 jsonArr.push({ key: 'status', value: this.oForm.status });;
                 jsonArr.push({ key: 'partnerName', value: this.oForm.partnerName });
                 jsonArr.push({ key: 'storeMobile', value: this.oForm.storeMobile });
@@ -619,6 +673,7 @@ export default {
                 jsonArr.push({ key: 'beginTime', value: this.oForm.beginTime });
                 jsonArr.push({ key: 'endTime', value: this.oForm.endTime });
                 jsonArr.push({ key: 'memo', value: this.oForm.memo });
+                jsonArr.push({ key: 'saleTime', value: this.oForm.saleTime });
                 jsonArr.push({ key: 'verifyCode', value: this.oForm.verifyCode });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
@@ -644,7 +699,9 @@ export default {
                                 this.oForm.beginTime = '';
                                 this.oForm.endTime = '';
                                 this.oForm.memo = '';
+                                this.oForm.saleTime = '';
                                 this.oForm.verifyCode = '';
+                                this.oForm.commonType = '1'
                                 this.getMenu();
                             } else if (data.data.code == 'nologin') {
                                 this.message = data.data.message;
@@ -745,8 +802,12 @@ export default {
                                 }
                             }
                             this.changeForm.status = this.showStatus[index].value;
-                            this.changeForm.cinemaCodes = JSON.parse(Decrypt(data.data.data)).cinemaCodes.split(",");
+                            this.changeForm.commonType = JSON.parse(Decrypt(data.data.data)).commonType.toString();
+                            if (this.changeForm.commonType == '2') {
+                                this.changeForm.cinemaCodes = JSON.parse(Decrypt(data.data.data)).cinemaCodes.split(",");
+                            }
                             this.changeForm.partnerName = JSON.parse(Decrypt(data.data.data)).partnerName;
+                            this.changeForm.saleTime = JSON.parse(Decrypt(data.data.data)).saleTime;
                             this.changeForm.partnerCode = JSON.parse(Decrypt(data.data.data)).partnerCode;
                             this.changeForm.storeMobile = JSON.parse(Decrypt(data.data.data)).storeMobile;
                             this.changeForm.concatName = JSON.parse(Decrypt(data.data.data)).concatName;
@@ -783,8 +844,8 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            if (this.changeForm.cinemaCodes.length == 0) {
-                this.message = '请选择影院！';
+            if (this.changeForm.commonType == '2' && this.changeForm.cinemaCodes.length == 0) {
+                this.message = '所选影院不能为空，请检查！';
                 this.open();
                 loading.close();
                 return;
@@ -832,11 +893,14 @@ export default {
                 return;
             }
             setTimeout(() => {
-                let cinemaCodes = this.changeForm.cinemaCodes.join(",")
                 var jsonArr = [];
+                jsonArr.push({ key: 'commonType', value: this.changeForm.commonType });
+                if (this.changeForm.commonType == '2') {
+                    let cinemaCodes = this.changeForm.cinemaCodes.join(",");
+                    jsonArr.push({ key: 'cinemaCodes', value: cinemaCodes });
+                }
                 jsonArr.push({ key: 'partnerName', value: this.changeForm.partnerName });
                 jsonArr.push({ key: 'partnerCode', value: this.changeForm.partnerCode });
-                jsonArr.push({ key: 'cinemaCodes', value: cinemaCodes });
                 jsonArr.push({ key: 'status', value: this.changeForm.status });
                 jsonArr.push({ key: 'storeMobile', value: this.changeForm.storeMobile });
                 jsonArr.push({ key: 'concatName', value: this.changeForm.concatName });
@@ -847,6 +911,7 @@ export default {
                 jsonArr.push({ key: 'beginTime', value: this.changeForm.beginTime });
                 jsonArr.push({ key: 'endTime', value: this.changeForm.endTime });
                 jsonArr.push({ key: 'memo', value: this.changeForm.memo });
+                jsonArr.push({ key: 'saleTime', value: this.changeForm.saleTime });
                 jsonArr.push({ key: 'verifyCode', value: this.changeForm.verifyCode });
                 jsonArr.push({ key: 'id', value: this.changeForm.id });
                 let sign = md5(preSign(jsonArr));
@@ -892,12 +957,16 @@ export default {
             setTimeout(() => {
                 let partnerName = this.query.partnerName;
                 let cinemaCodes = this.query.cinemaCodes;
+                let commonType = this.query.commonType;
                 let concatName = this.query.concatName;
                 let storeMobile = this.query.storeMobile;
                 let concatMobile = this.query.concatMobile;
                 let status = this.query.status;
                 if (!partnerName) {
                     partnerName = '';
+                }
+                if (!commonType) {
+                    commonType = '';
                 }
                 if (!cinemaCodes) {
                     cinemaCodes = '';
@@ -916,6 +985,7 @@ export default {
                 }
                 let jsonArr = [];
                 jsonArr.push({ key: 'status', value: status });
+                jsonArr.push({ key: 'commonType', value: commonType });
                 jsonArr.push({ key: 'cinemaCodes', value: cinemaCodes });
                 jsonArr.push({ key: 'partnerName', value: partnerName });
                 jsonArr.push({ key: 'concatName', value: concatName });
@@ -925,6 +995,7 @@ export default {
                 jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
+                console.log(jsonArr)
                 var params = ParamsAppend(jsonArr);
                 https
                     .fetchPost('/cinemaPartner/page', params)
