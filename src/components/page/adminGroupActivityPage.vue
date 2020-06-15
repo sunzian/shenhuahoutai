@@ -552,6 +552,12 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
+                <!-- <el-form-item :required="true" label="是否自动虚拟成团" :label-width="formLabelWidth">
+                    <el-radio-group v-model="oAutoGroup" disabled>
+                        <el-radio label="1">是</el-radio>
+                        <el-radio label="2">否</el-radio>
+                    </el-radio-group>
+                </el-form-item> -->
                 <el-form-item
                     :required="true"
                     label="限购数量"
@@ -708,7 +714,7 @@
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="cancelChange">取 消</el-button>
-                <el-button type="primary" @click="cancelChange">确 定</el-button>
+                <!-- <el-button type="primary" @click="cancelChange">确 定</el-button> -->
             </span>
         </el-dialog>
         <!--新增抽屉弹出框-->
@@ -750,6 +756,12 @@
                     </el-table-column>
                     <el-table-column prop="sort" label="商品名称" width="150">
                         <template slot-scope="scope">{{scope.row.name}}</template>
+                    </el-table-column>
+                    <el-table-column prop="sort" label="上架状态" width="90">
+                        <template slot-scope="scope">
+                            <el-tag v-if="scope.row.status == 1">上架</el-tag>
+                            <el-tag v-else-if="scope.row.status == 2">未上架</el-tag>
+                        </template>
                     </el-table-column>
                 </el-table>
                 <div class="pagination">
@@ -873,6 +885,7 @@ export default {
             oIsLimitSingle: '', ////
             oSingleNumber: '',
             oActivityImg: '',
+            oAutoGroup: '',
             fileList: [],
             type: {
                 type: ''
@@ -1356,7 +1369,7 @@ export default {
             jsonArr.push({ key: 'sign', value: sign });
             let params = ParamsAppend(jsonArr);
             https
-                .fetchPost('/groupActivity/updatePage', params)
+                .fetchPost('/admin/groupActivity/updatePage', params)
                 .then(data => {
                     loading.close();
                     if (data.data.code == 'success') {
@@ -1409,6 +1422,7 @@ export default {
                         this.oMoney = JSON.parse(Decrypt(data.data.data)).money;
                         this.oCommodityStore = JSON.parse(Decrypt(data.data.data)).commodityStore;
                         // this.oHasSoldNumber = JSON.parse(Decrypt(data.data.data)).hasSoldNumber;
+                        // this.oAutoGroup = JSON.parse(Decrypt(data.data.data)).autoGroup.toString();
                         for (let x in this.options) {
                             if (this.options[x].value == JSON.parse(Decrypt(data.data.data)).status) {
                                 this.oStatus = this.options[x].value;
@@ -1936,6 +1950,7 @@ export default {
                 jsonArr.push({ key: 'pageSize', value: this.query.aPageSize });
                 jsonArr.push({ key: 'commonType', value: this.oForm.commonType });
                 jsonArr.push({ key: 'cinemaCode', value: this.selectGoodsCode });
+                jsonArr.push({ key: 'status', value: 3 });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
                 console.log(jsonArr);
@@ -1989,6 +2004,7 @@ export default {
                 jsonArr.push({ key: 'pageSize', value: this.query.aPageSize });
                 jsonArr.push({ key: 'commonType', value: this.oCommonType });
                 jsonArr.push({ key: 'cinemaCode', value: this.selectGoodsCode });
+                jsonArr.push({ key: 'status', value: 3 });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
                 console.log(jsonArr);

@@ -371,13 +371,13 @@ export default {
     },
     methods: {
         derive(){
-            const loading = this.$loading({
-                lock: true,
-                text: 'Loading',
-                spinner: 'el-icon-loading',
-                background: 'rgba(0, 0, 0, 0.7)',
-                target: document.querySelector('.div1')
-            });
+            // const loading = this.$loading({
+            //     lock: true,
+            //     text: 'Loading',
+            //     spinner: 'el-icon-loading',
+            //     background: 'rgba(0, 0, 0, 0.7)',
+            //     target: document.querySelector('.div1')
+            // });
             setTimeout(() => {
                 let cinemaCode = this.query.cinemaCode;
                 let businessCode = this.query.businessCode;
@@ -447,8 +447,8 @@ export default {
                     fileName: businessName + '_注册用户列表统计',
                     params: params
                 };
-                https.exportMethod(myObj);
-                loading.close();
+                https.exportCouponMethod(myObj);
+                // loading.close();
             }, 1500);
         },
         addChange(index, row) {

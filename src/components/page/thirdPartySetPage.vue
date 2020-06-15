@@ -126,6 +126,9 @@
                         <el-tag v-else-if="scope.row.versionCode=='3'" type="info">黑金版</el-tag>
                     </template>
                 </el-table-column>
+                <el-table-column prop="time" label="版本说明" align="center" width="80px">
+                    <template slot-scope="scope">{{scope.row.versionDesc}}</template>
+                </el-table-column>
                 <el-table-column prop="number" label="授权状态" width="80px">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status=='1'" type="info">已授权</el-tag>

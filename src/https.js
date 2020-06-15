@@ -91,6 +91,7 @@ export function fetchPut(url, param) {
 }
 // 导出Excel公用方法
 export function exportMethod(data) {
+    let loadingInstance = Loading.service();
     axios({
         method: data.method,
         url: data.url,
@@ -98,6 +99,7 @@ export function exportMethod(data) {
         headers: { 'Content-Type': 'application/json' },
         responseType: 'blob'
     }).then((res) => {
+        loadingInstance.close();
         if (res.data.type == 'application/json') {
             alert('您没有该权限!');
             return
@@ -114,6 +116,7 @@ export function exportMethod(data) {
         document.body.removeChild(link)
     })
         .catch(error => {
+            loadingInstance.close();
             this.$Notice.error({
                 title: '错误',
                 desc: '网络连接错误'

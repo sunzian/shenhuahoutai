@@ -1526,6 +1526,12 @@
                             placeholder="模板id"
                     ></el-input>
                 </el-form-item>
+                <el-form-item :required="true" label="是否适用该商家下的所有影院" :label-width="formLabelWidth">
+                    <el-radio-group v-model="oSubscribeTemplateType">
+                        <el-radio label="1">是</el-radio>
+                        <el-radio label="2">否</el-radio>
+                    </el-radio-group>
+                </el-form-item>
                 <el-form-item prop="paymentType" label="费用支付类型" :label-width="formLabelWidth">
                     <el-radio-group v-model="oPaymentType">
                         <el-radio label="1">包年</el-radio>
@@ -1934,6 +1940,7 @@ export default {
             oOpenStatus: '',
             oExpireDate: '',
             oPaymentType: '',
+            oSubscribeTemplateType: '2',
             oReportedType: '',
             oOpenMemberCardStatus: '',
             oMemberCardCommonUseStatus: '',
@@ -2914,6 +2921,7 @@ export default {
             templateInfos.push({ 'templateType':  7 , 'templateId': this.oTemplateType7 });
             templateInfos.push({ 'templateType':  8 , 'templateId': this.oTemplateType8 });
             jsonArr.push({ key: 'subscribeTemplateJson', value: JSON.stringify(templateInfos)});
+            jsonArr.push({ key: 'subscribeTemplateType', value: this.oSubscribeTemplateType });
             jsonArr.push({ key: 'messagePlatformAccount', value: this.oMessagePlatformAccount });
             jsonArr.push({ key: 'messagePlatformPassword', value: this.oMessagePlatformPassword });
             jsonArr.push({ key: 'messagePlatformSignId', value: this.oMessagePlatformSignId });

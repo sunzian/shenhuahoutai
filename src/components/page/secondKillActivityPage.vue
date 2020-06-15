@@ -417,6 +417,15 @@
                             v-model="oForm.activityNotice"
                     ></el-input>
                 </el-form-item>
+                <el-form-item label="兑换须知" :label-width="formLabelWidth">
+                    <el-input
+                            type="textarea"
+                            show-word-limit
+                            maxlength="200"
+                            style="width: 300px"
+                            v-model="oForm.notice"
+                    ></el-input>
+                </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -681,6 +690,15 @@
                             v-model="oActivityNotice"
                     ></el-input>
                 </el-form-item>
+                <el-form-item label="兑换须知" :label-width="formLabelWidth">
+                    <el-input
+                            type="textarea"
+                            show-word-limit
+                            maxlength="200"
+                            style="width: 300px"
+                            v-model="oNotice"
+                    ></el-input>
+                </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false">取 消</el-button>
@@ -731,6 +749,12 @@
                     </el-table-column>
                     <el-table-column prop="sort" label="商品名称">
                         <template slot-scope="scope">{{scope.row.name}}</template>
+                    </el-table-column>
+                    <el-table-column prop="sort" label="上架状态" width="90">
+                        <template slot-scope="scope">
+                            <el-tag v-if="scope.row.status == 1">上架</el-tag>
+                            <el-tag v-else-if="scope.row.status == 2">未上架</el-tag>
+                        </template>
                     </el-table-column>
                 </el-table>
                 <div class="pagination">
@@ -850,6 +874,7 @@
                 oIsLimitSingle: '', ////
                 oSingleNumber: '',
                 oActivityImg: '',
+                oNotice: '',
                 fileList: [],
                 type: {
                     type: ''
@@ -985,7 +1010,8 @@
                     oNum: '',
                     oneNum: '',
                     description: '',
-                    activityNotice: ''
+                    activityNotice: '',
+                    notice: ''
                 },
                 formLabelWidth: '150px',
                 selectScreenCode: {},
@@ -1205,6 +1231,7 @@
                 jsonArr.push({ key: 'smsStatus', value: 0 });
                 jsonArr.push({ key: 'description', value: this.oForm.description });
                 jsonArr.push({ key: 'activityNotice', value: this.oForm.activityNotice });
+                jsonArr.push({ key: 'notice', value: this.oForm.notice });
                 jsonArr.push({ key: 'commodityId', value: this.commodityId });
                 jsonArr.push({ key: 'changeType', value: this.oForm.changeType });
                 jsonArr.push({ key: 'gold', value: this.oForm.gold });
@@ -1255,6 +1282,7 @@
                                 this.oForm.status = '';
                                 this.oForm.showStatus = '2';
                                 this.oForm.activityNotice = '';
+                                this.oForm.notice = '';
                                 this.getMenu();
                             } else if (data.data.code == 'nologin') {
                                 this.message = data.data.message;
@@ -1381,6 +1409,7 @@
                             }
                             this.oDescription = JSON.parse(Decrypt(data.data.data)).description;
                             this.oActivityNotice = JSON.parse(Decrypt(data.data.data)).activityNotice;
+                            this.oNotice = JSON.parse(Decrypt(data.data.data)).notice;
                             for (let x in this.showStatus) {
                                 if (this.showStatus[x].value == JSON.parse(Decrypt(data.data.data)).showStatus) {
                                     this.oShowStatus = this.showStatus[x].value;
@@ -1423,6 +1452,7 @@
                 jsonArr.push({ key: 'smsStatus', value: 0 });
                 jsonArr.push({ key: 'description', value: this.oDescription });
                 jsonArr.push({ key: 'activityNotice', value: this.oActivityNotice });
+                jsonArr.push({ key: 'notice', value: this.oNotice });
                 jsonArr.push({ key: 'activityImage', value: this.oActivityImg });
                 jsonArr.push({ key: 'commodityId', value: this.commodityId });
                 jsonArr.push({ key: 'changeType', value: this.oChangeType });
@@ -1464,6 +1494,7 @@
                             this.oSmsStatus = '';
                             this.oDescription = '';
                             this.oActivityNotice = '';
+                            this.oNotice = '';
                             this.commodityId = '';
                             this.commodityName = '';
                             this.value1 = '';
@@ -1511,12 +1542,13 @@
                         loading.close();
                         if (data.data.code == 'success') {
                             this.dialogFormVisible = true;
+                            console.log(JSON.parse(Decrypt(data.data.data)))
                             this.oForm.commonType = JSON.parse(Decrypt(data.data.data)).commonType;
                             this.oMerchandiseCode = [];
-                            if (JSON.parse(Decrypt(data.data.data)).cinemaCodes) {
+                            if (JSON.parse(Decrypt(data.data.data)).commonType == 2) {
                                 this.oMerchandiseCode = JSON.parse(Decrypt(data.data.data)).cinemaCodes.split(',');
+                                this.selectGoodsCode = JSON.parse(Decrypt(data.data.data)).cinemaCodes.split(',');
                             }
-                            this.selectGoodsCode = JSON.parse(Decrypt(data.data.data)).cinemaCodes.split(',');
                             for (let x in this.canUse1) {
                                 if (this.canUse1[x].value == JSON.parse(Decrypt(data.data.data)).purchaseType) {
                                     this.oForm.purchaseType = this.canUse1[x].value;
@@ -1550,6 +1582,7 @@
                             }
                             this.oForm.description = JSON.parse(Decrypt(data.data.data)).description;
                             this.oForm.activityNotice = JSON.parse(Decrypt(data.data.data)).activityNotice;
+                            this.oForm.notice = JSON.parse(Decrypt(data.data.data)).notice;
                             for (let x in this.showStatus) {
                                 if (this.showStatus[x].value == JSON.parse(Decrypt(data.data.data)).showStatus) {
                                     this.oForm.showStatus = this.showStatus[x].value;
@@ -1782,6 +1815,7 @@
                     jsonArr.push({ key: 'pageSize', value: this.query.aPageSize });
                     jsonArr.push({ key: 'commonType', value: this.oForm.commonType });
                     jsonArr.push({ key: 'cinemaCode', value: this.selectGoodsCode });
+                    jsonArr.push({ key: 'status', value: 3 });
                     let sign = md5(preSign(jsonArr));
                     jsonArr.push({ key: 'sign', value: sign });
                     console.log(jsonArr);
@@ -1835,6 +1869,7 @@
                     jsonArr.push({ key: 'pageSize', value: this.query.aPageSize });
                     jsonArr.push({ key: 'commonType', value: this.oCommonType });
                     jsonArr.push({ key: 'cinemaCode', value: this.selectGoodsCode });
+                    jsonArr.push({ key: 'status', value: 3 });
                     let sign = md5(preSign(jsonArr));
                     jsonArr.push({ key: 'sign', value: sign });
                     console.log(jsonArr);

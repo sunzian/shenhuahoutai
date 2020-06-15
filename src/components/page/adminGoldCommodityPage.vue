@@ -508,6 +508,32 @@
                             onkeyup="this.value=this.value.replace(/\D/g,'')"
                     ></el-input>
                 </el-form-item>
+                <el-form-item
+                        label="指定商品核销日期："
+                        :label-width="formLabelWidth"
+                        v-if="oForm.commodity_type==1 || oForm.commodity_type==4"
+                >
+                    <el-date-picker
+                            v-model="oForm.verifyDate"
+                            type="date"
+                            placeholder="请选择时间"
+                            value-format="yyyy-MM-dd"
+                            format="yyyy-MM-dd"
+                    ></el-date-picker>
+                </el-form-item>
+                <el-form-item
+                        label="商品截止核销时间："
+                        :label-width="formLabelWidth"
+                         v-if="oForm.commodity_type==1 || oForm.commodity_type==4"
+                >
+                    <el-date-picker
+                            v-model="oForm.endVerifyDate"
+                            type="datetime"
+                            placeholder="请选择时间"
+                            value-format="yyyy-MM-dd HH:mm:ss"
+                            format="yyyy-MM-dd HH:mm:ss"
+                    ></el-date-picker>
+                </el-form-item>
                 <el-form-item :required="true" label="是否今日大牌" :label-width="formLabelWidth">
                     <el-select v-model="oForm.topStatus" placeholder="请选择">
                         <el-option
@@ -589,6 +615,76 @@
                             style="color:red;cursor: pointer;"
                             @click="deletCoupon"
                     >删除</span>
+                </el-form-item>
+                                <el-form-item
+                        v-if="oForm.commodity_type==1"
+                        label="选择券包"
+                        :label-width="formLabelWidth"
+                >
+                    <el-button type="primary" @click="changeCoupon">点击选择</el-button>
+                </el-form-item>
+                <el-form-item
+                        v-if="oForm.commodity_type==1 && couponId"
+                        label="所选券包："
+                        :label-width="formLabelWidth"
+                >
+                    <el-input style="width: 150px" v-model="groupName" autocomplete="off" disabled></el-input>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <span
+                            v-if="groupName"
+                            style="color:red;cursor: pointer;"
+                            @click="deletCoupon"
+                    >删除</span>
+                </el-form-item>
+                <el-form-item
+                        :required="true"
+                        label="优惠券生效方式"
+                        :label-width="formLabelWidth"
+                        v-if="oForm.commodity_type==1 && couponId"
+                    >
+                    <el-select v-model="oForm.effectiveType" placeholder="请选择生效方式">
+                        <el-option
+                                v-for="item in effectiveType"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item
+                        :required="true"
+                        v-if="oForm.effectiveType==1 && oForm.commodity_type==1 && couponId"
+                        label="领取后几天开始生效"
+                        :label-width="formLabelWidth"
+                    >
+                    <el-input
+                            style="width: 250px"
+                            v-model="oForm.laterDays"
+                            autocomplete="off"
+                            placeholder="如马上生效，请填 0"
+                            onkeyup="this.value=this.value.replace(/\D/g,'')"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item
+                        :required="true"
+                        label="优惠券有效期："
+                        :label-width="formLabelWidth"
+                        v-if="oForm.effectiveType==2 && oForm.commodity_type==1 && couponId"
+                    >
+                    <el-date-picker
+                            v-model="oForm.startEffectiveDate"
+                            type="datetime"
+                            placeholder="请选择有效期开始时间"
+                            value-format="yyyy-MM-dd HH:mm:ss"
+                            format="yyyy-MM-dd HH:mm:ss"
+                    ></el-date-picker>
+                    至
+                    <el-date-picker
+                            v-model="oForm.endEffectiveDate"
+                            type="datetime"
+                            placeholder="请选择有效期结束时间"
+                            value-format="yyyy-MM-dd HH:mm:ss"
+                            format="yyyy-MM-dd HH:mm:ss"
+                    ></el-date-picker>
                 </el-form-item>
                 <el-form-item :required="true" label="是否指定日期可以兑换" :label-width="formLabelWidth">
                     <el-select
@@ -972,6 +1068,32 @@
                             onkeyup="this.value=this.value.replace(/\D/g,'')"
                     ></el-input>
                 </el-form-item>
+                                <el-form-item
+                        label="指定商品核销日期："
+                        :label-width="formLabelWidth"
+                        v-if="form.commodityType==1 || form.commodityType==4"
+                >
+                    <el-date-picker
+                            v-model="form.verifyDate"
+                            type="date"
+                            placeholder="请选择时间"
+                            value-format="yyyy-MM-dd"
+                            format="yyyy-MM-dd"
+                    ></el-date-picker>
+                </el-form-item>
+                <el-form-item
+                        label="商品截止核销时间："
+                        :label-width="formLabelWidth"
+                        v-if="form.commodityType==1 || form.commodityType==4"
+                >
+                    <el-date-picker
+                            v-model="form.endVerifyDate"
+                            type="datetime"
+                            placeholder="请选择时间"
+                            value-format="yyyy-MM-dd HH:mm:ss"
+                            format="yyyy-MM-dd HH:mm:ss"
+                    ></el-date-picker>
+                </el-form-item>
                 <el-form-item :required="true" label="是否今日大牌" :label-width="formLabelWidth">
                     <el-select v-model="oTopstatus" placeholder="请选择">
                         <el-option
@@ -1053,6 +1175,76 @@
                             style="color:red;cursor: pointer;"
                             @click="deletCoupon"
                     >删除</span>
+                </el-form-item>
+                               <el-form-item
+                        v-if="form.commodityType==1"
+                        label="选择券包"
+                        :label-width="formLabelWidth"
+                >
+                    <el-button type="primary" @click="changeCoupon">点击选择</el-button>
+                </el-form-item>
+                <el-form-item
+                        v-if="form.commodityType==1 && couponId"
+                        label="所选券包："
+                        :label-width="formLabelWidth"
+                >
+                    <el-input style="width: 150px" v-model="groupName" autocomplete="off" disabled></el-input>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <span
+                            v-if="groupName"
+                            style="color:red;cursor: pointer;"
+                            @click="deletCoupon"
+                    >删除</span>
+                </el-form-item>
+                <el-form-item
+                        :required="true"
+                        label="优惠券生效方式"
+                        :label-width="formLabelWidth"
+                        v-if="form.commodityType==1 && couponId"
+                    >
+                    <el-select v-model="oEffectiveType" placeholder="请选择生效方式">
+                        <el-option
+                                v-for="item in effectiveType"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item
+                        :required="true"
+                        v-if="oEffectiveType==1 && form.commodityType==1 && couponId"
+                        label="领取后几天开始生效"
+                        :label-width="formLabelWidth"
+                    >
+                    <el-input
+                            style="width: 250px"
+                            v-model="oLaterDays"
+                            autocomplete="off"
+                            placeholder="如马上生效，请填 0"
+                            onkeyup="this.value=this.value.replace(/\D/g,'')"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item
+                        :required="true"
+                        label="优惠券有效期："
+                        :label-width="formLabelWidth"
+                        v-if="oEffectiveType==2 && form.commodityType==1 && couponId"
+                    >
+                    <el-date-picker
+                            v-model="oStartEffectiveDate"
+                            type="datetime"
+                            placeholder="请选择有效期开始时间"
+                            value-format="yyyy-MM-dd HH:mm:ss"
+                            format="yyyy-MM-dd HH:mm:ss"
+                    ></el-date-picker>
+                    至
+                    <el-date-picker
+                            v-model="oEndEffectiveDate"
+                            type="datetime"
+                            placeholder="请选择有效期结束时间"
+                            value-format="yyyy-MM-dd HH:mm:ss"
+                            format="yyyy-MM-dd HH:mm:ss"
+                    ></el-date-picker>
                 </el-form-item>
                 <el-form-item :required="true" label="是否指定日期可以兑换" :label-width="formLabelWidth">
                     <el-select
@@ -1148,6 +1340,30 @@
                             style="width: 250px"
                             v-model="form.limitNumber"
                             autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item :required="true" label="是否限制每日售卖数量" :label-width="formLabelWidth">
+                    <el-select v-model="form.dayLimitStatus" placeholder="请选择限制时间">
+                        <el-option
+                                v-for="item in dayLimitStatus"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item
+                        v-if="form.dayLimitStatus==2"
+                        label="每日可售卖数量"
+                        :label-width="formLabelWidth"
+                        :required="true"
+                >
+                    <el-input
+                            onkeyup="this.value=this.value.replace(/\D/g,'')"
+                            style="width: 250px"
+                            v-model="form.dayLimitNumber"
+                            autocomplete="off"
+                            placeholder="请输入大于0的整数"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="排序" :label-width="formLabelWidth">
@@ -1487,6 +1703,10 @@
                     store: '',
                     commodityCategory: '',
                     supportExpressStatus: '',
+                    verifyDate: '',
+                    endVerifyDate: '',
+                    dayLimitStatus: '',
+                    dayLimitNumber: ''
                 },
                 idx: -1,
                 id: -1,
@@ -1514,6 +1734,8 @@
                     store: '',
                     commodityCategory: '',
                     supportExpressStatus: '1',
+                    verifyDate: '',
+                    endVerifyDate: ''
                 },
                 formLabelWidth: '120px',
                 selectValue: {},
@@ -1704,6 +1926,16 @@
                         value: '2',
                         label: '固定时间段'
                     }
+                ],
+                dayLimitStatus: [
+                    {
+                        value: '1',
+                        label: '不限制'
+                    },
+                    {
+                        value: '2',
+                        label: '限制'
+                    },
                 ],
                 showType: [
                     {
@@ -2641,15 +2873,14 @@
                                         this.cinemaData.push(json);
                                     }
                                 }
+                                if (JSON.parse(Decrypt(data.data.data)).goldCommodity.commodityType == 1) {
+                                    this.ticketIds = JSON.parse(Decrypt(data.data.data)).goldCommodity.ticketIds;
+                                    this.couponId = JSON.parse(Decrypt(data.data.data)).goldCommodity.ticketIds;
+                                    this.groupName = JSON.parse(Decrypt(data.data.data)).goldCommodity.couponName;
+                                }
                                 this.oName = JSON.parse(Decrypt(data.data.data)).goldCommodity.name;
                                 this.partnerCode = JSON.parse(Decrypt(data.data.data)).goldCommodity.partnerCode;
                                 this.partnerName = JSON.parse(Decrypt(data.data.data)).goldCommodity.partnerName;
-                                if (JSON.parse(Decrypt(data.data.data)).goldCommodity.pickupType == 1) {
-                                    this.form.pickupType = '1';
-                                }
-                                if (JSON.parse(Decrypt(data.data.data)).goldCommodity.pickupType == 2) {
-                                    this.form.pickupType = '2';
-                                }
                                 this.oImageUrl = JSON.parse(Decrypt(data.data.data)).goldCommodity.imageUrl;
                                 this.form.memo = JSON.parse(Decrypt(data.data.data)).goldCommodity.memo;
                                 this.form.store = JSON.parse(Decrypt(data.data.data)).goldCommodity.store;
@@ -2677,6 +2908,8 @@
                                 this.oLaterDays = JSON.parse(Decrypt(data.data.data)).goldCommodity.laterDays;
                                 this.oStartEffectiveDate = JSON.parse(Decrypt(data.data.data)).goldCommodity.startEffectiveDate;
                                 this.oEndEffectiveDate = JSON.parse(Decrypt(data.data.data)).goldCommodity.endEffectiveDate;
+                                this.form.verifyDate = JSON.parse(Decrypt(data.data.data)).goldCommodity.verifyDate;
+                                this.form.endVerifyDate = JSON.parse(Decrypt(data.data.data)).goldCommodity.endVerifyDate;
                                 if(JSON.parse(Decrypt(data.data.data)).goldCommodity.pickupType==1){
                                     this.form.pickupType='1'
                                 }
@@ -2748,6 +2981,15 @@
                                         this.form.limitType = this.limitType[x].value;
                                         break;
                                     }
+                                }
+                                for (let x in this.dayLimitStatus) {
+                                    if (this.dayLimitStatus[x].value == JSON.parse(Decrypt(data.data.data)).goldCommodity.dayLimitStatus) {
+                                        this.form.dayLimitStatus = this.dayLimitStatus[x].value;
+                                        break;
+                                    }
+                                }
+                                if (this.form.dayLimitStatus == 2) {
+                                    this.form.dayLimitNumber = JSON.parse(Decrypt(data.data.data)).goldCommodity.dayLimitNumber;
                                 }
                                 //是否快递下拉选显示对应的选项
                                 for (let x in this.supportType) {

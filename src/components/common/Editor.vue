@@ -149,17 +149,21 @@ export default {
                 this.info_ = html; // 绑定当前逐渐地值
                 this.$emit('change', this.info_); // 将内容同步到父组件中
             }),
-                (this.editor.customConfig.pasteTextHandle = function(content) {
-                    // content 即粘贴过来的内容（html 或 纯文本），可进行自定义处理然后返回
-                    if (content == '' && !content) return '';
-                    var str = content;
-                    str = str.replace(/<xml>[\s\S]*?<\/xml>/gi, '');
-                    str = str.replace(/<style>[\s\S]*?<\/style>/gi, '');
-                    str = str.replace(/<\/?[^>]*>/g, '');
-                    str = str.replace(/[ | ]*\n/g, '\n');
-                    str = str.replace(/&nbsp;/gi, '');
-                    return str;
-                });
+            (this.editor.customConfig.pasteTextHandle = function(content) {
+                // content 即粘贴过来的内容（html 或 纯文本），可进行自定义处理然后返回
+                if (content == '' && !content) return '';
+                var str = content;
+                // str = str.replace(/<xml>[\s\S]*?<\/xml>/gi, '');
+                // str = str.replace(/<style>[\s\S]*?<\/style>/gi, '');
+                // str = str.replace(/<\/?[^>]*>/g, '');
+                // str = str.replace(/[ | ]*\n/g, '\n');
+                // str = str.replace(/&nbsp;/gi, '');
+                str = str.replace(/<xml>[\s\S]*?<\/xml>/ig, '');
+                str=str.replace('/(\\n|\\r| class=(")?Mso[a-zA-Z]+(")?)/g','');
+                let reg=new RegExp('<!--(.*?)-->','g')
+                str=str.replace(reg,'');
+                return str;
+            });
             // 创建富文本编辑器
             this.editor.create();
         }

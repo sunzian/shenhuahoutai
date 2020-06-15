@@ -749,6 +749,12 @@
                     <el-table-column prop="sort" label="商品名称">
                         <template slot-scope="scope">{{scope.row.name}}</template>
                     </el-table-column>
+                    <el-table-column prop="sort" label="上架状态" width="90">
+                        <template slot-scope="scope">
+                            <el-tag v-if="scope.row.status == 1">上架</el-tag>
+                            <el-tag v-else-if="scope.row.status == 2">未上架</el-tag>
+                        </template>
+                    </el-table-column>
                 </el-table>
                 <div class="pagination">
                     <el-pagination
@@ -1879,6 +1885,7 @@
                     jsonArr.push({ key: 'pageSize', value: this.query.aPageSize });
                     jsonArr.push({ key: 'commonType', value: this.oForm.commonType });
                     jsonArr.push({ key: 'cinemaCode', value: this.selectGoodsCode });
+                    jsonArr.push({ key: 'status', value: 3 });
                     let sign = md5(preSign(jsonArr));
                     jsonArr.push({ key: 'sign', value: sign });
                     console.log(jsonArr);
@@ -1932,6 +1939,7 @@
                     jsonArr.push({ key: 'pageSize', value: this.query.aPageSize });
                     jsonArr.push({ key: 'commonType', value: this.oCommonType });
                     jsonArr.push({ key: 'cinemaCode', value: this.selectGoodsCode });
+                    jsonArr.push({ key: 'status', value: 3 });
                     let sign = md5(preSign(jsonArr));
                     jsonArr.push({ key: 'sign', value: sign });
                     console.log(jsonArr);

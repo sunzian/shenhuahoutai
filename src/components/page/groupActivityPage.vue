@@ -147,12 +147,12 @@
                             v-if="scope.row.status == 2"
                             @click="changeStatus(scope.$index, scope.row)"
                         >停用</el-button>
-                        <!-- <el-button
+                        <el-button
                                 type="success"
                                 style="margin-top: 5px;"
                                 @click="copyActivity(scope.$index, scope.row)"
                         >复制活动
-                        </el-button>-->
+                        </el-button>
                     </template>
                 </el-table-column>
                 <el-table-column label="操作" width="140" align="center" fixed="right">
@@ -373,6 +373,15 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="团购商品图片" :label-width="formLabelWidth">
+                    <el-popover placement="right" title trigger="hover">
+                        <img :src="oForm.activityImage"/>
+                        <img
+                                slot="reference"
+                                :src="oForm.activityImage"
+                                :alt="oForm.activityImage"
+                                style="max-height: 50px;max-width: 130px"
+                        />
+                    </el-popover>
                     <span>可空，若不上传则默认显示商品图片</span>
                     <el-upload
                         class="upload-demo"
@@ -410,6 +419,12 @@
                         v-model="oForm.detailDescription"
                     ></el-input>
                 </el-form-item>
+                <el-form-item :required="true" label="是否自动虚拟成团" :label-width="formLabelWidth">
+                    <el-radio-group v-model="oForm.autoGroup">
+                        <el-radio label="1">是</el-radio>
+                        <el-radio label="2">否</el-radio>
+                    </el-radio-group>
+                </el-form-item>
                 <el-form-item label="团购分享标题" :label-width="formLabelWidth">
                     <el-input
                         maxlength="25"
@@ -417,6 +432,15 @@
                         v-model="oForm.shareTitle"
                         autocomplete="off"
                         placeholder="最多显示25个字"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="兑换须知" :label-width="formLabelWidth">
+                    <el-input
+                            type="textarea"
+                            show-word-limit
+                            maxlength="200"
+                            style="width: 300px"
+                            v-model="oForm.activityMemo"
                     ></el-input>
                 </el-form-item>
             </el-form>
@@ -698,6 +722,12 @@
                         v-model="oActivityNotice"
                     ></el-input>
                 </el-form-item>
+                <el-form-item :required="true" label="是否自动虚拟成团" :label-width="formLabelWidth">
+                    <el-radio-group v-model="oAutoGroup">
+                        <el-radio label="1">是</el-radio>
+                        <el-radio label="2">否</el-radio>
+                    </el-radio-group>
+                </el-form-item>
                 <el-form-item label="团购分享标题" :label-width="formLabelWidth">
                     <el-input
                         maxlength="25"
@@ -705,6 +735,15 @@
                         v-model="oShareTitle"
                         autocomplete="off"
                         placeholder="最多显示25个字"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="兑换须知" :label-width="formLabelWidth">
+                    <el-input
+                            type="textarea"
+                            show-word-limit
+                            maxlength="200"
+                            style="width: 300px"
+                            v-model="oActivityMemo"
                     ></el-input>
                 </el-form-item>
             </el-form>
@@ -752,6 +791,12 @@
                     </el-table-column>
                     <el-table-column prop="sort" label="商品名称">
                         <template slot-scope="scope">{{scope.row.name}}</template>
+                    </el-table-column>
+                    <el-table-column prop="sort" label="上架状态" width="90">
+                        <template slot-scope="scope">
+                            <el-tag v-if="scope.row.status == 1">上架</el-tag>
+                            <el-tag v-else-if="scope.row.status == 2">未上架</el-tag>
+                        </template>
                     </el-table-column>
                 </el-table>
                 <div class="pagination">
@@ -810,6 +855,7 @@ export default {
             oStatus: '',
             oDescription: '',
             oActivityNotice: '',
+            oActivityMemo: '',
             oExceptWeekDay: [
                 {
                     index: '1',
@@ -873,9 +919,10 @@ export default {
             oIsLimitTotal: '',
             oTotalNumber: '',
             oTotalSurplus: '',
-            oIsLimitSingle: '', ////
+            oIsLimitSingle: '',
             oSingleNumber: '',
             oActivityImg: '',
+            oAutoGroup: '',
             fileList: [],
             type: {
                 type: ''
@@ -918,12 +965,12 @@ export default {
             ],
             canUse: [
                 {
-                    value: '0',
-                    label: '否'
-                },
-                {
                     value: '1',
                     label: '是'
+                },
+                {
+                    value: '2',
+                    label: '否'
                 }
             ],
             canUse1: [
@@ -1016,7 +1063,9 @@ export default {
                 oneNum: '',
                 description: '',
                 detailDescription: '',
-                shareTitle: ''
+                shareTitle: '',
+                autoGroup: '2',
+                activityMemo: ''
             },
             formLabelWidth: '200px',
             selectScreenCode: {},
@@ -1238,6 +1287,7 @@ export default {
             jsonArr.push({ key: 'smsStatus', value: 0 });
             jsonArr.push({ key: 'description', value: this.oForm.description });
             jsonArr.push({ key: 'detailDescription', value: this.oForm.detailDescription });
+            jsonArr.push({ key: 'activityMemo', value: this.oForm.activityMemo });
             jsonArr.push({ key: 'commodityId', value: this.commodityId });
             jsonArr.push({ key: 'changeType', value: this.oForm.changeType });
             jsonArr.push({ key: 'gold', value: this.oForm.gold });
@@ -1245,6 +1295,7 @@ export default {
             jsonArr.push({ key: 'commodityStore', value: this.oForm.commodityStore });
             jsonArr.push({ key: 'status', value: this.oForm.status });
             jsonArr.push({ key: 'shareTitle', value: this.oForm.shareTitle });
+            jsonArr.push({ key: 'autoGroup', value: this.oForm.autoGroup });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
             console.log(jsonArr);
@@ -1286,7 +1337,9 @@ export default {
                             this.oForm.status = '';
                             this.oForm.showStatus = '2';
                             this.oForm.detailDescription = '';
+                            this.oForm.activityMemo = '';
                             this.oForm.shareTitle = '';
+                            this.oForm.autoGroup = '2';
                             this.getMenu();
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
@@ -1389,6 +1442,7 @@ export default {
                         this.oActivityImg = JSON.parse(Decrypt(data.data.data)).activityImage;
                         this.oStartDate = JSON.parse(Decrypt(data.data.data)).startDate;
                         this.oEndDate = JSON.parse(Decrypt(data.data.data)).endDate;
+                        this.oAutoGroup = JSON.parse(Decrypt(data.data.data)).autoGroup.toString();
                         for (let x in this.canUse1) {
                             if (this.canUse1[x].value == JSON.parse(Decrypt(data.data.data)).purchaseType) {
                                 this.oPurchaseType = this.canUse1[x].value;
@@ -1423,6 +1477,7 @@ export default {
                         }
                         this.oDescription = JSON.parse(Decrypt(data.data.data)).description;
                         this.oActivityNotice = JSON.parse(Decrypt(data.data.data)).detailDescription;
+                        this.oActivityMemo = JSON.parse(Decrypt(data.data.data)).activityMemo;
                         for (let x in this.showStatus) {
                             if (this.showStatus[x].value == JSON.parse(Decrypt(data.data.data)).showStatus) {
                                 this.oShowStatus = this.showStatus[x].value;
@@ -1503,6 +1558,7 @@ export default {
             jsonArr.push({ key: 'smsStatus', value: 0 });
             jsonArr.push({ key: 'description', value: this.oDescription });
             jsonArr.push({ key: 'detailDescription', value: this.oActivityNotice });
+            jsonArr.push({ key: 'activityMemo', value: this.oActivityMemo });
             jsonArr.push({ key: 'activityImage', value: this.oActivityImg });
             jsonArr.push({ key: 'commodityId', value: this.commodityId });
             jsonArr.push({ key: 'changeType', value: this.oChangeType });
@@ -1512,6 +1568,7 @@ export default {
             // jsonArr.push({ key: 'hasSoldNumber', value: this.oHasSoldNumber });
             jsonArr.push({ key: 'status', value: this.oStatus });
             jsonArr.push({ key: 'shareTitle', value: this.oShareTitle });
+            jsonArr.push({ key: 'autoGroup', value: this.oAutoGroup });
             jsonArr.push({ key: 'id', value: this.form.id });
             let sign = md5(preSign(jsonArr));
             jsonArr.push({ key: 'sign', value: sign });
@@ -1553,6 +1610,7 @@ export default {
                         this.oStatus = '';
                         this.oActivityImg = '';
                         this.oShareTitle = '';
+                        this.oAutoGroup = '';
                         this.getMenu();
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;
@@ -1586,24 +1644,42 @@ export default {
             jsonArr.push({ key: 'sign', value: sign });
             let params = ParamsAppend(jsonArr);
             https
-                .fetchPost('/secondKillActivity/getCopyActivity', params)
+                .fetchPost('/groupActivity/getCopyGroupActivityById', params)
                 .then(data => {
                     loading.close();
                     if (data.data.code == 'success') {
                         this.dialogFormVisible = true;
+                        console.log(JSON.parse(Decrypt(data.data.data)))
                         this.oForm.commonType = JSON.parse(Decrypt(data.data.data)).commonType;
+                        this.isCanUpdate = JSON.parse(Decrypt(data.data.data)).isCanUpdate;
                         this.oMerchandiseCode = [];
                         if (JSON.parse(Decrypt(data.data.data)).cinemaCodes) {
                             this.oMerchandiseCode = JSON.parse(Decrypt(data.data.data)).cinemaCodes.split(',');
                         }
-                        this.selectGoodsCode = JSON.parse(Decrypt(data.data.data)).cinemaCodes.split(',');
+                        if (this.oForm.commonType == 2) {
+                            this.selectGoodsCode = JSON.parse(Decrypt(data.data.data)).cinemaCodes.split(',');
+                        }
+                        this.oForm.effectiveDuration = JSON.parse(Decrypt(data.data.data)).effectiveDuration;
+                        this.oForm.agglomerationNumber = JSON.parse(Decrypt(data.data.data)).agglomerationNumber;
+                        for (let x in this.canUse1) {
+                            if (this.canUse1[x].value == JSON.parse(Decrypt(data.data.data)).purchaseGroup) {
+                                this.oForm.purchaseGroup = this.canUse1[x].value;
+                                break;
+                            }
+                        }
+                        this.oForm.purchaseGroupNum = JSON.parse(Decrypt(data.data.data)).purchaseGroupNum;
+                        this.oForm.activityName = '';
+                        this.oForm.activityImage = JSON.parse(Decrypt(data.data.data)).activityImage;
+                        this.oForm.startDate = JSON.parse(Decrypt(data.data.data)).startDate;
+                        this.oForm.endDate = JSON.parse(Decrypt(data.data.data)).endDate;
+                        this.oForm.autoGroup = JSON.parse(Decrypt(data.data.data)).autoGroup.toString();
                         for (let x in this.canUse1) {
                             if (this.canUse1[x].value == JSON.parse(Decrypt(data.data.data)).purchaseType) {
                                 this.oForm.purchaseType = this.canUse1[x].value;
                                 break;
                             }
                         }
-                        this.oPurchaseCount = JSON.parse(Decrypt(data.data.data)).purchaseCount;
+                        this.oForm.purchaseCount = JSON.parse(Decrypt(data.data.data)).purchaseCount;
                         for (let x in this.canUse2) {
                             if (this.canUse2[x].value == JSON.parse(Decrypt(data.data.data)).smsStatus) {
                                 this.oForm.smsStatus = this.canUse2[x].value;
@@ -1620,16 +1696,17 @@ export default {
                         }
                         this.oForm.gold = JSON.parse(Decrypt(data.data.data)).gold;
                         this.oForm.money = JSON.parse(Decrypt(data.data.data)).money;
-                        this.oForm.commodityStore = JSON.parse(Decrypt(data.data.data)).commodityStore;
-                        this.oForm.hasSoldNumber = JSON.parse(Decrypt(data.data.data)).hasSoldNumber;
-                        for (let x in this.options) {
-                            if (this.options[x].value == JSON.parse(Decrypt(data.data.data)).status) {
-                                this.oForm.status = this.options[x].value;
-                                break;
-                            }
-                        }
+                        this.oForm.commodityStore = '';
+                        this.oForm.shareTitle = JSON.parse(Decrypt(data.data.data)).shareTitle;
+                        // for (let x in this.options) {
+                        //     if (this.options[x].value == JSON.parse(Decrypt(data.data.data)).status) {
+                        //         this.oForm.status = this.options[x].value;
+                        //         break;
+                        //     }
+                        // }
                         this.oForm.description = JSON.parse(Decrypt(data.data.data)).description;
                         this.oForm.detailDescription = JSON.parse(Decrypt(data.data.data)).detailDescription;
+                        this.oForm.activityMemo = JSON.parse(Decrypt(data.data.data)).activityMemo;
                         for (let x in this.showStatus) {
                             if (this.showStatus[x].value == JSON.parse(Decrypt(data.data.data)).showStatus) {
                                 this.oForm.showStatus = this.showStatus[x].value;
@@ -1861,6 +1938,7 @@ export default {
                 jsonArr.push({ key: 'pageSize', value: this.query.aPageSize });
                 jsonArr.push({ key: 'commonType', value: this.oForm.commonType });
                 jsonArr.push({ key: 'cinemaCode', value: this.selectGoodsCode });
+                jsonArr.push({ key: 'status', value: 3 });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
                 console.log(jsonArr);
@@ -1914,6 +1992,7 @@ export default {
                 jsonArr.push({ key: 'pageSize', value: this.query.aPageSize });
                 jsonArr.push({ key: 'commonType', value: this.oCommonType });
                 jsonArr.push({ key: 'cinemaCode', value: this.selectGoodsCode });
+                jsonArr.push({ key: 'status', value: 3 });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
                 console.log(jsonArr);

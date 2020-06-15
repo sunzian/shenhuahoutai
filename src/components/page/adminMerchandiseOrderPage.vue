@@ -793,13 +793,13 @@ export default {
             this.query.cinemaCode = val;
         },
         derive() {
-            const loading = this.$loading({
-                lock: true,
-                text: 'Loading',
-                spinner: 'el-icon-loading',
-                background: 'rgba(0, 0, 0, 0.7)',
-                target: document.querySelector('.div1')
-            });
+            // const loading = this.$loading({
+            //     lock: true,
+            //     text: 'Loading',
+            //     spinner: 'el-icon-loading',
+            //     background: 'rgba(0, 0, 0, 0.7)',
+            //     target: document.querySelector('.div1')
+            // });
             setTimeout(() => {
                 let businessCode = this.query.businessCode;
                 let cinemaCode = this.query.cinemaCode;
@@ -871,8 +871,8 @@ export default {
                     fileName: businessName + '_卖品订单统计',
                     params: params
                 };
-                https.exportMethod(myObj);
-                loading.close();
+                https.exportCouponMethod(myObj);
+                // loading.close();
             }, 1500);
         },
         getMenu() {

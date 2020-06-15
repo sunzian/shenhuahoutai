@@ -701,13 +701,13 @@
         },
         methods: {
             derive(){
-                const loading = this.$loading({
-                    lock: true,
-                    text: 'Loading',
-                    spinner: 'el-icon-loading',
-                    background: 'rgba(0, 0, 0, 0.7)',
-                    target: document.querySelector('.div1')
-                });
+                // const loading = this.$loading({
+                //     lock: true,
+                //     text: 'Loading',
+                //     spinner: 'el-icon-loading',
+                //     background: 'rgba(0, 0, 0, 0.7)',
+                //     target: document.querySelector('.div1')
+                // });
                 setTimeout(() => {
                     let jsonArr = [];
                     jsonArr.push({ key: 'id', value: this.lookId });
@@ -720,8 +720,8 @@
                         fileName: this.title+'报名表',
                         params: params
                     };
-                    https.exportMethod(myObj);
-                    loading.close();
+                    https.exportCouponMethod(myObj);
+                    // loading.close();
                 }, 1500);
             },
             delSelectedSell(index) {

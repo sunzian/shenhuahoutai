@@ -547,13 +547,13 @@ export default {
                     return;
                 }
             }
-            const loading = this.$loading({
-                lock: true,
-                text: 'Loading',
-                spinner: 'el-icon-loading',
-                background: 'rgba(0, 0, 0, 0.7)',
-                target: document.querySelector('.div1')
-            });
+            // const loading = this.$loading({
+            //     lock: true,
+            //     text: 'Loading',
+            //     spinner: 'el-icon-loading',
+            //     background: 'rgba(0, 0, 0, 0.7)',
+            //     target: document.querySelector('.div1')
+            // });
             var jsonArr = [];
             jsonArr.push({ key: 'validityType', value: this.exportForm.validityType });
             jsonArr.push({ key: 'validityDay', value: this.exportForm.validityDay });
@@ -578,7 +578,7 @@ export default {
             this.exportForm.endDate = '';
             this.exportForm.exportNum = '';
             this.exportVisible = false;
-            loading.close();
+            // loading.close();
         },
         changeInput() {
             this.$forceUpdate();

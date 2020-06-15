@@ -728,13 +728,13 @@ export default {
     methods: {
         // 导出
         derive(){
-            const loading = this.$loading({
-                lock: true,
-                text: 'Loading',
-                spinner: 'el-icon-loading',
-                background: 'rgba(0, 0, 0, 0.7)',
-                target: document.querySelector('.div1')
-            });
+            // const loading = this.$loading({
+            //     lock: true,
+            //     text: 'Loading',
+            //     spinner: 'el-icon-loading',
+            //     background: 'rgba(0, 0, 0, 0.7)',
+            //     target: document.querySelector('.div1')
+            // });
             setTimeout(() => {
                 let cinemaCode = this.query.cinemaCode;
                 let mobile = this.query.mobile;
@@ -807,8 +807,8 @@ export default {
                     fileName: '优惠券发放用户列表',
                     params: params
                 };
-                https.exportMethod(myObj);
-                loading.close();
+                https.exportCouponMethod(myObj);
+                // loading.close();
             }, 1500);
         },
         chooseOtherType() {
