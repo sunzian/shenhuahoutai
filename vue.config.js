@@ -7,7 +7,7 @@ module.exports = {
             '/api':{
                 target: 'http://test.legendpicture.com',
                 // target: 'https://wonder.legendpicture.com',
-                // target: 'http://192.168.1.106:8080',  // gw
+                // target: 'http://192.168.1.105:8080',  // gw
                 //  target: 'http://192.168.1.124:8080',  // zy
                 // target: 'http://192.168.101.57:8080',  // zy heloo2
                 // target: 'http://192.168.31.221:8080',  // zy jzkj

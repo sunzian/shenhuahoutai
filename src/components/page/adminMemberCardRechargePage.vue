@@ -451,8 +451,8 @@ export default {
                 }
                 let jsonArr = [];
                 jsonArr.push({ key: 'tableName', value: "member_card_recharge" });
-                jsonArr.push({ key: 'exportKeysJson', value: "['id','cinemaCode','cinemaName','rechargeCinemaCode','rechargeCinemaName','cardNo','userName','mobilePhone','rechargeAmount','payAmount','chPayStatus','chRechargeStatus','payTime','chGivenType','groupName','givenMoney','errorMsg','refundMsg','rechargeOrderNo','payTradeNo','employeeCode']"});
-                jsonArr.push({ key: 'exportTitlesJson', value:"['ID','开卡影院编码','开卡影院名称','充值影院编码','充值影院名称','卡号','用户','手机号','充值金额','支付金额','支付状态','充值状态','充值时间','赠送类型','赠送券包','赠送金额','充值失败原因','退款详情','充值订单号','支付交易号','推荐员工编码']" });
+                jsonArr.push({ key: 'exportKeysJson', value: "['cinemaCode','cinemaName','rechargeCinemaCode','rechargeCinemaName','cardNo','userName','mobilePhone','rechargeAmount','payAmount','chPayStatus','chRechargeStatus','payTime','chGivenType','groupName','givenMoney','errorMsg','refundMsg','rechargeOrderNo','payTradeNo','employeeCode']"});
+                jsonArr.push({ key: 'exportTitlesJson', value:"['开卡影院编码','开卡影院名称','充值影院编码','充值影院名称','卡号','用户','手机号','充值金额','支付金额','支付状态','充值状态','充值时间','赠送类型','赠送券包','赠送金额','充值失败原因','退款详情','充值订单号','支付交易号','推荐员工编码']" });
                 jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
                 jsonArr.push({ key: 'businessCode', value: businessCode });
                 jsonArr.push({ key: 'cardNo', value: cardNo });

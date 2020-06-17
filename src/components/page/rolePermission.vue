@@ -170,7 +170,7 @@ export default {
                 desc: '',
                 value: '1'
             },
-            coverStatus: false,
+            coverStatus: true,
             formLabelWidth: '120px',
             selectValue: {},
             options: [
@@ -256,7 +256,7 @@ export default {
                         loading.close();
                         if (data.data.code == 'success') {
                             this.editVisible = true;
-                            this.coverStatus = false;
+                            this.coverStatus = true;
                             this.expandedKeys = JSON.parse(Decrypt(data.data.data)).openPermissionIds;
                             this.checkedKeys = JSON.parse(Decrypt(data.data.data)).exitPermissionIds;
                             this.data = JSON.parse(Decrypt(data.data.data)).permissionList; //权限数据

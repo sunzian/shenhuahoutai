@@ -60,6 +60,18 @@
                 </el-select>
                 <el-select
                         clearable
+                        v-model="query.commodityCategory"
+                        placeholder="商品分类"
+                        class="handle-select mr10"
+                >
+                    <el-option key="1" label="影院周边" value="1"></el-option>
+                    <el-option key="2" label="超值美食" value="2"></el-option>
+                    <el-option key="3" label="优选精品" value="3"></el-option>
+                    <el-option key="4" label="健身美容" value="4"></el-option>
+                    <el-option key="5" label="休闲娱乐" value="5"></el-option>
+                </el-select>
+                <el-select
+                        clearable
                         v-model="query.commodityType"
                         placeholder="商品类型"
                         class="handle-select mr10"
@@ -112,7 +124,7 @@
                     header-cell-class-name="table-header"
                     @selection-change="handleSelectionChange"
             >
-                <el-table-column prop="sort" label="允许兑换的门店" width="240">
+                <el-table-column prop="sort" label="允许售卖的门店" width="240">
                     <template slot-scope="scope">{{scope.row.cinemaNames}}</template>
                 </el-table-column>
                 <el-table-column prop="name" label="商品名称" width="260">
@@ -259,7 +271,7 @@
         <!--新增弹出框-->
         <el-dialog :close-on-click-modal="false" title="新增商品" :visible.sync="dialogFormVisible">
             <el-form v-model="oForm">
-                <el-form-item :required="true" label="允许兑换的门店" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="允许售卖的门店" :label-width="formLabelWidth">
                     <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选
                     </el-checkbox>
                     <el-checkbox-group v-model="oCheckedCities" @change="getCinemaCode">
@@ -971,7 +983,7 @@
         <!-- 编辑弹出框 -->
         <el-dialog :close-on-click-modal="false" title="编辑" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
-                <el-form-item :required="true" label="允许兑换的门店" :label-width="formLabelWidth">
+                <el-form-item :required="true" label="允许售卖的门店" :label-width="formLabelWidth">
                     <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="oHandleCheckAllChange">
                         全选
                     </el-checkbox>
@@ -5001,6 +5013,7 @@
                     let status = this.query.status;
                     let changeType = this.query.changeType;
                     let commodityType = this.query.commodityType;
+                    let commodityCategory = this.query.commodityCategory;
                     let topStatus = this.query.topStatus;
                     let recommendStatus = this.query.recommendStatus;
                     let name = this.query.name;
@@ -5018,6 +5031,9 @@
                     }
                     if (!commodityType) {
                         commodityType = '';
+                    }
+                    if (!commodityCategory) {
+                        commodityCategory = '';
                     }
                     if (!topStatus) {
                         topStatus = '';
@@ -5037,6 +5053,7 @@
                     jsonArr.push({key: 'status', value: status});
                     jsonArr.push({key: 'changeType', value: changeType});
                     jsonArr.push({key: 'commodityType', value: commodityType});
+                    jsonArr.push({key: 'commodityCategory', value: commodityCategory});
                     jsonArr.push({key: 'pageNo', value: this.query.pageNo});
                     jsonArr.push({key: 'pageSize', value: this.query.pageSize});
                     let sign = md5(preSign(jsonArr));

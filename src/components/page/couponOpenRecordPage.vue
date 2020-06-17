@@ -173,6 +173,9 @@
                 <el-form-item label="已使用数量：" :label-width="formLabelWidth">
                     <span>{{form.useCount}}</span>
                 </el-form-item>
+                <el-form-item label="已绑定数量：" :label-width="formLabelWidth">
+                    <span>{{form.bindCount}}</span>
+                </el-form-item>
                 <el-form-item label="到期后未使用数量：" :label-width="formLabelWidth">
                     <span>{{form.expireCount}}</span>
                 </el-form-item>
@@ -237,6 +240,7 @@ export default {
                         loading.close();
                         if (data.data.code == 'success') {
                             var oData = JSON.parse(Decrypt(data.data.data));
+                            console.log(oData)
                             this.editVisible = true;
                             this.form = oData;
                         } else if (data.data.code == 'nologin') {

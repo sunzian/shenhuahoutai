@@ -241,8 +241,8 @@ export default {
                 }
                 let jsonArr = [];
                 jsonArr.push({ key: 'tableName', value: "third_party_member_card" });
-                jsonArr.push({ key: 'exportKeysJson', value: "['id','openCardCinemaCode','openCardCinemaName','bindCardCinemaCode','bindCardCinemaName','employeeCode','cardNo','levelCode','levelName','userMobile','userName','cnSex','balance','creditsAmount','cnBindStatus','bindUserMobile','cnOffOrOnLine']"});
-                jsonArr.push({ key: 'exportTitlesJson', value:"['ID','开卡影院编码','开卡影院名称','绑卡影院编码','绑卡影院名称','员工推荐编码','卡号','卡等级编号','卡等级名称','卡用户手机号','用户名','性别','余额','积分','绑定状态','绑卡手机号','是否线上卡']" });
+                jsonArr.push({ key: 'exportKeysJson', value: "['openCardCinemaCode','openCardCinemaName','bindCardCinemaCode','bindCardCinemaName','employeeCode','cardNo','levelCode','levelName','userMobile','userName','cnSex','balance','creditsAmount','cnBindStatus','bindUserMobile','cnOffOrOnLine']"});
+                jsonArr.push({ key: 'exportTitlesJson', value:"['开卡影院编码','开卡影院名称','绑卡影院编码','绑卡影院名称','员工推荐编码','卡号','卡等级编号','卡等级名称','卡用户手机号','用户名','性别','余额','积分','绑定状态','绑卡手机号','是否线上卡']" });
                 jsonArr.push({ key: 'openCardCinemaCode', value: cinemaCode });
                 jsonArr.push({ key: 'bindStatus', value: payWay });
                 jsonArr.push({ key: 'cardNo', value: orderNo });

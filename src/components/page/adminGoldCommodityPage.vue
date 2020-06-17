@@ -88,6 +88,18 @@
                 </el-select>
                 <el-select
                         clearable
+                        v-model="query.commodityCategory"
+                        placeholder="商品分类"
+                        class="handle-select mr10"
+                >
+                    <el-option key="1" label="影院周边" value="1"></el-option>
+                    <el-option key="2" label="超值美食" value="2"></el-option>
+                    <el-option key="3" label="优选精品" value="3"></el-option>
+                    <el-option key="4" label="健身美容" value="4"></el-option>
+                    <el-option key="5" label="休闲娱乐" value="5"></el-option>
+                </el-select>
+                <el-select
+                        clearable
                         v-model="query.commodityType"
                         placeholder="商品类型"
                         class="handle-select mr10"
@@ -3372,6 +3384,7 @@
                     let status = this.query.status;
                     let changeType = this.query.changeType;
                     let commodityType = this.query.commodityType;
+                    let commodityCategory = this.query.commodityCategory;
                     let topStatus = this.query.topStatus;
                     let recommendStatus = this.query.recommendStatus;
                     let name = this.query.name;
@@ -3386,6 +3399,9 @@
                     }
                     if (!adminPartnerCode) {
                         adminPartnerCode = '';
+                    }
+                    if (!commodityCategory) {
+                        commodityCategory = '';
                     }
                     if (!status) {
                         status = '';
@@ -3413,6 +3429,7 @@
                     jsonArr.push({key: 'cinemaCodes', value: cinemaCodes});
                     jsonArr.push({key: 'partnerCode', value: partnerCode});
                     jsonArr.push({key: 'adminPartnerCode', value: adminPartnerCode});
+                    jsonArr.push({key: 'commodityCategory', value: commodityCategory});
                     jsonArr.push({key: 'status', value: status});
                     jsonArr.push({key: 'changeType', value: changeType});
                     jsonArr.push({key: 'commodityType', value: commodityType});

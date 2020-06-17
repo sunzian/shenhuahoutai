@@ -193,7 +193,7 @@
         <el-dialog :close-on-click-modal="false" title="编辑" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
                 <el-form-item :required="true" label="通用方式" :label-width="formLabelWidth">
-                    <el-radio-group v-model="oCommonType" @change="selectCinema">
+                    <el-radio-group v-model="oCommonType" @change="selectCinema" disabled>
                         <el-radio :label="1">全部影院</el-radio>
                         <el-radio :label="2">指定影院</el-radio>
                     </el-radio-group>
@@ -204,7 +204,7 @@
                         :label-width="formLabelWidth"
                         v-if="oCommonType == 2"
                 >
-                    <el-checkbox-group v-model="oMerchandiseCode" @change="selectGoods">
+                    <el-checkbox-group v-model="oMerchandiseCode" @change="selectGoods" disabled>
                         <el-checkbox
                                 v-for="item in goodsInfo"
                                 :label="item.merchandiseCode"

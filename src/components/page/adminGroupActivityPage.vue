@@ -281,7 +281,7 @@
                 </el-form-item>
                 <el-form-item
                     :required="true"
-                    label="限制开团次数"
+                    label="限制用户开团次数"
                     v-if="oForm.purchaseGroup==2"
                     :label-width="formLabelWidth"
                 >
@@ -316,6 +316,20 @@
                         onkeyup="this.value=this.value.replace(/\D/g,'')"
                         autocomplete="off"
                     ></el-input>
+                </el-form-item>
+                <el-form-item
+                    label="限制开团总数量"
+                    :label-width="formLabelWidth"
+                >
+                    <el-input
+                        placeholder="请输入正确的的数字"
+                        style="width: 150px"
+                        onkeyup="this.value=this.value.replace(/\D/g,'')"
+                        v-model="oForm.totalGroupNum"
+                        autocomplete="off"
+                    ></el-input>
+                    <br>
+                    <span style="color:red;font-size:12px">不填代表不限制开团次数</span>
                 </el-form-item>
                 <el-form-item :required="true" label="选择商品" :label-width="formLabelWidth">
                     <el-button type="primary" @click="openNext">点击选择</el-button>
@@ -529,7 +543,7 @@
                 </el-form-item>
                 <el-form-item
                     :required="true"
-                    label="限制开团次数"
+                    label="限制用户开团次数"
                     v-if="oPurchaseGroup==2"
                     :label-width="formLabelWidth"
                 >
@@ -572,6 +586,20 @@
                         v-model="oPurchaseCount "
                         autocomplete="off"
                     ></el-input>
+                </el-form-item>
+                <el-form-item
+                    label="限制开团总数量"
+                    :label-width="formLabelWidth"
+                >
+                    <el-input
+                        placeholder="请输入正确的的数字"
+                        style="width: 150px"
+                        onkeyup="this.value=this.value.replace(/\D/g,'')"
+                        v-model="oTotalGroupNum"
+                        autocomplete="off"
+                    ></el-input>
+                    <br>
+                    <span style="color:red;font-size:12px">不填代表不限制开团次数</span>
                 </el-form-item>
                 <el-form-item
                     :required="true"
@@ -815,7 +843,7 @@ export default {
             oGold: '',
             oMoney: '',
             oCommodityStore: '',
-            // oHasSoldNumber: '',
+            oTotalGroupNum: '',
             oStatus: '',
             oDescription: '',
             oActivityNotice: '',
@@ -1025,7 +1053,8 @@ export default {
                 oNum: '',
                 oneNum: '',
                 description: '',
-                detailDescription: ''
+                detailDescription: '',
+                totalGroupNum: ''
             },
             formLabelWidth: '200px',
             selectScreenCode: {},
@@ -1245,6 +1274,7 @@ export default {
             jsonArr.push({ key: 'activityImage', value: this.oForm.activityImage });
             jsonArr.push({ key: 'purchaseType', value: this.oForm.purchaseType });
             jsonArr.push({ key: 'purchaseCount', value: this.oForm.purchaseCount });
+            jsonArr.push({ key: 'totalGroupNum', value: this.oForm.totalGroupNum });
             jsonArr.push({ key: 'smsStatus', value: 0 });
             jsonArr.push({ key: 'description', value: this.oForm.description });
             jsonArr.push({ key: 'detailDescription', value: this.oForm.detailDescription });
@@ -1295,6 +1325,7 @@ export default {
                             this.oForm.status = '';
                             this.oForm.showStatus = '2';
                             this.oForm.detailDescription = '';
+                            this.oForm.totalGroupNum = '';
                             this.getMenu();
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
@@ -1431,6 +1462,7 @@ export default {
                         }
                         this.oDescription = JSON.parse(Decrypt(data.data.data)).description;
                         this.oActivityNotice = JSON.parse(Decrypt(data.data.data)).detailDescription;
+                        this.oTotalGroupNum = JSON.parse(Decrypt(data.data.data)).totalGroupNum;
                         for (let x in this.showStatus) {
                             if (this.showStatus[x].value == JSON.parse(Decrypt(data.data.data)).showStatus) {
                                 this.oShowStatus = this.showStatus[x].value;
@@ -1481,6 +1513,7 @@ export default {
             this.oCommodityStore = '';
             this.oStatus = '';
             this.oActivityImg = '';
+            this.oTotalGroupNum = '';
         },
         // 编辑操作
         exChanger() {
@@ -1516,6 +1549,7 @@ export default {
             jsonArr.push({ key: 'gold', value: this.oGold });
             jsonArr.push({ key: 'money', value: this.oMoney });
             jsonArr.push({ key: 'commodityStore', value: this.oCommodityStore });
+            jsonArr.push({ key: 'totalGroupNum', value: this.oTotalGroupNum });
             // jsonArr.push({ key: 'hasSoldNumber', value: this.oHasSoldNumber });
             jsonArr.push({ key: 'status', value: this.oStatus });
             // jsonArr.push({ key: 'showStatus', value: this.oShowStatus });
@@ -1559,6 +1593,7 @@ export default {
                         this.oCommodityStore = '';
                         this.oStatus = '';
                         this.oActivityImg = '';
+                        this.oTotalGroupNum = '';
                         this.getMenu();
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;

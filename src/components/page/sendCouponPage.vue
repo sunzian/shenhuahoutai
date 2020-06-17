@@ -786,8 +786,8 @@ export default {
                 }
                 let jsonArr = [];
                 jsonArr.push({ key: 'tableName', value: "优惠券发放用户列表" });
-                jsonArr.push({ key: 'exportKeysJson', value: "['id','userName','userMobile','cinemaName','miniRegisterDate','loginDate','goldNumber','consumptionAmount','lastConsumeDate','remainCoupons','shareRegisterNumber','cnUserRole','cnBindMemberCardStatus']"});
-                jsonArr.push({ key: 'exportTitlesJson', value:"['ID','昵称','手机号','注册影院','注册时间','最近登陆时间','金币数量','累计消费金额','最近一次消费','有效优惠券数量','邀请注册人数','游戏厅角色','绑定会员卡']" });
+                jsonArr.push({ key: 'exportKeysJson', value: "['userName','userMobile','cinemaName','miniRegisterDate','loginDate','goldNumber','consumptionAmount','lastConsumeDate','remainCoupons','shareRegisterNumber','cnUserRole','cnBindMemberCardStatus']"});
+                jsonArr.push({ key: 'exportTitlesJson', value:"['昵称','手机号','注册影院','注册时间','最近登陆时间','金币数量','累计消费金额','最近一次消费','有效优惠券数量','邀请注册人数','游戏厅角色','绑定会员卡']" });
                 jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
                 jsonArr.push({ key: 'mobile', value: mobile });
                 jsonArr.push({ key: 'consumeStartDate', value: consumeStartDate });

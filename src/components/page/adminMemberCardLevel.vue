@@ -181,7 +181,7 @@
         <el-dialog :close-on-click-modal="false" title="编辑" :visible.sync="editVisible">
             <el-form ref="form" :model="form">
                 <el-form-item :required="true" label="通用方式" :label-width="formLabelWidth">
-                    <el-radio-group v-model="oCommonType" @change="selectCinema">
+                    <el-radio-group v-model="oCommonType">
                         <el-radio :label="1">全部影院</el-radio>
                         <el-radio :label="2">指定影院</el-radio>
                     </el-radio-group>
@@ -209,25 +209,17 @@
                             :disabled="true"
                     ></el-input>
                 </el-form-item>
-                <!-- <el-form-item label="会员卡图片" :label-width="formLabelWidth">
-                    <el-upload
-                            :before-upload="beforeUpload"
-                            :data="type"
-                            class="upload-demo"
-                            drag
-                            ref="download"
-                            action="/api/upload/uploadImage"
-                            :on-success="unSuccess"
-                            multiple
-                    >
-                        <i class="el-icon-upload"></i>
-                        <div class="el-upload__text">
-                            将文件拖到此处，或
-                            <em>点击上传</em>
-                        </div>
-                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过200kb 建议670*420</div>
-                    </el-upload>
-                </el-form-item> -->
+                <el-form-item label="会员卡图片" :label-width="formLabelWidth">
+                    <el-popover placement="right" title trigger="hover">
+                        <img style="width: 400px" :src="form.imageUrl" />
+                        <img
+                                slot="reference"
+                                :src="form.imageUrl"
+                                :alt="form.imageUrl"
+                                style="max-height: 50px;max-width: 130px"
+                        />
+                    </el-popover>
+                </el-form-item>
                 <el-form-item label="工本费" :label-width="formLabelWidth">
                     <el-input
                             style="width: 250px"
@@ -249,15 +241,16 @@
                             style="width: 250px"
                             v-model="form.cardNo"
                             autocomplete="off"
+                            :disabled="true"
                     ></el-input>
                     <br>
                     <span style="font-size:12px;">提供一张有效的并且卡类型相同的会员卡号（只用于查询会员价）</span>
                 </el-form-item>
             </el-form>
-            <!-- <span slot="footer" class="dialog-footer">
+            <span slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false">取 消</el-button>
                 <el-button type="primary" @click="exChanger">确 定</el-button>
-            </span> -->
+            </span>
         </el-dialog>
     </div>
 </template>
@@ -296,11 +289,13 @@
                 oCheckedCities: [],
                 cities: [], //增加页面影院
                 oCities: [], //修改页面影院
+                oImage: '',
                 pageTotal: 0,
                 form: {
                     memo: '',
                     sort: '',
-                    id: ''
+                    id: '',
+                    imageUrl: ''
                 },
                 idx: -1,
                 id: -1,
@@ -505,7 +500,7 @@
                     target: document.querySelector('.div1')
                 });
                 setTimeout(() => {
-                    this.selectCinema();
+                    this.selectCinema(row);
                     this.idx = index;
                     this.form = row;
                     var jsonArr = [];
@@ -662,7 +657,7 @@
                         });
                 }, 500);
             },
-            selectCinema(){
+            selectCinema(row){
                 const loading = this.$loading({
                     lock: true,
                     text: 'Loading',
@@ -680,10 +675,12 @@
                         status = '';
                     }
                     let jsonArr = [];
-                    jsonArr.push({key:"levelName",value:levelName});
-                    jsonArr.push({key:"status",value:status});
-                    jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
-                    jsonArr.push({ key: 'pageSize', value: 200 });
+                    console.log(row)
+                    jsonArr.push({key: "levelName",value:levelName});
+                    jsonArr.push({key: "status",value:status});
+                    jsonArr.push({key: "businessCode",value:row.businessCode});
+                    jsonArr.push({key: 'pageNo', value: this.query.pageNo });
+                    jsonArr.push({key: 'pageSize', value: 200 });
                     let sign = md5(preSign(jsonArr));
                     jsonArr.push({ key: 'sign', value: sign });
                     var params = ParamsAppend(jsonArr);

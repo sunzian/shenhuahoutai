@@ -104,9 +104,10 @@ export default {
                     const extension = testmsg === 'jpg';
                     const extension2 = testmsg === 'png';
                     const extension3 = testmsg === 'gif';
-                    if (!extension && !extension2 && !extension3) {
+                    const extension4 = testmsg === 'webp';
+                    if (!extension && !extension2 && !extension3 && !extension4) {
                         this.$message({
-                            message: '上传文件只能是 jpg、png、gif格式!',
+                            message: '上传文件只能是 jpg、png、gif、webp格式!',
                             type: 'warning'
                         });
                     }
