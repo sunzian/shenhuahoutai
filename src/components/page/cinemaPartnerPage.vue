@@ -41,6 +41,12 @@
                     <el-option key="2" label="停用" value="2"></el-option>
                 </el-select>
                 <el-input
+                    placeholder="品牌商名称"
+                    v-model="query.brandBusinessName"
+                    autocomplete="off"
+                    class="mr10"
+                ></el-input>
+                <el-input
                     placeholder="商户名称"
                     v-model="query.partnerName"
                     autocomplete="off"
@@ -86,6 +92,9 @@
                 header-cell-class-name="table-header"
                 @selection-change="handleSelectionChange"
             >
+                <el-table-column prop="sort" label="品牌商名称" width="360">
+                    <template slot-scope="scope">{{scope.row.brandBusinessName}}</template>
+                </el-table-column>
                 <el-table-column prop="sort" label="商户名称" width="360">
                     <template slot-scope="scope">{{scope.row.partnerName}}</template>
                 </el-table-column>
@@ -157,6 +166,29 @@
                         >{{item.cinemaName}}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
+                <el-form-item
+                        label="合作商"
+                        :label-width="formLabelWidth"
+                >
+                    <el-button size="small" type="primary" @click="getBrandBusiness()">点击选择</el-button>
+                </el-form-item>
+                <el-form-item
+                        v-if="brandBusinessId"
+                        label="所选合作商："
+                        :label-width="formLabelWidth"
+                >
+                    <el-input
+                            style="width: 280px"
+                            v-model="brandBusinessName"
+                            autocomplete="off"
+                            disabled
+                    ></el-input>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <span
+                            v-if="brandBusinessName"
+                            style="color:red;cursor: pointer;"
+                            @click="deletBrandBusiness"
+                    >删除</span>
+                </el-form-item>
                 <el-form-item :required="true" label="商户名称" :label-width="formLabelWidth">
                     <el-input
                         style="width: 250px"
@@ -217,26 +249,6 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <!-- <el-form-item label="营业开始时间" :label-width="formLabelWidth">
-                    <el-time-picker
-                        style="width: 200px"
-                        v-model="oForm.beginTime"
-                        type="datetime"
-                        value-format="HH:mm"
-                        format="HH:mm"
-                        placeholder="选择日期时间"
-                    ></el-time-picker>
-                </el-form-item>
-                <el-form-item label="营业结束时间" :label-width="formLabelWidth">
-                    <el-time-picker
-                        style="width: 200px"
-                        v-model="oForm.endTime"
-                        type="datetime"
-                        value-format="HH:mm"
-                        format="HH:mm"
-                        placeholder="选择日期时间"
-                    ></el-time-picker>
-                </el-form-item> -->
                 <el-form-item label="营业时间描述" :label-width="formLabelWidth">
                     <el-input
                             style="width: 300px"
@@ -289,13 +301,13 @@
         <el-dialog :close-on-click-modal="false" title="编辑" :visible.sync="editVisible">
             <el-form ref="form" :model="changeForm">
                 <el-form-item :required="true" label="通用方式" :label-width="formLabelWidth">
-                    <el-radio-group v-model="changeForm.commonType">
+                    <el-radio-group v-model="oForm.commonType">
                         <el-radio label="2">指定影院</el-radio>
                         <el-radio label="1">全部影院</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item :required="true" v-if="changeForm.commonType==2" label="适用影院" :label-width="formLabelWidth">
-                    <el-checkbox-group v-model="changeForm.cinemaCodes" @change="changeCinema2">
+                <el-form-item :required="true" v-if="oForm.commonType==2" label="适用影院" :label-width="formLabelWidth">
+                    <el-checkbox-group v-model="oForm.cinemaCodes" @change="changeCinema">
                         <el-checkbox
                             v-for="item in cinemaInfo"
                             :key="item.cinemaCode"
@@ -303,6 +315,29 @@
                             :value="item.cinemaCode"
                         >{{item.cinemaName}}</el-checkbox>
                     </el-checkbox-group>
+                </el-form-item>
+                <el-form-item
+                        label="合作商"
+                        :label-width="formLabelWidth"
+                >
+                    <el-button size="small" type="primary" @click="getBrandBusiness()">点击选择</el-button>
+                </el-form-item>
+                <el-form-item
+                        v-if="brandBusinessId"
+                        label="所选合作商："
+                        :label-width="formLabelWidth"
+                >
+                    <el-input
+                            style="width: 280px"
+                            v-model="brandBusinessName"
+                            autocomplete="off"
+                            disabled
+                    ></el-input>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <span
+                            v-if="brandBusinessName"
+                            style="color:red;cursor: pointer;"
+                            @click="deletBrandBusiness"
+                    >删除</span>
                 </el-form-item>
                 <el-form-item :required="true" label="商户名称" :label-width="formLabelWidth">
                     <el-input
@@ -364,26 +399,6 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <!-- <el-form-item label="营业开始时间" :label-width="formLabelWidth">
-                    <el-time-picker
-                        style="width: 200px"
-                        v-model="changeForm.beginTime"
-                        type="datetime"
-                        value-format="HH:mm"
-                        format="HH:mm"
-                        placeholder="选择日期时间"
-                    ></el-time-picker>
-                </el-form-item>
-                <el-form-item label="营业结束时间" :label-width="formLabelWidth">
-                    <el-time-picker
-                        style="width: 200px"
-                        v-model="changeForm.endTime"
-                        type="datetime"
-                        value-format="HH:mm"
-                        format="HH:mm"
-                        placeholder="选择日期时间"
-                    ></el-time-picker>
-                </el-form-item> -->
                 <el-form-item label="营业时间描述" :label-width="formLabelWidth">
                     <el-input
                             style="width: 300px"
@@ -432,6 +447,59 @@
                 <el-button type="primary" @click="exChanger">确 定</el-button>
             </span>
         </el-dialog>
+        <!-- 选择合作商弹出窗 -->
+        <el-dialog :close-on-click-modal="false" title="选择合作商" :visible.sync="drawerBrandBusiness">
+            <div class="container">
+                <div class="handle-box">
+                    <el-input
+                            v-model="query.partnerName"
+                            placeholder="合作商名称"
+                            class="handle-input mr12"
+                            style="width:200px"
+                    ></el-input>
+                    <el-button type="primary" icon="el-icon-search" @click="getBrandBusiness">搜索</el-button>
+                </div>
+                <el-table
+                        :data="brandBusinessList"
+                        border
+                        class="table"
+                        ref="multipleTable"
+                        highlight-current-row
+                        header-cell-class-name="table-header"
+                        @selection-change="handleSelectionChange"
+                >
+                    <el-table-column label="操作" width="100" align="center">
+                        <template slot-scope="scope">
+                            <el-radio v-model="brandBusinessId" :label="scope.row.id">&nbsp;</el-radio>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="合作商名称">
+                        <template slot-scope="scope">{{scope.row.name}}</template>
+                    </el-table-column>
+                    <el-table-column label="地址">
+                        <template slot-scope="scope">{{scope.row.address}}</template>
+                    </el-table-column>
+                </el-table>
+                <div class="pagination">
+                    <el-pagination
+                            background
+                            @size-change="oHandleSizeChange"
+                            layout="total, sizes, prev, pager, next, jumper"
+                            :current-page="query.oPageNo"
+                            :page-sizes="[10, 15, 20, 30]"
+                            :page-size="query.oPageSize"
+                            :total="query.oTotalCount"
+                            @current-change="oCurrentChange"
+                            @prev-click="oPrev"
+                            @next-click="oNext"
+                    ></el-pagination>
+                </div>
+            </div>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="drawerBrandBusiness = false">取 消</el-button>
+                <el-button type="primary" @click="sureBrandBusiness(brandBusinessId)">确 定</el-button>
+            </div>
+        </el-dialog>
     </div>
 </template>
 
@@ -461,7 +529,10 @@ export default {
                 pageNo: 1,
                 pageSize: 15,
                 aPageNo: 1,
-                aPageSize: 15
+                aPageSize: 15,
+                oPageNo: 1,
+                oPageSize: 15,
+                name: ''
             },
             tableData: [],
             multipleSelection: [],
@@ -471,6 +542,7 @@ export default {
             drawer: false,
             drawer1: false,
             drawer2: false,
+            drawerBrandBusiness: false,
             pageTotal: 0,
             changeForm: {
                 saleTime: '',
@@ -516,6 +588,9 @@ export default {
             formLabelWidth: '120px',
             selectValue: {},
             cinemaInfo: [],
+            brandBusinessList: [],
+            brandBusinessId: '',
+            brandBusinessName: '',
             options: [
                 {
                     value: '1',
@@ -565,6 +640,10 @@ export default {
                         loading.close();
                         if (data.data.code == 'success') {
                             this.dialogFormVisible = true;
+                            this.oForm.commonType = '1';
+                            this.oForm.cinemaCodes = [];
+                            this.brandBusinessName = '';
+                            this.brandBusinessId = '';
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
                             this.open();
@@ -596,7 +675,9 @@ export default {
             this.oForm.memo = '';
             this.oForm.saleTime = '';
             this.oForm.verifyCode = '';
-            this.oForm.commonType = '1'
+            this.oForm.commonType = '1';
+            this.brandBusinessName = '';
+            this.brandBusinessId = '';
         },
         addRole() {
             //新增按钮操作
@@ -664,6 +745,7 @@ export default {
                 }
                 jsonArr.push({ key: 'status', value: this.oForm.status });;
                 jsonArr.push({ key: 'partnerName', value: this.oForm.partnerName });
+                jsonArr.push({ key: 'brandBusinessId', value: this.brandBusinessId });
                 jsonArr.push({ key: 'storeMobile', value: this.oForm.storeMobile });
                 jsonArr.push({ key: 'concatName', value: this.oForm.concatName });
                 jsonArr.push({ key: 'concatMobile', value: this.oForm.concatMobile });
@@ -688,6 +770,8 @@ export default {
                                 this.dialogFormVisible = false;
                                 this.$message.success(`新增成功`);
                                 this.oForm.partnerName = '';
+                                this.brandBusinessId = '';
+                                this.brandBusinessName = '';
                                 this.oForm.cinemaCodes = [];
                                 this.oForm.status = '';
                                 this.oForm.storeMobile = '';
@@ -782,7 +866,6 @@ export default {
             });
             setTimeout(() => {
                 this.idx = index;
-                // this.changeForm = row;
                 var jsonArr = [];
                 jsonArr.push({ key: 'id', value: row.id });
                 let sign = md5(preSign(jsonArr));
@@ -802,11 +885,13 @@ export default {
                                 }
                             }
                             this.changeForm.status = this.showStatus[index].value;
-                            this.changeForm.commonType = JSON.parse(Decrypt(data.data.data)).commonType.toString();
-                            if (this.changeForm.commonType == '2') {
-                                this.changeForm.cinemaCodes = JSON.parse(Decrypt(data.data.data)).cinemaCodes.split(",");
+                            this.oForm.commonType = JSON.parse(Decrypt(data.data.data)).commonType.toString();
+                            if (this.oForm.commonType == '2') {
+                                this.oForm.cinemaCodes = JSON.parse(Decrypt(data.data.data)).cinemaCodes.split(",");
                             }
                             this.changeForm.partnerName = JSON.parse(Decrypt(data.data.data)).partnerName;
+                            this.brandBusinessName = JSON.parse(Decrypt(data.data.data)).brandBusinessName;
+                            this.brandBusinessId = JSON.parse(Decrypt(data.data.data)).brandBusinessId;
                             this.changeForm.saleTime = JSON.parse(Decrypt(data.data.data)).saleTime;
                             this.changeForm.partnerCode = JSON.parse(Decrypt(data.data.data)).partnerCode;
                             this.changeForm.storeMobile = JSON.parse(Decrypt(data.data.data)).storeMobile;
@@ -844,7 +929,7 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)',
                 target: document.querySelector('.div1')
             });
-            if (this.changeForm.commonType == '2' && this.changeForm.cinemaCodes.length == 0) {
+            if (this.oForm.commonType == '2' && this.oForm.cinemaCodes.length == 0) {
                 this.message = '所选影院不能为空，请检查！';
                 this.open();
                 loading.close();
@@ -894,13 +979,14 @@ export default {
             }
             setTimeout(() => {
                 var jsonArr = [];
-                jsonArr.push({ key: 'commonType', value: this.changeForm.commonType });
-                if (this.changeForm.commonType == '2') {
-                    let cinemaCodes = this.changeForm.cinemaCodes.join(",");
+                jsonArr.push({ key: 'commonType', value: this.oForm.commonType });
+                if (this.oForm.commonType == '2') {
+                    let cinemaCodes = this.oForm.cinemaCodes.join(",");
                     jsonArr.push({ key: 'cinemaCodes', value: cinemaCodes });
                 }
                 jsonArr.push({ key: 'partnerName', value: this.changeForm.partnerName });
                 jsonArr.push({ key: 'partnerCode', value: this.changeForm.partnerCode });
+                jsonArr.push({ key: 'brandBusinessId', value: this.brandBusinessId });
                 jsonArr.push({ key: 'status', value: this.changeForm.status });
                 jsonArr.push({ key: 'storeMobile', value: this.changeForm.storeMobile });
                 jsonArr.push({ key: 'concatName', value: this.changeForm.concatName });
@@ -956,6 +1042,7 @@ export default {
             });
             setTimeout(() => {
                 let partnerName = this.query.partnerName;
+                let brandBusinessName = this.query.brandBusinessName;
                 let cinemaCodes = this.query.cinemaCodes;
                 let commonType = this.query.commonType;
                 let concatName = this.query.concatName;
@@ -964,6 +1051,9 @@ export default {
                 let status = this.query.status;
                 if (!partnerName) {
                     partnerName = '';
+                }
+                if (!brandBusinessName) {
+                    brandBusinessName = '';
                 }
                 if (!commonType) {
                     commonType = '';
@@ -988,6 +1078,7 @@ export default {
                 jsonArr.push({ key: 'commonType', value: commonType });
                 jsonArr.push({ key: 'cinemaCodes', value: cinemaCodes });
                 jsonArr.push({ key: 'partnerName', value: partnerName });
+                jsonArr.push({ key: 'brandBusinessName', value: brandBusinessName });
                 jsonArr.push({ key: 'concatName', value: concatName });
                 jsonArr.push({ key: 'storeMobile', value: storeMobile });
                 jsonArr.push({ key: 'concatMobile', value: concatMobile });
@@ -995,7 +1086,6 @@ export default {
                 jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
-                console.log(jsonArr)
                 var params = ParamsAppend(jsonArr);
                 https
                     .fetchPost('/cinemaPartner/page', params)
@@ -1004,6 +1094,7 @@ export default {
                         if (data.data.code == 'success') {
                             var oData = JSON.parse(Decrypt(data.data.data));
                             this.tableData = oData.data;
+                            console.log(oData)
                             this.query.pageSize = oData.pageSize;
                             this.query.pageNo = oData.pageNo;
                             this.query.totalCount = oData.totalCount;
@@ -1033,9 +1124,6 @@ export default {
         changeCinema(val) {
             this.oForm.cinemaCodes = val;
         },
-        changeCinema2(val) {
-            this.changeForm.cinemaCodes = val;
-        },
         // 获取所有影院
         getAllCinema() {
             https
@@ -1056,6 +1144,70 @@ export default {
                 .catch(err => {
                     console.log(err);
                 });
+        },
+        // 获取合作商
+        getBrandBusiness() {
+            if (this.oForm.commonType == 2) {
+                if (this.oForm.cinemaCodes.length == 0) {
+                    this.message = '请选择影院！';
+                    this.open();
+                    return;   
+                }
+            }
+            let name = this.query.name;
+            if (!name) {
+                name = '';
+            }
+            let jsonArr = [];
+            jsonArr.push({key: 'status', value: '1'});
+            jsonArr.push({key: 'commonType', value: this.oForm.commonType});
+            if (this.oForm.commonType == 2) {
+                jsonArr.push({key: 'cinemaCodes', value: this.oForm.cinemaCodes.join(",")});
+            }
+            jsonArr.push({key: 'name', value: name});
+            jsonArr.push({key: 'pageNo', value: this.query.oPageNo});
+            jsonArr.push({key: 'pageSize', value: this.query.oPageSize});
+            let sign = md5(preSign(jsonArr));
+            jsonArr.push({key: 'sign', value: sign});
+            var params = ParamsAppend(jsonArr);
+            https
+                .fetchPost('/brandBusiness/page', params)
+                .then(data => {
+                    if (data.data.code == 'success') {
+                        var res = JSON.parse(Decrypt(data.data.data));
+                        console.log(res);
+                        this.query.name = '';
+                        this.brandBusinessList = res.data;
+                        this.query.oPageSize = res.pageSize;
+                        this.query.oPageNo = res.pageNo;
+                        this.query.oTotalCount = res.totalCount;
+                        this.query.oTotalPage = res.totalPage;
+                        this.drawerBrandBusiness = true;
+                    } else if (data.data.code == 'nologin') {
+                        this.message = data.data.message;
+                        this.open();
+                        this.$router.push('/login');
+                    } else {
+                        this.message = data.data.message;
+                        this.open();
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        },
+        sureBrandBusiness(id) {
+            this.brandBusinessId = id;
+            for (let i = 0; i < this.brandBusinessList.length; i++) {
+                if (this.brandBusinessList[i].id == this.brandBusinessId) {
+                    this.brandBusinessName = this.brandBusinessList[i].name;
+                }
+            }
+            this.drawerBrandBusiness = false;
+        },
+        deletBrandBusiness() {
+            this.brandBusinessId = '';
+            this.brandBusinessName = '';
         },
         // 多选操作
         handleSelectionChange(val) {
@@ -1098,7 +1250,26 @@ export default {
             //分页按钮下一页
             this.query.aPageNo++;
             this.openNext();
-        }
+        },
+        oHandleSizeChange(val) {
+            this.query.oPageSize = val;
+            this.getBrandBusiness();
+        },
+        oCurrentChange(val) {
+            //点击选择具体页数
+            this.query.oPageNo = val;
+            this.getBrandBusiness();
+        },
+        oPrev() {
+            //分页按钮上一页
+            this.query.oPageNo--;
+            this.getBrandBusiness();
+        },
+        oNext() {
+            //分页按钮下一页
+            this.query.oPageNo++;
+            this.getBrandBusiness();
+        },
     }
 };
 </script>

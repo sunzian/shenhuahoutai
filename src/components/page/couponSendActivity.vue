@@ -810,7 +810,7 @@ export default {
             var jsonArr = [];
             jsonArr.push({key: 'commonType', value: this.oForm.commonType});
             if (this.oForm.commonType == 2) {
-                let cinemaCodes = this.oForm.code.join(',');
+                let cinemaCodes = this.oForm.cinemaCode.join(',');
                 jsonArr.push({key: 'cinemaCode', value: cinemaCodes});
             }
             jsonArr.push({ key: 'activityImageUrl', value: this.oActivityImageUrl });

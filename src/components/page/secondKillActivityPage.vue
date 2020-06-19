@@ -287,7 +287,7 @@
                     <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" placeholder="请输入正确的的数字" style="width: 150px" v-model="oForm.purchaseCount " autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="兑换方式" :label-width="formLabelWidth">
-                    <el-select v-model="oForm.changeType" placeholder="请选择兑换方式">
+                    <el-select v-model="oForm.changeType" placeholder="请选择兑换方式" @change="changeSkuPrice">
                         <el-option
                                 v-for="item in showType"
                                 :key="item.value"
@@ -380,6 +380,12 @@
                                 </el-popover>
                             </template>
                         </el-table-column>
+                        <el-table-column prop="sort" label="是否参与" width="110">
+                            <template slot-scope="scope">
+                                <el-tag v-if="scope.row.status=='1'">参与</el-tag>
+                                <el-tag v-else-if="scope.row.status=='2'">不参与</el-tag>
+                            </template>
+                        </el-table-column>
                         <el-table-column prop="sort" label="库存" width="90">
                             <template slot-scope="scope">{{scope.row.store}}</template>
                         </el-table-column>
@@ -388,12 +394,6 @@
                         </el-table-column>
                         <el-table-column prop="sort" label="所需RMB" width="110">
                             <template slot-scope="scope">{{scope.row.activityMoney}}</template>
-                        </el-table-column>
-                        <el-table-column prop="sort" label="是否参与" width="110">
-                            <template slot-scope="scope">
-                                <el-tag v-if="scope.row.status=='1'">参与</el-tag>
-                                <el-tag v-else-if="scope.row.status=='2'">不参与</el-tag>
-                            </template>
                         </el-table-column>
                         <el-table-column label="操作" width="100" align="center" fixed="right">
                             <template slot-scope="scope">
@@ -409,6 +409,7 @@
                             v-model="oForm.commodityStore"
                             onkeyup="this.value=this.value.replace(/\D/g,'')"
                             placeholder="请输入大于0的数字"
+                            :disabled="skuStatus == 1"
                     ></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="排序" :label-width="formLabelWidth">
@@ -586,7 +587,7 @@
                     <el-input onkeyup="this.value=this.value.replace(/\D/g,'')" placeholder="请输入正确的的数字" style="width: 150px" v-model="oPurchaseCount " autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :required="true" label="兑换方式" :label-width="formLabelWidth">
-                    <el-select v-model="oChangeType" placeholder="请选择兑换方式">
+                    <el-select v-model="oChangeType" placeholder="请选择兑换方式" @change="changeSkuPrice2">
                         <el-option
                                 v-for="item in showType"
                                 :key="item.value"
@@ -679,6 +680,12 @@
                                 </el-popover>
                             </template>
                         </el-table-column>
+                        <el-table-column prop="sort" label="是否参与" width="110">
+                            <template slot-scope="scope">
+                                <el-tag v-if="scope.row.status=='1'">参与</el-tag>
+                                <el-tag v-else-if="scope.row.status=='2'">不参与</el-tag>
+                            </template>
+                        </el-table-column>
                         <el-table-column prop="sort" label="库存" width="90">
                             <template slot-scope="scope">{{scope.row.store}}</template>
                         </el-table-column>
@@ -687,12 +694,6 @@
                         </el-table-column>
                         <el-table-column prop="sort" label="所需RMB" width="110">
                             <template slot-scope="scope">{{scope.row.activityMoney}}</template>
-                        </el-table-column>
-                        <el-table-column prop="sort" label="是否参与" width="110">
-                            <template slot-scope="scope">
-                                <el-tag v-if="scope.row.status=='1'">参与</el-tag>
-                                <el-tag v-else-if="scope.row.status=='2'">不参与</el-tag>
-                            </template>
                         </el-table-column>
                         <el-table-column label="操作" width="100" align="center" fixed="right">
                             <template slot-scope="scope">
@@ -708,6 +709,7 @@
                             v-model="oCommodityStore"
                             onkeyup="this.value=this.value.replace(/\D/g,'')"
                             placeholder="请输入大于0的数字"
+                            :disabled="skuStatus == 1"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="已售数量" :label-width="formLabelWidth">
@@ -899,17 +901,8 @@
                         />
                     </el-popover>
                 </el-form-item>
-                <el-form-item :required="true" label="库存" :label-width="formLabelWidth">
-                    <el-input placeholder="请输入大于0的数字" onkeyup="this.value=this.value.replace(/[^0-9]+/,'')" style="width: 250px" min="1" v-model="skuChangeForm.store" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item v-if="oForm.changeType==1||oForm.changeType==3" :required="true" label="所需金币数量" :label-width="formLabelWidth">
-                    <el-input  style="width: 250px" min="1" v-model="skuChangeForm.gold" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item v-if="oForm.changeType==2||oForm.changeType==3" :required="true" label="所需RMB" :label-width="formLabelWidth">
-                    <el-input  style="width: 250px" min="1" v-model="skuChangeForm.money" autocomplete="off"></el-input>
-                </el-form-item>
                 <el-form-item :required="true" label="是否参与秒杀" :label-width="formLabelWidth">
-                    <el-select v-model="skuChangeForm.status" placeholder="请选择">
+                    <el-select v-model="skuChangeForm.status" @change="changeSkuStatus" placeholder="请选择">
                         <el-option
                                 v-for="item in skuJoin"
                                 :key="item.value"
@@ -918,6 +911,17 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
+                <div v-if="skuChangeForm.status == 1">
+                    <el-form-item :required="true" label="库存" :label-width="formLabelWidth">
+                        <el-input placeholder="请输入大于0的数字" onkeyup="this.value=this.value.replace(/[^0-9]+/,'')" style="width: 250px" min="1" v-model="skuChangeForm.store" autocomplete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item v-if="oForm.changeType==1||oForm.changeType==3" :required="true" label="所需金币数量" :label-width="formLabelWidth">
+                        <el-input  style="width: 250px" min="1" v-model="skuChangeForm.gold" autocomplete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item v-if="oForm.changeType==2||oForm.changeType==3" :required="true" label="所需RMB" :label-width="formLabelWidth">
+                        <el-input  style="width: 250px" min="1" v-model="skuChangeForm.money" autocomplete="off"></el-input>
+                    </el-form-item>
+                </div>
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <!-- <el-button @click="dialogskuChangeFormVisible = false">取 消</el-button> -->
@@ -944,17 +948,8 @@
                         />
                     </el-popover>
                 </el-form-item>
-                <el-form-item :required="true" label="库存" :label-width="formLabelWidth">
-                    <el-input placeholder="请输入大于0的数字" onkeyup="this.value=this.value.replace(/[^0-9]+/,'')" style="width: 250px" min="1" v-model="oSkuChangeForm.store" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item v-if="form.changeType==1||form.changeType==3" :required="true" label="所需金币数量" :label-width="formLabelWidth">
-                    <el-input placeholder="请输入正确的数字" onkeyup="this.value=this.value.replace(/[^0-9]+/,'')" style="width: 250px" min="1" v-model="oSkuChangeForm.activityGold" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item v-if="form.changeType==2||form.changeType==3" :required="true" label="所需RMB" :label-width="formLabelWidth">
-                    <el-input placeholder="请输入正确的数字" onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')" style="width: 250px" min="1" v-model="skuChangeForm.money" autocomplete="off"></el-input>
-                </el-form-item>
                 <el-form-item :required="true" label="是否参与秒杀" :label-width="formLabelWidth">
-                    <el-select v-model="oSkuChangeForm.status" placeholder="请选择">
+                    <el-select v-model="oSkuChangeForm.status" @change="changeSkuStatus" placeholder="请选择">
                         <el-option
                                 v-for="item in skuJoin"
                                 :key="item.value"
@@ -963,6 +958,17 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
+                <div v-if="oSkuChangeForm.status == 1">
+                    <el-form-item :required="true" label="库存" :label-width="formLabelWidth">
+                        <el-input placeholder="请输入大于0的数字" onkeyup="this.value=this.value.replace(/[^0-9]+/,'')" style="width: 250px" min="1" v-model="oSkuChangeForm.store" autocomplete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item v-if="oChangeType==1||oChangeType==3" :required="true" label="所需金币数量" :label-width="formLabelWidth">
+                        <el-input placeholder="请输入正确的数字" onkeyup="this.value=this.value.replace(/[^0-9]+/,'')" style="width: 250px" min="1" v-model="oSkuChangeForm.activityGold" autocomplete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item v-if="oChangeType==2||oChangeType==3" :required="true" label="所需RMB" :label-width="formLabelWidth">
+                        <el-input placeholder="请输入正确的数字" onkeyup="this.value=this.value.replace(/[^0-9.]+/,'')" style="width: 250px" min="1" v-model="oSkuChangeForm.activityMoney" autocomplete="off"></el-input>
+                    </el-form-item>
+                </div>
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <!-- <el-button @click="dialogoSkuChangeFormVisible = false">取 消</el-button> -->
@@ -1249,6 +1255,7 @@
                 this.commodityName = '';
                 this.commodityId = '';
                 this.skuStatus = '';
+                this.changeSkuList = [];
             },
             selectGoods(val) {
                 // console.log(val)
@@ -1420,12 +1427,21 @@
             addRole() {
                 //新增按钮操作
                 if (this.changeSkuList.length > 0) {
+                    let count = 0;
                     for (let i = 0; i < this.changeSkuList.length; i ++) {
                         if (!this.changeSkuList[i].status || this.changeSkuList[i].status == '') {
                             this.message = '请填写商品规格属性!';
                             this.open();
                             return
                         }
+                        if (this.changeSkuList[i].status == 1) {
+                            count += 1;
+                        }
+                    }
+                    if (count == 0) {
+                        this.message = '至少选择一项规格属性参与!';
+                        this.open();
+                        return
                     }
                 }
                 const loading = this.$loading({
@@ -1441,6 +1457,17 @@
                         delete this.changeSkuList[i].image;
                         delete this.changeSkuList[i].attribute;
                         delete this.changeSkuList[i].specifications;
+                        delete this.changeSkuList[i].alreadyChangedNumber;
+                        delete this.changeSkuList[i].remainNumber;
+                        if (!this.changeSkuList[i].store || this.changeSkuList[i].store == '') {
+                            this.changeSkuList[i].store = 0;
+                        }
+                        if (!this.changeSkuList[i].activityGold || this.changeSkuList[i].stoactivityGoldre == '') {
+                            this.changeSkuList[i].activityGold = 0;
+                        }
+                        if (!this.changeSkuList[i].activityMoney || this.changeSkuList[i].activityMoney == '') {
+                            this.changeSkuList[i].activityMoney = 0;
+                        }
                     }
                     jsonArr.push({key: 'skuListJson', value:JSON.stringify(this.changeSkuList)});
                 }
@@ -1631,9 +1658,15 @@
                                     loading.close();
                                     if (data.data.code == 'success') {
                                         var oData = JSON.parse(Decrypt(data.data.data));
+                                        console.log(oData)
                                         this.skuStatus = oData.skuStatus;
                                         if (this.skuStatus == 1) {
-                                            this.changeSkuList = skuInfoList;
+                                            if (skuInfoList.length > 0) {
+                                                this.changeSkuList = skuInfoList;
+                                            } else {
+                                                this.changeSkuList = oData.skuList
+                                            }
+                                            
                                         }
                                     } else if (data.data.code == 'nologin') {
                                         this.message = data.data.message;
@@ -1648,7 +1681,6 @@
                                     loading.close();
                                     console.log(err);
                                 });
-                            this.changeSkuList = JSON.parse(Decrypt(data.data.data)).skuInfoList;
                             this.commodityName = JSON.parse(Decrypt(data.data.data)).commodityName;
                             for (let x in this.showType) {
                                 if (this.showType[x].value == JSON.parse(Decrypt(data.data.data)).changeType) {
@@ -1693,12 +1725,21 @@
             exChanger() {
                 console.log(this.changeSkuList);
                 if (this.changeSkuList.length > 0) {
+                    let count = 0;
                     for (let i = 0; i < this.changeSkuList.length; i ++) {
                         if (!this.changeSkuList[i].status || this.changeSkuList[i].status == '') {
                             this.message = '请填写商品规格属性!';
                             this.open();
                             return
                         }
+                        if (this.changeSkuList[i].status == 1) {
+                            count += 1;
+                        }
+                    }
+                    if (count == 0) {
+                        this.message = '至少选择一项规格属性参与!';
+                        this.open();
+                        return
                     }
                 }
                 const loading = this.$loading({
@@ -1710,24 +1751,23 @@
                 });
                 var jsonArr = [];
                 if (this.skuStatus == 1) {
-                    // let newArr = [];
                     for (let i = 0; i < this.changeSkuList.length; i ++) {
-                        // newArr.push({
-                        //     activityType: this.changeSkuList[i].activityType,
-                        //     activityId: this.changeSkuList[i].activityId,
-                        //     skuId: this.changeSkuList[i].skuId,
-                        //     status: this.changeSkuList[i].status,
-                        //     store: this.changeSkuList[i].store,
-                        //     activityGold: this.changeSkuList[i].activityGold,
-                        //     activityMoney: this.changeSkuList[i].activityMoney,
-                        //     commodityId: this.changeSkuList[i].commodityId
-                        // })
                         delete this.changeSkuList[i].image;
                         delete this.changeSkuList[i].attribute;
                         delete this.changeSkuList[i].specifications;
                         delete this.changeSkuList[i].activityId;
+                        delete this.changeSkuList[i].alreadyChangedNumber;
+                        delete this.changeSkuList[i].remainNumber;
+                        if (!this.changeSkuList[i].store || this.changeSkuList[i].store == '') {
+                            this.changeSkuList[i].store = 0;
+                        }
+                        if (!this.changeSkuList[i].activityGold || this.changeSkuList[i].stoactivityGoldre == '') {
+                            this.changeSkuList[i].activityGold = 0;
+                        }
+                        if (!this.changeSkuList[i].activityMoney || this.changeSkuList[i].activityMoney == '') {
+                            this.changeSkuList[i].activityMoney = 0;
+                        }
                     }
-                    // console.log(newArr)
                     jsonArr.push({key: 'skuListJson', value:JSON.stringify(this.changeSkuList)});
                 }
                 jsonArr.push({ key: 'activityName', value: this.oActivityName });
@@ -1832,6 +1872,7 @@
                         loading.close();
                         if (data.data.code == 'success') {
                             this.dialogFormVisible = true;
+                            this.changeSkuList = [];
                             console.log(JSON.parse(Decrypt(data.data.data)))
                             this.oForm.commonType = JSON.parse(Decrypt(data.data.data)).commonType;
                             this.oMerchandiseCode = [];
@@ -1854,6 +1895,40 @@
                             }
                             this.commodityId = JSON.parse(Decrypt(data.data.data)).commodityId;
                             this.commodityName = JSON.parse(Decrypt(data.data.data)).commodityName;
+                            let skuInfoList = JSON.parse(Decrypt(data.data.data)).skuInfoList;
+                            let jsonArr2 = [];
+                            jsonArr2.push({ key: 'id', value: this.commodityId });
+                            let sign = md5(preSign(jsonArr2));
+                            jsonArr2.push({ key: 'sign', value: sign });
+                            var params2 = ParamsAppend(jsonArr2);
+                            https
+                                .fetchPost('/goldCommodity/getSKUInfo', params2)
+                                .then(data => {
+                                    loading.close();
+                                    if (data.data.code == 'success') {
+                                        var oData = JSON.parse(Decrypt(data.data.data));
+                                        console.log(oData)
+                                        this.skuStatus = oData.skuStatus;
+                                        if (this.skuStatus == 1) {
+                                            if (skuInfoList.length > 0) {
+                                                this.changeSkuList = skuInfoList;
+                                            } else {
+                                                this.changeSkuList = oData.skuList
+                                            }
+                                        }
+                                    } else if (data.data.code == 'nologin') {
+                                        this.message = data.data.message;
+                                        this.open();
+                                        this.$router.push('/login');
+                                    } else {
+                                        this.message = data.data.message;
+                                        this.open();
+                                    }
+                                })
+                                .catch(err => {
+                                    loading.close();
+                                    console.log(err);
+                                });
                             for (let x in this.showType) {
                                 if (this.showType[x].value == JSON.parse(Decrypt(data.data.data)).changeType) {
                                     this.oForm.changeType = this.showType[x].value;
@@ -2107,11 +2182,19 @@
                                 console.log(oData);
                                 this.skuStatus = oData.skuStatus;
                                 if (oData.skuStatus == 1) {
-                                    this.changeSkuList = oData.skuList
+                                    if (oData.skuList.length > 0) {
+                                        for (let i = 0; i < oData.skuList.length; i ++) {
+                                            oData.skuList[i].skuId = oData.skuList[i].id
+                                            delete oData.skuList[i].id;
+                                        }
+                                        console.log(oData.skuList)
+                                        this.changeSkuList = oData.skuList
+                                    }
                                     for (let i = 0; i < this.changeSkuList.length; i ++) {
                                         this.changeSkuList[i].gold = '';
                                         this.changeSkuList[i].money = '';
                                         this.changeSkuList[i].store = '';
+                                        this.changeSkuList[i].status = '2';
                                     }
                                 }
                             } else if (data.data.code == 'nologin') {
@@ -2309,6 +2392,9 @@
             },
             //修改sku弹出
             changeSku(index,row){
+                if (!row.skuId) {
+                    row.skuId = row.id;
+                }
                 this.skuChangeForm = row;
                 console.log(row)
                 this.oIndex=index;
@@ -2331,39 +2417,45 @@
                 this.dialogoSkuChangeFormVisible=true
             },
             sureChangeUseSku(){
-                if (!this.skuChangeForm.store || this.skuChangeForm.store == '' || this.skuChangeForm.store == 0) {
-                    this.message = '库存不能为空，请检查！';
-                    this.open();
-                    return;
-                }
-                if (this.oForm.changeType==1||this.oForm.changeType==3) {
-                    if (!this.skuChangeForm.gold) {
-                        this.message = '所需金币数量不能为空，请检查！';
-                        this.open();
-                        return;
-                    }
-                }
-                if (this.oForm.changeType==2||this.oForm.changeType==3) {
-                    if (!this.skuChangeForm.money) {
-                        this.message = '所需RMB不能为空，请检查！';
-                        this.open();
-                        return;
-                    }
-                }
                 if (!this.skuChangeForm.status || this.skuChangeForm.status == '') {
                     this.message = '请选择是否参与！';
                     this.open();
                     return;
                 }
-                if(!this.skuChangeForm.gold){
-                    this.skuChangeForm.gold=0
-                }
-                if(!this.skuChangeForm.money){
-                    this.skuChangeForm.money=0
+                if (this.skuChangeForm.status == 1) {
+                    if (!this.skuChangeForm.store || this.skuChangeForm.store == '' || this.skuChangeForm.store == 0) {
+                        this.message = '库存不能为空，请检查！';
+                        this.open();
+                        return;
+                    }
+                    if (this.oForm.changeType==1||this.oForm.changeType==3) {
+                        if (!this.skuChangeForm.gold) {
+                            this.message = '所需金币数量不能为空，请检查！';
+                            this.open();
+                            return;
+                        }
+                    }
+                    if (this.oForm.changeType==2||this.oForm.changeType==3) {
+                        if (!this.skuChangeForm.money) {
+                            this.message = '所需RMB不能为空，请检查！';
+                            this.open();
+                            return;
+                        }
+                    }
+                    if(!this.skuChangeForm.gold) {
+                        this.skuChangeForm.gold = 0
+                    }
+                    if(!this.skuChangeForm.money) {
+                        this.skuChangeForm.money = 0
+                    }
+                } else if (this.skuChangeForm.status == 2) {
+                    this.skuChangeForm.gold = 0;
+                    this.skuChangeForm.money = 0;
+                    this.skuChangeForm.store = 0;
                 }
                 let oneSku = {
                     activityType: '1',
-                    skuId:this.skuChangeForm.id,
+                    skuId:this.skuChangeForm.skuId,
                     commodityId:this.skuChangeForm.commodityId,
                     store: this.skuChangeForm.store,
                     activityGold: this.skuChangeForm.gold,
@@ -2380,47 +2472,55 @@
                 this.skuChangeForm.store = '';
                 this.skuChangeForm.gold = '';
                 this.skuChangeForm.money = '';
-                this.skuChangeForm.status = '';
+                this.skuChangeForm.status = '2';
                 this.skuChangeForm.id = '';
                 let num=0;
                 console.log(this.changeSkuList);
                 for(let x in this.changeSkuList){
-                    num+= Number(this.changeSkuList[x].store)
+                    if (this.changeSkuList[x].status == 1) {
+                        num+= Number(this.changeSkuList[x].store)
+                    }
                 }
                 this.oForm.commodityStore=num;
                 this.dialogoSkuFormVisible = false;
             },
             sureChangeChanger() {
                 // 编辑sku操作
-                if (!this.oSkuChangeForm.store || this.oSkuChangeForm.store == '' || this.oSkuChangeForm.store == 0) {
-                    this.message = '库存不能为空，请检查！';
-                    this.open();
-                    return;
-                }
-                if (this.form.changeType==1||this.form.changeType==3) {
-                    if (!this.oSkuChangeForm.activityGold) {
-                        this.message = '所需金币数量不能为空，请检查！';
-                        this.open();
-                        return;
-                    }
-                }
-                if (this.form.changeType==2||this.form.changeType==3) {
-                    if (!this.oSkuChangeForm.activityMoney) {
-                        this.message = '所需RMB不能为空，请检查！';
-                        this.open();
-                        return;
-                    }
-                }
                 if (!this.oSkuChangeForm.status || this.oSkuChangeForm.status == '') {
                     this.message = '请选择是否参与！';
                     this.open();
                     return;
                 }
-                if(!this.oSkuChangeForm.activityGold){
-                    this.oSkuChangeForm.activityGold=0
-                }
-                if(!this.oSkuChangeForm.activityMoney){
-                    this.oSkuChangeForm.activityMoney=0
+                if (this.oSkuChangeForm.status == 1) {
+                    if (!this.oSkuChangeForm.store || this.oSkuChangeForm.store == '' || this.oSkuChangeForm.store == 0) {
+                        this.message = '库存不能为空，请检查！';
+                        this.open();
+                        return;
+                    }
+                    if (this.oChangeType==1||this.oChangeType==3) {
+                        if (!this.oSkuChangeForm.activityGold) {
+                            this.message = '所需金币数量不能为空，请检查！';
+                            this.open();
+                            return;
+                        }
+                    }
+                    if (this.oChangeType==2||this.oChangeType==3) {
+                        if (!this.oSkuChangeForm.activityMoney) {
+                            this.message = '所需RMB不能为空，请检查！';
+                            this.open();
+                            return;
+                        }
+                    }
+                    if(!this.oSkuChangeForm.activityGold){
+                        this.oSkuChangeForm.activityGold=0
+                    }
+                    if(!this.oSkuChangeForm.activityMoney){
+                        this.oSkuChangeForm.activityMoney=0
+                    }
+                } else if (this.oSkuChangeForm.status == 2) {
+                    this.oSkuChangeForm.activityMoney = 0;
+                    this.oSkuChangeForm.activityGold = 0;
+                    this.oSkuChangeForm.store = 0;
                 }
                 let oneSku = {
                     activityType: '1',
@@ -2445,12 +2545,48 @@
                 this.oSkuChangeForm.status = '';
                 let num=0;
                 for(let x in this.changeSkuList){
-                    num+= Number(this.changeSkuList[x].store)
-
+                    if (this.changeSkuList[x].status == 1) {
+                        num+= Number(this.changeSkuList[x].store)
+                    }
                 }
                 this.oCommodityStore=num;
                 this.dialogoSkuChangeFormVisible = false;
             },
+            changeSkuStatus() {
+                this.$forceUpdate();
+            },
+            changeSkuPrice() {
+                if (this.oForm.changeType == 1) {
+                    if (this.changeSkuList.length > 0) {
+                        for(let x in this.changeSkuList){
+                            this.changeSkuList[x].activityMoney = 0;
+                        }
+                    }
+                }
+                if (this.oForm.changeType == 2) {
+                    if (this.changeSkuList.length > 0) {
+                        for(let x in this.changeSkuList){
+                            this.changeSkuList[x].activityGold = 0;
+                        }
+                    }
+                }
+            },
+            changeSkuPrice2() {
+                if (this.oChangeType == 1) {
+                    if (this.changeSkuList.length > 0) {
+                        for(let x in this.changeSkuList){
+                            this.changeSkuList[x].activityMoney = 0;
+                        }
+                    }
+                }
+                if (this.oChangeType == 2) {
+                    if (this.changeSkuList.length > 0) {
+                        for(let x in this.changeSkuList){
+                            this.changeSkuList[x].activityGold = 0;
+                        }
+                    }
+                }
+            }
         }
     };
 </script>

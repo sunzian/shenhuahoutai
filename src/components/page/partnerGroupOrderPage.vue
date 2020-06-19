@@ -204,6 +204,13 @@
                         :disabled="true"
                         autocomplete="off"
                 ></el-input>
+                总数量：
+                <el-input
+                        style="width: 150px"
+                        v-model="totalData.totalNumber"
+                        :disabled="true"
+                        autocomplete="off"
+                ></el-input>
             </div>
             <el-table
                     :data="tableData"

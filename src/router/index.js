@@ -651,6 +651,16 @@ export default new Router({
                     meta: { title: '秒杀活动管理' }
                 },
                 {
+                    path: '/goldCommodityCoupon',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/goldCommodityCoupon.vue'),
+                    meta: { title: '商城优惠券管理' }
+                },
+                {
+                    path: '/brandBusinessPage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/brandBusinessPage.vue'),
+                    meta: { title: '品牌商管理' }
+                },
+                {
                     path: '/404',
                     component: () => import(/* webpackChunkName: "404" */ '../components/page/404.vue'),
                     meta: { title: '404' }
