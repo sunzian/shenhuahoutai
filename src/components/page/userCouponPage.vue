@@ -53,6 +53,16 @@
                 </el-select>
                 <el-select
                     clearable
+                    v-model="query.couponType "
+                    placeholder="优惠券类型"
+                    class="handle-select mr10"
+                >
+                    <el-option key="1" label="影票" value="1"></el-option>
+                    <el-option key="2" label="卖品" value="2"></el-option>
+                    <el-option key="3" label="金币商城商品" value="3"></el-option>
+                </el-select>
+                <el-select
+                    clearable
                     v-model="query.getType"
                     placeholder="领取类型"
                     class="handle-select mr10"
@@ -627,6 +637,7 @@ export default {
             setTimeout(() => {
                 let cinemaCode = this.query.cinemaCode;
                 let sendCode = this.query.sendCode;
+                let couponType  = this.query.couponType ;
                 let orderNo = this.query.orderNo;
                 let userMobile = this.query.userMobile;
                 let status = this.query.status;
@@ -634,6 +645,9 @@ export default {
                 let couponName = this.query.couponName;
                 if (!cinemaCode) {
                     cinemaCode = '';
+                }
+                if (!couponType ) {
+                    couponType  = '';
                 }
                 if (!sendCode) {
                     sendCode = '';
@@ -657,6 +671,7 @@ export default {
                 jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
                 jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
                 jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
+                jsonArr.push({ key: 'couponType', value: couponType  });
                 jsonArr.push({ key: 'orderNum', value: orderNo });
                 jsonArr.push({ key: 'couponName', value: couponName });
                 jsonArr.push({ key: 'userMobile', value: userMobile });

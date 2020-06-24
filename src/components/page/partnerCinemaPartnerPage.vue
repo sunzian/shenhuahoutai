@@ -441,7 +441,9 @@ export default {
                                 }
                             }
                             this.changeForm.status = this.showStatus[index].value;
-                            this.changeForm.cinemaCodes = JSON.parse(Decrypt(data.data.data)).cinemaCodes.split(",");
+                            if (JSON.parse(Decrypt(data.data.data)).cinemaCodes) {
+                                this.changeForm.cinemaCodes = JSON.parse(Decrypt(data.data.data)).cinemaCodes.split(",");
+                            }
                             this.changeForm.partnerName = JSON.parse(Decrypt(data.data.data)).partnerName;
                             this.changeForm.cinemaNames = JSON.parse(Decrypt(data.data.data)).cinemaNames;
                             this.changeForm.partnerCode = JSON.parse(Decrypt(data.data.data)).partnerCode;

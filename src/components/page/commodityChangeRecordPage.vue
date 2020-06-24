@@ -511,6 +511,22 @@
                             autocomplete="off"
                     ></el-input>
                 </el-form-item>
+                <el-form-item v-if="form.totalCouponDiscount" label="优惠金额" :label-width="formLabelWidth">
+                    <el-input
+                            :disabled="true"
+                            style="width: 250px"
+                            v-model="form.totalCouponDiscount"
+                            autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item v-if="form.totalOriginalPrice" label="总原价" :label-width="formLabelWidth">
+                    <el-input
+                            :disabled="true"
+                            style="width: 250px"
+                            v-model="form.totalOriginalPrice"
+                            autocomplete="off"
+                    ></el-input>
+                </el-form-item>
                 <el-form-item label="购买数量" :label-width="formLabelWidth">
                     <el-input
                             :disabled="true"

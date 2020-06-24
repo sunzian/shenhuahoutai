@@ -398,6 +398,16 @@
                         placeholder="优惠券名称"
                         class="handle-input mr12"
                     ></el-input>
+                    <el-select
+                        clearable
+                        v-model="query.couponType "
+                        placeholder="优惠券类型"
+                        class="handle-select mr10"
+                    >
+                        <el-option key="1" label="影票" value="1"></el-option>
+                        <el-option key="2" label="卖品" value="2"></el-option>
+                        <el-option key="3" label="金币商城商品" value="3"></el-option>
+                    </el-select>
                     <el-button type="primary" icon="el-icon-search" @click="getAllCoupon">搜索</el-button>
                 </div>
                 <el-table
@@ -443,6 +453,10 @@
                                     v-else-if="scope.row.reduceType == 4 && scope.row.couponType == 1"
                                     type="success"
                             >满{{scope.row.achieveMoney}}减{{scope.row.discountMoney}}元</el-tag>
+                            <el-tag
+                                v-else-if="scope.row.reduceType == 2 && scope.row.couponType == 3"
+                                type="success"
+                            >满{{scope.row.achieveMoney}}减{{scope.row.discountMoney}}</el-tag>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -644,7 +658,8 @@ export default {
                 filmPageNo: 1,
                 pageSize: 15,
                 filmPageSize: 10,
-                couponPageSize: 10
+                couponPageSize: 10,
+                couponType: ''
             },
             userRole: [
                 {
@@ -824,10 +839,15 @@ export default {
             } else {
                 let cinemaCode = this.query.cinemaCode;
                 let couponName = this.query.couponName;
+                let couponType  = this.query.couponType ;
                 if (!couponName) {
                     couponName = '';
                 }
+                if (!couponType) {
+                    couponType = '';
+                }
                 let jsonArr = [];
+                jsonArr.push({ key: 'couponType', value: couponType });
                 jsonArr.push({ key: 'name', value: couponName });
                 jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
                 jsonArr.push({ key: 'pageNo', value: this.query.couponPageNo });
