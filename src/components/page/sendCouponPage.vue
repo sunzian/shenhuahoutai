@@ -418,6 +418,7 @@
                         <template slot-scope="scope">
                             <el-tag v-if="scope.row.couponType == 1" type="success">影票优惠券</el-tag>
                             <el-tag v-else-if="scope.row.couponType == 2" type="success">卖品优惠券</el-tag>
+                            <el-tag v-else-if="scope.row.couponType == 3" type="success">商城优惠券</el-tag>
                         </template>
                     </el-table-column>
                     <el-table-column prop="sort" label="优惠金额">
@@ -469,12 +470,11 @@
         <el-dialog
             title="选择影片"
             :visible.sync="seenFilmList"
-            :show-close="false"
             :close-on-click-modal="false"
             >
             <div class="container">
                 <div class="handle-box">
-                    <el-input v-model="query.filmName" placeholder="影片名称" class="handle-input mr10"></el-input>
+                    <el-input v-model="query.filmName" style="width: 300px" placeholder="影片名称" class="handle-input mr10"></el-input>
                     <el-button type="primary" icon="el-icon-search" @click="chooseFilm">搜索</el-button>
                 </div>
                 <el-table

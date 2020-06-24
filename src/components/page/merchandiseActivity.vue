@@ -712,8 +712,9 @@
                     ref="multipleTable"
                     header-cell-class-name="table-header"
                     @selection-change="handleSelectionChange"
+                    :row-key="getFilmId"
                 >
-                    <el-table-column label="操作" width="100" align="center">
+                    <!-- <el-table-column label="操作" width="100" align="center">
                         <template slot-scope="scope">
                             <el-radio
                                 v-model="id"
@@ -721,7 +722,8 @@
                                 @change.native="getCurrentRow(scope.$index)"
                             >&nbsp;</el-radio>
                         </template>
-                    </el-table-column>
+                    </el-table-column> -->
+                    <el-table-column type="selection" :reserve-selection="true" width="55"></el-table-column>
                     <el-table-column prop="name" label="图片">
                         <template slot-scope="scope">
                             <el-popover placement="right" title trigger="hover">
@@ -1435,7 +1437,7 @@ export default {
                         }
                         if (JSON.parse(Decrypt(data.data.data)).merchandiseCode && JSON.parse(Decrypt(data.data.data)).merchandiseName) {
                             let exFilmCodeList = JSON.parse(Decrypt(data.data.data)).merchandiseCode.split(',');
-                            let exFilmNameList = JSON.parse(Decrypt(data.data.data)).merchandiseName.split('|');
+                            let exFilmNameList = JSON.parse(Decrypt(data.data.data)).merchandiseName.split(',');
                             this.selectedSell = [];
                             for (let x in exFilmNameList) {
                                 let json = {};
@@ -1951,25 +1953,12 @@ export default {
             this.oForm.filmCode = a;
         },
         sureNext() {
-            if (this.sellIndex >= 0) {
-                // console.log('选了数据');
-                if (this.selectedSell.length <= 0) {
-                    // console.log('长度为0');
-                    this.selectedSell.push(this.sellTableData[this.sellIndex]);
-                } else if (this.selectedSell.length > 0) {
-                    // console.log('有数据');
-                    for (let x in this.selectedSell) {
-                        if (this.selectedSell[x].merchandiseCode == this.sellTableData[this.sellIndex].merchandiseCode) {
-                            this.message = '不能添加相同卖品！';
-                            this.open();
-                            return;
-                        }
-                    }
-                    // console.log('判断不重复');
-                    this.selectedSell.push(this.sellTableData[this.sellIndex]);
-                }
-            }
+            let selectedSell = [];
+            this.selectedSell = selectedSell.concat(this.multipleSelection);
             this.drawer = false;
+        },
+        getFilmId(row) {
+            return row.merchandiseCode;
         },
         openNext() {
             //获取商品列表

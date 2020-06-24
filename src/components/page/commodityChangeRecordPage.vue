@@ -434,6 +434,14 @@
                             autocomplete="off"
                     ></el-input>
                 </el-form-item>
+                <el-form-item v-if="form.partnerName" label="商品商户" :label-width="formLabelWidth">
+                    <el-input
+                            :disabled="true"
+                            style="width: 250px"
+                            v-model="form.partnerName"
+                            autocomplete="off"
+                    ></el-input>
+                </el-form-item>
                 <el-form-item label="订单编号" :label-width="formLabelWidth">
                     <el-input
                             :disabled="true"

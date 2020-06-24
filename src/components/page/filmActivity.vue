@@ -866,8 +866,9 @@
                         ref="multipleTable"
                         header-cell-class-name="table-header"
                         @selection-change="handleSelectionChange"
+                        :row-key="getFilmId"
                 >
-                    <el-table-column label="操作" width="50" align="center">
+                    <!-- <el-table-column label="操作" width="50" align="center">
                         <template slot-scope="scope">
                             <el-radio
                                     v-model="id"
@@ -876,7 +877,8 @@
                             >&nbsp;
                             </el-radio>
                         </template>
-                    </el-table-column>
+                    </el-table-column> -->
+                    <el-table-column type="selection" :reserve-selection="true" width="55"></el-table-column>
                     <el-table-column prop="sort" label="影片名称">
                         <template slot-scope="scope">{{scope.row.filmName}}</template>
                     </el-table-column>
@@ -2291,6 +2293,9 @@
                         console.log(err);
                     });
             },
+            getFilmId(row) {
+                return row.id;
+            },
             // 多选操作
             handleSelectionChange(val) {
                 this.multipleSelection = val;
@@ -2320,25 +2325,8 @@
                 this.oForm.filmCode = a;
             },
             sureNext() {
-                if (this.sellIndex >= 0) {
-                    // console.log('选了数据');
-                    if (this.selectedSell.length <= 0) {
-                        // console.log('长度为0');
-                        this.selectedSell.push(this.sellTableData[this.sellIndex]);
-                    } else if (this.selectedSell.length > 0) {
-                        // console.log('有数据');
-                        for (let x in this.selectedSell) {
-                            if (this.selectedSell[x].filmCode == this.sellTableData[this.sellIndex].filmCode) {
-                                this.message = '不能添加相同影片！';
-                                this.open();
-                                return;
-                            }
-                        }
-                        // console.log('判断不重复');
-                        this.selectedSell.push(this.sellTableData[this.sellIndex]);
-                    }
-                }
-                console.log(this.selectedSell);
+                let selectedSell = [];
+                this.selectedSell = selectedSell.concat(this.multipleSelection);
                 this.drawer = false;
             },
             openNext() {

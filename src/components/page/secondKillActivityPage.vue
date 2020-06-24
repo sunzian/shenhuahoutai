@@ -1462,7 +1462,7 @@
                         if (!this.changeSkuList[i].store || this.changeSkuList[i].store == '') {
                             this.changeSkuList[i].store = 0;
                         }
-                        if (!this.changeSkuList[i].activityGold || this.changeSkuList[i].stoactivityGoldre == '') {
+                        if (!this.changeSkuList[i].activityGold || this.changeSkuList[i].activityGold == '') {
                             this.changeSkuList[i].activityGold = 0;
                         }
                         if (!this.changeSkuList[i].activityMoney || this.changeSkuList[i].activityMoney == '') {

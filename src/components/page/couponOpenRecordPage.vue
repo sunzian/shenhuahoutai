@@ -31,6 +31,7 @@
                 >
                     <el-option key="1" label="影票" value="1"></el-option>
                     <el-option key="2" label="卖品" value="2"></el-option>
+                    <el-option key="3" label="商城" value="3"></el-option>
                 </el-select>
                 <el-date-picker
                         v-model="query.startOpenDate"
@@ -75,6 +76,7 @@
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.couponType == 1">影票</el-tag>
                         <el-tag v-if="scope.row.couponType == 2">卖品</el-tag>
+                        <el-tag v-if="scope.row.couponType == 3">商城</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column prop="memo" label="开通人" width="180">
@@ -138,6 +140,7 @@
                 <el-form-item label="优惠券类型：" :label-width="formLabelWidth">
                     <span v-if="form.couponType == 1">影票</span>
                     <span v-if="form.couponType == 2">卖品</span>
+                    <span v-if="form.couponType == 3">商城</span>
                 </el-form-item>
                 <el-form-item label="开通人：" :label-width="formLabelWidth">
                     <span>{{form.openUserName}}</span>

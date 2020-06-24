@@ -145,6 +145,7 @@
                         <el-tag v-if="scope.row.redirectType=='2'">跳转到电影</el-tag>
                         <el-tag v-if="scope.row.redirectType=='3'">跳转到金币商品</el-tag>
                         <el-tag v-if="scope.row.redirectType=='4'">不跳转</el-tag>
+                        <el-tag v-if="scope.row.redirectType=='5'">跳转到金币商品类别</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column label="操作" width="180" align="center" fixed="right">
@@ -313,6 +314,16 @@
                             :disabled="true"
                             autocomplete="off"
                     ></el-input>
+                </el-form-item>
+                <el-form-item :required="true" v-if="oForm.tabType==5" label="金币商品类型" :label-width="formLabelWidth">
+                    <el-select v-model="oForm.redirectGoal" placeholder="请选择类型">
+                        <el-option
+                                v-for="item in redirectGoalType"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                        ></el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item label="排序号" :label-width="formLabelWidth" :required="true">
                     <el-input
@@ -703,6 +714,7 @@
                 oButtonName: '',
                 oCinemaCodes: [],
                 oTabType: '',
+                oRedirectGoal: '',
                 type: {
                     type: ''
                 },
@@ -841,6 +853,32 @@
                     {
                         value: '4',
                         label: '不跳转'
+                    },
+                    {
+                        value: '5',
+                        label: '跳转到金币商品类别'
+                    }
+                ],
+                redirectGoalType: [
+                    {
+                        value: '1',
+                        label: '影院周边'
+                    },
+                    {
+                        value: '2',
+                        label: '超值美食'
+                    },
+                    {
+                        value: '3',
+                        label: '优选精品'
+                    },
+                    {
+                        value: '4',
+                        label: '健身美容'
+                    },
+                    {
+                        value: '5',
+                        label: '休闲娱乐'
                     }
                 ],
                 value: '',
@@ -1036,7 +1074,7 @@
                     }
                     //跳转到电影
                     else if (this.oForm.tabType == 2) {
-                        let filmName = this.query.filmName;
+                        let filmName = this.query.name;
                         if (!filmName) {
                             filmName = '';
                         }
@@ -1409,8 +1447,16 @@
                     loading.close();
                     return;
                 }
-                if (this.oForm.tabType != 4) {
+                if (this.oForm.tabType != 4 && this.oForm.tabType != 5) {
                     if (!this.oForm.goType) {
+                        this.message = '跳转的具体类型不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if (this.oForm.tabType == 5) {
+                    if (!this.oForm.redirectGoal) {
                         this.message = '跳转的具体类型不能为空，请检查！';
                         this.open();
                         loading.close();
@@ -1473,6 +1519,7 @@
                                     this.oForm.imageUrl = '';
                                     this.oForm.tabType = '';
                                     this.oForm.goType = '';
+                                    this.oForm.redirectGoal = '';
                                     this.getMenu();
                                 } else if (data.data.code == 'nologin') {
                                     this.message = data.data.message;
@@ -1617,6 +1664,17 @@
                                     }
                                 }
                                 this.oTabType = this.bannerType[tabIndex].value;
+                                let goalType = 0;
+                                if (this.oTabType == 5) {
+                                    for (let i in this.redirectGoalType) {
+                                    //轮播图类型下拉框显示对应的选项
+                                    if (this.redirectGoalType[i].value == JSON.parse(Decrypt(data.data.data)).banner.redirectGoal) {
+                                        goalType = i;
+                                        break;
+                                    }
+                                }
+                                this.oRedirectGoal = this.redirectGoalType[goalType].value;
+                                }
                                 this.goType = JSON.parse(Decrypt(data.data.data)).banner.redirectGoalName;
                                 this.form.redirectGoal = JSON.parse(Decrypt(data.data.data)).banner.redirectGoal;
                             } else if (data.data.code == 'nologin') {

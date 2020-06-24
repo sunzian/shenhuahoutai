@@ -254,12 +254,23 @@
                         <span style="color:red;cursor: pointer;" @click="deleteSell(index)">删除</span>
                     </div>
                 </el-form-item>
-                <!-- <el-form-item :required="true" label="优惠方式：" :label-width="formLabelWidth">
-                    <el-radio-group v-model="oForm.reduceType" @change="clearDiscountMoney()">
-                        <el-radio label="1">固定价格（兑换券）</el-radio>
-                        <el-radio label="2">满减（代金券）</el-radio>
+                <el-form-item label="是否在商品详情页显示领取：" :label-width="formLabelWidth">
+                    <el-radio-group v-model="oForm.showReceive">
+                        <el-radio label="1">不显示</el-radio>
+                        <el-radio label="2">显示</el-radio>
                     </el-radio-group>
-                </el-form-item> -->
+                    <br>
+                    <span style="color: red;font-size: 12px">仅在适用单个商品时生效</span>
+                </el-form-item>
+                <el-form-item
+                    v-if="oForm.showReceive==2"
+                    :required="true"
+                    label="领取后过期天数："
+                    :label-width="formLabelWidth"
+                >
+                    <el-input style="width: 100px" type="number" min="0" v-model="oForm.overDays" autocomplete="off"></el-input>
+                    &nbsp;&nbsp;&nbsp;<span style="color:red;font-size:12px">0为当天生效</span>
+                </el-form-item>
                 <el-form-item
                     :required="true"
                     label="减免金额："
@@ -432,6 +443,23 @@
                         <!--&gt;{{item.merchandiseName}}</el-checkbox>-->
                     <!--</el-checkbox-group>-->
                 <!--</el-form-item>-->
+                <el-form-item label="是否在商品详情页显示领取：" :label-width="formLabelWidth">
+                    <el-radio-group v-model="oShowReceive">
+                        <el-radio label="1">不显示</el-radio>
+                        <el-radio label="2">显示</el-radio>
+                    </el-radio-group>
+                    <br>
+                    <span style="color: red;font-size: 12px">仅在适用单个商品时生效</span>
+                </el-form-item>
+                <el-form-item
+                    v-if="oShowReceive==2"
+                    :required="true"
+                    label="领取后过期天数："
+                    :label-width="formLabelWidth"
+                >
+                    <el-input style="width: 100px" type="number" min="0" v-model="oOverDays" autocomplete="off"></el-input>
+                    &nbsp;&nbsp;&nbsp;<span style="color:red;font-size:12px">0为当天生效</span>
+                </el-form-item>
                 <el-form-item
                     :required="true"
                     label="减免金额："
@@ -914,6 +942,8 @@ export default {
             oCouponDesc: '',
             oId: '',
             oStatus: '',
+            oShowReceive: '',
+            oOverDays: '',
             message: '', //弹出框消息
             query: {
                 pageNo: 1,
@@ -983,7 +1013,9 @@ export default {
                 activityTogether: '1',
                 couponDesc: '',
                 id: '',
-                status: '0'
+                status: '0',
+                showReceive: '1',
+                overDays: ''
             },
             formLabelWidth: '120px',
             selectValue: {},
@@ -1604,6 +1636,14 @@ export default {
                 loading.close();
                 return;
             }
+            if (this.oForm.showReceive == 2) {
+                if (!this.oForm.overDays) {
+                    this.message = '领取后过期天数不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
             var jsonArr = [];
             jsonArr.push({ key: 'name', value: this.oForm.name });
             jsonArr.push({ key: 'commonType', value: this.oForm.commonType });
@@ -1611,8 +1651,8 @@ export default {
             jsonArr.push({ key: 'selectMerchandiseType', value: this.oForm.selectMerchandiseType });
             jsonArr.push({ key: 'merchandiseCode', value: this.oForm.merchandiseCode });
             jsonArr.push({ key: 'sendType', value: this.oForm.sendType });
-            // jsonArr.push({ key: 'startDate', value: this.oForm.startDate });
-            // jsonArr.push({ key: 'endDate', value: this.oForm.endDate });
+            jsonArr.push({ key: 'showReceive', value: this.oForm.showReceive });
+            jsonArr.push({ key: 'overDays', value: this.oForm.overDays });
             jsonArr.push({ key: 'reduceType', value: '2' });
             jsonArr.push({ key: 'validPayType', value: '1' });
             jsonArr.push({ key: 'achieveMoney', value: this.oForm.achieveMoney });
@@ -1651,6 +1691,8 @@ export default {
                             this.oForm.holidayValid = '1';
                             this.oForm.checkedDays = [];
                             this.oForm.status = '0';
+                            this.oForm.showReceive = '1';
+                            this.oForm.overDays = '';
                             this.oForm.sendNumber = '';
                             this.oForm.couponDesc = '';
                             this.getMenu();
@@ -1767,12 +1809,13 @@ export default {
                         this.oSendNumber = JSON.parse(Decrypt(data.data.data)).coupon.sendNumber;
                         // this.oEndDate = JSON.parse(Decrypt(data.data.data)).coupon.endDate;
                         this.oSendType = JSON.parse(Decrypt(data.data.data)).coupon.sendType;
-                        // if (JSON.parse(Decrypt(data.data.data)).coupon.sendType == 1) {
-                        //     this.oSendType = '1';
-                        // }
-                        // if (JSON.parse(Decrypt(data.data.data)).coupon.sendType == 2) {
-                        //     this.oSendType = '2';
-                        // }
+                        if (JSON.parse(Decrypt(data.data.data)).coupon.showReceive == 1) {
+                            this.oShowReceive = '1';
+                        }
+                        if (JSON.parse(Decrypt(data.data.data)).coupon.showReceive == 2) {
+                            this.oShowReceive = '2';
+                        }
+                        this.oOverDays = JSON.parse(Decrypt(data.data.data)).coupon.overDays;
                         this.oAchieveMoney = JSON.parse(Decrypt(data.data.data)).coupon.achieveMoney;
                         if (JSON.parse(Decrypt(data.data.data)).coupon.selectMerchandiseType == 0) {
                             this.oSelectMerchandiseType = '0';
@@ -1894,6 +1937,14 @@ export default {
                 loading.close();
                 return;
             }
+            if (!this.oShowReceive) {
+                if (!this.oOverDays) {
+                    this.message = '领取后过期天数不能为空，请检查！';
+                    this.open();
+                    loading.close();
+                    return;
+                }
+            }
             var jsonArr = [];
             jsonArr.push({ key: 'name', value: this.oName });
             jsonArr.push({ key: 'commonType', value: this.oForm.commonType });
@@ -1904,8 +1955,8 @@ export default {
             jsonArr.push({ key: 'achieveMoney', value: this.oAchieveMoney });
             jsonArr.push({ key: 'discountMoney', value: this.oDiscountMoney });
             jsonArr.push({ key: 'sendType', value: this.oSendType });
-            // jsonArr.push({ key: 'startDate', value: this.oStartDate});
-            // jsonArr.push({ key: 'endDate', value: this.oEndDate });
+            jsonArr.push({ key: 'showReceive', value: this.oShowReceive});
+            jsonArr.push({ key: 'overDays', value: this.oOverDays});
             jsonArr.push({ key: 'status', value: this.oStatus });
             jsonArr.push({ key: 'couponDesc', value: this.oCouponDesc });
             jsonArr.push({ key: 'holidayValid', value: this.oHolidayValid });

@@ -376,6 +376,7 @@
                         <template slot-scope="scope">
                             <el-tag v-if="scope.row.couponType=='1'">影票优惠券</el-tag>
                             <el-tag v-else-if="scope.row.couponType=='2'">卖品优惠券</el-tag>
+                            <el-tag v-else-if="scope.row.couponType=='3'">商城优惠券</el-tag>
                         </template>
                     </el-table-column>
                     <el-table-column prop="sort" label="优惠券名称" width="150">
