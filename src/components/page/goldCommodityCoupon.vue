@@ -265,11 +265,10 @@
                 <el-form-item
                     v-if="oForm.showReceive==2"
                     :required="true"
-                    label="领取后过期天数："
+                    label="领取后优惠券有效期天数："
                     :label-width="formLabelWidth"
                 >
-                    <el-input style="width: 100px" type="number" min="0" v-model="oForm.overDays" autocomplete="off"></el-input>
-                    &nbsp;&nbsp;&nbsp;<span style="color:red;font-size:12px">0为当天生效</span>
+                    <el-input style="width: 200px" type="number" min="0" placeholder="0为当天生效" v-model="oForm.overDays" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item
                     :required="true"
@@ -454,11 +453,10 @@
                 <el-form-item
                     v-if="oShowReceive==2"
                     :required="true"
-                    label="领取后过期天数："
+                    label="领取后优惠券有效期天数："
                     :label-width="formLabelWidth"
                 >
-                    <el-input style="width: 100px" type="number" min="0" v-model="oOverDays" autocomplete="off"></el-input>
-                    &nbsp;&nbsp;&nbsp;<span style="color:red;font-size:12px">0为当天生效</span>
+                    <el-input style="width: 200px" type="number" min="0" placeholder="0为当天生效" v-model="oOverDays" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item
                     :required="true"
@@ -1217,6 +1215,13 @@ export default {
             this.openNext();
         },
         openNext() {
+            if (this.oForm.commonType == 2) {
+                if (Object.keys(this.selectValue).length === 0) {
+                    this.message = '请选择影院！';
+                    this.open();
+                    return;
+                }
+            }
             //获取商品列表
             const loading = this.$loading({
                 lock: true,
@@ -1695,6 +1700,7 @@ export default {
                             this.oForm.overDays = '';
                             this.oForm.sendNumber = '';
                             this.oForm.couponDesc = '';
+                            this.query.sName = '';
                             this.getMenu();
                         } else if (data.data.code == 'nologin') {
                             this.message = data.data.message;
@@ -1777,6 +1783,7 @@ export default {
                         this.editVisible = true;
                         this.cinemaInfo = [];
                         this.oMerchandiseCode = [];
+                        this.query.sName = '';
                         for (let i = 0; i < JSON.parse(Decrypt(data.data.data)).cinemaList.length; i++) {
                             let cinemaList = {};
                             cinemaList.cinemaCode = JSON.parse(Decrypt(data.data.data)).cinemaList[i].cinemaCode;
@@ -2121,7 +2128,7 @@ export default {
                             cinemaList.cinemaName = oData.cinemaList[i].cinemaName;
                             this.cinemaInfo.push(cinemaList);
                         }
-                        this.selectValue = this.cinemaInfo[0].cinemaCode;
+                        // this.selectValue = this.cinemaInfo[0].cinemaCode;
                         this.tableData = oData.pageResult.data;
                         this.query.pageSize = oData.pageResult.pageSize;
                         this.query.pageNo = oData.pageResult.pageNo;

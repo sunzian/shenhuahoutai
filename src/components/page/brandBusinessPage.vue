@@ -156,6 +156,7 @@
                         maxlength="30"
                         v-model="oForm.mobile"
                         autocomplete="off"
+                        type="number"
                         onkeyup="this.value=this.value.replace(/[^0-9-]+/,'')"
                     ></el-input>
                 </el-form-item>
@@ -227,6 +228,7 @@
                         maxlength="30"
                         v-model="changeForm.mobile"
                         autocomplete="off"
+                        type="number"
                         onkeyup="this.value=this.value.replace(/\D/g,'')"
                     ></el-input>
                 </el-form-item>
@@ -427,6 +429,12 @@ export default {
             }
             if (this.oForm.mobile == '') {
                 this.message = '品牌商电话不能为空！';
+                this.open();
+                loading.close();
+                return;
+            }
+            if (this.oForm.address == '') {
+                this.message = '品牌商地址不能为空！';
                 this.open();
                 loading.close();
                 return;

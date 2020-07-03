@@ -436,6 +436,7 @@ export default {
                     if(data.data.code=='success') {
                         var oData = JSON.parse(Decrypt(data.data.data));
                         this.tableData = oData.data;
+                        console.log(JSON.parse(Decrypt(data.data.data)))
                         this.query.pageSize = oData.pageSize;
                         this.query.pageNo = oData.pageNo;
                         this.query.totalCount = oData.totalCount;

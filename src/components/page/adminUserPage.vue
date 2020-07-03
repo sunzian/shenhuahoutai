@@ -492,6 +492,7 @@
                         if(data.data.code=='success'){
                             this.editVisible = true;
                             this.form.id=row.id;
+                            console.log(JSON.parse(Decrypt(data.data.data)))
                             this.userName = JSON.parse(Decrypt(data.data.data)).userInfo.userName
                             this.form.realName = JSON.parse(Decrypt(data.data.data)).userInfo.realName
                             this.form.callNumber = JSON.parse(Decrypt(data.data.data)).userInfo.callNumber

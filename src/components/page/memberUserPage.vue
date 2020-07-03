@@ -72,6 +72,16 @@
                     <el-option key="1" label="普通用户" value="1"></el-option>
                     <el-option key="2" label="管理员" value="2"></el-option>
                 </el-select>
+                <el-select
+                    clearable
+                    v-model="query.disLevel"
+                    placeholder="分销级别"
+                    class="handle-select mr10"
+                >
+                    <el-option key="-1" label="非分销商" value="-1"></el-option>
+                    <el-option key="1" label="一级分销" value="1"></el-option>
+                    <el-option key="2" label="二级分销" value="2"></el-option>
+                </el-select>
                 <el-button
                     type="primary"
                     icon="el-icon-search"
@@ -152,6 +162,13 @@
                         <el-tag v-else-if="scope.row.userRole=='2'" type="success">管理员</el-tag>
                     </template>
                 </el-table-column>
+                <el-table-column prop="memo" label="分销级别" width="100" fixed="right">
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row.disLevel=='-1'" type="danger">非分销商</el-tag>
+                        <el-tag v-if="scope.row.disLevel=='1'" type="danger">一级分销</el-tag>
+                        <el-tag v-else-if="scope.row.disLevel=='2'" type="success">二级分销</el-tag>
+                    </template>
+                </el-table-column>
                 <el-table-column prop="memo" label="是否绑卡" width="80" fixed="right">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.bindMemberCardStatus=='1'" type="danger">未绑定</el-tag>
@@ -170,7 +187,13 @@
                                 type="text"
                                 icon="el-icon-edit"
                                 @click="changeRole(scope.$index, scope.row)"
-                        >更改角色</el-button>
+                        >更改游戏厅角色</el-button>
+                        <el-button
+                                type="text"
+                                icon="el-icon-edit"
+                                v-if="scope.row.disLevel=='-1'"
+                                @click="changedisLevel(scope.$index, scope.row)"
+                        >更改分销商级别</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -269,6 +292,30 @@
                         :disabled="true"
                         style="width: 250px"
                         v-model="form.userRole"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="分销级别" :label-width="formLabelWidth">
+                    <el-input
+                        :disabled="true"
+                        style="width: 250px"
+                        v-model="form.disLevel"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item v-if="form.realName" label="分销商真实姓名" :label-width="formLabelWidth">
+                    <el-input
+                        :disabled="true"
+                        style="width: 250px"
+                        v-model="form.realName"
+                        autocomplete="off"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item v-if="form.concatMobile" label="分销商联系电话" :label-width="formLabelWidth">
+                    <el-input
+                        :disabled="true"
+                        style="width: 250px"
+                        v-model="form.concatMobile"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
@@ -372,6 +419,7 @@ export default {
                 let startRegisterNumber = this.query.startRegisterNumber;
                 let endRegisterNumber = this.query.endRegisterNumber;
                 let userRole = this.query.userRole;
+                let disLevel = this.query.disLevel;
                 if (!cinemaCode) {
                     cinemaCode = '';
                 }
@@ -398,6 +446,9 @@ export default {
                 }
                 if (!userRole) {
                     userRole = '';
+                }
+                if (!disLevel) {
+                    disLevel = '';
                 }
                 let jsonArr = [];
                 jsonArr.push({ key: 'tableName', value: "member_user" });
@@ -449,10 +500,18 @@ export default {
                             this.editVisible = true;
                             this.form.id = row.id;
                             this.form = JSON.parse(Decrypt(data.data.data));
+                            console.log(JSON.parse(Decrypt(data.data.data)))
                             if (JSON.parse(Decrypt(data.data.data)).userRole == 1) {
                                 this.form.userRole = '普通用户';
                             } else if (JSON.parse(Decrypt(data.data.data)).userRole == 2) {
                                 this.form.userRole = '管理员';
+                            }
+                            if (JSON.parse(Decrypt(data.data.data)).disLevel == '-1') {
+                                this.form.disLevel = '非分销商';
+                            } else if (JSON.parse(Decrypt(data.data.data)).disLevel == 1) {
+                                this.form.disLevel = '一级分销';
+                            } else if (JSON.parse(Decrypt(data.data.data)).disLevel == 2) {
+                                this.form.disLevel = '二级分销';
                             }
                             if (JSON.parse(Decrypt(data.data.data)).miniRegisterStatus == 1) {
                                 this.form.miniRegisterStatus = '未注册';
@@ -533,6 +592,54 @@ export default {
                 });
             });
         },
+        changedisLevel(index, row) {
+            this.$confirm('此操作将用户角色更改为一级分销商, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            })
+                .then(() => {
+                    const loading = this.$loading({
+                        lock: true,
+                        text: 'Loading',
+                        spinner: 'el-icon-loading',
+                        background: 'rgba(0, 0, 0, 0.7)',
+                        target: document.querySelector('.div1')
+                    });
+                    var jsonArr = [];
+                    jsonArr.push({ key: 'userId', value: row.id });
+                    let sign = md5(preSign(jsonArr));
+                    jsonArr.push({ key: 'sign', value: sign });
+                    let params = ParamsAppend(jsonArr);
+                    https
+                        .fetchPost('/distributor/setToFirst',params)
+                        .then(data => {
+                            loading.close();
+                            if (data.data.code == 'success') {
+                                this.getMenu();
+                                this.$message({
+                                    type: 'info',
+                                    message: '修改成功！'
+                                });
+                            } else if (data.data.code == 'nologin') {
+                                this.message = data.data.message;
+                                this.open();
+                                this.$router.push('/login');
+                            } else {
+                                this.message = data.data.message;
+                                this.open();
+                            }
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        });
+                }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消更改'
+                });
+            });
+        },
         Search() {
             this.query.pageNo = 1;
             this.getMenu();
@@ -577,8 +684,12 @@ export default {
                 let startRegisterNumber = this.query.startRegisterNumber;
                 let endRegisterNumber = this.query.endRegisterNumber;
                 let userRole = this.query.userRole;
+                let disLevel = this.query.disLevel;
                 if (!userRole) {
                     userRole = '';
+                }
+                if (!disLevel) {
+                    disLevel = '';
                 }
                 if (!cinemaCode) {
                     cinemaCode = '';
@@ -614,8 +725,10 @@ export default {
                 jsonArr.push({ key: 'startRegisterNumber', value: startRegisterNumber });
                 jsonArr.push({ key: 'endRegisterNumber', value: endRegisterNumber });
                 jsonArr.push({ key: 'userRole', value: userRole });
+                jsonArr.push({ key: 'disLevel', value: disLevel });
                 jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
                 jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
+                console.log(jsonArr)
                 let sign = md5(preSign(jsonArr));
                 jsonArr.push({ key: 'sign', value: sign });
                 var params = ParamsAppend(jsonArr);
@@ -625,6 +738,7 @@ export default {
                         loading.close();
                         if (data.data.code == 'success') {
                             var oData = JSON.parse(Decrypt(data.data.data));
+                            console.log(oData)
                             this.tableData = oData.data;
                             this.query.pageSize = oData.pageSize;
                             this.query.pageNo = oData.pageNo;

@@ -22,6 +22,16 @@
                         :value="item.cinemaCode"
                     ></el-option>
                 </el-select>
+                <el-select
+                        clearable
+                        v-model="query.status"
+                        placeholder="状态"
+                        class="handle-select mr10"
+                >
+                    <el-option key="0" label="未启用" value="0"></el-option>
+                    <el-option key="1" label="启用" value="1"></el-option>
+                    <el-option key="2" label="过期" value="2"></el-option>
+                </el-select>
                 <el-button style="margin-top: 10px;width: 90px;" type="primary" icon="el-icon-search" @click="Search">搜索</el-button>
                 <el-button
                     type="primary"
@@ -63,6 +73,7 @@
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.status=='0'">未启用</el-tag>
                         <el-tag v-else-if="scope.row.status=='1'">启用</el-tag>
+                        <el-tag v-else-if="scope.row.status=='2'">过期</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column prop="number" label="是否限制数量" width="110">
@@ -530,7 +541,8 @@ export default {
                 pageNo: 1,
                 pageSize: 15,
                 aPageNo: 1,
-                aPageSize: 15
+                aPageSize: 15,
+                status: ''
             },
             options: [
                 {
@@ -1211,6 +1223,7 @@ export default {
             }
             let jsonArr = [];
             jsonArr.push({ key: 'cinemaCode', value: cinemaCode });
+            jsonArr.push({ key: 'status', value: status });
             jsonArr.push({ key: 'pageNo', value: this.query.pageNo });
             jsonArr.push({ key: 'pageSize', value: this.query.pageSize });
             let sign = md5(preSign(jsonArr));
@@ -1222,9 +1235,7 @@ export default {
                     loading.close();
                     if (data.data.code == 'success') {
                         var oData = JSON.parse(Decrypt(data.data.data));
-                        console.log(oData);
                         this.tableData = oData.data;
-                        console.log(this.tableData);
                         this.query.pageSize = oData.pageSize;
                         this.query.pageNo = oData.pageNo;
                         this.query.totalCount = oData.totalCount;
@@ -1328,7 +1339,6 @@ export default {
                 .then(data => {
                     if (data.data.code == 'success') {
                         var res = JSON.parse(Decrypt(data.data.data));
-                        console.log(res);
                         this.cinemaInfo = res;
                     } else if (data.data.code == 'nologin') {
                         this.message = data.data.message;

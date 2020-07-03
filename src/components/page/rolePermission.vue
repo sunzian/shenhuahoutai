@@ -214,6 +214,7 @@ export default {
                         loading.close();
                         if (data.data.code == 'success') {
                             this.viewVisible = true;
+                            console.log(JSON.parse(Decrypt(data.data.data)))
                             this.expandedKeys = JSON.parse(Decrypt(data.data.data)).openPermissionIds;
                             this.checkedKeys = JSON.parse(Decrypt(data.data.data)).exitPermissionIds;
                             this.data = JSON.parse(Decrypt(data.data.data)).existMenus; //权限数据

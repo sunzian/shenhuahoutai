@@ -151,7 +151,7 @@
         <el-dialog :close-on-click-modal="false" title="新增合作商家" :visible.sync="dialogFormVisible">
             <el-form :model="oForm">
                 <el-form-item :required="true" label="通用方式" :label-width="formLabelWidth">
-                    <el-radio-group v-model="oForm.commonType">
+                    <el-radio-group v-model="oForm.commonType" @change="clearBrandBusiness">
                         <el-radio label="2">指定影院</el-radio>
                         <el-radio label="1">全部影院</el-radio>
                     </el-radio-group>
@@ -301,7 +301,7 @@
         <el-dialog :close-on-click-modal="false" title="编辑" :visible.sync="editVisible">
             <el-form ref="form" :model="changeForm">
                 <el-form-item :required="true" label="通用方式" :label-width="formLabelWidth">
-                    <el-radio-group v-model="oForm.commonType">
+                    <el-radio-group v-model="oForm.commonType" @change="clearBrandBusiness">
                         <el-radio label="2">指定影院</el-radio>
                         <el-radio label="1">全部影院</el-radio>
                     </el-radio-group>
@@ -1123,6 +1123,12 @@ export default {
         },
         changeCinema(val) {
             this.oForm.cinemaCodes = val;
+            this.brandBusinessId = '';
+            this.brandBusinessName = '';
+        },
+        clearBrandBusiness() {
+            this.brandBusinessId = '';
+            this.brandBusinessName = '';
         },
         // 获取所有影院
         getAllCinema() {
@@ -1154,7 +1160,7 @@ export default {
                     return;   
                 }
             }
-            let name = this.query.name;
+            let name = this.query.partnerName;
             if (!name) {
                 name = '';
             }

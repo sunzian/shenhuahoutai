@@ -1088,7 +1088,7 @@ export default {
             console.log(jsonArr)
             var params = ParamsAppend(jsonArr);
             https
-                .fetchPost('couponGroup/couponGroupPage', params)
+                .fetchPost('/couponGroup/page', params)
                 .then(data => {
                     loading.close();
                     if (data.data.code == 'success') {

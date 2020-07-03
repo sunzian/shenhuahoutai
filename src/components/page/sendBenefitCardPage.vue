@@ -438,7 +438,6 @@
         <el-dialog
             title="选择影片"
             :visible.sync="seenFilmList"
-            :show-close="false"
             :close-on-click-modal="false"
             >
             <div class="container">

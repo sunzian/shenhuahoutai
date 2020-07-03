@@ -486,6 +486,16 @@
                             autocomplete="off"
                     ></el-input>
                 </el-form-item>
+                <el-form-item :required="true" v-if="oTabType==5" label="金币商品类型" :label-width="formLabelWidth">
+                    <el-select v-model="oRedirectGoal" placeholder="请选择类型">
+                        <el-option
+                                v-for="item in redirectGoalType"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
                 <el-form-item label="排序号" :label-width="formLabelWidth" :required="true">
                     <el-input
                             style="width: 250px"
@@ -883,7 +893,6 @@
                 ],
                 value: '',
                 goType: '',
-                oRedirectGoal:'',
                 goldData: [],
                 selectedSell: [],
                 sellIndex: ''
@@ -1751,8 +1760,16 @@
                     loading.close();
                     return;
                 }
-                if (this.oTabType != 4) {
+                if (this.oTabType != 4 && this.oTabType != 5) {
                     if (!this.goType) {
+                        this.message = '跳转的具体类型不能为空，请检查！';
+                        this.open();
+                        loading.close();
+                        return;
+                    }
+                }
+                if (this.oTabType == 5) {
+                    if (!this.oRedirectGoal) {
                         this.message = '跳转的具体类型不能为空，请检查！';
                         this.open();
                         loading.close();
@@ -1787,7 +1804,11 @@
                     jsonArr.push({ key: 'sort', value: this.form.sort });
                     jsonArr.push({ key: 'category', value: this.oBannerType });
                     jsonArr.push({ key: 'redirectType', value: this.oTabType });
-                    jsonArr.push({ key: 'redirectGoal', value: this.form.redirectGoal });
+                    if (this.oTabType != 5) {
+                        jsonArr.push({ key: 'redirectGoal', value: this.form.redirectGoal });
+                    } else {
+                        jsonArr.push({ key: 'redirectGoal', value: this.oRedirectGoal });
+                    }
                     jsonArr.push({ key: 'buttonStatus', value: this.oButtonStatus });
                     jsonArr.push({ key: 'buttonName', value: this.oButtonName });
                     let sign = md5(preSign(jsonArr));

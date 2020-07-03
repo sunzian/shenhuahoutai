@@ -1342,7 +1342,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item
-                        v-if="form.limitType==2||form.limitType==3||form.limitType==4"
+                        v-if="form.limitType==2||form.limitType==3||form.limitType==4||form.limitType==5"
                         label="限购数量"
                         :label-width="formLabelWidth"
                         :required="true"

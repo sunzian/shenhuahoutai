@@ -661,6 +661,16 @@ export default new Router({
                     meta: { title: '品牌商管理' }
                 },
                 {
+                    path: '/distributionRecordPage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/distributionRecordPage.vue'),
+                    meta: { title: '用户分销账单' }
+                },
+                {
+                    path: '/distributionFetchRecordPage',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/distributionFetchRecordPage.vue'),
+                    meta: { title: '用户分销提现记录' }
+                },
+                {
                     path: '/404',
                     component: () => import(/* webpackChunkName: "404" */ '../components/page/404.vue'),
                     meta: { title: '404' }
